@@ -1,0 +1,312 @@
+archetype
+	openEHR-EHR-OBSERVATION.blood_gases.test
+
+concept
+	[at0000]	-- Blood gas assessment
+description
+	author = <"Sam Heard <sam.heard@oceaninformatics.biz>">
+	submission = <
+		organisation = <"openEHR Foundation">
+		date = <2004-05-18>
+	>
+		version = <"version">
+	status = <"draft">
+	revision = <"1.0">
+	description("en") = <
+		purpose = <"Describe systemic blood pressure measurement result and protocol">
+		use = <"">
+		misuse = <"">
+	>
+	adl_version = <"1.2">
+	rights = <"">
+
+definition
+	OBSERVATION[at0000] matches {	-- Blood gas assessment
+		data matches {
+			HISTORY[at0002] matches {	-- history
+				events cardinality matches {1..*} matches {
+					EVENT[at0003] occurrences matches {0..*} matches {	-- Any event
+						data matches {
+							TREE[at0001] matches {	-- structure
+								items cardinality matches {0..1} matches {
+									CLUSTER[at0011] occurrences matches {0..*} matches {	-- Arterial
+										items cardinality matches {0..1} matches {
+											ELEMENT[at0004] occurrences matches {0..1} matches {	-- PaO2
+												value matches {
+													REAL_QUANTITY matches {
+														property matches {"pressure"}
+														units cardinality matches {1} matches {
+															UNIT matches {
+																unit_string matches {"kPa"}
+																magnitude matches {|>= 0|}
+															}
+														}
+													}
+												}
+											}
+											ELEMENT[at0005] occurrences matches {0..1} matches {	-- PaCO2
+												value matches {
+													REAL_QUANTITY matches {
+														property matches {"pressure"}
+														units cardinality matches {1} matches {
+															UNIT matches {
+																unit_string matches {"kPa"}
+																magnitude matches {|>= 0|}
+															}
+														}
+													}
+												}
+											}
+											ELEMENT[at0006] occurrences matches {0..1} matches {	-- pH
+												value matches {
+													REAL_QUANTITY matches {
+														property matches {"qualified real"}
+														units cardinality matches {1} matches {
+															UNIT matches {
+																unit_string matches {""}
+																magnitude matches {|0.0..14.0|}
+															}
+														}
+													}
+												}
+											}
+											ELEMENT[at0007] occurrences matches {0..1} matches {	-- Base excess
+												value matches {
+													REAL_QUANTITY matches {
+														property matches {"concentration"}
+														units cardinality matches {1} matches {
+															UNIT matches {
+																unit_string matches {"mmol/l"}
+																magnitude matches {|-3.0..3.0|}
+															}
+														}
+													}
+												}
+											}
+											ELEMENT[at0008] occurrences matches {0..1} matches {	-- Alveolar-arterial pO2 difference
+												value matches {
+													REAL_QUANTITY matches {
+														property matches {"pressure"}
+														units cardinality matches {1} matches {
+															UNIT matches {
+																unit_string matches {"kPa"}
+																magnitude matches {|0.0..100.0|}
+															}
+														}
+													}
+												}
+											}
+											ELEMENT[at0015] occurrences matches {0..1} matches {	-- SaO2
+												runtime_label matches {
+													CODED_TEXT matches {
+														code matches {[ac0004]}		-- 
+													}
+												}
+												value matches {
+													REAL_QUANTITY matches {
+														property matches {"concentration"}
+														units cardinality matches {1} matches {
+															UNIT matches {
+																unit_string matches {"%"}
+																magnitude matches {|0.0..100.0|}
+															}
+														}
+													}
+												}
+											}
+											ELEMENT[at0012] occurrences matches {0..1} matches {	-- Site
+												value matches {
+													CODED_TEXT matches {
+														code matches {[ac0005]}		-- Any term that 'is_a' artery or cavity
+													}
+												}
+											}
+											ELEMENT[at0018] occurrences matches {0..1} matches {	-- CaO2
+												value matches {
+													REAL_QUANTITY matches {
+														property matches {"concentration"}
+														units cardinality matches {1} matches {
+															UNIT matches {
+																unit_string matches {"{VOLUME/VOLUME}"}
+																magnitude matches {|>= 0|}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									CLUSTER[at0013] occurrences matches {0..*} matches {	-- Venous
+										items cardinality matches {0..1} matches {
+											ELEMENT[at0016] occurrences matches {0..1} matches {	-- PvO2
+												value matches {
+													REAL_QUANTITY matches {
+														property matches {"pressure"}
+														units cardinality matches {1} matches {
+															UNIT matches {
+																unit_string matches {"kPa"}
+																magnitude matches {|0.0..100.0|}
+															}
+														}
+													}
+												}
+											}
+											ELEMENT[at0017] occurrences matches {0..1} matches {	-- PvCO2
+												value matches {
+													REAL_QUANTITY matches {
+														property matches {"pressure"}
+														units cardinality matches {1} matches {
+															UNIT matches {
+																unit_string matches {"kPa"}
+																magnitude matches {|0.0..100.0|}
+															}
+														}
+													}
+												}
+											}
+											ELEMENT[at0014] occurrences matches {0..1} matches {	-- Site
+												value matches {
+													CODED_TEXT matches {
+														code matches {[ac0003]}		-- Any term that 'is_a' vein or cavity
+													}
+												}
+											}
+											use_node ELEMENT /[at0000]/data[at0002]/events[at0003]/data[at0001]/items[at0011]/items[at0006]/
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		state matches {
+			LIST[at0009] matches {	-- state structure
+				items cardinality matches {0..1} matches {
+					ELEMENT[at0010] occurrences matches {0..1} matches {	-- FiO2
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0001]}		-- 
+							}
+						}
+						value matches {
+							REAL_QUANTITY matches {
+								property matches {"qualified real"}
+								units cardinality matches {1} matches {
+									UNIT matches {
+										unit_string matches {""}
+										magnitude matches {|0.0..1.0|}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions("en") = <
+		items("at0005") = <
+			text = <"PaCO2">
+			description = <"The carbon dioxide pressure in the arterial blood">
+		>
+		items("at0006") = <
+			text = <"pH">
+			description = <"The negative logarithm of the Hydrogen ion concentration in blood">
+		>
+		items("at0007") = <
+			text = <"Base excess">
+			description = <"The relative excess of alkaline">
+		>
+		items("at0008") = <
+			text = <"Alveolar-arterial pO2 difference">
+			description = <"The difference between the pressure of oxygen in the alveolar and the artery">
+		>
+		items("at0009") = <
+			text = <"state structure">
+			description = <"@ internal @">
+		>
+		items("at0017") = <
+			text = <"PvCO2">
+			description = <"The carbon dioxide pressure in the venous blood">
+		>
+		items("at0012") = <
+			text = <"Site">
+			description = <"The site of sampling">
+		>
+		items("at0001") = <
+			text = <"structure">
+			description = <"@ internal @">
+		>
+		items("at0018") = <
+			text = <"CaO2">
+			description = <"The oxygen content of arterial blood">
+		>
+		items("at0016") = <
+			text = <"PvO2">
+			description = <"*">
+		>
+		items("at0002") = <
+			text = <"history">
+			description = <"@ internal @">
+		>
+		items("at0011") = <
+			text = <"Arterial">
+			description = <"Arterial readings">
+		>
+		items("at0010") = <
+			text = <"FiO2">
+			description = <"The fractional concentration of inspired O2 - normally 0.21">
+		>
+		items("at0013") = <
+			text = <"Venous">
+			description = <"Venous readings">
+		>
+		items("at0000") = <
+			text = <"Blood gas assessment">
+			description = <"The assessment of blood gas concentrations and acid-base balance in blood">
+		>
+		items("at0015") = <
+			text = <"SaO2">
+			description = <"The saturation of haem binding with oxygen">
+		>
+		items("at0014") = <
+			text = <"Site">
+			description = <"The vein from which the blood is sampled">
+		>
+		items("at0003") = <
+			text = <"Any event">
+			description = <"*">
+		>
+		items("at0004") = <
+			text = <"PaO2">
+			description = <"The oxygen pressure in the arterial blood">
+		>
+	>
+	constraint_definitions("en") = <
+		items("ac0001") = <
+			text = <"">
+			description = <"*">
+		>
+		items("ac0005") = <
+			text = <"Any term that 'is_a' artery or cavity">
+			description = <"Any artery or intravascular site within the systemic circulation from which blood can be sampled">
+		>
+		items("ac0004") = <
+			text = <"">
+			description = <"*">
+		>
+		items("ac0003") = <
+			text = <"Any term that 'is_a' vein or cavity">
+			description = <"A vein or cavity from which blood gases can be sampled">
+		>
+		items("ac0002") = <
+			text = <"Any term that 'is_a' artery">
+			description = <"Any artery from which blood gases can be sampled">
+		>
+	>

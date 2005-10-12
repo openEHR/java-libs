@@ -1,0 +1,23 @@
+TODO List Of ADL Parser
+=======================
+.String pattern using regular expression  (fixed)
+.Invariant and boolean expression
+.Special character specified by XML codes and Unicode
+.Support "string pattern matches {/mg|mg\/ml|mg\/g/}"
+.Support assumed values
+
+TODO List Of Validation After Parsing
+=====================================
+.Class existence
+.Attribute existence and type (including check if collection type)
+.Use node by object path in cADL
+.Decomposed date with dADL
+.Term definition and binding checking
+.check targetPath of ArchetypeInternalRef exists
+
+TODO List of Archetype Model
+============================
+.implement assertion package
+.implement path(), hasPath() within all constraint classes
+.implement isValid() within all constraint classes
+.implement isSubsetOf() with all constraint classes
