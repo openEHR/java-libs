@@ -49,6 +49,12 @@ ACKNOWLEDGEMENT
         Thank people from UCL for good collaboration and particulary Nathan Lee
         for authoring installation instructions.
         
+DIRECTORY STRUCTURE OF THE REPOSITORY
+		This repository is structured using the top-level structure defined at
+		http://www.openehr.org/developer/d_svn_um_dir_struct.htm. Due to java's 
+		needs, directory structures beneath the top level are fairly typical of
+		recommended java structures.
+
 BUILD
         The build script requires JDK and Maven to run. It has been tested with
         J2SDK 1.5.0 and Maven 1.0.2 on both Linux and Windows. It should work
