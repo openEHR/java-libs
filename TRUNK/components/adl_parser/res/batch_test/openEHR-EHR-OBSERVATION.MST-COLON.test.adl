@@ -1,0 +1,2288 @@
+archetype
+	openEHR-EHR-OBSERVATION.MST-COLON.V1
+
+concept
+	[at0000]	-- MST Findings for Colon
+description
+	author = <"Koray Atala� <atalagk@yahoo.com>">
+	status = <"draft">
+	version = <"1.0">
+	revision = <"1.0">
+	submission = <
+		organisation = <"METU Informatics Institute">
+		date = <2003-12-25>
+	>
+		adl_version = <"1.1">
+	description("en") = <
+		purpose = <"Describe MST 2.0 Findings for Colon">
+		use = <"">
+		misuse = <"">
+	>
+	description("tr") = <
+		purpose = <"Kolon i�in MST 2.0 Bulgular�">
+		use = <"">
+		misuse = <"">
+	>
+	rights = <"">
+
+definition
+	OBSERVATION[at0000] matches {	-- MST Findings for Colon
+		data matches {
+			HISTORY[at0001] matches {	-- History for endoscopy event
+				events cardinality matches {1..*} matches {
+					EVENT[at0002] matches {	-- Single event
+						data matches {
+							TREE[at0003] matches {	-- Colon
+								items cardinality matches {0..1} matches {
+									CLUSTER[at0005] matches {	-- NORMAL
+										items cardinality matches {0..1} matches {
+											CLUSTER[at0100] matches {	-- Normal
+												items cardinality matches {0..1} matches {
+													ELEMENT[at0110] occurrences matches {0..*} matches {	-- Site(s)
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac0110]}		-- Site(s)
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at0111, 	-- Anus
+																	at0112, 	-- Rectum
+																	at0113, 	-- Sigmoid
+																	at0114, 	-- Descending
+																	at0115, 	-- Splenic
+																	at0116, 	-- Transverse
+																	at0117, 	-- Hepatic
+																	at0118, 	-- Ascending
+																	at0119, 	-- Cecum
+																	at0120, 	-- Ileo-cecal valve
+																	at0121, 	-- Stoma
+																	at0122, 	-- Whole colon
+																	at0123, 	-- Anastomosis
+																	at0124]	-- Rectal Pouch
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									CLUSTER[at1000] matches {	-- LUMEN
+										items cardinality matches {0..1} matches {
+											CLUSTER[at1100] matches {	-- Dilated
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at1200] matches {	-- Stenosis
+												items cardinality matches {0..1} matches {
+													ELEMENT[at1210] occurrences matches {0..*} matches {	-- Appearance
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac1210]}		-- Appearance
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at1211, 	-- Extrinsic
+																	at1212, 	-- Benign intrinsic
+																	at1213]	-- Malignant intrinsic
+																}
+															}
+														}
+													}
+													ELEMENT[at1220] occurrences matches {0..*} matches {	-- Length (cm)
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac1220]}		-- Length (cm)
+															}
+														}
+														value matches {
+															REAL_QUANTITY matches {
+																property matches {"length"}
+																units cardinality matches {1} matches {
+																	UNIT matches {
+																		unit_string matches {"cm"}
+																		magnitude matches {|0.0..100.0|}
+																	}
+																}
+															}
+														}
+													}
+													ELEMENT[at1230] occurrences matches {0..*} matches {	-- Traversed
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac1230]}		-- Traversed
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at1231, 	-- Yes
+																	at1232]	-- No
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at1300] matches {	-- Evidence of previous surgery
+												items cardinality matches {0..1} matches {
+													ELEMENT[at1310] occurrences matches {0..*} matches {	-- Type
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac1310]}		-- Type
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at1311, 	-- Colo-colonic anastomosis
+																	at1312, 	-- Ileo-colonic anastomosis
+																	at1313, 	-- Colo-anal anastomosis
+																	at1314, 	-- Ileo-anal anastomosis
+																	at1315]	-- Colostomy
+																}
+															}
+														}
+													}
+													ELEMENT[at1320] occurrences matches {0..*} matches {	-- Suture Material Visible
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac1320]}		-- Suture Material Visible
+															}
+														}
+														value matches {
+															TEXT matches {*}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+										}
+									}
+									CLUSTER[at2000] matches {	-- CONTENTS
+										items cardinality matches {0..1} matches {
+											CLUSTER[at2100] matches {	-- Blood
+												items cardinality matches {0..1} matches {
+													ELEMENT[at2110] occurrences matches {0..*} matches {	-- Kind of blood
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac2110]}		-- Kind of blood
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at2111, 	-- Red
+																	at2112, 	-- Clot
+																	at2113]	-- Hematin (Altered blood)
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at2200] matches {	-- Foreign body
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at2300] matches {	-- Parasites
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at2400] matches {	-- Exudate
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at2500] matches {	-- Stool
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at2600] matches {	-- Stent
+												items cardinality matches {0..1} matches {
+													ELEMENT[at2610] occurrences matches {0..*} matches {	-- Type
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac2610]}		-- Type
+															}
+														}
+														value matches {
+															TEXT matches {*}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+										}
+									}
+									CLUSTER[at3000] matches {	-- MUCOSA
+										items cardinality matches {0..1} matches {
+											CLUSTER[at3100] occurrences matches {0..*} matches {	-- Vascular pattern
+												items cardinality matches {0..1} matches {
+													ELEMENT[at3110] occurrences matches {0..1} matches {	-- Appearance
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac3110]}		-- Appearance
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at3111, 	-- Normal
+																	at3112, 	-- Increased
+																	at3113]	-- Decreased
+																}
+															}
+														}
+													}
+													ELEMENT[at3120] occurrences matches {0..1} matches {	-- Extent
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac3120]}		-- Extent
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at3121, 	-- Localised
+																	at3122, 	-- Segmental
+																	at3123]	-- Diffuse
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at3200] occurrences matches {0..*} matches {	-- Erythematous (Hyperemic)
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3100]/items[at3120]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at3300] occurrences matches {0..*} matches {	-- Congested (Edematous)
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3100]/items[at3120]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at3400] occurrences matches {0..*} matches {	-- Granular
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3100]/items[at3120]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at3500] occurrences matches {0..*} matches {	-- Friable
+												items cardinality matches {0..1} matches {
+													ELEMENT[at3520] occurrences matches {0..1} matches {	-- Bleeding
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac3520]}		-- Bleeding
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at3521, 	-- Yes: Spontaneous
+																	at3522, 	-- Yes: Contact bleeding
+																	at1232]	-- No
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3100]/items[at3120]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at3600] occurrences matches {0..*} matches {	-- Ulcerated Mucosa
+												items cardinality matches {0..1} matches {
+													ELEMENT[at3610] occurrences matches {0..1} matches {	-- Continuity
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac3610]}		-- Continuity
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at3611, 	-- Discontinuous
+																	at3612]	-- Continuous
+																}
+															}
+														}
+													}
+													ELEMENT[at3620] occurrences matches {0..1} matches {	-- Bleeding
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac3620]}		-- Bleeding
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at1231, 	-- Yes
+																	at1232]	-- No
+																}
+															}
+														}
+													}
+													ELEMENT[at3630] occurrences matches {0..1} matches {	-- Stigmata of bleeding
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac3630]}		-- Stigmata of Bleeding
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at1231, 	-- Yes
+																	at1232]	-- No
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at3700] occurrences matches {0..*} matches {	-- Petechiae
+												items cardinality matches {0..1} matches {
+													ELEMENT[at3710] occurrences matches {0..1} matches {	-- Number
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac3710]}		-- Number
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at3711, 	-- Few
+																	at3712]	-- Multiple
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at3800] occurrences matches {0..*} matches {	-- Pseudomembrane
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3100]/items[at3120]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at3900] occurrences matches {0..*} matches {	-- Melanosis
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3100]/items[at3120]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+										}
+									}
+									CLUSTER[at4000] matches {	-- FLAT LESIONS
+										items cardinality matches {0..1} matches {
+											CLUSTER[at4100] occurrences matches {0..*} matches {	-- Angioectasia
+												items cardinality matches {0..1} matches {
+													ELEMENT[at4110] occurrences matches {0..1} matches {	-- Number
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac4110]}		-- Number
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at4111, 	-- Single
+																	at3711, 	-- Few
+																	at3712]	-- Multiple
+																}
+															}
+														}
+													}
+													ELEMENT[at4120] occurrences matches {0..1} matches {	-- Size
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac4120]}		-- Size
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at4121, 	-- Small
+																	at4122, 	-- Medium
+																	at4123]	-- Large
+																}
+															}
+														}
+													}
+													ELEMENT[at4130] occurrences matches {0..1} matches {	-- Extent
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac4130]}		-- Extent
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at3121, 	-- Localised
+																	at4132, 	-- Patchy
+																	at3123]	-- Diffuse
+																}
+															}
+														}
+													}
+													ELEMENT[at4140] occurrences matches {0..1} matches {	-- Bleeding
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac4140]}		-- Bleeding
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at1231, 	-- Yes
+																	at1232]	-- No
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3600]/items[at3630]/
+												}
+											}
+										}
+									}
+									CLUSTER[at5000] matches {	-- PROTRUDING LESIONS
+										items cardinality matches {0..1} matches {
+											CLUSTER[at5100] occurrences matches {0..*} matches {	-- Polyp(s)
+												items cardinality matches {0..1} matches {
+													ELEMENT[at5110] occurrences matches {0..1} matches {	-- Number
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac5110]}		-- Number
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at5111, 	-- <5: Specify
+																	at5112, 	-- >5:Many
+																	at5113]	-- >5:Multiple
+																}
+															}
+														}
+													}
+													ELEMENT[at5130] occurrences matches {0..1} matches {	-- Size
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac5130]}		-- Size
+															}
+														}
+														value matches {
+															REAL_QUANTITY matches {
+																property matches {"length"}
+																units cardinality matches {1} matches {
+																	UNIT matches {
+																		unit_string matches {"cm"}
+																		magnitude matches {|0.0..100.0|}
+																	}
+																}
+															}
+														}
+													}
+													ELEMENT[at5140] occurrences matches {0..1} matches {	-- Pedicle
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac5140]}		-- Pedicle
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at5141, 	-- Sessile
+																	at5142]	-- Pedunculated
+																}
+															}
+														}
+													}
+													ELEMENT[at5150] occurrences matches {0..1} matches {	-- Bleeding
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac5150]}		-- Bleeding
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at1231, 	-- Yes
+																	at1232, 	-- No
+																	at5153]	-- Stigmata of bleeding
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3100]/items[at3120]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at5200] occurrences matches {0..*} matches {	-- Pseudopolyps
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3100]/items[at3120]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at5300] occurrences matches {0..*} matches {	-- Lipoma
+												items cardinality matches {0..1} matches {
+													ELEMENT[at5320] occurrences matches {0..1} matches {	-- Diameter (mm)
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac5320]}		-- Diameter (mm)
+															}
+														}
+														value matches {
+															REAL_QUANTITY matches {
+																property matches {"diameter"}
+																units cardinality matches {1} matches {
+																	UNIT matches {
+																		unit_string matches {"mm"}
+																		magnitude matches {|0.0..1000.0|}
+																	}
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at4000]/items[at4100]/items[at4120]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at5400] occurrences matches {0..*} matches {	-- Tumor/Mass
+												items cardinality matches {0..1} matches {
+													ELEMENT[at5420] occurrences matches {0..*} matches {	-- Diameter (mm)
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac5420]}		-- Diameter (mm)
+															}
+														}
+														value matches {
+															REAL_QUANTITY matches {
+																property matches {"diameter"}
+																units cardinality matches {1} matches {
+																	UNIT matches {
+																		unit_string matches {"mm"}
+																		magnitude matches {|0.0..1000.0|}
+																	}
+																}
+															}
+														}
+													}
+													ELEMENT[at5430] occurrences matches {0..*} matches {	-- Length (cm)
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac5430]}		-- Length (cm)
+															}
+														}
+														value matches {
+															REAL_QUANTITY matches {
+																property matches {"length"}
+																units cardinality matches {1} matches {
+																	UNIT matches {
+																		unit_string matches {"cm"}
+																		magnitude matches {|0.0..1000.0|}
+																	}
+																}
+															}
+														}
+													}
+													ELEMENT[at5440] occurrences matches {0..1} matches {	-- Type
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac5440]}		-- Type
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at5441, 	-- Submucosal
+																	at5442, 	-- Fungating
+																	at5443, 	-- Ulcerated
+																	at5444, 	-- Infiltrative
+																	at5445]	-- Frond-like/Villous
+																}
+															}
+														}
+													}
+													ELEMENT[at5450] occurrences matches {0..1} matches {	-- Obstructing
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac5450]}		-- Obstructing
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at5451, 	-- Partial
+																	at5452]	-- Complete
+																}
+															}
+														}
+													}
+													ELEMENT[at5460] occurrences matches {0..1} matches {	-- Circumferential
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac5460]}		-- Circumferential
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at1231, 	-- Yes
+																	at1232]	-- No
+																}
+															}
+														}
+													}
+													ELEMENT[at5470] occurrences matches {0..1} matches {	-- Bleeding
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac5470]}		-- Bleeding
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at5471, 	-- Yes: Spurting
+																	at5472, 	-- Yes: Oozing
+																	at1232]	-- No
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at4000]/items[at4100]/items[at4120]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3600]/items[at3630]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											ELEMENT[at5500] occurrences matches {0..1} matches {*}
+											CLUSTER[at5600] occurrences matches {0..*} matches {	-- Hemorrhoids
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3600]/items[at3620]/
+												}
+											}
+											CLUSTER[at5700] occurrences matches {0..*} matches {	-- Suture Granuloma
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at4000]/items[at4100]/items[at4110]/
+												}
+											}
+											ELEMENT[at5800] occurrences matches {0..1} matches {*}
+										}
+									}
+									CLUSTER[at6000] matches {	-- EXCAVATED LESIONS
+										items cardinality matches {0..1} matches {
+											CLUSTER[at6100] occurrences matches {0..*} matches {	-- Erosion
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at4000]/items[at4100]/items[at4110]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3100]/items[at3120]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3600]/items[at3620]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3600]/items[at3630]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at6200] occurrences matches {0..*} matches {	-- Aphtha
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at4000]/items[at4100]/items[at4110]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3100]/items[at3120]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3600]/items[at3620]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3600]/items[at3630]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at6300] occurrences matches {0..*} matches {	-- Ulcer
+												items cardinality matches {0..1} matches {
+													ELEMENT[at6310] occurrences matches {0..*} matches {	-- Number
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac6310]}		-- Number
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at6311, 	-- Single (Solitary)
+																	at3711, 	-- Few
+																	at3712]	-- Multiple
+																}
+															}
+														}
+													}
+													ELEMENT[at6320] occurrences matches {0..*} matches {	-- Size
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac6320]}		-- Size
+															}
+														}
+														value matches {
+															REAL_QUANTITY matches {
+																property matches {"diameter"}
+																units cardinality matches {1} matches {
+																	UNIT matches {
+																		unit_string matches {"mm"}
+																		magnitude matches {|0.0..1000.0|}
+																	}
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at5000]/items[at5400]/items[at5470]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at3000]/items[at3600]/items[at3630]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at6400] occurrences matches {0..*} matches {	-- Scar
+												items cardinality matches {0..1} matches {
+													ELEMENT[at6410] occurrences matches {0..*} matches {	-- Number
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac6410]}		-- Number
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at4111, 	-- Single
+																	at3712]	-- Multiple
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at6500] occurrences matches {0..*} matches {	-- Diverticulum
+												items cardinality matches {0..1} matches {
+													ELEMENT[at6520] occurrences matches {0..*} matches {	-- Opening
+														runtime_label matches {
+															CODED_TEXT matches {
+																code matches {[ac6520]}		-- Opening
+															}
+														}
+														value matches {
+															CODED_TEXT matches {
+																code matches {
+																	[local::
+																	at4121, 	-- Small
+																	at4123]	-- Large
+																}
+															}
+														}
+													}
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at4000]/items[at4100]/items[at4110]/
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											CLUSTER[at6600] occurrences matches {0..*} matches {	-- Fistula
+												items cardinality matches {0..1} matches {
+													use_node ELEMENT /[at0000]/data[at0001]/events[at0002]/data[at0003]/items[at0005]/items[at0100]/items[at0110]/
+												}
+											}
+											ELEMENT[at6700] occurrences matches {0..1} matches {*}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", "tr">
+	terminologies_available = <"MST2", "UMLS", "SNOMED_CT">
+	term_definitions("en") = <
+		items("at5441") = <
+			text = <"Submucosal">
+			description = <"Attribute value: Tumor/Mass>Type">
+		>
+		items("at5440") = <
+			text = <"Type">
+			description = <"Attribute: Type">
+		>
+		items("at5140") = <
+			text = <"Pedicle">
+			description = <"Attribute: Pedicle">
+		>
+		items("at5442") = <
+			text = <"Fungating">
+			description = <"Attribute value: Tumor/Mass>Type">
+		>
+		items("at1000") = <
+			text = <"LUMEN">
+			description = <"HEADING: LUMEN">
+		>
+		items("at5142") = <
+			text = <"Pedunculated">
+			description = <"Attribute value: Polyp(s)>Pedicle">
+		>
+		items("at0122") = <
+			text = <"Whole colon">
+			description = <"Colon: Site">
+		>
+		items("at1232") = <
+			text = <"No">
+			description = <"Attribute value: General">
+		>
+		items("at1220") = <
+			text = <"Length (cm)">
+			description = <"Attribute: Length(cm)">
+		>
+		items("at2200") = <
+			text = <"Foreign body">
+			description = <"TERM: Foreign body">
+		>
+		items("at5450") = <
+			text = <"Obstructing">
+			description = <"Attribute: Obstructing">
+		>
+		items("at5451") = <
+			text = <"Partial">
+			description = <"Attribute value: Tumor/Mass>Obstructing">
+		>
+		items("at5452") = <
+			text = <"Complete">
+			description = <"Attribute value: Tumor/Mass>Obstructing">
+		>
+		items("at5000") = <
+			text = <"PROTRUDING LESIONS">
+			description = <"HEADING: PROTRUDING LESIONS">
+		>
+		items("at1230") = <
+			text = <"Traversed">
+			description = <"Attribute: Traversed">
+		>
+		items("at1231") = <
+			text = <"Yes">
+			description = <"Attribute value: General">
+		>
+		items("at5500") = <
+			text = <"Hypertrophy Anal Papillae">
+			description = <"TERM: Hypertrophy Anal Papillae">
+		>
+		items("at4140") = <
+			text = <"Bleeding">
+			description = <"Attribute: Bleeding">
+		>
+		items("at0110") = <
+			text = <"Site(s)">
+			description = <"Site(s) for Colon">
+		>
+		items("at0111") = <
+			text = <"Anus">
+			description = <"Colon: Site">
+		>
+		items("at0112") = <
+			text = <"Rectum">
+			description = <"Colon: Site">
+		>
+		items("at0113") = <
+			text = <"Sigmoid">
+			description = <"Colon: Site">
+		>
+		items("at0114") = <
+			text = <"Descending">
+			description = <"Colon: Site">
+		>
+		items("at0115") = <
+			text = <"Splenic">
+			description = <"Colon: Site">
+		>
+		items("at0116") = <
+			text = <"Transverse">
+			description = <"Colon: Site">
+		>
+		items("at0117") = <
+			text = <"Hepatic">
+			description = <"Colon: Site">
+		>
+		items("at0118") = <
+			text = <"Ascending">
+			description = <"Colon: Site">
+		>
+		items("at0119") = <
+			text = <"Cecum">
+			description = <"Colon: Site">
+		>
+		items("at1313") = <
+			text = <"Colo-anal anastomosis">
+			description = <"Attribute value: Evidence of previous surgery>Type">
+		>
+		items("at3700") = <
+			text = <"Petechiae">
+			description = <"TERM: Petechiae">
+		>
+		items("at1200") = <
+			text = <"Stenosis">
+			description = <"TERM: Stenosis">
+		>
+		items("at6320") = <
+			text = <"Size">
+			description = <"Attribute: Size (Largest diameter in mm">
+		>
+		items("at3113") = <
+			text = <"Decreased">
+			description = <"Attribute value: Vascular pattern>Appearance">
+		>
+		items("at3112") = <
+			text = <"Increased">
+			description = <"Attribute value: Vascular pattern>Appearance">
+		>
+		items("at3111") = <
+			text = <"Normal">
+			description = <"Attribute value: Vascular pattern>Appearance">
+		>
+		items("at3110") = <
+			text = <"Appearance">
+			description = <"Attribute: Appearance">
+		>
+		items("at4110") = <
+			text = <"Number">
+			description = <"Attribute: Number">
+		>
+		items("at3520") = <
+			text = <"Bleeding">
+			description = <"Attribute: Bleeding">
+		>
+		items("at3521") = <
+			text = <"Yes: Spontaneous">
+			description = <"Attribute value: Bleeding">
+		>
+		items("at3522") = <
+			text = <"Yes: Contact bleeding">
+			description = <"Attribute value: Bleeding">
+		>
+		items("at5470") = <
+			text = <"Bleeding">
+			description = <"Attribute: Bleeding">
+		>
+		items("at5471") = <
+			text = <"Yes: Spurting">
+			description = <"Attribute value: Bleeding">
+		>
+		items("at4111") = <
+			text = <"Single">
+			description = <"Attribute value: Number">
+		>
+		items("at5443") = <
+			text = <"Ulcerated">
+			description = <"Attribute value: Tumor/Mass>Type">
+		>
+		items("at2000") = <
+			text = <"CONTENTS">
+			description = <"HEADING: CONTENTS">
+		>
+		items("at1212") = <
+			text = <"Benign intrinsic">
+			description = <"Attribute value: Stenosis>Appearance">
+		>
+		items("at1213") = <
+			text = <"Malignant intrinsic">
+			description = <"Attribute value: Stenosis>Appearance">
+		>
+		items("at5200") = <
+			text = <"Pseudopolyps">
+			description = <"TERM: Pseudopolyps">
+		>
+		items("at1211") = <
+			text = <"Extrinsic">
+			description = <"Attribute value: Stenosis>Appearance">
+		>
+		items("at2500") = <
+			text = <"Stool">
+			description = <"TERM: Stool">
+		>
+		items("at5700") = <
+			text = <"Suture Granuloma">
+			description = <"TERM: Suture Granuloma">
+		>
+		items("at1210") = <
+			text = <"Appearance">
+			description = <"Attribute: Appearance">
+		>
+		items("at3800") = <
+			text = <"Pseudomembrane">
+			description = <"TERM: Pseudomembrane">
+		>
+		items("at6000") = <
+			text = <"EXCAVATED LESIONS">
+			description = <"HEADING: EXCAVATED LESIONS">
+		>
+		items("at3200") = <
+			text = <"Erythematous (Hyperemic)">
+			description = <"TERM: Erythematous (Hyperemic)">
+		>
+		items("at4132") = <
+			text = <"Patchy">
+			description = <"Attribute value: Extent">
+		>
+		items("at4130") = <
+			text = <"Extent">
+			description = <"Attribute: Extent">
+		>
+		items("at5800") = <
+			text = <"Condylomas">
+			description = <"TERM: Condylomas">
+		>
+		items("at3500") = <
+			text = <"Friable">
+			description = <"TERM: Friable">
+		>
+		items("at6700") = <
+			text = <"Anal fissure">
+			description = <"TERM: Anal fissure">
+		>
+		items("at2610") = <
+			text = <"Type">
+			description = <"Attribute: Type">
+		>
+		items("at4120") = <
+			text = <"Size">
+			description = <"Attribute: Size">
+		>
+		items("at3711") = <
+			text = <"Few">
+			description = <"Attribute value: Number">
+		>
+		items("at3710") = <
+			text = <"Number">
+			description = <"Attribute: Number">
+		>
+		items("at3712") = <
+			text = <"Multiple">
+			description = <"Attribute value: Number">
+		>
+		items("at6520") = <
+			text = <"Opening">
+			description = <"Attribute: Opening">
+		>
+		items("at5150") = <
+			text = <"Bleeding">
+			description = <"Attribute: Bleeding">
+		>
+		items("at5153") = <
+			text = <"Stigmata of bleeding">
+			description = <"Attribute value: Bleeding">
+		>
+		items("at4100") = <
+			text = <"Angioectasia">
+			description = <"TERM: Angioectasia">
+		>
+		items("at1100") = <
+			text = <"Dilated">
+			description = <"TERM: Dilated">
+		>
+		items("at6200") = <
+			text = <"Aphtha">
+			description = <"TERM: Aphtha">
+		>
+		items("at2600") = <
+			text = <"Stent">
+			description = <"TERM: Stent">
+		>
+		items("at1320") = <
+			text = <"Suture Material Visible">
+			description = <"Attribute: Suture Material Visible">
+		>
+		items("at0123") = <
+			text = <"Anastomosis">
+			description = <"Colon: Site">
+		>
+		items("at5100") = <
+			text = <"Polyp(s)">
+			description = <"TERM: Polyp(s)">
+		>
+		items("at0121") = <
+			text = <"Stoma">
+			description = <"Colon: Site">
+		>
+		items("at0120") = <
+			text = <"Ileo-cecal valve">
+			description = <"Colon: Site">
+		>
+		items("at0124") = <
+			text = <"Rectal Pouch">
+			description = <"Colon: Site">
+		>
+		items("at3000") = <
+			text = <"MUCOSA">
+			description = <"HEADING: MUCOSA">
+		>
+		items("at6310") = <
+			text = <"Number">
+			description = <"Attribute: Number">
+		>
+		items("at6311") = <
+			text = <"Single (Solitary)">
+			description = <"Attribute value: Number">
+		>
+		items("at5320") = <
+			text = <"Diameter (mm)">
+			description = <"Attribute: Diameter (mm)">
+		>
+		items("at6500") = <
+			text = <"Diverticulum">
+			description = <"TERM: Diverticulum">
+		>
+		items("at5460") = <
+			text = <"Circumferential">
+			description = <"Attribute: Circumferential">
+		>
+		items("at4123") = <
+			text = <"Large">
+			description = <"Attribute value: Size">
+		>
+		items("at4122") = <
+			text = <"Medium">
+			description = <"Attribute value: Size">
+		>
+		items("at4121") = <
+			text = <"Small">
+			description = <"Attribute value: Size">
+		>
+		items("at5141") = <
+			text = <"Sessile">
+			description = <"Attribute value: Polyp(s)>Pedicle">
+		>
+		items("at1300") = <
+			text = <"Evidence of previous surgery">
+			description = <"TERM: Evidence of previous surgery">
+		>
+		items("at2400") = <
+			text = <"Exudate">
+			description = <"TERM: Exudate">
+		>
+		items("at3600") = <
+			text = <"Ulcerated Mucosa">
+			description = <"TERM: Ulcerated Mucosa">
+		>
+		items("at2112") = <
+			text = <"Clot">
+			description = <"Attribute value: Blood>Kind of blood">
+		>
+		items("at2113") = <
+			text = <"Hematin (Altered blood)">
+			description = <"Attribute value: Blood>Kind of blood">
+		>
+		items("at2110") = <
+			text = <"Kind of blood">
+			description = <"Attribute: Kind of blood">
+		>
+		items("at2111") = <
+			text = <"Red">
+			description = <"Attribute value: Blood>Kind of blood">
+		>
+		items("at5400") = <
+			text = <"Tumor/Mass">
+			description = <"TERM: Tumor/Mass">
+		>
+		items("at2300") = <
+			text = <"Parasites">
+			description = <"TERM: Parasites">
+		>
+		items("at0100") = <
+			text = <"Normal">
+			description = <"TERM: Normal">
+		>
+		items("at5300") = <
+			text = <"Lipoma">
+			description = <"TERM: Lipoma">
+		>
+		items("at0000") = <
+			text = <"MST Findings for Colon">
+			description = <"The name of OBSERVATION Type">
+		>
+		items("at0001") = <
+			text = <"History for endoscopy event">
+			description = <"the name of HISTORY Structure">
+		>
+		items("at0002") = <
+			text = <"Single event">
+			description = <"the name of EVENT Structure">
+		>
+		items("at0003") = <
+			text = <"Colon">
+			description = <"the name of TREE Structure">
+		>
+		items("at0005") = <
+			text = <"NORMAL">
+			description = <"HEADING: NORMAL">
+		>
+		items("at6600") = <
+			text = <"Fistula">
+			description = <"TERM: Fistula">
+		>
+		items("at5111") = <
+			text = <"<5: Specify">
+			description = <"Attribute value: Polyp(s)>Number">
+		>
+		items("at5110") = <
+			text = <"Number">
+			description = <"Attribute: Number">
+		>
+		items("at5113") = <
+			text = <">5:Multiple">
+			description = <"Attribute value: Polyp(s)>Number">
+		>
+		items("at5112") = <
+			text = <">5:Many">
+			description = <"Attribute value: Polyp(s)>Number">
+		>
+		items("at3900") = <
+			text = <"Melanosis">
+			description = <"TERM: Melanosis">
+		>
+		items("at6300") = <
+			text = <"Ulcer">
+			description = <"TERM: Ulcer">
+		>
+		items("at3300") = <
+			text = <"Congested (Edematous)">
+			description = <"TERM: Congested (Edematous)">
+		>
+		items("at5472") = <
+			text = <"Yes: Oozing">
+			description = <"Attribute value: Bleeding">
+		>
+		items("at4000") = <
+			text = <"FLAT LESIONS">
+			description = <"HEADING: FLAT LESIONS">
+		>
+		items("at3610") = <
+			text = <"Continuity">
+			description = <"Attribute: Continuity">
+		>
+		items("at3611") = <
+			text = <"Discontinuous">
+			description = <"Attribute value: Ulcerated mucosa>Continuity">
+		>
+		items("at3612") = <
+			text = <"Continuous">
+			description = <"Attribute value: Ulcerated mucosa>Continuity">
+		>
+		items("at3120") = <
+			text = <"Extent">
+			description = <"Attribute: Extent">
+		>
+		items("at3121") = <
+			text = <"Localised">
+			description = <"Attribute value: Extent">
+		>
+		items("at3122") = <
+			text = <"Segmental">
+			description = <"Attribute value: Extent">
+		>
+		items("at3123") = <
+			text = <"Diffuse">
+			description = <"Attribute value: Extent">
+		>
+		items("at5420") = <
+			text = <"Diameter (mm)">
+			description = <"Attribute: Diameter (mm)">
+		>
+		items("at6410") = <
+			text = <"Number">
+			description = <"Attribute: Number">
+		>
+		items("at1312") = <
+			text = <"Ileo-colonic anastomosis">
+			description = <"Attribute value: Evidence of previous surgery>Type">
+		>
+		items("at1311") = <
+			text = <"Colo-colonic anastomosis">
+			description = <"Attribute value: Evidence of previous surgery>Type">
+		>
+		items("at1310") = <
+			text = <"Type">
+			description = <"Attribute: Type">
+		>
+		items("at5600") = <
+			text = <"Hemorrhoids">
+			description = <"TERM: Hemorrhoids">
+		>
+		items("at1315") = <
+			text = <"Colostomy">
+			description = <"Attribute value: Evidence of previous surgery>Type">
+		>
+		items("at1314") = <
+			text = <"Ileo-anal anastomosis">
+			description = <"Attribute value: Evidence of previous surgery>Type">
+		>
+		items("at3620") = <
+			text = <"Bleeding">
+			description = <"Attribute: Bleeding">
+		>
+		items("at2100") = <
+			text = <"Blood">
+			description = <"TERM: Blood">
+		>
+		items("at5130") = <
+			text = <"Size">
+			description = <"Attribute: Size">
+		>
+		items("at5430") = <
+			text = <"Length (cm)">
+			description = <"Attribute: Length (cm)">
+		>
+		items("at3400") = <
+			text = <"Granular">
+			description = <"TERM: Granular">
+		>
+		items("at6400") = <
+			text = <"Scar">
+			description = <"TERM: Scar">
+		>
+		items("at3630") = <
+			text = <"Stigmata of bleeding">
+			description = <"Attribute: Stigmata of bleeding">
+		>
+		items("at6100") = <
+			text = <"Erosion">
+			description = <"TERM: Erosion">
+		>
+		items("at3100") = <
+			text = <"Vascular pattern">
+			description = <"TERM: Vascular pattern">
+		>
+		items("at5445") = <
+			text = <"Frond-like/Villous">
+			description = <"Attribute value: Tumor/Mass>Type">
+		>
+		items("at5444") = <
+			text = <"Infiltrative">
+			description = <"Attribute value: Tumor/Mass>Type">
+		>
+	>
+	term_definitions("tr") = <
+		items("at5441") = <
+			text = <"Submukozal">
+			description = <"S�fat de�eri: T�m�r/Kitle>Tip">
+		>
+		items("at5440") = <
+			text = <"Tip">
+			description = <"S�fat: Tip">
+		>
+		items("at5140") = <
+			text = <"Pedik�l">
+			description = <"S�fat: Pedik�l">
+		>
+		items("at5442") = <
+			text = <"Parmak �eklinde">
+			description = <"S�fat de�eri: T�m�r/Kitle>Tip">
+		>
+		items("at1000") = <
+			text = <"L�MEN">
+			description = <"BA�LIK: L�MEN">
+		>
+		items("at5142") = <
+			text = <"Sapl�">
+			description = <"S�fat de�eri: Polip(ler)>Pedik�l">
+		>
+		items("at0122") = <
+			text = <"T�m kolon">
+			description = <"Kolon: B�lge">
+		>
+		items("at1232") = <
+			text = <"Hay�r">
+			description = <"S�fat de�eri: Genel">
+		>
+		items("at1220") = <
+			text = <"Uzunluk (cm)">
+			description = <"S�fat: Uzunluk (cm)">
+		>
+		items("at2200") = <
+			text = <"Yabanc� cisim">
+			description = <"TER�M: Yabanc� cisim">
+		>
+		items("at5450") = <
+			text = <"T�kay�c�">
+			description = <"S�fat: T�kay�c�">
+		>
+		items("at5451") = <
+			text = <"K�smi">
+			description = <"S�fat de�eri: T�m�r/Kitle>T�kay�c�">
+		>
+		items("at5452") = <
+			text = <"Tam">
+			description = <"S�fat de�eri: T�m�r/Kitle>T�kay�c�">
+		>
+		items("at5000") = <
+			text = <"�IKINTI YAPMI� LEZYONLAR">
+			description = <"BA�LIK: �IKINTI YAPMI� LEZYONLAR">
+		>
+		items("at1230") = <
+			text = <"��inden ge�ilen">
+			description = <"S�fat: ��inden ge�ilen">
+		>
+		items("at1231") = <
+			text = <"Evet">
+			description = <"S�fat de�eri: Genel">
+		>
+		items("at5500") = <
+			text = <"Hipertrofik anal papilla">
+			description = <"TER�M: Hipertrofik anal papilla">
+		>
+		items("at4140") = <
+			text = <"Kanama">
+			description = <"S�fat: Kanama">
+		>
+		items("at0110") = <
+			text = <"B�lge(ler)">
+			description = <"Kolon i�in B�lge(ler)">
+		>
+		items("at0111") = <
+			text = <"An�s">
+			description = <"Kolon: B�lge">
+		>
+		items("at0112") = <
+			text = <"Rektum">
+			description = <"Kolon: B�lge">
+		>
+		items("at0113") = <
+			text = <"Sigmoid">
+			description = <"Kolon: B�lge">
+		>
+		items("at0114") = <
+			text = <"Desandan">
+			description = <"Kolon: B�lge">
+		>
+		items("at0115") = <
+			text = <"Splenik">
+			description = <"Kolon: B�lge">
+		>
+		items("at0116") = <
+			text = <"Transvers">
+			description = <"Kolon: B�lge">
+		>
+		items("at0117") = <
+			text = <"Hepatik">
+			description = <"Kolon: B�lge">
+		>
+		items("at0118") = <
+			text = <"Asendan">
+			description = <"Kolon: B�lge">
+		>
+		items("at0119") = <
+			text = <"�ekum">
+			description = <"Kolon: B�lge">
+		>
+		items("at1313") = <
+			text = <"Kolo-anal anastomoz">
+			description = <"S�fat de�eri: Daha �nceki cerrahiye ait kan�t>Tip">
+		>
+		items("at3700") = <
+			text = <"Pete�i">
+			description = <"TER�M: Pete�i">
+		>
+		items("at1200") = <
+			text = <"Stenoz">
+			description = <"TER�M: Stenoz">
+		>
+		items("at6320") = <
+			text = <"Boyut">
+			description = <"S�fat: Boyut">
+		>
+		items("at3113") = <
+			text = <"Azalm��">
+			description = <"S�fat de�eri: Vask�ler pattern>G�r�n�m">
+		>
+		items("at3112") = <
+			text = <"Artm��">
+			description = <"S�fat de�eri: Vask�ler pattern>G�r�n�m">
+		>
+		items("at3111") = <
+			text = <"Normal">
+			description = <"S�fat de�eri: Vask�ler pattern>G�r�n�m">
+		>
+		items("at3110") = <
+			text = <"G�r�n�m">
+			description = <"S�fat: G�r�n�m">
+		>
+		items("at4110") = <
+			text = <"Say�">
+			description = <"S�fat: Say�">
+		>
+		items("at3520") = <
+			text = <"Kanama">
+			description = <"S�fat: Kanama">
+		>
+		items("at3521") = <
+			text = <"Evet: Spontan">
+			description = <"S�fat de�eri: Kanama">
+		>
+		items("at3522") = <
+			text = <"Evet: Temas ile kanama">
+			description = <"S�fat de�eri: Kanama">
+		>
+		items("at5470") = <
+			text = <"Kanama">
+			description = <"S�fat: Kanama">
+		>
+		items("at5471") = <
+			text = <"Evet: F��k�r�r tarzda">
+			description = <"S�fat de�eri: Kanama">
+		>
+		items("at4111") = <
+			text = <"Tek">
+			description = <"S�fat de�eri: Say�">
+		>
+		items("at5443") = <
+			text = <"�lsere">
+			description = <"S�fat de�eri: T�m�r/Kitle>Tip">
+		>
+		items("at2000") = <
+			text = <"��ER�KLER">
+			description = <"BA�LIK: ��ER�KLER">
+		>
+		items("at1212") = <
+			text = <"Selim intrensek">
+			description = <"S�fat de�eri: Stenoz>G�r�n�m">
+		>
+		items("at1213") = <
+			text = <"Habis intrensek">
+			description = <"S�fat de�eri: Stenoz>G�r�n�m">
+		>
+		items("at5200") = <
+			text = <"Ps�dopolipler">
+			description = <"TER�M: Ps�dopolipler">
+		>
+		items("at1211") = <
+			text = <"Ekstrensek">
+			description = <"S�fat de�eri: Stenoz>G�r�n�m">
+		>
+		items("at2500") = <
+			text = <"D��k�">
+			description = <"TER�M: D��k�">
+		>
+		items("at5700") = <
+			text = <"S�t�r gran�lomu">
+			description = <"TER�M: S�t�r gran�lomu">
+		>
+		items("at1210") = <
+			text = <"G�r�n�m">
+			description = <"S�fat: G�r�n�m">
+		>
+		items("at3800") = <
+			text = <"Ps�domembran">
+			description = <"TER�M: Ps�domembran">
+		>
+		items("at6000") = <
+			text = <"��ER� DO�RU ��K�K LEZYONLAR">
+			description = <"BA�LIK: ��ER� DO�RU ��K�K LEZYONLAR">
+		>
+		items("at3200") = <
+			text = <"Eritemat�z (Hiperemik)">
+			description = <"TER�M: Eritemat�z (Hiperemik)">
+		>
+		items("at4132") = <
+			text = <"Yamal�">
+			description = <"S�fat de�eri: Yay�l�m">
+		>
+		items("at4130") = <
+			text = <"Yay�l�m">
+			description = <"S�fat: Yay�l�m">
+		>
+		items("at5800") = <
+			text = <"Kondilom">
+			description = <"TER�M: Kondilom">
+		>
+		items("at3500") = <
+			text = <"Frajil">
+			description = <"TER�M: Frajil">
+		>
+		items("at6700") = <
+			text = <"Anal fiss�r">
+			description = <"TER�M: Anal fiss�r">
+		>
+		items("at2610") = <
+			text = <"Tip">
+			description = <"S�fat: Tip">
+		>
+		items("at4120") = <
+			text = <"Boyut">
+			description = <"S�fat: Boyut">
+		>
+		items("at3711") = <
+			text = <"Az say�da">
+			description = <"S�fat de�eri: Say�">
+		>
+		items("at3710") = <
+			text = <"Say�">
+			description = <"S�fat: Say�">
+		>
+		items("at3712") = <
+			text = <"�ok say�da">
+			description = <"S�fat de�eri: Say�">
+		>
+		items("at6520") = <
+			text = <"A��kl�k">
+			description = <"S�fat: A��kl�k">
+		>
+		items("at5150") = <
+			text = <"Kanama">
+			description = <"S�fat: Kanama">
+		>
+		items("at5153") = <
+			text = <"Kanama i�aretleri">
+			description = <"S�fat de�eri: Kanama">
+		>
+		items("at4100") = <
+			text = <"Anjiyoektazi">
+			description = <"TER�M: Anjiyoektazi">
+		>
+		items("at1100") = <
+			text = <"Dilate">
+			description = <"TER�M: Dilate">
+		>
+		items("at6200") = <
+			text = <"Aftlar">
+			description = <"TER�M: Aftlar">
+		>
+		items("at2600") = <
+			text = <"Stent">
+			description = <"TER�M: Stent">
+		>
+		items("at1320") = <
+			text = <"S�t�r materyali g�r�n�yor">
+			description = <"S�fat: S�t�r materyali g�r�n�yor">
+		>
+		items("at0123") = <
+			text = <"Anastomoz">
+			description = <"Kolon: B�lge">
+		>
+		items("at5100") = <
+			text = <"Polip(ler)">
+			description = <"TER�M: Polip(ler)">
+		>
+		items("at0121") = <
+			text = <"Stoma">
+			description = <"Kolon: B�lge">
+		>
+		items("at0120") = <
+			text = <"�leo-�ekal valv">
+			description = <"Kolon: B�lge">
+		>
+		items("at0124") = <
+			text = <"Rektal cep">
+			description = <"Kolon: B�lge">
+		>
+		items("at3000") = <
+			text = <"MUKOZA">
+			description = <"BA�LIK: MUKOZA">
+		>
+		items("at6310") = <
+			text = <"Say�">
+			description = <"S�fat: Say�">
+		>
+		items("at6311") = <
+			text = <"Tek (soliter)">
+			description = <"S�fat de�eri: Say�">
+		>
+		items("at5320") = <
+			text = <"�ap (mm)">
+			description = <"S�fat: �ap (mm)">
+		>
+		items("at6500") = <
+			text = <"Divertik�l">
+			description = <"TER�M: Divertik�l">
+		>
+		items("at5460") = <
+			text = <"�epe�evre">
+			description = <"S�fat: �epe�evre">
+		>
+		items("at4123") = <
+			text = <"B�y�k">
+			description = <"S�fat de�eri: Boyut">
+		>
+		items("at4122") = <
+			text = <"Orta">
+			description = <"S�fat de�eri: Boyut">
+		>
+		items("at4121") = <
+			text = <"K���k">
+			description = <"S�fat de�eri: Boyut">
+		>
+		items("at5141") = <
+			text = <"Sessil">
+			description = <"S�fat de�eri: Polip(ler)>Pedik�l">
+		>
+		items("at1300") = <
+			text = <"Daha �nceki cerrahiye ait kan�t">
+			description = <"TER�M: Daha �nceki cerrahiye ait kan�t">
+		>
+		items("at2400") = <
+			text = <"Eks�da">
+			description = <"TER�M: Eks�da">
+		>
+		items("at3600") = <
+			text = <"�lsere mukoza">
+			description = <"TER�M: �lsere mukoza">
+		>
+		items("at2112") = <
+			text = <"P�ht�">
+			description = <"S�fat de�eri: Kan>Kan�n cinsi">
+		>
+		items("at2113") = <
+			text = <"Hematin (De�i�mi� kan)">
+			description = <"S�fat de�eri: Kan>Kan�n cinsi">
+		>
+		items("at2110") = <
+			text = <"Kan�n cinsi">
+			description = <"S�fat: Kan�n cinsi">
+		>
+		items("at2111") = <
+			text = <"K�rm�z�">
+			description = <"S�fat de�eri: Kan>Kan�n cinsi">
+		>
+		items("at5400") = <
+			text = <"T�m�r/Kitle">
+			description = <"TER�M: T�m�r/Kitle">
+		>
+		items("at2300") = <
+			text = <"Parazitler">
+			description = <"TER�M: Parazitler">
+		>
+		items("at0100") = <
+			text = <"Normal">
+			description = <"TER�M: Normal">
+		>
+		items("at5300") = <
+			text = <"Lipom">
+			description = <"TER�M: Lipom">
+		>
+		items("at0000") = <
+			text = <"*MST Findings for Colon(en)">
+			description = <"*The name of OBSERVATION Type(en)">
+		>
+		items("at0001") = <
+			text = <"Endoskopi i�in hikaye">
+			description = <"HISTORY Yap�s�n�n �smi">
+		>
+		items("at0002") = <
+			text = <"Tek event">
+			description = <"EVENT Yap�s�n�n �smi">
+		>
+		items("at0003") = <
+			text = <"Kolon">
+			description = <"TREE Yap�s�n�n �smi">
+		>
+		items("at0005") = <
+			text = <"NORMAL">
+			description = <"BA�LIK: NORMAL">
+		>
+		items("at6600") = <
+			text = <"Fist�l">
+			description = <"TER�M: Fist�l">
+		>
+		items("at5111") = <
+			text = <"E�er 5den azsa, belirt">
+			description = <"S�fat de�eri: Polip(ler)>Say�">
+		>
+		items("at5110") = <
+			text = <"Say�">
+			description = <"S�fat: Say�">
+		>
+		items("at5113") = <
+			text = <"E�er 5 den fazlaysa: Multipl">
+			description = <"S�fat de�eri: Polip(ler)>Say�">
+		>
+		items("at5112") = <
+			text = <"E�er 5 den fazlaysa: �ok say�da">
+			description = <"S�fat de�eri: Polip(ler)>Say�">
+		>
+		items("at3900") = <
+			text = <"Melanoz">
+			description = <"TER�M: Melanoz">
+		>
+		items("at6300") = <
+			text = <"�lser">
+			description = <"TER�M: �lser">
+		>
+		items("at3300") = <
+			text = <"Konjesyone (�demli)">
+			description = <"TER�M: Konjesyone (�demli)">
+		>
+		items("at5472") = <
+			text = <"Evet: S�zma tarz�nda">
+			description = <"S�fat de�eri: Kanama">
+		>
+		items("at4000") = <
+			text = <"D�Z LEZYONLAR">
+			description = <"BA�LIK: D�Z LEZYONLAR">
+		>
+		items("at3610") = <
+			text = <"Devaml�l�k">
+			description = <"S�fat: Devaml�l�k">
+		>
+		items("at3611") = <
+			text = <"Devaml� de�il">
+			description = <"S�fat de�eri: �lsere mukoza>Devaml�l�k">
+		>
+		items("at3612") = <
+			text = <"Devaml�">
+			description = <"S�fat de�eri: �lsere mukoza>Devaml�l�k">
+		>
+		items("at3120") = <
+			text = <"Yay�l�m">
+			description = <"S�fat: Yay�l�m">
+		>
+		items("at3121") = <
+			text = <"Lokalize">
+			description = <"S�fat de�eri: Yay�l�m">
+		>
+		items("at3122") = <
+			text = <"Segmenter">
+			description = <"S�fat de�eri: Yay�l�m">
+		>
+		items("at3123") = <
+			text = <"Diff�z">
+			description = <"S�fat de�eri: Yay�l�m">
+		>
+		items("at5420") = <
+			text = <"�ap (mm)">
+			description = <"S�fat: �ap (mm)">
+		>
+		items("at6410") = <
+			text = <"Say�">
+			description = <"S�fat: Say�">
+		>
+		items("at1312") = <
+			text = <"�leo-kolonik anastomoz">
+			description = <"S�fat de�eri: Daha �nceki cerrahiye ait kan�t>Tip">
+		>
+		items("at1311") = <
+			text = <"Kolo-kolonik anastomoz">
+			description = <"S�fat de�eri: Daha �nceki cerrahiye ait kan�t>Tip">
+		>
+		items("at1310") = <
+			text = <"Tip">
+			description = <"S�fat: Tip">
+		>
+		items("at5600") = <
+			text = <"Hemoroidler">
+			description = <"TER�M: Hemoroidler">
+		>
+		items("at1315") = <
+			text = <"Kolostomi">
+			description = <"S�fat de�eri: Daha �nceki cerrahiye ait kan�t>Tip">
+		>
+		items("at1314") = <
+			text = <"�leo-anal anastomoz">
+			description = <"S�fat de�eri: Daha �nceki cerrahiye ait kan�t>Tip">
+		>
+		items("at3620") = <
+			text = <"Kanama">
+			description = <"S�fat: Kanama">
+		>
+		items("at2100") = <
+			text = <"Kan">
+			description = <"TER�M: Kan">
+		>
+		items("at5130") = <
+			text = <"Boyut">
+			description = <"S�fat: Boyut">
+		>
+		items("at5430") = <
+			text = <"Uzunluk (cm)">
+			description = <"S�fat: Uzunluk (cm)">
+		>
+		items("at3400") = <
+			text = <"Gran�ler">
+			description = <"TER�M: Gran�ler">
+		>
+		items("at6400") = <
+			text = <"Skar">
+			description = <"TER�M: Skar">
+		>
+		items("at3630") = <
+			text = <"Kanama i�aretleri">
+			description = <"S�fat: Kanama i�aretleri">
+		>
+		items("at6100") = <
+			text = <"Erozyon">
+			description = <"TER�M: Erozyon">
+		>
+		items("at3100") = <
+			text = <"Vask�ler patern">
+			description = <"TER�M: Vask�ler patern">
+		>
+		items("at5445") = <
+			text = <"Yaprak gibi/vill�z">
+			description = <"S�fat de�eri: T�m�r/Kitle>Tip">
+		>
+		items("at5444") = <
+			text = <"�nfiltratif">
+			description = <"S�fat de�eri: T�m�r/Kitle>Tip">
+		>
+	>
+	constraint_definitions("en") = <
+		items("ac4140") = <
+			text = <"Bleeding">
+			description = <"Attribute name">
+		>
+		items("ac3710") = <
+			text = <"Number">
+			description = <"Attribute name">
+		>
+		items("ac4120") = <
+			text = <"Size">
+			description = <"Attribute name">
+		>
+		items("ac3620") = <
+			text = <"Bleeding">
+			description = <"Attribute name">
+		>
+		items("ac1230") = <
+			text = <"Traversed">
+			description = <"Attribute name">
+		>
+		items("ac0110") = <
+			text = <"Site(s)">
+			description = <"Sites for Colon">
+		>
+		items("ac9999") = <
+			text = <"Terms for Colon">
+			description = <"MST Findings for Colon">
+		>
+		items("ac3120") = <
+			text = <"Extent">
+			description = <"Attribute name">
+		>
+		items("ac5320") = <
+			text = <"Diameter (mm)">
+			description = <"Attribute name">
+		>
+		items("ac5450") = <
+			text = <"Obstructing">
+			description = <"Attribute name">
+		>
+		items("ac1220") = <
+			text = <"Length (cm)">
+			description = <"Attribute name">
+		>
+		items("ac5150") = <
+			text = <"Bleeding">
+			description = <"Attribute name">
+		>
+		items("ac5470") = <
+			text = <"Bleeding">
+			description = <"Attribute name">
+		>
+		items("ac9997") = <
+			text = <"Endoscopy event">
+			description = <"Single Endoscopy event">
+		>
+		items("ac2610") = <
+			text = <"Type">
+			description = <"Attribute name">
+		>
+		items("ac1310") = <
+			text = <"Type">
+			description = <"Attribute name">
+		>
+		items("ac3610") = <
+			text = <"Continuity">
+			description = <"Attribute name">
+		>
+		items("ac5110") = <
+			text = <"Number">
+			description = <"Attribute name">
+		>
+		items("ac6320") = <
+			text = <"Size">
+			description = <"Attribute name">
+		>
+		items("ac3630") = <
+			text = <"Stigmata of Bleeding">
+			description = <"Attribute name">
+		>
+		items("ac5130") = <
+			text = <"Size">
+			description = <"Attribute name">
+		>
+		items("ac4110") = <
+			text = <"Number">
+			description = <"Attribute name">
+		>
+		items("ac1320") = <
+			text = <"Suture Material Visible">
+			description = <"Attribute name">
+		>
+		items("ac4130") = <
+			text = <"Extent">
+			description = <"Attribute name">
+		>
+		items("ac1210") = <
+			text = <"Appearance">
+			description = <"Attribute name">
+		>
+		items("ac3110") = <
+			text = <"Appearance">
+			description = <"Attribute name">
+		>
+		items("ac3520") = <
+			text = <"Bleeding">
+			description = <"Attribute name">
+		>
+		items("ac6410") = <
+			text = <"Number">
+			description = <"Attribute name">
+		>
+		items("ac5420") = <
+			text = <"Diameter (mm)">
+			description = <"Attribute name">
+		>
+		items("ac5140") = <
+			text = <"Pedicle">
+			description = <"Attribute name">
+		>
+		items("ac5430") = <
+			text = <"Length (cm)">
+			description = <"Attribute name">
+		>
+		items("ac2110") = <
+			text = <"Kind of blood">
+			description = <"Attribute name">
+		>
+		items("ac5440") = <
+			text = <"Type">
+			description = <"Attribute name">
+		>
+		items("ac6310") = <
+			text = <"Number">
+			description = <"Attribute name">
+		>
+		items("ac5460") = <
+			text = <"Circumferential">
+			description = <"Attribute name">
+		>
+		items("ac6520") = <
+			text = <"Opening">
+			description = <"Attribute name">
+		>
+	>
+	constraint_definitions("tr") = <
+		items("ac4140") = <
+			text = <"Kanama">
+			description = <"S�fat">
+		>
+		items("ac3710") = <
+			text = <"Say�">
+			description = <"S�fat">
+		>
+		items("ac4120") = <
+			text = <"Boyut">
+			description = <"S�fat">
+		>
+		items("ac3620") = <
+			text = <"Kanama">
+			description = <"S�fat">
+		>
+		items("ac1230") = <
+			text = <"��inden ge�ilen">
+			description = <"S�fat">
+		>
+		items("ac0110") = <
+			text = <"B�lge(ler)">
+			description = <"Kolon i�in B�lge(ler)">
+		>
+		items("ac9999") = <
+			text = <"Kolon i�in terimler listesi">
+			description = <"Kolon i�in MST Bulgular�">
+		>
+		items("ac3120") = <
+			text = <"Yay�l�m">
+			description = <"S�fat">
+		>
+		items("ac5320") = <
+			text = <"�ap (mm)">
+			description = <"S�fat">
+		>
+		items("ac5450") = <
+			text = <"T�kay�c�">
+			description = <"S�fat">
+		>
+		items("ac1220") = <
+			text = <"Uzunluk (cm)">
+			description = <"S�fat">
+		>
+		items("ac5150") = <
+			text = <"Kanama">
+			description = <"S�fat">
+		>
+		items("ac5470") = <
+			text = <"Kanama">
+			description = <"S�fat">
+		>
+		items("ac9997") = <
+			text = <"Endoskopi Olay�">
+			description = <"Tek Endoskopi Olay�">
+		>
+		items("ac2610") = <
+			text = <"Tip">
+			description = <"S�fat">
+		>
+		items("ac1310") = <
+			text = <"Tip">
+			description = <"S�fat">
+		>
+		items("ac3610") = <
+			text = <"Devaml�l�k">
+			description = <"S�fat">
+		>
+		items("ac5110") = <
+			text = <"Say�">
+			description = <"S�fat">
+		>
+		items("ac6320") = <
+			text = <"Boyut">
+			description = <"S�fat">
+		>
+		items("ac3630") = <
+			text = <"Kanama i�aretleri">
+			description = <"S�fat">
+		>
+		items("ac5130") = <
+			text = <"Boyut">
+			description = <"S�fat">
+		>
+		items("ac4110") = <
+			text = <"Say�">
+			description = <"S�fat">
+		>
+		items("ac1320") = <
+			text = <"S�t�r materyali g�r�n�yor">
+			description = <"S�fat">
+		>
+		items("ac4130") = <
+			text = <"Yay�l�m">
+			description = <"S�fat">
+		>
+		items("ac1210") = <
+			text = <"G�r�n�m">
+			description = <"S�fat">
+		>
+		items("ac3110") = <
+			text = <"G�r�n�m">
+			description = <"S�fat">
+		>
+		items("ac3520") = <
+			text = <"Kanama">
+			description = <"S�fat">
+		>
+		items("ac6410") = <
+			text = <"Say�">
+			description = <"S�fat">
+		>
+		items("ac5420") = <
+			text = <"�ap (mm)">
+			description = <"S�fat">
+		>
+		items("ac5140") = <
+			text = <"Pedik�l">
+			description = <"S�fat">
+		>
+		items("ac5430") = <
+			text = <"Uzunluk (cm)">
+			description = <"S�fat">
+		>
+		items("ac2110") = <
+			text = <"Kan�n cinsi">
+			description = <"S�fat">
+		>
+		items("ac5440") = <
+			text = <"Tip">
+			description = <"S�fat">
+		>
+		items("ac6310") = <
+			text = <"Say�">
+			description = <"S�fat">
+		>
+		items("ac5460") = <
+			text = <"�epe�evre">
+			description = <"S�fat">
+		>
+		items("ac6520") = <
+			text = <"A��kl�k">
+			description = <"S�fat">
+		>
+	>
+	term_binding("MST2") = <
+		items("at1200") = <[mst2::C0908982]>
+		items("at1000") = <[mst2::C0908980]>
+		items("at1100") = <[mst2::C0908983]>
+	>
+	term_binding("UMLS") = <
+		items("at0110") = <[umls::C234305]>
+		items("at1210") = <[umls::C189305]>
+		items("at1200") = <[umls::C987305]>
+		items("at1000") = <[umls::C232405]>
+		items("at0005") = <[umls::C124305]>
+		items("at0100") = <[umls::C000000]>
+		items("at1100") = <[umls::C254305]>
+		items("at1220") = <[umls::C187305]>
+	>
+	term_binding("SNOMED_CT") = <
+		items("at0110") = <[snomed_ct::1000339]>
+		items("at1210") = <[snomed_ct::1008405]>
+		items("at1200") = <[snomed_ct::1003002]>
+		items("at1000") = <[snomed_ct::1000240]>
+		items("at0005") = <[snomed_ct::1000394]>
+		items("at0100") = <[snomed_ct::1000310]>
+		items("at1100") = <[snomed_ct::1003590]>
+		items("at1220") = <[snomed_ct::1001304]>
+	>
+	constraint_binding("SNOMED_CT") = <
+		items("ac0117") = <query("terminology", "terminology_id = snomed_ct; synonym_of [1111111]")>
+		items("ac0116") = <query("terminology", "terminology_id = snomed_ct; synonym_of [1111111]")>
+		items("ac0115") = <query("terminology", "terminology_id = snomed_ct; synonym_of [1111111]")>
+		items("ac0114") = <query("terminology", "terminology_id = snomed_ct; synonym_of [1111111]")>
+		items("ac0113") = <query("terminology", "terminology_id = snomed_ct; synonym_of [1111111]")>
+		items("ac0112") = <query("terminology", "terminology_id = snomed_ct; synonym_of [1111111]")>
+		items("ac0111") = <query("terminology", "terminology_id = snomed_ct; synonym_of [1111111]")>
+		items("ac0110") = <query("terminology", "terminology_id = snomed_ct; synonym_of [1111111]")>
+		items("ac0119") = <query("terminology", "terminology_id = snomed_ct; synonym_of [1111111]")>
+		items("ac0118") = <query("terminology", "terminology_id = snomed_ct; synonym_of [1111111]")>
+	>

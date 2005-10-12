@@ -1,0 +1,86 @@
+archetype
+	openehr-ehr-INSTRUCTION.simple_medication_order.test
+
+concept
+	[at0000]	-- simple medication order
+
+description
+	author = 		<"Sam Heard and Thomas Beale">
+	status = 		<"draft">
+	version = 		<"1.0">
+	revision = 		<"1.0">
+	submission = 	<
+		organisation = 	<"Ocean Informatics">
+		date = 		<2004-08-07>
+	>
+	adl_version =		<"1.2">
+	description("en") = <
+		purpose = 	<"Describe a simple medication order instruction">
+		use = 	<"">
+		misuse = 	<"">
+	>
+	rights = 		<"">
+
+definition
+	INSTRUCTION[at0000] matches {	-- simple medication order
+		action matches {
+			allow_archetype LIST occurrences matches {1..1} matches {
+				include
+					id matches {/openehr-ehr-LIST\.medication_description\.*/}
+			}
+		}
+		links cardinality matches {0..*} matches {
+			LINK occurrences matches {0..*} matches {
+				type matches {
+					CODED_TEXT matches {
+						code matches {[openehr::2222]}	-- Indication
+					}
+				}
+				meaning matches {
+					CODED_TEXT matches {
+						code matches {[openehr::2223]}	-- Administration
+					}
+				}
+				target matches {
+					EHR_URI matches {
+						target_rm_type matches {"OBSERVATION"}
+					}
+				}
+			}
+		}
+		other_participations cardinality matches {0..*} matches {
+			PARTICIPATION [at0010] occurrences matches {1..1} matches {	-- performer
+				mode matches {
+					CODED_TEXT matches {
+						code matches {[openehr::216]}			-- face to face
+					}
+				}
+			}
+			PARTICIPATION [at0011] occurrences matches {0..*} matches {	-- other participant
+				mode matches {
+					CODED_TEXT matches {
+						code matches {[openehr::]}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+
+	languages_available = <"en", ...>
+
+	terminologies_available = <"HL7_ParticipationType", ...>
+
+	term_definitions("en") = <
+		items("at0000") = <text = <"single medication order">		description = <"order for a single medication">>
+		items("at0010") = <text = <"performer">;				description = <"performer of administration">>
+		items("at0011") = <text = <"other participant">;		description = <"other particpant in administration">>
+		>
+	
+
+	term_binding("HL7_ParticipationType") = <
+		items("at0010") = <[HL7_ParticipationType::V10248]>	-- performer
+	>
+

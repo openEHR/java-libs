@@ -1,0 +1,185 @@
+archetype
+	openehr-ehr-CLUSTER.medication_description.test
+
+concept
+	[at0000]	-- medication description
+
+description
+	author = 		<"Sam Heard and Thomas Beale">
+	status = 		<"draft">
+	version = 		<"1.0">
+	revision = 		<"1.0">
+	submission = 	<
+		organisation = 	<"Ocean Informatics">
+		date = 		<2004-08-07>
+	>
+	adl_version =		<"1.2">
+	description("en") = <
+		purpose = 	<"Describe a medication">
+		use = 	<"">
+		misuse = 	<"">
+	>
+	rights = 		<"">
+
+definition
+	CLUSTER [at0001] matches {	-- structure
+		items cardinality matches {0..*} matches {
+			ELEMENT[at0004.1] matches {	-- Name of medication
+				value matches {
+					TEXT matches {*}
+				}
+			}
+			ELEMENT[at0.10] occurrences matches {0..1} matches {	-- Strength
+				value matches {
+					QUANTITY matches {
+						units matches {"s"}
+					}
+				}
+			}
+			ELEMENT[at0.11] occurrences matches {0..1} matches {	-- Form
+				value matches {
+					CODED_TEXT matches {
+						code matches {[ac0.1]}		-- Any term that 'is_a' form of medication
+					}
+				}
+			}
+			ELEMENT[at0.13] occurrences matches {0..1} matches {	-- Dose
+				value matches {
+					QUANTITY matches {
+						units matches {"s"}
+					}
+				}
+			}
+			ELEMENT[at0.12] occurrences matches {0..1} matches {	-- Route
+				value matches {
+					CODED_TEXT matches {
+						code matches {[ac0.2]}		-- Any term that 'is_a' route of administration
+					}
+				}
+			}
+			ELEMENT[at0008] occurrences matches {0..1} matches {	-- Indication
+				value matches {
+					TEXT matches {*}
+				}
+			}
+			ELEMENT[at0005.1] occurrences matches {0..1} matches {	-- Patient instructions
+				value matches {
+					TEXT matches {*}
+				}
+			}
+			ELEMENT[at0006] occurrences matches {0..1} matches {	-- Age
+				value matches {
+					QUANTITY matches {
+						units matches {"s"}						
+					}
+				}
+			}
+			ELEMENT[at0007] occurrences matches {0..1} matches {	-- Provider
+				value matches {
+					TEXT matches {*}
+				}
+			}
+			ELEMENT[at0.9] occurrences matches {0..1} matches {	-- Alternative name
+				runtime_label matches {
+					CODED_TEXT matches {
+						code matches {[ac0.3]}		-- =Generic name OR Brand name
+					}
+				}
+				value matches {
+					TEXT matches {*}
+				}
+			}
+		}
+	}
+	
+ontology
+	primary_language = <"en">
+
+	languages_available = <"en", ...>
+
+	terminologies_available = <"openehr", ...>
+
+	term_definitions("en") = <
+		items("at0000") = <
+			text = <"Medication description">
+			description = <"The description of the medication">
+		>
+		items("at0001") = <
+			text = <"structure">
+			description = <"@ internal @">
+		>
+		items("at0005") = <
+			text = <"Description">
+			description = <"The description of the intervention">
+		>
+		items("at0006") = <
+			text = <"Age">
+			description = <"Age of the subject at the time of the procedure">
+		>
+		items("at0007") = <
+			text = <"Provider">
+			description = <"The name of the provider">
+		>
+		items("at0008") = <
+			text = <"Indication">
+			description = <"The indication for the intervention">
+		>
+		items("at0005.1") = <
+			text = <"Patient instructions">
+			description = <"The description of the intervention">
+		>
+		items("at0.11") = <
+			text = <"Form">
+			description = <"The form of the medication">
+		>
+		items("at0.9") = <
+			text = <"Alternative name">
+			description = <"The generic or brand name of the drug which is an alternative to the name - assumed to be brand name if 'medication name is generic' is set to true, generic if 'medication name is generic' set to false">
+		>
+		items("at0.10") = <
+			text = <"Strength">
+			description = <"The strength of the medication">
+		>
+		items("at0.12") = <
+			text = <"Route">
+			description = <"The route of administration">
+		>
+		items("at0004.1") = <
+			text = <"Name of medication">
+			description = <"The name of the intervention - which may be coded">
+		>
+		items("at0000.1") = <
+			text = <"Administration of medication">
+			description = <"Recording of administration of medication">
+		>
+		items("at0.13") = <
+			text = <"Dose">
+			description = <"The dose of the medication">
+		>
+		items("at0002") = <
+			text = <"history">
+			description = <"@ internal @">
+		>
+		items("at0003") = <
+			text = <"Any event">
+			description = <"*">
+		>
+		items("at0004") = <
+			text = <"Name">
+			description = <"The name of the intervention - which may be coded">
+		>
+	>
+	constraint_definitions("en") = <
+		items("ac0.1") = <
+			text = <"Any term that 'is_a' form of medication">
+			description = <"Terms such as tablet, inhaler, liquid....">
+		>
+		items("ac0.3") = <
+			text = <"=Generic name OR Brand name">
+			description = <"*">
+		>
+		items("ac0.2") = <
+			text = <"Any term that 'is_a' route of administration">
+			description = <"*">
+		>
+	>

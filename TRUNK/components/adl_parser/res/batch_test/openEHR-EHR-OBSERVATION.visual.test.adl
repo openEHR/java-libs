@@ -1,0 +1,119 @@
+archetype
+	openEHR-EHR-OBSERVATION.visual.test
+
+concept
+	[at0000]	-- Visual observation
+description
+	author = <"Sam Heard <sam.heard@oceaninformatics.biz>">
+	submission = <
+		organisation = <"openEHR Foundation">
+		date = <2004-05-18>
+	>
+		version = <"version">
+	status = <"draft">
+	revision = <"1.0">
+	description("en") = <
+		purpose = <"Describe systemic blood pressure measurement result and protocol">
+		use = <"">
+		misuse = <"">
+	>
+	adl_version = <"1.2">
+	rights = <"">
+
+definition
+	OBSERVATION[at0000] matches {	-- Visual observation
+		data matches {
+			HISTORY[at0002] matches {	-- history
+				events cardinality matches {1..*} matches {
+					EVENT[at0003] occurrences matches {0..*} matches {	-- Any event
+						data matches {
+							TREE[at0001] matches {	-- structure
+								items cardinality matches {0..1} matches {
+									CLUSTER[at0008] occurrences matches {1..*} matches {	-- Object and findings
+										items cardinality matches {0..1} matches {
+											ELEMENT[at0009] matches {	-- Finding site
+												value matches {
+													CODED_TEXT matches {
+														code matches {[ac0001]}		-- =any body part including the whole
+													}
+												}
+											}
+											ELEMENT[at0010] occurrences matches {0..1} matches {	-- Finding site description
+												value matches {
+													TEXT matches {*}
+												}
+											}
+										}
+									}
+									CLUSTER[at0011] occurrences matches {0..1} matches {	-- Findings
+										items cardinality matches {0..1} matches {
+											ELEMENT[at0013] occurrences matches {0..1} matches {	-- Normal
+												value matches {True, False}
+											}
+											ELEMENT[at0014] occurrences matches {0..1} matches {	-- Clinical findings
+												value matches {
+													TEXT matches {*}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions("en") = <
+		items("at0008") = <
+			text = <"Object and findings">
+			description = <"Grouping for the object and findings">
+		>
+		items("at0009") = <
+			text = <"Finding site">
+			description = <"*">
+		>
+		items("at0002") = <
+			text = <"history">
+			description = <"@ internal @">
+		>
+		items("at0011") = <
+			text = <"Findings">
+			description = <"*">
+		>
+		items("at0010") = <
+			text = <"Finding site description">
+			description = <"A textural description of the body site">
+		>
+		items("at0013") = <
+			text = <"Normal">
+			description = <"Are the findings normal">
+		>
+		items("at0000") = <
+			text = <"Visual observation">
+			description = <"Allows recording of visual observations regarding any aspect of the body, the surface features of the body, at endoscopy or  by radiology or other visualisation techniques">
+		>
+		items("at0001") = <
+			text = <"structure">
+			description = <"@ internal @">
+		>
+		items("at0014") = <
+			text = <"Clinical findings">
+			description = <"Description of the findings">
+		>
+		items("at0003") = <
+			text = <"Any event">
+			description = <"*">
+		>
+	>
+	constraint_definitions("en") = <
+		items("ac0001") = <
+			text = <"=any body part including the whole">
+			description = <"Able to record the object of the visual observation">
+		>
+	>

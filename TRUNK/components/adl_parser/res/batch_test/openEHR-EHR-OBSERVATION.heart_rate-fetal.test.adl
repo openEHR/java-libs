@@ -1,0 +1,244 @@
+archetype
+	openEHR-EHR-OBSERVATION.heart_rate-fetal.test
+specialize
+	openEHR-EHR-OBSERVATION.heart_rate.test
+
+concept
+	[at0000.1]	-- Foetal heart rate
+description
+	author = <"Sam Heard <sam.heard@oceaninformatics.biz>">
+	submission = <
+		organisation = <"openEHR Foundation">
+		date = <2004-05-18>
+	>
+		version = <"version">
+	status = <"draft">
+	revision = <"1.0">
+	description("en") = <
+		purpose = <"Describe systemic blood pressure measurement result and protocol">
+		use = <"">
+		misuse = <"">
+	>
+	adl_version = <"1.2">
+	rights = <"">
+
+definition
+	OBSERVATION[at0000.1] matches {	-- Foetal heart rate
+		subject matches {
+			RELATED_PARTY[at0.16] matches {	-- Subject of data
+				relationship matches {
+					CODED_TEXT matches {
+						code matches {[openehr::3]}
+						assumed_value matches {"relationship"}
+					}
+				}
+			}
+		}
+		data matches {
+			HISTORY[at0002] matches {	-- history
+				events cardinality matches {1..*; ordered} matches {
+					EVENT[at0003] occurrences matches {0..*} matches {	-- Any event
+						data matches {
+							List[at0001] matches {	-- structure
+								items cardinality matches {0..1; ordered} matches {
+									ELEMENT[at0004] matches {	-- Rate
+										value matches {
+											COUNT matches {
+												magnitude matches {|>= 0|}
+											}
+										}
+									}
+									ELEMENT[at0005] occurrences matches {0..1} matches {	-- Rhythm
+										value matches {
+											CODED_TEXT matches {
+												code matches {
+													[local::
+													at0006, 	-- Regular
+													at0007, 	-- Irregular
+													at0008]	-- Irregularly irregular
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			List[at0.10] matches {	-- List
+				items cardinality matches {0..1; ordered} matches {
+					ELEMENT[at0.11] occurrences matches {0..1} matches {	-- Device
+						value matches {
+							CODED_TEXT matches {
+								code matches {
+									[local::
+									at0.12, 	-- Pinnards stethoscope
+									at0.13, 	-- Doppler
+									at0.14]	-- Electrical
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", "en-us">
+	term_definitions("en") = <
+		items("at0005") = <
+			text = <"Rhythm">
+			description = <"The rhythm of the heart beat">
+		>
+		items("at0006") = <
+			text = <"Regular">
+			description = <"Regular heart beat">
+		>
+		items("at0007") = <
+			text = <"Irregular">
+			description = <"The heart is irregular">
+		>
+		items("at0008") = <
+			text = <"Irregularly irregular">
+			description = <"Irregular in a chaotic manner">
+		>
+		items("at0.14") = <
+			text = <"Electrical">
+			description = <"Electrical device">
+		>
+		items("at0000.1") = <
+			text = <"Foetal heart rate">
+			description = <"The rate the foetal heart is beating - either mechanically or electrically">
+		>
+		items("at0.9") = <
+			text = <"Subject of data">
+			description = <"Subject of this entry">
+		>
+		items("at0.13") = <
+			text = <"Doppler">
+			description = <"Ultrasound doppler device">
+		>
+		items("at0.10") = <
+			text = <"List">
+			description = <"*">
+		>
+		items("at0.12") = <
+			text = <"Pinnards stethoscope">
+			description = <"A foetal stethoscope">
+		>
+		items("at0.11") = <
+			text = <"Device">
+			description = <"The device used to measure the foetal heart rate">
+		>
+		items("at0.16") = <
+			text = <"Subject of data">
+			description = <"subject of this entry">
+		>
+		items("at0.15") = <
+			text = <"Subject of data">
+			description = <"subject of this entry">
+		>
+		items("at0000") = <
+			text = <"Heart rate">
+			description = <"The rate the heart is beating - either mechanically or electrically">
+		>
+		items("at0001") = <
+			text = <"structure">
+			description = <"@ internal @">
+		>
+		items("at0002") = <
+			text = <"history">
+			description = <"@ internal @">
+		>
+		items("at0003") = <
+			text = <"Any event">
+			description = <"*">
+		>
+		items("at0004") = <
+			text = <"Rate">
+			description = <"The rate of the heart">
+		>
+	>
+	term_definitions("en-us") = <
+		items("at0005") = <
+			text = <"Rhythm">
+			description = <"The rhythm of the heart beat">
+		>
+		items("at0006") = <
+			text = <"Regular">
+			description = <"Regular heart beat">
+		>
+		items("at0007") = <
+			text = <"Irregular">
+			description = <"The heart is irregular">
+		>
+		items("at0008") = <
+			text = <"Irregularly irregular">
+			description = <"Irregular in a chaotic manner">
+		>
+		items("at0002") = <
+			text = <"*history(en)">
+			description = <"*@ internal @(en)">
+		>
+		items("at0000") = <
+			text = <"Heart rate">
+			description = <"The rate the heart is beating - either mechanically or electrically">
+		>
+		items("at0003") = <
+			text = <"Any event">
+			description = <"*">
+		>
+		items("at0001") = <
+			text = <"*structure(en)">
+			description = <"*@ internal @(en)">
+		>
+		items("at0000.1") = <
+			text = <"Fetal heart rate">
+			description = <"The rate the fetal heart is beating - either mechanically or electrically">
+		>
+		items("at0.9") = <
+			text = <"Subject of data">
+			description = <"Subject of this entry">
+		>
+		items("at0004") = <
+			text = <"Rate">
+			description = <"The rate of the heart">
+		>
+		items("at0.16") = <
+			text = <"*Subject of data(en)">
+			description = <"*subject of this entry(en)">
+		>
+		items("at0.15") = <
+			text = <"*Subject of data(en)">
+			description = <"*subject of this entry(en)">
+		>
+		items("at0.14") = <
+			text = <"Electrical">
+			description = <"Electrical device">
+		>
+		items("at0.13") = <
+			text = <"Doppler">
+			description = <"Ultrasound doppler device">
+		>
+		items("at0.12") = <
+			text = <"Pinnards stethoscope">
+			description = <"A fetal stethoscope">
+		>
+		items("at0.11") = <
+			text = <"Device">
+			description = <"The device used to measure the fetal heart rate">
+		>
+		items("at0.10") = <
+			text = <"List">
+			description = <"*">
+		>
+	>
+	constraint_definitions("en") = <
+	>
+	constraint_definitions("en-us") = <
+	>

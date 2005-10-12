@@ -1,0 +1,418 @@
+archetype
+	openEHR-EHR-OBSERVATION.temperature.test
+
+concept
+	[at0000]	-- body temperature
+description
+	author = <"Sam Heard <sam.heard@oceaninformatics.biz>">
+	submission = <
+		organisation = <"openEHR Foundation">
+		date = <2004-05-18>
+	>
+		version = <"version">
+	status = <"draft">
+	revision = <"1.0">
+	description("en") = <
+		purpose = <"Describe systemic blood pressure measurement result and protocol">
+		use = <"">
+		misuse = <"">
+	>
+	adl_version = <"1.2">
+	rights = <"">
+
+definition
+	OBSERVATION[at0000] matches {	-- body temperature
+		data matches {
+			HISTORY[at0002] matches {	-- history
+				events cardinality matches {1..*} matches {
+					EVENT[at0003] occurrences matches {0..*} matches {	-- Any event
+						data matches {
+							SIMPLE[at0001] matches {	-- Simple
+								item matches {
+									ELEMENT[at0004] occurrences matches {0..1} matches {	-- Temperature
+										runtime_label matches {
+											CODED_TEXT matches {
+												code matches {[ac0001]}		-- Any synonym for 'temperature'
+											}
+										}
+										value matches {
+											REAL_QUANTITY matches {
+												property matches {"temperature"}
+												units cardinality matches {1} matches {
+													UNIT matches {
+														unit_string matches {"C"}
+														magnitude matches {|>= 4|}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					EVENT[at0005] occurrences matches {0..*} matches {	-- 1 hour average
+						aggregate_math_function matches {"Mean"}
+						width matches {P1h}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0006] occurrences matches {0..*} matches {	-- 1 hour maximum
+						aggregate_math_function matches {"Maximum"}
+						width matches {P1h}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0007] occurrences matches {0..*} matches {	-- 1 hour minimum
+						aggregate_math_function matches {"Minimum"}
+						width matches {P1h}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0008] occurrences matches {0..*} matches {	-- 8 hour average
+						aggregate_math_function matches {"Mean"}
+						width matches {P8h}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0009] occurrences matches {0..*} matches {	-- 8 hour maximum
+						aggregate_math_function matches {"Maximum"}
+						width matches {P8h}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0010] occurrences matches {0..*} matches {	-- 8 hour minimum
+						aggregate_math_function matches {"Minimum"}
+						width matches {P8h}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0011] occurrences matches {0..*} matches {	-- 10 hour average
+						aggregate_math_function matches {"Mean"}
+						width matches {P10h}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0012] occurrences matches {0..*} matches {	-- 10 hour maximum
+						aggregate_math_function matches {"Maximum"}
+						width matches {P10h}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0013] occurrences matches {0..*} matches {	-- 10 hour minimum
+						aggregate_math_function matches {"Minimum"}
+						width matches {P10h}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0014] occurrences matches {0..*} matches {	-- 12 hour average
+						aggregate_math_function matches {"Mean"}
+						width matches {P12h}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0015] occurrences matches {0..*} matches {	-- 12 hour maximum
+						aggregate_math_function matches {"Maximum"}
+						width matches {P12h}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0016] occurrences matches {0..*} matches {	-- 12 hour minimum
+						aggregate_math_function matches {"Minimum"}
+						width matches {P12h}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0017] occurrences matches {0..*} matches {	-- 24 hour average
+						aggregate_math_function matches {"Mean"}
+						width matches {P1d}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0018] occurrences matches {0..*} matches {	-- 24 hour maximum
+						aggregate_math_function matches {"Maximum"}
+						width matches {P1d}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+					EVENT[at0019] occurrences matches {0..*} matches {	-- 24 hour minimum
+						aggregate_math_function matches {"Minimum"}
+						width matches {P1d}
+						data matches {
+							use_node SIMPLE /[at0000]/data[at0002]/events[at0003]/data[at0001]/
+						}
+					}
+				}
+			}
+		}
+		state matches {
+			LIST[at0029] matches {	-- List
+				items cardinality matches {0..1} matches {
+					ELEMENT[at0030] occurrences matches {0..1} matches {	-- Thermal situation
+						value matches {
+							CODED_TEXT matches {
+								code matches {
+									[local::
+									at0031, 	-- Indoor - normal clothing or bedding
+									at0032, 	-- Indoor - reduced clothing or bedding
+									at0033, 	-- Indoor - increased clothing or bedding
+									at0034, 	-- Outdoors - normal clothing
+									at0035, 	-- Outdoors - reduced clothing
+									at0036, 	-- Outdoors - Increased clothing
+									at0037, 	-- Thermal stress - downward
+									at0038, 	-- Thermal stress - upward
+									at0040]	-- Paediatric incubator
+								}
+								assumed_value matches {"at0031"}
+							}
+						}
+					}
+					ELEMENT[at0039] occurrences matches {0..1} matches {	-- Ambient temperature
+						value matches {
+							REAL_QUANTITY matches {
+								property matches {"temperature"}
+								units cardinality matches {1} matches {
+									UNIT matches {
+										unit_string matches {"C"}
+										assumed_value matches {25}
+									}
+								}
+							}
+						}
+					}
+					ELEMENT[at0041] occurrences matches {0..1} matches {	-- Description of thermal stress
+						value matches {
+							TEXT matches {*}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			LIST[at0020] matches {	-- protocol structure
+				items cardinality matches {0..1} matches {
+					ELEMENT[at0021] occurrences matches {0..1} matches {	-- Site of measurement
+						value matches {
+							CODED_TEXT matches {
+								code matches {
+									[local::
+									at0022, 	-- Oral
+									at0023, 	-- Aural
+									at0024, 	-- Axilla
+									at0025, 	-- Rectal
+									at0026, 	-- Core
+									at0027, 	-- Urinary bladder
+									at0028]	-- Intravascular
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	terminologies_available = <"LNC205", ...>
+	term_definitions("en") = <
+		items("at0030") = <
+			text = <"Thermal situation">
+			description = <"The thermal situation of the person who is having the temperature taken">
+		>
+		items("at0037") = <
+			text = <"Thermal stress - downward">
+			description = <"The patient has been exposed to conditions to reduce temperature">
+		>
+		items("at0036") = <
+			text = <"Outdoors - Increased clothing">
+			description = <"The patient has been outdoors with more clothing than is required for the conditions">
+		>
+		items("at0035") = <
+			text = <"Outdoors - reduced clothing">
+			description = <"The patient is or has been outdoors with less clothing than is ideal for the conditions">
+		>
+		items("at0034") = <
+			text = <"Outdoors - normal clothing">
+			description = <"The patient is or has been outdoors and wearing normal clothing for the conditions">
+		>
+		items("at0010") = <
+			text = <"8 hour minimum">
+			description = <"Minimum temperature over 8 hour">
+		>
+		items("at0013") = <
+			text = <"10 hour minimum">
+			description = <"Minimum temperature over 1 hour">
+		>
+		items("at0012") = <
+			text = <"10 hour maximum">
+			description = <"Maximum temperature over 10 hours">
+		>
+		items("at0015") = <
+			text = <"12 hour maximum">
+			description = <"Maximum temperature over 12 hours">
+		>
+		items("at0014") = <
+			text = <"12 hour average">
+			description = <"Average temperature over 12 hours">
+		>
+		items("at0017") = <
+			text = <"24 hour average">
+			description = <"Average temperature over 24 hours">
+		>
+		items("at0016") = <
+			text = <"12 hour minimum">
+			description = <"Minimum temperature over 1 hour">
+		>
+		items("at0019") = <
+			text = <"24 hour minimum">
+			description = <"Minimum temperature over 1 hour">
+		>
+		items("at0018") = <
+			text = <"24 hour maximum">
+			description = <"Maximum temperature over 24 hours">
+		>
+		items("at0040") = <
+			text = <"Paediatric incubator">
+			description = <"The patient is in a paediatric incubator">
+		>
+		items("at0041") = <
+			text = <"Description of thermal stress">
+			description = <"Desscription of the conditions applied to the patient to change temperature">
+		>
+		items("at0022") = <
+			text = <"Oral">
+			description = <"measured in the mouth">
+		>
+		items("at0023") = <
+			text = <"Aural">
+			description = <"measured in the ear">
+		>
+		items("at0020") = <
+			text = <"protocol structure">
+			description = <"@ internal @">
+		>
+		items("at0021") = <
+			text = <"Site of measurement">
+			description = <"The site of measurement of the temperature">
+		>
+		items("at0026") = <
+			text = <"Core">
+			description = <"Measured internally in the body; includes bladder, rectum and intravascular">
+		>
+		items("at0027") = <
+			text = <"Urinary bladder">
+			description = <"measured in the urinary bladder">
+		>
+		items("at0024") = <
+			text = <"Axilla">
+			description = <"measured in the arm-pit">
+		>
+		items("at0000") = <
+			text = <"body temperature">
+			description = <"An estimate of the core temperature of the body">
+		>
+		items("at0001") = <
+			text = <"Simple">
+			description = <"@ internal @">
+		>
+		items("at0002") = <
+			text = <"history">
+			description = <"@ internal @">
+		>
+		items("at0003") = <
+			text = <"Any event">
+			description = <"Any event">
+		>
+		items("at0004") = <
+			text = <"Temperature">
+			description = <"The core body temperature">
+		>
+		items("at0005") = <
+			text = <"1 hour average">
+			description = <"Average temperature over 1 hour">
+		>
+		items("at0006") = <
+			text = <"1 hour maximum">
+			description = <"Maximum temperature over 1 hour">
+		>
+		items("at0007") = <
+			text = <"1 hour minimum">
+			description = <"Minimum temperature over 1 hour">
+		>
+		items("at0008") = <
+			text = <"8 hour average">
+			description = <"Average temperature over 8 hours">
+		>
+		items("at0009") = <
+			text = <"8 hour maximum">
+			description = <"Maximum temperature over 8 hours">
+		>
+		items("at0011") = <
+			text = <"10 hour average">
+			description = <"Average temperature over 10 hours">
+		>
+		items("at0025") = <
+			text = <"Rectal">
+			description = <"measured in the rectum">
+		>
+		items("at0029") = <
+			text = <"List">
+			description = <"">
+		>
+		items("at0039") = <
+			text = <"Ambient temperature">
+			description = <"The temperature to which the person has been exposed">
+		>
+		items("at0038") = <
+			text = <"Thermal stress - upward">
+			description = <"The person has been exposed to conditions to raise their temperature">
+		>
+		items("at0028") = <
+			text = <"Intravascular">
+			description = <"Measured within the vascular system">
+		>
+		items("at0033") = <
+			text = <"Indoor - increased clothing or bedding">
+			description = <"The patient is indoors and is wearing more clothing or using more bedding than usual for the environment">
+		>
+		items("at0032") = <
+			text = <"Indoor - reduced clothing or bedding">
+			description = <"The patient is indoors and is wearing less than ideal clothing or using less bedding than ideal for the environment">
+		>
+		items("at0031") = <
+			text = <"Indoor - normal clothing or bedding">
+			description = <"Patient is indoors and is wearing a normal amount of clothing or has bedding one would expect for the conditions">
+		>
+	>
+	constraint_definitions("en") = <
+		items("ac0001") = <
+			text = <"Any synonym for 'temperature'">
+			description = <"*">
+		>
+	>
+	term_binding("LNC205") = <
+		items("[at0000]/data[at0002]/events[at0006]/data/item[at0004]/") = <[LNC205::8311-3]>
+		items("[at0000]/data[at0002]/events[at0017]/data/item[at0004]/") = <[LNC205::8325-3]>
+		items("[at0000]/data[at0002]/events[at0003]/data[at0001]/item[at0004]/") = <[LNC205::8310-5]>
+		items("[at0000]/data[at0002]/events[at0019]/data/item[at0004]/") = <[LNC205::8320-4]>
+		items("[at0000]/data[at0002]/events[at0008]/data/item[at0004]/") = <[LNC205::8332-0]>
+		items("[at0000]/data[at0002]/events[at0009]/data/item[at0004]/") = <[LNC205::8312-1]>
+		items("[at0000]/data[at0002]/events[at0005]/data/item[at0004]/") = <[LNC205::8321-2]>
+		items("[at0000]/data[at0002]/events[at0007]/data/item[at0004]/") = <[LNC205::8316-2]>
+	>

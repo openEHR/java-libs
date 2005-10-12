@@ -1,0 +1,87 @@
+archetype 
+	openEHR-EHR-SECTION.post_natal_exam.draft
+concept 
+	[at0000]	-- post-natal examination headings
+
+description
+	author = 		<"Sam Heard <s.heard@littlerock.com>">
+	submission = 	<
+		organisation = <"World Health Organisation">
+		date = <2003-06-10>
+	>
+	version = 		<"draft">
+	status = 		<"draft">
+	revision = 		<"1.0">
+	description("en") =	<
+		purpose = 		<"Headings for post-natal examination">
+		use = 		<"">
+		misuse = 		<"">
+	>
+	adl_version =	<"0.9">
+	rights = 		<"">
+
+definition
+	SECTION[at0001] matches {						-- Post-natal Examination
+		name matches {
+			CODED_TEXT matches {
+				code matches {[local::at0000]}
+			}
+		}
+		items cardinality matches {0..*} matches {			-- allow for multiple babies
+			SECTION[at1000] occurrences matches {0..*}  matches {	-- Neonate
+				name matches {
+					CODED_TEXT matches {
+						code matches {[local::at1000]}
+					}
+				}
+				items cardinality matches {0..*} matches {
+					allow_archetype OBSERVATION occurrences matches {0..*} matches {		-- any OBSERVATION 
+						include
+							id matches {"openehr-ehr-observation.*.*"}
+					}
+				}
+			}
+
+			SECTION[at2000] occurrences matches {0..1}  matches {	-- mother
+				name matches {
+					CODED_TEXT matches {
+						code matches {[local::at2000]}
+					}
+				}
+				items cardinality matches {0..*} matches {
+					allow_archetype OBSERVATION occurrences matches {0..*} matches {			-- any OBSERVATION
+						include
+							id matches {"openehr-ehr-observation.*.*"}
+					}
+				}
+			}
+		}
+	}
+
+
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", "fr">
+	terminologies_available = <"snomed_ct", ...>
+
+	term_definitions("en") = <
+		items("at0000") = <text = <"post-natal examination headings">;	description = <"headings for post-natal examination note">>
+		items("at0001") = <text = <"post-natal examination">;	description = <"Post-natal examination of mother and children">>
+		items("at1000") = <text = <"neonate">; 		description = <"newborn child">>
+		items("at2000") = <text = <"mother">; 		description = <"mother of newborn child">>
+	>
+
+	term_definitions("fr") = <
+		translation = <"tbeale@mavaise.traduction.org">
+		items("at0000") = <text = <"sections pour note d'examination neo-natale">;	description = <"sections pour note d'examination neo-natale">>
+		items("at0001") = <text = <"examination neo-natale">; description = <"examination de mère et nouveaux-nés après accouchement">>
+		items("at1000") = <text = <"nouveau-né">; 	description = <"nouveau-né">>
+		items("at2000") = <text = <"mère">; 		description = <"mère de nouveau-né">>
+	>
+
+	term_binding("snomed_ct") = <
+		items("at0001") = <[snomed_ct::234523959]>		-- neonatal exam
+		items("at1000") = <[snomed_ct::293854954]>		-- neonate
+		items("at2000") = <[snomed_ct::293854955]>		-- mother
+	>
+
