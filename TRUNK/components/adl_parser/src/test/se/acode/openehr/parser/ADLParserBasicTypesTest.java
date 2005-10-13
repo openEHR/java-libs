@@ -78,6 +78,8 @@ public class ADLParserBasicTypesTest extends ADLParserTestBase {
         assertCString(list.get(2), "cardio.*", null);
 
         assertCString(list.get(3), "mg|mg/ml|mg/g", null);
+
+        assertCString(list.get(4), null, new String[]{"apple","pear"});
     }
 
     private List getConstraints(int index) {
