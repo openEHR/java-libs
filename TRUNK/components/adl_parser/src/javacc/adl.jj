@@ -43,6 +43,8 @@ import org.openehr.am.archetype.ontology.*;
 /**
  * JavaCC grammer file for Archteype Definition Language (ADL)
  *
+ * Targeted ADL revision 1.2.1
+ *
  * @author Rong Chen (rong@acode.se)
  * @version 1.0.1
  */
@@ -82,7 +84,7 @@ public class ADLParser {
   /* ===================  entry point from command-line  ================ */
   public static void main(String args[]) {
     ADLParser parser;
-    String title = "ADL 1.2d Parser: ";
+    String title = "ADL 1.2 Parser: ";
 
 // read from stdin disabled
 //    if (args.length == 0) {
@@ -2345,11 +2347,11 @@ CString c_string() :
 }
 {
   (
-    LOOKAHEAD( string_value() )
-    value = string_value()
-  |
     LOOKAHEAD( string_list_value() )
     list = string_list_value() [ "," <SYM_LIST_CONTINUE> ]
+  |
+    LOOKAHEAD( string_value() )
+    value = string_value()
   |
     t = <V_REGEXP>
     {
