@@ -45,7 +45,7 @@ public class ADLParserDomainTypesTest extends ADLParserTestBase {
      */
     protected void setUp() throws Exception {
         ADLParser parser = new ADLParser(new File(dir,
-                "adl-test-entry.domain_types.draft.adl"));
+                "adl-test-entry.domain_types.test.adl"));
         archetype = parser.parse();
     }
 

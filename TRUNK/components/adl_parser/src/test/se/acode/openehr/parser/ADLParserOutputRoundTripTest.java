@@ -40,7 +40,7 @@ public class ADLParserOutputRoundTripTest extends ADLParserTestBase {
 
     public void testRoundTrip() throws Exception {
         ADLParser parser = new ADLParser(new File(dir,
-                "openEHR-EHR-COMPOSITION.test_two.v1.adl"));
+                "openEHR-EHR-COMPOSITION.test_two.test.adl"));
         Archetype archetypeOne = parser.parse();
 
         ADLOutputter outputter = new ADLOutputter();

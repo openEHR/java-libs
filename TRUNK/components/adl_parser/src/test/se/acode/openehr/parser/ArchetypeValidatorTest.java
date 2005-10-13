@@ -39,7 +39,7 @@ public class ArchetypeValidatorTest extends ADLParserTestBase {
 
     public void setUp() throws Exception {
         ADLParser parser = new ADLParser(new File(dir,
-                "adl-test-car.use_node.draft.adl"));
+                "adl-test-car.use_node.test.adl"));
         archetype = parser.parse();
         validator = new ArchetypeValidator(archetype);
     }

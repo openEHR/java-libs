@@ -35,7 +35,7 @@ public class ADLParserStructureTest extends ADLParserTestBase {
 
     public void setUp() throws Exception {
         ADLParser parser = new ADLParser(new File(dir,
-                "adl-test-entry.structure_test1.draft.adl"));
+                "adl-test-entry.structure_test1.test.adl"));
         definition = parser.parse().getDefinition();
     }
 
