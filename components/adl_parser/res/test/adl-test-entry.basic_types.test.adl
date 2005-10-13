@@ -20,7 +20,8 @@ definition
                 string_attr1 matches {"something"}
                 string_attr2 matches {/this|that|something else/}
                 string_attr3 matches {/cardio.*/}
-                string_attr4 matches {^mg|mg/ml|mg/g^}                                                
+                string_attr4 matches {^mg|mg/ml|mg/g^}  
+                string_attr4 matches {"apple","pear"}                                              
             }
         }
         boolean_attributes matches {
