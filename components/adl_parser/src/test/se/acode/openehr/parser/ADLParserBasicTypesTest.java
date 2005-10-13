@@ -51,7 +51,7 @@ public class ADLParserBasicTypesTest extends ADLParserTestBase {
      */
     protected void setUp() throws Exception {
         ADLParser parser = new ADLParser(new File(dir,
-                "adl-test-entry.basic_types.draft.adl"));
+                "adl-test-entry.basic_types.test.adl"));
         attributeList = parser.parse().getDefinition().getAttributes();
         //System.out.println("list: " + attributeList);
     }

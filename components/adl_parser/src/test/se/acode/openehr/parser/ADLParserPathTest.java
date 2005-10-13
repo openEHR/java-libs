@@ -39,7 +39,7 @@ public class ADLParserPathTest extends ADLParserTestBase {
 
     public void setUp() throws Exception {
         ADLParser parser = new ADLParser(new File(dir,
-                "adl-test-car.paths.draft.adl"));
+                "adl-test-car.paths.test.adl"));
         definition = parser.parse().getDefinition();
     }
 
