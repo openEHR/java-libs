@@ -8,9 +8,9 @@
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL$"
- * revision:    "$LastChangedRevision$"
- * last_change: "$LastChangedDate$"
+ * file:        "$Source: /usr/local/cvsroot/acode/openehr-kernel/src/java/org/openehr/am/archetype/ontology/OntologyBindingItem.java,v $"
+ * revision:    "$Revision$"
+ * last_change: "$Date$"
  */
 package org.openehr.am.archetype.ontology;
 
@@ -37,6 +37,15 @@ public class OntologyBindingItem {
     public String toString() {
         return ToStringBuilder.reflectionToString(this,
                 ToStringStyle.MULTI_LINE_STYLE);
+    }
+
+    /**
+     * Gest the code
+     *
+     * @return code
+     */
+    public String getCode() {
+        return code;
     }
 
     /* fields */

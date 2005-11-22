@@ -1,0 +1,5 @@
+2005/11/22
+.bug fix for term binding
+.add test for minimum adl
+.set dependency to kernel-1.2.4
+

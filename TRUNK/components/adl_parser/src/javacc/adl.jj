@@ -757,6 +757,7 @@ OntologyBinding ontology_binding_body() :
 TermBindingItem term_binding_item() :
 {
   String code;
+  String term;
   List terms = new ArrayList();
 }
 {
@@ -768,11 +769,11 @@ TermBindingItem term_binding_item() :
     code = local_code_path_value()
   )
   ")" <SYM_EQ> "<"
-    code = term_code() {
-      terms.add(code);
+    term = term_code() {
+      terms.add(term);
     }
-    ("," code = term_code() {
-           terms.add(code);
+    ("," term = term_code() {
+           terms.add(term);
          }
     )*
   ">"
