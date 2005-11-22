@@ -4,7 +4,7 @@
     <id>adl-parser</id>
     <name>java ADL Parser</name>
     <groupId>acode</groupId>
-    <currentVersion>1.0.1</currentVersion>
+    <currentVersion>1.0.2-SNAPSHOT</currentVersion>
     <organization>
         <name>Acode HB</name>
         <url>http://www.acode.se/</url>
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>acode</groupId>
             <artifactId>openehr-kernel</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.4</version>
             <url>http://www.acode.se</url>
         </dependency>
     </dependencies>

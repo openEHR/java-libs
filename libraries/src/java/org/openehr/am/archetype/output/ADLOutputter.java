@@ -48,10 +48,10 @@ public class ADLOutputter {
     }
 
     /**
-     * Output given archetype as string
+     * Output given archetype as string in ADL format
      *
      * @param archetype
-     * @return
+     * @return a string in ADL format
      * @throws IOException
      */
     public String output(Archetype archetype) throws IOException {
@@ -205,21 +205,25 @@ public class ADLOutputter {
         printOccurrences(ccobj.getOccurrences(), out);
 
         out.write(" matches {");
-        newline(out);
 
-        // print all attributes
-        for (CAttribute cattribute : ccobj.getAttributes()) {
-            printCAttribute(cattribute, indent + 1, out);
+        // only print if there is any attribute
+        if (ccobj.getAttributes() != null) {
+            newline(out);
+
+            // print all attributes
+            for (CAttribute cattribute : ccobj.getAttributes()) {
+                printCAttribute(cattribute, indent + 1, out);
+            }
+
+            indent(indent, out);
         }
-
-        indent(indent, out);
         out.write("}");
         newline(out);
     }
-    
+
     protected void printOccurrences(Interval<Integer> occurrences,
                                     Writer out) throws IOException {
-        
+
         if (occurrences != null) {
             out.write(" occurrences matches {");
             if (occurrences.getLower() == null) {

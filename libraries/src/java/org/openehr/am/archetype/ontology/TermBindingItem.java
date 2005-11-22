@@ -8,13 +8,14 @@
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL$"
- * revision:    "$LastChangedRevision$"
- * last_change: "$LastChangedDate$"
+ * file:        "$Source: /usr/local/cvsroot/acode/openehr-kernel/src/java/org/openehr/am/archetype/ontology/TermBindingItem.java,v $"
+ * revision:    "$Revision$"
+ * last_change: "$Date$"
  */
 package org.openehr.am.archetype.ontology;
 
 import java.util.List;
+import java.util.Collections;
 
 /**
  * OntologyBindingItem that defines the binding by a list of external terms
@@ -24,12 +25,27 @@ import java.util.List;
  */
 public class TermBindingItem extends OntologyBindingItem {
 
+    /**
+     * Creates a binding item with a list of terms
+     *
+     * @param code
+     * @param terms
+     */
     public TermBindingItem(String code, List<String> terms) {
         super(code);
         this.terms = terms;
     }
 
-    List<String> terms;
+    /**
+     * Gets an unmodifiable list of terms
+     *
+     * @return terms
+     */
+    public List<String> getTerms() {
+        return Collections.unmodifiableList(terms);
+    }
+
+    private List<String> terms;
 }
 
 /*

@@ -8,9 +8,9 @@
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL$"
- * revision:    "$LastChangedRevision$"
- * last_change: "$LastChangedDate$"
+ * file:        "$Source: /usr/local/cvsroot/acode/openehr-kernel/src/java/org/openehr/am/archetype/ontology/QueryBindingItem.java,v $"
+ * revision:    "$Revision$"
+ * last_change: "$Date$"
  */
 package org.openehr.am.archetype.ontology;
 
@@ -22,13 +22,28 @@ package org.openehr.am.archetype.ontology;
  */
 public class QueryBindingItem extends OntologyBindingItem {
 
+    /**
+     * Creates a binding item with a qery
+     *
+     * @param code
+     * @param query
+     */
     public QueryBindingItem(String code, Query query) {
         super(code);
         this.query = query;
     }
 
+    /**
+     * Query of this binding item
+     *
+     * @return the query
+     */
+    public Query getQuery() {
+        return query;
+    }
+
     /* fields */
-    Query query;
+    private Query query;
 }
 
 /*

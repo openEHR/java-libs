@@ -173,3 +173,7 @@ change 'charset' and 'language' from required to optional in the constructor of 
 2005-08-18
 fixed obsolete path separator in data structure package
 
+2005-11-17
+added setters for binding items in archetype ontology package
+bug fix for term binding in ADL parser
+
