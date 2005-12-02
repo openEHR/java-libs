@@ -14,11 +14,10 @@
  */
 package org.openehr.am.archetype.description;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.openehr.am.archetype.Archetype;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Defines the descriptive meta-data of an archetype.
@@ -32,37 +31,34 @@ public class ArchetypeDescription {
      * Constructs an ArchetypeDescription
      *
      * @param originalAuthor
-     * @param originalAuthorOrganisation
+     * @param otherContributors
      * @param lifecycleState
      * @param archetypePackageURI
      * @param details
      * @param otherDetails
      * @throws IllegalArgumentException if originalAuthor null or empty,
-     *         or orignalAuthorOrgnaisation empty or details null or empty
+     *                                  or orignalAuthorOrgnaisation empty or details null or empty
      */
-    public ArchetypeDescription(String originalAuthor,
-                                String originalAuthorOrganisation,
+    public ArchetypeDescription(Map<String, String> originalAuthor,
+                                List<String> otherContributors,
                                 String lifecycleState,
-                                String archetypePackageURI,
                                 List<ArchetypeDescriptionItem> details,
-                                Map<String,String> otherDetails) {
-        if(StringUtils.isEmpty(originalAuthor)) {
-            throw new IllegalArgumentException("originalAuthor null");
+                                String archetypePackageURI,
+                                Map<String, String> otherDetails,
+                                Archetype parentArchetype) {
+        if (originalAuthor == null || originalAuthor.isEmpty()) {
+            throw new IllegalArgumentException("originalAuthor null or empty");
         }
-        if(originalAuthorOrganisation != null &&
-                StringUtils.isEmpty(originalAuthorOrganisation)) {
-            throw new IllegalArgumentException(
-                    "originalAuthorOrganisation empty");
-        }
-        if(details == null || details.isEmpty()) {
+        if (details == null || details.isEmpty()) {
             throw new IllegalArgumentException("null or empty details");
         }
-        this.originalAuthor = originalAuthor;
-        this.originalAuthorOrganisation = originalAuthorOrganisation;
+        this.originalAuthor = new HashMap<String, String>(originalAuthor);
+        this.otherContributors = otherContributors;
         this.lifecycleState = lifecycleState;
         this.archetypePackageURI = archetypePackageURI;
         this.details = details;
         this.otherDetails = otherDetails;
+        this.parentArchetype = parentArchetype;
     }
 
     /**
@@ -70,17 +66,8 @@ public class ArchetypeDescription {
      *
      * @return Original author
      */
-    public String getOriginalAuthor() {
-        return originalAuthor;
-    }
-
-    /**
-     * Original author organisation.
-     *
-     * @return Original author organisation.
-     */
-    public String getOriginalAuthorOrganisation() {
-        return originalAuthorOrganisation;
+    public Map<String, String> getOriginalAuthor() {
+        return Collections.unmodifiableMap(originalAuthor);
     }
 
     /**
@@ -123,7 +110,26 @@ public class ArchetypeDescription {
         return otherDetails;
     }
 
-   /**
+    /**
+     * Other contributors to the archetype, probably listed in  name <email>
+     * form.
+     *
+     * @return list of other contributors
+     */
+    public List<String> getOtherContributors() {
+        return otherContributors;
+    }
+
+    /**
+     * Reference to owning archetype
+     *
+     * @return parent archetype
+     */
+    public Archetype getParentArchetype() {
+        return parentArchetype;
+    }
+
+    /**
      * String representation of this object
      *
      * @return string form
@@ -133,12 +139,13 @@ public class ArchetypeDescription {
     }
 
     /* fields */
-    private String originalAuthor;
-    private String originalAuthorOrganisation;
+    private Map<String, String> originalAuthor;
+    private List<String> otherContributors;
     private String lifecycleState;
     private String archetypePackageURI;
     private List<ArchetypeDescriptionItem> details;
-    private Map<String,String> otherDetails;
+    private Map<String, String> otherDetails;
+    private Archetype parentArchetype;
 }
 
 /*

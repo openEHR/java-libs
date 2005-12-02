@@ -1,7 +1,23 @@
+/*
+ * component:   "openEHR Reference Implementation"
+ * description: "Class ADLOutputterTest"
+ * keywords:    "archetype"
+ *
+ * author:      "Rong Chen <rong@acode.se>"
+ * support:     "Acode HB <support@acode.se>"
+ * copyright:   "Copyright (c) 2004,2005 Acode HB, Sweden"
+ * license:     "See notice at bottom of class"
+ *
+ * file:        "$URL$"
+ * revision:    "$LastChangedRevision$"
+ * last_change: "$LastChangedDate$"
+ */
 /**
  * ADLOutputterTest
  *
  * @author Rong Chen
+ * @author Mattias Forss, Johan Hjalmarsson
+ *
  * @version 1.0 
  */
 package org.openehr.am.archetype.output;
@@ -9,7 +25,12 @@ package org.openehr.am.archetype.output;
 import junit.framework.TestCase;
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
 import org.openehr.am.archetype.ontology.DefinitionItem;
+import org.openehr.am.archetype.ontology.OntologyBinding;
+import org.openehr.am.archetype.ontology.OntologyBindingItem;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
+import org.openehr.am.archetype.ontology.Query;
+import org.openehr.am.archetype.ontology.QueryBindingItem;
+import org.openehr.am.archetype.ontology.TermBindingItem;
 import org.openehr.am.archetype.description.ArchetypeDescription;
 import org.openehr.am.archetype.description.ArchetypeDescriptionItem;
 import org.openehr.am.archetype.constraintmodel.domain.*;
@@ -83,7 +104,8 @@ public class ADLOutputterTest extends TestCase {
     public void testPrintDescription() throws Exception {
         String author = "Jerry Mouse";
         String status = "draft";
-        String organisation = "Mouse Academy";
+        Map<String,String> authorMap = new HashMap<String,String>();
+        authorMap.put("name", author);
 
         List<ArchetypeDescriptionItem> items =
                 new ArrayList<ArchetypeDescriptionItem>();
@@ -99,14 +121,16 @@ public class ADLOutputterTest extends TestCase {
         ArchetypeDescriptionItem item = new ArchetypeDescriptionItem(
                 TestCodeSet.ENGLISH, "purpose of this archetype");
         items.add(item);
-        ArchetypeDescription description = new ArchetypeDescription(author,
-                organisation, status, null, items, null);
+        ArchetypeDescription description = new ArchetypeDescription(authorMap,
+                null, status, items, null, null, null);
 
         clean();
         outputter.printDescription(description, out);
 
         verify("description\r\n" +
-                "    author = <\"" + author + "\">\r\n" +
+                "    original_author = <\r\n" +
+                "        [\"name\"] = <\"" + author + "\">\r\n" +
+                "    >\r\n" +
                 "    status = <\"" + status + "\">\r\n" +
                 "    description(\"en\") = <\r\n" +
                 "        purpose = <\"purpose of this archetype\">\r\n" +
@@ -124,18 +148,51 @@ public class ADLOutputterTest extends TestCase {
         List<OntologyDefinitions> termDefinitionsList =
                 new ArrayList<OntologyDefinitions>();
         termDefinitionsList.add(definitions);
+
+        item = new DefinitionItem("ac0001", "text ac0001", "desc ac0001");
+        items = new ArrayList<DefinitionItem>();
+        items.add(item);
+        item = new DefinitionItem("ac0002", "text ac0002", "desc ac0002");
+        items.add(item);
+        definitions = new OntologyDefinitions("en", items);
+        List<OntologyDefinitions> constraintDefinitionsList =
+                new ArrayList<OntologyDefinitions>();
+        constraintDefinitionsList.add(definitions);
+        
         List<String> languages = new ArrayList<String>();
         languages.add("en");
         List<String> terminologies = new ArrayList<String>();
-        terminologies.add("en");
+        terminologies.add("local");
+        
+        List<String> terms = new ArrayList<String>();
+        terms.add("[local::100000]");
+        TermBindingItem termBindItem = new TermBindingItem("at0001",terms); 
+        List<OntologyBindingItem> termBindList = new ArrayList<OntologyBindingItem>();
+        termBindList.add(termBindItem);
+        terms = new ArrayList<String>();
+        terms.add("[local::200000]");
+        termBindItem = new TermBindingItem("at0002",terms); 
+        termBindList.add(termBindItem);
+        OntologyBinding ontologyBind = new OntologyBinding("local",termBindList);
+        List<OntologyBinding> termBindingList = new ArrayList<OntologyBinding>();
+        termBindingList.add(ontologyBind);
+        
+        Query query = new Query("terminology", "terminology_id = local; synonym_of [300000]");
+        QueryBindingItem queryBindItem = new QueryBindingItem("ac0001",query); 
+        List<OntologyBindingItem> constraintBindList = new ArrayList<OntologyBindingItem>();
+        constraintBindList.add(queryBindItem);
+        ontologyBind = new OntologyBinding("local",constraintBindList);
+        List<OntologyBinding> constraintBindingList = new ArrayList<OntologyBinding>();
+        constraintBindingList.add(ontologyBind);
+        
         ArchetypeOntology ontology = new ArchetypeOntology("en", languages,
-                terminologies, termDefinitionsList, null, null, null);
-
+                terminologies, termDefinitionsList, constraintDefinitionsList, termBindingList, constraintBindingList);
         clean();
         outputter.printOntology(ontology, out);
         verify("ontology\r\n" +
                 "    primary_language = <\"en\">\r\n" +
                 "    languages_available = <\"en\", ...>\r\n" +
+    			"    terminologies_available = <\"local\", ...>\r\n" +
                 "    term_definitions(\"en\") = <\r\n" +
                 "        items(\"at0001\") = <\r\n" +
                 "            text = <\"text at0001\">\r\n" +
@@ -145,9 +202,26 @@ public class ADLOutputterTest extends TestCase {
                 "            text = <\"text at0002\">\r\n" +
                 "            description = <\"desc at0002\">\r\n" +
                 "        >\r\n" +
-                "    >\r\n");
+        		"    >\r\n" +
+                "    constraint_definitions(\"en\") = <\r\n" +
+                "        items(\"ac0001\") = <\r\n" +
+                "            text = <\"text ac0001\">\r\n" +
+                "            description = <\"desc ac0001\">\r\n" +
+                "        >\r\n" +
+                "        items(\"ac0002\") = <\r\n" +
+                "            text = <\"text ac0002\">\r\n" +
+                "            description = <\"desc ac0002\">\r\n" +
+                "        >\r\n" +
+                "    >\r\n" +
+        		"    term_binding(\"local\") = <\r\n" +
+        		"        items(\"at0001\") = <[local::100000]>\r\n" +
+        		"        items(\"at0002\") = <[local::200000]>\r\n" +
+        		"    >\r\n" + 
+        		"    constraint_binding(\"local\") = <\r\n" +
+        		"        items(\"ac0001\") = <query(\"terminology\", \"terminology_id = local; synonym_of [300000]\")>\r\n" +
+        		"    >\r\n");
     }
-
+    
     public void testPrintExistence() throws Exception {
         clean();
         outputter.printExistence(CAttribute.Existence.REQUIRED, out);
@@ -262,20 +336,6 @@ public class ADLOutputterTest extends TestCase {
         verify("\"" + value + "\"");
     }
 
-    /* test archetype ontology */
-    private ArchetypeOntology ontology() {
-        List<DefinitionItem> items = new ArrayList<DefinitionItem>();
-        for (int i = 0; i < 99; i++) {
-            items.add(new DefinitionItem("at000" + i, "text" + i, "desc" + i));
-        }
-        String lang = TestCodeSet.ENGLISH.getCodeString();
-        OntologyDefinitions defs = new OntologyDefinitions(lang, items);
-        List<OntologyDefinitions> defsList = new ArrayList<OntologyDefinitions>();
-        defsList.add(defs);
-        return new ArchetypeOntology(lang, Arrays.asList(new String[]{lang}),
-                null, defsList, null, null, null);
-    }
-
     /* clean the string writer for next test */
     private void clean() {
         out = new StringWriter();
@@ -292,3 +352,32 @@ public class ADLOutputterTest extends TestCase {
     private ADLOutputter outputter;
     private StringWriter out;
 }
+/*
+ *  ***** BEGIN LICENSE BLOCK *****
+ *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ *  The contents of this file are subject to the Mozilla Public License Version
+ *  1.1 (the 'License'); you may not use this file except in compliance with
+ *  the License. You may obtain a copy of the License at
+ *  http://www.mozilla.org/MPL/
+ *
+ *  Software distributed under the License is distributed on an 'AS IS' basis,
+ *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing rights and limitations under the
+ *  License.
+ *
+ *  The Original Code is ADLOutPutterTest.java
+ *
+ *  The Initial Developer of the Original Code is Rong Chen.
+ *  Portions created by the Initial Developer are Copyright (C) 2004-2005
+ *  the Initial Developer. All Rights Reserved.
+ *
+ *  Contributor(s): Mattias Forss, Johan Hjalmarsson
+ *
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ *  ***** END LICENSE BLOCK *****
+ */

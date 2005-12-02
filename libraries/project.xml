@@ -4,7 +4,7 @@
     <id>openehr-kernel</id>
     <name>openEHR Java Kernel</name>
     <groupId>acode</groupId>
-    <currentVersion>1.2.4</currentVersion>
+    <currentVersion>1.2.5-SNAPSHOT</currentVersion>
     <organization>
         <name>Acode HB</name>
         <url>http://www.acode.se/</url>
