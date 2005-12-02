@@ -1,22 +1,26 @@
 /*
- * Copyright (C) 2004 Rong Chen, Acode HB, Sweden
- * All rights reserved.
+ * component:   "openEHR Reference Implementation"
+ * description: "Class ADLOutputter"
+ * keywords:    "archetype"
  *
- * The contents of this software are subject to the FSF GNU Public License 2.0;
- * you may not use this software except in compliance with the License. You may
- * obtain a copy of the License at http://www.fsf.org/licenses/gpl.html
+ * author:      "Rong Chen <rong@acode.se>"
+ * support:     "Acode HB <support@acode.se>"
+ * copyright:   "Copyright (c) 2004,2005 Acode HB, Sweden"
+ * license:     "See notice at bottom of class"
  *
- * Software distributed under the License is distributed on an 'AS IS' basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
+ * file:        "$URL$"
+ * revision:    "$LastChangedRevision$"
+ * last_change: "$LastChangedDate$"
  */
 package org.openehr.am.archetype.output;
 
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
+import org.openehr.am.archetype.ontology.OntologyBinding;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
 import org.openehr.am.archetype.ontology.DefinitionItem;
+import org.openehr.am.archetype.ontology.QueryBindingItem;
+import org.openehr.am.archetype.ontology.TermBindingItem;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
 import org.openehr.am.archetype.constraintmodel.domain.*;
@@ -29,11 +33,14 @@ import org.apache.commons.lang.StringUtils;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ADLOutputter
  *
  * @author Rong Chen
+ * @author Mattias Forss, Johan Hjalmarsson
+ *
  * @version 1.0
  */
 public class ADLOutputter {
@@ -95,6 +102,8 @@ public class ADLOutputter {
         newline(out);
 
         printOntology(archetype.getOntology(), out);
+        out.flush();
+        out.close();
     }
 
     protected void printHeader(ArchetypeID id, ArchetypeID parentId,
@@ -134,9 +143,16 @@ public class ADLOutputter {
         newline(out);
 
         indent(1, out);
-        out.write("author = <\"");
-        out.write(description.getOriginalAuthor());
-        out.write("\">");
+        out.write("original_author = <");
+        newline(out);
+        Map<String,String> map = description.getOriginalAuthor();
+        for(String key : map.keySet()) {
+            indent(2, out);
+            out.write("[\"" + key + "\"] = <\"" + map.get(key) + "\">");
+            newline(out);
+        }
+        indent(1,out);
+        out.write(">");
         newline(out);
 
         indent(1, out);
@@ -195,30 +211,30 @@ public class ADLOutputter {
     protected void printCComplexObject(CComplexObject ccobj, int indent,
                                        Writer out) throws IOException {
 
-        // print rmTypeName and nodeId
-        indent(indent, out);
-        out.write(ccobj.getRmTypeName());
-        if (StringUtils.isNotEmpty(ccobj.getNodeID())) {
-            out.write("[" + ccobj.getNodeID() + "]");
-        }
+		// print rmTypeName and nodeId
+		indent(indent, out);
+		out.write(ccobj.getRmTypeName());
+		if (StringUtils.isNotEmpty(ccobj.getNodeID())) {
+			out.write("[" + ccobj.getNodeID() + "]");
+		}
 
-        printOccurrences(ccobj.getOccurrences(), out);
+		printOccurrences(ccobj.getOccurrences(), out);
 
-        out.write(" matches {");
+		out.write(" matches {");
 
-        // only print if there is any attribute
-        if (ccobj.getAttributes() != null) {
-            newline(out);
-
-            // print all attributes
-            for (CAttribute cattribute : ccobj.getAttributes()) {
-                printCAttribute(cattribute, indent + 1, out);
-            }
-
-            indent(indent, out);
-        }
-        out.write("}");
-        newline(out);
+		// print all attributes
+		if (!ccobj.isAnyAllowed()) {
+			for (CAttribute cattribute : ccobj.getAttributes()) {
+				printCAttribute(cattribute, indent + 1, out);
+			}
+			newline(out);
+			indent(indent, out);
+			out.write("}");
+		} else {
+			out.write("*");
+			out.write("}");
+		}
+		newline(out);
     }
 
     protected void printOccurrences(Interval<Integer> occurrences,
@@ -255,33 +271,32 @@ public class ADLOutputter {
 
     protected void printCAttribute(CAttribute cattribute, int indent,
                                    Writer out) throws IOException {
-        indent(indent, out);
-        out.write(cattribute.getRmAttributeName());
-        if (!CAttribute.Existence.REQUIRED.equals(cattribute.getExistence())) {
-            out.write(" ");
-        }
-        printExistence(cattribute.getExistence(), out);
-        if (cattribute instanceof CMultipleAttribute) {
-            out.write(" ");
-            printCardinality(
-                    ( (CMultipleAttribute) cattribute ).getCardinality(),
-                    out);
-        }
-        out.write(" matches {");
-        List<CObject> children = cattribute.getChildren();
-        if (children.size() != 1
-                || !( children.get(0) instanceof CPrimitiveObject )) {
-            newline(out);
-            for (CObject cobject : cattribute.getChildren()) {
-                printCObject(cobject, indent + 1, out);
-            }
-            indent(indent, out);
-        } else {
-            CObject child = children.get(0);
-            printCPrimitiveObject((CPrimitiveObject) child, out);
-        }
-        out.write("}");
-        newline(out);
+		newline(out);
+		indent(indent, out);
+		out.write(cattribute.getRmAttributeName());
+		if (!CAttribute.Existence.REQUIRED.equals(cattribute.getExistence())) {
+			out.write(" ");
+		}
+		printExistence(cattribute.getExistence(), out);
+		if (cattribute instanceof CMultipleAttribute) {
+			out.write(" ");
+			printCardinality(
+					((CMultipleAttribute) cattribute).getCardinality(), out);
+		}
+		out.write(" matches {");
+		List<CObject> children = cattribute.getChildren();
+		if (children.size() != 1
+				|| !(children.get(0) instanceof CPrimitiveObject)) {
+			newline(out);
+			for (CObject cobject : cattribute.getChildren()) {
+				printCObject(cobject, indent + 1, out);
+			}
+			indent(indent, out);
+		} else {
+			CObject child = children.get(0);
+			printCPrimitiveObject((CPrimitiveObject) child, out);
+		}
+		out.write("}");
     }
 
     protected void printExistence(CAttribute.Existence existence, Writer out)
@@ -376,23 +391,33 @@ public class ADLOutputter {
     protected void printCCodedText(CCodedText ccoded, int indent, Writer out)
             throws IOException {
 
-        indent(indent, out);
-        out.write("[" + ccoded.getTerminology() + "::");
-        if (ccoded.getCodeList().size() > 1) {
-            newline(out);
-        }
-        for (int i = 0, j = ccoded.getCodeList().size(); i < j; i++) {
-            if (j > 1) {
-                indent(indent, out);
-            }
-            out.write(ccoded.getCodeList().get(i));
-            if (i != j - 1) {
-                out.write(",");
-            } else {
-                out.write("]");
-            }
-            newline(out);
-        }
+		indent(indent, out);
+
+		if (ccoded.getTerminology() != null)
+			out.write("[" + ccoded.getTerminology() + "::");
+
+		if (ccoded.getCodeList() != null) {
+			if (ccoded.getCodeList().size() > 1) {
+				newline(out);
+
+				for (int i = 0, j = ccoded.getCodeList().size(); i < j; i++) {
+					if (j > 1) {
+						indent(indent, out);
+					}
+					out.write(ccoded.getCodeList().get(i));
+					if (i != j - 1) {
+						out.write(",");
+					} else {
+						out.write("]");
+					}
+					newline(out);
+				}
+			} else
+				out.write(ccoded.getCodeList().get(0));
+		} else if (ccoded.getReference() != null) {
+			out.write("[" + ccoded.getReference() + "]");
+			newline(out);
+		}
     }
 
     protected void printCOrdinal(COrdinal cordinal, int indent, Writer out)
@@ -438,54 +463,168 @@ public class ADLOutputter {
     protected void printOntology(ArchetypeOntology ontology, Writer out)
             throws IOException {
 
-        out.write("ontology");
-        newline(out);
+		out.write("ontology");
+		newline(out);
 
-        indent(1, out);
-        out.write("primary_language = <\"");
-        out.write(ontology.getPrimaryLanguage());
-        out.write("\">");
-        newline(out);
+		indent(1, out);
+		out.write("primary_language = <\"");
+		out.write(ontology.getPrimaryLanguage());
+		out.write("\">");
+		newline(out);
 
-        indent(1, out);
-        out.write("languages_available = <\"");
-        for (String lang : ontology.getLanguages()) {
-            out.write(lang);
-            out.write("\", ");
-        }
-        out.write("...>");
-        newline(out);
+		indent(1, out);
+		out.write("languages_available = <");
+		for (String lang : ontology.getLanguages()) {
+			out.write("\"");
+			out.write(lang);
+			out.write("\", ");
+		}
+		out.write("...>");
+		newline(out);
 
-        for (OntologyDefinitions defs : ontology.getTermDefinitionsList()) {
-            indent(1, out);
-            out.write("term_definitions(\"");
-            out.write(defs.getLanguage());
-            out.write("\") = <");
-            newline(out);
-            for (DefinitionItem item : defs.getDefinitions()) {
-                indent(2, out);
-                out.write("items(\"");
-                out.write(item.getCode());
-                out.write("\") = <");
-                newline(out);
-                indent(3, out);
-                out.write("text = <\"");
-                out.write(item.getText());
-                out.write("\">");
-                newline(out);
-                indent(3, out);
-                out.write("description = <\"");
-                out.write(item.getDescription());
-                out.write("\">");
-                newline(out);
-                indent(2, out);
-                out.write(">");
-                newline(out);
-            }
-            indent(1, out);
-            out.write(">");
-            newline(out);
-        }
+		if (ontology.getTerminologies() != null) {
+			indent(1, out);
+			out.write("terminologies_available = <\"");
+			for (String terminology : ontology.getTerminologies()) {
+				out.write(terminology);
+				out.write("\", ");
+			}
+			out.write("...>");
+			newline(out);
+		}
+
+		for (OntologyDefinitions defs : ontology.getTermDefinitionsList()) {
+			indent(1, out);
+			out.write("term_definitions(\"");
+			out.write(defs.getLanguage());
+			out.write("\") = <");
+			newline(out);
+			for (DefinitionItem item : defs.getDefinitions()) {
+				indent(2, out);
+				out.write("items(\"");
+				out.write(item.getCode());
+				out.write("\") = <");
+				newline(out);
+				indent(3, out);
+				out.write("text = <\"");
+				out.write(item.getText());
+				out.write("\">");
+				newline(out);
+				indent(3, out);
+				out.write("description = <\"");
+				out.write(item.getDescription());
+				out.write("\">");
+				newline(out);
+				indent(2, out);
+				out.write(">");
+				newline(out);
+			}
+			indent(1, out);
+			out.write(">");
+			newline(out);
+		}
+
+		if (ontology.getConstraintDefinitionsList() != null) {
+			for (OntologyDefinitions constraintdefs : ontology
+					.getConstraintDefinitionsList()) {
+				indent(1, out);
+				out.write("constraint_definitions(\"");
+				out.write(constraintdefs.getLanguage());
+				out.write("\") = <");
+				newline(out);
+				for (DefinitionItem item : constraintdefs.getDefinitions()) {
+					indent(2, out);
+					out.write("items(\"");
+					out.write(item.getCode());
+					out.write("\") = <");
+					newline(out);
+					indent(3, out);
+					out.write("text = <\"");
+					out.write(item.getText());
+					out.write("\">");
+					newline(out);
+					indent(3, out);
+					out.write("description = <\"");
+					out.write(item.getDescription());
+					out.write("\">");
+					newline(out);
+					indent(2, out);
+					out.write(">");
+					newline(out);
+				}
+				indent(1, out);
+				out.write(">");
+				newline(out);
+			}
+		}
+
+		if (ontology.getTermBindingList() != null) {
+			for (int i = 0; i < ontology.getTermBindingList().size(); i++) {
+				OntologyBinding bind = ontology.getTermBindingList().get(i);
+				indent(1, out);
+				out.write("term_binding(\"");
+				out.write(bind.getTerminology());
+				out.write("\") = <");
+				newline(out);
+
+				for (int j = 0; j < ontology.getTermBindingList().get(i)
+						.getBindingList().size(); j++) {
+					TermBindingItem item = (TermBindingItem) ontology
+							.getTermBindingList().get(i).getBindingList()
+							.get(j);
+					indent(2, out);
+					out.write("items(\"");
+					out.write(item.getCode());
+					out.write("\") = <");
+					out.write(item.getTerms().get(0));
+
+					if (item.getTerms().size() > 1) {
+						for (int k = 1; k < item.getTerms().size(); k++)
+							out.write(","+item.getTerms().get(k));
+					}
+
+					out.write(">");
+					newline(out);
+				}
+				indent(1, out);
+				out.write(">");
+				newline(out);
+			}
+		}
+
+		if (ontology.getConstraintBindingList() != null) {
+			for (int i = 0; i < ontology.getConstraintBindingList().size(); i++) {
+				OntologyBinding bind = ontology.getConstraintBindingList().get(
+						i);
+				indent(1, out);
+				out.write("constraint_binding(\"");
+				out.write(bind.getTerminology());
+				out.write("\") = <");
+				newline(out);
+
+				for (int j = 0; j < ontology.getConstraintBindingList().get(i)
+						.getBindingList().size(); j++) {
+					QueryBindingItem item = (QueryBindingItem) ontology
+							.getConstraintBindingList().get(i).getBindingList()
+							.get(j);
+					indent(2, out);
+					out.write("items(\"");
+					out.write(item.getCode());
+					out.write("\") = <");
+					out.write("query(\"");
+					out.write(item.getQuery().getTarget());
+					out.write("\", \"");
+					out.write(item.getQuery().getConditions());
+					out.write("\")");
+					out.write(">");
+					newline(out);
+
+				}
+				indent(1, out);
+				out.write(">");
+				newline(out);
+			}
+		}
     }
 
     protected void printCPrimitiveObject(CPrimitiveObject cpo, Writer out)
@@ -655,3 +794,32 @@ public class ADLOutputter {
     private String lineSeparator;
     private String indent;
 }
+/*
+ *  ***** BEGIN LICENSE BLOCK *****
+ *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ *  The contents of this file are subject to the Mozilla Public License Version
+ *  1.1 (the 'License'); you may not use this file except in compliance with
+ *  the License. You may obtain a copy of the License at
+ *  http://www.mozilla.org/MPL/
+ *
+ *  Software distributed under the License is distributed on an 'AS IS' basis,
+ *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing rights and limitations under the
+ *  License.
+ *
+ *  The Original Code is ADLOutPutterTest.java
+ *
+ *  The Initial Developer of the Original Code is Rong Chen.
+ *  Portions created by the Initial Developer are Copyright (C) 2004-2005
+ *  the Initial Developer. All Rights Reserved.
+ *
+ *  Contributor(s): Mattias Forss, Johan Hjalmarsson
+ *
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ *  ***** END LICENSE BLOCK *****
+ */
