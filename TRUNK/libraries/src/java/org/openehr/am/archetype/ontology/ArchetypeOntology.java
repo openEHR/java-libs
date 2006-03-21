@@ -70,7 +70,10 @@ public class ArchetypeOntology {
         }
         Map<String, DefinitionItem> codeMap = null;
         for (OntologyDefinitions defs : list) {
-            codeMap = new HashMap<String, DefinitionItem>();
+            codeMap = map.get(defs.getLanguage());
+            if (null == codeMap) {
+              codeMap = new HashMap<String, DefinitionItem>();
+            }
             for (DefinitionItem item : defs.getDefinitions()) {
                 codeMap.put(item.getCode(), item);
             }

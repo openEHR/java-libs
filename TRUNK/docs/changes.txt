@@ -177,3 +177,6 @@ fixed obsolete path separator in data structure package
 added setters for binding items in archetype ontology package
 bug fix for term binding in ADL parser
 
+2006-03-21
+bug fix in the constructor of ArchetypeOntology class
+

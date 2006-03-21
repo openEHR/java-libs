@@ -3,11 +3,11 @@
     <pomVersion>3</pomVersion>
     <id>openehr-kernel</id>
     <name>openEHR Java Kernel</name>
-    <groupId>acode</groupId>
+    <groupId>openehr</groupId>
     <currentVersion>1.2.5-SNAPSHOT</currentVersion>
     <organization>
-        <name>Acode HB</name>
-        <url>http://www.acode.se/</url>
+        <name>openEHR</name>
+        <url>http://www.openehr.org/</url>
     </organization>
     <inceptionYear>2004</inceptionYear>
     <package>org.openehr</package>
