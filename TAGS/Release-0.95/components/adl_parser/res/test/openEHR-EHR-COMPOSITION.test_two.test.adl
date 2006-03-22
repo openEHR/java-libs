@@ -1,0 +1,398 @@
+archetype
+	openEHR-EHR-COMPOSITION.test_one.test
+
+concept
+	[at0000]
+
+description
+	author = <"Rong Chen">
+	submission = <
+		organisation = <"Acode HB">
+		date = <2004-12-10>
+	>
+    version = <"draft">
+	status = <"draft">
+	revision = <"1.0">
+	description("en") = <
+		purpose = <"full blown test composition">
+		use = <"works fine with RMObject construction">
+		misuse = <"">
+	>
+	adl_version = <"0.9">
+	rights = <"">
+
+definition
+    COMPOSITION[at0000] matches {
+        content existence matches {0..1} cardinality matches {1..4; ordered; unique} matches {
+            SECTION[at0001] matches { -- observation section
+                items cardinality matches {*; ordered} matches {
+                    OBSERVATION[at1000] matches {
+                        data matches {
+                            SINGLE_EVENT[at1001] matches {
+                                origin matches {yyyy-mm-dd hh:mm:ss}
+                                item matches {
+                                    ITEM_SINGLE[at1002] matches {
+                                        representation matches {
+                                            ELEMENT[at1003]  matches {
+                                                value matches {/this|that|something else/}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            SECTION[at0002] matches { -- instruction section
+                items cardinality matches {*; ordered} matches {
+                    INSTRUCTION[at2000] matches {
+                        state matches {
+                            DV_STATE matches {
+                                value matches {
+                                    [local::
+                                    at2001.0, 	-- initial
+                                    at2001.1, 	-- wait
+                                    at2001.2] 	-- completed
+                                }
+                            }
+                        }
+                        action matches {
+                            ITEM_LIST[at2002] matches {
+                                representation matches {
+                                    Cluster[at2003] matches {
+                                        items cardinality matches {*; ordered} matches {
+                                            ELEMENT[at2004] matches {	-- Name of medication
+                                                value matches  {/.*/}
+                                            }
+                                            ELEMENT[at2005] matches {	-- Strength
+                                                value matches {
+                                                    QUANTITY matches {
+                                                        magnitude matches {|>=0.0|}
+                                                        units matches {"mg"}
+                                                    }
+                                                }
+                                            }
+                                            ELEMENT[at2006] matches {	-- Form
+                                                value matches {
+                                                    1|[local::at2006.0], 	-- capsule
+                                                    2|[local::at2006.1], 	-- powder
+                                                    3|[local::at2006.2],  	-- tablet
+                                                    4|[local::at2006.3],  	-- solution
+                                                    5|[local::at2006.4]  	-- suspension
+                                                }
+                                            }
+                                            ELEMENT[at2007] matches {	-- Count
+                                                value matches {
+                                                    COUNT matches {
+                                                        magnitude matches {|1..8|}
+                                                    }
+                                                }
+                                            }
+                                        }
+									}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            SECTION[at0003] matches { -- evaluation section
+                items cardinality matches {*; ordered} matches {
+                    EVALUATION[at3000] matches {
+                        data matches {
+                            ITEM_TABLE[at3001] matches {
+                                representation matches {
+                                    CLUSTER[at3002]  matches {
+                                        items cardinality matches {*; ordered} matches {
+                                            CLUSTER[at3100] matches {	-- aspect
+                                                items cardinality matches {*; ordered} matches {
+                                                    ELEMENT[at3101] matches {  -- acuity unaided
+                                                        value matches {
+                                                            [local::at3101.0]
+                                                        }
+                                                    }
+                                                    ELEMENT[at3102] matches { 	-- acuity w/glasses
+                                                        value matches {
+                                                            [local::at3102.0]
+                                                        }
+                                                    }
+                                                    ELEMENT[at3103] matches { 	-- color
+                                                        value matches {
+                                                            [local::at3103.0]
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            CLUSTER[at3200] matches {	-- left eye
+                                                items cardinality matches {*; ordered} matches {
+                                                    ELEMENT[at3201] matches {  -- acuity unaided
+                                                        value matches {
+                                                            QUANTITY matches {
+                                                                magnitude matches {|>=0.0|}
+                                                                units matches {"s"}
+                                                            }
+                                                        }
+                                                    }
+                                                    ELEMENT[at3202] matches {  -- acuity w/glasses
+                                                        value matches {
+                                                            QUANTITY matches {
+                                                                magnitude matches {|>=0.0|}
+                                                                units matches {"s"}
+                                                            }
+                                                        }
+                                                    }
+                                                    ELEMENT[at3203] matches {  -- color
+                                                        value matches {
+                                                            1|[local::at3203.0], 	-- normal
+                                                            2|[local::at3203.1], 	-- weak
+                                                            3|[local::at3203.2],  	-- very weak
+                                                            4|[local::at3203.3]  	-- no color
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            CLUSTER[at3300] matches {  -- right eye
+                                                items cardinality matches {*; ordered} matches {
+                                                    ELEMENT[at3301] matches {  -- acuity unaided
+                                                        value matches {
+                                                            QUANTITY matches {
+                                                                magnitude matches {|>=0.0|}
+                                                                units matches {"s"}
+                                                            }
+                                                        }
+                                                    }
+                                                    ELEMENT[at3302] matches {  -- acuity w/glasses
+                                                        value matches {
+                                                            QUANTITY matches {
+                                                                magnitude matches {|>=0.0|}
+                                                                units matches {"s"}
+                                                            }
+                                                        }
+                                                    }
+                                                    ELEMENT[at3303] matches {  -- color
+                                                        value matches {
+                                                            1|[local::at3303.0], 	-- normal
+                                                            2|[local::at3303.1], 	-- weak
+                                                            3|[local::at3303.2],  	-- very weak
+                                                            4|[local::at3303.3]  	-- no color
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions("en") = <
+		items("at0000") = <
+			text = <"test composition">
+			description = <"this is a test composition">
+		>
+        items("at0001") = <
+			text = <"observation section">
+			description = <"section one">
+		>
+		items("at0002") = <
+			text = <"instruction section">
+			description = <"section two">
+		>
+		items("at0003") = <
+			text = <"evaluation section">
+			description = <"section three">
+		>
+        items("at1000") = <
+			text = <"test observation">
+			description = <"observation">
+		>
+        items("at1001") = <
+            text = <"test event">
+            description = <"single event">
+		>
+        items("at1002") = <
+			text = <"test item">
+			description = <"item single">
+		>
+		items("at1003") = <
+			text = <"test dv_text">
+			description = <"dv_text">
+		>
+		items("at2000") = <
+			text = <"test instruction">
+			description = <"instruction">
+		>
+		items("at2001") = <
+			text = <"state">
+			description = <"instruction state">
+		>
+		items("at2001.0") = <
+			text = <"initial">
+			description = <"state initial">
+		>
+		items("at2001.1") = <
+			text = <"wait">
+			description = <"state wait">
+		>
+		items("at2001.2") = <
+			text = <"completed">
+			description = <"state completed">
+		>
+        items("at2002") = <
+			text = <"list">
+			description = <" * internal structure * ">
+		>
+		items("at2003") = <
+			text = <"cluster">
+			description = <" * internal structure * ">
+		>
+		items("at2004") = <
+			text = <"name">
+			description = <"drug name">
+		>
+		items("at2005") = <
+			text = <"strength">
+			description = <"drug strength">
+		>
+		items("at2006") = <
+			text = <"form">
+			description = <"drug form">
+		>
+		items("at2006.0") = <
+			text = <"capsule">
+			description = <"capsule form">
+		>
+		items("at2006.1") = <
+			text = <"powder">
+			description = <"powder form">
+		>
+		items("at2006.2") = <
+			text = <"tablet">
+			description = <"tablet form">
+		>
+		items("at2006.3") = <
+			text = <"solution">
+			description = <"solution form">
+		>
+		items("at2006.4") = <
+			text = <"suspension">
+			description = <"suspension form">
+		>
+        items("at2007") = <
+            text = <"count">
+            description = <"drug count">
+        >
+        items("at3000") = <
+			text = <"test evaluvation">
+			description = <"observation">
+		>
+        items("at3001") = <
+			text = <"table">
+			description = <"vision table">
+		>
+        items("at3002") = <
+			text = <"cluster">
+			description = <" * internal structure * ">
+		>
+		items("at3100") = <
+			text = <"aspect">
+			description = <" * internal structure * ">
+		>
+		items("at3101") = <
+			text = <"acuity unaided">
+			description = <"acuity unaided">
+		>
+		items("at3102") = <
+			text = <"acuity w/glasses">
+			description = <"acuity w/glasses">
+		>
+		items("at3103") = <
+			text = <"color">
+			description = <"color">
+		>
+		items("at3101.0") = <
+			text = <"acuity unaided">
+			description = <"acuity unaided">
+		>
+		items("at3102.0") = <
+			text = <"acuity w/glasses">
+			description = <"acuity w/glasses">
+		>
+		items("at3103.0") = <
+			text = <"color">
+			description = <"color">
+		>
+		items("at3200") = <
+			text = <"left eye">
+			description = <" * internal structure * ">
+		>
+		items("at3201") = <
+			text = <"acuity unaided">
+			description = <"acuity unaided">
+		>
+		items("at3202") = <
+			text = <"acuity w/glasses">
+			description = <"acuity w/glasses">
+		>
+		items("at3203") = <
+			text = <"color">
+			description = <"color">
+		>
+		items("at3203.0") = <
+			text = <"normal">
+			description = <"color">
+		>
+		items("at3203.1") = <
+			text = <"weak">
+			description = <"color">
+		>
+		items("at3203.2") = <
+			text = <"very weak">
+			description = <"color">
+		>
+		items("at3203.3") = <
+			text = <"no color">
+			description = <"color">
+		>
+		items("at3300") = <
+			text = <"right eye">
+			description = <" * internal structure * ">
+		>
+		items("at3301") = <
+			text = <"acuity unaided">
+			description = <"acuity unaided">
+		>
+		items("at3302") = <
+			text = <"acuity w/glasses">
+			description = <"acuity w/glasses">
+		>
+		items("at3303") = <
+			text = <"color">
+			description = <"color">
+		>
+		items("at3303.0") = <
+			text = <"normal">
+			description = <"color">
+		>
+		items("at3303.1") = <
+			text = <"weak">
+			description = <"color">
+		>
+		items("at3303.2") = <
+			text = <"very weak">
+			description = <"color">
+		>
+		items("at3303.3") = <
+			text = <"no color">
+			description = <"color">
+		>
+	>

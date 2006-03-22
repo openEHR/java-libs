@@ -1,0 +1,376 @@
+archetype
+	openEHR-EHR-EVALUATION.problem-genetic.test
+specialize
+	openEHR-EHR-EVALUATION.problem.test
+
+concept
+	[at0000.1]	-- Problem as defined by a clinician!
+description
+	author = <"Sam Heard <sam.heard@oceaninformatics.biz>">
+	submission = <
+		organisation = <"openEHR Foundation">
+		date = <2004-05-18>
+	>
+		version = <"version">
+	status = <"draft">
+	revision = <"1.0">
+	description("en") = <
+		purpose = <"Describe systemic blood pressure measurement result and protocol">
+		use = <"">
+		misuse = <"">
+	>
+	adl_version = <"1.2">
+	rights = <"">
+
+definition
+	EVALUATION[at0000.1] matches {	-- Problem as defined by a clinician!
+		data matches {
+			Tree[at0002] matches {	-- structure
+				items cardinality matches {0..1} matches {
+					ELEMENT[at0003.1] matches {	-- Genetic condition
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0001.1]}		-- = genetic condition
+							}
+						}
+						value matches {
+							CODED_TEXT matches {
+								code matches {[ac0002]}		-- Any term that 'is_a'  genetic condition
+							}
+						}
+					}
+					ELEMENT[at0004.1] occurrences matches {0..1} matches {	-- Date of manifestation
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0004.1]}		-- =Date of manifestation
+							}
+						}
+						value matches {yyyy-mm-dd}
+					}
+					ELEMENT[at0005.1] occurrences matches {0..1} matches {	-- Age at determination
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0003.1]}		-- =Age the condition was diagnosed
+							}
+						}
+						value matches {
+							REAL_QUANTITY matches {
+								property matches {"time"}
+								units cardinality matches {1} matches {
+									UNIT matches {
+										unit_string matches {"yr"}
+										magnitude matches {|0.0..200.0|}
+									}
+									UNIT matches {
+										unit_string matches {"day"}
+										magnitude matches {|>= -260|}
+									}
+									UNIT matches {
+										unit_string matches {"mth"}
+										magnitude matches {|>= -9|}
+									}
+								}
+							}
+						}
+					}
+					ELEMENT[at0007] occurrences matches {0..1} matches {	-- Number of occurrences
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0006]}		-- =Number of occurrences
+							}
+						}
+						value matches {
+							COUNT matches {
+								magnitude matches {|>= 1|}
+							}
+						}
+					}
+					ELEMENT[at0025] occurrences matches {0..1} matches {	-- Severity
+						value matches {
+							ORDINAL matches {
+								value matches {
+									0|[local::at0026], 	-- Mild
+									5|[local::at0027], 	-- Moderate
+									10|[local::at0028]  	-- Severe
+								}
+							}
+						}
+					}
+					ELEMENT[at0008] occurrences matches {0..1} matches {	-- Clinical description
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0005]}		-- =Description
+							}
+						}
+						value matches {
+							TEXT matches {*}
+						}
+					}
+					ELEMENT[at0009] occurrences matches {0..1} matches {	-- Date clinically recognised
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0007]}		-- =Date problem recognised
+							}
+						}
+						value matches {yyyy-??-??}
+					}
+					CLUSTER[at0010] occurrences matches {0..*} matches {	-- Location
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0008]}		-- =Location
+							}
+						}
+						items cardinality matches {0..1} matches {
+							ELEMENT[at0011] occurrences matches {0..1} matches {	-- Body site
+								runtime_label matches {
+									CODED_TEXT matches {
+										code matches {[ac0009]}		-- =Body site
+									}
+								}
+								value matches {
+									CODED_TEXT matches {
+										code matches {[ac0010]}		-- Any term that describes a body site
+									}
+								}
+							}
+							ELEMENT[at0012] occurrences matches {0..1} matches {	-- Location description
+								runtime_label matches {
+									CODED_TEXT matches {
+										code matches {[ac0011]}		-- =Description
+									}
+								}
+								value matches {
+									TEXT matches {*}
+								}
+							}
+						}
+					}
+					CLUSTER[at0013] occurrences matches {0..1} matches {	-- Complications
+						items cardinality matches {0..1} matches {
+							ELEMENT[at0014] occurrences matches {0..*} matches {	-- Complication
+								runtime_label matches {
+									CODED_TEXT matches {
+										code matches {[ac0012]}		-- =Complication
+									}
+								}
+								value matches {
+									CODED_TEXT matches {
+										code matches {[ac0013]}		-- Any term that 'is_a' problem
+									}
+								}
+							}
+						}
+					}
+					ELEMENT[at0015] occurrences matches {0..1} matches {	-- Date of resolution/remission
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0014]}		-- =Date of resolution/remission
+							}
+						}
+						value matches {yyyy-??-??}
+					}
+					ELEMENT[at0029] occurrences matches {0..1} matches {	-- Age at resolution
+						value matches {
+							REAL_QUANTITY matches {
+								property matches {"time"}
+								units cardinality matches {1} matches {
+									UNIT matches {
+										unit_string matches {"yr"}
+										magnitude matches {|0.0..200.0|}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions("en") = <
+		items("at0003.1") = <
+			text = <"Genetic condition">
+			description = <"The index problem described">
+		>
+		items("at0011") = <
+			text = <"Body site">
+			description = <"The body site affected">
+		>
+		items("at0010") = <
+			text = <"Location">
+			description = <"Location of the problem in terms of body site">
+		>
+		items("at0013") = <
+			text = <"Complications">
+			description = <"Complications that are attributed to this problem">
+		>
+		items("at0012") = <
+			text = <"Location description">
+			description = <"A free text description of the location - may be in addition to a coded body site">
+		>
+		items("at0015") = <
+			text = <"Date of resolution/remission">
+			description = <"The date that the problem resolved or went into remission">
+		>
+		items("at0014") = <
+			text = <"Complication">
+			description = <"Any problem arising as a complication of the index problem">
+		>
+		items("at0000.1") = <
+			text = <"Problem as defined by a clinician!">
+			description = <"A problem, condition or issue defined by the clinician which is deemed summative of a range of symptoms or concerns of the person and a useful label of these.!">
+		>
+		items("at0019") = <
+			text = <"protocol structure">
+			description = <"@ internal @">
+		>
+		items("at0018") = <
+			text = <"state structure">
+			description = <"@ internal @">
+		>
+		items("at0022") = <
+			text = <"protocol structure">
+			description = <"@ internal @">
+		>
+		items("at0021") = <
+			text = <"protocol structure">
+			description = <"@ internal @">
+		>
+		items("at0026") = <
+			text = <"Mild">
+			description = <"*">
+		>
+		items("at0027") = <
+			text = <"Moderate">
+			description = <"*">
+		>
+		items("at0024") = <
+			text = <"protocol structure">
+			description = <"@ internal @">
+		>
+		items("at0025") = <
+			text = <"Severity">
+			description = <"The severity of the index problem">
+		>
+		items("at0002") = <
+			text = <"structure">
+			description = <"@ internal @">
+		>
+		items("at0003") = <
+			text = <"Problem">
+			description = <"The index problem described">
+		>
+		items("at0004") = <
+			text = <"Date of onset">
+			description = <"The date that the problem began from the perspective of the clinician">
+		>
+		items("at0005") = <
+			text = <"Age at onset">
+			description = <"The age of the at the onset of the problem">
+		>
+		items("at0007") = <
+			text = <"Number of occurrences">
+			description = <"Number of times this problem has occurred or been apparent">
+		>
+		items("at0008") = <
+			text = <"Clinical description">
+			description = <"Description of the clinical aspects of the problem">
+		>
+		items("at0009") = <
+			text = <"Date clinically recognised">
+			description = <"Date the problem was recognised by clinicians">
+		>
+		items("at0000") = <
+			text = <"Problem as defined by a clinician">
+			description = <"A problem, condition or issue defined by the clinician which is deemed summative of a range of symptoms or concerns of the person and a useful label of these.">
+		>
+		items("at0028") = <
+			text = <"Severe">
+			description = <"*">
+		>
+		items("at0029") = <
+			text = <"Age at resolution">
+			description = <"The age of the at the resolution of the problem">
+		>
+		items("at0004.1") = <
+			text = <"Date of manifestation">
+			description = <"The date that the problem began from the perspective of the clinician">
+		>
+		items("at0005.1") = <
+			text = <"Age at determination">
+			description = <"The age of the at the diagnosis of the condition">
+		>
+	>
+	constraint_definitions("en") = <
+		items("ac0008") = <
+			text = <"=Location">
+			description = <"*">
+		>
+		items("ac0001.1") = <
+			text = <"= genetic condition">
+			description = <"*">
+		>
+		items("ac0004.1") = <
+			text = <"=Date of manifestation">
+			description = <"*">
+		>
+		items("ac0014") = <
+			text = <"=Date of resolution/remission">
+			description = <"*">
+		>
+		items("ac0003.1") = <
+			text = <"=Age the condition was diagnosed">
+			description = <"*">
+		>
+		items("ac0012") = <
+			text = <"=Complication">
+			description = <"*">
+		>
+		items("ac0013") = <
+			text = <"Any term that 'is_a' problem">
+			description = <"Any probblem, issue or condition">
+		>
+		items("ac0010") = <
+			text = <"Any term that describes a body site">
+			description = <"An anatomical structure with qualifiers">
+		>
+		items("ac0011") = <
+			text = <"=Description">
+			description = <"*">
+		>
+		items("ac0007") = <
+			text = <"=Date problem recognised">
+			description = <"*">
+		>
+		items("ac0006") = <
+			text = <"=Number of occurrences">
+			description = <"*">
+		>
+		items("ac0005") = <
+			text = <"=Description">
+			description = <"*">
+		>
+		items("ac0004") = <
+			text = <"=Date of onset">
+			description = <"*">
+		>
+		items("ac0003") = <
+			text = <"=Age at onset">
+			description = <"*">
+		>
+		items("ac0002") = <
+			text = <"Any term that 'is_a'  genetic condition">
+			description = <"Any term that is a genetic condition of concern to the clinician">
+		>
+		items("ac0001") = <
+			text = <"=Problem">
+			description = <"*">
+		>
+		items("ac0009") = <
+			text = <"=Body site">
+			description = <"*">
+		>
+	>

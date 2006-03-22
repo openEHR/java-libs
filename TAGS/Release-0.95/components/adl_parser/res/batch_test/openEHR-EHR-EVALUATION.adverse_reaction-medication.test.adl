@@ -1,0 +1,269 @@
+archetype
+	openEHR-EHR-EVALUATION.adverse_reaction-medication.test
+specialize
+	openEHR-EHR-EVALUATION.adverse_reaction.test
+
+concept
+	[at0000.1]	-- Adverse reaction to medication
+description
+	author = <"Sam Heard <sam.heard@oceaninformatics.biz>">
+	status = <"draft">
+	version = <"1.0">
+	revision = <"1.0">
+	submission = <
+		organisation = <"Ocean Informatics">
+		date = <2004-06-08>
+	>
+		adl_version = <"1.2">
+	description("en") = <
+		purpose = <"Recording of adverse reactions">
+		use = <"">
+		misuse = <"">
+	>
+	rights = <"">
+
+definition
+	EVALUATION[at0000.1] matches {	-- Adverse reaction to medication
+		data matches {
+			TREE[at0001] matches {	-- structure
+				items cardinality matches {0..1} matches {
+					ELEMENT[at0002.1] matches {	-- Medication
+						value matches {
+							CODED_TEXT matches {
+								code matches {[ac0001]}		-- Any term that 'is_a' medication
+							}
+						}
+					}
+					ELEMENT[at0003] matches {	-- Is negated
+						value matches {False}
+					}
+					ELEMENT[at0010] occurrences matches {0..1} matches {	-- Classification
+						value matches {
+							CODED_TEXT matches {
+								code matches {
+									[local::
+									at0011, 	-- Allergic
+									at0012, 	-- Chemical/Physical
+									at0013]	-- Intolerance
+								}
+							}
+						}
+					}
+					CLUSTER[at0004] occurrences matches {0..*} matches {	-- Reaction
+						items cardinality matches {0..1} matches {
+							ELEMENT[at0008] occurrences matches {0..1} matches {	-- Type of reaction
+								value matches {
+									CODED_TEXT matches {
+										code matches {[local::]}	
+									}
+								}
+							}
+							ELEMENT[at0005] occurrences matches {0..1} matches {	-- Date of onset
+								value matches {yyyy-??-XX}
+							}
+							ELEMENT[at0014] occurrences matches {0..1} matches {	-- Severity
+								value matches {
+									ORDINAL matches {
+										value matches {
+											0|[local::at0015], 	-- Mild
+											5|[local::at0016], 	-- Moderate
+											10|[local::at0017], 	-- Severe
+											15|[local::at0018]  	-- Life threatening
+										}
+									}
+								}
+							}
+							ELEMENT[at0006] occurrences matches {0..1} matches {	-- Date of resolution
+								value matches {yyyy-??-XX}
+							}
+							ELEMENT[at0007] occurrences matches {0..1} matches {	-- Duration
+								value matches {
+									REAL_QUANTITY matches {
+										property matches {"time"}
+										units cardinality matches {1} matches {
+											UNIT matches {
+												unit_string matches {"min"}
+												magnitude matches {|>= 0|}
+											}
+											UNIT matches {
+												unit_string matches {"hr"}
+												magnitude matches {|>= 0|}
+											}
+											UNIT matches {
+												unit_string matches {"day"}
+												magnitude matches {|>= 0|}
+											}
+											UNIT matches {
+												unit_string matches {"mth"}
+												magnitude matches {|>= 0|}
+											}
+											UNIT matches {
+												unit_string matches {"yr"}
+												magnitude matches {|>= 0|}
+											}
+										}
+									}
+								}
+							}
+							CLUSTER[at0.2] occurrences matches {0..1} matches {	-- Administration information
+								items cardinality matches {0..1} matches {
+									ELEMENT[at0.3] occurrences matches {0..1} matches {	-- Start date
+										value matches {yyyy-??-?? ??:??:??}
+									}
+									ELEMENT[at0.4] occurrences matches {0..1} matches {	-- End date
+										value matches {yyyy-??-?? ??:??:??}
+									}
+									ELEMENT[at0.5] occurrences matches {0..1} matches {	-- Duration
+										value matches {
+											REAL_QUANTITY matches {
+												property matches {"time"}
+											}
+										}
+									}
+									ELEMENT[at0.6] occurrences matches {0..1} matches {	-- Frequency
+										value matches {
+											REAL_QUANTITY matches {
+												property matches {"rate"}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					ELEMENT[at0019] occurrences matches {0..1} matches {	-- Certainty
+						value matches {
+							CODED_TEXT matches {
+								code matches {
+									[local::
+									at0020, 	-- Suspected
+									at0021]	-- Probable
+								}
+							}
+						}
+					}
+					ELEMENT[at0022] occurrences matches {0..1} matches {	-- Notes
+						value matches {
+							TEXT matches {*}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions("en") = <
+		items("at0005") = <
+			text = <"Date of onset">
+			description = <"Date of onset of reaction">
+		>
+		items("at0006") = <
+			text = <"Date of resolution">
+			description = <"The date of resolution of the reaction">
+		>
+		items("at0007") = <
+			text = <"Duration">
+			description = <"The duration of the reaction">
+		>
+		items("at0008") = <
+			text = <"Type of reaction">
+			description = <"A description of the symptoms or signs associated with the reaction">
+		>
+		items("at0009") = <
+			text = <"New element">
+			description = <"*">
+		>
+		items("at0.3") = <
+			text = <"Start date">
+			description = <"Date the administration started">
+		>
+		items("at0012") = <
+			text = <"Chemical/Physical">
+			description = <"Toxic chemical or adverse physical mediation">
+		>
+		items("at0014") = <
+			text = <"Severity">
+			description = <"The severity of the reaction">
+		>
+		items("at0022") = <
+			text = <"Notes">
+			description = <"*">
+		>
+		items("at0019") = <
+			text = <"Certainty">
+			description = <"Certainty from HL7 on p482">
+		>
+		items("at0020") = <
+			text = <"Suspected">
+			description = <"The reaction is thought to be caused by this agent">
+		>
+		items("at0021") = <
+			text = <"Probable">
+			description = <"The causative agent is the probable cause">
+		>
+		items("at0002.1") = <
+			text = <"Medication">
+			description = <"The agent, substance, therapy or other intervention that is the cause of the reaction">
+		>
+		items("at0002") = <
+			text = <"Causative agent">
+			description = <"The agent, substance, therapy or other intervention that is the cause of the reaction">
+		>
+		items("at0.6") = <
+			text = <"Frequency">
+			description = <"*">
+		>
+		items("at0.4") = <
+			text = <"End date">
+			description = <"Date the administration ended">
+		>
+		items("at0.5") = <
+			text = <"Duration">
+			description = <"Duration of the administration">
+		>
+		items("at0.2") = <
+			text = <"Administration information">
+			description = <"*">
+		>
+		items("at0011") = <
+			text = <"Allergic">
+			description = <"IgE mediated">
+		>
+		items("at0010") = <
+			text = <"Classification">
+			description = <"Classification of the type of reaction">
+		>
+		items("at0000.1") = <
+			text = <"Adverse reaction to medication">
+			description = <"The recording of an adverse reaction, or lack of a reaction, to a specific causative medication.">
+		>
+		items("at0000") = <
+			text = <"Adverse reaction">
+			description = <"The recording of an adverse reaction, or lack of a reaction, to a specific causative agent">
+		>
+		items("at0001") = <
+			text = <"structure">
+			description = <"@ internal @">
+		>
+		items("at0013") = <
+			text = <"Intolerance">
+			description = <"Known benign effect (or side-effect) of agent or class - benign and self-limiting">
+		>
+		items("at0003") = <
+			text = <"Is negated">
+			description = <"Enables the recording of the lack of a reaction to a given agent">
+		>
+		items("at0004") = <
+			text = <"Reaction">
+			description = <"The reaction">
+		>
+	>
+	constraint_definitions("en") = <
+		items("ac0001") = <
+			text = <"Any term that 'is_a' medication">
+			description = <"Any medication">
+		>
+	>

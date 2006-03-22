@@ -1,0 +1,555 @@
+archetype
+	openEHR-EHR-EVALUATION.problem-diagnosis.test
+specialize
+	openEHR-EHR-EVALUATION.problem.test
+
+concept
+	[at0000.1]	-- Diagnosis as defined by a clinician
+description
+	author = <"Sam Heard <sam.heard@oceaninformatics.biz>">
+	submission = <
+		organisation = <"openEHR Foundation">
+		date = <2004-05-18>
+	>
+		version = <"version">
+	status = <"draft">
+	revision = <"1.0">
+	description("en") = <
+		purpose = <"Describe systemic blood pressure measurement result and protocol">
+		use = <"">
+		misuse = <"">
+	>
+	adl_version = <"1.2">
+	rights = <"">
+
+definition
+	EVALUATION[at0000.1] matches {	-- Diagnosis as defined by a clinician
+		data matches {
+			TREE[at0002] matches {	-- structure
+				items cardinality matches {0..1} matches {
+					ELEMENT[at0003.1] matches {	-- Diagnosis
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0001.1]}		-- =Diagnosis
+							}
+						}
+						value matches {
+							CODED_TEXT matches {
+								code matches {[ac0002]}		-- Any term that 'is_a' diagnosis
+							}
+						}
+					}
+					ELEMENT[at0.22] occurrences matches {0..1} matches {	-- Status
+						value matches {
+							CODED_TEXT matches {
+								code matches {
+									[local::
+									at0.23, 	-- Provisional
+									at0.24, 	-- Working
+									at0.25]	-- Final
+								}
+							}
+						}
+					}
+					ELEMENT[at0004] occurrences matches {0..1} matches {	-- Date of onset
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0004]}		-- =Date of onset
+							}
+						}
+						value matches {yyyy-??-??}
+					}
+					ELEMENT[at0005] occurrences matches {0..1} matches {	-- Age at onset
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0003]}		-- =Age at onset
+							}
+						}
+						value matches {
+							REAL_QUANTITY matches {
+								property matches {"time"}
+								units cardinality matches {1} matches {
+									UNIT matches {
+										unit_string matches {"yr"}
+										magnitude matches {|0.0..200.0|}
+									}
+								}
+							}
+						}
+					}
+					ELEMENT[at0007] occurrences matches {0..1} matches {	-- Number of occurrences
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0006]}		-- =Number of occurrences
+							}
+						}
+						value matches {
+							COUNT matches {
+								magnitude matches {|>= 1|}
+							}
+						}
+					}
+					ELEMENT[at0025] occurrences matches {0..1} matches {	-- Severity
+						value matches {
+							ORDINAL matches {
+								value matches {
+									0|[local::at0026], 	-- Mild
+									5|[local::at0027], 	-- Moderate
+									10|[local::at0028]  	-- Severe
+								}
+							}
+						}
+					}
+					ELEMENT[at0008] occurrences matches {0..1} matches {	-- Clinical description
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0005]}		-- =Description
+							}
+						}
+						value matches {
+							TEXT matches {*}
+						}
+					}
+					ELEMENT[at0009] occurrences matches {0..1} matches {	-- Date clinically recognised
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0007]}		-- =Date of diagnosis
+							}
+						}
+						value matches {yyyy-??-??}
+					}
+					CLUSTER[at0010] occurrences matches {0..*} matches {	-- Location
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0008]}		-- =Location
+							}
+						}
+						items cardinality matches {0..1} matches {
+							ELEMENT[at0011] occurrences matches {0..1} matches {	-- Body site
+								runtime_label matches {
+									CODED_TEXT matches {
+										code matches {[ac0009]}		-- =Body site
+									}
+								}
+								value matches {
+									CODED_TEXT matches {
+										code matches {[ac0010]}		-- Any term that describes a body site
+									}
+								}
+							}
+							ELEMENT[at0012] occurrences matches {0..1} matches {	-- Location description
+								runtime_label matches {
+									CODED_TEXT matches {
+										code matches {[ac0011]}		-- =Description
+									}
+								}
+								value matches {
+									TEXT matches {*}
+								}
+							}
+						}
+					}
+					CLUSTER[at0013] occurrences matches {0..1} matches {	-- Complications
+						items cardinality matches {0..1} matches {
+							ELEMENT[at0014] occurrences matches {0..*} matches {	-- Complication
+								runtime_label matches {
+									CODED_TEXT matches {
+										code matches {[ac0012]}		-- =Complication
+									}
+								}
+								value matches {
+									CODED_TEXT matches {
+										code matches {[ac0013]}		-- Any term that 'is_a' problem
+									}
+								}
+							}
+						}
+					}
+					ELEMENT[at0015] occurrences matches {0..1} matches {	-- Date of resolution/remission
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0014]}		-- =Date of resolution/remission
+							}
+						}
+						value matches {yyyy-??-??}
+					}
+					ELEMENT[at0029] occurrences matches {0..1} matches {	-- Age at resolution
+						value matches {
+							REAL_QUANTITY matches {
+								property matches {"time"}
+								units cardinality matches {1} matches {
+									UNIT matches {
+										unit_string matches {"yr"}
+										magnitude matches {|0.0..200.0|}
+									}
+								}
+							}
+						}
+					}
+					CLUSTER[at0.2] occurrences matches {0..1} matches {	-- Diagnostic criteria
+						items cardinality matches {0..1} matches {
+							ELEMENT[at0.3] occurrences matches {0..*} matches {	-- Criterion
+								runtime_label matches {
+									CODED_TEXT matches {
+										code matches {[ac0.2]}		-- =Diagnostic criterion
+									}
+								}
+								value matches {
+									TEXT matches {*}
+								}
+							}
+						}
+					}
+					CLUSTER[at0.4] occurrences matches {0..1} matches {	-- Clinical staging
+						runtime_label matches {
+							CODED_TEXT matches {
+								code matches {[ac0.3]}		-- =Clinical staging
+							}
+						}
+						items cardinality matches {0..1} matches {
+							ELEMENT[at0.5] occurrences matches {0..1} matches {	-- Stage
+								runtime_label matches {
+									CODED_TEXT matches {
+										code matches {[ac0.4]}		-- =Stage
+									}
+								}
+								value matches {
+									CODED_TEXT matches {
+										code matches {[ac0.5]}		-- Any term that describes the stage of a diagnosis
+									}
+								}
+							}
+							ELEMENT[at0.6] occurrences matches {0..1} matches {	-- Tumour
+								runtime_label matches {
+									CODED_TEXT matches {
+										code matches {[ac0.6]}		-- =Tumor
+									}
+								}
+								value matches {
+									ORDINAL matches {
+										value matches {
+											-1|[local::at0.7], 	-- Tx - Primary tumor not assessed
+											0|[local::at0.8], 	-- T0 - no primary tumor
+											5|[local::at0.9], 	-- Tis - Carcinoma insitu
+											10|[local::at0.10], 	-- T1 - Micro-invasion 0.5 cm
+											20|[local::at0.11], 	-- T2 - Tumor invading 1cm
+											30|[local::at0.12], 	-- T3 - Full thickness of structure
+											40|[local::at0.13]  	-- T4 - Invading adjacent structure
+										}
+									}
+								}
+							}
+							ELEMENT[at0.14] occurrences matches {0..1} matches {	-- Nodes
+								runtime_label matches {
+									CODED_TEXT matches {
+										code matches {[ac0.8]}		-- =Nodes
+									}
+								}
+								value matches {
+									ORDINAL matches {
+										value matches {
+											-1|[local::at0.15], 	-- Nx - regional nodes not assessed
+											0|[local::at0.16], 	-- N0 - no regional nodes involved
+											10|[local::at0.17]  	-- N1 - Regional node involvement
+										}
+									}
+								}
+							}
+							ELEMENT[at0.18] occurrences matches {0..1} matches {	-- Metastases
+								runtime_label matches {
+									CODED_TEXT matches {
+										code matches {[ac0.7]}		-- =Matastases
+									}
+								}
+								value matches {
+									ORDINAL matches {
+										value matches {
+											-1|[local::at0.19], 	-- Mx - metastases not assessed
+											0|[local::at0.20], 	-- M0 - no distant metastases
+											10|[local::at0.21]  	-- M1 - Distant metastases
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions("en") = <
+		items("at0003.1") = <
+			text = <"Diagnosis">
+			description = <"The index problem described">
+		>
+		items("at0011") = <
+			text = <"Body site">
+			description = <"The body site affected">
+		>
+		items("at0010") = <
+			text = <"Location">
+			description = <"Location of the problem in terms of body site">
+		>
+		items("at0013") = <
+			text = <"Complications">
+			description = <"Complications that are attributed to this problem">
+		>
+		items("at0012") = <
+			text = <"Location description">
+			description = <"A free text description of the location - may be in addition to a coded body site">
+		>
+		items("at0015") = <
+			text = <"Date of resolution/remission">
+			description = <"The date that the problem resolved or went into remission">
+		>
+		items("at0014") = <
+			text = <"Complication">
+			description = <"Any problem arising as a complication of the index problem">
+		>
+		items("at0000.1") = <
+			text = <"Diagnosis as defined by a clinician">
+			description = <"A diagnosis defined by the clinician which is coded and may include the stage and diagnostic criteria.">
+		>
+		items("at0.8") = <
+			text = <"T0 - no primary tumor">
+			description = <"*">
+		>
+		items("at0.9") = <
+			text = <"Tis - Carcinoma insitu">
+			description = <"*">
+		>
+		items("at0.6") = <
+			text = <"Tumour">
+			description = <"Extent of invasion of local tissue">
+		>
+		items("at0.7") = <
+			text = <"Tx - Primary tumor not assessed">
+			description = <"*">
+		>
+		items("at0.4") = <
+			text = <"Clinical staging">
+			description = <"Clinical staging of a process">
+		>
+		items("at0.5") = <
+			text = <"Stage">
+			description = <"Stage of the disease as a term or a text - not TNM staging">
+		>
+		items("at0.2") = <
+			text = <"Diagnostic criteria">
+			description = <"*">
+		>
+		items("at0.3") = <
+			text = <"Criterion">
+			description = <"A criterion on which the diagnosis is based">
+		>
+		items("at0.21") = <
+			text = <"M1 - Distant metastases">
+			description = <"*">
+		>
+		items("at0.22") = <
+			text = <"Status">
+			description = <"The status of the diagnosis">
+		>
+		items("at0.23") = <
+			text = <"Provisional">
+			description = <"The diagnosis is interim or a working diagnosis">
+		>
+		items("at0000") = <
+			text = <"Problem as defined by a clinician">
+			description = <"A problem, condition or issue defined by the clinician which is deemed summative of a range of symptoms or concerns of the person and a useful label of these.">
+		>
+		items("at0002") = <
+			text = <"structure">
+			description = <"@ internal @">
+		>
+		items("at0003") = <
+			text = <"Problem">
+			description = <"The index problem described">
+		>
+		items("at0004") = <
+			text = <"Date of onset">
+			description = <"The date that the problem began from the perspective of the clinician">
+		>
+		items("at0005") = <
+			text = <"Age at onset">
+			description = <"The age of the at the onset of the problem">
+		>
+		items("at0007") = <
+			text = <"Number of occurrences">
+			description = <"Number of times this problem has occurred or been apparent">
+		>
+		items("at0008") = <
+			text = <"Clinical description">
+			description = <"Description of the clinical aspects of the problem">
+		>
+		items("at0009") = <
+			text = <"Date clinically recognised">
+			description = <"Date the problem was recognised by clinicians">
+		>
+		items("at0.19") = <
+			text = <"Mx - metastases not assessed">
+			description = <"*">
+		>
+		items("at0.18") = <
+			text = <"Metastases">
+			description = <"Existence of metastases">
+		>
+		items("at0.17") = <
+			text = <"N1 - Regional node involvement">
+			description = <"*">
+		>
+		items("at0.16") = <
+			text = <"N0 - no regional nodes involved">
+			description = <"*">
+		>
+		items("at0.15") = <
+			text = <"Nx - regional nodes not assessed">
+			description = <"*">
+		>
+		items("at0.14") = <
+			text = <"Nodes">
+			description = <"Involvment of regional nodes">
+		>
+		items("at0.13") = <
+			text = <"T4 - Invading adjacent structure">
+			description = <"*">
+		>
+		items("at0.12") = <
+			text = <"T3 - Full thickness of structure">
+			description = <"*">
+		>
+		items("at0.11") = <
+			text = <"T2 - Tumor invading 1cm">
+			description = <"*">
+		>
+		items("at0.10") = <
+			text = <"T1 - Micro-invasion 0.5 cm">
+			description = <"*">
+		>
+		items("at0.24") = <
+			text = <"Working">
+			description = <"The patient is managed as if they have this diagnosis">
+		>
+		items("at0.25") = <
+			text = <"Final">
+			description = <"The diagnosis is proven beyond reasonable doubt">
+		>
+		items("at0.20") = <
+			text = <"M0 - no distant metastases">
+			description = <"*">
+		>
+		items("at0025") = <
+			text = <"Severity">
+			description = <"The severity of the index problem">
+		>
+		items("at0026") = <
+			text = <"Mild">
+			description = <"*">
+		>
+		items("at0027") = <
+			text = <"Moderate">
+			description = <"*">
+		>
+		items("at0028") = <
+			text = <"Severe">
+			description = <"*">
+		>
+		items("at0029") = <
+			text = <"Age at resolution">
+			description = <"The age of the at the resolution of the problem">
+		>
+	>
+	constraint_definitions("en") = <
+		items("ac0008") = <
+			text = <"=Location">
+			description = <"*">
+		>
+		items("ac0.8") = <
+			text = <"=Nodes">
+			description = <"*">
+		>
+		items("ac0001.1") = <
+			text = <"=Diagnosis">
+			description = <"*">
+		>
+		items("ac0014") = <
+			text = <"=Date of resolution/remission">
+			description = <"*">
+		>
+		items("ac0012") = <
+			text = <"=Complication">
+			description = <"*">
+		>
+		items("ac0013") = <
+			text = <"Any term that 'is_a' problem">
+			description = <"Any probblem, issue or condition">
+		>
+		items("ac0010") = <
+			text = <"Any term that describes a body site">
+			description = <"An anatomical structure with qualifiers">
+		>
+		items("ac0011") = <
+			text = <"=Description">
+			description = <"*">
+		>
+		items("ac0.3") = <
+			text = <"=Clinical staging">
+			description = <"*">
+		>
+		items("ac0.7") = <
+			text = <"=Matastases">
+			description = <"*">
+		>
+		items("ac0007") = <
+			text = <"=Date of diagnosis">
+			description = <"*">
+		>
+		items("ac0005") = <
+			text = <"=Description">
+			description = <"*">
+		>
+		items("ac0006") = <
+			text = <"=Number of occurrences">
+			description = <"*">
+		>
+		items("ac0003") = <
+			text = <"=Age at onset">
+			description = <"*">
+		>
+		items("ac0002") = <
+			text = <"Any term that 'is_a' diagnosis">
+			description = <"Any term that is a diagnosis of concern to the clinician">
+		>
+		items("ac0001") = <
+			text = <"=Problem">
+			description = <"*">
+		>
+		items("ac0004") = <
+			text = <"=Date of onset">
+			description = <"*">
+		>
+		items("ac0.5") = <
+			text = <"Any term that describes the stage of a diagnosis">
+			description = <"Local templates need to standardise the terms based on requirements">
+		>
+		items("ac0.6") = <
+			text = <"=Tumor">
+			description = <"*">
+		>
+		items("ac0.4") = <
+			text = <"=Stage">
+			description = <"*">
+		>
+		items("ac0.2") = <
+			text = <"=Diagnostic criterion">
+			description = <"*">
+		>
+		items("ac0009") = <
+			text = <"=Body site">
+			description = <"*">
+		>
+	>

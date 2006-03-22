@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<project>
+    <pomVersion>3</pomVersion>
+    <id>openehr-kernel</id>
+    <name>openEHR Java Kernel</name>
+    <groupId>openehr</groupId>
+    <currentVersion>1.2.5-SNAPSHOT</currentVersion>
+    <organization>
+        <name>openEHR</name>
+        <url>http://www.openehr.org/</url>
+    </organization>
+    <inceptionYear>2004</inceptionYear>
+    <package>org.openehr</package>
+
+    <shortDescription>Java implementation of openEHR Kernel</shortDescription>
+
+    <developers>
+        <developer>
+            <name>Rong Chen</name>
+            <id>rong</id>
+            <email>rong@acode.se</email>
+            <organization>Acode HB</organization>
+        </developer>
+        <developer>
+            <name>Goran Pestana</name>
+            <id>goran</id>
+            <email>goran@acode.se</email>
+            <organization>Acode HB</organization>
+        </developer>
+    </developers>
+
+    <dependencies>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.0</version>
+            <url>http://jakarta.apache.org/commons/lang</url>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.8</version>
+            <url>http://jakarta.apache.org/log4j/</url>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/java</sourceDirectory>
+        <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+        <unitTest>
+            <includes>
+                <include>**/*Test.java</include>
+            </includes>
+            <resources>
+                <resource>
+                    <directory>conf</directory>
+                    <includes>
+                        <include>log4j.properties</include>
+                    </includes>
+                </resource>
+            </resources>
+        </unitTest>
+    </build>
+
+</project>
