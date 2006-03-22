@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<project>
+    <pomVersion>3</pomVersion>
+    <id>adl-parser</id>
+    <name>java ADL Parser</name>
+    <groupId>acode</groupId>
+    <currentVersion>1.0.2-SNAPSHOT</currentVersion>
+    <organization>
+        <name>Acode HB</name>
+        <url>http://www.acode.se/</url>
+    </organization>
+    <inceptionYear>2004</inceptionYear>
+    <package>se.acode.openehr</package>
+
+    <shortDescription>java ADL Parser</shortDescription>
+
+    <developers>
+        <developer>
+            <name>Rong Chen</name>
+            <id>rong</id>
+            <email>rong@acode.se</email>
+            <organization>Acode HB</organization>
+        </developer>
+
+        <developer>
+            <name>Goran Pestana</name>
+            <id>goran</id>
+            <email>goran@acode.se</email>
+            <organization>Acode HB</organization>
+        </developer>
+    </developers>
+
+    <dependencies>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>2.1</version>
+            <url>http://jakarta.apache.org/commons/collections</url>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.0</version>
+            <url>http://jakarta.apache.org/commons/lang</url>
+        </dependency>
+
+        <dependency>
+            <groupId>acode</groupId>
+            <artifactId>openehr-kernel</artifactId>
+            <version>1.2.4</version>
+            <url>http://www.acode.se</url>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/java</sourceDirectory>
+        <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
+        <unitTest>
+            <includes>
+                <include>**/*Test.java</include>
+            </includes>
+        </unitTest>
+    </build>
+
+</project>

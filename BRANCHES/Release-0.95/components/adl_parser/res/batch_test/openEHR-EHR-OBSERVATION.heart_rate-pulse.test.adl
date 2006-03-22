@@ -1,0 +1,136 @@
+archetype
+	openEHR-EHR-OBSERVATION.heart_rate-pulse.test
+specialize
+	openEHR-EHR-OBSERVATION.heart_rate.test
+
+concept
+	[at0000.1]	-- Pulse
+description
+	author = <"Sam Heard <sam.heard@oceaninformatics.biz>">
+	submission = <
+		organisation = <"openEHR Foundation">
+		date = <2004-05-18>
+	>
+		version = <"version">
+	status = <"draft">
+	revision = <"1.0">
+	description("en") = <
+		purpose = <"Describe systemic blood pressure measurement result and protocol">
+		use = <"">
+		misuse = <"">
+	>
+	adl_version = <"1.2">
+	rights = <"">
+
+definition
+	OBSERVATION[at0000.1] matches {	-- Pulse
+		data matches {
+			HISTORY[at0002] matches {	-- history
+				events cardinality matches {1..*} matches {
+					EVENT[at0003] occurrences matches {0..*} matches {	-- Any event
+						data matches {
+							List[at0001] matches {	-- structure
+								items cardinality matches {0..1} matches {
+									ELEMENT[at0004] matches {	-- Rate
+										value matches {
+											COUNT matches {
+												magnitude matches {|>= 0|}
+											}
+										}
+									}
+									ELEMENT[at0005] occurrences matches {0..1} matches {	-- Rhythm
+										value matches {
+											CODED_TEXT matches {
+												code matches {
+													[local::
+													at0006, 	-- Regular
+													at0007, 	-- Irregular
+													at0008]	-- Irregularly irregular
+												}
+											}
+										}
+									}
+									ELEMENT[at0.9] occurrences matches {0..1} matches {	-- Character
+										value matches {
+											CODED_TEXT matches {
+												code matches {
+													[local::
+													at0.10, 	-- Normal
+													at0.11, 	-- Bounding
+													at0.12]	-- Thready
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions("en") = <
+		items("at0005") = <
+			text = <"Rhythm">
+			description = <"The rhythm of the heart beat">
+		>
+		items("at0006") = <
+			text = <"Regular">
+			description = <"Regular heart beat">
+		>
+		items("at0007") = <
+			text = <"Irregular">
+			description = <"The heart is irregular">
+		>
+		items("at0008") = <
+			text = <"Irregularly irregular">
+			description = <"Irregular in a chaotic manner">
+		>
+		items("at0002") = <
+			text = <"history">
+			description = <"@ internal @">
+		>
+		items("at0003") = <
+			text = <"Any event">
+			description = <"*">
+		>
+		items("at0004") = <
+			text = <"Rate">
+			description = <"The rate of the heart">
+		>
+		items("at0.9") = <
+			text = <"Character">
+			description = <"The character of the pulse">
+		>
+		items("at0000.1") = <
+			text = <"Pulse">
+			description = <"The mechanical heart rate  - usually measured by palpation">
+		>
+		items("at0000") = <
+			text = <"Heart rate">
+			description = <"The rate the heart is beating - either mechanically or electrically">
+		>
+		items("at0001") = <
+			text = <"structure">
+			description = <"@ internal @">
+		>
+		items("at0.12") = <
+			text = <"Thready">
+			description = <"Weak pulse">
+		>
+		items("at0.11") = <
+			text = <"Bounding">
+			description = <"Strong long pulse">
+		>
+		items("at0.10") = <
+			text = <"Normal">
+			description = <"Normal pulse">
+		>
+	>
+	constraint_definitions("en") = <
+	>

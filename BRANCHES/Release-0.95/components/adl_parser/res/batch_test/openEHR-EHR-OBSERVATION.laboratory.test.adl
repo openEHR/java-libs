@@ -1,0 +1,180 @@
+archetype
+	openEHR-EHR-OBSERVATION.laboratory.test
+
+concept
+	[at0000]	-- Laboratory result
+
+definition
+	OBSERVATION[at0000] matches {	-- Laboratory result
+		data matches {
+			HISTORY[at0001] matches {	-- history
+				events cardinality matches {1..*} matches {
+					EVENT[at0002] occurrences matches {0..*} matches {	-- Any event
+						data matches {
+							Tree[at0003] matches {	-- Tree
+								items cardinality matches {0..1} matches {
+									ELEMENT[at0013] occurrences matches {0..1} matches {	-- Diagnostic intervention name
+										value matches {
+											CODED_TEXT matches {
+												code matches {[local::]}	
+											}
+										}
+									}
+									ELEMENT[at0012] occurrences matches {0..1} matches {	-- Diagnostic service
+										value matches {
+											CODED_TEXT matches {
+												code matches {
+													[local::
+													at0015, 	-- Chemistry
+													at0016]	-- Microbiology
+												}
+											}
+										}
+									}
+									CLUSTER[at0004] occurrences matches {0..*} matches {	-- level 1
+										runtime_label matches {
+											CODED_TEXT matches {
+												code matches {[ac0001]}		-- =LOINC::Battery_name
+											}
+										}
+										items cardinality matches {0..1} matches {
+											CLUSTER[at0006] occurrences matches {0..*} matches {	-- level 2
+												runtime_label matches {
+													CODED_TEXT matches {
+														code matches {[ac0002]}		-- =LOINC::Battery_name
+													}
+												}
+												items cardinality matches {0..1} matches {
+													ELEMENT[at0007] occurrences matches {0..*} matches {*}
+													ELEMENT[at0008] occurrences matches {0..1} matches {	-- Comment
+														value matches {
+															TEXT matches {*}
+														}
+													}
+												}
+											}
+											ELEMENT[at0005] occurrences matches {0..*} matches {*}
+											ELEMENT[at0009] occurrences matches {0..1} matches {	-- Comment
+												value matches {
+													TEXT matches {*}
+												}
+											}
+										}
+									}
+									ELEMENT[at0011] occurrences matches {0..*} matches {*}
+									ELEMENT[at0010] occurrences matches {0..1} matches {	-- Overall Comment
+										value matches {
+											TEXT matches {*}
+										}
+									}
+									ELEMENT[at0014] occurrences matches {0..1} matches {	-- Body site
+										value matches {
+											CODED_TEXT matches {
+												code matches {[local::]}	
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions("en") = <
+		items("at0005") = <
+			text = <"Any result">
+			description = <"Generic result - data type is not set">
+		>
+		items("at0006") = <
+			text = <"level 2">
+			description = <"A cluster to enable level 2 battery labels">
+		>
+		items("at0007") = <
+			text = <"Any result">
+			description = <"Generic result - data type is not set">
+		>
+		items("at0008") = <
+			text = <"Comment">
+			description = <"Comment on level 2 results">
+		>
+		items("at0009") = <
+			text = <"Comment">
+			description = <"Comment on level one results">
+		>
+		items("at0000") = <
+			text = <"Laboratory result">
+			description = <"Generic laboratory result archetype to allow terminology driven results on a generic framework">
+		>
+		items("at0001") = <
+			text = <"history">
+			description = <"@ internal @">
+		>
+		items("at0002") = <
+			text = <"Any event">
+			description = <"*">
+		>
+		items("at0004") = <
+			text = <"level 1">
+			description = <"A cluster to enable level one battery labels">
+		>
+		items("at0011") = <
+			text = <"Any result">
+			description = <"Generic result - data type is not set">
+		>
+		items("at0010") = <
+			text = <"Overall Comment">
+			description = <"Comment on all results">
+		>
+		items("at0013") = <
+			text = <"Diagnostic intervention name">
+			description = <"The name of the diagnostic intervention">
+		>
+		items("at0012") = <
+			text = <"Diagnostic service">
+			description = <"The type of diagnostic service">
+		>
+		items("at0015") = <
+			text = <"Chemistry">
+			description = <"Biochemical and chemical analysis">
+		>
+		items("at0014") = <
+			text = <"Body site">
+			description = <"The site of the body where the intervention is carried out">
+		>
+		items("at0003") = <
+			text = <"Tree">
+			description = <"">
+		>
+		items("at0016") = <
+			text = <"Microbiology">
+			description = <"Results of microbiological analysis">
+		>
+	>
+	constraint_definitions("en") = <
+		items("ac0001") = <
+			text = <"=LOINC::Battery_name">
+			description = <"Any name for a set of tests from the LOINC set of battery names">
+		>
+		items("ac0005") = <
+			text = <"Any term that 'is_a' laboratory result">
+			description = <"Any term that is a laboratory test name">
+		>
+		items("ac0004") = <
+			text = <"Any term that 'is_a' laboratory result">
+			description = <"Any term that is a laboratory test name">
+		>
+		items("ac0003") = <
+			text = <"Any term that 'is_a' laboratory result">
+			description = <"Any term that is a laboratory test name">
+		>
+		items("ac0002") = <
+			text = <"=LOINC::Battery_name">
+			description = <"Any name for a set of tests from the LOINC set of battery names">
+		>
+	>
