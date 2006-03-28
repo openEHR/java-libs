@@ -8,17 +8,22 @@
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL$"
- * revision:    "$LastChangedRevision$"
- * last_change: "$LastChangedDate$"
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/common/changecontrol/VersionRepository.java $"
+ * revision:    "$LastChangedRevision: 2 $"
+ * last_change: "$LastChangedDate: 2005-10-12 22:20:08 +0100 (Wed, 12 Oct 2005) $"
  */
 package org.openehr.rm.common.changecontrol;
 
 import org.openehr.rm.RMObject;
+import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectVersionID;
+import org.openehr.rm.common.generic.Attestation;
+import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.datatypes.basic.DvState;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
+import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 import java.util.*;
@@ -30,32 +35,36 @@ import java.util.*;
  * @author Rong Chen
  * @version 1.0
  */
-public class VersionRepository <T> extends RMObject {
+public class VersionedObject <T> extends RMObject {
 
     /**
-     * Constructs a VersionRepository with first version
+     * Constructs a VersionObject with first version
      *
      * @param uid     not null
      * @param ownerID not null
      * @throws IllegalArgumentException
      */
-    public VersionRepository(ObjectID uid, ObjectReference ownerID,
-                             AuditDetails audit, T data,
-                             ObjectReference contribution,
-                             DvState lifecycleState,
-                             TerminologyService termServ,
-                             ObjectReference.Namespace namespace,
-                             ObjectReference.Type type) {
+    public VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID,
+    		ObjectVersionID uid, ObjectVersionID precedingVersionID,
+	          T data, List<Attestation> attestations,
+         AuditDetails commitAudit, ObjectReference contribution,
+         DvCodedText lifecycleState,
+         TerminologyService terminologyService) {
         if (uid == null) {
             throw new IllegalArgumentException("null uid");
         }
         if (ownerID == null) {
             throw new IllegalArgumentException("null ownerID");
         }
+        if (timeCreated == null) {
+            throw new IllegalArgumentException("null timeCreated");
+        }
+        //TODO or to create time stamp automatically?
+        //timeCreated = new DvDateTime(); // now
         this.uid = uid;
         this.ownerID = ownerID;
-        idCounter = 0;
-        timeCreated = new DvDateTime(); // now
+        this.timeCreated = timeCreated;
+        idCounter = 0;       
         timeVersionMap = new TreeMap<DvDateTime, Version<T>>();
         idVersionMap = new TreeMap<String, Version<T>>();
         commit(audit, data, contribution, lifecycleState, termServ,
@@ -207,23 +216,29 @@ public class VersionRepository <T> extends RMObject {
      * @param type
      */
     public synchronized void commit(AuditDetails audit, T data,
-                                    ObjectReference contribution,
-                                    DvState lifecycleState,
-                                    TerminologyService termServ,
-                                    ObjectReference.Namespace namespace,
-                                    ObjectReference.Type type) {
+    								  ObjectVersionID precedingVersionId) {
         String preceedingVersionID = Integer.toString(idCounter);
         idCounter++;
         String currentVersionID = Integer.toString(idCounter);
-        ObjectReference repositoryRef = new ObjectReference(uid,
-                namespace, type);
+//        ObjectReference repositoryRef = new ObjectReference(uid,
+//                namespace, type);
         Version<T> version = new Version<T>(data, null, audit,
                 currentVersionID, preceedingVersionID,
-                repositoryRef, contribution, lifecycleState, termServ);
-        timeVersionMap.put(version.getAudit().getTimeCommitted(), version);
+                contribution, lifecycleState, termServ);
+        timeVersionMap.put(version.getCommitAudit().getTimeCommitted(), version);
         idVersionMap.put(version.getVersionID(), version);
     }
 
+    /**
+     * Add a new attestation to the specified version
+     * 
+     * @param attestation
+     * @param versionID
+     */
+    public synchronized void commitAttestation(Attestation attestation,
+    				ObjectVersionID versionID) {
+    		
+    }
     // POJO start
     private Long id;
 
@@ -235,10 +250,10 @@ public class VersionRepository <T> extends RMObject {
         this.id = id;
     }
 
-    protected VersionRepository() {
+    protected VersionedObject() {
     }
 
-    void setUid(ObjectID uid) {
+    void setUid(HierarchicalObjectID uid) {
         this.uid = uid;
     }
 
@@ -255,7 +270,7 @@ public class VersionRepository <T> extends RMObject {
         idVersionMap = new TreeMap<String, Version<T>>();
         timeVersionMap = new TreeMap<DvDateTime, Version<T>>();
         for(Version<T> version : versions) {
-            timeVersionMap.put(version.getAudit().getTimeCommitted(), version);
+            timeVersionMap.put(version.getCommitAudit().getTimeCommitted(), version);
             idVersionMap.put(version.getVersionID(), version);
         }
         idCounter = Integer.parseInt(idVersionMap.lastKey());
@@ -274,9 +289,10 @@ public class VersionRepository <T> extends RMObject {
     public static final String FIRST = "1";
 
     /* fields */
-    private ObjectID uid;
+    private HierarchicalObjectID uid;
     private ObjectReference ownerID;
     private DvDateTime timeCreated;
+    
     private SortedMap<DvDateTime, Version<T>> timeVersionMap;
     private SortedMap<String, Version<T>> idVersionMap;
     private int idCounter;
