@@ -4,14 +4,20 @@ concept
 	[at0000]	--  structure test 1
 
 description
-	author = 		<"Thomas Beale">
-	status = 		<"draft">
-	version = 		<"draft">
-	revision = 		<"1.0">
-	description("en") = <
-		purpose = 		<"test structure">
+	details = <
+		["en"] = <
+			language = <"en">
+			purpose = <"parser test for basic data types">
+			keywords = <"data types">
+			copyright = <"copyright (c) 2004 Ocean Informatics">
+		>
 	>
-	adl_version =	<"0.9">
+	lifecycle_state = <"draft">
+	original_author = <
+		["name"] = <"Thomas Beale">
+		["organisation"] = <"Ocean Informatics">
+		["date"] = <"2004-06-08">
+	>
 
 definition
 	ENTRY[at0000] matches {
@@ -149,8 +155,15 @@ ontology
 	languages_available = <"en", ...>
 	terminologies_available = <"adl_test", ...>
 
-	term_definitions("en") = <
-		items("at0000") = <text = <"test entry">; description = <"test entry">>
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test entry">; 
+					description = <"test entry">
+				>
+			>
+		>
 	>
 
 	dadl_type_test = <

@@ -10,12 +10,25 @@ ontology
 	primary_language = <"en">
 	languages_available = <"en", ...>
 
-	term_definitions("en") = <
-		items("at0000") = <text = <"most minimal">; description = <"most minimal">>
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
 	>
-	term_binding("SNOMED_CT") = <
-		items("at0000") = <[snomed_ct::1000339]>
-	>
-	term_binding("ICD10") = <
-		items("at0000") = <[icd10::1000],[icd10::1001]>
+	term_binding = <
+		["SNOMED_CT"] = <
+			items = <
+				["at0000"] = <[snomed_ct::1000339]>
+			>
+		>
+		["ICD10"] = <
+			items = <
+				["at0000"] = <[icd10::1000],[icd10::1001]>
+			>
+		>
 	>

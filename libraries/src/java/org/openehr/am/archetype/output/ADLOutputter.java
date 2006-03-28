@@ -37,179 +37,207 @@ import java.util.Map;
 
 /**
  * ADLOutputter
- *
+ * 
  * @author Rong Chen
  * @author Mattias Forss, Johan Hjalmarsson
- *
+ * 
  * @version 1.0
  */
 public class ADLOutputter {
 
-    /**
-     * Create an outputter with default encoding, indent and lineSeparator
-     */
-    public ADLOutputter() {
-        this.encoding = UTF8;
-        this.indent = "    "; // 4 white space characters
-        this.lineSeparator = "\r\n";
-    }
+	/**
+	 * Create an outputter with default encoding, indent and lineSeparator
+	 */
+	public ADLOutputter() {
+		this.encoding = UTF8;
+		this.indent = "    "; // 4 white space characters
+		this.lineSeparator = "\r\n";
+	}
 
-    /**
-     * Output given archetype as string in ADL format
-     *
-     * @param archetype
-     * @return a string in ADL format
-     * @throws IOException
-     */
-    public String output(Archetype archetype) throws IOException {
-        StringWriter writer = new StringWriter();
-        output(archetype, writer);
-        return writer.toString();
-    }
+	/**
+	 * Output given archetype as string in ADL format
+	 * 
+	 * @param archetype
+	 * @return a string in ADL format
+	 * @throws IOException
+	 */
+	public String output(Archetype archetype) throws IOException {
+		StringWriter writer = new StringWriter();
+		output(archetype, writer);
+		return writer.toString();
+	}
 
+	/**
+	 * Output given archetype to outputStream
+	 * 
+	 * @param archetype
+	 * @param out
+	 * @throws IOException
+	 */
+	public void output(Archetype archetype, OutputStream out)
+			throws IOException {
+		Writer writer = new BufferedWriter(new OutputStreamWriter(
+				new BufferedOutputStream(out), encoding));
+		output(archetype, writer);
+	}
 
-    /**
-     * Output given archetype to outputStream
-     *
-     * @param archetype
-     * @param out
-     * @throws IOException
-     */
-    public void output(Archetype archetype, OutputStream out)
-            throws IOException {
-        Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new BufferedOutputStream(out), encoding));
-        output(archetype, writer);
-    }
+	/**
+	 * Output given archetype to writer
+	 * 
+	 * @param archetype
+	 * @param out
+	 * @throws IOException
+	 */
+	public void output(Archetype archetype, Writer out) throws IOException {
+		printHeader(archetype.getArchetypeId(), archetype
+				.getParentArchetypeId(), archetype.getConceptCode(), out);
+		newline(out);
 
-    /**
-     * Output given archetype to writer
-     *
-     * @param archetype
-     * @param out
-     * @throws IOException
-     */
-    public void output(Archetype archetype, Writer out) throws IOException {
-        printHeader(archetype.getArchetypeId(),
-                archetype.getParentArchetypeId(),
-                archetype.getConceptCode(), out);
-        newline(out);
+		printDescription(archetype.getDescription(), out);
+		newline(out);
 
-        printDescription(archetype.getDescription(), out);
-        newline(out);
+		printDefinition(archetype.getDefinition(), out);
+		newline(out);
 
-        printDefinition(archetype.getDefinition(), out);
-        newline(out);
+		printOntology(archetype.getOntology(), out);
+		out.flush();
+		out.close();
+	}
 
-        printOntology(archetype.getOntology(), out);
-        out.flush();
-        out.close();
-    }
+	protected void printHeader(ArchetypeID id, ArchetypeID parentId,
+			String conceptCode, Writer out) throws IOException {
 
-    protected void printHeader(ArchetypeID id, ArchetypeID parentId,
-                               String conceptCode, Writer out)
-            throws IOException {
+		out.write("archetype");
+		newline(out);
+		indent(1, out);
+		out.write(id.toString());
+		newline(out);
 
-        out.write("archetype");
-        newline(out);
-        indent(1, out);
-        out.write(id.toString());
-        newline(out);
+		if (parentId != null) {
+			out.write("specialize");
+			newline(out);
+			indent(1, out);
+			out.write(parentId.toString());
+			newline(out);
+		}
 
-        if (parentId != null) {
-            out.write("specialize");
-            newline(out);
-            indent(1, out);
-            out.write(parentId.toString());
-            newline(out);
-        }
+		out.write("concept");
+		newline(out);
+		indent(1, out);
+		out.write("[" + conceptCode + "]");
+		newline(out);
+	}
 
-        out.write("concept");
-        newline(out);
-        indent(1, out);
-        out.write("[" + conceptCode + "]");
-        newline(out);
-    }
+	protected void printDescription(ArchetypeDescription description, Writer out)
+			throws IOException {
 
-    protected void printDescription(ArchetypeDescription description,
-                                    Writer out)
-            throws IOException {
+		if (description == null) {
+			return;
+		}
 
-        if (description == null) {
-            return;
-        }
+		out.write("description");
+		newline(out);
 
-        out.write("description");
-        newline(out);
+		indent(1, out);
+		out.write("original_author = <");
+		newline(out);
+		Map<String, String> map = description.getOriginalAuthor();
+		for (String key : map.keySet()) {
+			indent(2, out);
+			out.write("[\"" + key + "\"] = <\"" + map.get(key) + "\">");
+			newline(out);
+		}
+		indent(1, out);
+		out.write(">");
+		newline(out);
 
-        indent(1, out);
-        out.write("original_author = <");
-        newline(out);
-        Map<String,String> map = description.getOriginalAuthor();
-        for(String key : map.keySet()) {
-            indent(2, out);
-            out.write("[\"" + key + "\"] = <\"" + map.get(key) + "\">");
-            newline(out);
-        }
-        indent(1,out);
-        out.write(">");
-        newline(out);
+		indent(1, out);
+		out.write("lifecycle_state = <\"");
+		out.write(description.getLifecycleState());
+		out.write("\">");
+		newline(out);
 
-        indent(1, out);
-        out.write("status = <\"");
-        out.write(description.getLifecycleState());
-        out.write("\">");
-        newline(out);
+		indent(1, out);
+		out.write("details = <");
+		newline(out);
+		for (ArchetypeDescriptionItem item : description.getDetails()) {
+			printDescriptionItem(item, 2, out);
+		}
+		indent(1, out);
+		out.write(">");
+		newline(out);
+	}
 
-        for (ArchetypeDescriptionItem item : description.getDetails()) {
-            printDescriptionItem(item, 1, out);
-        }
-    }
-
-    protected void printDescriptionItem(ArchetypeDescriptionItem item,
+protected void printDescriptionItem(ArchetypeDescriptionItem item,
                                         int indent, Writer out)
             throws IOException {
         indent(indent, out);
-        out.write("description(\"");
+        out.write("[\"");
         out.write(item.getLanguage().getCodeString());
-        out.write("\") = <");
+        out.write("\"] = <");
         newline(out);
 
-        printNonEmptyString("purpose", item.getPurpose(), indent + 1, out);
-        printNonEmptyString("use", item.getUse(), indent + 1, out);
-        printNonEmptyString("misuse", item.getMisuse(), indent + 1, out);
-        printNonEmptyString("copyright", item.getCopyright(), indent + 1, out);
+        printNoneEmptyString("language", item.getLanguage().getCodeString(), 
+        		indent + 1, out);
+        printNoneEmptyString("purpose", item.getPurpose(), indent + 1, out);        
+        printNoneEmptyStringList("keywords", item.getKeywords(), indent + 1, out); 
+        printNoneEmptyString("copyright", item.getCopyright(), indent + 1, out);
+        printNoneEmptyString("use", item.getUse(), indent + 1, out);
+        printNoneEmptyString("misuse", item.getMisuse(), indent + 1, out);
+        printNoneEmptyStringList("original_resource_uri", 
+        		item.getOriginalResourceUri(), indent + 1, out);
+        
+        // other details not printed
+        
         indent(indent, out);
         out.write(">");
         newline(out);
-    }
+    }	private void printNoneEmptyString(String label, String value, int indent,
+			Writer out) throws IOException {
 
-    private void printNonEmptyString(String label, String value, int indent,
-                                     Writer out)
-            throws IOException {
+		if (StringUtils.isEmpty(value)) {
+			return;
+		}
+		indent(indent, out);
+		out.write(label);
+		out.write(" = <\"");
+		out.write(value);
+		out.write("\">");
+		newline(out);
+	}
 
-        if (StringUtils.isEmpty(value)) {
-            return;
-        }
-        indent(indent, out);
-        out.write(label);
-        out.write(" = <\"");
-        out.write(value);
-        out.write("\">");
-        newline(out);
-    }
+	private void printNoneEmptyStringList(String label, List<String> list,
+			int indent, Writer out) throws IOException {
 
-    protected void printDefinition(CComplexObject definition, Writer out)
-            throws IOException {
+		if (list == null || list.isEmpty()) {
+			return;
+		}
+		indent(indent, out);
+		out.write(label);
+		out.write(" = <");
+		for(int i = 0, j = list.size(); i < j; i++) {
+			out.write("\"");
+			out.write(list.get(i));
+			out.write("\"");
+			if(i != j - 1) {
+				out.write(",");
+			}
+		}				
+		out.write(">");
+		newline(out);
+	}
 
-        out.write("definition");
-        newline(out);
+	protected void printDefinition(CComplexObject definition, Writer out)
+			throws IOException {
 
-        printCComplexObject(definition, 1, out);
-    }
+		out.write("definition");
+		newline(out);
 
-    protected void printCComplexObject(CComplexObject ccobj, int indent,
-                                       Writer out) throws IOException {
+		printCComplexObject(definition, 1, out);
+	}
+
+	protected void printCComplexObject(CComplexObject ccobj, int indent,
+			Writer out) throws IOException {
 
 		// print rmTypeName and nodeId
 		indent(indent, out);
@@ -229,48 +257,85 @@ public class ADLOutputter {
 			}
 			newline(out);
 			indent(indent, out);
-			out.write("}");
 		} else {
 			out.write("*");
+		}
+		out.write("}");
+		newline(out);
+	}
+
+	protected void printOccurrences(Interval<Integer> occurrences, Writer out)
+			throws IOException {
+
+		if (occurrences != null) {
+			out.write(" occurrences matches {");
+			if (occurrences.getLower() == null) {
+				out.write("*");
+			} else {
+				out.write(Integer.toString(occurrences.getLower()));
+			}
+			out.write("..");
+			if (occurrences.getUpper() == null) {
+				out.write("*");
+			} else {
+				out.write(Integer.toString(occurrences.getUpper()));
+			}
 			out.write("}");
 		}
+	}
+
+	protected void printArchetypeInternalRef(ArchetypeInternalRef ref,
+			int indent, Writer out) throws IOException {
+		indent(indent, out);
+		printOccurrences(ref.getOccurrences(), out);
+		out.write(" use_node ");
+		out.write(ref.getRmTypeName());
+		out.write(" ");
+		out.write(ref.getTargetPath());
 		newline(out);
-    }
+	}
 
-    protected void printOccurrences(Interval<Integer> occurrences,
-                                    Writer out) throws IOException {
+	protected void printArchetypeSlot(ArchetypeSlot slot, int indent, Writer out)
+			throws IOException {
 
-        if (occurrences != null) {
-            out.write(" occurrences matches {");
-            if (occurrences.getLower() == null) {
-                out.write("*");
-            } else {
-                out.write(Integer.toString(occurrences.getLower()));
-            }
-            out.write("..");
-            if (occurrences.getUpper() == null) {
-                out.write("*");
-            } else {
-                out.write(Integer.toString(occurrences.getUpper()));
-            }
-            out.write("}");
-        }
-    }
+		// print rmTypeName and nodeId
+		indent(indent, out);
+		out.write(slot.getRmTypeName());
+		if (StringUtils.isNotEmpty(slot.getNodeID())) {
+			out.write("[" + slot.getNodeID() + "]");
+		}
 
-    protected void printArchetypeInternalRef(ArchetypeInternalRef ref,
-                                             int indent,
-                                             Writer out) throws IOException {
-        indent(indent, out);
-        printOccurrences(ref.getOccurrences(), out);
-        out.write(" use_node ");
-        out.write(ref.getRmTypeName());
-        out.write(" ");
-        out.write(ref.getTargetPath());
-        newline(out);
-    }
+		printOccurrences(slot.getOccurrences(), out);
+		out.write(" matches {");
 
-    protected void printCAttribute(CAttribute cattribute, int indent,
-                                   Writer out) throws IOException {
+		// print all attributes
+		if (slot.isAnyAllowed()) {
+			out.write("*");
+		} else {
+			if (!slot.getIncludes().isEmpty()) {
+				out.write("include");
+				newline(out);
+				indent(indent, out);
+				for (Object include : slot.getIncludes()) {
+					out.write("included: " + include);
+					newline(out);
+				}
+			} else if (!slot.getExcludes().isEmpty()) {
+				out.write("exclude");
+				newline(out);
+				indent(indent, out);
+				for (Object exclude : slot.getExcludes()) {
+					out.write("excluded: " + exclude);
+					newline(out);
+				}
+			}
+		}
+		out.write("}");
+		newline(out);
+	}
+
+	protected void printCAttribute(CAttribute cattribute, int indent, Writer out)
+			throws IOException {
 		newline(out);
 		indent(indent, out);
 		out.write(cattribute.getRmAttributeName());
@@ -297,104 +362,107 @@ public class ADLOutputter {
 			printCPrimitiveObject((CPrimitiveObject) child, out);
 		}
 		out.write("}");
-    }
+	}
 
-    protected void printExistence(CAttribute.Existence existence, Writer out)
-            throws IOException {
-        if (CAttribute.Existence.REQUIRED.equals(existence)) {
-            return;
-        }
-        out.write("existence matches ");
-        if (CAttribute.Existence.OPTIONAL.equals(existence)) {
-            out.write("{0..1}");
-        } else {
-            out.write("{0}");
-        }
-    }
+	protected void printExistence(CAttribute.Existence existence, Writer out)
+			throws IOException {
+		if (CAttribute.Existence.REQUIRED.equals(existence)) {
+			return;
+		}
+		out.write("existence matches ");
+		if (CAttribute.Existence.OPTIONAL.equals(existence)) {
+			out.write("{0..1}");
+		} else {
+			out.write("{0}");
+		}
+	}
 
-    protected void printCObject(CObject cobj, int indent, Writer out)
-            throws IOException {
+	protected void printCObject(CObject cobj, int indent, Writer out)
+			throws IOException {
 
-        // print specialised types
-        if (cobj instanceof CDomainType) {
-            printCDomainType((CDomainType) cobj, indent, out);
-        } else if (cobj instanceof CPrimitiveObject) {
-            printCPrimitiveObject((CPrimitiveObject) cobj, out);
-        } else if (cobj instanceof CComplexObject) {
-            printCComplexObject((CComplexObject) cobj, indent, out);
-        } else if (cobj instanceof ArchetypeInternalRef) {
-            printArchetypeInternalRef((ArchetypeInternalRef) cobj, indent, out);
-        }
-    }
+		// print specialised types
+		if (cobj instanceof CDomainType) {
+			printCDomainType((CDomainType) cobj, indent, out);
+		} else if (cobj instanceof CPrimitiveObject) {
+			printCPrimitiveObject((CPrimitiveObject) cobj, out);
+		} else if (cobj instanceof CComplexObject) {
+			printCComplexObject((CComplexObject) cobj, indent, out);
+		} else if (cobj instanceof ArchetypeInternalRef) {
+			printArchetypeInternalRef((ArchetypeInternalRef) cobj, indent, out);
+		} else if (cobj instanceof ArchetypeSlot) {
+			printArchetypeSlot((ArchetypeSlot) cobj, indent, out);
+		}
+	}
 
-    protected void printCardinality(Cardinality cardinality, Writer out)
-            throws IOException {
-        out.write("cardinality matches {");
-        Interval<Integer> interval = cardinality.getInterval();
-        if (interval != null) {
-            if (interval.isLowerUnbounded()) {
-                out.write("*");
-            } else {
-                out.write(interval.getLower().toString());
-            }
-            out.write("..");
-            if (interval.isUpperUnbounded()) {
-                out.write("*");
-            } else {
-                out.write(interval.getUpper().toString());
-            }
-        } else {
-            out.write("*");
-        }
-        out.write("; ");
-        if (cardinality.isOrdered()) {
-            out.write("ordered");
-        } else {
-            out.write("unordered");
-        }
-        if (cardinality.isUnique()) {
-            out.write("; unique");
-        }
-        out.write("}");
-    }
+	protected void printCardinality(Cardinality cardinality, Writer out)
+			throws IOException {
+		out.write("cardinality matches {");
+		Interval<Integer> interval = cardinality.getInterval();
+		if (interval != null) {
+			if (interval.isLowerUnbounded()) {
+				out.write("*");
+			} else {
+				out.write(interval.getLower().toString());
+			}
+			out.write("..");
+			if (interval.isUpperUnbounded()) {
+				out.write("*");
+			} else {
+				out.write(interval.getUpper().toString());
+			}
+		} else {
+			out.write("*");
+		}
+		out.write("; ");
+		if (cardinality.isOrdered()) {
+			out.write("ordered");
+		} else {
+			out.write("unordered");
+		}
+		if (cardinality.isUnique()) {
+			out.write("; unique");
+		}
+		out.write("}");
+	}
 
-    protected void printCDomainType(CDomainType cdomain, int indent,
-                                    Writer out) throws IOException {
-        if (cdomain instanceof CCount) {
-            printCCount((CCount) cdomain, indent, out);
-        } else if (cdomain instanceof CCodedText) {
-            printCCodedText((CCodedText) cdomain, indent, out);
-        } else if (cdomain instanceof COrdinal) {
-            printCOrdinal((COrdinal) cdomain, indent, out);
-        } else if (cdomain instanceof CQuantity) {
-            printCQuantity((CQuantity) cdomain, indent, out);
-        }
-        // unknow CDomainType
-    }
+	protected void printCDomainType(CDomainType cdomain, int indent, Writer out)
+			throws IOException {
+		if (cdomain instanceof CCount) {
+			printCCount((CCount) cdomain, indent, out);
+		} else if (cdomain instanceof CCodedText) {
+			printCCodedText((CCodedText) cdomain, indent, out);
+		} else if (cdomain instanceof COrdinal) {
+			printCOrdinal((COrdinal) cdomain, indent, out);
+		} else if (cdomain instanceof CQuantity) {
+			printCQuantity((CQuantity) cdomain, indent, out);
+		}
+		// unknow CDomainType
+	}
 
-    /* not using DV_COUNT because this is a domain type extension */
-    protected void printCCount(CCount ccount, int indent, Writer out)
-            throws IOException {
-        indent(indent, out);
-        out.write("COUNT matches {");
-        newline(out);
-        indent(indent + 1, out);
-        out.write("magnitude matches {");
-        printInterval(ccount.getMagnitude(), out);
-        out.write("}");
-        newline(out);
-        indent(indent, out);
-        out.write("}");
-        newline(out);
-    }
+	/* not using DV_COUNT because this is a domain type extension */
+	protected void printCCount(CCount ccount, int indent, Writer out)
+			throws IOException {
+		indent(indent, out);
+		out.write("COUNT matches {");
+		newline(out);
+		indent(indent + 1, out);
+		out.write("magnitude matches {");
+		printInterval(ccount.getMagnitude(), out);
+		out.write("}");
+		newline(out);
+		indent(indent, out);
+		out.write("}");
+		newline(out);
+	}
 
-    protected void printCCodedText(CCodedText ccoded, int indent, Writer out)
-            throws IOException {
+	protected void printCCodedText(CCodedText ccoded, int indent, Writer out)
+			throws IOException {
 
 		indent(indent, out);
 
-		if (ccoded.getTerminology() != null)
+		if (ccoded.getTerminology() != null) {
 			out.write("[" + ccoded.getTerminology() + "::");
+		}
 
 		if (ccoded.getCodeList() != null) {
 			if (ccoded.getCodeList().size() > 1) {
@@ -412,56 +480,59 @@ public class ADLOutputter {
 					}
 					newline(out);
 				}
-			} else
+			} else {
 				out.write(ccoded.getCodeList().get(0));
+				out.write("]");
+				newline(out);
+			}	
 		} else if (ccoded.getReference() != null) {
 			out.write("[" + ccoded.getReference() + "]");
 			newline(out);
 		}
-    }
+	}
 
-    protected void printCOrdinal(COrdinal cordinal, int indent, Writer out)
-            throws IOException {
+	protected void printCOrdinal(COrdinal cordinal, int indent, Writer out)
+			throws IOException {
 
-        for (int i = 0, j = cordinal.getList().size(); i < j; i++) {
-            Ordinal ordinal = cordinal.getList().get(i);
-            indent(indent, out);
-            out.write(Integer.toString(ordinal.getValue()));
-            out.write("|[");
-            out.write(ordinal.getTerminology());
-            out.write("::");
-            out.write(ordinal.getCode());
-            out.write("]");
-            if (i != j - 1) {
-                out.write(",");
-            }
-            newline(out);
-        }
-    }
+		for (int i = 0, j = cordinal.getList().size(); i < j; i++) {
+			Ordinal ordinal = cordinal.getList().get(i);
+			indent(indent, out);
+			out.write(Integer.toString(ordinal.getValue()));
+			out.write("|[");
+			out.write(ordinal.getTerminology());
+			out.write("::");
+			out.write(ordinal.getCode());
+			out.write("]");
+			if (i != j - 1) {
+				out.write(",");
+			}
+			newline(out);
+		}
+	}
 
-    /* not using DV_QUANTITY because this is a domain type extension */
-    protected void printCQuantity(CQuantity cquantity, int indent, Writer out)
-            throws IOException {
-        indent(indent, out);
-        out.write("QUANTITY matches {");
-        newline(out);
-        indent(indent + 1, out);
-        out.write("magnitude matches {");
-        printInterval(cquantity.getMagnitude(), out);
-        out.write("}");
-        newline(out);
-        indent(indent + 1, out);
-        out.write("units matches {\"");
-        out.write(cquantity.getUnits());
-        out.write("\"}");
-        newline(out);
-        indent(indent, out);
-        out.write("}");
-        newline(out);
-    }
+	/* not using DV_QUANTITY because this is a domain type extension */
+	protected void printCQuantity(CQuantity cquantity, int indent, Writer out)
+			throws IOException {
+		indent(indent, out);
+		out.write("QUANTITY matches {");
+		newline(out);
+		indent(indent + 1, out);
+		out.write("magnitude matches {");
+		printInterval(cquantity.getMagnitude(), out);
+		out.write("}");
+		newline(out);
+		indent(indent + 1, out);
+		out.write("units matches {\"");
+		out.write(cquantity.getUnits());
+		out.write("\"}");
+		newline(out);
+		indent(indent, out);
+		out.write("}");
+		newline(out);
+	}
 
-    protected void printOntology(ArchetypeOntology ontology, Writer out)
-            throws IOException {
+	protected void printOntology(ArchetypeOntology ontology, Writer out)
+			throws IOException {
 
 		out.write("ontology");
 		newline(out);
@@ -495,66 +566,82 @@ public class ADLOutputter {
 
 		for (OntologyDefinitions defs : ontology.getTermDefinitionsList()) {
 			indent(1, out);
-			out.write("term_definitions(\"");
+			out.write("term_definitions = <");
+			newline(out);
+			indent(2, out);
+			out.write("[\"");
 			out.write(defs.getLanguage());
-			out.write("\") = <");
+			out.write("\"] = <");
+			newline(out);
+			indent(3, out);
+			out.write("items = <");
 			newline(out);
 			for (DefinitionItem item : defs.getDefinitions()) {
-				indent(2, out);
-				out.write("items(\"");
+				indent(4, out);
+				out.write("[\"");
 				out.write(item.getCode());
-				out.write("\") = <");
+				out.write("\"] = <");
 				newline(out);
-				indent(3, out);
+				indent(5, out);
 				out.write("text = <\"");
 				out.write(item.getText());
 				out.write("\">");
 				newline(out);
-				indent(3, out);
+				indent(5, out);
 				out.write("description = <\"");
 				out.write(item.getDescription());
 				out.write("\">");
 				newline(out);
-				indent(2, out);
+				indent(4, out);
 				out.write(">");
 				newline(out);
 			}
-			indent(1, out);
-			out.write(">");
-			newline(out);
+			for (int i = 3; i > 0; i--) {
+				indent(i, out);
+				out.write(">");
+				newline(out);
+			}
 		}
 
 		if (ontology.getConstraintDefinitionsList() != null) {
 			for (OntologyDefinitions constraintdefs : ontology
 					.getConstraintDefinitionsList()) {
 				indent(1, out);
-				out.write("constraint_definitions(\"");
+				out.write("constraint_definitions = <");
+				newline(out);
+				indent(2, out);
+				out.write("[\"");
 				out.write(constraintdefs.getLanguage());
-				out.write("\") = <");
+				out.write("\"] = <");
+				newline(out);
+				indent(3, out);
+				out.write("items = <");
 				newline(out);
 				for (DefinitionItem item : constraintdefs.getDefinitions()) {
-					indent(2, out);
-					out.write("items(\"");
+					indent(4, out);
+					out.write("[\"");
 					out.write(item.getCode());
-					out.write("\") = <");
+					out.write("\"] = <");
 					newline(out);
-					indent(3, out);
+					indent(5, out);
 					out.write("text = <\"");
 					out.write(item.getText());
 					out.write("\">");
 					newline(out);
-					indent(3, out);
+					indent(5, out);
 					out.write("description = <\"");
 					out.write(item.getDescription());
 					out.write("\">");
 					newline(out);
-					indent(2, out);
+					indent(4, out);
 					out.write(">");
 					newline(out);
 				}
-				indent(1, out);
-				out.write(">");
-				newline(out);
+				for (int i = 3; i > 0; i--) {
+					indent(i, out);
+					out.write(">");
+					newline(out);
+				}
 			}
 		}
 
@@ -562,9 +649,15 @@ public class ADLOutputter {
 			for (int i = 0; i < ontology.getTermBindingList().size(); i++) {
 				OntologyBinding bind = ontology.getTermBindingList().get(i);
 				indent(1, out);
-				out.write("term_binding(\"");
+				out.write("term_binding = <");
+				newline(out);
+				indent(2, out);
+				out.write("[\"");
 				out.write(bind.getTerminology());
-				out.write("\") = <");
+				out.write("\"] = <");
+				newline(out);
+				indent(3, out);
+				out.write("items = <");
 				newline(out);
 
 				for (int j = 0; j < ontology.getTermBindingList().get(i)
@@ -572,23 +665,25 @@ public class ADLOutputter {
 					TermBindingItem item = (TermBindingItem) ontology
 							.getTermBindingList().get(i).getBindingList()
 							.get(j);
-					indent(2, out);
-					out.write("items(\"");
+					indent(4, out);
+					out.write("[\"");
 					out.write(item.getCode());
-					out.write("\") = <");
+					out.write("\"] = <");
 					out.write(item.getTerms().get(0));
 
 					if (item.getTerms().size() > 1) {
 						for (int k = 1; k < item.getTerms().size(); k++)
-							out.write(","+item.getTerms().get(k));
+							out.write("," + item.getTerms().get(k));
 					}
 
 					out.write(">");
 					newline(out);
 				}
-				indent(1, out);
-				out.write(">");
-				newline(out);
+				for (int l = 3; l > 0; l--) {
+					indent(l, out);
+					out.write(">");
+					newline(out);
+				}
 			}
 		}
 
@@ -597,9 +692,15 @@ public class ADLOutputter {
 				OntologyBinding bind = ontology.getConstraintBindingList().get(
 						i);
 				indent(1, out);
-				out.write("constraint_binding(\"");
+				out.write("constraint_binding = <");
+				newline(out);
+				indent(2, out);
+				out.write("[\"");
 				out.write(bind.getTerminology());
-				out.write("\") = <");
+				out.write("\"] = <");
+				newline(out);
+				indent(3, out);
+				out.write("items = <");
 				newline(out);
 
 				for (int j = 0; j < ontology.getConstraintBindingList().get(i)
@@ -607,10 +708,10 @@ public class ADLOutputter {
 					QueryBindingItem item = (QueryBindingItem) ontology
 							.getConstraintBindingList().get(i).getBindingList()
 							.get(j);
-					indent(2, out);
-					out.write("items(\"");
+					indent(4, out);
+					out.write("[\"");
 					out.write(item.getCode());
-					out.write("\") = <");
+					out.write("\"] = <");
 					out.write("query(\"");
 					out.write(item.getQuery().getTarget());
 					out.write("\", \"");
@@ -618,208 +719,204 @@ public class ADLOutputter {
 					out.write("\")");
 					out.write(">");
 					newline(out);
-
 				}
-				indent(1, out);
-				out.write(">");
-				newline(out);
+				for (int l = 3; l > 0; l--) {
+					indent(l, out);
+					out.write(">");
+					newline(out);
+				}
 			}
 		}
-    }
+	}
 
-    protected void printCPrimitiveObject(CPrimitiveObject cpo, Writer out)
-            throws IOException {
+	protected void printCPrimitiveObject(CPrimitiveObject cpo, Writer out)
+			throws IOException {
 
-        CPrimitive cp = cpo.getItem();
-        if (cp instanceof CBoolean) {
-            printCBoolean((CBoolean) cp, out);
-        } else if (cp instanceof CDate) {
-            printCDate((CDate) cp, out);
-        } else if (cp instanceof CDateTime) {
-            printCDateTime((CDateTime) cp, out);
-        } else if (cp instanceof CTime) {
-            printCTime((CTime) cp, out);
-        } else if (cp instanceof CDuration) {
-            printCDuration((CDuration) cp, out);
-        } else if (cp instanceof CInteger) {
-            printCInteger((CInteger) cp, out);
-        } else if (cp instanceof CReal) {
-            printCReal((CReal) cp, out);
-        } else if (cp instanceof CString) {
-            printCString((CString) cp, out);
-        }
-        // unknow CPrimitive type
-    }
+		CPrimitive cp = cpo.getItem();
+		if (cp instanceof CBoolean) {
+			printCBoolean((CBoolean) cp, out);
+		} else if (cp instanceof CDate) {
+			printCDate((CDate) cp, out);
+		} else if (cp instanceof CDateTime) {
+			printCDateTime((CDateTime) cp, out);
+		} else if (cp instanceof CTime) {
+			printCTime((CTime) cp, out);
+		} else if (cp instanceof CDuration) {
+			printCDuration((CDuration) cp, out);
+		} else if (cp instanceof CInteger) {
+			printCInteger((CInteger) cp, out);
+		} else if (cp instanceof CReal) {
+			printCReal((CReal) cp, out);
+		} else if (cp instanceof CString) {
+			printCString((CString) cp, out);
+		}
+		// unknow CPrimitive type
+	}
 
-    protected void printCBoolean(CBoolean cboolean, Writer out)
-            throws IOException {
-        if (cboolean.isTrueValid()) {
-            out.write("true");
-            if (cboolean.isFalseValid()) {
-                out.write(", false");
-            }
-        } else {
-            out.write("false");
-        }
-    }
+	protected void printCBoolean(CBoolean cboolean, Writer out)
+			throws IOException {
+		if (cboolean.isTrueValid()) {
+			out.write("true");
+			if (cboolean.isFalseValid()) {
+				out.write(", false");
+			}
+		} else {
+			out.write("false");
+		}
+	}
 
-    protected void printCDate(CDate cdate, Writer out)
-            throws IOException {
-        if (cdate.getPattern() != null) {
-            out.write(cdate.getPattern());
-        } else if (cdate.getList() != null) {
-            out.write(cdate.getList().get(0).toString());
-        } else {
-            printInterval(cdate.getInterval(), out);
-        }
-    }
+	protected void printCDate(CDate cdate, Writer out) throws IOException {
+		if (cdate.getPattern() != null) {
+			out.write(cdate.getPattern());
+		} else if (cdate.getList() != null) {
+			out.write(cdate.getList().get(0).toString());
+		} else {
+			printInterval(cdate.getInterval(), out);
+		}
+	}
 
-    protected void printCDateTime(CDateTime cdatetime, Writer out)
-            throws IOException {
-        if (cdatetime.getPattern() != null) {
-            out.write(cdatetime.getPattern());
-        } else if (cdatetime.getList() != null) {
-            out.write(cdatetime.getList().get(0).toString());
-        } else {
-            printInterval(cdatetime.getInterval(), out);
-        }
-    }
+	protected void printCDateTime(CDateTime cdatetime, Writer out)
+			throws IOException {
+		if (cdatetime.getPattern() != null) {
+			out.write(cdatetime.getPattern());
+		} else if (cdatetime.getList() != null) {
+			out.write(cdatetime.getList().get(0).toString());
+		} else {
+			printInterval(cdatetime.getInterval(), out);
+		}
+	}
 
-    protected void printCTime(CTime ctime, Writer out)
-            throws IOException {
-        if (ctime.getPattern() != null) {
-            out.write(ctime.getPattern());
-        } else if (ctime.getList() != null) {
-            out.write(ctime.getList().get(0).toString());
-        } else {
-            printInterval(ctime.getInterval(), out);
-        }
-    }
+	protected void printCTime(CTime ctime, Writer out) throws IOException {
+		if (ctime.getPattern() != null) {
+			out.write(ctime.getPattern());
+		} else if (ctime.getList() != null) {
+			out.write(ctime.getList().get(0).toString());
+		} else {
+			printInterval(ctime.getInterval(), out);
+		}
+	}
 
-    protected void printCDuration(CDuration cduration, Writer out)
-            throws IOException {
-        if (cduration.getValue() != null) {
-            out.write(cduration.getValue().toString());
-        } else {
-            printInterval(cduration.getInterval(), out);
-        }
-    }
+	protected void printCDuration(CDuration cduration, Writer out)
+			throws IOException {
+		if (cduration.getValue() != null) {
+			out.write(cduration.getValue().toString());
+		} else {
+			printInterval(cduration.getInterval(), out);
+		}
+	}
 
-    protected void printCInteger(CInteger cinteger, Writer out)
-            throws IOException {
-        if (cinteger.getList() != null) {
-            printList(cinteger.getList(), out);
-        } else {
-            printInterval(cinteger.getInterval(), out);
-        }
-    }
+	protected void printCInteger(CInteger cinteger, Writer out)
+			throws IOException {
+		if (cinteger.getList() != null) {
+			printList(cinteger.getList(), out);
+		} else {
+			printInterval(cinteger.getInterval(), out);
+		}
+	}
 
-    protected void printCReal(CReal creal, Writer out)
-            throws IOException {
-        if (creal.getList() != null) {
-            printList(creal.getList(), out);
-        } else {
-            printInterval(creal.getInterval(), out);
-        }
-    }
+	protected void printCReal(CReal creal, Writer out) throws IOException {
+		if (creal.getList() != null) {
+			printList(creal.getList(), out);
+		} else {
+			printInterval(creal.getInterval(), out);
+		}
+	}
 
-    protected void printCString(CString cstring, Writer out)
-            throws IOException {
-        if (cstring.getPattern() != null) {
-            out.write("/" + cstring.getPattern() + "/");
-        } else {
-            printList(cstring.getList(), out, true);
-        }
-    }
+	protected void printCString(CString cstring, Writer out) throws IOException {
+		if (cstring.getPattern() != null) {
+			out.write("/" + cstring.getPattern() + "/");
+		} else {
+			printList(cstring.getList(), out, true);
+		}
+	}
 
-    protected void printList(List list, Writer out) throws IOException {
-        printList(list, out, false);
-    }
+	protected void printList(List list, Writer out) throws IOException {
+		printList(list, out, false);
+	}
 
-    protected void printList(List list, Writer out, boolean string)
-            throws IOException {
-        for (int i = 0, j = list.size(); i < j; i++) {
-            if (i != 0) {
-                out.write(",");
-            }
-            if (string) {
-                out.write("\"");
-            }
-            out.write(list.get(i).toString());
-            if (string) {
-                out.write("\"");
-            }
-        }
-    }
+	protected void printList(List list, Writer out, boolean string)
+			throws IOException {
+		for (int i = 0, j = list.size(); i < j; i++) {
+			if (i != 0) {
+				out.write(",");
+			}
+			if (string) {
+				out.write("\"");
+			}
+			out.write(list.get(i).toString());
+			if (string) {
+				out.write("\"");
+			}
+		}
+	}
 
-    protected void printInterval(Interval interval, Writer out)
-            throws IOException {
-        out.write("|");
-        if (interval.getLower() != null && interval.getUpper() != null) {
-            out.write(interval.getLower().toString());
-            out.write("..");
-            out.write(interval.getUpper().toString());
-        } else if (interval.getLower() == null) {
-            out.write("<");
-            if (interval.isUpperInclusive()) {
-                out.write("=");
-            }
-            out.write(interval.getUpper().toString());
-        } else {
-            out.write(">");
-            if (interval.isLowerInclusive()) {
-                out.write("=");
-            }
-            out.write(interval.getLower().toString());
-        }
-        out.write("|");
-    }
+	protected void printInterval(Interval interval, Writer out)
+			throws IOException {
+		out.write("|");
+		if (interval.getLower() != null && interval.getUpper() != null) {
+			out.write(interval.getLower().toString());
+			out.write("..");
+			out.write(interval.getUpper().toString());
+		} else if (interval.getLower() == null) {
+			out.write("<");
+			if (interval.isUpperInclusive()) {
+				out.write("=");
+			}
+			out.write(interval.getUpper().toString());
+		} else {
+			out.write(">");
+			if (interval.isLowerInclusive()) {
+				out.write("=");
+			}
+			out.write(interval.getLower().toString());
+		}
+		out.write("|");
+	}
 
-    private void newline(Writer out) throws IOException {
-        out.write(lineSeparator);
-    }
+	private void newline(Writer out) throws IOException {
+		out.write(lineSeparator);
+	}
 
-    private void indent(int level, Writer out) throws IOException {
-        for (int i = 0; i < level; i++) {
-            out.write(indent);
-        }
-    }
+	private void indent(int level, Writer out) throws IOException {
+		for (int i = 0; i < level; i++) {
+			out.write(indent);
+		}
+	}
 
-    /* charset encodings */
-    public static final Charset UTF8 = Charset.forName("UTF-8");
-    public static final Charset LATIN1 = Charset.forName("ISO-8859-1");
+	/* charset encodings */
+	public static final Charset UTF8 = Charset.forName("UTF-8");
 
-    /* fields */
-    private Charset encoding;
-    private String lineSeparator;
-    private String indent;
+	public static final Charset LATIN1 = Charset.forName("ISO-8859-1");
+
+	/* fields */
+	private Charset encoding;
+
+	private String lineSeparator;
+
+	private String indent;
 }
 /*
- *  ***** BEGIN LICENSE BLOCK *****
- *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
- *
- *  The contents of this file are subject to the Mozilla Public License Version
- *  1.1 (the 'License'); you may not use this file except in compliance with
- *  the License. You may obtain a copy of the License at
- *  http://www.mozilla.org/MPL/
- *
- *  Software distributed under the License is distributed on an 'AS IS' basis,
- *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- *  for the specific language governing rights and limitations under the
- *  License.
- *
- *  The Original Code is ADLOutPutterTest.java
- *
- *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2004-2005
- *  the Initial Developer. All Rights Reserved.
- *
- *  Contributor(s): Mattias Forss, Johan Hjalmarsson
- *
+ * ***** BEGIN LICENSE BLOCK ***** Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ * 
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the 'License'); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.mozilla.org/MPL/
+ * 
  * Software distributed under the License is distributed on an 'AS IS' basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- *  ***** END LICENSE BLOCK *****
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * 
+ * The Original Code is ADLOutPutterTest.java
+ * 
+ * The Initial Developer of the Original Code is Rong Chen. Portions created by
+ * the Initial Developer are Copyright (C) 2004-2005 the Initial Developer. All
+ * Rights Reserved.
+ * 
+ * Contributor(s): Mattias Forss, Johan Hjalmarsson
+ * 
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * 
+ * ***** END LICENSE BLOCK *****
  */

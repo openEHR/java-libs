@@ -10,7 +10,13 @@ ontology
 	primary_language = <"en">
 	languages_available = <"en", ...>
 
-	term_definitions("en") = <
-		items("at0000") = <text = <"most minimal">; description = <"most minimal">>
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
 	>
-

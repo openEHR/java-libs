@@ -46,9 +46,9 @@
         </dependency>
 
         <dependency>
-            <groupId>acode</groupId>
+            <groupId>openehr</groupId>
             <artifactId>openehr-kernel</artifactId>
-            <version>1.2.4</version>
+            <version>1.2.5-SNAPSHOT</version>
             <url>http://www.acode.se</url>
         </dependency>
     </dependencies>

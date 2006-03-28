@@ -1,1653 +1,586 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en">
-<head>
-
-
-
-
-
-
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <title>openEHR java reference kernel Project</title>
-  <link rel="stylesheet" href="http://www.openehr.org/styles/oe.css" type="text/css" />
-</head>
-
-
-<body>
-
-
-
-
-
-
-
-
-<h1>The <span style="font-style: italic;">open</span>EHR Java
-Reference Implementation Project
-</h1>
-
-
-
-
-
-
-
-
-<hr style="width: 100%; height: 2px;" />
-<h2>Vital Statistics</h2>
-
-
-
-
-
-
-
-
-<table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
-
-
-
-
-
-
-
-
-  <tbody>
-
-
-
-
-
-
-
-
-    <tr>
-
-
-
-
-
-
-
-      <td style="background-color: rgb(204, 204, 255);" colspan="2" rowspan="1">
-      
-      
-      
-      
-      
-      
-      
-      <p class="table_cell_top_heading">Java Reference Implementation</p>
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-    </tr>
-
-
-
-
-
-
-
-    <tr>
-
-
-
-
-
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);"><span style="font-weight: bold;">Project Team</span><br />
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 230);">Rong
-Chen, G&ouml;ran Pestana (ACODE; <a href="mailto:rXXong@acXXode.sXXe">email</a>; remove XXs from email address)<br />
-
-
-
-
-
-
-
-
-Nathan Lea, Yin Su Lim (CHIME, UCL)<br />
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-    </tr>
-
-
-
-
-
-
-
-
-    <tr>
-
-
-
-
-
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);"><span style="font-weight: bold;">Team Coordinator</span><br />
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 230);">Thomas
-Beale (Ocean Informatics, CHIME, UCL; <a href="mailto:tXXhomas.beXXale@oceaninformaXXtics.biXz">email</a>; remove XXs from email address)<br />
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-    </tr>
-
-
-
-
-
-
-
-
-    <tr>
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);"><span style="font-weight: bold;">Developer Guidelines</span><br />
-
-
-
-
-
-
-
-
-
-      </td>
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 230);">The
-      <a href="QA_guidelines.htm">guidelines</a> are used by the team in managing this repository, and govern
-quality assurance measures designed to guarantee that the repository
-moves from one consistent state to another consistent state with every
-change-set.<br />
-
-
-
-
-
-
-
-
-
-      </td>
-
-
-    </tr>
-
-
-    <tr>
-
-
-
-
-
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);"><span style="font-weight: bold;">ARB change managed</span><br />
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 230);">No<br />
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-    </tr>
-
-
-
-
-
-
-
-
-    <tr>
-
-
-
-
-
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 204);"><span style="font-weight: bold;"><br />
-
-
-
-
-
-
-
-
-      <br />
-
-
-
-
-
-
-
-
-Source Repository</span><br />
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 230);">
-      
-      
-      
-      
-      
-      
-      
-      
-      <ul>
-
-
-
-
-
-
-
-
-        <li>Subversion repository name = <span style="font-weight: bold;">ref_impl_java</span>; URLs:
-          
-          
-          
-          
-          
-          
-          
-          <ul>
-
-
-
-
-
-
-
-
-          <li>repository top: <a href="http://svn.openehr.org/ref_impl_java">http://svn.openehr.org/ref_impl_java</a></li>
-
-
-
-
-
-
-
-
-          <li><a href="http://www.openehr.org/wsvn/ref_impl_java/?sc=0">web-view</a>
-          </li>
-
-
-
-
-
-
-
-
-        
-          
-          
-          
-          
-          
-          
-          
-          </ul>
-
-
-
-
-
-
-
-        </li>
-
-
-
-
-
-
-
-
-        
-        <li><a href="http://www.acode.se/release/kernel/apidocs/">online
-javadoc</a></li>
-
-
-
-
-
-
-
-
-        <li><a href="docs/design.html">design
-document</a></li>
-
-
-
-
-
-
-
-
-      
-      
-      
-      
-      
-      
-      
-      
-      </ul>
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-    </tr>
-
-
-
-
-
-
-
-
-    <tr>
-
-
-
-
-
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 204);"><span style="font-weight: bold;"><br />
-
-
-
-
-
-
-
-
-      <br />
-
-
-
-
-
-
-
-
-Downloads</span><br />
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 230);">
-      
-      
-      
-      
-      
-      
-      
-      
-      <ul>
-
-
-
-
-
-
-
-
-        <li><a href="readme.txt">release
-notes</a> </li>
-
-
-
-
-        <li><a href="install.txt">detailed
-installation instructions</a> </li>
-
-
-
-
-
-
-
-
-        <li><a href="http://www.acode.se/release/kernel/">binaries and
-apidocs</a> </li>
-
-
-
-
-
-
-
-
-      
-      
-      
-      
-      
-      
-      
-      
-      </ul>
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-    </tr>
-
-
-
-
-
-
-
-
-    <tr>
-
-
-
-
-
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 204);"><span style="font-weight: bold;"><br />
-
-
-
-
-
-
-
-
-Problem Reports (PRs)<br />
-
-
-
-
-
-
-
-
-Change Requests (CRs)
-      </span> </td>
-
-
-
-
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 230);">
-      
-      
-      
-      
-      
-      
-      
-      
-      <ul>
-
-
-
-
-
-
-
-
-        <li><a href="http://coruscant.chime.ucl.ac.uk:8200/openEHR_Collector/projects/reference_implementations/javakernel/PR/folder_contents">PRs</a></li>
-
-
-
-
-
-
-
-
-        <li><a href="http://coruscant.chime.ucl.ac.uk:8200/openEHR_Collector/projects/reference_implementations/javakernel/CR/folder_contents">CRs</a>
-        </li>
-
-
-
-
-
-
-
-
-      
-      
-      
-      
-      
-      
-      
-      
-      </ul>
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-    </tr>
-
-
-
-
-
-
-
-
-    <tr>
-
-
-
-
-
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);"><span style="font-weight: bold;">Status</span><br />
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 230);">Release
-0.5<br />
-
-
-
-
-
-
-
-
-      </td>
-
-
-
-
-
-
-
-
-    </tr>
-
-
-
-
-
-
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  </tbody>
-</table>
-
-
-
-
-
-
-
-
-<h2>Description</h2>
-
-This repository contains components comprising a reference implementation of <span style="font-style: italic;">open</span>EHR in the Java language. Eventually the components will include:<br />
-
-<ul>
-
-  <li>back-end services, such as EHR service, demographic service, archetype service</li>
-
-  <li>a client component, which is built in to user applications to "<span style="font-style: italic;">open</span>EHR-enable"
-them, i.e. to add the capability of an archetyping/templating kernel,
-security, client side communication with back-end services, and so on</li>
-
-  <li>as part of the client component, a "kernel". The idea of a&nbsp;kernel in <span style="font-style: italic;">open</span>EHR
-is a small but sophisticated
-component which
-implements the reference model (RM) and archetype model (AM) in order
-to actually
-use archetypes at runtime to build and validate data. It is the key
-component in
-many openEHR services, and central to the archetype method. We are
-aiming for
-this implementation to become the openEHR reference implementation of
-the kernel
-for the Java language.</li>
-  <li>ADL parser</li>
-
-</ul>
-
-<h3>Implemented Specifications&nbsp;</h3>
-
-
-
-
-
-
-
-<ul>
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-  <li><span style="font-style: italic; font-weight: bold;">open</span><span style="font-weight: bold;">EHR Reference Model</span>: EHR,&nbsp;EHR Extract,&nbsp;Demographic,&nbsp;Data Types,&nbsp;Data Structures,&nbsp;Common,&nbsp;Support</li>
-
-
-
-
-
-
-
-  <li><span style="font-style: italic; font-weight: bold;">open</span><span style="font-weight: bold;">EHR Archetype Model</span>: Archetype Object Model, Archetype Definition Language (in parser) </li>
-
-
-
-
-
-
-
-</ul>
-
-
-
-
-
-
-
-
-<ul>
-
-
-
-
-
-
-
-
-</ul>
-
-
-
-
-
-
-
-
-<h2>Component Descriptions<br />
-</h2>
-<h3>The Kernel&nbsp;</h3>
-
-
-
-
-
-
-
-<ul>
-
-
-
-
-
-
-
-  <li>archetypes based object creation and validation</li>
-
-
-
-
-
-
-
-  <li>ADL output from archetype object model</li>
-
-
-
-
-
-
-
-</ul>
-<h3>ADL Parser</h3>
-<ul>
-<li>
-A Java implementation of ADL parser targeting ADL 1.2
-</li>
-<li>
-Fully integrated with the Java Kernel
-</li>
-
-
-<li>
-limited post-parsing validation
-</li>
-
-
-
-
-
-
-
-</ul>
-
-
-
-
-
-
-
-
-</ul>
-
-
-
-
-
-
-
-
-<h2>Recent Changes</h2>
-
-
-
-
-<ul>
-
-
-
-
-  <li><b>2005-03-04</b> bug fix in DvDateTime; removed null check for
-attribute details in Party</li>
-
-
-
-
-  <li><b>2005-03-19</b> v1.2.1, added support for object creation by
-archetype internal references </li>
-
-
-
-
-  <li><b>2005-03-21</b> v1.2.2, better error report during object
-creation;
-changes in object creation within primitive constraint</li>
-
-
-
-
-  <li><b>2005-03-23</b> v1.2.3,
-1. added logging support for archetype object creation
-2. buf fix of assigned value causing node not optional</li>
-
-
-
-
-  <li><b>2005-03-30</b> bug fix in DvDate.isValidDate()</li>
-
-
-
-
-  <li><b>2005-03-31</b> added base() in ArchetypeID</li>
-
-
-
-
-  <li><b>2005-04-29</b> v1.2.4, improved support for runtime path based
-query on Locatable subclasses (e.g. ItemList, Composition and Party).</li>
-
-
-
-
-  <li><b>2005-05-05</b> bug fix in DvQuantityTest related to hard coded
-decimal separator</li>
-
-
-
-
-  <li><b>2005-05-13</b> improvement in createObject() of CReal and
-CInteger</li>
-
-
-
-
-  <li><b>2005-06-20</b>
-bug fix in participation constructor regarding mode and function</li>
-
-
-
-
-  <li><b>2005-07-11</b>
-fixed countries codeset checking in Composition</li>
-
-
-
-
-  <li><b>2005-07-12</b>
-interface Terminology no longer extends CodeSet, since no need to have has(CodePhrase code)</li>
-
-
-
-
-  <li><b>2005-07-13</b>
-add null checking for setting in the constructor of EventContext
-bug fix in getParticipations of EventContext
-change 'charset' and 'language' from required to optional in the constructor of DvCodedText</li>
-
-
-
-
-  <li><b>2005-07-22</b>
-  +++++++++++++++ move to subversion control +++++++++++++++</li>
-
-
-
-
-  <li><b>2005-08-18</b>
-fixed obsolete path separator in data structure package</li>
-
-
-  <li><b>2005-11-17</b>
-fixed TermBindingItem bug in ADL parser</li>
-
-  <li><b>2005-12-02</b>
-better support for archetype ontology output, contributed by Mattias and Johan</li>
-
-  <li><b>2006-03-21</b>
-fixed a bug in the constructor of ArchetypeOntology, thanks to Jonas and Joakim</li>
-
-
-
-
-</ul>
-
-
-
-
-
-
-
-
-<h2>To Do</h2>
-
-
-
-
-
-
-
-
-
-<span style="font-weight: bold;"></span>
-<table style="text-align: left; width: 849px; height: 192px;" border="1" cellpadding="2" cellspacing="2">
-
-
-
-
-
-
-
-
-  <tbody>
-
-
-
-
-
-
-
-
-    <tr>
-
-
-
-
-
-
-
-
-      <td class="footer table_cell_left_heading" colspan="3" rowspan="1" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-      
-      
-      
-      
-      
-      
-      
-      <div style="text-align: center;">
-      
-      </div>
-
-
-
-
-
-
-
-      
-      
-      
-      
-      
-      
-      
-      <div style="text-align: center;"><span class="table_cell_top_heading">Demographics Project</span></div>
-
-
-
-
-
-
-
-
-      
-      </td>
-
-
-
-
-
-
-
-
-    </tr>
-
-
-
-
-
-
-
-
-    <tr>
-
-
-
-
-
-
-
-
-      <td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-      Job
-      </td>
-
-
-
-
-
-
-
-
-      <td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-      Description
-      </td>
-
-
-
-
-
-
-      <td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-      Who
-      </td>
-
-
-
-
-
-
-
-
-    </tr>
-
-
-
-
-
-
-
-
-    <tr>
-
-
-
-
-
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">Create archetypes for a person</td>
-
-
-
-
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      We
-need to create an archeypte to represent one person. The most basic set
-of archetypes are optional at this stage. 5 archetypes would be ideal
-to represent the different objects within demographic package,
-initially without using any archetype slots functionality. Further
-examples expanding on the initial 5 archetype models can then be
-considered using archetype slots and other options. Input from Dipak
-Kalra and/or Sam Heard would be optimal. </td>
-
-
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">YLim<br />
-
-
-
-
-
-NLea </td>
-
-
-
-
-
-
-
-
-    </tr>
-
-
-
-
-
-
-    <tr>
-
-
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 57px;">Create archeyptes for 10 people </td>
-
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 57px;">As
-above, only 10 variants for 10 different people. This could be
-interpreted as 10 instances of the PERSON object and their respective
-relationships as defined by PARTY_RELATIONSHIP instances.&nbsp; </td>
-
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 57px;"> YLim<br />
-
-
-
-
-
-NLea</td>
-
-
-
-
-
-      
-    </tr>
-
-
-
-
-    <tr>
-
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 57px;"> Get kernel working</td>
-
-
-
-
-      <td style="vertical-align: top; height: 57px; background-color: rgb(255, 255, 204);"> Try
-and bind archetype objects to relevant reference model objects with
-different archetypes and functions (i.e. with archetype slots and
-without)</td>
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 57px;"> YLim<br />
-
-
-
-
-
-NLea</td>
-
-
-
-
-    </tr>
-
-
-
-
-    <tr>
-
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 57px;"> Get persistence package working</td>
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 57px;"> To
-reduce table numbers in a database, it is advantegeous to group certain
-reference model classes into single object for direct object relational
-mapping. This package will serialise the objects into specific
-formalism such as XML and dADL which will be persisted, retrieved and
-de-serialised when required.</td>
-
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 57px;"> YLim<br />
-
-
-
-
-
-NLea
-      </td>
-
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 57px;"> Archetype persistence</td>
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 57px;"> </td>
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 57px;"><br />
-
-
-
-
-      </td>
-
-
-
-    </tr>
-
-
-
-    <tr>
-
-
-
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 57px;"> GUI demonstrator</td>
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 57px;"> </td>
-
-
-
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 57px;"><br />
-
-
-
-
-      </td>
-
-
-
-    </tr>  
-  
-  
-  </tbody>
-</table>
-
-<p/>
-
-<table style="text-align: left; width: 849px; height: 192px;" border="1" cellpadding="2" cellspacing="2">
-  <tbody>
-    <tr>
-      <td class="footer table_cell_left_heading" colspan="3" rowspan="1" style="vertical-align: top; background-color: rgb(204, 204, 255);">      
-        <div style="text-align: center;"><span class="table_cell_top_heading">BRANCH Release 0.95 Development</span></div>     
-      </td>
-    </tr>
-    <tr>
-      <td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-      Job
-      </td>
-      <td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-      Description
-      </td>
-      <td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-      Who
-      </td>
-    </tr>
-    <tr>
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-      ADL parser
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      Add support of "[]" and assumed values to the ADL parser
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">Rong Chen</td>
-    </tr>    
-  </tbody>
-</table>
-
-<p/>
-
-<table style="text-align: left; width: 849px; height: 192px;" border="1" cellpadding="2" cellspacing="2">
-  <tbody>
-    <tr>
-      <td class="footer table_cell_left_heading" colspan="3" rowspan="1" style="vertical-align: top; background-color: rgb(204, 204, 255);">      
-        <div style="text-align: center;"></div> 
-        <div style="text-align: center;"><span class="table_cell_top_heading">MAINLINE Release 1.0 Development</span></div>     
-      </td>
-    </tr>
-    <tr>
-      <td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-      Job
-      </td>
-      <td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-      Description
-      </td>
-      <td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-      Who
-      </td>
-    </tr>
-    <tr>
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-      Update the RM
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      Update the Reference Model classes according to the Release 1.0 specifications
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      </td>      
-    </tr>
-    <tr>
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-      Update the AOM
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      Update the Archetype Object Model classes according to the Release 1.0 specifications
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      </td>      
-    </tr>
-    <tr>
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-      Update the ADL Parser 
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      Update the ADL Parser according to the Release 1.0 specifications
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      </td>      
-    </tr>   
-    <tr>
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-      DbC support
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      Implement Design by Contract properly in the kernel code
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      </td>      
-    </tr>   
-    <tr>
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-      Object creation
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      Improve the current object creation logic
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      </td>      
-    </tr>   
-    <tr>
-      <td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-      ADL output 
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      Improve the ADL output feature
-      </td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-      </td>      
-    </tr>    
-  </tbody>
-</table>
-
-
-
-<br />
-
-
-
-
-
-
-
-
-<br />
-
-
-
-
-
-
-
-
-<hr style="width: 100%; height: 2px;" />
-<span class="footer">Last
-changed: $Date$ $Revision$</span><br />
-
-
-
-
-
-
-
-
-<br />
-
-
-
-
-
-
-
-
-<br />
-
-
-
-
-
-
-
-
-</body>
+	<head>
+		<title>openEHR java reference kernel Project</title>
+		<link rel="stylesheet" href="http://www.openehr.org/styles/oe.css"
+			type="text/css"/>
+	</head>
+	<body>
+		<h1> The
+			<span style="font-style: italic;">open</span>EHR Java Reference
+			Implementation Project </h1>
+		<hr style="width: 100%; height: 2px;"/>
+		<h2>Vital Statistics</h2>
+		
+		<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+			cellspacing="2">
+			<tbody>
+				<tr>
+					<td style="background-color: rgb(204, 204, 255);" colspan="2"
+						rowspan="1">
+						<p class="table_cell_top_heading">Java Reference
+							Implementation</p>
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">Project Team</span>
+						<br/>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						Rong Chen, G&ouml;ran Pestana (ACODE)
+						<br/> Nathan Lea, Yin Su Lim (CHIME, UCL)
+						<br/> </td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">Contributors</span>
+						<br/>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						Rodrigo Filgueira, Erik Sundvall, Mattias Forss, Johan
+						Hjalmarsson, Jonas Andersson, Joakim Fredriksson, Routis
+						Haralampos </td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">Team Coordinator</span>
+						<br/>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						Thomas Beale (Ocean Informatics, CHIME, UCL; <a
+							href="mailto:tXXhomas.beXXale@oceaninformaXXtics.biXz">
+						email</a>; remove XXs from email address)
+						<br/> </td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">Project Leader</span>
+						<br/>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						Rong Chen; (ACODE, <a href="mailto:rXXong@acXXode.sXXe">
+						email</a>; remove XXs from email address)
+						<br/> </td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;"> Developer
+							Guidelines</span>
+						<br/>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						The <a href="QA_guidelines.htm">guidelines</a> are used by the
+						team in managing this repository, and govern quality assurance
+						measures designed to guarantee that the repository moves from one
+						consistent state to another consistent state with every
+						change-set.
+						<br/> </td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">ARB change managed</span>
+						<br/>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						No
+						<br/> </td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">
+							<br/>
+							<br/>Source Repository </span>
+						<br/>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						<ul>
+							<li>Subversion repository name =
+								<span style="font-weight: bold;">
+									ref_impl_java</span>; URLs:
+								<ul>
+									<li> repository top: <a
+											href="http://svn.openehr.org/ref_impl_java">
+										http://svn.openehr.org/ref_impl_java</a>
+										</li>
+									<li> <a
+											href="http://www.openehr.org/wsvn/ref_impl_java/?sc=0">
+										web-view</a>
+									</li>
+								</ul> </li>
+							<li> <a
+									href="http://www.acode.se/release/kernel/apidocs/">
+								online javadoc</a>
+							</li>
+							<li> <a href="docs/design.html">design document</a>
+							</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">
+							<br/>
+							<br/>Downloads</span>
+						<br/>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						<ul>
+							<li><a href="readme.txt">release notes</a>
+							</li>
+							<li><a href="install.txt">detailed installation
+								instructions</a>
+							</li>
+							<li><a href="http://www.acode.se/release/kernel/">
+								binaries and apidocs</a>
+							</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">
+							<br/> Problem Reports (PRs)
+							<br/> Change Requests (CRs) </span>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						<ul>
+							<li><a
+									href="http://coruscant.chime.ucl.ac.uk:8200/openEHR_Collector/projects/reference_implementations/javakernel/PR/folder_contents">
+								PRs</a>
+							</li>
+							<li><a
+									href="http://coruscant.chime.ucl.ac.uk:8200/openEHR_Collector/projects/reference_implementations/javakernel/CR/folder_contents">
+								CRs</a>
+							</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">Status</span>
+						<br/>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						Release 0.95
+						<br/> </td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<h2>Description</h2>
+		This repository contains components comprising a reference implementation of
+		<span style="font-style: italic;">open</span>EHR in the Java language.
+		Eventually the components will include:
+		<br/>
+		
+		<ul>
+			
+			<li>back-end services, such as EHR service, demographic service, archetype
+				service</li>
+			
+			<li>a client component, which is built in to user applications to "
+				<span style="font-style: italic;">open</span>EHR-enable" them, i.e.
+				to add the capability of an archetyping/templating kernel, security,
+				client side communication with back-end services, and so on</li>
+			
+			<li>as part of the client component, a "kernel". The idea of a&nbsp;kernel in
+				<span style="font-style: italic;">open</span>EHR is a small but
+				sophisticated component which implements the reference model (RM) and
+				archetype model (AM) in order to actually use archetypes at runtime to build
+				and validate data. It is the key component in many openEHR services, and
+				central to the archetype method. We are aiming for this implementation to
+				become the openEHR reference implementation of the kernel for the Java
+				language.</li>
+			<li>ADL parser</li>
+			
+		</ul>
+		
+		<h3>Implemented Specifications&nbsp;</h3>
+		<ul>
+			
+			<li>
+				<span style="font-style: italic; font-weight: bold;">open</span>
+				<span style="font-weight: bold;">EHR Reference Model</span>:
+				EHR,&nbsp;EHR Extract,&nbsp;Demographic,&nbsp;Data
+				Types,&nbsp;Data Structures,&nbsp;Common,&nbsp;Support</li>
+			
+			<li>
+				<span style="font-style: italic; font-weight: bold;">open</span>
+				<span style="font-weight: bold;">EHR Archetype Model</span>:
+				Archetype Object Model, Archetype Definition Language (in parser) </li>
+			
+		</ul>
+		
+		<ul>
+			
+		</ul>
+		
+		<h2>Component Descriptions
+			<br/> </h2>
+		<h3>The Kernel&nbsp;</h3>
+		
+		<ul>
+			
+			<li>archetypes based object creation and validation</li>
+			
+			<li>ADL output from archetype object model</li>
+			
+		</ul>
+		<h3>ADL Parser</h3>
+		<ul>
+			<li> A Java implementation of ADL parser targeting ADL 1.2 </li>
+			<li> Fully integrated with the Java Kernel </li>
+			
+			<li> limited post-parsing validation </li>
+			
+		</ul>
+		</ul>
+		
+		<h2>Recent Changes</h2>
+		
+		<ul>
+			
+			<li><b>2005-03-04</b> bug fix in DvDateTime; removed null check for attribute
+				details in Party</li>
+			
+			<li><b>2005-03-19</b> v1.2.1, added support for object creation by archetype
+				internal references </li>
+			
+			<li><b>2005-03-21</b> v1.2.2, better error report during object creation;
+				changes in object creation within primitive constraint</li>
+			
+			<li><b>2005-03-23</b> v1.2.3, 1. added logging support for archetype object
+				creation 2. buf fix of assigned value causing node not optional</li>
+			
+			<li><b>2005-03-30</b> bug fix in DvDate.isValidDate()</li>
+			
+			<li><b>2005-03-31</b> added base() in ArchetypeID</li>
+			
+			<li><b>2005-04-29</b> v1.2.4, improved support for runtime path based query
+				on Locatable subclasses (e.g. ItemList, Composition and Party).</li>
+			
+			<li><b>2005-05-05</b> bug fix in DvQuantityTest related to hard coded decimal
+				separator</li>
+			
+			<li><b>2005-05-13</b> improvement in createObject() of CReal and
+				CInteger</li>
+			
+			<li><b>2005-06-20</b> bug fix in participation constructor regarding mode
+				and function</li>
+			
+			<li><b>2005-07-11</b> fixed countries codeset checking in Composition</li>
+			
+			<li><b>2005-07-12</b> interface Terminology no longer extends CodeSet,
+				since no need to have has(CodePhrase code)</li>
+			
+			<li><b>2005-07-13</b> add null checking for setting in the constructor of
+				EventContext bug fix in getParticipations of EventContext change
+				'charset' and 'language' from required to optional in the constructor of
+				DvCodedText</li>
+			
+			<li><b>2005-07-22</b> +++++++++++++++ move to subversion control
+				+++++++++++++++</li>
+			
+			<li><b>2005-08-18</b> fixed obsolete path separator in data structure
+				package</li>
+			
+			<li><b>2005-11-17</b> fixed TermBindingItem bug in ADL parser</li>
+			
+			<li><b>2005-12-02</b> better support for archetype ontology output,
+				contributed by Mattias Forss and Johan Hjalmarsson</li>
+			
+			<li><b>2006-03-21</b> fixed a bug in the constructor of ArchetypeOntology,
+				thanks to Jonas Andersson, Joakim Fredriksson and Routis Haralampos</li>
+			
+			<li><b>2006-03-28</b>
+				<ul>
+					<li>updated parser for better support of dADL in description and
+						ontology part</li>
+					<li>adjusted all the test archetypes and parser tests</li>
+					<li>updated and fixed a bug in ADLOutputter</li>
+					<li>more up-to-date ArchetypeDescriptionItem</li>
+				</ul>
+			</li>
+			
+		</ul>
+		
+		<h2>TO DO</h2>
+		<span style="font-weight: bold;"></span>
+		
+		<p/>
+		
+		<table style="text-align: left; width: 849px; height: 192px;" border="1"
+			cellpadding="2" cellspacing="2">
+			<tbody>
+				<tr>
+					<td class="footer table_cell_left_heading" colspan="3"
+						rowspan="1"
+						style="vertical-align: top; background-color: rgb(204, 204, 255);">
+						<div style="text-align: center;"></div>
+						<div style="text-align: center;">
+							<span class="table_cell_top_heading">MAINLINE Release
+								1.0 Development</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_top_heading"
+						style="vertical-align: top; background-color: rgb(204, 204, 255);">
+						Job </td>
+					<td class="table_cell_top_heading"
+						style="vertical-align: top; background-color: rgb(204, 204, 255);">
+						Description </td>
+					<td class="table_cell_top_heading"
+						style="vertical-align: top; background-color: rgb(204, 204, 255);">
+						Who </td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						Update the RM </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						Update the Reference Model classes according to the Release 1.0
+						specifications </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						Update the AOM </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						Update the Archetype Object Model classes according to the
+						Release 1.0 specifications </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						Update the ADL Parser </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						Update the ADL Parser according to the Release 1.0 specifications
+						</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						DbC support </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						Implement Design by Contract properly in the kernel code </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						Object creation </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						Improve the current object creation logic </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						ADL output </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						Improve the ADL output feature </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<p/>
+		<table style="text-align: left; width: 849px; height: 192px;" border="1"
+			cellpadding="2" cellspacing="2">
+			<tbody>
+				<tr>
+					<td class="footer table_cell_left_heading" colspan="3"
+						rowspan="1"
+						style="vertical-align: top; background-color: rgb(204, 204, 255);">
+						<div style="text-align: center;"></div>
+						<div style="text-align: center;">
+							<span class="table_cell_top_heading">RM Update towards
+								Release 1.0</span>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_top_heading"
+						style="vertical-align: top; background-color: rgb(204, 204, 255);">
+						Job </td>
+					<td class="table_cell_top_heading"
+						style="vertical-align: top; background-color: rgb(204, 204, 255);">
+						Description </td>
+					<td class="table_cell_top_heading"
+						style="vertical-align: top; background-color: rgb(204, 204, 255);">
+						Who </td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						common_im </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						<ul>
+							<li>Move directory package from ehr into common</li>
+							<li>Add resource package, and move two description classes
+								from AOM</li>
+							<li>Update generic package, and move some classes from
+								change control</li>
+							<li>Update change control package, add 3 new classes</li>
+						</ul>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						data_structures_im </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						<ul>
+							<li>Update history package, add new classes</li>
+							<li>Update item structure package: some small
+								adjustment</li>
+						</ul>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						data_types_im </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						<ul>
+							<li>Update DvQuantified</li>
+							<li>Update DvEHRURI</li>
+						</ul>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						demographic_im </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						<ul>
+							<li>Minor changes related to the root classes</li>
+						</ul>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						ehr_im </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						<ul>
+							<li>Update Instruction class and add related classes</li>
+							<li>Add newly introduced AdminEntry</li>
+							<li>Add new CareEntry and update all its subclasses</li>
+							<li>Move directly package to common_im</li>
+							<li>Add EHRStatus class</li>
+						</ul>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						integraion_im </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						<ul>
+							<li>Add GenericEntry class</li>
+						</ul>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
+						support_im </td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+						<ul>
+							<li>Update PartyRef class</li>
+							<li>Add 3 new classes: ObjectVersionID, VersionTreeID and
+								LocatableRef</li>
+						</ul>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		
+		
+		<br/>
+		
+		<br/>
+		
+		<hr style="width: 100%; height: 2px;"/>
+		<span class="footer">Last changed: $Date: 2006-03-23 00:56:54 +0100 (Thu, 23 Mar
+			2006) $ $Revision$</span>
+		<br/>
+		
+		<br/>
+		
+		<br/>
+		</body>
 </html>

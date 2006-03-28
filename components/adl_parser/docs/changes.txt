@@ -3,3 +3,7 @@
 .add test for minimum adl
 .set dependency to kernel-1.2.4
 
+2006/03/26
+.dependency to the latest kernel-1.2.5-SNAPSHOT
+.updated archetype description
+.updated archetype ontology 

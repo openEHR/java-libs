@@ -47,7 +47,10 @@ public class ADLParserOutputRoundTripTest extends ADLParserTestBase {
         StringWriter writer = new StringWriter();
         outputter.output(archetypeOne, writer);
 
-        parser = new ADLParser(writer.toString());
+        String adlOutput = writer.toString();
+        //System.out.println(adlOutput);
+        
+        parser = new ADLParser(adlOutput);
         Archetype archetypeTwo = parser.parse();
 
         // verify header - id, concenpt, parent

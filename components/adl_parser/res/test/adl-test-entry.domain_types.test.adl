@@ -4,21 +4,20 @@ archetype
 concept
 	[at0000]	-- HIV quality registry
 description
-	author = <"Rong Chen">
-	submission = <
-		organisation = <"Acode HB">
-		date = <2004-10-05>
+	details = <
+		["en"] = <
+			language = <"en">
+			purpose = <"parser test for domain data types">
+			keywords = <"data types">
+			copyright = <"copyright (c) 2004 ACODE HB">
+		>
 	>
-		version = <"draft">
-	status = <"draft">
-	revision = <"1.0">
-	description("en") = <
-		purpose = <"test for domain type constraints">
-		use = <"">
-		misuse = <"">
+	lifecycle_state = <"draft">
+	original_author = <
+		["name"] = <"Rong Chen">
+		["organisation"] = <"ACODE HB">
+		["date"] = <"2004-10-05">
 	>
-	adl_version = <"0.9">
-	rights = <"">
 
 definition
 	INSTRUCTION[at0000] matches {	-- HIV medication order
@@ -65,37 +64,41 @@ definition
 ontology
 	primary_language = <"en">
 	languages_available = <"en", ...>
-	term_definitions("en") = <
-		items("at0000") = <
-			text = <"HIV quality registry headings">
-			description = <"headings for HIV quality registry">
-		>
-		items("at0001") = <
-			text = <"Medication">
-			description = <"HIV Medication">
-		>
-		items("at0002") = <
-			text = <"Lab">
-			description = <"HIV related lab result">
-		>
-		items("at0003.0") = <
-			text = <"capsule">
-			description = <"">
-		>
-		items("at0003.1") = <
-			text = <"powder">
-			description = <"">
-		>
-		items("at0003.2") = <
-			text = <"tablet">
-			description = <"">
-		>
-		items("at0003.3") = <
-			text = <"solution">
-			description = <"">
-		>
-		items("at0003.4") = <
-			text = <"suspension">
-			description = <"">
+	term_definitions = < 
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"HIV quality registry headings">
+					description = <"headings for HIV quality registry">
+				>
+				["at0001"] = <
+					text = <"Medication">
+					description = <"HIV Medication">
+				>
+				["at0002"] = <
+					text = <"Lab">
+					description = <"HIV related lab result">
+				>
+				["at0003.0"] = <
+					text = <"capsule">
+					description = <"">
+				>
+				["at0003.1"] = <
+					text = <"powder">
+					description = <"">
+				>
+				["at0003.2"] = <
+					text = <"tablet">
+					description = <"">
+				>
+				["at0003.3"] = <
+					text = <"solution">
+					description = <"">
+				>
+				["at0003.4"] = <
+					text = <"suspension">
+					description = <"">
+				>
+			>
 		>
 	>

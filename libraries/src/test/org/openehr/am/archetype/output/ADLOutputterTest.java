@@ -86,21 +86,31 @@ public class ADLOutputterTest extends TestCase {
         String use = "use";
         String misuse = "misuse";
         String copyright = "copyright";
+        List<String> keywords = new ArrayList<String>();
+        keywords.add("apple");
+        keywords.add("pear");
+        List<String> urls = new ArrayList<String>();
+        urls.add("original_res_url");
+        Map<String, String> others = new HashMap<String,String>();
+        
         ArchetypeDescriptionItem item = new ArchetypeDescriptionItem(
-                TestCodeSet.ENGLISH, purpose, use, misuse, copyright);
+                TestCodeSet.ENGLISH, purpose, use, misuse, copyright,
+                keywords, urls, others);
 
         clean();
         outputter.printDescriptionItem(item, 0, out);
 
-        verify("description(\"" + TestCodeSet.ENGLISH.getCodeString() +
-                "\") = <\r\n" +
+        verify("[\"en\"] = <\r\n" +
+                "    language = <\"en\">\r\n" + 
                 "    purpose = <\"purpose\">\r\n" +
+                "    keywords = <\"apple\",\"pear\">\r\n" +
+                "    copyright = <\"copyright\">\r\n" +
                 "    use = <\"use\">\r\n" +
                 "    misuse = <\"misuse\">\r\n" +
-                "    copyright = <\"copyright\">\r\n" +
+                "    original_resource_uri = <\"original_res_url\">\r\n" +
                 ">\r\n");
     }
-
+    
     public void testPrintDescription() throws Exception {
         String author = "Jerry Mouse";
         String status = "draft";
@@ -131,9 +141,12 @@ public class ADLOutputterTest extends TestCase {
                 "    original_author = <\r\n" +
                 "        [\"name\"] = <\"" + author + "\">\r\n" +
                 "    >\r\n" +
-                "    status = <\"" + status + "\">\r\n" +
-                "    description(\"en\") = <\r\n" +
-                "        purpose = <\"purpose of this archetype\">\r\n" +
+                "    lifecycle_state = <\"" + status + "\">\r\n" +
+                "    details = <\r\n" +
+                "        [\"en\"] = <\r\n" +
+                "            language = <\"en\">\r\n" + 
+                "            purpose = <\"purpose of this archetype\">\r\n" +
+                "        >\r\n" +
                 "    >\r\n");
     }
 
@@ -193,32 +206,48 @@ public class ADLOutputterTest extends TestCase {
                 "    primary_language = <\"en\">\r\n" +
                 "    languages_available = <\"en\", ...>\r\n" +
     			"    terminologies_available = <\"local\", ...>\r\n" +
-                "    term_definitions(\"en\") = <\r\n" +
-                "        items(\"at0001\") = <\r\n" +
-                "            text = <\"text at0001\">\r\n" +
-                "            description = <\"desc at0001\">\r\n" +
-                "        >\r\n" +
-                "        items(\"at0002\") = <\r\n" +
-                "            text = <\"text at0002\">\r\n" +
-                "            description = <\"desc at0002\">\r\n" +
-                "        >\r\n" +
+                "    term_definitions = <\r\n" +
+                "        [\"en\"] = <\r\n" +
+                "            items = <\r\n" + 
+                "                [\"at0001\"] = <\r\n" +
+                "                    text = <\"text at0001\">\r\n" +
+                "                    description = <\"desc at0001\">\r\n" +
+                "                >\r\n" +
+                "                [\"at0002\"] = <\r\n" +
+                "                    text = <\"text at0002\">\r\n" +
+                "                    description = <\"desc at0002\">\r\n" +
+                "                >\r\n" +
+        		"            >\r\n" +
+        		"        >\r\n" +
         		"    >\r\n" +
-                "    constraint_definitions(\"en\") = <\r\n" +
-                "        items(\"ac0001\") = <\r\n" +
-                "            text = <\"text ac0001\">\r\n" +
-                "            description = <\"desc ac0001\">\r\n" +
-                "        >\r\n" +
-                "        items(\"ac0002\") = <\r\n" +
-                "            text = <\"text ac0002\">\r\n" +
-                "            description = <\"desc ac0002\">\r\n" +
+                "    constraint_definitions = <\r\n" +
+                "        [\"en\"] = <\r\n" +
+                "            items = <\r\n" +
+                "                [\"ac0001\"] = <\r\n" +
+                "                    text = <\"text ac0001\">\r\n" +
+                "                    description = <\"desc ac0001\">\r\n" +
+                "                >\r\n" +
+                "                [\"ac0002\"] = <\r\n" +
+                "                    text = <\"text ac0002\">\r\n" +
+                "                    description = <\"desc ac0002\">\r\n" +
+                "                >\r\n" +
+                "            >\r\n" +
                 "        >\r\n" +
                 "    >\r\n" +
-        		"    term_binding(\"local\") = <\r\n" +
-        		"        items(\"at0001\") = <[local::100000]>\r\n" +
-        		"        items(\"at0002\") = <[local::200000]>\r\n" +
-        		"    >\r\n" + 
-        		"    constraint_binding(\"local\") = <\r\n" +
-        		"        items(\"ac0001\") = <query(\"terminology\", \"terminology_id = local; synonym_of [300000]\")>\r\n" +
+        		"    term_binding = <\r\n" +
+        		"        [\"local\"] = <\r\n" +
+        		"            items = <\r\n" +
+        		"                [\"at0001\"] = <[local::100000]>\r\n" +
+        		"                [\"at0002\"] = <[local::200000]>\r\n" +
+        		"            >\r\n" +
+        		"        >\r\n" +
+        		"    >\r\n" +
+        		"    constraint_binding = <\r\n" +
+        		"        [\"local\"] = <\r\n" +
+        		"            items = <\r\n" +
+        		"                [\"ac0001\"] = <query(\"terminology\", \"terminology_id = local; synonym_of [300000]\")>\r\n" +
+        	    "            >\r\n" +
+        	    "        >\r\n" +
         		"    >\r\n");
     }
     
@@ -264,6 +293,14 @@ public class ADLOutputterTest extends TestCase {
                 "    " + codes[ 0 ] + ",\r\n" +
                 "    " + codes[ 1 ] + ",\r\n" +
                 "    " + codes[ 2 ] + "]\r\n");
+        
+        // test the single code term
+        codes = new String[] {"at3102.0"};
+        ccoded = new CCodedText("/path", terminology,
+        		Arrays.asList(codes));
+        clean();
+        outputter.printCCodedText(ccoded, 1, out);
+        verify("    [local::at3102.0]\r\n");
     }
 
     public void testPrintCCount() throws Exception {

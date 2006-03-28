@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 Acode HB, Sweden.
+ * Copyright (C) 2005,2006 Acode HB, Sweden.
  * All Rights Reserved.
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +19,10 @@
 
 options {
   STATIC = false;
+  DEBUG_PARSER = false;
+  DEBUG_TOKEN_MANAGER = false;
+  DEBUG_LOOKAHEAD = false;
+  LOOKAHEAD = 1;
 }
 
 PARSER_BEGIN(ADLParser)
@@ -109,7 +113,7 @@ public class ADLParser {
     }
     try {
       Archetype a = parser.archetype();
-      System.out.println(a.toString());
+      // System.out.println(a.toString());
       System.out.println(title + "  ADL file parsed successfully.");
     } catch (Throwable e) {
       e.printStackTrace();
@@ -147,16 +151,24 @@ PARSER_END(ADLParser)
 
 < DESCRIPTION, ONTOLOGY > TOKEN [IGNORE_CASE]: /* KEYWORDS - ADL description */
 {
-  < SYM_AUTHOR: "author">
+  < SYM_ORIGINAL_AUTHOR: "original_author">
+| < SYM_LIFECYCLE_STATE: "lifecycle_state">
+| < SYM_ARCHETYPE_PACKAGE_URI: "archetype_package_uri">
+| < SYM_DETAILS: "details">
+| < SYM_ORIGINAL_RESOURCE_URI: "original_resource_uri">
+| < SYM_OTHER_DETAILS: "other_details">
 | < SYM_SUBMISSION: "submission">
 | < SYM_ORGANISATION: "organisation">
 | < SYM_DATE: "date">
 | < SYM_VERSION: "version">
 | < SYM_STATUS: "status">
 | < SYM_REVISION: "revision">
+| < SYM_LANGUAGE: "language">
 | < SYM_PURPOSE: "purpose">
 | < SYM_USE: "use">
 | < SYM_MISUSE: "misuse">
+| < SYM_COPYRIGHT: "copyright">
+| < SYM_KEYWORDS: "keywords">
 | < SYM_ADL_VERSION: "adl_version">
 | < SYM_RIGHTS: "rights">
 | < SYM_DESCRIPTION_WORD: "description">
@@ -234,15 +246,15 @@ PARSER_END(ADLParser)
 | < SYM_DOT: ".">
 | < SYM_SEMICOLON: ";">
 | < SYM_COMMA: ",">
-| < SYM_TWO_COLONS: "::"> : TERM_CODE
+| < SYM_TWO_COLONS: "::">
 | < SYM_COLON: ":">
 | < SYM_EXCLAMATION: "!">
 | < SYM_L_PARENTHESIS: "(">
 | < SYM_R_PARENTHESIS: ")">
 | < SYM_DOLLAR: "$">
 | < SYM_QUESTION: "?">
-| < SYM_L_BRACKET: "["> : TERMINOLOGY_ID
-| < SYM_R_BRACKET: "]"> : CADL
+| < SYM_L_BRACKET: "["> 
+| < SYM_R_BRACKET: "]">  /* : CADL		/* !!! cause problems with description_item !!! */
 | < SYM_INTERVAL_DELIM: "|">
 | < SYM_EQ: "=">
 | < SYM_GE: ">=">
@@ -283,12 +295,7 @@ TOKEN : /* IDENTIFIERS - ADL */
 
 < TERM_CODE > TOKEN: /* VALUES - cADL */
 {
-  < V_TERM_CODE: (<LET_DIG_DUDS>)+ >
-}
-
-< TERMINOLOGY_ID > TOKEN: /* VALUES - cADL */
-{
-  < V_TERMINOLOGY_ID: (<LET_DIG_DUDSLR>)+ >
+  < V_TERM_CODE: (<LET_DIG_DUDS>)+ > 
 }
 
 /* -------------------- TOKEN - dADL & cADL ------------------------- */
@@ -400,6 +407,8 @@ TOKEN : /* IDENTIFIERS - ADL */
 |
   < V_ATTRIBUTE_IDENTIFIER: ["a"-"z"](<LET_DIG_U>)*>
 |
+  < V_TERMINOLOGY_ID_BLOCK: "["(<LET_DIG_DUDSLR>)+"::" > : TERM_CODE	
+|
   < V_REGEXP: (["=","!"]"~ ")? (
   ( "/"(~["/","}"])*("\\/"(~["/","}"]))*"/" | "^"(~["^","\n"])*"^")) >
 |
@@ -473,71 +482,113 @@ String arch_concept() :
 
 ArchetypeDescription arch_description() :
 {
-  String author = null;
-  String organisation = null;
-  DvDate date = null;
-  String version = null;
-  String revision = null;
-  String status = null;
-  String adlVersion = null;
-  String rights = null;
-  String originalResourceURI = null;
-  String archetypePackageURI = null;
+  Map originalAuthor = new HashMap();
+  String key = null;
+  String value = null;
+  List otherContributors = new ArrayList(); // not used
+  String lifecycleState = null;
   List details = new ArrayList();
   ArchetypeDescriptionItem item = null;
-  Map otherDetails = new HashMap();
+  String archetypePackageURI = null;
+  Map otherDetails = new HashMap(); // not used
+  Archetype parentArchetype = null;
 }
 {
    <SYM_DESCRIPTION>
    (
-     <SYM_AUTHOR> <SYM_EQ> "<" author = string_value() ">"
+
+     <SYM_LIFECYCLE_STATE> <SYM_EQ> "<" lifecycleState = string_value() ">"
    |
-     <SYM_SUBMISSION> <SYM_EQ> "<"
-       <SYM_ORGANISATION> <SYM_EQ> "<" organisation = string_value() ">"
-       <SYM_DATE> <SYM_EQ> "<" date = date_value() ">"
+     <SYM_ARCHETYPE_PACKAGE_URI> <SYM_EQ> "<" archetypePackageURI = string_value() ">"
+   |
+     <SYM_DETAILS> <SYM_EQ> "<"
+         (
+           LOOKAHEAD(2)       
+           item = arch_description_item()
+           {
+             details.add(item);
+           }
+         )+
      ">"
    |
-     <SYM_VERSION> <SYM_EQ> "<" version = string_value() ">"
-   |
-     <SYM_STATUS> <SYM_EQ> "<" status = string_value() ">"
-   |
-     <SYM_REVISION> <SYM_EQ> "<" revision = string_value() ">"
-   |
-     (
-       LOOKAHEAD(2)
-       item = arch_description_item()
-       {
-         details.add(item);
-       }
-     )+
-   |
-     <SYM_ADL_VERSION> <SYM_EQ> "<" adlVersion = string_value() ">"
-   |
-     <SYM_RIGHTS> <SYM_EQ> "<" rights = string_value() ">"
+   	 <SYM_ORIGINAL_AUTHOR> <SYM_EQ> originalAuthor = map_value()         
+    
    )*
+   
+   [ <SYM_COPYRIGHT> <SYM_EQ> "<" string_value() ">" ]
+   
    {
-     return new ArchetypeDescription(author, organisation, status,
-                                     archetypePackageURI, details,
-                                     otherDetails);
+     return new ArchetypeDescription(originalAuthor, otherContributors,
+                                     lifecycleState, details,
+                                     archetypePackageURI, otherDetails, null);
+   }
+}
+
+Map map_value() :
+{
+  Map map = new HashMap();
+  String key = null;
+  String value = null;
+}
+{
+  "<"
+       (
+         "[" key = string_value() "]" <SYM_EQ> "<" value = string_value() ">"
+         {
+           if( key != null && value != null) map.put(key, value);
+         }
+       )+
+   ">"
+   {
+     return map;
    }
 }
 
 ArchetypeDescriptionItem arch_description_item() :
 {
-  String language;
+  String lang;
   String purpose;
   String use = null;
   String misuse = null;
   String copyright = null;
+  List keywords = null; 
+  String keyword = null;
+  List originalResourceURI = null; // not used
+  Map otherDetails = null; // not used
 }
 {
-  <SYM_DESCRIPTION_WORD> "(" language = string_value() ")" <SYM_EQ> "<"
+  "[" lang = string_value() "]" <SYM_EQ> "<"
+    
+    [ <SYM_LANGUAGE> <SYM_EQ> "<" lang = string_value() ">" ]
     <SYM_PURPOSE> <SYM_EQ> "<" purpose = string_value() ">"
+    [ 
+     
+      <SYM_KEYWORDS> <SYM_EQ> "<" 
+        (
+          LOOKAHEAD(2) 
+          keywords = string_list_value() 
+        |
+          LOOKAHEAD(2) 
+          keyword = string_value()
+          { 
+          	keywords = new ArrayList();
+          	keywords.add(keyword);
+          }
+		)
+         
+      ">" 
+    ]
+    [ <SYM_COPYRIGHT> <SYM_EQ> "<" copyright = string_value() ">" ]    
     [ <SYM_USE> <SYM_EQ> "<" use = string_value() ">" ]
     [ <SYM_MISUSE> <SYM_EQ> "<" misuse = string_value() ">" ]
+    [ 
+      { String url = null; }
+      <SYM_ORIGINAL_RESOURCE_URI> <SYM_EQ> "<" url = string_value() ">" 
+      { originalResourceURI.add(url); }	
+    ]
   ">"
   {
-    CodePhrase lang = new CodePhrase("openehr", language);
+    CodePhrase langcode = new CodePhrase("openehr", lang);
     if(use != null && use.trim().length() == 0) {
       use = null;
     }
@@ -547,7 +598,9 @@ ArchetypeDescriptionItem arch_description_item() :
     if(copyright != null && copyright.trim().length() == 0) {
       copyright = null;
     }
-    return new ArchetypeDescriptionItem(lang, purpose, use, misuse, copyright);
+    
+
+    return new ArchetypeDescriptionItem(langcode, purpose, use, misuse, copyright);
   }
 }
 
@@ -587,28 +640,14 @@ ArchetypeOntology arch_ontology() :
   languages = languages_available()
   [ terminologies = terminologies_available() ]
 
-  definitions = term_definitions()
-  {
-    termDefinitionsList.add(definitions);
-  }
-  (
-    definitions = term_definitions() {
-      termDefinitionsList.add(definitions);
-    }
-    |
-    definitions = constraint_definitions() {
-      constraintDefinitionsList.add(definitions);
-    }
-    |
-    binding = term_binding() {
-      termBindingList.add(binding);
-    }
-    |
-    binding = constraint_binding() {
-      constraintBindingList.add(binding);
-    }
-  )*
-
+  termDefinitionsList = term_definitions_list()
+  
+  [ constraintDefinitionsList = constraint_definitions_list() ]
+  
+  [ termBindingList = term_binding_list() ]	  
+   
+  [ constraintBindingList = constraint_binding_list() ]
+    
   (
     t = <V_IDENTIFIER> { key = t.image; }
     <SYM_EQ> "<" value = dadl_text() ">"
@@ -652,22 +691,30 @@ List terminologies_available() :
   { return list; }
 }
 
-OntologyDefinitions term_definitions() :
+List term_definitions_list() :
 {
-  OntologyDefinitions definitions;
+  List list = new ArrayList();
+  OntologyDefinitions definitions = null;
 }
 {
-  <SYM_TERM_DEFINITIONS> definitions = definitions_body()
-  { return definitions; }
+  <SYM_TERM_DEFINITIONS> <SYM_EQ> "<"    
+    ( definitions = definitions_body())+
+    { list.add(definitions); }
+  ">"
+  { return list; }
 }
 
-OntologyDefinitions constraint_definitions() :
+List constraint_definitions_list() :
 {
-  OntologyDefinitions definitions;
+  List list = new ArrayList();	
+  OntologyDefinitions definitions = null;
 }
 {
-  <SYM_CONSTRAINT_DEFINITIONS> definitions = definitions_body()
-  { return definitions; }
+  <SYM_CONSTRAINT_DEFINITIONS> <SYM_EQ> "<" 
+    ( definitions = definitions_body())*
+    { list.add(definitions); }
+  ">"
+  { return list; }
 }
 
 OntologyDefinitions definitions_body() :
@@ -678,18 +725,18 @@ OntologyDefinitions definitions_body() :
   DefinitionItem item;
 }
 {
-  "(" language = string_value() ")"
+  "[" language = string_value() "]"
   <SYM_EQ> "<"
-    [
-      [ <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" dadl_text() ">" ]
-      [ <SYM_TRANSLATION> <SYM_EQ> "<" string_value() ">" ]
-      (
-        item = definition_item()
-        {
-          list.add(item);
-        }
-      )+
-    ]
+    <SYM_ITEMS> <SYM_EQ> "<"
+	    [
+	      (
+	        item = definition_item()
+	        {
+	          list.add(item);
+	        }
+	      )+
+	    ]
+	">"
   ">"
   { return new OntologyDefinitions(language, list); }
 }
@@ -701,30 +748,44 @@ DefinitionItem definition_item() :
   String description;
 }
 {
-  <SYM_ITEMS> "(" code = local_code_value() ")" <SYM_EQ> "<"
-    <SYM_TEXT> <SYM_EQ> "<" text = string_value() ">"
-    [ ";" ]
-    <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" description = string_value() ">"
+  "[" code = local_code_value() "]" <SYM_EQ> "<"
+    ( 
+      <SYM_TEXT> <SYM_EQ> "<" text = string_value() ">"
+      [ ";" ]
+      <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" description = string_value() ">"
+    |
+      <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" description = string_value() ">"
+      [ ";" ]
+      <SYM_TEXT> <SYM_EQ> "<" text = string_value() ">"      
+    )
   ">"
   { return new DefinitionItem(code, text, description); }
 }
 
-OntologyBinding term_binding() :
+List term_binding_list() :
 {
-  OntologyBinding binding;
+  List list = new ArrayList();	
+  OntologyBinding binding = null;
 }
 {
-  <SYM_TERM_BINDING> binding = ontology_binding_body()
-  { return binding; }
+  <SYM_TERM_BINDING> <SYM_EQ> "<"
+    ( binding = ontology_binding_body() )*
+    { list.add(binding); }
+  ">"
+  { return list; }
 }
 
-OntologyBinding constraint_binding() :
+List constraint_binding_list() :
 {
-  OntologyBinding binding;
+  List list = new ArrayList();	 
+  OntologyBinding binding = null;
 }
 {
-   <SYM_CONSTRAINT_BINDING> binding = ontology_binding_body()
-  { return binding; }
+   <SYM_CONSTRAINT_BINDING> <SYM_EQ> "<"
+     ( binding = ontology_binding_body() )*
+     { list.add(binding); }
+   ">"
+  { return list; }
 }
 
 OntologyBinding ontology_binding_body() :
@@ -735,21 +796,22 @@ OntologyBinding ontology_binding_body() :
   OntologyBindingItem item;
 }
 {
-   "(" terminology = string_value() ")"
+   "[" terminology = string_value() "]" <SYM_EQ> "<"
+     
+     <SYM_ITEMS> <SYM_EQ> "<"
 
-   <SYM_EQ> "<"
-
-    [ <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" dadl_text() ">" ]
-
-    (
-      LOOKAHEAD( query_binding_item() )
-      item = query_binding_item()
-      { bindingList.add(item); }
-    |
-      LOOKAHEAD( term_binding_item() )
-      item = term_binding_item()
-      { bindingList.add(item); }
-    )+
+	    [ <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" dadl_text() ">" ]
+	
+	    (
+	      LOOKAHEAD( query_binding_item() )
+	      item = query_binding_item()
+	      { bindingList.add(item); }
+	    |
+	      LOOKAHEAD( term_binding_item() )
+	      item = term_binding_item()
+	      { bindingList.add(item); }
+	    )+
+	 ">"
   ">"
   { return new OntologyBinding(terminology, bindingList); }
 }
@@ -761,14 +823,14 @@ TermBindingItem term_binding_item() :
   List terms = new ArrayList();
 }
 {
-  <SYM_ITEMS> "("
+  "["
   (
     LOOKAHEAD( local_code_value())
     code = local_code_value()
   |
     code = local_code_path_value()
   )
-  ")" <SYM_EQ> "<"
+  "]" <SYM_EQ> "<"
     term = term_code() {
       terms.add(term);
     }
@@ -1803,6 +1865,7 @@ List c_attr_values(String path) :
   CObject c = null;
 }
 {
+  (	
     LOOKAHEAD(2)
     c_any()
   |
@@ -1812,7 +1875,7 @@ List c_attr_values(String path) :
       c = c_object(path)
       { list.add(c); }
     )*
-
+  )
   { return list; }
 }
 
@@ -2119,12 +2182,21 @@ Ordinal ordinal() :
 }
 {
   value = integer_value()
-  "|" "["
-    t = <V_TERMINOLOGY_ID> { terminology = t.image; }
-    "::"
+  "|" 
+    t = <V_TERMINOLOGY_ID_BLOCK> 
+    { 
+		// remove leading "[" and trailing "::"
+    	terminology = t.image; 
+    	terminology = terminology.substring(1, terminology.length() - 2);
+    }
     t = <V_TERM_CODE> { code = t.image; }
   "]"
-  { return new Ordinal(value, terminology, code); }
+  { 
+  	// leave lexical state "TERM_CODE"
+  	token_source.SwitchTo(CADL);
+  	
+  	return new Ordinal(value, terminology, code); 
+  }
 }
 
 CCodedText term_code_constraint(String path) :
@@ -2134,9 +2206,12 @@ CCodedText term_code_constraint(String path) :
   List codeList = new ArrayList();
 }
 {
-  "["
-    t = <V_TERMINOLOGY_ID> { terminology = t.image; }
-    "::"
+  t = <V_TERMINOLOGY_ID_BLOCK> 
+    { 
+		// remove leading "[" and trailing "::"
+    	terminology = t.image; 
+    	terminology = terminology.substring(1, terminology.length() - 2);
+    }
     [
       t = <V_TERM_CODE> { codeList.add(t.image); }
       (
@@ -2144,7 +2219,12 @@ CCodedText term_code_constraint(String path) :
       )*
     ]
   "]"
-  { return new CCodedText(path, terminology, codeList); }
+  { 
+  	// leave lexical state "TERM_CODE"
+  	token_source.SwitchTo(CADL);
+  	
+  	return new CCodedText(path, terminology, codeList); 
+  }
 }
 
 CQuantity c_quantity(String path) :

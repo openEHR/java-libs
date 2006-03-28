@@ -37,13 +37,14 @@ public class ArchetypeDescriptionItem {
      * @param use
      * @param misuse
      * @param copyright
+     * @param keywords
      * @throws IllegalArgumentException if language null or not valid
      *                                  purpose null or empty;
      *                                  use, misuses and rights empty
      */
     public ArchetypeDescriptionItem(CodePhrase language, String purpose,
                                     String use, String misuse, 
-                                    String copyright, 
+                                    String copyright, List<String> keywords,
                                     List<String> originalResourceUri,
                                     Map<String,String> otherDetails) {
         if (language == null) {
@@ -69,6 +70,7 @@ public class ArchetypeDescriptionItem {
         this.use = use;
         this.misuse = misuse;
         this.copyright = copyright;
+        this.keywords = keywords;
         this.originalResourceUri = originalResourceUri;
         this.otherDetails = otherDetails;
     }
@@ -85,7 +87,7 @@ public class ArchetypeDescriptionItem {
     public ArchetypeDescriptionItem(CodePhrase language, String purpose,
                                     String use, String misuse,
                                     String copyright) {
-        this(language, purpose, use, misuse, copyright, null, null);
+        this(language, purpose, use, misuse, copyright, null, null, null);
     }
 
     /**
@@ -95,7 +97,7 @@ public class ArchetypeDescriptionItem {
      * @param purpose
      */
     public ArchetypeDescriptionItem(CodePhrase language, String purpose) {
-        this(language, purpose, null, null, null, null, null);
+        this(language, purpose, null, null, null, null, null, null);
     }
 
     /**
@@ -146,7 +148,13 @@ public class ArchetypeDescriptionItem {
     public String getCopyright() {
         return copyright;
     }
-
+    
+    /**
+     * List of keywords
+     */
+    public List<String> getKeywords() {
+    	return keywords;
+    }
     /**
      * URI of original clinical document(s) or description of which archetype
      * is a formalisation, in the language of this description item.
@@ -182,6 +190,7 @@ public class ArchetypeDescriptionItem {
     private String use;
     private String misuse;
     private String copyright;
+    private List<String> keywords;
     private List<String> originalResourceUri;
     private Map<String,String> otherDetails;
 }

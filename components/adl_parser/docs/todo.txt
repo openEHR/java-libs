@@ -21,3 +21,9 @@ TODO List of Archetype Model
 .implement path(), hasPath() within all constraint classes
 .implement isValid() within all constraint classes
 .implement isSubsetOf() with all constraint classes
+
+2006/03/26
+.update term_definitions()
+.support for assumed values
+.support for "[]" 
+.support for C_QUANTITY
