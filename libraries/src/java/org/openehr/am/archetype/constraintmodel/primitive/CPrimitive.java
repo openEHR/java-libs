@@ -63,6 +63,20 @@ public abstract class CPrimitive {
      * @return datavalue or null if not assigned
      */
     public abstract Object assignedValue();
+    
+    /**
+     * Return true if there is an assumed value
+     * 
+     * @return true if has an assumed value
+     */
+    public abstract boolean hasAssumedValue();
+    
+    /**
+     * Value to be assumed if none sent in data
+     * 
+     * @return an assumed value
+     */
+    public abstract Object assumedValue();
 }
 
 /*

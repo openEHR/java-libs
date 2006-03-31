@@ -31,7 +31,29 @@ import java.util.List;
 public final class CTime extends CPrimitive {
 
     /**
-     * Construct a TimeConstraint
+     * Construct a TimeConstraint with an assumed value
+     *
+     * @param pattern
+     * @param interval Interval<DvTime>
+     * @param list     List<DvTime>
+     * @param assumedValue
+     * @throws IllegalArgumentException if both pattern and interval
+     *                                  both null or both not null
+     */
+    public CTime(String pattern, Interval<DvTime> interval, List<DvTime> list,
+    		DvTime assumedValue) {
+        if (interval == null && pattern == null && list == null) {
+            throw new IllegalArgumentException(
+                    "pattern, interval and list can't be all null");
+        }
+        this.pattern = pattern;
+        this.interval = interval;
+        this.list = ( list == null ? null : new ArrayList<DvTime>(list) );
+        this.assumedValue = assumedValue;
+    }
+    
+    /**
+     * Construct a TimeConstraint without assumed value
      *
      * @param pattern
      * @param interval Interval<DvTime>
@@ -40,15 +62,9 @@ public final class CTime extends CPrimitive {
      *                                  both null or both not null
      */
     public CTime(String pattern, Interval<DvTime> interval, List<DvTime> list) {
-        if (interval == null && pattern == null && list == null) {
-            throw new IllegalArgumentException(
-                    "pattern, interval and list can't be all null");
-        }
-        this.pattern = pattern;
-        this.interval = interval;
-        this.list = ( list == null ? null : new ArrayList<DvTime>(list) );
+    	this(pattern, interval, list, null);
     }
-
+    	
     /**
      * Return the primitive type this constraint is applied on
      *
@@ -145,10 +161,21 @@ public final class CTime extends CPrimitive {
         return list == null ? null : Collections.unmodifiableList(list);
     }
 
+    @Override
+	public boolean hasAssumedValue() {
+		return assumedValue != null;
+	}
+
+	@Override
+	public Object assumedValue() {
+		return assumedValue;
+	}
+
     /* fields */
     private final String pattern;
     private final Interval<DvTime> interval;
     private final List<DvTime> list;
+    private final DvTime assumedValue;
 }
 
 /*

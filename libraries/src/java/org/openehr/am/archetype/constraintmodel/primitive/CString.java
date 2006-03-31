@@ -30,20 +30,33 @@ import java.util.List;
 public final class CString extends CPrimitive {
 
     /**
-     * Constructs a StringConstraint
+     * Constructs a StringConstraint with an assumed value
+     *
+     * @param pattern
+     * @param list    List<String>
+     * @param assumedValue
+     * @throws IllegalArgumentException if pattern not null and empty
+     */
+    public CString(String pattern, List<String> list, String assumedValue) {
+        if (pattern != null && StringUtils.isEmpty(pattern)) {
+            throw new IllegalArgumentException("empty pattern");
+        }
+        this.pattern = pattern;
+        this.list = ( list == null ? null : new ArrayList<String>(list) );
+        this.assumedValue = assumedValue;
+    }
+    
+    /**
+     * Constructs a StringConstraint without assumed value
      *
      * @param pattern
      * @param list    List<String>
      * @throws IllegalArgumentException if pattern not null and empty
      */
     public CString(String pattern, List<String> list) {
-        if (pattern != null && StringUtils.isEmpty(pattern)) {
-            throw new IllegalArgumentException("empty pattern");
-        }
-        this.pattern = pattern;
-        this.list = ( list == null ? null : new ArrayList<String>(list) );
+    	this(pattern, list, null);
     }
-
+    	
     /**
      * Return the primitive type this constraint is applied on
      *
@@ -122,10 +135,20 @@ public final class CString extends CPrimitive {
     public List<String> getList() {
         return list == null ? null : Collections.unmodifiableList(list);
     }
+    @Override
+	public boolean hasAssumedValue() {
+		return assumedValue != null;
+	}
 
+	@Override
+	public Object assumedValue() {
+		return assumedValue;
+	}
     /* fields */
     private final String pattern;
     private final List<String> list;
+    private final String assumedValue;
+	
 }
 
 /*

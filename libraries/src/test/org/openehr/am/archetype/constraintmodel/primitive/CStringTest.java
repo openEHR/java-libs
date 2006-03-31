@@ -83,6 +83,11 @@ public class CStringTest extends TestCase {
         String text = cs.assignedValue();
         assertEquals("wrong value", "apple", text);
     }
+    
+    public void testConstructorWithoutAssumedValue() throws Exception {
+    	CString cs = new CString("file.*", null);
+        assertFalse("shouldn't have an assumed value", cs.hasAssumedValue());        
+    }
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

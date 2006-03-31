@@ -2267,6 +2267,8 @@ CInteger c_integer() :
   int i = 0;
   List list = null;
   Interval interval = null;
+  int assumed = 0;
+  Integer assumedValue = null;
 }
 {
   (
@@ -2281,9 +2283,12 @@ CInteger c_integer() :
     LOOKAHEAD( occurrence_spec())
     interval = occurrence_spec()
   )
+  [ ";" assumed = integer_value() 
+		{ assumedValue = new Integer(assumed); }  
+  ]
   {
     if(interval != null) {
-      return new CInteger(interval, null);
+      return new CInteger(interval, null, assumedValue);
     }
     List set = new ArrayList();
     if(list != null) {
@@ -2291,7 +2296,7 @@ CInteger c_integer() :
     } else {
       set.add(new Integer(i));
     }
-    return new CInteger(null, set);
+    return new CInteger(null, set, assumedValue);
   }
 }
 
@@ -2299,6 +2304,8 @@ CReal c_real() :
 {
   double d = 0;
   List list = null;
+  double assumed = 0.0;
+  Double assumedValue = null;
   Interval interval = null;
 }
 {
@@ -2311,9 +2318,13 @@ CReal c_real() :
     LOOKAHEAD( real_value() )
     d = real_value()
   )
+  [ 
+  	";" assumed = real_value()
+  	{ assumedValue = new Double(assumed); }
+  ]
   {
     if(interval != null) {
-      return new CReal(interval, null);
+      return new CReal(interval, null, assumedValue);
     }
     List set = new ArrayList();
     if(list != null) {
@@ -2321,7 +2332,7 @@ CReal c_real() :
     } else {
       set.add(new Double(d));
     }
-    return new CReal(null, set);
+    return new CReal(null, set, assumedValue);
   }
 }
 
@@ -2331,6 +2342,7 @@ CDate c_date() :
   DvDate date = null;
   String pattern = null;
   Interval interval = null;
+  DvDate assumed = null;
 }
 {
   (
@@ -2341,13 +2353,16 @@ CDate c_date() :
   |
     interval = date_interval_value()
   )
+  [ 
+    ";" assumed = date_value()
+  ]
   {
     List set = null;
     if(date != null) {
         set = new ArrayList();
         set.add(date);
     }
-    return new CDate(pattern, interval, set);
+    return new CDate(pattern, interval, set, assumed);
   }
 }
 
@@ -2357,6 +2372,7 @@ CTime c_time() :
   String pattern = null;
   DvTime time = null;
   Interval interval = null;
+  DvTime assumed = null;
 }
 {
   (
@@ -2367,13 +2383,16 @@ CTime c_time() :
   |
     interval = time_interval_value()
   )
+  [ 
+    ";" assumed = time_value()
+  ]
   {
     List set = null;
     if(time != null) {
       set = new ArrayList();
       set.add(time);
     }
-    return new CTime(pattern, interval, set);
+    return new CTime(pattern, interval, set, assumed);
   }
 }
 
@@ -2383,6 +2402,7 @@ CDateTime c_date_time() :
   String pattern = null;
   DvDateTime datetime = null;
   Interval interval = null;
+  DvDateTime assumed = null;
 }
 {
   (
@@ -2393,13 +2413,16 @@ CDateTime c_date_time() :
   |
     interval = date_time_interval_value()
   )
+  [ 
+    ";" assumed = date_time_value()
+  ]
   {
     List set = null;
     if(datetime != null) {
       set = new ArrayList();
       set.add(datetime);
     }
-    return new CDateTime(pattern, interval, set);
+    return new CDateTime(pattern, interval, set, assumed);
   }
 }
 
@@ -2407,6 +2430,7 @@ CDuration c_duration() :
 {
   DvDuration value = null;
   Interval interval = null;
+  DvDuration assumed = null;
 }
 {
   (
@@ -2414,8 +2438,11 @@ CDuration c_duration() :
   |
     interval = duration_interval_value()
   )
+  [ 
+    ";" assumed = duration_value()
+  ]
   {
-    return new CDuration(value, interval);
+    return new CDuration(value, interval, assumed);
   }
 }
 
@@ -2424,6 +2451,7 @@ CString c_string() :
   Token t = null;
   String value = null;
   String pattern = null;
+  String assumed = null;
   List list = null;
 }
 {
@@ -2440,9 +2468,10 @@ CString c_string() :
       pattern = reg.substring(1, reg.length() - 1);
     }
   )
+  [";" assumed = string_value() ]
   {
     if(pattern != null) {
-      return new CString(pattern, null);
+      return new CString(pattern, null, assumed);
     }
     List set = new ArrayList();
     if(list != null) {
@@ -2450,7 +2479,7 @@ CString c_string() :
     } else if(value != null) {
       set.add(value);
     }
-    return new CString(pattern, set);
+    return new CString(pattern, set, assumed);
   }
 }
 
@@ -2458,6 +2487,8 @@ CBoolean c_boolean() :
 {
   boolean trueAllowed = false;
   boolean falseAllowed = false;
+  boolean assumed = false;  
+  boolean hasAssumed = false;
 }
 {
   (
@@ -2466,8 +2497,13 @@ CBoolean c_boolean() :
   | <SYM_FALSE> { falseAllowed = true; }
     [ "," <SYM_TRUE> { trueAllowed = true; } ]
   )
+  [ 
+    ";" 
+    ( <SYM_TRUE> {assumed = true; } | <SYM_FALSE> {assumed = false;} ) 
+    { hasAssumed = true; }
+  ]
   {
-    return new CBoolean(trueAllowed, falseAllowed);
+    return new CBoolean(trueAllowed, falseAllowed, assumed, hasAssumed);
   }
 }
 

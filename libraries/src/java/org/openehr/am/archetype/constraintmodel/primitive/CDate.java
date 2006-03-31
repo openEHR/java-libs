@@ -33,7 +33,29 @@ import java.util.List;
 public final class CDate extends CPrimitive {
 
     /**
-     * Constructs a DateConstraint
+     * Constructs a DateConstraint with an assumed value
+     *
+     * @param pattern
+     * @param interval Interval<DvDate>
+     * @param list     List<DvDate>
+     * @param assumedValue
+     * @throws IllegalArgumentException if both pattern and interval null
+     *                                  or not null
+     */
+    public CDate(String pattern, Interval<DvDate> interval, List<DvDate> list,
+    		DvDate assumedValue) {
+        if (interval == null && pattern == null && list == null) {
+            throw new IllegalArgumentException(
+                    "pattern, interval and list can't be all null");
+        }
+        this.pattern = pattern;
+        this.interval = interval;
+        this.list = ( list == null ? null : new ArrayList<DvDate>(list) );
+        this.assumedValue = assumedValue;
+    }
+    
+    /**
+     * Constructs a DateConstraint no assumed value
      *
      * @param pattern
      * @param interval Interval<DvDate>
@@ -42,13 +64,7 @@ public final class CDate extends CPrimitive {
      *                                  or not null
      */
     public CDate(String pattern, Interval<DvDate> interval, List<DvDate> list) {
-        if (interval == null && pattern == null && list == null) {
-            throw new IllegalArgumentException(
-                    "pattern, interval and list can't be all null");
-        }
-        this.pattern = pattern;
-        this.interval = interval;
-        this.list = ( list == null ? null : new ArrayList<DvDate>(list) );
+    	this(pattern, interval, list, null);
     }
 
     /**
@@ -160,6 +176,16 @@ public final class CDate extends CPrimitive {
     public List<DvDate> getList() {
         return list == null ? null : Collections.unmodifiableList(list);
     }
+    
+    @Override
+	public boolean hasAssumedValue() {
+		return assumedValue != null;
+	}
+
+	@Override
+	public Object assumedValue() {
+		return assumedValue;
+	}
 
     /* static fields */
     public final String FULL_PATTERN = "yyyy-MM-dd";
@@ -169,6 +195,7 @@ public final class CDate extends CPrimitive {
     private final String pattern;
     private final Interval<DvDate> interval; // Interval<DvDate>
     private final List<DvDate> list; // List<DvDate>
+    private final DvDate assumedValue;
 }
 
 /*
@@ -184,7 +211,7 @@ public final class CDate extends CPrimitive {
  *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
  *  for the specific language governing rights and limitations under the
  *  License.
- *
+ *f
  *  The Original Code is CDate.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.

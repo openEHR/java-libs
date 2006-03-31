@@ -30,20 +30,33 @@ import java.util.List;
 public final class CReal extends CPrimitive {
 
     /**
-     * Constructs a RealConstraint
+     * Constructs a RealConstraint with an assumed value
      *
      * @param interval Interval<Double>
      * @param list     List<Double>
+     * @param assumedValue
+     * @throws IllegalArgumentException if boht null or bot not null
      */
-    public CReal(Interval<Double> interval, List<Double> list) {
+    public CReal(Interval<Double> interval, List<Double> list,
+    		Double assumedValue) {
         if (( interval != null && list != null )
                 || ( interval == null && list == null )) {
             throw new IllegalArgumentException("both null or both not null");
         }
         this.interval = interval;
         this.list = ( list == null ? null : new ArrayList<Double>(list) );
+        this.assumedValue = assumedValue;
     }
 
+    /**
+     * Constructs a RealConstraint without assumed value
+     *
+     * @param interval Interval<Double>
+     * @param list     List<Double>
+     */
+    public CReal(Interval<Double> interval, List<Double> list) {
+    	this(interval, list, null);
+    }
     /**
      * Return the primitive type this constraint is applied on
      *
@@ -130,10 +143,21 @@ public final class CReal extends CPrimitive {
     public Interval<Double> getInterval() {
         return interval;
     }
+    
+	@Override
+	public boolean hasAssumedValue() {
+		return assumedValue != null;
+	}
+
+	@Override
+	public Object assumedValue() {
+		return assumedValue;
+	}
 
     /* fields */
     private final List<Double> list;
     private final Interval<Double> interval;
+    private final Double assumedValue;
 }
 
 /*
