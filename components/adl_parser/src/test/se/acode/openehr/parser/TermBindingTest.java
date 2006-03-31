@@ -39,12 +39,17 @@ public class TermBindingTest extends ADLParserTestBase {
         super(test);
     }
 
-    public void testParse() throws Exception {
+    /**
+     * Verifies term binding by multiple terminolgies
+     * 
+     * @throws Exception
+     */
+    public void testTermBindingWithMultiTerminologies() throws Exception {
         ADLParser parser = new ADLParser(new File(dir,
                 "adl-test-entry.term_binding.test.adl"));
         Archetype archetype = parser.parse();
 
-        /*// verify the first term binding
+        // verify the first term binding
         OntologyBinding binding = archetype.getOntology().getTermBindingList().get(0);
         assertEquals("wrong binding terminology", "SNOMED_CT", binding.getTerminology());
 
@@ -63,7 +68,7 @@ public class TermBindingTest extends ADLParserTestBase {
         assertEquals("wrong local code", "at0000", item.getCode());
         assertEquals("wrong terms size", 2, item.getTerms().size());
         assertEquals("wrong 1st term", "[icd10::1000]", item.getTerms().get(0));
-        assertEquals("wrong 2nd term", "[icd10::1001]", item.getTerms().get(1));*/
+        assertEquals("wrong 2nd term", "[icd10::1001]", item.getTerms().get(1));
 
     }
 }

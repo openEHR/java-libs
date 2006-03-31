@@ -190,7 +190,7 @@ public class ADLOutputterTest extends TestCase {
         List<OntologyBinding> termBindingList = new ArrayList<OntologyBinding>();
         termBindingList.add(ontologyBind);
         
-        Query query = new Query("terminology", "terminology_id = local; synonym_of [300000]");
+        Query query = new Query("http://terminology.org?terminology_id=snomed_ct&&has_relation=[102002];with_target=[128004]");
         QueryBindingItem queryBindItem = new QueryBindingItem("ac0001",query); 
         List<OntologyBindingItem> constraintBindList = new ArrayList<OntologyBindingItem>();
         constraintBindList.add(queryBindItem);
@@ -245,7 +245,7 @@ public class ADLOutputterTest extends TestCase {
         		"    constraint_binding = <\r\n" +
         		"        [\"local\"] = <\r\n" +
         		"            items = <\r\n" +
-        		"                [\"ac0001\"] = <query(\"terminology\", \"terminology_id = local; synonym_of [300000]\")>\r\n" +
+        		"                [\"ac0001\"] = <http://terminology.org?terminology_id=snomed_ct&&has_relation=[102002];with_target=[128004]>\r\n" +
         	    "            >\r\n" +
         	    "        >\r\n" +
         		"    >\r\n");

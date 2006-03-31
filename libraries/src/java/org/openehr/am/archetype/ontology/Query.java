@@ -21,27 +21,26 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * The class represents a query to external terminology service. Immutable.
  *
  * @author Rong Chen
- * @version 1.0
+ * @version 1.1
  */
 public class Query {
 
-    /**
+   /**
      * Constructor
-     *
-     * @param target
-     * @param conditions
+     * 
+     * @param url
      */
-    public Query(String target, String conditions) {
-        this.target = target;
-        this.conditions = conditions;
+    public Query(String url) {
+    	this.url = url;
     }
-
-    public String getTarget() {
-        return target;
-    }
-
-    public String getConditions() {
-        return conditions;
+    
+    /**
+     * The url of this query
+     * 
+     * @return url
+     */
+    public String getUrl() {
+    	return url;
     }
 
     /**
@@ -55,8 +54,7 @@ public class Query {
     }
 
     /* fields */
-    private String target;
-    private String conditions;
+    private String url;
 }
 
 /*

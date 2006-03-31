@@ -712,11 +712,7 @@ protected void printDescriptionItem(ArchetypeDescriptionItem item,
 					out.write("[\"");
 					out.write(item.getCode());
 					out.write("\"] = <");
-					out.write("query(\"");
-					out.write(item.getQuery().getTarget());
-					out.write("\", \"");
-					out.write(item.getQuery().getConditions());
-					out.write("\")");
+					out.write(item.getQuery().getUrl());
 					out.write(">");
 					newline(out);
 				}
