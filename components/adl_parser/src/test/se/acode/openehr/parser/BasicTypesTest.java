@@ -40,7 +40,7 @@ import java.util.*;
  * @version 1.0
  */
 
-public class ADLParserBasicTypesTest extends ADLParserTestBase {
+public class BasicTypesTest extends ParserTestBase {
 
 	/**
 	 * Create new test case
@@ -48,7 +48,7 @@ public class ADLParserBasicTypesTest extends ADLParserTestBase {
 	 * @param test
 	 * @throws Exception
 	 */
-	public ADLParserBasicTypesTest(String test) throws Exception {
+	public BasicTypesTest(String test) throws Exception {
 		super(test);
 	}
 

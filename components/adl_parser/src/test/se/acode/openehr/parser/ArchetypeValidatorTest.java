@@ -31,7 +31,7 @@ import java.util.HashMap;
  * @author Rong Chen
  * @version 1.0
  */
-public class ArchetypeValidatorTest extends ADLParserTestBase {
+public class ArchetypeValidatorTest extends ParserTestBase {
 
     public ArchetypeValidatorTest(String test) {
         super(test);
@@ -53,12 +53,12 @@ public class ArchetypeValidatorTest extends ADLParserTestBase {
         Map<String, String> expected = new HashMap<String, String>();
 
         // wrong target path
-        expected.put("/[at0000]/wheels[at0005]/parts",
-                "/[at0000]/engine[at0001]/parts[at0002]/");
+        expected.put("/wheels[at0005]/parts",
+                "/engine[at0001]/parts[at0002]");
 
         // wrong type
-        expected.put("/[at0000]/wheels[at0006]/parts",
-                "/[at0000]/wheels[at0001]/parts[at0002]/");
+        expected.put("/wheels[at0006]/parts",
+                "/wheels[at0001]/parts[at0002]");
 
         assertEquals(expected, validator.checkInternalReferences());
     }

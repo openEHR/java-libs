@@ -1,14 +1,14 @@
 archetype
-	openEHR-EHR-SECTION.HIV.test
+	adl-test-ENTRY.domain_types.test
 
 concept
-	[at0000]	-- HIV quality registry
+	[at0000]
 description
 	details = <
 		["en"] = <
 			language = <"en">
 			purpose = <"parser test for domain data types">
-			keywords = <"data types">
+			keywords = <"domain types">
 			copyright = <"copyright (c) 2004 ACODE HB">
 		>
 	>
@@ -20,8 +20,8 @@ description
 	>
 
 definition
-	INSTRUCTION[at0000] matches {	-- HIV medication order
-        action matches {
+	ENTRY[at0000] matches {	
+        types matches {
             LIST[at0001] matches {
                 items cardinality matches {0..*} matches {
                     ELEMENT[at10001] matches {	-- ordinal
@@ -41,21 +41,47 @@ definition
                             at2001.2] 	-- completed
                         }
                     }
-                    ELEMENT[at10003] matches {	-- quantity
-                        value matches {
-                            QUANTITY matches {
-                                magnitude matches {|10.0..100.0|}
-                                units matches {"mg"}
-                            }
-                        }
+                    
+                    -- newly added openehr profile domain types
+                    -- implementation of Release 1.0
+                    
+                    ELEMENT[at10005] matches {	-- c_quantity     
+	                    value matches {
+							C_QUANTITY <
+								property = <"time">
+								list = <									
+									["1"] = <
+										units = <"yr">
+										magnitude = <|0.0..200.0|>
+									>
+									["2"] = <
+										units = <"mth">
+										magnitude = <|1.0..36.0|>
+									>									
+								>
+							>
+						}
                     }
-                    ELEMENT[at10004] matches {	-- count
-                        value matches {
-                            COUNT matches {
-                                magnitude matches {|1..8|}
-                            }
-                        }
-                    }
+                    
+                    -- not a domain type
+                    -- here for testing C_QUANTITY parsing
+                    
+                    ELEMENT[at10006] matches {	-- count     
+	                	value matches {
+							COUNT matches {
+								magnitude matches {|0..100|}
+							}
+						}
+					}	
+					
+					-- not a domain type
+					-- here for verifying a bug fix
+					
+					ELEMENT[at10006] matches {	-- count     
+	                	value matches {
+							COUNT matches {*}
+						}
+					}		
                 }
             }
         }
@@ -68,16 +94,16 @@ ontology
 		["en"] = <
 			items = <
 				["at0000"] = <
-					text = <"HIV quality registry headings">
-					description = <"headings for HIV quality registry">
+					text = <"domain types test">
+					description = <"domain types test">
 				>
 				["at0001"] = <
-					text = <"Medication">
-					description = <"HIV Medication">
+					text = <"items">
+					description = <"items">
 				>
 				["at0002"] = <
-					text = <"Lab">
-					description = <"HIV related lab result">
+					text = <"*">
+					description = <"*">
 				>
 				["at0003.0"] = <
 					text = <"capsule">

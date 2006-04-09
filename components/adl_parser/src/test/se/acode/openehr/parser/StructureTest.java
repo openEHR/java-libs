@@ -31,7 +31,7 @@ import java.io.File;
  * @author Rong Chen
  * @version 1.0
  */
-public class ADLParserStructureTest extends ADLParserTestBase {
+public class StructureTest extends ParserTestBase {
 
     public void setUp() throws Exception {
         ADLParser parser = new ADLParser(new File(dir,
@@ -44,7 +44,7 @@ public class ADLParserStructureTest extends ADLParserTestBase {
 
     }
 
-    public ADLParserStructureTest(String test) {
+    public StructureTest(String test) {
         super(test);
     }
 

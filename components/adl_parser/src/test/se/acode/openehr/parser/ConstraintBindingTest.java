@@ -29,7 +29,7 @@ import java.util.List;
  * @author Rong Chen
  * @version 1.0
  */
-public class ConstraintBindingTest extends ADLParserTestBase {
+public class ConstraintBindingTest extends ParserTestBase {
 
     /**
      * Create new test case

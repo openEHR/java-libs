@@ -1,5 +1,5 @@
 archetype
-	openEHR-EHR-COMPOSITION.test_two.test
+	openEHR-EHR-COMPOSITION.round_trip.test
 
 concept
 	[at0000]
@@ -8,7 +8,7 @@ description
 	details = <
 		["en"] = <
 			language = <"en">
-			purpose = <"parser test for composition">
+			purpose = <"parser round_trip for composition">
 			keywords = <"test composition">
 			copyright = <"copyright (c) 2004 ACODE HB">
 		>
@@ -64,14 +64,6 @@ definition
                                             ELEMENT[at2004] matches {	-- Name of medication
                                                 value matches  {/.*/}
                                             }
-                                            ELEMENT[at2005] matches {	-- Strength
-                                                value matches {
-                                                    QUANTITY matches {
-                                                        magnitude matches {|>=0.0|}
-                                                        units matches {"mg"}
-                                                    }
-                                                }
-                                            }
                                             ELEMENT[at2006] matches {	-- Form
                                                 value matches {
                                                     1|[local::at2006.0], 	-- capsule
@@ -80,14 +72,7 @@ definition
                                                     4|[local::at2006.3],  	-- solution
                                                     5|[local::at2006.4]  	-- suspension
                                                 }
-                                            }
-                                            ELEMENT[at2007] matches {	-- Count
-                                                value matches {
-                                                    COUNT matches {
-                                                        magnitude matches {|1..8|}
-                                                    }
-                                                }
-                                            }
+                                            }                                            
                                         }
 									}
                                 }
@@ -125,22 +110,6 @@ definition
                                             }
                                             CLUSTER[at3200] matches {	-- left eye
                                                 items cardinality matches {*; ordered} matches {
-                                                    ELEMENT[at3201] matches {  -- acuity unaided
-                                                        value matches {
-                                                            QUANTITY matches {
-                                                                magnitude matches {|>=0.0|}
-                                                                units matches {"s"}
-                                                            }
-                                                        }
-                                                    }
-                                                    ELEMENT[at3202] matches {  -- acuity w/glasses
-                                                        value matches {
-                                                            QUANTITY matches {
-                                                                magnitude matches {|>=0.0|}
-                                                                units matches {"s"}
-                                                            }
-                                                        }
-                                                    }
                                                     ELEMENT[at3203] matches {  -- color
                                                         value matches {
                                                             1|[local::at3203.0], 	-- normal
@@ -153,22 +122,6 @@ definition
                                             }
                                             CLUSTER[at3300] matches {  -- right eye
                                                 items cardinality matches {*; ordered} matches {
-                                                    ELEMENT[at3301] matches {  -- acuity unaided
-                                                        value matches {
-                                                            QUANTITY matches {
-                                                                magnitude matches {|>=0.0|}
-                                                                units matches {"s"}
-                                                            }
-                                                        }
-                                                    }
-                                                    ELEMENT[at3302] matches {  -- acuity w/glasses
-                                                        value matches {
-                                                            QUANTITY matches {
-                                                                magnitude matches {|>=0.0|}
-                                                                units matches {"s"}
-                                                            }
-                                                        }
-                                                    }
                                                     ELEMENT[at3303] matches {  -- color
                                                         value matches {
                                                             1|[local::at3303.0], 	-- normal

@@ -27,7 +27,7 @@ import java.io.StringWriter;
  * @author Rong Chen
  * @version 1.0
  */
-public class TermBindingTest extends ADLParserTestBase {
+public class TermBindingTest extends ParserTestBase {
 
     /**
      * Create new test case

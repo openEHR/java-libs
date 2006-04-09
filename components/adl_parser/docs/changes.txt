@@ -7,3 +7,13 @@
 .dependency to the latest kernel-1.2.5-SNAPSHOT
 .updated archetype description
 .updated archetype ontology 
+
+2006/03/29
+.added support for assumed values
+
+2006/04/08
+.adjusted object path syntax
+.updated some unit tests
+.added support for C_QUANTITY
+.removed C_COUNT syntax
+.added a directory based parsing for convenient testing 

@@ -8,7 +8,7 @@ import org.openehr.am.archetype.output.ADLOutputter;
 
 import junit.framework.TestCase;
 
-public class ArchetypeSlotTest extends ADLParserTestBase {
+public class ArchetypeSlotTest extends ParserTestBase {
 
 	/**
      * Create new test case

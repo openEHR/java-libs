@@ -36,6 +36,7 @@ import java.text.*;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.quantity.datetime.*;
+import org.openehr.rm.datatypes.text.*;
 
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.description.*;
@@ -43,6 +44,7 @@ import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
 import org.openehr.am.archetype.constraintmodel.domain.*;
 import org.openehr.am.archetype.ontology.*;
+import org.openehr.am.openehrprofile.datatypes.quantity.*;
 
 /**
  * JavaCC grammer file for Archteype Definition Language (ADL)
@@ -52,7 +54,7 @@ import org.openehr.am.archetype.ontology.*;
  * Included uriGrammarFragment.txt from Gregory Kick
  *
  * @author Rong Chen (rong@acode.se)
- * @version 1.2
+ * @version 1.3
  */
 
 public class ADLParser {
@@ -88,9 +90,9 @@ public class ADLParser {
 
 
   /* ===================  entry point from command-line  ================ */
-  public static void main(String args[]) {
-    ADLParser parser;
-    String title = "ADL 1.2 Parser: ";
+  public static void main(String args[]) throws IOException {
+    ADLParser parser = null;
+    String title = "ADL 1.3 Parser: ";
 
 // read from stdin disabled
 //    if (args.length == 0) {
@@ -106,11 +108,51 @@ public class ADLParser {
         System.out.println(title + "  File " + args[0] + " not found.");
         return;
       }
+    } else if(args.length == 2 && "-d".equals(args[0])) {
+    	System.out.println(title + "  Reading from directory " + args[1] + " . . .");
+    	File dir = new File(args[1]);	
+    	if( ! dir.isDirectory()) {
+    		System.out.println(args[1] + " not a directory.. aborted");
+    		return;	
+    	}
+    	File[] files = dir.listFiles();
+    	if(files == null || files.length == 0) {
+    		System.out.println(args[1] + " has no file.. aborted");
+    		return;	
+    	}
+    	int passed = 0;
+    	int total = 0;
+    	for(int i = 0; i < files.length; i++) {
+    		if( ! files[i].getName().endsWith(".adl")) {
+    			continue;
+    		}
+    		if(parser == null) {
+    			parser = new ADLParser(files[i]);
+    		} else {
+    			parser.reInit(files[i]);
+    		}    		
+    		total++;
+    		try {
+		      Archetype a = parser.archetype();
+		      System.out.println(files[i] + "  parsed successfully");
+		      passed ++;
+		    } catch (Throwable e) {
+		      e.printStackTrace();
+		      System.out.println(files[i] + "  failed in parsing");
+		    }
+    	}
+    	System.out.println("Total files parsed: " + total);
+    	System.out.println("Parsed successfully: " + passed);
+    	System.out.println("Failed in parsing: " + (total - passed));
+    	
+    	return;	
     } else {
       System.out.println(title + "  Usage is one of:");
       System.out.println("         java ADLParser < inputfile");
       System.out.println("OR");
       System.out.println("         java ADLParser inputfile");
+      System.out.println("OR");
+      System.out.println("         java ADLParser -d directory");
       return;
     }
     try {
@@ -198,7 +240,7 @@ PARSER_END(ADLParser)
 | < SYM_TRANSLATION: "translation">
 }
 
-< CADL,DOMAIN_TYPE_QUANTITY,DOMAIN_TYPE_COUNT > TOKEN [IGNORE_CASE]: /* KEYWORDS - cADL */
+< CADL > TOKEN [IGNORE_CASE]: /* KEYWORDS - cADL */
 {
   < SYM_THEN: "then">
 | < SYM_ELSE: "else">
@@ -223,19 +265,16 @@ PARSER_END(ADLParser)
 | < SYM_EXCLUDE: "exclude">
 | < SYM_START_CBLOCK: "{">
 | < SYM_END_CBLOCK: "}">
-| < SYM_QUANTITY: "quantity" >: DOMAIN_TYPE_QUANTITY
-| < SYM_COUNT: "count" >: DOMAIN_TYPE_COUNT
+| < SYM_C_QUANTITY: "c_quantity" >: DOMAIN_TYPE_C_QUANTITY
+| < SYM_UNITS: "units">: DOMAIN_TYPE_C_QUANTITY 
 }
 
-< DOMAIN_TYPE_QUANTITY > TOKEN [IGNORE_CASE]:
+< DOMAIN_TYPE_C_QUANTITY > TOKEN [IGNORE_CASE]:
 {
-  < SYM_QUANTITY_MAGNITUDE: "magnitude">
-| < SYM_UNITS: "units"> : CADL
-}
-
-< DOMAIN_TYPE_COUNT > TOKEN [IGNORE_CASE]:
-{
-  < SYM_COUNT_MAGNITUDE: "magnitude"> : CADL
+  < SYM_PROPERTY: "property">
+| < SYM_LIST: "list">  
+| < SYM_C_QUANTITY_UNITS: "units"> 
+| < SYM_MAGNITUDE: "magnitude">: CADL
 }
 
 < * > TOKEN: /* SYMBOLS - common */
@@ -372,17 +411,9 @@ TOKEN : /* IDENTIFIERS - ADL */
                       "#" ( (["0"-"9"])+ | "x" (["0"-"9","a"-"f","A"-"F"])+ )
                     ) ";'">
 |
-  < #OBJ_PATH_SEGMENT: (<V_LOCAL_TERM_CODE_REF>)? "/" >
+  < #PATH_SEGMENT: "/" <V_ATTRIBUTE_IDENTIFIER> ( <V_LOCAL_TERM_CODE_REF>)? >
 |
-  < OBJECT_PATH: "/" <OBJ_PATH_SEGMENT>
-                 ( <V_ATTRIBUTE_IDENTIFIER> <OBJ_PATH_SEGMENT> )* >
-|
-  /* not used currently */
-  < #RELATION_PATH: <V_ATTRIBUTE_IDENTIFIER>
-                   ( <OBJ_PATH_SEGMENT> <V_ATTRIBUTE_IDENTIFIER> )* >
-|
-  /* not used currently  */
-  < #OG_PATH: <OBJECT_PATH> | <RELATION_PATH> >
+  < ADL_PATH: (  <PATH_SEGMENT> )+ >                    
 }
 
 /* ----------------------- TOKEN - dADL ---------------------------- */
@@ -620,7 +651,7 @@ Map map_value() :
 ArchetypeDescriptionItem arch_description_item() :
 {
   String lang;
-  String purpose;
+  String purpose = null;
   String use = null;
   String misuse = null;
   String copyright = null;
@@ -631,11 +662,12 @@ ArchetypeDescriptionItem arch_description_item() :
 }
 {
   "[" lang = string_value() "]" <SYM_EQ> "<"
-    
-    [ <SYM_LANGUAGE> <SYM_EQ> "<" lang = string_value() ">" ]
+  (
+    <SYM_LANGUAGE> <SYM_EQ> "<" lang = string_value() ">"
+  |	
     <SYM_PURPOSE> <SYM_EQ> "<" purpose = string_value() ">"
-    [ 
-     
+  |  
+          
       <SYM_KEYWORDS> <SYM_EQ> "<" 
         (
           LOOKAHEAD(2) 
@@ -650,15 +682,22 @@ ArchetypeDescriptionItem arch_description_item() :
 		)
          
       ">" 
-    ]
-    [ <SYM_COPYRIGHT> <SYM_EQ> "<" copyright = string_value() ">" ]    
-    [ <SYM_USE> <SYM_EQ> "<" use = string_value() ">" ]
-    [ <SYM_MISUSE> <SYM_EQ> "<" misuse = string_value() ">" ]
-    [ 
+   |
+    
+     <SYM_USE> <SYM_EQ> "<" use = string_value() ">"
+   | 
+   
+     <SYM_MISUSE> <SYM_EQ> "<" misuse = string_value() ">" 
+   | 
+   
+     <SYM_COPYRIGHT> <SYM_EQ> "<" copyright = string_value() ">" 
+   
+   |     
+      
       { String url = null; }
       <SYM_ORIGINAL_RESOURCE_URI> <SYM_EQ> "<" url = string_value() ">" 
       { originalResourceURI.add(url); }	
-    ]
+   )*
   ">"
   {
     CodePhrase langcode = new CodePhrase("openehr", lang);
@@ -1753,11 +1792,11 @@ CComplexObject c_complex_object(String path) :
   [ nodeID = constraint_ref() ]
   [ occurrences = c_occurrences() ]
   {
-    if(path == null) {
+  	if(path == null) {
       path = "/";
-    }
-    path += (nodeID == null ? "" : "[" + nodeID + "]" );
-    path += "/";
+    } else {
+      path += (nodeID == null ? "" : "[" + nodeID + "]");
+    }    
   }
   <SYM_MATCHES> <SYM_START_CBLOCK>
     attributes = c_complex_object_body(path)
@@ -1798,9 +1837,7 @@ CObject c_object(String path) :
 }
 {
   (
-      c = c_count(path)
-    |
-      c = c_quantity(path)
+      c = c_dv_quantity(path)    
     |
       c = c_complex_object(path)
     |
@@ -1830,7 +1867,7 @@ ArchetypeInternalRef archetype_internal_ref(String path) :
   String target;
 }
 {
-  <SYM_USE_NODE> type = type_identifier() target = object_path()
+  <SYM_USE_NODE> type = type_identifier() target = adl_path()
   { return new ArchetypeInternalRef(path, type, target); }
 }
 
@@ -1905,15 +1942,21 @@ CAttribute c_attribute(String path) :
   CAttribute attribute;
 }
 {
+  {
+  	if( ! path.endsWith("/")) {
+	    path += "/";
+  	}
+  }	
   name = attribute_identifier()
   [ existence = c_existence() ]
   [ cardinality = c_cardinality() ]
   <SYM_MATCHES> <SYM_START_CBLOCK>
-    children = c_attr_values(path + name)
+    children = c_attr_values(path +  name)
   <SYM_END_CBLOCK>
   {
-    path += "." + name;
-    if(cardinality == null) {
+  	path += name;
+  	
+  	if(cardinality == null) {
       attribute = new CSingleAttribute(path, name, existence, children);
     } else {
       attribute = new CMultipleAttribute(path, name, existence, cardinality,
@@ -2000,7 +2043,7 @@ Invariant invariant() :
 void Boolean_expression() :
 {}
 {
-  LOOKAHEAD( 3 ) <SYM_EXISTS> object_path()
+  LOOKAHEAD( 3 ) <SYM_EXISTS> adl_path()
 |
   LOOKAHEAD( 3 ) "(" Boolean_expression() ")"
 |
@@ -2045,14 +2088,16 @@ void Boolean_expression() :
 void Boolean_expression_sub() :
 {}
 {
-  <SYM_EXISTS> object_path()
+  <SYM_EXISTS> adl_path()
 |
   LOOKAHEAD( 3 )
   "(" Boolean_expression() ")"
 |
   LOOKAHEAD( 3 )
   call_path()
-| attribute_identifier() <SYM_MATCHES>(
+| 
+  LOOKAHEAD( 3 )
+  attribute_identifier() <SYM_MATCHES>(
                    <SYM_START_CBLOCK> c_primitive_object(null) <SYM_END_CBLOCK>
                  |
                    <V_REGEXP>
@@ -2291,39 +2336,46 @@ CCodedText term_code_constraint(String path) :
   }
 }
 
-CQuantity c_quantity(String path) :
+CDvQuantity c_dv_quantity(String path) :
 {
-  Interval magnitude = null;
-  String units;
+  // TODO: how to create codedText? skipped for now.. 	
+  DvCodedText property = null;
+  List list = null;
+  CDvQuantityItem item = null;
 }
 {
-  <SYM_QUANTITY> <SYM_MATCHES> <SYM_START_CBLOCK>
-      [
-        <SYM_QUANTITY_MAGNITUDE> <SYM_MATCHES> <SYM_START_CBLOCK>
-          magnitude = real_interval_value()
-        <SYM_END_CBLOCK>
-      ]
+  <SYM_C_QUANTITY> "<"
+    [
+      <SYM_PROPERTY> <SYM_EQ> "<"
+        string_value()
+      ">"
+    ] 
 
-      <SYM_UNITS> <SYM_MATCHES> <SYM_START_CBLOCK>
-        units = string_value()
-      <SYM_END_CBLOCK>
-  <SYM_END_CBLOCK>
-
-  { return new CQuantity(path, magnitude, units); }
+	[
+	  { list = new ArrayList(); }
+	  <SYM_LIST> <SYM_EQ> "<"	  
+	    ( 
+	      item = c_dv_quantity_item() 
+	      { list.add(item); }
+	    )+	  	  
+	  ">"
+    ]
+  ">"	   
+  { return new CDvQuantity(path, list, property); }
 }
 
-CCount c_count(String path) :
+CDvQuantityItem c_dv_quantity_item() :
 {
-  Interval magnitude;
+  Interval value = null;
+  String units;  	
 }
 {
-  <SYM_COUNT> <SYM_MATCHES> <SYM_START_CBLOCK>
-    <SYM_COUNT_MAGNITUDE> <SYM_MATCHES> <SYM_START_CBLOCK>
-      magnitude = integer_interval_value()
-    <SYM_END_CBLOCK>
-  <SYM_END_CBLOCK>
-
-  { return new CCount(path, magnitude); }
+  "[" string_value() "]" <SYM_EQ> "<"
+    (<SYM_C_QUANTITY_UNITS>|<SYM_UNITS>) <SYM_EQ> "<" units = string_value() ">"
+    <SYM_MAGNITUDE> <SYM_EQ> "<" 
+      value = real_interval_value() ">"
+  ">"
+  { return new CDvQuantityItem(value, units); } 		
 }
 
 CInteger c_integer() :
@@ -2632,15 +2684,88 @@ String attribute_identifier() :
 }
 
 
-String object_path() :
-{  Token t; }
+String adl_path() :
+{  
+  String path = null;
+  Token t;
+}
 {
-  t = <OBJECT_PATH>
-  { return t.image; }
+  t = <ADL_PATH>	
+  // path = movable_path() | path = absolute_path() | path = relative_path()
+  {
+  	path = t.image;  
+  	return path; 
+  }
+}
+
+String movable_path() :
+{ 
+  String path; 
+}
+{
+  "//" path = relative_path()	
+  { return "//" + path; }
+}
+
+String absolute_path() :
+{ 
+  String path; 
+  StringBuffer buf;
+}
+{
+  <SYM_SLASH> path = relative_path()
+  {
+  	buf = new StringBuffer("/");
+  	buf.append(path); 
+  }
+  (
+    LOOKAHEAD( 2 )
+    <SYM_SLASH> path = relative_path()
+    {
+      buf.append("/");
+      buf.append(path);
+    }	
+  )* 	
+  { return "/" + path; }
+}
+
+String relative_path() :
+{ 
+  StringBuffer buf;
+  String seg;	
+}
+{
+  seg = path_segment()
+  { buf = new StringBuffer(seg); }
+  ( 
+    LOOKAHEAD( 2 )
+    <SYM_SLASH> seg = path_segment()
+    {
+      buf.append("/");
+      buf.append(seg); 
+    } 
+  )*	
+  { return buf.toString(); }
+}
+
+String path_segment() :
+{ 
+  Token t; 
+  StringBuffer buf = new StringBuffer();
+}
+{
+  t = <V_ATTRIBUTE_IDENTIFIER>
+  { buf.append(t.image); } 
+  [
+    LOOKAHEAD(2)
+    t = <V_LOCAL_TERM_CODE_REF>
+    { buf.append(t.image); }
+  ]  	
+  { return buf.toString(); }	
 }
 
 void call_path() :
 {}
 {
-  ( object_path() "." attribute_identifier() )+ "." attribute_identifier()
+  ( adl_path() "." attribute_identifier() )+ "." attribute_identifier()
 }

@@ -64,16 +64,11 @@ public final class ArchetypeID extends ObjectID {
         rmEntity = tokens.nextToken();
 
         tokens = new StringTokenizer(domainConcept, SECTION_SEPARATOR);
-        if (tokens.countTokens() < 1 || tokens.countTokens() > 2) {
-            throw new IllegalArgumentException("bad format, too many sections for domainConcept, " +
-                    value);
-        }
         conceptName = tokens.nextToken();
         if (tokens.hasMoreTokens()) {
-            specialisation = tokens.nextToken();
-        } else {
-            specialisation = null;
-        }
+        	specialisation = domainConcept.substring(
+        			conceptName.length() + 1, domainConcept.length());        	
+        } 
         validateAll();
     }
 
@@ -124,9 +119,11 @@ public final class ArchetypeID extends ObjectID {
         validateName(rmName, "rm_name");
         validateName(rmEntity, "rm_entity");
         validateName(conceptName, "concept_name");
-        if (specialisation != null) {
-            validateName(specialisation, "specialisation");
-        }
+        
+        /* need to validate specialisation(s) separately */
+        // if (specialisation != null) {
+        //    validateName(specialisation, "specialisation");
+        // }
         validateVersionID(versionID);
     }
 
@@ -169,7 +166,7 @@ public final class ArchetypeID extends ObjectID {
                     + label + ": " + value);
         }
     }
-
+    
     private static void validateVersionID(String version) {
         if (!VERSION_PATTERN.matcher(version).matches()) {
             throw new IllegalArgumentException(
@@ -306,6 +303,7 @@ public final class ArchetypeID extends ObjectID {
 
     private static Pattern NAME_PATTERN =
             Pattern.compile("[a-zA-Z][a-zA-Z0-9()_/%$#&]*");
+    
     private static Pattern VERSION_PATTERN =
             Pattern.compile("[a-zA-Z0-9]+");
 

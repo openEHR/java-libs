@@ -49,7 +49,7 @@
             <groupId>openehr</groupId>
             <artifactId>openehr-kernel</artifactId>
             <version>1.2.5-SNAPSHOT</version>
-            <url>http://www.acode.se</url>
+            <url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>
         </dependency>
     </dependencies>
 

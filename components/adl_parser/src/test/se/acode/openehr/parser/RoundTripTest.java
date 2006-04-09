@@ -32,15 +32,15 @@ import java.io.StringWriter;
  * @author Rong Chen
  * @version 1.0
  */
-public class ADLParserOutputRoundTripTest extends ADLParserTestBase {
+public class RoundTripTest extends ParserTestBase {
 
-    public ADLParserOutputRoundTripTest(String test) {
+    public RoundTripTest(String test) {
         super(test);
     }
 
     public void testRoundTrip() throws Exception {
         ADLParser parser = new ADLParser(new File(dir,
-                "openEHR-EHR-COMPOSITION.test_two.test.adl"));
+                "openEHR-EHR-COMPOSITION.round_trip.test.adl"));
         Archetype archetypeOne = parser.parse();
 
         ADLOutputter outputter = new ADLOutputter();

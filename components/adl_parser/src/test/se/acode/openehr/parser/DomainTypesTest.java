@@ -22,6 +22,8 @@ package se.acode.openehr.parser;
 import org.openehr.am.archetype.constraintmodel.CObject;
 import org.openehr.am.archetype.constraintmodel.domain.*;
 import org.openehr.am.archetype.Archetype;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
 import org.openehr.rm.support.basic.Interval;
 
 import java.io.File;
@@ -34,9 +36,9 @@ import java.util.*;
  * @version 1.0
  */
 
-public class ADLParserDomainTypesTest extends ADLParserTestBase {
+public class DomainTypesTest extends ParserTestBase {
 
-    public ADLParserDomainTypesTest(String test) throws Exception {
+    public DomainTypesTest(String test) throws Exception {
         super(test);
     }
 
@@ -58,7 +60,7 @@ public class ADLParserDomainTypesTest extends ADLParserTestBase {
 
     public void testCOrdinal() throws Exception {
         CObject node = archetype.node(
-                "/[at0000]/action[at0001]/items[at10001]/value");
+                "/types[at0001]/items[at10001]/value");
         assertTrue("COrdinal expected", node instanceof COrdinal);
         COrdinal cordinal = (COrdinal) node;
         String[] codes = {
@@ -76,7 +78,7 @@ public class ADLParserDomainTypesTest extends ADLParserTestBase {
 
     public void testCCodedText() throws Exception {
         CObject node = archetype.node(
-                "/[at0000]/action[at0001]/items[at10002]/value");
+                "/types[at0001]/items[at10002]/value");
         assertTrue("CCodedText expected", node instanceof CCodedText);
         CCodedText ccodedtext = (CCodedText) node;
         assertEquals("terminology", "local", ccodedtext.getTerminology());
@@ -90,25 +92,25 @@ public class ADLParserDomainTypesTest extends ADLParserTestBase {
         }
     }
 
-    public void testCQuantity() throws Exception {
+    public void testCDvQuantity() throws Exception {
         CObject node = archetype.node(
-                "/[at0000]/action[at0001]/items[at10003]/value");
-        assertTrue("CQuantity expected", node instanceof CQuantity);
-        CQuantity cquantity = (CQuantity) node;
-        assertEquals("units", "mg", cquantity.getUnits());
-        Interval<Double> interval = new Interval<Double>(new Double(10.0),
-                new Double(100.0));
-        assertEquals("magnitude", interval, cquantity.getMagnitude());
+                "/types[at0001]/items[at10005]/value");
+        assertTrue("CDvQuantity expected", node instanceof CDvQuantity);
+        CDvQuantity cdvquantity = (CDvQuantity) node;
+        
+        // property creation skipped
+        assertNull(cdvquantity.getProperty());
+        
+        List<CDvQuantityItem> list = cdvquantity.getList();
+        assertEquals("unexpected size of list", 2, list.size());
+        assertCDvQuantityItem(list.get(0), "yr", new Interval<Double>(0.0, 200.0));
+        assertCDvQuantityItem(list.get(1), "mth", new Interval<Double>(1.0, 36.0));
     }
-
-    public void testCCount() throws Exception {
-        CObject node = archetype.node(
-                "/[at0000]/action[at0001]/items[at10004]/value");
-        assertTrue("CCount expected", node instanceof CCount);
-        CCount ccount = (CCount) node;
-        Interval<Integer> interval = new Interval<Integer>(new Integer(1),
-                new Integer(8));
-        assertEquals("magnitude", interval, ccount.getMagnitude());
+    
+    private void assertCDvQuantityItem(CDvQuantityItem item, String units,
+    		Interval<Double> value) {
+    	assertEquals("unexpected units", units, item.getUnits());
+    	assertEquals("unexpected value interval", value, item.getValue());
     }
 
     private Archetype archetype;

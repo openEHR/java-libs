@@ -6,7 +6,7 @@ import java.util.List;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
 
-public class MultiLanguageTest extends ADLParserTestBase {
+public class MultiLanguageTest extends ParserTestBase {
 
 	/**
 	 * Create new test case

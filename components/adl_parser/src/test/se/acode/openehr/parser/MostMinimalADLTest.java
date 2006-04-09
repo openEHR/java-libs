@@ -25,7 +25,7 @@ import java.io.StringWriter;
  * @author Rong Chen
  * @version 1.0
  */
-public class MostMinimalADLTest extends ADLParserTestBase {
+public class MostMinimalADLTest extends ParserTestBase {
 
     /**
      * Create new test case

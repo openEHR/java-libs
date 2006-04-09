@@ -34,27 +34,27 @@ definition
 			WHEEL[at0003] matches {
 				description matches {"front right hand wheel"}
 				parts matches {
-					use_node WHEEL_PART /[at0000]/wheels[at0001]/parts[at0002]/ -- will pass
+					use_node WHEEL_PART /wheels[at0001]/parts[at0002] -- will pass
 				}
 			}
 			WHEEL[at0004] matches {
 				description matches {"rear left hand wheel"}
 				parts matches {
-					use_node WHEEL_PART /[at0000]/wheels[at0001]/parts[at0002]/	-- will pass
+					use_node WHEEL_PART /wheels[at0001]/parts[at0002]	-- will pass
 				}
 			}
 			WHEEL[at0005] matches {
 				description matches {"rear right hand wheel"}
 				parts matches {
-					use_node WHEEL_PART /[at0000]/engine[at0001]/parts[at0002]/ -- will fail, wrong target path
+					use_node WHEEL_PART /engine[at0001]/parts[at0002] -- will fail, wrong target path
 				}
 			}
 			WHEEL[at0006] matches {
 				description matches {"rear right hand wheel"}
 				parts matches {
-					use_node WHEEL /[at0000]/wheels[at0001]/parts[at0002]/ -- will fail, wrong type
+					use_node WHEEL /wheels[at0001]/parts[at0002] -- will fail, wrong type
 				}
-			}
+			}			
 		}
 	}
 

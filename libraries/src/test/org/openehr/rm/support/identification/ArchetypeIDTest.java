@@ -69,7 +69,6 @@ public class ArchetypeIDTest extends TestCase {
 
             // domain concept part
             "openehr-ehr_rm-section.physical+examination.v2", // illegal char
-            "openehr-ehr_rm-section.physical-examination-prenatal.v1", // too many sections
 
             // version part
             "hl7-rim-act.progress_note.", // missing version
@@ -165,6 +164,19 @@ public class ArchetypeIDTest extends TestCase {
         {"hl7-rim-act", "progress_note", "v1"},
         {"openehr-ehr_rm-ENTRY", "progress_note-naturopathy", "draft"}
     };
+    
+    /**
+     * Verify the bug fix allowing more than one specialisation in 
+     * an archetype id
+     * 
+     * @throws Exception
+     */
+    public void testArchetypeIDWithMoreThanOneSpecialisation() throws Exception {
+    	ArchetypeID aid = new ArchetypeID(
+    			"openehr-ehr_rm-section.concept-spec-spec2-spec3.v2");
+    	assertEquals("unexceped specialisation", "spec-spec2-spec3", 
+    			aid.specialisation());    
+    }
 
 }
 /*
