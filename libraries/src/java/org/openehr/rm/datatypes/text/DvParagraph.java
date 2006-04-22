@@ -63,6 +63,22 @@ public final class DvParagraph extends DataValue {
     public List<DvText> getItems() {
         return Collections.unmodifiableList(items);
     }
+    
+    /**
+     * Returns true if two paragaph has  same items
+     * 
+     * @return false if two not equal
+     */
+    public boolean equals(Object object) {
+    	  if (this == object) {
+    	    return true;
+    	  }
+    	  if (!(object instanceof DvParagraph)) {
+    	    return false;
+    	  }
+    	  final DvParagraph other = (DvParagraph) object;
+    	  return items.equals(other.items);
+    	}
 
     // POJO start
     DvParagraph() {
