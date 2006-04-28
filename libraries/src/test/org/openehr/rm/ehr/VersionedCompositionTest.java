@@ -21,9 +21,10 @@
 package org.openehr.rm.ehr;
 
 import junit.framework.TestCase;
+
+import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.RelatedParty;
-import org.openehr.rm.common.changecontrol.AuditDetails;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.support.identification.*;
 import org.openehr.rm.composition.Composition;

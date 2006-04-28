@@ -14,6 +14,7 @@
  */
 package org.openehr.rm.common.changecontrol;
 
+import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectReference;
 import org.openehr.rm.RMObject;

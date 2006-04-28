@@ -25,6 +25,7 @@ import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectReference;
 import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;

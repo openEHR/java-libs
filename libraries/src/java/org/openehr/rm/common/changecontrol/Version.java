@@ -17,6 +17,7 @@ package org.openehr.rm.common.changecontrol;
 import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.common.generic.Attestation;
+import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectReference;

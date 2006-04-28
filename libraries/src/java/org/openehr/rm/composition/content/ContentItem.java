@@ -42,9 +42,9 @@ public abstract class ContentItem extends Locatable {
      * @param links
      */
     protected ContentItem(ObjectID uid, String archetypeNodeId, DvText name,
-                          Archetyped archetypeDetails,
-                          FeederAudit feederAudit, Set<Link> links) {
-        super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links);
+                          Archetyped archetypeDetails, FeederAudit feederAudit,
+                          Set<Link> links, Locatable parent) {
+        super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);
     }
 
     // POJO start

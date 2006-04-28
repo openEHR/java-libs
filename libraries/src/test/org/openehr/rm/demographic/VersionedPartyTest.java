@@ -19,7 +19,7 @@ import org.openehr.rm.support.terminology.TestTerminologyService;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.identification.*;
 import org.openehr.rm.common.changecontrol.Version;
-import org.openehr.rm.common.changecontrol.AuditDetails;
+import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
