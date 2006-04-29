@@ -31,8 +31,8 @@ public class Folder extends Locatable {
      */
 	public Folder(ObjectID uid, String archetypeNodeId, DvText name,
             Archetyped archetypeDetails, FeederAudit feederAudit, Set<Link> links, 
-            List<Folder> folders, List<ObjectReference> items) {
-			super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links);
+            Locatable parent, List<Folder> folders, List<ObjectReference> items) {
+			super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);
 			if(folders != null && folders.size() == 0) {
 				throw new IllegalArgumentException("empty folders");
 			}			

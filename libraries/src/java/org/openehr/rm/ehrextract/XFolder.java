@@ -49,10 +49,10 @@ public class XFolder extends Locatable {
      */
     public XFolder(ObjectID uid, String archetypeNodeId, DvText name,
                    Archetyped archetypeDetails, FeederAudit feederAudit,
-                   Set<Link> links, List<XFolder> folders,
+                   Set<Link> links, Locatable parent, List<XFolder> folders,
                    List<XComposition> compositions) {
 
-        super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links);
+        super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);
 
         if (folders != null && folders.isEmpty()) {
             throw new IllegalArgumentException("empty folders");
