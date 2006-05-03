@@ -4,7 +4,7 @@
     <id>openehr-kernel</id>
     <name>openEHR Java Kernel</name>
     <groupId>openehr</groupId>
-    <currentVersion>1.2.5-SNAPSHOT</currentVersion>
+    <currentVersion>1.2.10-SNAPSHOT</currentVersion>
     <organization>
         <name>openEHR</name>
         <url>http://www.openehr.org/</url>
@@ -42,10 +42,17 @@
             <version>1.2.8</version>
             <url>http://jakarta.apache.org/log4j/</url>
         </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>1.2.1</version>
+            <url>http://joda-time.sourceforge.net/</url>
+        </dependency>
     </dependencies>
 
     <build>
         <sourceDirectory>src/java</sourceDirectory>
+         <!--
         <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
         <unitTest>
             <includes>
@@ -60,6 +67,7 @@
                 </resource>
             </resources>
         </unitTest>
+        -->
     </build>
 
 </project>
