@@ -165,7 +165,7 @@ public final class Interval<T extends Comparable> extends RMObject {
                 .append(upper)
                 .append(lowerInclusive)
                 .append(upperInclusive)
-                .hashCode();
+                .toHashCode();
     }
 
     /**
