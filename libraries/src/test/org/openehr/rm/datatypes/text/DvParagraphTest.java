@@ -19,8 +19,8 @@ public class DvParagraphTest extends TestCase {
 		
 		DvParagraph p1 = asTextParagraph(fruits);
 		DvParagraph p2 = asTextParagraph(moreFruits);
-		assertFalse("shoud not equal", p1.equals(p2));
-		assertFalse("shoud not equal", p2.equals(p1));
+		assertFalse("should not equal", p1.equals(p2));
+		assertFalse("should not equal", p2.equals(p1));
 	}
 	
 	public void testEqualsWithDifferentValueOfItems() throws Exception {
@@ -29,8 +29,8 @@ public class DvParagraphTest extends TestCase {
 		
 		DvParagraph p1 = asTextParagraph(fruits);
 		DvParagraph p2 = asTextParagraph(drinks);
-		assertFalse("shoud not equal", p1.equals(p2));
-		assertFalse("shoud not equal", p2.equals(p1));
+		assertFalse("should not equal", p1.equals(p2));
+		assertFalse("should not equal", p2.equals(p1));
 	}
 	
 	/* construct a paragraph out of string array */

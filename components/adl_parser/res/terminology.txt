@@ -1,0 +1,67 @@
+# Terminology: openehr Group_name("en"): "measurable properties"
+# Extracted from terminology.pdf release 1.0
+339 Acceleration
+342 Acceleration, angular
+381 Amount (Eq)
+384 Amount (mole)
+497 Angle, plane
+500 Angle, solid
+335 Area
+350 Density
+362 Diffusion coefficient
+501 Electrical capacitance
+498 Electrical charge
+502 Electrical conductance
+334 Electrical current
+377 Electrical field strength
+121 Energy
+366 Energy density
+508 Energy dose
+365 Energy per area
+347 Flow rate, mass
+352 Flow rate, mass/force
+351 Flow rate, mass/volume
+126 Flow rate, volume
+348 Flux, mass
+355 Force
+357 Force, body
+382 Frequency
+373 Heat transfer coefficient
+505 Illuminance
+379 Inductance
+122 Length
+499 Light intensity
+123 Loudness
+504 Luminous flux
+378 Magnetic flux
+503 Magnetic flux density
+124 Mass
+385 Mass (IU)
+349 Mass per area
+344 Moment inertia, area
+345 Moment inertia, mass
+340 Momentum
+346 Momentum, flow rate
+343 Momentum, angular
+369 Power density
+368 Power flux
+367 Power, linear
+125 Pressure
+507 Proportion
+380 Qualified real,
+506 Radioactivity
+375 Resistance
+370 Specific energy
+371 Specific heat, gas content
+337 Specific surface
+336 Specific volume
+356 Surface tension
+127 Temperature 
+128 Time
+338 Velocity
+341 Velocity, angular
+360 Velocity, dynamic
+361 Velocity, kinematic
+374 Voltage, electrical
+129 Volume
+130 Work

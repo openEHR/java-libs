@@ -36,11 +36,19 @@
 	<build>
 		<sourceDirectory>src/java</sourceDirectory>
 		<testSourceDirectory>src/test</testSourceDirectory>
+		<resources>
+			<resource>
+				<directory>res</directory>
+				<includes>
+					<include>*.txt</include>
+				</includes>
+			</resource>			
+		</resources>
 		<testResources>
 			<testResource>
 				<directory>conf</directory>
 			</testResource>
-		</testResources>
+		</testResources>		
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

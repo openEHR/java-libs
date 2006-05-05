@@ -87,8 +87,7 @@ public class ADLParser {
   public void reInit(InputStream input) throws IOException {
       ReInit(new BufferedInputStream(input));
   }
-
-
+  
   /* ===================  entry point from command-line  ================ */
   public static void main(String args[]) throws IOException {
     ADLParser parser = null;
@@ -2338,17 +2337,20 @@ CCodedText term_code_constraint(String path) :
 
 CDvQuantity c_dv_quantity(String path) :
 {
-  // TODO: how to create codedText? skipped for now.. 	
   DvCodedText property = null;
+  String value = null;
   List list = null;
-  CDvQuantityItem item = null;
+  CDvQuantityItem item = null;  
 }
 {
   <SYM_C_QUANTITY> "<"
     [
       <SYM_PROPERTY> <SYM_EQ> "<"
-        string_value()
+        value = string_value()
       ">"
+      {
+      	property =  TerminologyUtil.getInstance().codedText(value);
+      }
     ] 
 
 	[

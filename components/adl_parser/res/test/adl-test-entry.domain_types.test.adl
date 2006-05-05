@@ -63,6 +63,16 @@ definition
 						}
                     }
                     
+                    -- test newly added "property" initialisation
+                    
+            --        ELEMENT[at10005] matches {	-- c_quantity     
+	        --            value matches {
+			--				C_QUANTITY <
+			--					property = <"time">
+			--				>
+			--	 		}
+            --        }
+                    
                     -- not a domain type
                     -- here for testing C_QUANTITY parsing
                     
