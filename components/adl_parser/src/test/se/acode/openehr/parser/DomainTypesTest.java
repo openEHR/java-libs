@@ -24,6 +24,7 @@ import org.openehr.am.archetype.constraintmodel.domain.*;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
+import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.support.basic.Interval;
 
 import java.io.File;
@@ -92,16 +93,42 @@ public class DomainTypesTest extends ParserTestBase {
         }
     }
 
-    public void testCDvQuantity() throws Exception {
+    public void testCDvQuantityWithPropertyAsString() throws Exception {
         CObject node = archetype.node(
                 "/types[at0001]/items[at10005]/value");
         assertTrue("CDvQuantity expected", node instanceof CDvQuantity);
         CDvQuantity cdvquantity = (CDvQuantity) node;
         
-        // property creation skipped
-        assertNull(cdvquantity.getProperty());
+        // verify property 
+        DvCodedText property = cdvquantity.getProperty();
+        assertNotNull("property is null", property);
+        assertEquals("time", property.getValue());
+        assertEquals("openehr", property.getDefiningCode().getTerminologyID().name());
+        assertEquals("128", property.getDefiningCode().getCodeString());
         
+        // verify item list
         List<CDvQuantityItem> list = cdvquantity.getList();
+        assertEquals("unexpected size of list", 2, list.size());
+        assertCDvQuantityItem(list.get(0), "yr", new Interval<Double>(0.0, 200.0));
+        assertCDvQuantityItem(list.get(1), "mth", new Interval<Double>(1.0, 36.0));
+    }
+    
+    public void testCDvQuantityWithPropertyAsCodedText() throws Exception {
+        CObject node = archetype.node(
+                "/types[at0001]/items[at10005.2]/value");
+        assertTrue("CDvQuantity expected", node instanceof CDvQuantity);
+        CDvQuantity cdvquantity = (CDvQuantity) node;
+        
+        // verify property 
+        DvCodedText property = cdvquantity.getProperty();
+        assertNotNull("property is null", property);
+        assertEquals("time", property.getValue());
+        assertEquals("openehr", property.getDefiningCode().getTerminologyID().name());
+        assertEquals("128", property.getDefiningCode().getCodeString());
+        
+        // verify item list
+        List<CDvQuantityItem> list = cdvquantity.getList();
+        System.out.println("### " + cdvquantity.getProperty());
         assertEquals("unexpected size of list", 2, list.size());
         assertCDvQuantityItem(list.get(0), "yr", new Interval<Double>(0.0, 200.0));
         assertCDvQuantityItem(list.get(1), "mth", new Interval<Double>(1.0, 36.0));

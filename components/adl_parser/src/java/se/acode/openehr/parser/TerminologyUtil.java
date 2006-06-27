@@ -10,7 +10,7 @@ import org.openehr.rm.support.identification.TerminologyID;
 /**
  * Utility class for loading openehr terminology from a text file
  * 
- * This is very much tailored for the parse to create property of coded text
+ * This is very much tailored for the parser to create property of coded text
  * within c_quantity_item structure.
  * 
  * @author Rong Chen
@@ -22,6 +22,7 @@ public class TerminologyUtil {
 	 */
 	private TerminologyUtil() {
 		this.map = new HashMap<String, DvCodedText>();
+		this.codeMap = new HashMap<String, DvCodedText>();
 		
 		try {
 			loadTerminology();
@@ -38,7 +39,9 @@ public class TerminologyUtil {
 
 	private static final TerminologyUtil instance = new TerminologyUtil();
 
-	private Map<String, DvCodedText> map;
+	private Map<String, DvCodedText> map; // rubric as key
+	private Map<String, DvCodedText> codeMap; // code as key
+	
 
 	/**
 	 * Gets an instance of this utility
@@ -53,11 +56,24 @@ public class TerminologyUtil {
 	 * Creates an instance of coded text for given text value using pre-loaded
 	 * terminology content
 	 * 
-	 * @param value
+	 * @param value not null
 	 * @return null if no code found for given value
 	 */
 	public DvCodedText codedText(String value) {
-		return map.get(value);
+		if(value == null) {
+			throw new IllegalArgumentException("value is null");
+		}
+		return map.get(value.toLowerCase());
+	}
+	
+	/**
+	 * Retrieves coded text by given code
+	 * 
+	 * @param code
+	 * @return null if not found
+	 */
+	public DvCodedText fromCode(String code) {
+		return codeMap.get(code);
 	}
 	
 	/**
@@ -92,8 +108,13 @@ public class TerminologyUtil {
 				code = tokens.nextToken();
 				rubric = line.substring(code.length() + 1, line.length());
 				
+				// terms are case insensitive
+				rubric = rubric.toLowerCase();
+				
 				CodePhrase cp = new CodePhrase(OPENEHR, code);
-				this.map.put(rubric, new DvCodedText(rubric, cp));				
+				DvCodedText coded = new DvCodedText(rubric, cp);
+				this.map.put(rubric, coded);	
+				this.codeMap.put(code, coded);
 				
 				line = reader.readLine();
 			}

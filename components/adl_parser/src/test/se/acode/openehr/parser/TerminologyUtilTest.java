@@ -29,4 +29,11 @@ public class TerminologyUtilTest extends TestCase {
 		assertEquals("code wrong", "125", 
 				codedtext.getDefiningCode().getCodeString());		
 	}
+	
+	public void testFromCode() throws Exception {
+		TerminologyUtil tu = TerminologyUtil.getInstance();
+		
+		DvCodedText codedText = tu.fromCode("128");
+		assertEquals("rubric wrong", "time", codedText.getValue());
+	}
 }

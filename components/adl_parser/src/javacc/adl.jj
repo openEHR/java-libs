@@ -2345,13 +2345,22 @@ CDvQuantity c_dv_quantity(String path) :
 }
 {
   <SYM_C_QUANTITY> "<"
-    [
-      <SYM_PROPERTY> <SYM_EQ> "<"
-        value = string_value()
-      ">"
-      {
-      	property =  TerminologyUtil.getInstance().codedText(value);
-      }
+    [    	
+	  <SYM_PROPERTY> <SYM_EQ> "<"
+	    value = string_value()
+	  ">"
+	  {
+	  	TerminologyUtil tu = TerminologyUtil.getInstance();
+	  	int index = value.indexOf("::");
+	  	if(index < 0) { 
+	  		// in the form of "time" 
+	  		property =  tu.codedText(value);
+	  	} else { 
+	  		// in the form of "openehr::128"
+	  		String code = value.substring(index + 2);
+	  		property = tu.fromCode(code);
+	  	}
+	  }
     ] 
 
 	[

@@ -63,6 +63,24 @@ definition
 						}
                     }
                     
+                    ELEMENT[at10005.2] matches {	-- c_quantity, property as coded text     
+	                    value matches {
+							C_QUANTITY <
+								property = <"openehr::128">
+								list = <									
+									["1"] = <
+										units = <"yr">
+										magnitude = <|0.0..200.0|>
+									>
+									["2"] = <
+										units = <"mth">
+										magnitude = <|1.0..36.0|>
+									>									
+								>
+							>
+						}
+                    }
+                    
                     -- test newly added "property" initialisation
                     
             --        ELEMENT[at10005] matches {	-- c_quantity     
