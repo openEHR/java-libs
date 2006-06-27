@@ -23,6 +23,7 @@ options {
   DEBUG_TOKEN_MANAGER = false;
   DEBUG_LOOKAHEAD = false;
   LOOKAHEAD = 1;
+  UNICODE_INPUT = true;
 }
 
 PARSER_BEGIN(ADLParser)
@@ -63,7 +64,7 @@ public class ADLParser {
 
   /* Constructor that takes file as input */
   public ADLParser(File file) throws IOException {
-      this(new BufferedInputStream(new FileInputStream(file)));
+      this(new FileInputStream(file), "UTF-8");
   }
 
   /* Constructor that takes string as input */
@@ -80,7 +81,7 @@ public class ADLParser {
 
   /* re-initial the parser */
   public void reInit(File file) throws IOException {
-      ReInit(new BufferedInputStream(new FileInputStream(file)));
+      ReInit(new FileInputStream(file), "UTF-8");
   }
 
   /* re-initial the parser */

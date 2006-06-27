@@ -1,14 +1,15 @@
 Installation
 ============
-You need to have j2sdk1.5 and Maven 1.0 to be able to build the parser from
-source code. If your build machine is online, Maven can download relevant
-libraries (see project.xml for dependencies). Otherwise, you will need to
-download them manually and put it in your local Maven repository. You also need
-to solve the dependency towards the openEHR java kernel.
+You need to have j2sdk1.5 and Maven 1.0 (or Maven 2.0) to be able to build 
+the parser from source code. If your build machine is online, Maven can 
+download relevant libraries (see project.xml for dependencies). Otherwise, 
+you will need to download them manually and put it in your local Maven 
+repository. You also need to solve the dependency towards the openEHR java 
+kernel.
 
 
-Build
-=====
+Build with Maven 1.0
+====================
 Type "maven javacc test" to compile and test the code.
 
 Type "maven javacc jar:install" to install the parser jar file into local Maven
@@ -17,3 +18,12 @@ repository, but you can also find it under "target".
 Type "maven javacc javadoc" to generate java API docs under "target/docs".
 
 
+Build with Maven 2.0
+====================
+Clean build and test: "mvn clean test"
+
+Generate complete jar with dependencies: "mvn package"
+
+Build and install the jar locally: "mvn install"
+
+Test single test case, e.g. "mvn test -Dtest=UnicodeSupportTest"

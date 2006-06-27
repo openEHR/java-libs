@@ -17,3 +17,9 @@
 .added support for C_QUANTITY
 .removed C_COUNT syntax
 .added a directory based parsing for convenient testing 
+
+2006/05/15
+.added packaing jar with dependencies and command line jar invocation
+
+2006/05/25
+.added initial support of unicode (UTF-8 encoding) in the parser
