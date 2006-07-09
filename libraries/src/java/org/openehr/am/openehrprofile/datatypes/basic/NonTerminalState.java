@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class CDvQuantityItem"
+ * description: "Class NonTerminalState"
  * keywords:    "openehr archetype profile"
  *
  * author:      "Rong Chen <rong@acode.se>"
@@ -13,54 +13,51 @@
  * last_change: "$LastChangedDate$"
  */
 
-package org.openehr.am.openehrprofile.datatypes.quantity;
+package org.openehr.am.openehrprofile.datatypes.basic;
 
-import org.apache.commons.lang.StringUtils;
-import org.openehr.rm.support.basic.Interval;
+import java.util.*;
 
-/**
- * Constrain instances of DV_QUANTITY.
- * 
- * @author Rong Chen
- */
-public class CDvQuantityItem {	
+public class NonTerminalState extends State {
 	
 	/**
-	 * Constructor
+	 * Creates a NonTerminalState by name and transitions
 	 * 
-	 * @param value 
-	 * @param units not null or empty
-	 * @throws IllegalArgumentException if units null or empty
+	 * @param name not null or empty
+	 * @param transitions not null or empty
+	 * @throws IllegalArgumentException if name null or empty,
+	 *                     or transitions null or empty
 	 */
-	public CDvQuantityItem(Interval<Double> value, String units) {
-		if(StringUtils.isEmpty(units)) {
-			throw new IllegalArgumentException("units null or empty");
+	public NonTerminalState(String name, Set<Transition> transitions) {
+		super(name);
+		if(transitions == null || transitions.isEmpty()) {
+			throw new IllegalArgumentException("transitions null or empty");
 		}
-		this.value = value;
-		this.units = units;
+		this.transitions = new HashSet<Transition>(transitions);
 	}
 	
 	/**
-	 * Constraint on units
+	 * Gets transitions of this state
 	 * 
-	 * @return units
+	 * @return an unmodifiable set of transitions
 	 */
-	public String getUnits() {
-		return units;
+	public Set<Transition> getTransitions() {
+		return Collections.unmodifiableSet(transitions);
 	}
 	
 	/**
-	 * Value must be inside the supplied interval.
+	 * Adds a transition to this state
 	 * 
-	 * @return value interval
+	 * @param transition not null
+	 * @throws IllegalArgumentException if transition null
 	 */
-	public Interval<Double> getValue() {
-		return value;
+	public void addTransition(Transition transition) {
+		if(transition == null) {
+			throw new IllegalArgumentException("transition null");
+		}
+		transitions.add(transition);
 	}
 	
-	/* fields */
-	private Interval<Double> value;
-	private String units;	
+	private Set<Transition> transitions;
 }
 
 /*
@@ -77,7 +74,7 @@ public class CDvQuantityItem {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is CDvQuantity.java
+ *  The Original Code is NonTerminalState.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2006

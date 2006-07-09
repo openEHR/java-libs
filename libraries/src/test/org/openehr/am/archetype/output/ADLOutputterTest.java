@@ -33,10 +33,16 @@ import org.openehr.am.archetype.ontology.QueryBindingItem;
 import org.openehr.am.archetype.ontology.TermBindingItem;
 import org.openehr.am.archetype.description.ArchetypeDescription;
 import org.openehr.am.archetype.description.ArchetypeDescriptionItem;
-import org.openehr.am.archetype.constraintmodel.domain.*;
+import org.openehr.am.archetype.constraintmodel.domain.CCodedText;
+import org.openehr.am.archetype.constraintmodel.domain.CCount;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.Cardinality;
 import org.openehr.am.archetype.constraintmodel.primitive.CString;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
+import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
+import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.terminology.TestCodeSet;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.identification.ArchetypeID;
@@ -312,29 +318,46 @@ public class ADLOutputterTest extends TestCase {
                 "}\r\n");
     }
 
-    public void testPrintCOrdinal() throws Exception {
-        List<Ordinal> list = new ArrayList<Ordinal>();
+    public void testPrintCDvOrdinal() throws Exception {
+        Set<Ordinal> list = new LinkedHashSet<Ordinal>();
         for (int i = 1; i <= 4; i++) {
-            list.add(new Ordinal(i, "local", "at200" + i));
+            list.add(new Ordinal(i, new CodePhrase("local", "at200" + i)));
         }
-        COrdinal cordinal = new COrdinal("/path", list);
+        CDvOrdinal cordinal = new CDvOrdinal("/path", list);
         clean();
-        outputter.printCOrdinal(cordinal, 0, out);
+        outputter.printCDvOrdinal(cordinal, 0, out);
         verify("1|[local::at2001],\r\n" +
                 "2|[local::at2002],\r\n" +
                 "3|[local::at2003],\r\n" +
                 "4|[local::at2004]\r\n");
     }
 
-    public void testPrintCQuantity() throws Exception {
-        CQuantity cquantity = new CQuantity("/path",
-                new Interval<Double>(0.0, 20.0), "mg");
+    public void testPrintCDvQuantity() throws Exception {
+        CDvQuantityItem item1 = new CDvQuantityItem(
+        		new Interval<Double>(0.0, 200.0), "year");        
+        CDvQuantityItem item2 = new CDvQuantityItem(
+        		new Interval<Double>(1.0, 36.0), "month");
+        List<CDvQuantityItem> list = new ArrayList<CDvQuantityItem>();
+        list.add(item1);
+        list.add(item2);
+        CodePhrase property = new CodePhrase("openehr", "128");
+        CDvQuantity cquantity = new CDvQuantity("/path", list, property);
+        
         clean();
-        outputter.printCQuantity(cquantity, 0, out);
-        verify("QUANTITY matches {\r\n" +
-                "    magnitude matches {|0.0..20.0|}\r\n" +
-                "    units matches {\"mg\"}\r\n" +
-                "}\r\n");
+        outputter.printCDvQuantity(cquantity, 0, out);
+        verify("C_QUANTITY <\r\n" +
+			   "    property = [openehr::128]\r\n" +
+			   "    list = <\r\n" +									
+			   "        [\"1\"] = <\r\n" +
+			   "            units = <\"year\">\r\n" +
+			   "            magnitude = <|0.0..200.0|>\r\n" +
+			   "        >\r\n" +
+			   "        [\"2\"] = <\r\n" +
+			   "            units = <\"month\">\r\n" +
+			   "            magnitude = <|1.0..36.0|>\r\n" +
+			   "        >\r\n" +									
+			   "    >\r\n" +
+			   ">\r\n");
     }
 
     public void testPrintInterval() throws Exception {

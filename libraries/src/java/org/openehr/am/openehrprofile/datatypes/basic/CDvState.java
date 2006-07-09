@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class CDvQuantity"
+ * description: "Class CDvState"
  * keywords:    "openehr archetype profile"
  *
  * author:      "Rong Chen <rong@acode.se>"
@@ -13,84 +13,50 @@
  * last_change: "$LastChangedDate$"
  */
 
-package org.openehr.am.openehrprofile.datatypes.quantity;
+package org.openehr.am.openehrprofile.datatypes.basic;
 
-import java.util.*;
+import java.util.Map;
 
-import org.openehr.rm.common.archetyped.Archetyped;
-import org.openehr.rm.datatypes.text.CodePhrase;
-import org.openehr.rm.util.RMObjectBuilder;
-import org.openehr.rm.util.SystemValue;
-import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
 import org.openehr.am.archetype.constraintmodel.DVObjectCreationException;
-import org.openehr.am.archetype.constraintmodel.ErrorType;
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
+import org.openehr.rm.util.SystemValue;
 
 /**
- * This class represents constrain instances of DV_QUANTITY.
+ * Constrainer type for DV_STATE instances. The attribute c_value defines a
+ * state/event table which constrains the allowed values of the attribute 
+ * value in a DV_STATE instance, as well as the order of transitions between
+ * values.
  * 
  * @author Rong Chen
  * @version 1.0
  */
-public class CDvQuantity extends CDomainType {
+public class CDvState extends CDomainType {
 
 	/**
-	 * Constructor
+	 * Creates a CDvState with path and stateMachine 
 	 * 
 	 * @param path
-	 * @param list
-	 *            null if unspecified
-	 * @param property
-	 *            null if unspecified, no empty
-	 * @throws IllegalArgumentException if list is empty, 
-	 *             or both list and property null
+	 * @param value not null
+	 * @throws IllegalArgumentException if value null
 	 */
-	public CDvQuantity(String path, List<CDvQuantityItem> list,
-			CodePhrase property) {
-
-		super(path, "DvQuantity");
-
-		if (list != null && list.isEmpty()) {
-			throw new IllegalArgumentException("empty list");
+	public CDvState(String path, StateMachine value) {
+		super(path, "DvState");
+		if(value == null) {
+			throw new IllegalArgumentException("value null");
 		}
-		if(list == null && property == null) {
-			throw new IllegalArgumentException("both list and property null");
-		}
-		this.list = list == null ? list 
-				: new ArrayList<CDvQuantityItem>(list);
-		this.property = property;
+		this.value = value;
 	}
-
+	
 	/**
-	 * List of value/units pairs.
+	 * Gets value
 	 * 
 	 * @return
 	 */
-	public List<CDvQuantityItem> getList() {
-		return list == null ? null 
-				: Collections.unmodifiableList(list);
-	}
-
-	/**
-	 * Optional constraint on units property
-	 * 
-	 * @return
-	 */
-	public CodePhrase getProperty() {
-		return property;
-	}
-
-	@Override
-	public Object createObject(Map<String, Object> objectMap,
-			Set<String> inputPaths, Map<String, ErrorType> errorMap,
-			Archetype archetype, RMObjectBuilder builder,
-			Archetyped archetypeDetails) {
-		// TODO Auto-generated method stub
-		return super.createObject(objectMap, inputPaths, errorMap, archetype,
-				builder, archetypeDetails);
+	public StateMachine getValue() {
+		return value;
 	}
 
 	@Override
@@ -100,22 +66,25 @@ public class CDvQuantity extends CDomainType {
 	}
 
 	@Override
-	public Object assignedValue(Map<SystemValue, Object> systemValues,
-			ArchetypeOntology ontology) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object createObject(String value,
-			Map<SystemValue, Object> systemValues, ArchetypeOntology ontology)
-			throws DVObjectCreationException {
+	public Object createObject(String value, Map<SystemValue, Object> systemValues, ArchetypeOntology ontology) throws DVObjectCreationException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean hasAssignedValue() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Object assignedValue(Map<SystemValue, Object> systemValues, ArchetypeOntology ontology) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isValid() {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -131,17 +100,8 @@ public class CDvQuantity extends CDomainType {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	@Override
-	public boolean isValid() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/* fields */
-	private List<CDvQuantityItem> list;
-
-	private CodePhrase property;
+	
+	private StateMachine value;	
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
@@ -157,7 +117,7 @@ public class CDvQuantity extends CDomainType {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is CDvQuantity.java
+ *  The Original Code is CDvState.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2006
@@ -172,3 +132,4 @@ public class CDvQuantity extends CDomainType {
  *
  *  ***** END LICENSE BLOCK *****
  */
+

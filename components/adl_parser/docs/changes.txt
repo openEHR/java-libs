@@ -23,3 +23,7 @@
 
 2006/05/25
 .added initial support of unicode (UTF-8 encoding) in the parser
+
+2006/07/04
+.updated C_DV_QUANTITY and removed unnecessary TerminologyUtil
+.added c_dv_ordinal connected to newly added CDvQuantity in the RM

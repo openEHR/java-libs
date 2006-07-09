@@ -6,7 +6,7 @@
 	<groupId>acode</groupId>
 	<artifactId>adl-parser</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.3</version>
 	<name>java ADL Parser</name>
 	<url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>
 	
@@ -101,7 +101,7 @@
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-kernel</artifactId>
-			<version>1.2.5-SNAPSHOT</version>
+			<version>1.2.6</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

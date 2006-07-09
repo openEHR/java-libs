@@ -24,6 +24,7 @@ import org.openehr.am.archetype.constraintmodel.domain.*;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
+import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.support.basic.Interval;
 
@@ -59,24 +60,6 @@ public class DomainTypesTest extends ParserTestBase {
         archetype = null;
     }
 
-    public void testCOrdinal() throws Exception {
-        CObject node = archetype.node(
-                "/types[at0001]/items[at10001]/value");
-        assertTrue("COrdinal expected", node instanceof COrdinal);
-        COrdinal cordinal = (COrdinal) node;
-        String[] codes = {
-            "at0003.0", "at0003.1", "at0003.2", "at0003.3", "at0003.4"
-        };
-        List<Ordinal> list = cordinal.getList();
-        assertEquals("codes.size", codes.length, cordinal.getList().size());
-        for(int i = 0; i < codes.length; i++) {
-            Ordinal ordinal = list.get(i);
-            assertEquals("terminology", "local", ordinal.getTerminology());
-            assertEquals("value", i, ordinal.getValue());
-            assertEquals("code", codes[i], ordinal.getCode());
-        }
-    }
-
     public void testCCodedText() throws Exception {
         CObject node = archetype.node(
                 "/types[at0001]/items[at10002]/value");
@@ -91,54 +74,7 @@ public class DomainTypesTest extends ParserTestBase {
         for(int i = 0; i < codes.length; i++) {
             assertEquals("code", codes[i], codeList.get(i));
         }
-    }
-
-    public void testCDvQuantityWithPropertyAsString() throws Exception {
-        CObject node = archetype.node(
-                "/types[at0001]/items[at10005]/value");
-        assertTrue("CDvQuantity expected", node instanceof CDvQuantity);
-        CDvQuantity cdvquantity = (CDvQuantity) node;
-        
-        // verify property 
-        DvCodedText property = cdvquantity.getProperty();
-        assertNotNull("property is null", property);
-        assertEquals("time", property.getValue());
-        assertEquals("openehr", property.getDefiningCode().getTerminologyID().name());
-        assertEquals("128", property.getDefiningCode().getCodeString());
-        
-        // verify item list
-        List<CDvQuantityItem> list = cdvquantity.getList();
-        assertEquals("unexpected size of list", 2, list.size());
-        assertCDvQuantityItem(list.get(0), "yr", new Interval<Double>(0.0, 200.0));
-        assertCDvQuantityItem(list.get(1), "mth", new Interval<Double>(1.0, 36.0));
-    }
-    
-    public void testCDvQuantityWithPropertyAsCodedText() throws Exception {
-        CObject node = archetype.node(
-                "/types[at0001]/items[at10005.2]/value");
-        assertTrue("CDvQuantity expected", node instanceof CDvQuantity);
-        CDvQuantity cdvquantity = (CDvQuantity) node;
-        
-        // verify property 
-        DvCodedText property = cdvquantity.getProperty();
-        assertNotNull("property is null", property);
-        assertEquals("time", property.getValue());
-        assertEquals("openehr", property.getDefiningCode().getTerminologyID().name());
-        assertEquals("128", property.getDefiningCode().getCodeString());
-        
-        // verify item list
-        List<CDvQuantityItem> list = cdvquantity.getList();
-        System.out.println("### " + cdvquantity.getProperty());
-        assertEquals("unexpected size of list", 2, list.size());
-        assertCDvQuantityItem(list.get(0), "yr", new Interval<Double>(0.0, 200.0));
-        assertCDvQuantityItem(list.get(1), "mth", new Interval<Double>(1.0, 36.0));
-    }
-    
-    private void assertCDvQuantityItem(CDvQuantityItem item, String units,
-    		Interval<Double> value) {
-    	assertEquals("unexpected units", units, item.getUnits());
-    	assertEquals("unexpected value interval", value, item.getValue());
-    }
+    }    
 
     private Archetype archetype;
 }

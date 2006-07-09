@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class CDvQuantityItem"
+ * description: "Class TerminalState"
  * keywords:    "openehr archetype profile"
  *
  * author:      "Rong Chen <rong@acode.se>"
@@ -13,54 +13,25 @@
  * last_change: "$LastChangedDate$"
  */
 
-package org.openehr.am.openehrprofile.datatypes.quantity;
-
-import org.apache.commons.lang.StringUtils;
-import org.openehr.rm.support.basic.Interval;
+package org.openehr.am.openehrprofile.datatypes.basic;
 
 /**
- * Constrain instances of DV_QUANTITY.
+ * Definition of a terminal state in a state machine, i.e. a state with no 
+ * exit transitions.
  * 
  * @author Rong Chen
+ * @version 1.0
  */
-public class CDvQuantityItem {	
-	
+public class TerminalState extends State {
+
 	/**
-	 * Constructor
+	 * Creates a TerminalState 
 	 * 
-	 * @param value 
-	 * @param units not null or empty
-	 * @throws IllegalArgumentException if units null or empty
+	 * @param name
 	 */
-	public CDvQuantityItem(Interval<Double> value, String units) {
-		if(StringUtils.isEmpty(units)) {
-			throw new IllegalArgumentException("units null or empty");
-		}
-		this.value = value;
-		this.units = units;
+	public TerminalState(String name) {
+		super(name);
 	}
-	
-	/**
-	 * Constraint on units
-	 * 
-	 * @return units
-	 */
-	public String getUnits() {
-		return units;
-	}
-	
-	/**
-	 * Value must be inside the supplied interval.
-	 * 
-	 * @return value interval
-	 */
-	public Interval<Double> getValue() {
-		return value;
-	}
-	
-	/* fields */
-	private Interval<Double> value;
-	private String units;	
 }
 
 /*
@@ -77,7 +48,7 @@ public class CDvQuantityItem {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is CDvQuantity.java
+ *  The Original Code is TerminalState.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2006

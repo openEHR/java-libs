@@ -275,6 +275,7 @@ PARSER_END(ADLParser)
 | < SYM_LIST: "list">  
 | < SYM_C_QUANTITY_UNITS: "units"> 
 | < SYM_MAGNITUDE: "magnitude">: CADL
+| < V_TERMINOLOGY_ID_BLOCK_CQ: "["(<LET_DIG_DUDSLR>)+"::" > : TERM_CODE
 }
 
 < * > TOKEN: /* SYMBOLS - common */
@@ -709,8 +710,7 @@ ArchetypeDescriptionItem arch_description_item() :
     }
     if(copyright != null && copyright.trim().length() == 0) {
       copyright = null;
-    }
-    
+    }  
 
     return new ArchetypeDescriptionItem(langcode, purpose, use, misuse, copyright);
   }
@@ -1851,7 +1851,7 @@ CObject c_object(String path) :
       c = c_coded_term(path)
     |
       LOOKAHEAD( 3 )
-      c = c_ordinal(path)
+      c = c_dv_ordinal(path)
     |
       LOOKAHEAD( 3 )
       c = c_primitive_object(path)
@@ -2268,10 +2268,10 @@ Interval occurrence_spec() :
 
 /* ---------------------- leaf constraint types ----------------------- */
 
-COrdinal c_ordinal(String path) :
+CDvOrdinal c_dv_ordinal(String path) :
 {
-  List list = new ArrayList();
-  Ordinal o;
+  Set list = new HashSet();
+  org.openehr.am.openehrprofile.datatypes.quantity.Ordinal o;
 }
 {
   o = ordinal() { list.add(o); }
@@ -2279,10 +2279,10 @@ COrdinal c_ordinal(String path) :
     "," o = ordinal()
         { list.add(o); }
   )*
-  { return new COrdinal(path, list); }
+  { return new CDvOrdinal(path, list); }
 }
 
-Ordinal ordinal() :
+org.openehr.am.openehrprofile.datatypes.quantity.Ordinal ordinal() :
 {
   Token t;
   int value;
@@ -2304,7 +2304,8 @@ Ordinal ordinal() :
   	// leave lexical state "TERM_CODE"
   	token_source.SwitchTo(CADL);
   	
-  	return new Ordinal(value, terminology, code); 
+  	return new org.openehr.am.openehrprofile.datatypes.quantity.Ordinal(
+  		value, new CodePhrase(terminology, code)); 
   }
 }
 
@@ -2338,29 +2339,17 @@ CCodedText term_code_constraint(String path) :
 
 CDvQuantity c_dv_quantity(String path) :
 {
-  DvCodedText property = null;
-  String value = null;
+  CodePhrase property = null;
+  String terminology = null;
+  String code = null;
   List list = null;
   CDvQuantityItem item = null;  
+  Token t = null;
 }
 {
   <SYM_C_QUANTITY> "<"
     [    	
-	  <SYM_PROPERTY> <SYM_EQ> "<"
-	    value = string_value()
-	  ">"
-	  {
-	  	TerminologyUtil tu = TerminologyUtil.getInstance();
-	  	int index = value.indexOf("::");
-	  	if(index < 0) { 
-	  		// in the form of "time" 
-	  		property =  tu.codedText(value);
-	  	} else { 
-	  		// in the form of "openehr::128"
-	  		String code = value.substring(index + 2);
-	  		property = tu.fromCode(code);
-	  	}
-	  }
+	  <SYM_PROPERTY> <SYM_EQ> property = code_phrase()  
     ] 
 
 	[
@@ -2375,6 +2364,29 @@ CDvQuantity c_dv_quantity(String path) :
   ">"	   
   { return new CDvQuantity(path, list, property); }
 }
+
+CodePhrase code_phrase() :
+{
+  Token t = null;	
+  String terminology = null;
+  String code = null;
+}
+{
+  t = <V_TERMINOLOGY_ID_BLOCK_CQ> 
+	{ 
+      // remove leading "[" and trailing "::"
+	  terminology = t.image; 
+	  terminology = terminology.substring(1, terminology.length() - 2);
+	}	
+	t = <V_TERM_CODE> { code = t.image; }	    
+  "]"	  	  
+  {
+  	// leave lexical state "TERM_CODE"
+  	token_source.SwitchTo(DOMAIN_TYPE_C_QUANTITY);
+  	
+  	return new CodePhrase(terminology, code);
+  }  	
+}	 	
 
 CDvQuantityItem c_dv_quantity_item() :
 {

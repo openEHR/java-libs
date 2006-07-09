@@ -4,7 +4,7 @@
     <id>openehr-kernel</id>
     <name>openEHR Java Kernel</name>
     <groupId>openehr</groupId>
-    <currentVersion>1.2.5-SNAPSHOT</currentVersion>
+    <currentVersion>1.2.5</currentVersion>
     <organization>
         <name>openEHR</name>
         <url>http://www.openehr.org/</url>

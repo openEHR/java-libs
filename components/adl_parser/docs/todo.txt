@@ -26,4 +26,3 @@ TODO List of Archetype Model
 .update term_definitions()
 .support for assumed values
 .support for "[]" 
-.support for C_QUANTITY

@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class CDvQuantityItem"
+ * description: "Class StateMachine"
  * keywords:    "openehr archetype profile"
  *
  * author:      "Rong Chen <rong@acode.se>"
@@ -13,56 +13,45 @@
  * last_change: "$LastChangedDate$"
  */
 
-package org.openehr.am.openehrprofile.datatypes.quantity;
+package org.openehr.am.openehrprofile.datatypes.basic;
 
-import org.apache.commons.lang.StringUtils;
-import org.openehr.rm.support.basic.Interval;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
 
 /**
- * Constrain instances of DV_QUANTITY.
+ * Definition of a state machine in terms of states, transition events and
+ * outputs, and next states.
  * 
  * @author Rong Chen
+ * @version 1.0
  */
-public class CDvQuantityItem {	
+public class StateMachine {
 	
 	/**
-	 * Constructor
+	 * Creates a StateMachine by a set of states
 	 * 
-	 * @param value 
-	 * @param units not null or empty
-	 * @throws IllegalArgumentException if units null or empty
+	 * @param states not null or empty
+	 * @throws IlleglArgumentException if states null or empty
 	 */
-	public CDvQuantityItem(Interval<Double> value, String units) {
-		if(StringUtils.isEmpty(units)) {
-			throw new IllegalArgumentException("units null or empty");
+	public StateMachine(Set<State> states) {
+		if(states == null || states.isEmpty()) {
+			throw new IllegalArgumentException("states null or empty");
 		}
-		this.value = value;
-		this.units = units;
+		this.states = new HashSet<State>(states);
 	}
 	
 	/**
-	 * Constraint on units
+	 * Gets states of this StateMachine
 	 * 
-	 * @return units
+	 * @return an unmodifiable set of states
 	 */
-	public String getUnits() {
-		return units;
+	public Set<State> getStates() {
+		return Collections.unmodifiableSet(states);
 	}
 	
-	/**
-	 * Value must be inside the supplied interval.
-	 * 
-	 * @return value interval
-	 */
-	public Interval<Double> getValue() {
-		return value;
-	}
-	
-	/* fields */
-	private Interval<Double> value;
-	private String units;	
+	private Set<State> states;
 }
-
 /*
  *  ***** BEGIN LICENSE BLOCK *****
  *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -77,7 +66,7 @@ public class CDvQuantityItem {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is CDvQuantity.java
+ *  The Original Code is StateMachine.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2006
@@ -92,3 +81,4 @@ public class CDvQuantityItem {
  *
  *  ***** END LICENSE BLOCK *****
  */
+

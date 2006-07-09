@@ -23,15 +23,22 @@ import org.openehr.am.archetype.ontology.QueryBindingItem;
 import org.openehr.am.archetype.ontology.TermBindingItem;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
-import org.openehr.am.archetype.constraintmodel.domain.*;
+import org.openehr.am.archetype.constraintmodel.domain.CCodedText;
+import org.openehr.am.archetype.constraintmodel.domain.CCount;
 import org.openehr.am.archetype.description.ArchetypeDescription;
 import org.openehr.am.archetype.description.ArchetypeDescriptionItem;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
+import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
+import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.basic.Interval;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -431,10 +438,10 @@ protected void printDescriptionItem(ArchetypeDescriptionItem item,
 			printCCount((CCount) cdomain, indent, out);
 		} else if (cdomain instanceof CCodedText) {
 			printCCodedText((CCodedText) cdomain, indent, out);
-		} else if (cdomain instanceof COrdinal) {
-			printCOrdinal((COrdinal) cdomain, indent, out);
-		} else if (cdomain instanceof CQuantity) {
-			printCQuantity((CQuantity) cdomain, indent, out);
+		} else if (cdomain instanceof CDvOrdinal) {
+			printCDvOrdinal((CDvOrdinal) cdomain, indent, out);
+		} else if (cdomain instanceof CDvQuantity) {
+			printCDvQuantity((CDvQuantity) cdomain, indent, out);
 		}
 		// unknow CDomainType
 	}
@@ -491,43 +498,78 @@ protected void printDescriptionItem(ArchetypeDescriptionItem item,
 		}
 	}
 
-	protected void printCOrdinal(COrdinal cordinal, int indent, Writer out)
+	protected void printCDvOrdinal(CDvOrdinal cordinal, int indent, Writer out)
 			throws IOException {
 
-		for (int i = 0, j = cordinal.getList().size(); i < j; i++) {
-			Ordinal ordinal = cordinal.getList().get(i);
+		for (Iterator<Ordinal> it = cordinal.getList().iterator(); 
+				it.hasNext();) {
+			Ordinal ordinal = it.next();
+			CodePhrase symbol = ordinal.getSymbol();
 			indent(indent, out);
 			out.write(Integer.toString(ordinal.getValue()));
 			out.write("|[");
-			out.write(ordinal.getTerminology());
+			out.write(symbol.getTerminologyID().getValue());
 			out.write("::");
-			out.write(ordinal.getCode());
+			out.write(symbol.getCodeString());
 			out.write("]");
-			if (i != j - 1) {
+			if (it.hasNext()) {
 				out.write(",");
 			}
 			newline(out);
 		}
 	}
 
-	/* not using DV_QUANTITY because this is a domain type extension */
-	protected void printCQuantity(CQuantity cquantity, int indent, Writer out)
+	protected void printCDvQuantity(CDvQuantity cquantity, int indent, Writer out)
 			throws IOException {
 		indent(indent, out);
-		out.write("QUANTITY matches {");
+		out.write("C_QUANTITY <");
 		newline(out);
 		indent(indent + 1, out);
-		out.write("magnitude matches {");
-		printInterval(cquantity.getMagnitude(), out);
-		out.write("}");
+		CodePhrase property = cquantity.getProperty();
+		if(property != null) {
+			out.write("property = [");			
+			out.write(property.getTerminologyID().getValue());
+			out.write("::");
+			out.write(property.getCodeString());
+			out.write("]");
+		}
 		newline(out);
-		indent(indent + 1, out);
-		out.write("units matches {\"");
-		out.write(cquantity.getUnits());
-		out.write("\"}");
-		newline(out);
+		List<CDvQuantityItem> list = cquantity.getList();
+		if(list != null) {
+			indent(indent + 1, out);			
+			out.write("list = <");
+			newline(out);
+			int index = 1;
+			for(CDvQuantityItem item : list) {
+				indent(indent + 2, out);
+				out.write("[\"");
+				out.write(Integer.toString(index));
+				out.write("\"] = <");
+				newline(out);
+				indent(indent + 3, out);
+				out.write("units = <\"");
+				out.write(item.getUnits());
+				out.write("\">");
+				newline(out);
+				Interval<Double> value = item.getValue();
+				if(value != null) {
+					indent(indent + 3, out);
+					out.write("magnitude = <");
+					printInterval(value, out);
+					out.write(">");
+					newline(out);
+				}
+				index++;
+				indent(indent + 2, out);
+				out.write(">");
+				newline(out);
+			}
+			indent(indent + 1, out);
+			out.write(">");
+			newline(out);
+		}		
 		indent(indent, out);
-		out.write("}");
+		out.write(">");
 		newline(out);
 	}
 

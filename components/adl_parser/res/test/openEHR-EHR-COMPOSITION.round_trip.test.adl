@@ -35,6 +35,23 @@ definition
                                             ELEMENT[at1003]  matches {
                                                 value matches {/this|that|something else/}
                                             }
+                                            ELEMENT[at1004] matches {	-- c_quantity     
+							                    value matches {
+													C_QUANTITY <
+														property = [openehr::128]
+														list = <									
+															["1"] = <
+																units = <"yr">
+																magnitude = <|0.0..200.0|>
+															>
+															["2"] = <
+																units = <"mth">
+																magnitude = <|1.0..36.0|>
+															>									
+														>
+													>
+												}
+						                    }	
                                         }
                                     }
                                 }

@@ -39,20 +39,25 @@ public class RoundTripTest extends ParserTestBase {
     }
 
     public void testRoundTrip() throws Exception {
-        ADLParser parser = new ADLParser(new File(dir,
+        
+    	// first round parse ADL into AOM
+    	ADLParser parser = new ADLParser(new File(dir,
                 "openEHR-EHR-COMPOSITION.round_trip.test.adl"));
         Archetype archetypeOne = parser.parse();
 
+        // output AOM into ADL
         ADLOutputter outputter = new ADLOutputter();
         StringWriter writer = new StringWriter();
         outputter.output(archetypeOne, writer);
 
         String adlOutput = writer.toString();
-        //System.out.println(adlOutput);
+        // System.out.println(adlOutput);
         
+        // second round parse ADL into AOM
         parser = new ADLParser(adlOutput);
         Archetype archetypeTwo = parser.parse();
 
+        // compare the AOM from two round of parsing
         // verify header - id, concenpt, parent
         assertEquals("id not same", archetypeOne.getArchetypeId(),
                 archetypeTwo.getArchetypeId());

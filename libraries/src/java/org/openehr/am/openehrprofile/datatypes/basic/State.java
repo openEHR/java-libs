@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class CDvQuantityItem"
+ * description: "Class State"
  * keywords:    "openehr archetype profile"
  *
  * author:      "Rong Chen <rong@acode.se>"
@@ -13,54 +13,41 @@
  * last_change: "$LastChangedDate$"
  */
 
-package org.openehr.am.openehrprofile.datatypes.quantity;
+package org.openehr.am.openehrprofile.datatypes.basic;
 
 import org.apache.commons.lang.StringUtils;
-import org.openehr.rm.support.basic.Interval;
 
 /**
- * Constrain instances of DV_QUANTITY.
+ * Abstract definition of one state in a state machine.
  * 
  * @author Rong Chen
+ * @version 1.0
  */
-public class CDvQuantityItem {	
+public abstract class State {
 	
 	/**
-	 * Constructor
+	 * Creates a State by name
 	 * 
-	 * @param value 
-	 * @param units not null or empty
-	 * @throws IllegalArgumentException if units null or empty
+	 * @param name not null or empty
+	 * @throws IllegalArgumentException if name null or empty
 	 */
-	public CDvQuantityItem(Interval<Double> value, String units) {
-		if(StringUtils.isEmpty(units)) {
-			throw new IllegalArgumentException("units null or empty");
+	public State(String name) {
+		if(StringUtils.isEmpty(name)) {
+			throw new IllegalArgumentException("name null or empty");
 		}
-		this.value = value;
-		this.units = units;
+		this.name = name;		
 	}
 	
 	/**
-	 * Constraint on units
+	 * Gest name of this state
 	 * 
-	 * @return units
+	 * @return name
 	 */
-	public String getUnits() {
-		return units;
+	public String getName() {
+		return name;
 	}
 	
-	/**
-	 * Value must be inside the supplied interval.
-	 * 
-	 * @return value interval
-	 */
-	public Interval<Double> getValue() {
-		return value;
-	}
-	
-	/* fields */
-	private Interval<Double> value;
-	private String units;	
+	private String name;
 }
 
 /*
@@ -77,7 +64,7 @@ public class CDvQuantityItem {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is CDvQuantity.java
+ *  The Original Code is State.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2006
