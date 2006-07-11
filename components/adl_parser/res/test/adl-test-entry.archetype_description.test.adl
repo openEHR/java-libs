@@ -1,0 +1,42 @@
+archetype 
+	adl-test-ENTRY.archetype_description.draft
+	
+concept 
+	[at0000]	--  test
+
+description
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["date"] = <"23/04/2006">
+		["email"] = <"sam.heard@oceaninformatics.biz">
+	>
+	details = <
+		["en"] = <
+			language = <"en">
+			purpose = <"For recording a problem, condition or issue that has ongoing significance to the person's health.">
+			use = <"Used for recording any problem, present or past - so is used for recording past history as well as current problems. Used with changed 'Subject of care' for recording problems of relatives and so for family history.">
+			keywords = <"issue", "condition">
+			misuse = <"Use specialisations for medical diagnoses, 'openEHR-EHR-EVALUATION.problem-diagnosis' and histological diagnoses 'openEHR-EHR-EVALUATION.problem-diagnosis-histological'">
+		>
+	>
+	lifecycle_state = <"AuthorDraft">
+	other_contributors = <>
+	
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test">; 
+					description = <"test">
+				>
+			>
+		>
+	>

@@ -204,6 +204,7 @@ PARSER_END(ADLParser)
 | < SYM_DETAILS: "details">
 | < SYM_ORIGINAL_RESOURCE_URI: "original_resource_uri">
 | < SYM_OTHER_DETAILS: "other_details">
+| < SYM_OTHER_CONTRIBUTORS: "other_contributors">
 | < SYM_SUBMISSION: "submission">
 | < SYM_ORGANISATION: "organisation">
 | < SYM_DATE: "date">
@@ -655,6 +656,7 @@ ArchetypeDescription arch_description() :
    
    [ <SYM_COPYRIGHT> <SYM_EQ> "<" string_value() ">" ]
    
+   [ <SYM_OTHER_CONTRIBUTORS> <SYM_EQ> "<" [ string_value() ] ">" ]
    {
      return new ArchetypeDescription(originalAuthor, otherContributors,
                                      lifecycleState, details,
@@ -2347,6 +2349,7 @@ CCodedText term_code_constraint(String path) :
   Token t;
   String terminology = null;
   List codeList = new ArrayList();
+  String assumed = null;
 }
 {
   t = <V_TERMINOLOGY_ID_BLOCK> 
@@ -2360,6 +2363,7 @@ CCodedText term_code_constraint(String path) :
       (
         [","] t = <V_TERM_CODE> { codeList.add(t.image); }
       )*
+      [ ";" t = <V_TERM_CODE> { assumed = t.image; } ]	
     ]
   "]"
   { 
@@ -2382,7 +2386,7 @@ CDvQuantity c_dv_quantity(String path) :
 {
   <SYM_C_QUANTITY> "<"
     [    	
-	  <SYM_PROPERTY> <SYM_EQ> property = code_phrase()  
+	  <SYM_PROPERTY> <SYM_EQ> "<" property = code_phrase() ">"  
     ] 
 
 	[
@@ -2412,7 +2416,7 @@ CodePhrase code_phrase() :
 	  terminology = terminology.substring(1, terminology.length() - 2);
 	}	
 	t = <V_TERM_CODE> { code = t.image; }	    
-  "]"	  	  
+  "]" 	  	  
   {
   	// leave lexical state "TERM_CODE"
   	token_source.SwitchTo(DOMAIN_TYPE_C_QUANTITY);

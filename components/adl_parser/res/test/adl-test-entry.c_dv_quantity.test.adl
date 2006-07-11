@@ -27,7 +27,7 @@ definition
                     ELEMENT[at10005] matches {	-- c_quantity     
 	                    value matches {
 							C_QUANTITY <
-								property = [openehr::128]
+								property = <[openehr::128]>
 								list = <									
 									["1"] = <
 										units = <"yr">
