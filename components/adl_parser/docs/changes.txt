@@ -27,3 +27,6 @@
 2006/07/04
 .updated C_DV_QUANTITY and removed unnecessary TerminologyUtil
 .added c_dv_ordinal connected to newly added CDvQuantity in the RM
+
+2006/07/11
+.added support for adl_version and controlled

@@ -50,12 +50,12 @@ import org.openehr.am.openehrprofile.datatypes.quantity.*;
 /**
  * JavaCC grammer file for Archteype Definition Language (ADL)
  *
- * Targeted ADL revision 1.3
+ * Targeted ADL revision 1.4
  *
  * Included uriGrammarFragment.txt from Gregory Kick
  *
  * @author Rong Chen (rong@acode.se)
- * @version 1.3
+ * @version 1.4
  */
 
 public class ADLParser {
@@ -185,7 +185,10 @@ PARSER_END(ADLParser)
 
 < * > TOKEN [IGNORE_CASE]: /* RESERVED WORDS AND LITERALS - ADL */
 {
-  <SYM_ARCHETYPE: "archetype"([" ","\t","\r","\n"])*"\n" > : DEFAULT
+  <SYM_ARCHETYPE: "archetype"([" ","\t","\r","\n"])* > : DEFAULT
+| <SYM_ADL_VERSION: "adl_version"> : DEFAULT
+| <SYM_CONTROLLED: "controlled"> : DEFAULT
+| <SYM_UNCONTROLLED: "uncontrolled"> : DEFAULT
 | <SYM_SPECIALIZE: "speciali"["s","z"]"e"([" ","\t","\r","\n"])*"\n"> : DEFAULT
 | <SYM_CONCEPT: "concept"([" ","\t","\r","\n"])*"\n" > : DEFAULT
 | <SYM_DEFINITION: "definition"([" ","\t","\r","\n"])*"\n" > : CADL
@@ -213,7 +216,6 @@ PARSER_END(ADLParser)
 | < SYM_MISUSE: "misuse">
 | < SYM_COPYRIGHT: "copyright">
 | < SYM_KEYWORDS: "keywords">
-| < SYM_ADL_VERSION: "adl_version">
 | < SYM_RIGHTS: "rights">
 | < SYM_DESCRIPTION_WORD: "description">
 }
@@ -536,7 +538,10 @@ TOKEN : /* IDENTIFIERS - ADL */
 
 Archetype archetype() :
 {
+  Token t;	
   String id;
+  String adlVersion = null;
+  boolean controlled = false;
   String parent = null;
   String concept;
   ArchetypeDescription description = null;
@@ -544,11 +549,27 @@ Archetype archetype() :
   ArchetypeOntology ontology;
 }
 {
-  id = arch_identification()
+  <SYM_ARCHETYPE>	
+  [ 
+    <SYM_L_PARENTHESIS>
+    adlVersion = adl_version() 
+    [ 
+      <SYM_SEMICOLON>
+      controlled = controlled() 
+    ]
+    <SYM_R_PARENTHESIS>
+  ]
+
+  t = <V_ARCHETYPE_ID>
+  { id = t.image; }
+
   [ parent = arch_specialisation() ]
   concept = arch_concept()
+
   [ description = arch_description() ]
+
   definition = arch_definition()
+
   ontology = arch_ontology()
   <EOF>
 
@@ -558,13 +579,25 @@ Archetype archetype() :
   }
 }
 
-String arch_identification() :
+String adl_version() :
 {
   Token t;
 }
 {
-  <SYM_ARCHETYPE> t = <V_ARCHETYPE_ID>
+  <SYM_ADL_VERSION> <SYM_EQ> t = <V_REAL>
   { return t.image; }
+}
+
+boolean controlled() :
+{
+  boolean ret = false;	
+}
+{
+  <SYM_CONTROLLED> 
+  { return true; }
+  |
+  <SYM_UNCONTROLLED>
+  { return false; }
 }
 
 String arch_specialisation() :
