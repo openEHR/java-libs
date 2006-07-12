@@ -61,8 +61,8 @@ public class RoundTripTest extends ParserTestBase {
         // verify header - id, concenpt, parent
         assertEquals("id not same", archetypeOne.getArchetypeId(),
                 archetypeTwo.getArchetypeId());
-        assertEquals("concept not same", archetypeOne.getConceptCode(),
-                archetypeTwo.getConceptCode());
+        assertEquals("concept not same", archetypeOne.getConcept(),
+                archetypeTwo.getConcept());
         assertEquals("parent not same", archetypeOne.getParentArchetypeId(),
                 archetypeTwo.getParentArchetypeId());
 

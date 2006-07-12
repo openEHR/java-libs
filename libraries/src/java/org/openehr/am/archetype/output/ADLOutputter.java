@@ -97,7 +97,7 @@ public class ADLOutputter {
 	 */
 	public void output(Archetype archetype, Writer out) throws IOException {
 		printHeader(archetype.getArchetypeId(), archetype
-				.getParentArchetypeId(), archetype.getConceptCode(), out);
+				.getParentArchetypeId(), archetype.getConcept(), out);
 		newline(out);
 
 		printDescription(archetype.getDescription(), out);

@@ -40,14 +40,7 @@ public class ArchetypeIdentificationTest extends ParserTestBase {
                 "adl-test-entry.archetype_identification.test.adl"));
         Archetype archetype = parser.parse();
         assertNotNull(archetype);
-        
-        /*ADLOutputter outputter = new ADLOutputter();
-        StringWriter writer = new StringWriter();
-        outputter.output(archetype, writer);
-
-        System.out.println(writer.toString());*/
-
-
+        assertEquals("adl_version wrong", "1.4", archetype.getAdlVersion());
     }
 }
 

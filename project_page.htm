@@ -217,7 +217,7 @@
 			
 		</ul>
 		
-		<h3>Implemented Specifications&nbsp;</h3>
+		<h3>Implemented openEHR Specifications&nbsp;</h3>
 		<ul>
 			
 			<li>
@@ -229,7 +229,7 @@
 			<li>
 				<span style="font-style: italic; font-weight: bold;">open</span>
 				<span style="font-weight: bold;">EHR Archetype Model</span>:
-				Archetype Object Model, Archetype Definition Language (in parser) </li>
+				Archetype Object Model, openEHR Archetype Profile, Archetype Definition Language (in the parser) </li>
 			
 		</ul>
 		
@@ -250,105 +250,18 @@
 		</ul>
 		<h3>ADL Parser</h3>
 		<ul>
-			<li> A Java implementation of ADL parser targeting ADL 1.2 </li>
+			<li> A Java implementation of ADL parser targeting ADL 1.4</li>
 			<li> Fully integrated with the Java Kernel </li>
 			
 			<li> limited post-parsing validation </li>
 			
 		</ul> </ul>
 		
-		<h2>Recent Changes</h2>
-		
+		<h2>Change log</h2>
 		<ul>
-			
-			<li><b>2005-03-04</b> bug fix in DvDateTime; removed null check for attribute
-				details in Party</li>
-			
-			<li><b>2005-03-19</b> v1.2.1, added support for object creation by archetype
-				internal references </li>
-			
-			<li><b>2005-03-21</b> v1.2.2, better error report during object creation;
-				changes in object creation within primitive constraint</li>
-			
-			<li><b>2005-03-23</b> v1.2.3, 1. added logging support for archetype object
-				creation 2. buf fix of assigned value causing node not optional</li>
-			
-			<li><b>2005-03-30</b> bug fix in DvDate.isValidDate()</li>
-			
-			<li><b>2005-03-31</b> added base() in ArchetypeID</li>
-			
-			<li><b>2005-04-29</b> v1.2.4, improved support for runtime path based query
-				on Locatable subclasses (e.g. ItemList, Composition and Party).</li>
-			
-			<li><b>2005-05-05</b> bug fix in DvQuantityTest related to hard coded decimal
-				separator</li>
-			
-			<li><b>2005-05-13</b> improvement in createObject() of CReal and
-				CInteger</li>
-			
-			<li><b>2005-06-20</b> bug fix in participation constructor regarding mode
-				and function</li>
-			
-			<li><b>2005-07-11</b> fixed countries codeset checking in Composition</li>
-			
-			<li><b>2005-07-12</b> interface Terminology no longer extends CodeSet,
-				since no need to have has(CodePhrase code)</li>
-			
-			<li><b>2005-07-13</b> add null checking for setting in the constructor of
-				EventContext bug fix in getParticipations of EventContext change
-				'charset' and 'language' from required to optional in the constructor of
-				DvCodedText</li>
-			
-			<li><b>2005-07-22</b> +++++++++++++++ move to subversion control
-				+++++++++++++++</li>
-			
-			<li><b>2005-08-18</b> fixed obsolete path separator in data structure
-				package</li>
-			
-			<li><b>2005-11-17</b> fixed TermBindingItem bug in ADL parser</li>
-			
-			<li><b>2005-12-02</b> better support for archetype ontology output,
-				contributed by Mattias Forss and Johan Hjalmarsson</li>
-			
-			<li><b>2006-03-21</b> fixed a bug in the constructor of ArchetypeOntology,
-				thanks to Jonas Andersson, Joakim Fredriksson and Routis Haralampos</li>
-			
-			<li><b>2006-03-28</b>
-				<ul>
-					<li>updated parser for better support of dADL in description and
-						ontology part</li>
-					<li>adjusted all the test archetypes and parser tests</li>
-					<li>updated and fixed a bug in ADLOutputter</li>
-					<li>more up-to-date ArchetypeDescriptionItem</li>
-				</ul>
-			</li>
-			
-			<li><b>2006-03-30</b>
-				<ul>
-					<li>added Maven 2 project descriptors for the kernel and parser,
-						contributed by Routis Haralampos</li>					
-					<li>updated AOM and parser for assumed values support</li>
-				</ul>
-			</li>
-			<li><b>2006-03-31</b>
-				<ul>
-					<li>parser bugs fix related to term/constraint definitions and binding 
-						with multi-language or multi-terminology, thanks to by Routis Haralampos</li>					
-					<li>updated constraint binding syntax in the parser</li>					
-				</ul>
-			</li>
-			<li><b>2006-04-09</b>
-				<ul>
-					<li>bug fix in ArchetypeID allowing multiple specialisation of concept</li>					
-					<li>updated c_quantity in the AOM and parser</li>
-                              <li>updated ADL path grammar in the parser</li>					
-				</ul>
-			</li>
-			<li><b>2006-04-22</b> added equals() to DvParagraph</li>
-
-			
-		</ul>
-		
+			<li><a href="libraries/docs/changes.txt">kernel changes</a></li>
+		    <li><a href="components/adl_parser/docs/changes.txt">parser changes</a></li>
+		</ul>		
 		<h2>TO DO</h2>
 		<span style="font-weight: bold;"></span>
 		

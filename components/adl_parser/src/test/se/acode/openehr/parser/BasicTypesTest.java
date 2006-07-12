@@ -173,6 +173,9 @@ public class BasicTypesTest extends ParserTestBase {
 
 		assertCInteger(list.get(15), new Interval<Integer>(new Integer(-10),
 				new Integer(-5)), null, -7);
+		
+		assertCInteger(list.get(16), new Interval<Integer>(new Integer(100),
+				new Integer(100)), null, null);
 	}
 
 	/**

@@ -30,6 +30,11 @@
 
 2006/07/11
 .added support for adl_version and controlled
+
+2006/07/11
 .bug fix for c_dv_quantity
 .quick fix for other_contributors in arch_desc
 .added assumed_value for c_coded_text
+
+2006/07/11
+.added point interval support

@@ -101,7 +101,7 @@
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-kernel</artifactId>
-			<version>1.2.6</version>
+			<version>1.2.7-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

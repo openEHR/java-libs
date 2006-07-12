@@ -177,6 +177,32 @@ fixed obsolete path separator in data structure package
 added setters for binding items in archetype ontology package
 bug fix for term binding in ADL parser
 
-2006-03-21
-bug fix in the constructor of ArchetypeOntology class
+2005-12-02 
+better support for archetype ontology output, contributed by Mattias Forss and Johan Hjalmarsson
 
+2006-03-21 
+fixed a bug in the constructor of ArchetypeOntology, thanks to Jonas Andersson, Joakim Fredriksson and Routis Haralampos
+
+2006-03-28
+updated and fixed a bug in ADLOutputter
+more up-to-date ArchetypeDescriptionItem
+
+2006-03-30
+added Maven 2 project descriptors for the kernel and parser, contributed by Routis Haralampos
+updated AOM and parser for assumed values support
+
+2006-03-31
+parser bugs fix related to term/constraint definitions and binding with multi-language or multi-terminology, thanks to by Routis Haralampos
+
+2006-04-09
+bug fix in ArchetypeID allowing multiple specialisation of concept
+
+2006-04-22 
+added equals() to DvParagraph
+
+2006-07-10
+implmented openEHR Archetype Profile 
+updated ADLOutputter accordingly
+
+2006-07-12
+added adlVersion and renamed conceptCode to concept on Archetype class

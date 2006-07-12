@@ -575,8 +575,8 @@ Archetype archetype() :
   <EOF>
 
   {
-    return new Archetype(id, parent, concept, description, definition,
-                         ontology);
+    return new Archetype(adlVersion, id, parent, concept, description, 
+    					definition, ontology);
   }
 }
 
@@ -1304,7 +1304,11 @@ Interval integer_interval_value() :
 {
   <SYM_INTERVAL_DELIM>
   (
-    lower = integer_value() <SYM_ELLIPSIS> upper = integer_value()
+    lower = integer_value() 
+    { upper = lower; }
+    [ 
+      <SYM_ELLIPSIS> upper = integer_value()       
+    ]
     {
       i = new Interval(new Integer(lower), new Integer(upper), true, true);
     }

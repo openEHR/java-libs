@@ -70,6 +70,9 @@ definition
                 integer_attr15 matches {|>=10|; 12}
                 integer_attr16 matches {|<=10|; 8}
                 integer_attr17 matches {|-10..-5|; -7}
+                
+                -- fixed value as interval
+                integer_attr18 matches {|100|}
             }
         }
         real_attributes matches {

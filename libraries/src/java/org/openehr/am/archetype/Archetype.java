@@ -45,393 +45,431 @@ import java.util.Set;
  */
 public final class Archetype {
 
-    /**
-     * Constructs an Archetype
-     *
-     * @param id
-     * @param parentId
-     * @param conceptCode
-     * @param description
-     * @param definition
-     * @param ontology
-     * @throws IllegalArgumentException if description null or ontology null
-     */
-    public Archetype(String id, String parentId, String conceptCode,
-                     ArchetypeDescription description,
-                     CComplexObject definition,
-                     ArchetypeOntology ontology) {
-        if (id != null && StringUtils.isEmpty(id)) {
-            throw new IllegalArgumentException("empty id");
-        }
-        if (ontology == null) {
-            throw new IllegalArgumentException("ontology null");
-        }
-        if (definition == null) {
-            throw new IllegalArgumentException("definition null");
-        }
-        this.archetypeId = new ArchetypeID(id);
-        this.conceptCode = conceptCode;
-        this.parentArchetypeId =
-                ( parentId == null ? null : new ArchetypeID(parentId) );
-        this.description = description;
-        this.definition = definition;
-        this.ontology = ontology;
-        this.pathNodeMap = new HashMap<String, CObject>();
-        this.pathInputMap = new HashMap<String, String>();
-        this.inputPathMap = new HashMap<String, String>();
-        this.requiredInput = new HashSet<String>();
-        inputCounter = 0;
-        loadMaps(definition, true);
-        loadInternalRefs(definition, true, null);
+	/**
+	 * Constructs an Archetype
+	 *
+	 * @param adlVersion null if unspecified
+	 * @param id
+	 * @param parentId
+	 * @param concept
+	 * @param description
+	 * @param definition
+	 * @param ontology
+	 * @throws IllegalArgumentException if description null or ontology null
+	 */
+	public Archetype(String adlVersion, String id, String parentId,
+			String conceptCode, ArchetypeDescription description,
+			CComplexObject definition, ArchetypeOntology ontology) {
+		if (id != null && StringUtils.isEmpty(id)) {
+			throw new IllegalArgumentException("empty id");
+		}
+		if (ontology == null) {
+			throw new IllegalArgumentException("ontology null");
+		}
+		if (definition == null) {
+			throw new IllegalArgumentException("definition null");
+		}
+		this.adlVersion = adlVersion;
+		this.archetypeId = new ArchetypeID(id);
+		this.concept = conceptCode;
+		this.parentArchetypeId = (parentId == null ? null : new ArchetypeID(
+				parentId));
+		this.description = description;
+		this.definition = definition;
+		this.ontology = ontology;
+		this.pathNodeMap = new HashMap<String, CObject>();
+		this.pathInputMap = new HashMap<String, String>();
+		this.inputPathMap = new HashMap<String, String>();
+		this.requiredInput = new HashSet<String>();
+		inputCounter = 0;
+		loadMaps(definition, true);
+		loadInternalRefs(definition, true, null);
 
-        logger.debug("inputPathMap: " + inputPathMap);
-        logger.debug("requiredInput: " + requiredInput);
-    }
+		logger.debug("inputPathMap: " + inputPathMap);
+		logger.debug("requiredInput: " + requiredInput);
+	}
 
-    private void loadMaps(CObject node, boolean required) {
-        pathNodeMap.put(node.path(), node);
+	/**
+	 * Constructs an Archetype
+	 *
+	 * @param id
+	 * @param parentId
+	 * @param concept
+	 * @param description
+	 * @param definition
+	 * @param ontology
+	 * @throws IllegalArgumentException if description null or ontology null
+	 */
+	public Archetype(String id, String parentId, String conceptCode,
+			ArchetypeDescription description, CComplexObject definition,
+			ArchetypeOntology ontology) {
+		this(null, id, parentId, conceptCode, description, definition, ontology);
+	}
 
-        if (node instanceof LeafConstraint) {
-            LeafConstraint leaf = (LeafConstraint) node;
-            if (!leaf.hasAssignedValue()) {
-                inputCounter++;
-                String input = INPUT + inputCounter;
-                pathInputMap.put(node.path(), input);
-                inputPathMap.put(input, node.path());
-                if (required && node.isRequired()) {
-                    requiredInput.add(node.path());
-                }
-            }
-            return;
-        }
+	private void loadMaps(CObject node, boolean required) {
+		pathNodeMap.put(node.path(), node);
 
-        if (!( node instanceof CComplexObject )) {
-            return; // other types of cobject
-        }
-        CComplexObject parent = (CComplexObject) node;
+		if (node instanceof LeafConstraint) {
+			LeafConstraint leaf = (LeafConstraint) node;
+			if (!leaf.hasAssignedValue()) {
+				inputCounter++;
+				String input = INPUT + inputCounter;
+				pathInputMap.put(node.path(), input);
+				inputPathMap.put(input, node.path());
+				if (required && node.isRequired()) {
+					requiredInput.add(node.path());
+				}
+			}
+			return;
+		}
 
-        if (parent.getAttributes() == null) {
-            return; // no attribute
-        }
-        for (CAttribute attribute : parent.getAttributes()) {
-            if (attribute.getExistence().equals(
-                    CAttribute.Existence.NOT_ALLOWED)) {
-                continue;
-            }
-            if (attribute.getChildren() == null) {
-                continue; // no child
-            }
-            for (CObject child : attribute.getChildren()) {
-                loadMaps(child, required && node.isRequired() &&
-                        attribute.isRequired());
-            }
-        }
-    }
+		if (!(node instanceof CComplexObject)) {
+			return; // other types of cobject
+		}
+		CComplexObject parent = (CComplexObject) node;
 
-    private void loadInternalRefs(CObject node, boolean required,
-                                  String refPath) {
+		if (parent.getAttributes() == null) {
+			return; // no attribute
+		}
+		for (CAttribute attribute : parent.getAttributes()) {
+			if (attribute.getExistence().equals(
+					CAttribute.Existence.NOT_ALLOWED)) {
+				continue;
+			}
+			if (attribute.getChildren() == null) {
+				continue; // no child
+			}
+			for (CObject child : attribute.getChildren()) {
+				loadMaps(child, required && node.isRequired()
+						&& attribute.isRequired());
+			}
+		}
+	}
 
-        if (( node instanceof LeafConstraint ) && refPath != null) {
-            LeafConstraint leaf = (LeafConstraint) node;
-            if (!leaf.hasAssignedValue()) {
-                inputCounter++;
-                String input = INPUT + inputCounter;
-                String path = refPath + ArchetypeInternalRef.USE_NODE
-                        + node.path();
-                pathInputMap.put(path, input);
-                inputPathMap.put(input, path);
-                if (required && node.isRequired()) {
-                    requiredInput.add(path);
-                }
-            }
-            return;
-        }
+	private void loadInternalRefs(CObject node, boolean required, String refPath) {
 
-        if (node instanceof ArchetypeInternalRef) {
-            ArchetypeInternalRef ref = (ArchetypeInternalRef) node;
-            loadInternalRefs(node(ref.getTargetPath()),
-                    required && node.isRequired(), ref.path());
-        }
+		if ((node instanceof LeafConstraint) && refPath != null) {
+			LeafConstraint leaf = (LeafConstraint) node;
+			if (!leaf.hasAssignedValue()) {
+				inputCounter++;
+				String input = INPUT + inputCounter;
+				String path = refPath + ArchetypeInternalRef.USE_NODE
+						+ node.path();
+				pathInputMap.put(path, input);
+				inputPathMap.put(input, path);
+				if (required && node.isRequired()) {
+					requiredInput.add(path);
+				}
+			}
+			return;
+		}
 
-        if (!( node instanceof CComplexObject )) {
-            return; // other types of cobject
-        }
-        CComplexObject parent = (CComplexObject) node;
+		if (node instanceof ArchetypeInternalRef) {
+			ArchetypeInternalRef ref = (ArchetypeInternalRef) node;
+			loadInternalRefs(node(ref.getTargetPath()), required
+					&& node.isRequired(), ref.path());
+		}
 
-        if (parent.getAttributes() == null) {
-            return; // no attribute
-        }
-        for (CAttribute attribute : parent.getAttributes()) {
-            if (attribute.getExistence().equals(
-                    CAttribute.Existence.NOT_ALLOWED)) {
-                continue;
-            }
-            if (attribute.getChildren() == null) {
-                continue; // no child
-            }
-            for (CObject child : attribute.getChildren()) {
-                loadInternalRefs(child, required && node.isRequired() &&
-                        attribute.isRequired(), refPath);
-            }
-        }
-    }
+		if (!(node instanceof CComplexObject)) {
+			return; // other types of cobject
+		}
+		CComplexObject parent = (CComplexObject) node;
 
-    /**
-     * Multi-axial identifier of this archetype in archetype space.
-     *
-     * @return archetypeId
-     */
-    public ArchetypeID getArchetypeId() {
-        return archetypeId;
-    }
+		if (parent.getAttributes() == null) {
+			return; // no attribute
+		}
+		for (CAttribute attribute : parent.getAttributes()) {
+			if (attribute.getExistence().equals(
+					CAttribute.Existence.NOT_ALLOWED)) {
+				continue;
+			}
+			if (attribute.getChildren() == null) {
+				continue; // no child
+			}
+			for (CObject child : attribute.getChildren()) {
+				loadInternalRefs(child, required && node.isRequired()
+						&& attribute.isRequired(), refPath);
+			}
+		}
+	}
 
-    /**
-     * OID identifier of this archetype.
-     *
-     * @return uid
-     */
-    public ObjectID getUid() {
-        return uid;
-    }
+	/**
+	 * ADL version if archteype was read in from an ADL sharable 
+	 * archetype.
+	 * 
+	 * @return null if unspecified
+	 */
+	public String getAdlVersion() {
+		return adlVersion;
+	}
 
-    /**
-     * The normative meaning of the archetype as a whole.
-     *
-     * @return concept code
-     */
-    public String getConceptCode() {
-        return conceptCode;
-    }
+	/**
+	 * Multi-axial identifier of this archetype in archetype space.
+	 *
+	 * @return archetypeId
+	 */
+	public ArchetypeID getArchetypeId() {
+		return archetypeId;
+	}
 
-    /**
-     * Identifier of the specialisation parent of this archetype.
-     *
-     * @return parent id
-     */
-    public ArchetypeID getParentArchetypeId() {
-        return parentArchetypeId;
-    }
+	/**
+	 * OID identifier of this archetype.
+	 *
+	 * @return uid
+	 */
+	public ObjectID getUid() {
+		return uid;
+	}
 
-    /**
-     * Description and lifecycle information of the archetype - all archetype
-     * information which is not required at runtime.
-     *
-     * @return description
-     */
-    public ArchetypeDescription getDescription() {
-        return description;
-    }
+	/**
+	 * The normative meaning of the archetype as a whole.
+	 *
+	 * @return concept code
+	 */
+	public String getConcept() {
+		return concept;
+	}
 
-    /**
-     * Root node of this archetype
-     *
-     * @return definition
-     */
-    public CComplexObject getDefinition() {
-        return definition;
-    }
+	/**
+	 * Identifier of the specialisation parent of this archetype.
+	 *
+	 * @return parent id
+	 */
+	public ArchetypeID getParentArchetypeId() {
+		return parentArchetypeId;
+	}
 
-    /**
-     * Ontology definition of this archetype
-     *
-     * @return ontology
-     */
-    public ArchetypeOntology getOntology() {
-        return ontology;
-    }
+	/**
+	 * Description and lifecycle information of the archetype - all archetype
+	 * information which is not required at runtime.
+	 *
+	 * @return description
+	 */
+	public ArchetypeDescription getDescription() {
+		return description;
+	}
 
-    /**
-     * Version of this archetype, extracted from id.
-     *
-     * @return version
-     */
-    public String version() {
-        return archetypeId.versionID();
-    }
+	/**
+	 * Root node of this archetype
+	 *
+	 * @return definition
+	 */
+	public CComplexObject getDefinition() {
+		return definition;
+	}
 
-    /**
-     * Version of predecessor archetype of this archetype, if any.
-     *
-     * @return previous version
-     */
-    public String previousVersion() {
-        // todo: how to find the previous version?
-        return null;
-    }
+	/**
+	 * Ontology definition of this archetype
+	 *
+	 * @return ontology
+	 */
+	public ArchetypeOntology getOntology() {
+		return ontology;
+	}
 
-    /**
-     * Retrun a node at given path
-     *
-     * @param path
-     * @return null if node not found
-     */
-    public CObject node(String path) {
-        return pathNodeMap.get(path);
-    }
+	/**
+	 * Version of this archetype, extracted from id.
+	 *
+	 * @return version
+	 */
+	public String version() {
+		return archetypeId.versionID();
+	}
 
-    /**
-     * String representation of this object
-     *
-     * @return string form
-     */
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this,
-                ToStringStyle.MULTI_LINE_STYLE);
-    }
+	/**
+	 * Version of predecessor archetype of this archetype, if any.
+	 *
+	 * @return previous version
+	 */
+	public String previousVersion() {
+		// todo: how to find the previous version?
+		return null;
+	}
 
-    /**
-     * Create a reference model instance by given input and constraints
-     * within this archetype
-     *
-     * @param valueMap
-     * @param errorMap
-     * @param systemValues
-     * @return locatable null if creation fails
-     */
-    public Object buildRMObject(Map<String, String> valueMap,
-                                Map<String, ErrorType> errorMap,
-                                Map<SystemValue, Object> systemValues) {
+	/**
+	 * Retrun a node at given path
+	 *
+	 * @param path
+	 * @return null if node not found
+	 */
+	public CObject node(String path) {
+		return pathNodeMap.get(path);
+	}
 
-        return buildRMObject(valueMap, new HashMap<String, Object>(),
-                errorMap, systemValues);
-    }
+	/**
+	 * String representation of this object
+	 *
+	 * @return string form
+	 */
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this,
+				ToStringStyle.MULTI_LINE_STYLE);
+	}
 
-    private Object buildRMObject(Map<String, String> valueMap,
-                                 Map<String, Object> objectMap,
-                                 Map<String, ErrorType> errorMap,
-                                 Map<SystemValue, Object> systemValues) {
+	/**
+	 * Create a reference model instance by given input and constraints
+	 * within this archetype
+	 *
+	 * @param valueMap
+	 * @param errorMap
+	 * @param systemValues
+	 * @return locatable null if creation fails
+	 */
+	public Object buildRMObject(Map<String, String> valueMap,
+			Map<String, ErrorType> errorMap,
+			Map<SystemValue, Object> systemValues) {
 
-        logger.debug("PHASE ONE -> Creating all leaf nodes objects..");
+		return buildRMObject(valueMap, new HashMap<String, Object>(), errorMap,
+				systemValues);
+	}
 
-        Set<String> inputPaths = new HashSet<String>();
+	private Object buildRMObject(Map<String, String> valueMap,
+			Map<String, Object> objectMap, Map<String, ErrorType> errorMap,
+			Map<SystemValue, Object> systemValues) {
 
-        for (String input : inputPathMap.keySet()) {
-            String path = inputPathMap.get(input);
-            String value = valueMap.get(input);
-            int index = path.indexOf(ArchetypeInternalRef.USE_NODE);
-            String refpath = path;
-            if (index > 0) {
-                refpath = path.substring(index
-                        + ArchetypeInternalRef.USE_NODE.length());
-            }
-            CObject cobj = pathNodeMap.get(refpath);
-            LeafConstraint leafc = (LeafConstraint) cobj;
+		logger.debug("PHASE ONE -> Creating all leaf nodes objects..");
 
-            // empty strings are skipped
-            if (StringUtils.isBlank(value)) {
+		Set<String> inputPaths = new HashSet<String>();
 
-                logger.debug("empty value of " + input + " skipped..");
+		for (String input : inputPathMap.keySet()) {
+			String path = inputPathMap.get(input);
+			String value = valueMap.get(input);
+			int index = path.indexOf(ArchetypeInternalRef.USE_NODE);
+			String refpath = path;
+			if (index > 0) {
+				refpath = path.substring(index
+						+ ArchetypeInternalRef.USE_NODE.length());
+			}
+			CObject cobj = pathNodeMap.get(refpath);
+			LeafConstraint leafc = (LeafConstraint) cobj;
 
-                valueMap.remove(inputByPath(path));
-                continue;
-            }
-            inputPaths.add(path);
+			// empty strings are skipped
+			if (StringUtils.isBlank(value)) {
 
-            Object datavalue = null;
-            try {
-                datavalue = leafc.createObject(value, systemValues, ontology);
-                objectMap.put(path, datavalue);
+				logger.debug("empty value of " + input + " skipped..");
 
-                logger.debug("object for node " + input
-                        + " successfully created..");
+				valueMap.remove(inputByPath(path));
+				continue;
+			}
+			inputPaths.add(path);
 
-            } catch (DVObjectCreationException e) {
+			Object datavalue = null;
+			try {
+				datavalue = leafc.createObject(value, systemValues, ontology);
+				objectMap.put(path, datavalue);
 
-                logger.warn("failed to create object for node " + input
-                        + " from value: " + value, e);
+				logger.debug("object for node " + input
+						+ " successfully created..");
 
-                errorMap.put(path, e.getErrorType());
-            }
-        }
+			} catch (DVObjectCreationException e) {
 
-        logger.debug("checking if all required leaf nodes has been created..");
+				logger.warn("failed to create object for node " + input
+						+ " from value: " + value, e);
 
-        for (String path : requiredInput) {
-            if (!valueMap.containsKey(inputByPath(path))) {
+				errorMap.put(path, e.getErrorType());
+			}
+		}
 
-                logger.warn("missing value for required leaf node " + path);
+		logger.debug("checking if all required leaf nodes has been created..");
 
-                errorMap.put(path, ErrorType.MISSING);
-            }
-        }
+		for (String path : requiredInput) {
+			if (!valueMap.containsKey(inputByPath(path))) {
 
-        logger.debug("getting assigned values for leaf nodes..");
+				logger.warn("missing value for required leaf node " + path);
 
-        for (String path : pathNodeMap.keySet()) {
-            CObject node = pathNodeMap.get(path);
-            if (node instanceof LeafConstraint) {
-                LeafConstraint leafc = (LeafConstraint) node;
-                if (leafc.hasAssignedValue()) {
-                    objectMap.put(path,
-                            leafc.assignedValue(systemValues, ontology));
-                }
-            }
-        }
+				errorMap.put(path, ErrorType.MISSING);
+			}
+		}
 
-        // only continue if all leaf nodes are constructed successfully
-        if (!errorMap.isEmpty()) {
+		logger.debug("getting assigned values for leaf nodes..");
 
-            logger.warn(errorMap.size()
-                    +  "error(s) occurred during phase one, terminating..");
+		for (String path : pathNodeMap.keySet()) {
+			CObject node = pathNodeMap.get(path);
+			if (node instanceof LeafConstraint) {
+				LeafConstraint leafc = (LeafConstraint) node;
+				if (leafc.hasAssignedValue()) {
+					objectMap.put(path, leafc.assignedValue(systemValues,
+							ontology));
+				}
+			}
+		}
 
-            return null; // terminate construction
-        }
+		// only continue if all leaf nodes are constructed successfully
+		if (!errorMap.isEmpty()) {
 
-        // create archetypeDetails for the root object
-        // todo: hardcoded RM version
-        Archetyped archetypeDetails = new Archetyped(archetypeId, null, "1.0");
-        RMObjectBuilder builder = new RMObjectBuilder(systemValues);
+			logger.warn(errorMap.size()
+					+ "error(s) occurred during phase one, terminating..");
 
-        logger.debug("PHASE TWO -> Building whole object tree..");
+			return null; // terminate construction
+		}
 
-        // build whole object tree
-        return definition.createObject(objectMap, inputPaths, errorMap, this,
-                builder, archetypeDetails);
-    }
+		// create archetypeDetails for the root object
+		// todo: hardcoded RM version
+		Archetyped archetypeDetails = new Archetyped(archetypeId, null, "1.0");
+		RMObjectBuilder builder = new RMObjectBuilder(systemValues);
 
-    /**
-     * Find input name by node path
-     *
-     * @param path
-     * @return null if path unknown
-     */
-    public String inputByPath(String path) {
-        return pathInputMap.get(path);
-    }
+		logger.debug("PHASE TWO -> Building whole object tree..");
 
-    /**
-     * Find node path by input name
-     *
-     * @param input
-     * @return null if input unknown
-     */
-    public String pathByInput(String input) {
-        return inputPathMap.get(input);
-    }
+		// build whole object tree
+		return definition.createObject(objectMap, inputPaths, errorMap, this,
+				builder, archetypeDetails);
+	}
 
-    /* fields */
-    private final ArchetypeID archetypeId;
-    private final ObjectID uid = null; // todo: not yet from adl
-    private final String conceptCode;
-    private final ArchetypeID parentArchetypeId;
-    private final ArchetypeDescription description;
-    private final CComplexObject definition;
-    private final ArchetypeOntology ontology;
-    private int inputCounter;
+	/**
+	 * Find input name by node path
+	 *
+	 * @param path
+	 * @return null if path unknown
+	 */
+	public String inputByPath(String path) {
+		return pathInputMap.get(path);
+	}
 
-    /* calculated fields */
-    private final Map<String, CObject> pathNodeMap;
-    private final Map<String, String> pathInputMap;
-    private final Map<String, String> inputPathMap;
-    private final Set<String> requiredInput;
+	/**
+	 * Find node path by input name
+	 *
+	 * @param input
+	 * @return null if input unknown
+	 */
+	public String pathByInput(String input) {
+		return inputPathMap.get(input);
+	}
 
-    /**
-     * prefix for all input names
-     */
-    public static final String INPUT = "input";
+	/* fields */
+	private final String adlVersion;
 
-    /* static field */
-    private Logger logger = Logger.getLogger(Archetype.class);
+	private final ArchetypeID archetypeId;
+
+	private final ObjectID uid = null; // todo: not yet from adl
+
+	private final String concept;
+
+	private final ArchetypeID parentArchetypeId;
+
+	private final ArchetypeDescription description;
+
+	private final CComplexObject definition;
+
+	private final ArchetypeOntology ontology;
+
+	private int inputCounter;
+
+	/* calculated fields */
+	private final Map<String, CObject> pathNodeMap;
+
+	private final Map<String, String> pathInputMap;
+
+	private final Map<String, String> inputPathMap;
+
+	private final Set<String> requiredInput;
+
+	/**
+	 * prefix for all input names
+	 */
+	public static final String INPUT = "input";
+
+	/* static field */
+	private Logger logger = Logger.getLogger(Archetype.class);
 }
 
 /*
