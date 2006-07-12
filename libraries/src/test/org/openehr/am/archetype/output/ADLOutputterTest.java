@@ -346,7 +346,7 @@ public class ADLOutputterTest extends TestCase {
         clean();
         outputter.printCDvQuantity(cquantity, 0, out);
         verify("C_QUANTITY <\r\n" +
-			   "    property = [openehr::128]\r\n" +
+			   "    property = <[openehr::128]>\r\n" +
 			   "    list = <\r\n" +									
 			   "        [\"1\"] = <\r\n" +
 			   "            units = <\"year\">\r\n" +

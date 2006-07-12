@@ -527,11 +527,11 @@ protected void printDescriptionItem(ArchetypeDescriptionItem item,
 		indent(indent + 1, out);
 		CodePhrase property = cquantity.getProperty();
 		if(property != null) {
-			out.write("property = [");			
+			out.write("property = <[");			
 			out.write(property.getTerminologyID().getValue());
 			out.write("::");
 			out.write(property.getCodeString());
-			out.write("]");
+			out.write("]>");
 		}
 		newline(out);
 		List<CDvQuantityItem> list = cquantity.getList();
