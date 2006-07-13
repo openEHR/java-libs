@@ -233,6 +233,9 @@ definition
                 date_time_attr18 matches {|<= 2000-01-01 00:00:00|; 2006-03-31 01:12:00}
                 date_time_attr19 matches {|> 2000-01-01 00:00:00|; 2006-03-31 01:12:00}
                 date_time_attr20 matches {|>= 2000-01-01 00:00:00|; 2006-03-31 01:12:00}
+                
+                -- newly supported pattern with "T" in the middle
+                date_time_attr21 matches {yyyy-??-??T??:??:??}
             }
         }
         duration_attributes matches {

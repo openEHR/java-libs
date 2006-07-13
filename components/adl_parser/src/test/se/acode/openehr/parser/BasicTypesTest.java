@@ -437,7 +437,7 @@ public class BasicTypesTest extends ParserTestBase {
 
 		assertCDateTime(list.get(3), "yyyy-mm-dd hh:??:XX", null, null, null);
 
-		assertCDateTime(list.get(4), "yyyy-??-?? ??:??:??", null, null, null);
+		assertCDateTime(list.get(4), "yyyy-??-?? ??:??:??", null, null, null);		
 
 		assertCDateTime(list.get(5), null, null,
 				new String[] { "1983-12-25 22:00:05" }, "yyyy-MM-dd HH:mm:ss");
@@ -492,6 +492,8 @@ public class BasicTypesTest extends ParserTestBase {
 
 		assertCDateTime(list.get(19), null,
 				greaterEqual(dateTime("2000-01-01 00:00:00")), null, null);
+		
+		assertCDateTime(list.get(40), "yyyy-??-??T??:??:??", null, null, null);
 	}
 
 	/**

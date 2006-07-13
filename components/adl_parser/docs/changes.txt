@@ -38,3 +38,6 @@
 
 2006/07/11
 .added point interval support
+
+2006/07/11
+.fixed "T" in the iso datetime pattern
