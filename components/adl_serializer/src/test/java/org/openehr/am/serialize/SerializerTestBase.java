@@ -8,7 +8,7 @@
  * copyright:   "Copyright (c) 2004,2005,2006 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL:$"
+ * file:        "$URL$"
  * revision:    "$LastChangedRevision: $"
  * last_change: "$LastChangedDate: $"
  */
