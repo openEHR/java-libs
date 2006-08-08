@@ -84,53 +84,7 @@ public class OntologyTest extends SerializerTestBase {
                 terminologies, termDefinitionsList, constraintDefinitionsList, termBindingList, constraintBindingList);
         clean();
         outputter.printOntology(ontology, out);
-        verify("ontology\r\n" +
-                "    primary_language = <\"en\">\r\n" +
-                "    languages_available = <\"en\", ...>\r\n" +
-    			"    terminologies_available = <\"local\", ...>\r\n" +
-                "    term_definitions = <\r\n" +
-                "        [\"en\"] = <\r\n" +
-                "            items = <\r\n" + 
-                "                [\"at0001\"] = <\r\n" +
-                "                    text = <\"text at0001\">\r\n" +
-                "                    description = <\"desc at0001\">\r\n" +
-                "                >\r\n" +
-                "                [\"at0002\"] = <\r\n" +
-                "                    text = <\"text at0002\">\r\n" +
-                "                    description = <\"desc at0002\">\r\n" +
-                "                >\r\n" +
-        		"            >\r\n" +
-        		"        >\r\n" +
-        		"    >\r\n" +
-                "    constraint_definitions = <\r\n" +
-                "        [\"en\"] = <\r\n" +
-                "            items = <\r\n" +
-                "                [\"ac0001\"] = <\r\n" +
-                "                    text = <\"text ac0001\">\r\n" +
-                "                    description = <\"desc ac0001\">\r\n" +
-                "                >\r\n" +
-                "                [\"ac0002\"] = <\r\n" +
-                "                    text = <\"text ac0002\">\r\n" +
-                "                    description = <\"desc ac0002\">\r\n" +
-                "                >\r\n" +
-                "            >\r\n" +
-                "        >\r\n" +
-                "    >\r\n" +
-        		"    term_binding = <\r\n" +
-        		"        [\"local\"] = <\r\n" +
-        		"            items = <\r\n" +
-        		"                [\"at0001\"] = <[local::100000]>\r\n" +
-        		"                [\"at0002\"] = <[local::200000]>\r\n" +
-        		"            >\r\n" +
-        		"        >\r\n" +
-        		"    >\r\n" +
-        		"    constraint_binding = <\r\n" +
-        		"        [\"local\"] = <\r\n" +
-        		"            items = <\r\n" +
-        		"                [\"ac0001\"] = <http://terminology.org?terminology_id=snomed_ct&&has_relation=[102002];with_target=[128004]>\r\n" +
-        	    "            >\r\n" +
-        	    "        >\r\n" +
-        		"    >\r\n");
+        verifyByFile("ontology.adl");
     }
 }
 /*

@@ -14,11 +14,12 @@
  */
 package org.openehr.am.serialize;
 
-import java.io.StringWriter;
+import java.io.*;
 
 import org.openehr.rm.datatypes.text.CodePhrase;
 
 import junit.framework.TestCase;
+import org.apache.commons.io.FileUtils;
 
 public class SerializerTestBase extends TestCase {
 
@@ -53,7 +54,39 @@ public class SerializerTestBase extends TestCase {
 	/* take the result from writer and compare with the expected */
 	protected void verify(String expected) {
 		String actual = out.toString();
-		assertEquals("expected: \r\n" + expected + "\r\nactual:\r\n" + actual,
+		verify(expected, actual);
+	}
+	
+	protected void verifyByFile(String expectedFile) throws Exception {
+		String expected = readFile(expectedFile);
+		String actual = out.toString();
+		verify(expected, actual);	
+	}
+	
+	private String readFile(String filename) throws Exception {
+		InputStream input = null;
+		try {
+			input = this.getClass().getClassLoader().getResourceAsStream(filename);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+			String line = reader.readLine();
+			StringBuffer buf = new StringBuffer();
+			while(line != null) {
+				buf.append(line);
+				buf.append("\r\n");
+				line = reader.readLine();				
+			}			
+			
+			return buf.toString();
+			
+		} finally {
+			if(input != null) {
+				input.close();
+			}
+		}		
+	}
+	
+	private void verify(String expected, String actual) {
+		assertEquals(">>> expected: \r\n" + expected + "\r\n >>> actual:\r\n" + actual,
 				expected, actual);
 	}
 
