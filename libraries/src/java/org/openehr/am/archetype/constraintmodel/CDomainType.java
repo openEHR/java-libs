@@ -31,58 +31,55 @@ import java.util.Set;
  */
 public abstract class CDomainType extends LeafConstraint {
 
-    /**
-     * Constructs a DomainTypeConstraint
-     *
-     * @param path
-     * @param rmTypeName
-     * @param occurrences
-     * @param nodeID
-     */
-    protected CDomainType(String path, String rmTypeName,
-                          Interval<Integer> occurrences,
-                          String nodeID) {
-        super(false, path, rmTypeName, occurrences, nodeID);
-    }
+	/**
+	 * Constructs a DomainTypeConstraint
+	 *
+	 * @param path
+	 * @param rmTypeName
+	 * @param occurrences
+	 * @param nodeID
+	 */
+	protected CDomainType(String path, String rmTypeName,
+			Interval<Integer> occurrences, String nodeID) {
+		super(false, path, rmTypeName, occurrences, nodeID);
+	}
 
-    /**
-     * Creates an ObjectConstraint
-     *
-     * @param path
-     * @param rmTypeName
-     */
-    protected CDomainType(String path, String rmTypeName) {
-        this(path, rmTypeName, null, null);
-    }
+	/**
+	 * Creates an ObjectConstraint
+	 *
+	 * @param path
+	 * @param rmTypeName
+	 */
+	protected CDomainType(String path, String rmTypeName) {
+		this(path, rmTypeName, null, null);
+	}
 
-    /**
-     * Standard form of constraint
-     *
-     * @return Standard form of constraint
-     */
-    public abstract CComplexObject standardRepresentation();
+	/**
+	 * Standard form of constraint
+	 *
+	 * @return Standard form of constraint
+	 */
+	public abstract CComplexObject standardRepresentation();
 
-    /**
-     * Create an object based on this object constraint
-     *
-     * @param objectMap
-     * @param inputPaths
-     * @param errorMap
-     * @param archetype
-     * @param builder
-     * @param archetypeDetails
-     * @return null if this node is optional
-     */
-    public Object createObject(Map<String, Object> objectMap,
-                               Set<String> inputPaths,
-                               Map<String, ErrorType> errorMap,
-                               Archetype archetype,
-                               RMObjectBuilder builder,
-                               Archetyped archetypeDetails) {
+	/**
+	 * Create an object based on this object constraint
+	 *
+	 * @param objectMap
+	 * @param inputPaths
+	 * @param errorMap
+	 * @param archetype
+	 * @param builder
+	 * @param archetypeDetails
+	 * @return null if this node is optional
+	 */
+	public Object createObject(Map<String, Object> objectMap,
+			Set<String> inputPaths, Map<String, ErrorType> errorMap,
+			Archetype archetype, RMObjectBuilder builder,
+			Archetyped archetypeDetails) {
 
-        // should be created by the first phase
-        return objectMap.get(path());
-    }
+		// should be created by the first phase
+		return objectMap.get(path());
+	}
 }
 
 /*

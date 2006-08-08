@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * ObjectConstraint
+ * Abstract model of constraint on any kind of object node.
  *
  * @author Rong Chen
  * @version 1.0

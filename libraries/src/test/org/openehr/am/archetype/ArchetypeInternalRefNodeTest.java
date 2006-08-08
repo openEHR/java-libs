@@ -16,7 +16,6 @@ package org.openehr.am.archetype;
 
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.domain.CCount;
-import org.openehr.am.archetype.output.ADLOutputter;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.composition.Composition;
 import org.openehr.rm.composition.content.navigation.Section;
@@ -244,10 +243,7 @@ Composition[at0001] matches {
         Archetype archetype = archetypeWithOptionalNode();
 
         StringWriter out = new StringWriter();
-        ADLOutputter outputter = new ADLOutputter();
-        outputter.output(archetype, out);
-//      System.out.println(out.toString());
-
+        
         Map<String, ErrorType> errorMap = new HashMap<String, ErrorType>();
         Map<String, String> valueMap = new HashMap<String, String>();
         Object rmobj = null;
@@ -272,12 +268,7 @@ Composition[at0001] matches {
 
     public void testBuildEvaluationWithOptionalValues() throws Exception {
         Archetype archetype = archetypeWithOptionalNode();
-
-        StringWriter out = new StringWriter();
-        ADLOutputter outputter = new ADLOutputter();
-        outputter.output(archetype, out);
-        //System.out.println(out.toString());
-
+        
         Map<String, ErrorType> errorMap = new HashMap<String, ErrorType>();
         Map<String, String> valueMap = new HashMap<String, String>();
         Evaluation evaluation;

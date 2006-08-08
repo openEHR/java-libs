@@ -48,7 +48,7 @@
         <dependency>
             <groupId>openehr</groupId>
             <artifactId>openehr-kernel</artifactId>
-            <version>1.2.5-SNAPSHOT</version>
+            <version>1.2.6</version>
             <url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>
         </dependency>
     </dependencies>
