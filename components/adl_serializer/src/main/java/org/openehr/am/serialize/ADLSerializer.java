@@ -597,8 +597,9 @@ protected void printDescriptionItem(ArchetypeDescriptionItem item,
 
 		if (ontology.getTerminologies() != null) {
 			indent(1, out);
-			out.write("terminologies_available = <\"");
+			out.write("terminologies_available = <");
 			for (String terminology : ontology.getTerminologies()) {
+				out.write("\"");				
 				out.write(terminology);
 				out.write("\", ");
 			}
@@ -606,10 +607,10 @@ protected void printDescriptionItem(ArchetypeDescriptionItem item,
 			newline(out);
 		}
 
-		for (OntologyDefinitions defs : ontology.getTermDefinitionsList()) {
-			indent(1, out);
-			out.write("term_definitions = <");
-			newline(out);
+		indent(1, out);
+		out.write("term_definitions = <");
+		newline(out);
+		for (OntologyDefinitions defs : ontology.getTermDefinitionsList()) {			
 			indent(2, out);
 			out.write("[\"");
 			out.write(defs.getLanguage());
@@ -638,19 +639,22 @@ protected void printDescriptionItem(ArchetypeDescriptionItem item,
 				out.write(">");
 				newline(out);
 			}
-			for (int i = 3; i > 0; i--) {
+			for (int i = 3; i > 1; i--) {
 				indent(i, out);
 				out.write(">");
 				newline(out);
 			}
 		}
+		indent(1, out);
+		out.write(">");
+		newline(out);
 
 		if (ontology.getConstraintDefinitionsList() != null) {
+			indent(1, out);
+			out.write("constraint_definitions = <");
+			newline(out);
 			for (OntologyDefinitions constraintdefs : ontology
-					.getConstraintDefinitionsList()) {
-				indent(1, out);
-				out.write("constraint_definitions = <");
-				newline(out);
+					.getConstraintDefinitionsList()) {				
 				indent(2, out);
 				out.write("[\"");
 				out.write(constraintdefs.getLanguage());
@@ -679,20 +683,23 @@ protected void printDescriptionItem(ArchetypeDescriptionItem item,
 					out.write(">");
 					newline(out);
 				}
-				for (int i = 3; i > 0; i--) {
+				for (int i = 3; i > 1; i--) {
 					indent(i, out);
 					out.write(">");
 					newline(out);
 				}
 			}
+			indent(1, out);
+			out.write(">");
+			newline(out);
 		}
 
 		if (ontology.getTermBindingList() != null) {
+			indent(1, out);
+			out.write("term_binding = <");
+			newline(out);			
 			for (int i = 0; i < ontology.getTermBindingList().size(); i++) {
-				OntologyBinding bind = ontology.getTermBindingList().get(i);
-				indent(1, out);
-				out.write("term_binding = <");
-				newline(out);
+				OntologyBinding bind = ontology.getTermBindingList().get(i);				
 				indent(2, out);
 				out.write("[\"");
 				out.write(bind.getTerminology());
@@ -721,21 +728,23 @@ protected void printDescriptionItem(ArchetypeDescriptionItem item,
 					out.write(">");
 					newline(out);
 				}
-				for (int l = 3; l > 0; l--) {
+				for (int l = 3; l > 1; l--) {
 					indent(l, out);
 					out.write(">");
 					newline(out);
 				}
 			}
+			indent(1, out);
+			out.write(">");
+			newline(out);
 		}
 
 		if (ontology.getConstraintBindingList() != null) {
+			indent(1, out);
+			out.write("constraint_binding = <");
+			newline(out);
 			for (int i = 0; i < ontology.getConstraintBindingList().size(); i++) {
-				OntologyBinding bind = ontology.getConstraintBindingList().get(
-						i);
-				indent(1, out);
-				out.write("constraint_binding = <");
-				newline(out);
+				OntologyBinding bind = ontology.getConstraintBindingList().get(i);				
 				indent(2, out);
 				out.write("[\"");
 				out.write(bind.getTerminology());
@@ -758,12 +767,15 @@ protected void printDescriptionItem(ArchetypeDescriptionItem item,
 					out.write(">");
 					newline(out);
 				}
-				for (int l = 3; l > 0; l--) {
+				for (int l = 3; l > 1; l--) {
 					indent(l, out);
 					out.write(">");
 					newline(out);
 				}
 			}
+			indent(1, out);
+			out.write(">");
+			newline(out);
 		}
 	}
 

@@ -15,6 +15,7 @@
 package org.openehr.am.serialize;
 
 import java.io.*;
+import java.util.*;
 
 import org.openehr.rm.datatypes.text.CodePhrase;
 
@@ -58,25 +59,24 @@ public class SerializerTestBase extends TestCase {
 	}
 	
 	protected void verifyByFile(String expectedFile) throws Exception {
-		String expected = readFile(expectedFile);
-		String actual = out.toString();
-		verify(expected, actual);	
+		List<String> expected = readFile(expectedFile);
+		List<String> actual = toLines(out.toString());
+		verifyByLines(expected, actual);	
 	}
 	
-	private String readFile(String filename) throws Exception {
+	private List<String> readFile(String filename) throws Exception {
 		InputStream input = null;
+		List<String> list = new ArrayList<String>();
 		try {
 			input = this.getClass().getClassLoader().getResourceAsStream(filename);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 			String line = reader.readLine();
-			StringBuffer buf = new StringBuffer();
 			while(line != null) {
-				buf.append(line);
-				buf.append("\r\n");
+				list.add(line);
 				line = reader.readLine();				
 			}			
 			
-			return buf.toString();
+			return list;
 			
 		} finally {
 			if(input != null) {
@@ -85,9 +85,37 @@ public class SerializerTestBase extends TestCase {
 		}		
 	}
 	
+	private List<String> toLines(String source) {
+		List<String> list = new ArrayList<String>();
+		StringTokenizer tokens = new StringTokenizer(source, "\r\n");
+		while(tokens.hasMoreTokens()) {
+			list.add(tokens.nextToken());
+		}
+		return list;	
+	}
+	
 	private void verify(String expected, String actual) {
 		assertEquals(">>> expected: \r\n" + expected + "\r\n >>> actual:\r\n" + actual,
 				expected, actual);
+	}
+	
+	/* verify line by line, preceeding and trailing white spaces, line returns are ignored */
+	private void verifyByLines(List<String> expected, List<String> actual) {
+		int expectedSize = expected.size();
+		int actualSize = actual.size();
+		
+		// check if preceeding lines match
+		for(int i = 0; i < expectedSize && i < actualSize; i++) {
+			String lineExpected = expected.get(i).trim();
+			String lineActual = actual.get(i).trim();
+			if( ! lineExpected.equals(lineActual)) {
+				assertEquals(">>> line no." + i + " different.. ", lineExpected, lineActual);
+			}
+		}
+		
+		if(expectedSize != actualSize) {
+			assertEquals("total number of lines wrong", expectedSize, actualSize);
+		}
 	}
 
 	/* field */
