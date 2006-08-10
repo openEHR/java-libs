@@ -51,7 +51,7 @@ public class ItemTableTest extends DataStructureTestBase {
     }
 
     public void testColumnCount() throws Exception {
-        assertEquals("column count", COL_NAMES.length,
+        assertEquals("column count", COLM_NAMES.length,
                 itemTable.columnCount());
     }
 
@@ -69,10 +69,11 @@ public class ItemTableTest extends DataStructureTestBase {
     }
 
     public void testRowAt() throws Exception {
-        List<Element> expected = new ArrayList<Element>();
-        for (int i = 0; i < COL_NAMES.length; i++) {
-            expected.add(elementArray[ i ][ 1 ]);
-        }
+        //List<Element> expected = new ArrayList<Element>();
+        //for (int i = 0; i < COLM_NAMES.length; i++) {
+         //   expected.add(elementArray[ i ][ 1 ]);
+        //}
+        Cluster expected = rowArray[1];
         assertEquals("row at", expected, itemTable.ithRow(1));
     }
 
@@ -84,8 +85,8 @@ public class ItemTableTest extends DataStructureTestBase {
     }
 
     public void testHasColumnWithName() throws Exception {
-        for (int i = 0; i < COL_NAMES.length; i++) {
-            assertTrue(itemTable.hasColumnWithName(COL_NAMES[ i ]));
+        for (int i = 0; i < COLM_NAMES.length; i++) {
+            assertTrue(itemTable.hasColumnWithName(COLM_NAMES[ i ]));
         }
         assertFalse(itemTable.hasColumnWithName("dummy"));
     }
@@ -93,8 +94,8 @@ public class ItemTableTest extends DataStructureTestBase {
     public void testElementAt() throws Exception {
 
         // test the content of whole table
-        for (int i = 0; i < COL_NAMES.length; i++) {
-            for (int j = 0; j < ROW_NAMES.length; j++) {
+        for (int i = 0; i < ROW_NAMES.length; i++) {
+            for (int j = 0; j < COLM_NAMES.length; j++) {
                 assertEquals(elementArray[ i ][ j ],
                         itemTable.elementAtCell(i, j));
             }
@@ -118,20 +119,21 @@ public class ItemTableTest extends DataStructureTestBase {
     }
 
     public void testNamedRow() throws Exception {
-        List<Element> expected = new ArrayList<Element>();
-        for (int i = 0; i < COL_NAMES.length; i++) {
+        /*List<Element> expected = new ArrayList<Element>();
+        for (int i = 0; i < ROW_NAMES.length; i++) {
             expected.add(elementArray[ i ][ 1 ]);
-        }
+        }*/
+        Cluster expected = rowArray[1];
         assertEquals(expected, itemTable.namedRow(ROW_NAMES[ 1 ]));
     }
 
     public void testElementAtNamedCell() throws Exception {
         // test the content of whole table
-        for (int i = 0; i < COL_NAMES.length; i++) {
-            for (int j = 0; j < ROW_NAMES.length; j++) {
+        for (int i = 0; i < ROW_NAMES.length; i++) {
+            for (int j = 0; j < COLM_NAMES.length; j++) {
                 assertEquals(elementArray[ i ][ j ],
-                        itemTable.elementAtNamedCell(COL_NAMES[ i ],
-                                ROW_NAMES[ j ]));
+                        itemTable.elementAtNamedCell(ROW_NAMES[ i ],
+                                COLM_NAMES[ j ]));
             }
         }
     }
@@ -140,11 +142,11 @@ public class ItemTableTest extends DataStructureTestBase {
         // valid path
         List<String> pathList = new ArrayList<String>();
         pathList.add(sep + TABLE_NAME);
-        for (String col : COL_NAMES) {
+        for (String col : ROW_NAMES) {
             pathList.add(sep + TABLE_NAME + sep + col);
         }
-        for (String col : COL_NAMES) {
-            for (String row : ROW_NAMES) {
+        for (String col : ROW_NAMES) {
+            for (String row : COLM_NAMES) {
                 pathList.add(sep + TABLE_NAME + sep + ItemTable.COL_IS + col
                         + sep + ItemTable.ROW_IS + row);
             }
@@ -175,18 +177,18 @@ public class ItemTableTest extends DataStructureTestBase {
                 itemTable.itemAtPath(sep + TABLE_NAME));
 
         // fetch column
-        for (int i = 0, ii = COL_NAMES.length; i < ii; i++) {
-            String path = sep + TABLE_NAME + sep + COL_NAMES[i];
+        for (int i = 0, ii = ROW_NAMES.length; i < ii; i++) {
+            String path = sep + TABLE_NAME + sep + ROW_NAMES[i];
             Locatable item = itemTable.itemAtPath(path);
-            assertEquals("fetch column[" + i + "]", columnArray[i],
+            assertEquals("fetch column[" + i + "]", rowArray[i],
                     item);
         }
         // fetch cell
-        for (int i = 0, ii = COL_NAMES.length; i < ii; i++) {
-            for (int j = 0, jj = ROW_NAMES.length; j < jj; j++) {
+        for (int i = 0, ii = ROW_NAMES.length; i < ii; i++) {
+            for (int j = 0, jj = COLM_NAMES.length; j < jj; j++) {
                 String path = sep + TABLE_NAME + sep + ItemTable.COL_IS
-                        + COL_NAMES[i] + sep + ItemTable.ROW_IS
-                        + ROW_NAMES[j];
+                        + ROW_NAMES[i] + sep + ItemTable.ROW_IS
+                        + COLM_NAMES[j];
                 Locatable item = itemTable.itemAtPath(path);
                 assertEquals("fetch cell[" + i + "][" + j + "]",
                         elementArray[i][j], item);
@@ -198,64 +200,64 @@ public class ItemTableTest extends DataStructureTestBase {
     private ItemTable init() {
 
         // save element in the array for comparison
-        elementArray = new Element[ COL_NAMES.length ][ 0 ];
-        columnArray = new Cluster[COL_NAMES.length];
+        elementArray = new Element[ ROW_NAMES.length ][ 0 ];
+        rowArray = new Cluster[ROW_NAMES.length];
 
-        for (int i = 0; i < COL_NAMES.length; i++) {
-            elementArray[ i ] = new Element[ ROW_NAMES.length ];
-        }
-        // key column
         for (int i = 0; i < ROW_NAMES.length; i++) {
-            elementArray[ 0 ][ i ] = element(ROW_NAMES[ i ]);
+            elementArray[ i ] = new Element[ COLM_NAMES.length ];
+        }
+        // key row
+        for (int i = 0; i < COLM_NAMES.length; i++) {
+            elementArray[ 0 ][ i ] = element(COLM_NAMES[ i ]);
         }
         // data_col left eye
-        elementArray[ 1 ][ 0 ] = element(ROW_NAMES[ 0 ], 6, 24);
-        elementArray[ 1 ][ 1 ] = element(ROW_NAMES[ 1 ], 6, 16);
-        elementArray[ 1 ][ 2 ] = element(ROW_NAMES[ 2 ], "xxxx1111");
-        elementArray[ 1 ][ 3 ] = element(ROW_NAMES[ 3 ], "yyyy1111");
+        elementArray[ 1 ][ 0 ] = element(COLM_NAMES[ 0 ], 6, 24);
+        elementArray[ 1 ][ 1 ] = element(COLM_NAMES[ 1 ], 6, 16);
+        elementArray[ 1 ][ 2 ] = element(COLM_NAMES[ 2 ], "xxxx1111");
+        elementArray[ 1 ][ 3 ] = element(COLM_NAMES[ 3 ], "yyyy1111");
 
         // data_col right eye
-        elementArray[ 2 ][ 0 ] = element(ROW_NAMES[ 0 ], 6, 18);
-        elementArray[ 2 ][ 1 ] = element(ROW_NAMES[ 1 ], 6, 6);
-        elementArray[ 2 ][ 2 ] = element(ROW_NAMES[ 2 ], "xxxx2222");
-        elementArray[ 2 ][ 3 ] = element(ROW_NAMES[ 3 ], "yyyy2222");
+        elementArray[ 2 ][ 0 ] = element(COLM_NAMES[ 0 ], 6, 18);
+        elementArray[ 2 ][ 1 ] = element(COLM_NAMES[ 1 ], 6, 6);
+        elementArray[ 2 ][ 2 ] = element(COLM_NAMES[ 2 ], "xxxx2222");
+        elementArray[ 2 ][ 3 ] = element(COLM_NAMES[ 3 ], "yyyy2222");
 
 
-        // key column aspect
-        List<List<Item>> columns = new ArrayList<List<Item>>();
-        for (int i = 0; i < COL_NAMES.length; i++) {
-            columns.add(new ArrayList<Item>());
-            for (int j = 0; j < ROW_NAMES.length; j++) {
-                columns.get(i).add(elementArray[ i ][ j ]);
+        // key row aspect
+        List<List<Item>> rows = new ArrayList<List<Item>>();
+        for (int i = 0; i < ROW_NAMES.length; i++) {
+            rows.add(new ArrayList<Item>());
+            for (int j = 0; j < COLM_NAMES.length; j++) {
+                rows.get(i).add(elementArray[ i ][ j ]);
             }
         }
 
         // items
         List<Item> items = new ArrayList<Item>();
-        for (int i = 0; i < COL_NAMES.length; i++) {
-            columnArray[i] = cluster(i == 0 ? "key_col" : "data_col",
-                    COL_NAMES[ i ], columns.get(i));
-            items.add(columnArray[i]);
+        for (int i = 0; i < ROW_NAMES.length; i++) {
+            rowArray[i] = cluster(i == 0 ? "key_col" : "data_col",
+                    ROW_NAMES[ i ], rows.get(i));
+            items.add(rowArray[i]);
         }
         Cluster itemsCluster = cluster("items", "items", items);
         return new ItemTable(null, "at0001", text(TABLE_NAME),
-                null, null, null, itemsCluster);
+                null, null, null, null, itemsCluster);
     }
 
     /* static fields */
     private static final String TABLE_NAME = "vision";
-    private static final String[] ROW_NAMES = {
+    private static final String[] COLM_NAMES = {
         "acuity unaided", "acuity w/ glasses", "color", "shape"
     };
 
-    private static final String[] COL_NAMES = {
+    private static final String[] ROW_NAMES = {
         "aspect", "left eye", "right eye"
     };
 
     /* field */
     private ItemTable itemTable;
     private Element[][] elementArray;
-    private Cluster[] columnArray;
+    private Cluster[] rowArray;
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

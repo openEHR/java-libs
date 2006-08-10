@@ -35,7 +35,7 @@ public class ItemSingleTest extends DataStructureTestBase {
     protected void setUp() throws Exception {
         Element element = element("element name", "value");
         itemSingle = new ItemSingle(null, "at0001", text("item name"),
-                null, null, null, element);
+                null, null, null, null, element);
     }
 
     /**

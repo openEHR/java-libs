@@ -45,20 +45,23 @@ public class VersionedParty extends VersionedObject<Party> {
 	 */
 	public VersionedParty(HierarchicalObjectID uid, ObjectReference ownerID, 
 			DvDateTime timeCreated, ObjectVersionID versionID, Party party, 
-			AuditDetails commitAudit, ObjectReference contribution, 
-			DvCodedText lifecycleState, TerminologyService terminologyService) {
+			DvCodedText lifecycleState, AuditDetails commitAudit, 
+                        ObjectReference contribution, String signature,
+                        TerminologyService terminologyService) {
 		
-        super(uid, ownerID, timeCreated, versionID, party, commitAudit, contribution, 
-        		lifecycleState, terminologyService);
+        super(uid, ownerID, timeCreated, versionID, party, lifecycleState, commitAudit, contribution, 
+                    signature, terminologyService);
 	}
 	
 	/**
 	 * Constructs a VersionParty with first imported Party
 	 */
 	public VersionedParty(HierarchicalObjectID uid, ObjectReference ownerID, 
-			DvDateTime timeCreated, AuditDetails commitAudit, 
-			ObjectReference contribution, OriginalVersion<Party> item) {
-        super(uid, ownerID, timeCreated, commitAudit, contribution, item);
+			DvDateTime timeCreated, OriginalVersion<Party> item,
+                        AuditDetails commitAudit, ObjectReference contribution,
+			String signature) {
+
+        super(uid, ownerID, timeCreated, item, commitAudit, contribution, signature);
         
 	}
 
@@ -67,12 +70,13 @@ public class VersionedParty extends VersionedObject<Party> {
 	 */
 	public VersionedParty(HierarchicalObjectID uid, ObjectReference ownerID, 
 			DvDateTime timeCreated, ObjectVersionID versionID,   
-			ObjectVersionID precedingVersionID, Party party, AuditDetails commitAudit,    
-			ObjectReference contribution, DvCodedText lifecycleState,   
-			Set<ObjectVersionID> otherInputVersionUids, TerminologyService terminologyService) {
+			ObjectVersionID precedingVersionID, Party party, DvCodedText lifecycleState,
+                        AuditDetails commitAudit, ObjectReference contribution,  
+			Set<ObjectVersionID> otherInputVersionUids, String signature,
+                        TerminologyService terminologyService) {
 		
-		super(uid, ownerID, timeCreated, versionID, precedingVersionID, party, commitAudit,
-				contribution, lifecycleState, otherInputVersionUids, terminologyService);
+		super(uid, ownerID, timeCreated, versionID, precedingVersionID, party, lifecycleState,
+                    commitAudit, contribution, otherInputVersionUids, signature, terminologyService);
 	}
 	
     // POJO start

@@ -12,7 +12,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.common.generic.RevisionHistory;
 import org.openehr.rm.datatypes.text.CodePhrase;
-import org.openehr.rm.support.terminology.CodeSet;
+import org.openehr.rm.support.terminology.CodeSetAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
@@ -36,31 +36,31 @@ public abstract class AuthoredResource extends RMObject {
 			TranslationDetails> translations, ResourceDescription description,
 			RevisionHistory revisionHistory, boolean isControlled, 
 			TerminologyService terminologyService) {
-		if (originalLanguage == null ) {
-			throw new IllegalArgumentException("null originalLanguage");
-		}
-		if (translations != null) {
-			if (translations.isEmpty()) {
-				throw new IllegalArgumentException("empty translations");
-			}
-			if (translations.containsKey(originalLanguage.getCodeString())) {
-				throw new IllegalArgumentException("original language in translations");
-			}
-		}
-		if (terminologyService == null) {
-			throw new IllegalArgumentException("null terminology service");
-		}
-		if (!terminologyService.codeSet("languages").hasLang(originalLanguage)) {
-            throw new IllegalArgumentException("unknown original language " + originalLanguage);
-		}
-		if (isControlled == (revisionHistory == null)) {
-			throw new IllegalArgumentException("breach of revision history validity");
-		}
-		this.originalLanguage = originalLanguage;
-		this.translations = translations;
-		setDescription(description);
-		this.revisionHistory = revisionHistory;
-		this.isControlled = isControlled;
+            if (originalLanguage == null ) {
+                    throw new IllegalArgumentException("null originalLanguage");
+            }
+            if (translations != null) {
+                    if (translations.isEmpty()) {
+                            throw new IllegalArgumentException("empty translations");
+                    }
+                    if (translations.containsKey(originalLanguage.getCodeString())) {
+                            throw new IllegalArgumentException("original language in translations");
+                    }
+            }
+            if (terminologyService == null) {
+                    throw new IllegalArgumentException("null terminology service");
+            }
+            if (!terminologyService.codeSet("languages").hasLang(originalLanguage)) {
+                throw new IllegalArgumentException("unknown original language " + originalLanguage);
+            }
+            if (isControlled == (revisionHistory == null)) {
+                    throw new IllegalArgumentException("breach of revision history validity");
+            }
+            this.originalLanguage = originalLanguage;
+            this.translations = translations;
+            setDescription(description);
+            this.revisionHistory = revisionHistory;
+            this.isControlled = isControlled;
 	}
 
 	/**
@@ -117,8 +117,12 @@ public abstract class AuthoredResource extends RMObject {
 	 * @return 
 	 */
 	public String currentRevision() {
+            
+            if(isControlled) {
+                return revisionHistory.mostRecentVersionId();
+            } else {
 		return "uncontrolled";
-		//TODO implement
+            }
 	}
 	
 	/**
@@ -130,7 +134,7 @@ public abstract class AuthoredResource extends RMObject {
 	public Set<String> languagesAvailable() {
 		Set<String> languages = null;
 		if (translations != null) { //TODO: && translations.size != 0?
-			languages = (Set<String>)translations.keySet();			
+			languages = new HashSet<String>(translations.keySet());			
 		} else {
 			languages = new HashSet<String>();
 		}
@@ -176,22 +180,25 @@ public abstract class AuthoredResource extends RMObject {
 	AuthoredResource() {
 	}
 	
-	void setDescription(ResourceDescription description) throws IllegalArgumentException {
-		if (description != null && translations != null) {
-			if (!description.equals(this.description)) {
-				for (ResourceDescriptionItem rdi : description.getDetails()) {
-					if (!translations.containsKey(rdi.getLanguage().getCodeString())) {
-						throw new IllegalArgumentException(
-								"the language of description details not in translations");
-					}
-				}
-			}
-		}
-		this.description = description;
-		if (description != null && description.getParentResource() != this) {
-				description.setParentResource(this);
-		}			
-	}
+        void setDescription(ResourceDescription description) throws IllegalArgumentException {
+            if (description != null && translations != null) {
+                //if (!description.equals(this.description)) {
+                //if(this.description != description) {
+                if(description.getParentResource() != this) {
+                    for (ResourceDescriptionItem rdi : description.getDetails()) {
+                        if (!translations.containsKey(rdi.getLanguage().getCodeString()) &&
+                            !originalLanguage.getCodeString().equals(rdi.getLanguage().getCodeString())) {
+                            throw new IllegalArgumentException(
+                                    "the language of description details not in translations");
+                        }
+                    }
+                }
+            }
+            this.description = description;
+            if (description != null && description.getParentResource() != this) {
+                description.setParentResource(this);
+            }
+        }
 
 	void setControlled(boolean isControlled) {
 		this.isControlled = isControlled;

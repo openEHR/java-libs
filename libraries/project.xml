@@ -52,12 +52,14 @@
 
     <build>
         <sourceDirectory>src/java</sourceDirectory>
-         <!--
         <unitTestSourceDirectory>src/test</unitTestSourceDirectory>
         <unitTest>
             <includes>
                 <include>**/*Test.java</include>
             </includes>
+            <excludes>
+                <exclude>org/openehr/am/**/*Test.java</exclude>
+            </excludes>
             <resources>
                 <resource>
                     <directory>conf</directory>
@@ -67,7 +69,6 @@
                 </resource>
             </resources>
         </unitTest>
-        -->
     </build>
 
 </project>

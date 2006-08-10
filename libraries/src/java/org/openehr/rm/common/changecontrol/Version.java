@@ -45,13 +45,15 @@ public abstract class Version <T> extends RMObject {
      * @throws IllegalArgumentException
      */
     public Version(ObjectVersionID uid, ObjectVersionID precedingVersionID,
-                   T data, AuditDetails commitAudit, ObjectReference contribution) {
+                   T data, DvCodedText lifeCycleState, AuditDetails commitAudit, 
+                   ObjectReference contribution, String signature,
+                   TerminologyService terminologyService) {
 
         if (uid == null) {
             throw new IllegalArgumentException("null uid");
         }
-        if (data == null) {
-        		throw new IllegalArgumentException("null data");
+        if(lifeCycleState == null) {
+            throw new IllegalArgumentException("null lifeCycleState");
         }
         if (commitAudit == null) {
             throw new IllegalArgumentException("null audit");
@@ -60,25 +62,28 @@ public abstract class Version <T> extends RMObject {
             throw new IllegalArgumentException("null contribution");
         }
         if (!contribution.getType().equals(ObjectReference.Type.CONTRIBUTION)) {
-        		throw new IllegalArgumentException("contribution not of type CONTRIBUTION");
+            throw new IllegalArgumentException("contribution not of type CONTRIBUTION");
         }
         if (uid.versionTreeID().isFirst() == (precedingVersionID != null)) {
-        		throw new IllegalArgumentException("breach of precedingVersionUid validity");
+            throw new IllegalArgumentException("breach of precedingVersionUid validity");
         }
-        this.uid = uid;
-        this.precedingVersionID = precedingVersionID;
-        this.data = data;
-        this.commitAudit = commitAudit;      
-        this.contribution = contribution;
+        if(!terminologyService.terminology(TerminologyService.OPENEHR)
+            .codesForGroupName("version lifecycle state", "en")
+            .contains(lifeCycleState.getDefiningCode())) {
+            throw new IllegalArgumentException("unknown lifeCycleState");
+        }
+        setAttributes(uid, precedingVersionID, data, lifeCycleState, commitAudit, 
+                   contribution, signature);
     }
-
+    
+    
 	/**
      * Unique identifier of the owning version container.
      *
      * @return uid of owning version container
      */
     public HierarchicalObjectID ownerID() {
-    		//TODO check if correct, the extension bit at the back?
+        //TODO check if correct, the extension bit at the back?
         return new HierarchicalObjectID(uid.objectID(), null);
     }
 
@@ -86,10 +91,22 @@ public abstract class Version <T> extends RMObject {
      * True if this Version represents a branch
      */
     public boolean isBranch() {
-    		return uid.versionTreeID().isBranch();
+        return uid.versionTreeID().isBranch();
     }
     
 
+    /**
+     * Canonical form of Version object, created by 
+     * serialising all attributes except signature
+     */
+    public String canonicalForm() {
+        //return uid.toString() + "," + precedingVersionID.toString() + 
+          //      "," + data.toString() + "," + lifeCycleState.toString() + 
+            //    "," + commitAudit.toString() + "," + contribution.toString(); 
+            //TODO:implement
+        return "";
+    }
+    
     /**
      * Audit trail of this version
      *
@@ -119,6 +136,15 @@ public abstract class Version <T> extends RMObject {
     }
 
     /**
+     * Lifecycle state of this version; coded by openEHR
+     * vocabulary "version lifecycle state"
+     */
+    public DvCodedText getLifeCycleState() {
+        return lifeCycleState;
+    }
+    
+    
+    /**
      * Contribution in which this version was added
      *
      * @return contribution
@@ -136,10 +162,26 @@ public abstract class Version <T> extends RMObject {
     		return data;
     }
 
+    /**
+     * OpenPGP digital signature or digest of content 
+     * committed in this Version
+     */
+    public String getSignature() {
+        return signature;
+    }
+    
     // POJO start
     Version() {
     }
 
+    void setSignature(String signature) {
+        this.signature = signature;
+    }
+    
+    void setLifeCycleState(DvCodedText lifeCycleState) {
+        this.lifeCycleState = lifeCycleState;
+    }
+    
     void setCommitAudit(AuditDetails audit) {
         this.commitAudit = audit;
     }
@@ -156,9 +198,22 @@ public abstract class Version <T> extends RMObject {
         this.contribution = contribution;
     }
 
-	void setData(T data) {
-		this.data = data;
-	}
+    void setData(T data) {
+        this.data = data;
+    }
+        
+    protected void setAttributes(ObjectVersionID uid, 
+               ObjectVersionID precedingVersionID, T data, DvCodedText lifeCycleState,  
+               AuditDetails commitAudit, ObjectReference contribution, 
+               String signature) {
+        this.uid = uid;
+        this.precedingVersionID = precedingVersionID;
+        this.data = data;
+        this.lifeCycleState = lifeCycleState;
+        this.commitAudit = commitAudit;      
+        this.contribution = contribution;
+        this.signature = signature;
+    }
 
     // POJO end
 
@@ -168,6 +223,8 @@ public abstract class Version <T> extends RMObject {
     private ObjectVersionID precedingVersionID;
     private ObjectReference contribution;
     private T data;
+    private DvCodedText lifeCycleState;
+    private String signature;
 
 }
 

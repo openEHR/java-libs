@@ -41,20 +41,22 @@ public class VersionedEHRStatus extends VersionedObject<EHRStatus> {
 	 */
 	public VersionedEHRStatus(HierarchicalObjectID uid, ObjectReference ownerID, 
 			DvDateTime timeCreated, ObjectVersionID versionID, EHRStatus ehrStatus, 
-			AuditDetails commitAudit, ObjectReference contribution, 
-			DvCodedText lifecycleState, TerminologyService terminologyService) {
+			DvCodedText lifecycleState, AuditDetails commitAudit, 
+                        ObjectReference contribution, String signature,
+                        TerminologyService terminologyService) {
 		
-        super(uid, ownerID, timeCreated, versionID, ehrStatus, commitAudit, contribution, 
-        		lifecycleState, terminologyService);
+        super(uid, ownerID, timeCreated, versionID, ehrStatus, lifecycleState, commitAudit, 
+        	 contribution, signature, terminologyService);
 	}
 	
 	/**
 	 * Constructs a VersionEHRStatus with first imported EHRStatus
 	 */
 	public VersionedEHRStatus(HierarchicalObjectID uid, ObjectReference ownerID, 
-			DvDateTime timeCreated, AuditDetails commitAudit, 
-			ObjectReference contribution, OriginalVersion<EHRStatus> item) {
-        super(uid, ownerID, timeCreated, commitAudit, contribution, item);
+			DvDateTime timeCreated, OriginalVersion<EHRStatus> item,
+                        AuditDetails commitAudit, ObjectReference contribution, 
+                        String signature) {
+        super(uid, ownerID, timeCreated, item, commitAudit, contribution, signature);
         
 	}
 
@@ -63,12 +65,13 @@ public class VersionedEHRStatus extends VersionedObject<EHRStatus> {
 	 */
 	public VersionedEHRStatus(HierarchicalObjectID uid, ObjectReference ownerID, 
 			DvDateTime timeCreated, ObjectVersionID versionID,   
-			ObjectVersionID precedingVersionID, EHRStatus ehrStatus, AuditDetails commitAudit,    
-			ObjectReference contribution, DvCodedText lifecycleState,   
-			Set<ObjectVersionID> otherInputVersionUids, TerminologyService terminologyService) {
+			ObjectVersionID precedingVersionID, EHRStatus ehrStatus, DvCodedText lifecycleState, 
+                        AuditDetails commitAudit, ObjectReference contribution,   			  
+			Set<ObjectVersionID> otherInputVersionUids, String signature,
+                        TerminologyService terminologyService) {
 		
-		super(uid, ownerID, timeCreated, versionID, precedingVersionID, ehrStatus, commitAudit,
-				contribution, lifecycleState, otherInputVersionUids, terminologyService);
+		super(uid, ownerID, timeCreated, versionID, precedingVersionID, ehrStatus, lifecycleState, 
+                        commitAudit, contribution, otherInputVersionUids, signature, terminologyService);
 	}
     
 	//POJO start

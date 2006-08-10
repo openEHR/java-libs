@@ -42,34 +42,34 @@ public class ObjectVersionID extends ObjectID {
     }
 
     public ObjectVersionID(String objectId, String creatingSystemId, String versionTreeId) {
-    		this(objectId + "::" + creatingSystemId + "::" + versionTreeId);
+        this(objectId + "::" + creatingSystemId + "::" + versionTreeId);
     }
  
     public ObjectVersionID(UID objectID, HierarchicalObjectID creatingSystemID, 
     		VersionTreeID versionTreeID) {
-    		this(objectID.toString() + "::" + creatingSystemID.toString() + "::"
-    				+ versionTreeID.toString());
-    		this.objectID = objectID;
-    		this.creatingSystemID = creatingSystemID;
-    		this.versionTreeID = versionTreeID;
+        this(objectID.toString() + "::" + creatingSystemID.toString() + "::"
+                        + versionTreeID.toString());
+        this.objectID = objectID;
+        this.creatingSystemID = creatingSystemID;
+        this.versionTreeID = versionTreeID;
     }
     
-	private void loadValue(String value) {
-		// Steps for value checking:
-		// 1. Check if value contains any :: or starts with ::
-		int doubleColons = value.indexOf("::");
-		if (doubleColons <= 0) {
-			throw new IllegalArgumentException("bad format, missing objectId");
-		}
-		// 2. Check how many segments in the value
-		String[] splits = value.split("::");
-		int segments = splits.length;
-		if(segments < 3) {
-			throw new IllegalArgumentException("bad format, missing creatingSystemId or versionTreeId");
-		}
-		if(segments > 4) {
-			throw new IllegalArgumentException("bad format, too many segments or '::'");
-		}
+    private void loadValue(String value) {
+        // Steps for value checking:
+        // 1. Check if value contains any :: or starts with ::
+        int doubleColons = value.indexOf("::");
+        if (doubleColons <= 0) {
+                throw new IllegalArgumentException("bad format, missing objectId");
+        }
+        // 2. Check how many segments in the value
+        String[] splits = value.split("::");
+        int segments = splits.length;
+        if(segments < 3) {
+                throw new IllegalArgumentException("bad format, missing creatingSystemId or versionTreeId");
+        }
+        if(segments > 4) {
+                throw new IllegalArgumentException("bad format, too many segments or '::'");
+        }
 		// 3. Construct objects for each segment
         //the patterns below are for sorting only, the correct syntax
         //checking is handled by the UID sublcasses.
@@ -77,19 +77,19 @@ public class ObjectVersionID extends ObjectID {
         		objectID = new UUID(value.substring(0, doubleColons));
         } else if (splits[0].matches("(\\d)+(\\.(\\d)+)*")) { //for ISO_OID
         		objectID = new ISO_OID(value.substring(0, doubleColons));
-        } else if (splits[0].matches("(\\w)+(\\.(\\w)+)*")){ //for InternetID, 
+        } else if (splits[0].matches("(\\w|-)+(\\.(\\w|-)+)*")){ //for InternetID, 
         		objectID = new InternetID(value.substring(0, doubleColons));
         } else {
         		throw new IllegalArgumentException("wrong format");
         }
-		if(segments == 4) {
-			creatingSystemID = new HierarchicalObjectID(splits[1] + "::" + splits[2]);
-			versionTreeID = new VersionTreeID(splits[3]);
-		} else {
-			creatingSystemID = new HierarchicalObjectID (splits[1]);
-			versionTreeID = new VersionTreeID(splits[2]);
-		}
-	}
+        if(segments == 4) {
+                creatingSystemID = new HierarchicalObjectID(splits[1] + "::" + splits[2]);
+                versionTreeID = new VersionTreeID(splits[3]);
+        } else {
+                creatingSystemID = new HierarchicalObjectID (splits[1]);
+                versionTreeID = new VersionTreeID(splits[2]);
+        }
+    }
 
 	/**
 	 * Unique identifier that identifies one version. It is 

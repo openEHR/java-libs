@@ -35,26 +35,26 @@ public class PartyRelationshipTest extends DemographicTestBase {
     }
 
     public void testConstructor() throws Exception {
-        ObjectID oid = oid("5723404");
+        ObjectID oid = oid("1.5.2.34.0.4.3");
         String meaning = "at0000";
         DvText name = text("father");
         DvInterval<DvDate> time = new DvInterval<DvDate>(
                         date("1980-05-13"), null);
         ItemStructure details = itemSingle("father to son");
-        ObjectReference source = new ObjectReference(oid("908573425"),
+        ObjectReference source = new ObjectReference(oid("1.9.0.8.57.34.25"),
                 ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY);
-        ObjectReference target = new ObjectReference(oid("980707800"),
+        ObjectReference target = new ObjectReference(oid("1.9.8.0.70.78.0"),
                 ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY);
 
-        new PartyRelationship(oid, meaning, name, null, null, null,
+        new PartyRelationship(oid, meaning, name, null, null, null, null, 
                 details, time, source, target);
 
         // null time
-        new PartyRelationship(oid, meaning, name, null, null, null,
+        new PartyRelationship(oid, meaning, name, null, null, null, null,
                 details, null, source, target);
 
         // null details
-        new PartyRelationship(oid, meaning, name, null, null, null,
+        new PartyRelationship(oid, meaning, name, null, null, null, null,
                 null, null, source, target);
 
         assertException(oid, meaning, name, details, time, null, target);
@@ -70,7 +70,7 @@ public class PartyRelationshipTest extends DemographicTestBase {
             throws Exception {
 
         try {
-            new PartyRelationship(oid, meaning, name, null, null, null,
+            new PartyRelationship(oid, meaning, name, null, null, null, null,
                     details, timeValidity, source, target);
 
             fail("exception should be thrown");

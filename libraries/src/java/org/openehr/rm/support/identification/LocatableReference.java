@@ -35,11 +35,11 @@ public class LocatableReference extends ObjectReference {
 	 */
 	public LocatableReference(ObjectVersionID id, Namespace namespace, 
 			Type type, String path) {
-		super(id, namespace, type);
-		if (path != null && StringUtils.isEmpty(path)) {
-			throw new IllegalArgumentException("empty path");
-		}
-		this.path = path;
+            super(id, namespace, type);
+            //if (path != null && StringUtils.isEmpty(path)) {
+              //  throw new IllegalArgumentException("empty path");
+            //}
+            this.path = path;
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class LocatableReference extends ObjectReference {
 	 * means that the object referred to by id being specified.
 	 */
 	public String getPath() {
-		return path;
+            return path;
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class LocatableReference extends ObjectReference {
 	 * "ehr://" + id.value + "/" + path
 	 */
 	public String asURI() {
-		return "ehr://" + getId().getValue() + "/" + path;
+            return "ehr://" + getId().getValue() + "/" + path;
 	}
 
     /**
@@ -86,7 +86,7 @@ public class LocatableReference extends ObjectReference {
      */
     public int hashCode() {
         return new HashCodeBuilder()
-        			.appendSuper(super.hashCode())
+                .appendSuper(super.hashCode())
                 .append(path)
                 .toHashCode();
     }

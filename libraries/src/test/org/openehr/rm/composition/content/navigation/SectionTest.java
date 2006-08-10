@@ -52,12 +52,6 @@ public class SectionTest extends CompositionTestBase {
     public void testValidPath() throws Exception {
         String[] validPathList = {
             "/",
-            "/[section]",
-            "/[section]/items[observation 1]",
-            "/[section]/items[section 2]",
-            "/[section]/items[section 2]/items[section 3]",
-            "/[section]/items[section 2]/items[observation 2]",
-
             "/items[observation 1]",
             "/items[section 2]",
             "/items[section 2]/items[section 3]",
@@ -73,7 +67,12 @@ public class SectionTest extends CompositionTestBase {
             "", null, "[section]", "/section", // bad root
             "/[section]/items", // incomplete
             "/[section]/items[section 3]", // unknown section
-            "/[section]/items[observation 3]"    // unknown entry
+            "/[section]/items[observation 3]",    // unknown entry
+            "/[section]",
+            "/[section]/items[observation 1]",
+            "/[section]/items[section 2]",
+            "/[section]/items[section 2]/items[section 3]",
+            "/[section]/items[section 2]/items[observation 2]",
         };
 
         for (String path : invalidPathList) {
@@ -92,24 +91,16 @@ public class SectionTest extends CompositionTestBase {
 
         assertEquals("section two wrong", sectionTwo,
                 section.itemAtPath("/items[section 2]"));
-        assertEquals("section two wrong", sectionTwo,
-                section.itemAtPath("/[section]/items[section 2]"));
 
         assertEquals("section three wrong", sectionThree,
                 section.itemAtPath("/items[section 2]/items[section 3]"));
-        assertEquals("section three wrong", sectionThree, section.itemAtPath(
-                "/[section]/items[section 2]/items[section 3]"));
 
-        assertEquals("observation one wrong", observationOne,
-                section.itemAtPath("/[section]/items[observation 1]"));
         assertEquals("observation one wrong", observationOne,
                 section.itemAtPath("/items[observation 1]"));
 
         assertEquals("observation two wrong", observationTwo,
                 section.itemAtPath("/items[section 2]/items[observation 2]"));
-        assertEquals("observation two wrong", observationTwo,
-                section.itemAtPath(
-                        "/[section]/items[section 2]/items[observation 2]"));
+
     }
 
     /* fields */

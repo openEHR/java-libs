@@ -44,7 +44,7 @@ public class PartyTest extends DemographicTestBase {
             "/",
             "/details",
             "/details/item single",
-            "/identities[legal identity]/",
+            "/identities[legal identity]",
             "/identities[legal identity]/details",
             "/contacts[contact 1]/addresses[address 1]",
             "/contacts[contact 1]/addresses[address 2]",
@@ -52,13 +52,7 @@ public class PartyTest extends DemographicTestBase {
             "/contacts[contact 1]/addresses[address 2]/details",
             "/contacts[contact 1]",
 
-            "/[person]",
-            "/[person]/details",
-            "/[person]/identities[legal identity]/",
-            "/[person]/identities[legal identity]/details",
-            "/[person]/contacts[contact 1]",
-            "/[person]/contacts[contact 1]/addresses[address 1]",
-            "/[person]/contacts[contact 1]/addresses[address 2]"
+
         };
 
         for (String path : validPathList) {
@@ -68,9 +62,16 @@ public class PartyTest extends DemographicTestBase {
 
         String[] invalidPathList = {
             "", null, "[person]", "/person", // bad root
-            "/person]details", // incomplete
+            "/[person]details", // incomplete
             "/[person]/items|item single", // unknown attribute
-            "/[person]/details|list"            // unknown item
+            "/[person]/details|list",           // unknown item
+            "/[person]",
+            "/[person]/details",
+            "/[person]/identities[legal identity]/",
+            "/[person]/identities[legal identity]/details",
+            "/[person]/contacts[contact 1]",
+            "/[person]/contacts[contact 1]/addresses[address 1]",
+            "/[person]/contacts[contact 1]/addresses[address 2]"
         };
 
         for (String path : invalidPathList) {
@@ -83,44 +84,28 @@ public class PartyTest extends DemographicTestBase {
         Person person = person();
 
         assertEquals("wrong root", person, person.itemAtPath("/"));
-        assertEquals("wrong root", person, person.itemAtPath("/[person]"));
 
         assertEquals("wrong details", person.getDetails(),
                 person.itemAtPath("/details"));
-        assertEquals("wrong details", person.getDetails(),
-                person.itemAtPath("/[person]/details"));
         assertEquals("wrong details element",
                 ( (ItemSingle) person.getDetails() ).item(),
-                person.itemAtPath("/[person]/details/item single"));
+                person.itemAtPath("/details/item single"));
 
         PartyIdentity identity =
                 (PartyIdentity) person.getIdentities().toArray()[ 0 ];
         assertEquals("wrong identity", identity,
-                person.itemAtPath("/identities[legal identity]/"));
-        assertEquals("wrong identity", identity,
-                person.itemAtPath("/[person]/identities[legal identity]/"));
+                person.itemAtPath("/identities[legal identity]"));
 
         assertEquals("wrong identity details", identity.getDetails(),
                 person.itemAtPath("/identities[legal identity]/details"));
-        assertEquals("wrong identity details", identity.getDetails(),
-                person.itemAtPath(
-                        "/[person]/identities[legal identity]/details"));
 
         Contact contact = (Contact) person.getContacts().toArray()[ 0 ];
-        assertEquals("wrong contact", contact,
-                person.itemAtPath("/[person]/contacts[contact 1]"));
         assertEquals("wrong contact", contact,
                 person.itemAtPath("/contacts[contact 1]"));
 
         assertEquals("wrong address 1", contact.getAddresses().get(0),
-                person.itemAtPath(
-                        "/[person]/contacts[contact 1]/addresses[address 1]"));
-        assertEquals("wrong address 1", contact.getAddresses().get(0),
                 person.itemAtPath("/contacts[contact 1]/addresses[address 1]"));
 
-        assertEquals("wrong address 2", contact.getAddresses().get(1),
-                person.itemAtPath(
-                        "/[person]/contacts[contact 1]/addresses[address 2]"));
         assertEquals("wrong address 2", contact.getAddresses().get(1),
                 person.itemAtPath("/contacts[contact 1]/addresses[address 2]"));
     }
@@ -131,24 +116,23 @@ public class PartyTest extends DemographicTestBase {
         ItemSingle legalName = new ItemSingle("at0002",
                 text("legal name"), element("at0003", new DvText("value")));
         identities.add(new PartyIdentity(null, "at0000",
-                text(Agent.LEGAL_IDENTITY), null, null, null, legalName));
+                text(Agent.LEGAL_IDENTITY), null, null, null, null, legalName));
 
         Set<Contact> contacts = new HashSet<Contact>();
         List<Address> addresses = new ArrayList<Address>();
         addresses.add(address("address 1", "element 1"));
         addresses.add(address("address 2", "element 2"));
-        contacts.add(new Contact(oid("3454"), "at0010",
-                new DvText("contact 1"), null, null, null,
+        contacts.add(new Contact(oid("1.3.4.5.4.6"), "at0010",
+                new DvText("contact 1"), null, null, null, null,
                 new DvInterval<DvDate>(new DvDate("2004-01-01"),
                         new DvDate("2005-01-01")), addresses));
 
         Archetyped archetypeDetails = new Archetyped(
-                new ArchetypeID("openehr-dm_rm-person.person.v1"),
-                null, "v1.0");
+                new ArchetypeID("openehr-dm_rm-person.person.v1"), "v1.0");
         ItemSingle details = new ItemSingle("at0001", text("item single"),
                 element("at0003", new DvText("value")));
 
-        return new Person(oid("123"), "at0000", new DvText("person"),
+        return new Person(oid("1.2.33.2.3.6.4"), "at0000", new DvText("person"),
                 archetypeDetails, null, null, identities, contacts, null, null,
                 details, null, null);
     }
@@ -156,7 +140,7 @@ public class PartyTest extends DemographicTestBase {
     private Address address(String addressName, String itemName) {
         ItemSingle item = new ItemSingle("at0004", text(itemName),
                 element("at0005", new DvText("value")));
-        return new Address(oid("2333"), "at0011", new DvText(addressName),
-                null, null, null, item);
+        return new Address(oid("address.a1"), "at0011", new DvText(addressName),
+                null, null, null, null, item);
     }
 }

@@ -13,10 +13,15 @@
  */
 package org.openehr.rm.composition.content.entry;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
-import org.openehr.rm.datatypes.basic.DvState;
-import org.openehr.rm.support.terminology.TestCodeSet;
 import org.openehr.rm.composition.CompositionTestBase;
+import org.openehr.rm.datatypes.encapsulated.DvParsable;
+import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.support.identification.ArchetypeID;
+import org.openehr.rm.support.identification.HierarchicalObjectID;
 
 /**
  * InstructionTest
@@ -35,36 +40,31 @@ public class InstructionTest extends CompositionTestBase {
     }
 
     public void setUp() throws Exception {
-        ItemStructure action = list("list action");
-        ItemStructure data = list("list data");
-        ItemStructure profile = list("list profile");
+        //ItemStructure action = list("list action");
+        //ItemStructure data = list("list data");
+        //ItemStructure profile = list("list profile");
         ItemStructure protocol = list("list protocol");
-        DvState state = TestCodeSet.DRAFT;
+        //DvState state = TestCodeSetAccess.DRAFT;
+        Archetyped arch = new Archetyped(
+                new ArchetypeID("openehr-ehr_rm-instruction.physical_examination.v3"),
+                "1.1");
+        DvParsable timing = new DvParsable(new CodePhrase("test", "en"), new CodePhrase("test", "en"),
+                 1, "timing value", "fomalism", ts);
+        Activity activity = new Activity("at0004", text("activity 1"), list("list activity"), timing);
+        List<Activity> activities = new ArrayList<Activity>();
+        activities.add(activity);
         instruction = new Instruction(null, "at0001", text("instruction"),
-                null, null, null, subject(), provider(), protocol,
-                null, null, null, state, action, profile, data);
+                arch, null, null, null, language("en"), language("en"), subject(), provider(), 
+                null, null, protocol, null, text("narrative"), activities, null, null, ts);
     }
 
     public void testValidPath() throws Exception {
         String[] validPathList = {
             "/",
-            "/action",
-            "/data",
             "/protocol",
-            "/profile",
-            "/action/list action",
-            "/data/list data",
+            "/activities[activity 1]",
+            "/activities[activity 1]/description",
             "/protocol/list protocol",
-            "/profile/list profile",
-            "/[instruction]",
-            "/[instruction]/action",
-            "/[instruction]/data",
-            "/[instruction]/protocol",
-            "/[instruction]/profile",
-            "/[instruction]/action/list action",
-            "/[instruction]/data/list data",
-            "/[instruction]/profile/list profile",
-            "/[instruction]/protocol/list protocol"
         };
 
         for (String path : validPathList) {
@@ -73,8 +73,9 @@ public class InstructionTest extends CompositionTestBase {
         }
 
         String[] invalidPathList = {
-            "", null, "[instruction]", "/instruction", // bad root
-            "/[instruction]/state"                   // bad attribute
+            "", null, "[instruction]", "/instruction",  "/[instruction]", // bad root
+            "/[instruction]/state",                    // bad attribute
+            "/activities"                              // incomplete
         };
 
         for (String path : invalidPathList) {
@@ -85,24 +86,16 @@ public class InstructionTest extends CompositionTestBase {
 
     public void testItemAtPath() throws Exception {
         assertItemAtPath("/", instruction, instruction);
-        assertItemAtPath("/[instruction]", instruction, instruction);
-
-        assertItemAtPath("/data", instruction, instruction.getData());
-        assertItemAtPath("/[instruction]/data", instruction,
-                instruction.getData());
+        assertItemAtPath("/", instruction, instruction);
 
         assertItemAtPath("/protocol", instruction, instruction.getProtocol());
-        assertItemAtPath("/[instruction]/protocol", instruction,
+
+        assertItemAtPath("/protocol/list protocol", instruction, 
                 instruction.getProtocol());
-
-        assertItemAtPath("/profile", instruction, instruction.getProfile());
-        assertItemAtPath("/[instruction]/profile", instruction,
-                instruction.getProfile());
-
-        assertItemAtPath("/action", instruction, instruction.getAction());
-        assertItemAtPath("/[instruction]/action", instruction,
-                instruction.getAction());
-
+        assertItemAtPath("/activities[activity 1]", instruction, instruction.getActivities().get(0));
+        assertItemAtPath("/activities[activity 1]/description", instruction, 
+                instruction.getActivities().get(0).getDescription());
+       
         String[] invalidPathList = {
             "", null, "instruction", "/instruction", // bad root
             "/[instruction]/state"                    // bad attribute

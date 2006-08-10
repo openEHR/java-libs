@@ -51,30 +51,36 @@ public class HierarchicalObjectIDTest extends TestCase {
 
         for (int i = 0; i < STRING_VALUES.length; i++) {
             assertHOID(new HierarchicalObjectID(SECTIONS[i][0],
-            SECTIONS[i][1],SECTIONS[i][2]), i);
+            SECTIONS[i][1]), i);
         }
     }
 
     private void assertHOID(HierarchicalObjectID hoid, int i) throws Exception {
+        //System.out.println("matches? " + SECTIONS[i][0].matches("(\\d)+(\\.(\\d)+)*"));
         assertEquals("value", STRING_VALUES[i], hoid.getValue());
-        assertEquals("contextID", SECTIONS[i][0] == null ? null : new ISO_OID(SECTIONS[i][0]),
-                hoid.contextID());
-        assertEquals("localID", SECTIONS[i][1], hoid.localID());
-        assertEquals("versionID", SECTIONS[i][2], hoid.versionID());
+        //System.out.println("root uid? " + hoid.root());
+        //String str = hoid.root().getValue();
+        
+        assertEquals("root", SECTIONS[i][0], hoid.root().getValue());
+        assertEquals("extension", SECTIONS[i][1], hoid.extension());
     }
 
     private static final String[][] SECTIONS = {
-            {"1.2.840.113554.1.2.2", "1234", "456"},
-            {"1.2.840.113554.1.2.2", "1234", null},
-            new String[]{null, "1234", null},
-            {"1.2.840.113554.1.2.2", "1234", "4.5.6"},
+            {"1.2.840.113554.1.2.2", "345"},
+            {"1-2-840-113554-1", "789"},
+            {"w123.com", "123"},
+            {"1.2.840.113554.1.2.2", null},
+            {"1-2-840-113554-1", null},
+            {"w123.com", null}
         };
 
     private static final String[] STRING_VALUES = {
-            "1.2.840.113554.1.2.2.1234(456)",
-            "1.2.840.113554.1.2.2.1234",
-            "1234",
-            "1.2.840.113554.1.2.2.1234(4.5.6)",
+            "1.2.840.113554.1.2.2::345",
+            "1-2-840-113554-1::789",
+            "w123.com::123",
+            "1.2.840.113554.1.2.2",
+            "1-2-840-113554-1",
+            "w123.com",
         };
 
 }

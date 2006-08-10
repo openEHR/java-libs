@@ -106,11 +106,11 @@ public class Capability extends Locatable {
         if (ret != null) {
             return ret;
         }
-        String whole = whole();
+        //String whole = whole();
         String tmp = path;
-        if (tmp.startsWith(whole)) {
-            tmp = tmp.substring(whole.length());
-        }
+        //if (tmp.startsWith(whole)) {
+          //  tmp = tmp.substring(whole.length());
+        //}
         ret = checkAttribute(tmp, "credentials", credentials);
         if (ret == null) {
             throw new IllegalArgumentException("invalid path: " + path);

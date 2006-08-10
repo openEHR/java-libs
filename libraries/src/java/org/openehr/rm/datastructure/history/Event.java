@@ -58,10 +58,10 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
      * @throws IllegalArgumentException if offset null
      */
     @FullConstructor protected Event(
-            		   @Attribute(name = "uid", required = true) ObjectID uid,
+            		   @Attribute(name = "uid") ObjectID uid,
                     @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
                     @Attribute(name = "name", required = true) DvText name,
-                    @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
+                    @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
                     @Attribute(name = "feederAudit") FeederAudit feederAudit,
                     @Attribute(name = "links") Set<Link> links,
                     @Attribute(name = "parent") History<T> parent,
@@ -106,69 +106,68 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
      * 
      * @return state
      */
-	public ItemStructure getState() {
-		return state;
-	}
+    public ItemStructure getState() {
+            return state;
+    }
 
-	/**
-	 * Time of this event. If the width is non-zero, 
-	 * it is the time point of the trailing edge of 
-	 * the event.
-	 * 
-	 * @return time
-	 */
-	public DvDateTime getTime() {
-		return time;
-	}
+    /**
+     * Time of this event. If the width is non-zero, 
+     * it is the time point of the trailing edge of 
+     * the event.
+     * 
+     * @return time
+     */
+    public DvDateTime getTime() {
+            return time;
+    }
 
-	/**
-	 * Redefinition of LOCATABLE.parent to be of type 
-	 * History
-	 * 
-	 * @return parent null if not known
-	 */
-	public History<T> getParent() {
-		return parent;
-	}
-	
-	/**
-	 * Offset of this event from origin
-	 * 
-	 * @return offset = time - parent.origin
-	 */
-	public DvDuration offset() {
-		if (parent != null) {
-			DvDateTime result = (DvDateTime) time.subtract(parent.getOrigin());
-			return new DvDuration(result.getYear(), result.getMonth(),
-					result.getDay(), result.getHour(), result.getMinute(), 
-					result.getSecond(), result.getFractionalSecond());
-		} else return null;
-		//TODO: offset should not return null
-	}
-	/**
-	 * To assign parent object. This function can only be called 
-	 * once for the lifetime of an Event. Once set, the parent
-	 * cannot be modified.
-	 * 
-	 * @param history
-	 * @throws IllegalArgumentException if the given history object does not contain
-	 * 		a copy of this Event object, or if this.parent is not null
-	 */
-	void assignParent(History<T> parent) {
-		if (this.parent == null) {
-			//TODO: be careful about this, espcially when events are not assigned
-			if (parent.getEvents().contains(this)) {
-				this.parent = parent;
-			} else {
-				throw new IllegalArgumentException ("this Event is not contained in the parent object");
-			}
-		} else {
-			//TODO: throw or not throw?
-			throw new IllegalArgumentException("parent object existing");
-		}
-	}
-	
-	/**
+    /**
+     * Redefinition of LOCATABLE.parent to be of type 
+     * History
+     * 
+     * @return parent null if not known
+     */
+    public History<T> getParent() {
+            return parent;
+    }
+
+    /**
+     * Offset of this event from origin
+     * 
+     * @return offset = time - parent.origin
+     */
+    public DvDuration offset() {
+        if (parent != null) {
+            return DvDuration.getDifference(parent.getOrigin(), time);
+        } else return null;
+        //TODO: offset should not return null
+    }
+    
+    /**
+     * To assign parent object. This function can only be called 
+     * once for the lifetime of an Event. Once set, the parent
+     * cannot be modified.
+     * This method does not include this object into the events 
+     * list of the parent. To make sure the bi-directional relationships 
+     * between History and Event work properly, try create a list of Event
+     * with null parent, then when the list of Event is assigned to History,
+     * this method will be called to complete the links.
+     * 
+     * @param history
+     * @throws IllegalArgumentException if the given history object does not contain
+     * 		a copy of this Event object, or if this.parent is not null
+     */
+    void assignParent(History<T> parent) {
+        if (this.parent == null) {
+               this.parent = parent; 
+ 
+        } else {
+            //TODO: throw or not throw?
+            throw new IllegalArgumentException("parent object existing");
+        }
+    }
+
+    /**
      * String The path to an item relative to the root of this
      * archetyped structure.
      *

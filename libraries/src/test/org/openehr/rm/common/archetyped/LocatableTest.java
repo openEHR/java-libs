@@ -25,8 +25,8 @@ import junit.framework.TestCase;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.ehr.Folder;
-import org.openehr.rm.support.terminology.TestCodeSet;
+import org.openehr.rm.common.directory.Folder;
+import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 
 public class LocatableTest extends TestCase {
@@ -48,15 +48,15 @@ public class LocatableTest extends TestCase {
     }
 
     public void testGetLinks() throws Exception {
-        ObjectID uid = new HierarchicalObjectID("470234723");
+        ObjectID uid = new HierarchicalObjectID("1-0-23-47-23");
 
         Folder folder = new Folder(uid, "at0001",
-                text("folder name"), null, null, null, null, null);
+                text("folder name"), null, null, null, null, null, null);
         folder.getLinks();        
     }
 
     private DvText text(String value) {
-        return new DvText(value, TestCodeSet.ENGLISH, TestCodeSet.LATIN_1,
+        return new DvText(value, TestCodeSetAccess.ENGLISH, TestCodeSetAccess.LATIN_1,
                 TestTerminologyService.getInstance());
     }
 }

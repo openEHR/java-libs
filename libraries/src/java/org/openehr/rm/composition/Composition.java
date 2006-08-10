@@ -66,8 +66,9 @@ public final class Composition extends Locatable {
                                @Attribute(name = "links") Set<Link> links,
                                @Attribute(name = "parent") Locatable parent,
                                @Attribute(name = "content") List<ContentItem> content,
+                               @Attribute(name = "language", system = true) CodePhrase language,
                                @Attribute(name = "context", system = true) EventContext context,
-                               @Attribute(name = "composer", required = true) PartyProxy composer,
+                               @Attribute(name = "composer", system = true) PartyProxy composer,
                                @Attribute(name = "category", system = true) DvCodedText category,
                                @Attribute(name = "territory", system = true) CodePhrase territory,
                                @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
@@ -87,10 +88,13 @@ public final class Composition extends Locatable {
             throw new IllegalArgumentException("invalid persistent category");
         }
         if (composer == null) {
-        		throw new IllegalArgumentException("null composer");
+            throw new IllegalArgumentException("null composer");
+        }
+        if (language == null) {
+            throw new IllegalArgumentException("null language");
         }
         if (parent != null) {
-        		throw new IllegalArgumentException("parent must be null");
+            throw new IllegalArgumentException("parent must be null");
         }
 
         // Is_persistent_validity: is_persistent implies context = Void
@@ -108,9 +112,10 @@ public final class Composition extends Locatable {
         if (terminologyService == null) {
             throw new IllegalArgumentException("null terminologyService");
         }
+  
         if (!terminologyService.terminology(TerminologyService.OPENEHR)
-                .hasCodeForGroupName(category.getDefiningCode(),
-                        "composition category", "en")) {
+                .codesForGroupName("composition category", "en")
+                .contains(category.getDefiningCode())) {
             throw new IllegalArgumentException(
                     "unknown category: " + category.getDefiningCode());
         }
@@ -118,17 +123,25 @@ public final class Composition extends Locatable {
             throw new IllegalArgumentException(
                     "unknown territory: " + territory);
         }
+        if (!terminologyService.codeSet("languages").hasLang(language)) {
+            throw new IllegalArgumentException("unknown language:" + language);
+        }
 
         this.content = content;
         this.context = context;
+        this.language = language;
+        this.composer = composer;
         this.category = category;
         this.territory = territory;
     }
 
     // check is given category indicates persistent type
     private static boolean isPersistent(DvCodedText category) {
-        // todo: implement this
-        return false;
+        return category.getDefiningCode().getCodeString().equals("persistent");
+    }
+
+    public CodePhrase getLanguage() {
+        return language;
     }
 
     /**
@@ -219,16 +232,13 @@ public final class Composition extends Locatable {
         if (ret != null) {
             return ret;
         }
-        String whole = whole();
         String tmp = path;
-        if (tmp.startsWith(whole)) {
-            tmp = tmp.substring(whole.length());
-        }
         ret = checkAttribute(tmp, "content", content);
         if (ret == null) {
             throw new IllegalArgumentException("invalid path: " + path);
         }
         return ret;
+
     }
 
     /**
@@ -251,6 +261,10 @@ public final class Composition extends Locatable {
     Composition() {
     }
 
+    void setLanguage(CodePhrase language) {
+        this.language = language;
+    }
+    
     void setContent(List<ContentItem> content) {
         this.content = content;
     }
@@ -278,6 +292,7 @@ public final class Composition extends Locatable {
     private PartyProxy composer;
     private DvCodedText category;
     private CodePhrase territory;
+    private CodePhrase language;
 
 }
 

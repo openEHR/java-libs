@@ -30,13 +30,13 @@ public class PartyIdentityTest extends DemographicTestBase {
     public void testConstructor() throws Exception {
 
         new PartyIdentity(null, "at0000",
-                text("person name"), null, null, null,
+                text("person name"), null, null, null, null, 
                 itemSingle("Neo"));
 
         // null details
         try {
             new PartyIdentity(null, "at0000",
-                text("person name"), null, null, null, null);
+                text("person name"), null, null, null, null, null);
 
             fail("exception should be thrown");
         } catch(Exception e) {

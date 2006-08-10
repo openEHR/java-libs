@@ -33,42 +33,16 @@ public class VersionTreeID extends RMObject {
 	 * Contruct VersionTreeID by string value
 	 * 
 	 * @param value
-     * @throws IllegalArgumentException if value is null or empty
+         * @throws IllegalArgumentException if value is null or empty
 	 */
 	public VersionTreeID(String value) {
-		if (StringUtils.isEmpty(value)) {
-            throw new IllegalArgumentException("empty value");
-        }
-        loadValue(value);
-        this.value = value;
+            if (StringUtils.isEmpty(value)) {
+                throw new IllegalArgumentException("empty value");
+            }
+            loadValue(value);
+            //this.value = value;
 	}
 
-	/**
-	 * Contruct VersionTreeID by value of trunkVersion, branchNumber 
-	 * and branchVersion
-	 * 
-	 * @param trunkVersion
-	 * @param branchNumber
-	 * @param branchVersion
-     * @throws IllegalArgumentException if value is null or empty??
-	 */
-	public VersionTreeID(String trunkVersion, String branchNumber, 
-				String branchVersion) {
-		if (StringUtils.isEmpty(trunkVersion)) {
-            throw new IllegalArgumentException("empty trunk version");
-        }
-		if (StringUtils.isEmpty(branchVersion) != StringUtils.isEmpty(branchNumber)) {
-			throw new IllegalArgumentException("breach of branch_validity");
-		}
-		if(StringUtils.isNotEmpty(branchNumber)) {
-			String value = trunkVersion + "." + branchNumber + "." + branchVersion + "";
-			loadValue(value);
-			this.value = value;
-		} else {
-			loadValue(trunkVersion);
-			this.value = trunkVersion;
-		}	
-	}
 	
 	/**
 	 * Contruct VersionTreeID by value of trunkVersion, branchNumber 
@@ -82,38 +56,59 @@ public class VersionTreeID extends RMObject {
 	 */
 	public VersionTreeID(int trunkVersion, int branchNumber, 
 				int branchVersion) {
-		if (trunkVersion < 1 || branchNumber < 0 || branchNumber < 0) {
-            throw new IllegalArgumentException("version number smaller than 0");
-        }
-		if (branchNumber == 0 || branchVersion == 0) {
-			if (branchVersion != branchNumber) {
-				throw new IllegalArgumentException("breach of branch_validity");
-			}
-		}
-		if(branchNumber > 0 ) {
-			String value = Integer.toString(trunkVersion) + "." + Integer.toString(branchNumber) 
-							+  "." + Integer.toString(branchVersion);
-			this.value = value;
-		} else {
-			this.value = Integer.toString(trunkVersion);
-		}	
+            validateValues(trunkVersion, branchNumber, branchVersion);
+            String trunk = Integer.toString(trunkVersion);
+            this.trunkVersion = trunk;
+            if(branchNumber > 0 ) {                 
+                this.value = trunk + "." + Integer.toString(branchNumber) +  "." 
+                        + Integer.toString(branchVersion);                
+                this.branchNumber = Integer.toString(branchNumber);
+                this.branchVersion = Integer.toString(branchVersion);
+            } else {
+                this.value = trunk;
+            }	
 	}
 	
-	private void loadValue(String value) {
-		if (!value.matches(PATTERN)) {
-			throw new IllegalArgumentException("wrong format");
-		}
-		int branch = value.indexOf(".");
-		if (branch < 0) { // no branch, just trunk
-				this.trunkVersion = value; 			
-		} else {
-			String[] entries = value.split(".");
-			this.trunkVersion = entries[0];
-			this.branchNumber = entries[1];
-			this.branchVersion = entries[2];
-		}
-	}
+        private void loadValue(String value) {
+            if (!value.matches(PATTERN)) {
+                    throw new IllegalArgumentException("wrong format");
+            }
+            int branch = value.indexOf(".");
+            if (branch < 0) { // no branch, just trunk
+                 //validateValues(Integer.parseInt(value), 0, 0);
+                 this.trunkVersion = value; 
+                 this.value = value;
+            } else {
+                String[] entries = value.split("\\.");
+                //System.out.println("in loadValues, size of entries:" + entries.length);               
+                validateValues(Integer.parseInt(entries[0]), Integer.parseInt(entries[1]),
+                        Integer.parseInt(entries[2]));
+                this.trunkVersion = entries[0];
+                //never set branchNo or branchV to 0
+                if(Integer.parseInt(entries[1]) > 0) {
+                    this.branchNumber = entries[1];
+                    this.branchVersion = entries[2];
+                    this.value = value;
+                } else {
+                    this.value = entries[0];
+                }
+            }
+        }
 
+        private void validateValues(int trunk, int branchNo, int branchV) {
+            if (trunk < 1 || branchNo < 0 || branchV < 0) {
+                throw new IllegalArgumentException("version number smaller than 0");
+            }
+            //0 for branchNo or branchV is special case,
+            //where both must be 0 to indicate no branch
+            if (branchNo == 0 || branchV == 0) {                  
+                if (branchV != branchNo) {
+                        throw new IllegalArgumentException("breach of branch_validity");
+                }
+            }
+        }
+        
+        
 	public String getValue() {
 		return value;
 	}
@@ -168,7 +163,8 @@ public class VersionTreeID extends RMObject {
 	public VersionTreeID next() {
 		if (isBranch()) {
 			String newBranchVersion = Integer.toString(Integer.valueOf(branchVersion) + 1);
-			return new VersionTreeID(trunkVersion, branchNumber, newBranchVersion);
+			return new VersionTreeID(trunkVersion + "." + branchNumber +
+                                "." +  newBranchVersion);
 			
 		} else {
 			
@@ -213,14 +209,14 @@ public class VersionTreeID extends RMObject {
 	VersionTreeID() {
 	}
 
-	void setValue(String value) {
-		this.value = value;
-		loadValue(value);
-	}
+    void setValue(String value) {
+        this.value = value;
+        loadValue(value);
+    }
 	
 	//POJO end
 
-	private String PATTERN = "(\\d)+(\\.(\\d)+\\.(\\d)+)?";
+	private String PATTERN = "[1-9](\\d)*(\\.(\\d)+\\.(\\d)+)?";
 	
 	/* field */
 	private String value;

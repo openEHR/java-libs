@@ -43,17 +43,34 @@ public abstract class CareEntry extends Entry {
     protected CareEntry(ObjectID uid, String archetypeNodeId, DvText name,
                  Archetyped archetypeDetails, FeederAudit feederAudit,
                  Set<Link> links, Locatable parent, CodePhrase language,
-                 CodePhrase encoding, PartyProxy subject, 
+                 CodePhrase charset, PartyProxy subject, 
                  PartyProxy provider, ObjectReference workflowID,
                  List<Participation> otherParticipations,
                  ItemStructure protocol, ObjectReference guidelineID, 
                  TerminologyService terminologyService) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent, 
-        		language, encoding, subject, provider, workflowID, otherParticipations,
+        		language, charset, subject, provider, workflowID, otherParticipations,
         		terminologyService);
         this.protocol = protocol;
         this.guidelineID = guidelineID;
+    }
+
+    public Object itemAtPath(String path) {
+
+        Object item = super.itemAtPath(path);
+        if(item != null) {
+            return item;
+        }
+        String tmp = path;
+        String attr = ROOT + PROTOCOL;
+        if (tmp.equals(attr)) {
+            return protocol;
+        }
+        if(tmp.startsWith(attr)) {
+            return protocol.itemAtPath(tmp.substring(attr.length()));
+        }
+        return null;    // path needs to be further processed by sub-class
     }
     
     /**
@@ -88,7 +105,12 @@ public abstract class CareEntry extends Entry {
 	//POJO end
 	
     /* fields */
+        
    private ItemStructure protocol;
    private ObjectReference guidelineID;
 
+   /* static fields */
+   public static final String PROTOCOL = "protocol";
+   //public static final String ACTION = "action";
+   //public static final String PROFILE = "profile";
 }

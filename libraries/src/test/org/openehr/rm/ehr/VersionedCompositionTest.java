@@ -24,15 +24,15 @@ import junit.framework.TestCase;
 
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.common.generic.Participation;
-import org.openehr.rm.common.generic.RelatedParty;
+import org.openehr.rm.common.generic.PartyIdentified;
 import org.openehr.rm.common.archetyped.Archetyped;
+import org.openehr.rm.composition.CompositionTestBase;
 import org.openehr.rm.support.identification.*;
 import org.openehr.rm.composition.Composition;
 import org.openehr.rm.composition.EventContext;
 import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.composition.content.entry.Observation;
 import org.openehr.rm.composition.content.navigation.Section;
-import org.openehr.rm.datastructure.history.SingleEvent;
 import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
@@ -42,13 +42,14 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.terminology.TerminologyService;
-import org.openehr.rm.support.terminology.TestCodeSet;
+import org.openehr.rm.support.terminology.TestCodeSetAccess;
+import org.openehr.rm.support.terminology.TestTerminologyAccess;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VersionedCompositionTest extends TestCase {
+public class VersionedCompositionTest extends CompositionTestBase {
 
     public VersionedCompositionTest(String test) {
         super(test);
@@ -75,19 +76,24 @@ public class VersionedCompositionTest extends TestCase {
         VersionedComposition vc = versionedComposition("at0001", "first");
 
         assertExceptionThrown(vc, composition("at0002", "second"));
-
+        assertExceptionThrown(vc, compositionPersistent("at0001", "second"));
+        
         // todo: need to test different category
 
-        vc.commit(audit(TestCodeSet.AMENDMENT), composition("at0001", "first"),
-                contribution("30002"), TestCodeSet.DRAFT, ts,
-                ObjectReference.Namespace.LOCAL);
+        vc.commitOriginalVersion(new ObjectVersionID("1.2.4.7::1.2.40.14.1.2.2::2"), 
+                new ObjectVersionID("1.2.4.7::1.2.40.14.1.2.2::1"), 
+                composition("at0001", "subsequent"),
+                audit(TestCodeSetAccess.AMENDMENT), contribution("1.5.25.6.2.1.2"),
+                 TestCodeSetAccess.AMENDMENT, null, ts);
     }
 
     private void assertExceptionThrown(VersionedComposition vc,
                                        Composition data) throws Exception {
          try {
-            vc.commit(audit(TestCodeSet.AMENDMENT), data, contribution("30002"),
-                    TestCodeSet.DRAFT, ts, ObjectReference.Namespace.LOCAL);
+            vc.commitOriginalVersion(new ObjectVersionID("1.7.5.2::1.2.40.14.1.2.2::2"), 
+                new ObjectVersionID("1.7.5.2::1.2.40.14.1.2.2::1"), data,
+                audit(TestCodeSetAccess.AMENDMENT), contribution("1.5.25.6.2.1.2"),
+                 TestCodeSetAccess.AMENDMENT, null, ts);
             fail("exception should be thrown");
         } catch(Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
@@ -97,22 +103,23 @@ public class VersionedCompositionTest extends TestCase {
     // test versioned composition
     private VersionedComposition versionedComposition(String node, String text)
             throws Exception {
-        ObjectID id = new HierarchicalObjectID("20001");
+        HierarchicalObjectID id = new HierarchicalObjectID("1.2.4.7");
         Composition firstData = composition(node, text);
         ObjectReference ehrRef = new ObjectReference(
-                new HierarchicalObjectID("20001"),
+                new HierarchicalObjectID("1.2.0.0.0.1.2"),
                 ObjectReference.Namespace.LOCAL,
                 ObjectReference.Type.EHR);
-        return new VersionedComposition(id, ehrRef,
-                audit(TestCodeSet.CREATION), firstData, contribution("30001"),
-                TestCodeSet.DRAFT, ts, ObjectReference.Namespace.LOCAL);
+  
+        return new VersionedComposition(id, ehrRef, new DvDateTime(), 
+                new ObjectVersionID("1.2.4.7::1.2.40.14.1.2.2::1"), firstData, 
+                TestCodeSetAccess.CREATION, audit(TestCodeSetAccess.CREATION), contribution("1.2.3.1"), 
+                null,ts);
     }
 
     // test audit
     private AuditDetails audit(DvCodedText changeType) throws Exception {
-        PartyReference committer = new PartyReference(
-                new HierarchicalObjectID("10001"));
-        return new AuditDetails("/", committer, new DvDateTime(),
+
+        return new AuditDetails("/", provider(), new DvDateTime(),
                 changeType, new DvText("desc"),
                 TestTerminologyService.getInstance());
     }
@@ -128,75 +135,36 @@ public class VersionedCompositionTest extends TestCase {
     private Composition composition(String node, String text)
             throws Exception {
         DvText name = new DvText(text, lang, charset, ts);
-        ObjectID id = new HierarchicalObjectID("111");
-        List<Section> content = new ArrayList<Section>();
+        ObjectID id = new HierarchicalObjectID("1.11.2.5.1.66.3");
+        List<ContentItem> content = new ArrayList<ContentItem>();
         content.add(section());
-        DvCodedText category = TestCodeSet.EVENT;
+        DvCodedText category = TestCodeSetAccess.EVENT;
         Archetyped archetypeDetails = new Archetyped(new ArchetypeID(
-                "openehr-ehr_rm-Composition.physical_examination.v2"), null,
-                "1.0");
-        return new Composition(id, node, name, archetypeDetails, null, null,
-                content, context(), category, territory(), ts);
+                "openehr-ehr_rm-Composition.physical_examination.v2"), "1.0");
+        return new Composition(id, node, name, archetypeDetails, null, 
+                null, null, content, TestTerminologyAccess.ENGLISH, context(), 
+                provider(), category, territory(), ts);
     }
 
-    // test context
-    private EventContext context() {
-        DvCodedText setting = new DvCodedText("setting", lang, charset,
-                new CodePhrase("test", "setting_code"), ts);
-        PartyReference composer = new PartyReference(
-                new HierarchicalObjectID("333"));
-        return new EventContext(null, time(), composer, null, null,
-                setting, null, ts);
+    private Composition compositionPersistent(String node, String text)
+            throws Exception {
+        DvText name = new DvText(text, lang, charset, ts);
+        ObjectID id = new HierarchicalObjectID("1.11.2.5.1.66.3");
+        List<ContentItem> content = new ArrayList<ContentItem>();
+        content.add(section());
+        DvCodedText category = TestCodeSetAccess.PERSISTENT;
+        Archetyped archetypeDetails = new Archetyped(new ArchetypeID(
+                "openehr-ehr_rm-Composition.physical_examination.v2"), "1.0");
+        return new Composition(id, node, name, archetypeDetails, null, 
+                null, null, content, TestTerminologyAccess.ENGLISH, null, 
+                provider(), category, territory(), ts);
     }
-
+    
     private Section section() throws Exception {
         DvText name = new DvText("test section", lang, charset, ts);
         List<ContentItem> items = new ArrayList<ContentItem>();
         items.add(observation());
         return new Section("at0000", name, items);
-    }
-
-    private Observation observation() throws Exception {
-        DvText meaning = new DvText("test observation", lang, charset, ts);
-        return new Observation("at0000", meaning, subject(), provider(),
-                singleEvent());
-    }
-
-    // test subject
-    private RelatedParty subject() {
-        PartyReference party = new PartyReference(
-                new HierarchicalObjectID("123"));
-        DvCodedText relationship = new DvCodedText("family relationship", lang,
-                charset, new CodePhrase("test", "family_code"), ts);
-        return new RelatedParty(party, relationship, ts);
-    }
-
-    // test provider
-    private Participation provider() {
-        PartyReference performer = new PartyReference(
-                new HierarchicalObjectID("333"));
-        DvCodedText function = new DvCodedText("doctor", lang, charset,
-                new CodePhrase("test", "doctor_code"), ts);
-        DvCodedText mode = new DvCodedText("present", lang, charset,
-                new CodePhrase("test", "present_code"), ts);
-        return new Participation(performer, function, mode, time(), ts);
-    }
-
-    // test  territory
-    private CodePhrase territory() {
-        return new CodePhrase("test", "se");
-    }
-
-    private DvInterval<DvDateTime> time() {
-        return new DvInterval<DvDateTime>(
-                new DvDateTime("2004-10-29 22:37:00"),
-                new DvDateTime("2004-10-29 23:10:00"));
-    }
-
-    private SingleEvent<ItemStructure> singleEvent() throws Exception {
-        DvText name = new DvText("test single event", lang, charset, ts);
-        DvDateTime orgin = new DvDateTime("2004-10-29 22:37:00");
-        return new SingleEvent<ItemStructure>("at0000", name, orgin, itemSingle());
     }
 
     // test element
@@ -211,8 +179,8 @@ public class VersionedCompositionTest extends TestCase {
         return new ItemSingle("at0000", name, element());
     }
 
-    private CodePhrase lang = TestCodeSet.ENGLISH;
-    private CodePhrase charset = TestCodeSet.LATIN_1;
+    private CodePhrase lang = TestCodeSetAccess.ENGLISH;
+    private CodePhrase charset = TestCodeSetAccess.LATIN_1;
     private TerminologyService ts = TestTerminologyService.getInstance();
 }
 /*

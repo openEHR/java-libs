@@ -130,11 +130,12 @@ public abstract class Party extends Locatable {
         if (ret != null) {
             return ret;
         }
-        String whole = whole();
+        //String whole = whole();
         String tmp = path;
-        if (tmp.startsWith(whole)) {
-            tmp = tmp.substring(whole.length());
-        }
+        //if (tmp.startsWith(whole)) {
+        //if(!whole.equals("/") && tmp.startsWith(whole)) {
+          //  tmp = tmp.substring(whole.length());
+        //}
         ret = checkAttribute(tmp, "identities", identities);
         if (ret != null) {
             return ret;
@@ -231,11 +232,11 @@ public abstract class Party extends Locatable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!( o instanceof Party )) return false;
-
+        if (!super.equals(o)) return false;
+        
         final Party party = (Party) o;
 
         return new EqualsBuilder()
-                .appendSuper(super.equals(o))
                 .append(identities, party.identities)
                 .append(contacts, party.contacts)
                 .append(relationships, party.relationships)

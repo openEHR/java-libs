@@ -48,8 +48,8 @@ public final class PartyRelated extends PartyIdentified {
             throw new IllegalArgumentException("null relationship");
         }
         if (!terminologyService.terminology(TerminologyService.OPENEHR)
-                .hasCodeForGroupName(relationship.getDefiningCode(),
-                        "related party relationship", "en")) {
+                .codesForGroupName("related party relationship", "en")
+                .contains(relationship.getDefiningCode())) {
             throw new IllegalArgumentException(
                     "unkown relationship: " + relationship);
         }
@@ -91,7 +91,7 @@ public final class PartyRelated extends PartyIdentified {
      */
     public int hashCode() {
         return new HashCodeBuilder(13, 59)
-        		    .appendSuper(super.hashCode())
+                .appendSuper(super.hashCode())
                 .append(relationship)
                 .toHashCode();
     }

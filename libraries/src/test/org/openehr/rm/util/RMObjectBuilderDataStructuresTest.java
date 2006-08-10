@@ -22,14 +22,16 @@ package org.openehr.rm.util;
 
 import org.openehr.rm.RMObject;
 import org.openehr.rm.datastructure.history.Event;
-import org.openehr.rm.datastructure.history.EventSeries;
-import org.openehr.rm.datastructure.history.SingleEvent;
+import org.openehr.rm.datastructure.history.History;
+import org.openehr.rm.datastructure.history.IntervalEvent;
+import org.openehr.rm.datastructure.history.PointEvent;
 import org.openehr.rm.datastructure.itemstructure.*;
 import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
+import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 
 import java.util.ArrayList;
@@ -127,7 +129,7 @@ public class RMObjectBuilderDataStructuresTest extends RMObjectBuilderTestBase {
         Map<String, Object> values = new HashMap<String, Object>();
         String archetypeNodeId = "at0001";
         DvText name = new DvText("test item talbe", lang, charset, ts);
-        Cluster cluster = cluster();
+        Cluster cluster = clusterTable();
 
         values.put("archetypeNodeId", archetypeNodeId);
         values.put("name", name);
@@ -160,65 +162,76 @@ public class RMObjectBuilderDataStructuresTest extends RMObjectBuilderTestBase {
         assertEquals("representation", cluster, itemTree.getRepresentation());
     }
 
-    public void testBuildEvent() throws Exception {
+    public void testBuildPointEvent() throws Exception {
         Map<String, Object> values = new HashMap<String, Object>();
-        ItemStructure item = itemSingle();
-        DvDuration offset = DvDuration.getInstance("P1d");
-        values.put("item", item);
-        values.put("offset", offset);
-        RMObject obj = builder.construct("Event", values);
-
-        assertTrue(obj instanceof Event);
-        Event event = (Event) obj;
-        assertEquals("item", item, event.getItem());
-        assertEquals("width", null, event.getWidth());
-        assertEquals("mathFunction", null, event.getMathFunction());
-        assertEquals("offset", offset, event.getOffset());
+        String archetypeNodeId = "at0001";
+        DvText name = new DvText("test point event", lang, charset, ts);
+        ItemStructure data = itemSingle();
+        DvDateTime time = new DvDateTime("2006-07-12T12:00:03");
+        values.put("archetypeNodeId", archetypeNodeId);
+        values.put("name", name);
+        values.put("data", data);
+        values.put("time", time);
+        RMObject obj = builder.construct("PointEvent", values);
+        assertTrue(obj instanceof PointEvent);
+        PointEvent event = (PointEvent) obj;
+        assertEquals("archetypeNodeId", archetypeNodeId, event.getArchetypeNodeId());
+        assertEquals("name", name, event.getName());
+        assertEquals("data", data, event.getData());
+        assertEquals("time", time, event.getTime());
     }
 
-    public void testBuildEventSeries() throws Exception {
+    public void testBuildIntervalEvent() throws Exception {
         Map<String, Object> values = new HashMap<String, Object>();
         String archetypeNodeId = "at0001";
         DvText name = new DvText("test event series", lang, charset, ts);
-        List<Event<ItemStructure>> items = new ArrayList<Event<ItemStructure>>();
-        items.add(event());
-        items.add(event());
-        DvDateTime origin = new DvDateTime("2004-10-30 14:22:00");
+        ItemStructure data = itemList();
+        DvDateTime time = new DvDateTime("2004-10-30T14:22:00");
+        DvDuration width = DvDuration.getInstance("P1d");
+        DvCodedText mathFunction = codedText("mean", "meanCode");
         values.put("archetypeNodeId", archetypeNodeId);
         values.put("name", name);
-        values.put("items", items);
-        values.put("origin", origin);
-        RMObject obj = builder.construct("EventSeries", values);
+        values.put("time", time);
+        values.put("data", data);
+        values.put("width", width);
+        values.put("mathFunction", mathFunction);
+        RMObject obj = builder.construct("IntervalEvent", values);
 
-        assertTrue(obj instanceof EventSeries);
-        EventSeries eventSeries = (EventSeries) obj;
+        assertTrue(obj instanceof IntervalEvent);
+        IntervalEvent intEvent = (IntervalEvent) obj;
         assertEquals("archetypeNodeId", archetypeNodeId,
-                eventSeries.getArchetypeNodeId());
-        assertEquals("name", name, eventSeries.getName());
-        assertEquals("period", null, eventSeries.getPeriod());
-        assertEquals("origin", origin, eventSeries.getOrigin());
-        assertEquals("items", items, eventSeries.getItems());
+                intEvent.getArchetypeNodeId());
+        assertEquals("name", name, intEvent.getName());
+        assertEquals("data", data, intEvent.getData());
+        assertEquals("time", time, intEvent.getTime());
+        assertEquals("width", width, intEvent.getWidth());
+        assertEquals("mathFunction", mathFunction, intEvent.getMathFunction());
+        assertEquals("intervalStartTime", new DvDateTime("2004-10-29T14:22:00"), 
+                intEvent.intervalStartTime());
     }
 
-    public void testBuildSingleEvent() throws Exception {
+    public void testBuildHistoy() throws Exception {
         Map<String, Object> values = new HashMap<String, Object>();
         String archetypeNodeId = "at0001";
-        DvText name = new DvText("test event series", lang, charset, ts);
+        DvText name = new DvText("test history", lang, charset, ts);
         ItemStructure item = itemSingle();
-        DvDateTime origin = new DvDateTime("2004-10-30 14:22:00");
+        DvDateTime origin = new DvDateTime("2004-10-30T14:22:00");
+        List<Event<ItemSingle>> events = new ArrayList<Event<ItemSingle>>();
+        events.add(new PointEvent<ItemSingle>(null, "at0003", text("point event"), null, 
+               null, null, null, new DvDateTime("2004-10-31T08:00:00"), itemSingle(), null));
         values.put("archetypeNodeId", archetypeNodeId);
         values.put("name", name);
-        values.put("item", item);
         values.put("origin", origin);
-        RMObject obj = builder.construct("SingleEvent", values);
+        values.put("events", events);
+        RMObject obj = builder.construct("History", values);
 
-        assertTrue(obj instanceof SingleEvent);
-        SingleEvent singleEvent = (SingleEvent) obj;
+        assertTrue(obj instanceof History);
+        History history = (History) obj;
         assertEquals("archetypeNodeId", archetypeNodeId,
-                singleEvent.getArchetypeNodeId());
-        assertEquals("name", name, singleEvent.getName());
-        assertEquals("origin", origin, singleEvent.getOrigin());
-        assertEquals("item", item, singleEvent.getItem());
+                history.getArchetypeNodeId());
+        assertEquals("name", name, history.getName());
+        assertEquals("origin", origin, history.getOrigin());
+        assertEquals("eventd", events, history.getEvents());
     }   
 }
 /*

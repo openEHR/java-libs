@@ -35,19 +35,19 @@ public class CapabilityTest extends DemographicTestBase {
                 date("2000-01-01"), date("2010-10-30"));
 
         new Capability(null, "at0000",
-                text("capability meaning"), null, null, null,
+                text("capability meaning"), null, null, null, null,
                 timeValidity, itemSingle("capability credentials"));
 
         // null timeValidity
         new Capability(null, "at0000",
-                text("capability meaning"), null, null, null,
+                text("capability meaning"), null, null, null, null, 
                 null, itemSingle("capability credentials"));
 
         // null credentials
         try {
             new Capability(null, "at0000",
                     text("capability meaning"), null, null, null,
-                    timeValidity, null);
+                    null, timeValidity, null);
 
             fail("exception should be thrown");
 

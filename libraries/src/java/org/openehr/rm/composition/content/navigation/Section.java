@@ -102,16 +102,17 @@ public final class Section extends ContentItem {
         if(ret != null) {
             return ret;
         }
-        String whole = whole();
+        //String whole = whole();
         String tmp = path;
-        if(tmp.startsWith(whole)) {
-            tmp = tmp.substring(whole.length());
-        }
-        String attr = ROOT + "items";
+        //if(tmp.startsWith(whole)) {
+          //  tmp = tmp.substring(whole.length());
+        //}
+        /*String attr = ROOT + "items";
         if(tmp.startsWith(attr)) {
             tmp = tmp.substring(attr.length());
             for(ContentItem item : items) {
-                String node = item.whole().substring(1);
+                //String node = item.whole().substring(1);
+                String node = item.nodeName();
                 if(tmp.startsWith(node)) {
                     if(tmp.equals(node)) {
                         return item;
@@ -122,8 +123,13 @@ public final class Section extends ContentItem {
                     }
                 }
             }
-        }
+        }*/
+        ret = checkAttribute(tmp, "items", items);
+        if (ret != null) {
+            return ret;
+        } else {
         throw new IllegalArgumentException("invalid path: " + path);
+        }
     }
 
     /**

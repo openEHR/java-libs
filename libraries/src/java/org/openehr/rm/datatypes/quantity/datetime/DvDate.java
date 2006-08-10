@@ -3,10 +3,11 @@
  */
 package org.openehr.rm.datatypes.quantity.datetime;
 
-//import static org.openehr.rm.datatypes.quantity.datetime.DvWorldTime.convert;
+//import static org.openehr.rm.datatypes.quantity.datetime.DvWorldDateTime.convert;
 
 import java.util.List;
 import java.util.TimeZone;
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
@@ -27,7 +28,7 @@ import org.openehr.rm.datatypes.quantity.DvQuantity;
  * @author yinsulim
  *
  */
-public class DvDate extends DvWorldTime<DvDate> {
+public class DvDate extends DvWorldDateTime<DvDate> {
 
 
     /**
@@ -51,28 +52,25 @@ public class DvDate extends DvWorldTime<DvDate> {
 
     protected DvDate(List<ReferenceRange<DvDate>> referenceRanges,
 			DvInterval<DvDate> normalRange, double accuracy, 
-			boolean accuracyPercent, DateTime datetime) {
-		super(referenceRanges, normalRange, accuracy, accuracyPercent, datetime);
-    }
-
-    protected DvDate(DateTime datetime) {
-    		super(null, null, 0.0, false, datetime);
+			boolean accuracyPercent, DateTime datetime, String pattern) {
+	super(referenceRanges, normalRange, accuracy, accuracyPercent, datetime);
+        setValue(DvDateTimeParser.toDateString(getDateTime(), pattern));
+        setBooleans(pattern);
     }
     
-	/**
-	 * Construct a DvDate by current date
-	 * 
-	 * @param referenceRanges
-	 * @param normalRange
-	 * @param accuracy
-	 * @param accuracyPercent
-	 */
-	public DvDate(List<ReferenceRange<DvDate>> referenceRanges,
-			DvInterval<DvDate> normalRange, double accuracy, 
-			boolean accuracyPercent) {
-		super(referenceRanges, normalRange, accuracy, accuracyPercent);
-	}
-
+    /**
+     * Construct a DvDate of current date
+     *
+     * @param referenceRanges
+     * @param normalRange
+     * @param accuracy
+     * @param accuracyPercent
+     */
+    public DvDate() {
+        super(null, null, 0.0, false, DvDateTimeParser.defaultDate());
+        setValue(DvDateTimeParser.toDateString(getDateTime(), "yyyy-MM-dd"));
+        setBooleans(false, true, true);
+    }
     /**
      * Constructs a DvDate with timezone
      *
@@ -81,30 +79,38 @@ public class DvDate extends DvWorldTime<DvDate> {
      * @param day
      * @param timezone null if use default timezone
      */
-    public DvDate(int year, int month, int day, TimeZone timezone) {
-        super(null, null, 0.0, false, convert(year, month, day, timezone));
+    public DvDate(int year, int month, int day) {
+        super(null, null, 0.0, false, DvDateTimeParser.convertDate(year, month, day));
+        setValue(year + "-" + month + "-" + day);
+        setBooleans(false, true, true);
     }
 
-    public DvDate(String value) {
-    		this(null, null, 0.0, false, value);
+    /**
+     * Contructs a partial DvDate
+     *
+     * @param year
+     * @param month
+     * @param monthKnown
+     * @param day
+     * @param dayKnown
+     * @param timezone
+     */
+    public DvDate(int year, int month) {
+        super(null, null, 0.0, false, DvDateTimeParser.convertDate(year, month, 1));
+        setValue(year + "-" + month);
+        setBooleans(true, true, false);
     }
     
-    protected static DateTime convert(int year, int month, int day, TimeZone timezone) {
-		if (timezone == null) {
-			return new DateTime(year, month, day, 0, 0, 0, 0);
-		} else {
-			return new DateTime(year, month, day, 0, 0, 0, 0, DateTimeZone.forTimeZone(timezone));
-		}
+    public DvDate(int year) {
+        super(null, null, 0.0, false, DvDateTimeParser.convertDate(year, 1, 1));
+        setValue(Integer.toString(year));
+        setBooleans(true, false, false);
     }
-
-    protected static DateTime convert(int year, int month, int day, DateTimeZone timezone) {
-		if (timezone == null) {
-			return new DateTime(year, month, day, 0, 0, 0, 0);
-		} else {
-			return new DateTime(year, month, day, 0, 0, 0, 0, timezone);
-		}
+    
+    public DvDate(String value) {
+    	this(null, null, 0.0, false, value);
     }
-
+    
     /**
      * Year
      *
@@ -117,10 +123,10 @@ public class DvDate extends DvWorldTime<DvDate> {
     /**
      * Month in year
      *
-     * @return month
+     * @return month, 0 if month is unknown
      */
     public int getMonth() {
-        return getDateTime().getMonthOfYear();
+        return monthKnown ? getDateTime().getMonthOfYear(): -1;
     }
 
     /**
@@ -129,101 +135,182 @@ public class DvDate extends DvWorldTime<DvDate> {
      * @return day
      */
     public int getDay() {
-        return getDateTime().getDayOfMonth();
+        return dayKnown ? getDateTime().getDayOfMonth(): -1;
     }
 
     /**
+     * Indicate if this DvDate is partial
+     *
+     * @return true if is partial
+     *
+     */
+    public boolean isPartial() {
+        return isPartial;
+    }
+    
+    /**
+     * Indicate if month is unknown 
+     *
+     * @return true if month is unknown
+     */
+    public boolean monthKnown() {
+        return monthKnown;
+    }
+ 
+    /**
+     * Indicate if day is unknown 
+     *
+     * @return true if day is unknown
+     */
+    public boolean dayKnown() {
+        return dayKnown;
+    }
+    
+    /**
      * If date is valid ISO8601 format
+     *
+     *@param value
+     * 
+     */
+    public static boolean isValidISO8601Date(String value) {
+        DateTime dt = null;
+        try {
+            dt = DvDateTimeParser.parseDate(value);
+        } catch (Exception e) {
+            return false;
+        }
+        return dt != null;
+    }
+ 
+    /**
+     * If date is valid
      *
      * @param year
      * @param month
      * @param day
      * @return true if valid
      */
-    public static boolean isValidDate(String value) {
-        return parse(value) != null;
+/*    public static boolean isValidDate(int year, int month, int day) {
+        DateTime dt = null;
+        try {
+            dt = new DateTime(year, month, day, 0, 0, 0, 0);
+        } catch(Exception e) {
+        }
+        return dt!=null;
+    }*/
+    
+    @Override
+    DateTime parseValue(String value) {
+        return DvDateTimeParser.parseDate(value);
+    }
+    
+    
+    @Override
+    public DvQuantity toQuantity() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    
+    @Override
+    public Number getMagnitude() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    
+    @Override
+    public DvQuantified<DvDate> add(DvQuantified q) {
+        if (!getDiffType().isInstance(q)) {
+            throw new IllegalArgumentException("invalid difference type");
+        }
+        DvDuration d = (DvDuration) q;
+        MutableDateTime mdate = getDateTime().toMutableDateTimeISO();
+        mdate.add(d.getPeriod());
+        return new DvDate(getReferenceRanges(), getNormalRange(),
+                getAccuracy(), isAccuracyPercent() ,mdate.toDateTimeISO(), this.toString());
+    }
+    
+    
+    @Override
+    public DvQuantified<DvDate> subtract(DvQuantified q) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    
+    @Override
+            public boolean isStrictlyComparableTo(DvOrdered ordered) {
+        // TODO Auto-generated method stub
+        return false;
     }
  
-    static DateTime parse(String value) {
-    		if(value == null) {
-            throw new IllegalArgumentException("null value");
-        }
-    		DateTime dt = null;
-		if (value.indexOf("-") > 0) {
-			try {
-				dt = eDateFormatter.parseDateTime(value);
-			} catch (Exception e) {
-				throw new IllegalArgumentException("invalid value");
-			}
-		} else {
-			try {
-				dt = dateFormatter.parseDateTime(value);
-			} catch (Exception e) {
-				throw new IllegalArgumentException("invalid value");
-			}
-		}		
-		return dt;
-    }
-    
-	@Override 
-	DateTime parseValue(String value) {
-		return parse(value);
-	}
-
-
-	@Override
-	public DvQuantity toQuantity() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Number getMagnitude() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public DvQuantified<DvDate> add(DvQuantified q) {
-		if (!getDiffType().isInstance(q)) {
-			throw new IllegalArgumentException("invalid difference type");
-		}
-		DvDuration d = (DvDuration) q;
-		MutableDateTime mdate = getDateTime().toMutableDateTimeISO();
-		mdate.add(d.getPeriod());
-		return new DvDate(getOtherReferenceRanges(), getNormalRange(), 
-				getAccuracy(), isAccuracyPercent() ,mdate.toDateTimeISO());		
-	}
-
-
-	@Override
-	public DvQuantified<DvDate> subtract(DvQuantified q) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public boolean isStrictlyComparableTo(DvOrdered ordered) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-    /**
-     * Two DvDate equal if both have same year, month, day and timezone
-     *
-     * @param o
-     * @return true if equals
-     */
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof DvDate )) return false;
-        return super.equals(o);       
+        if (!super.equals(o)) return false;
+        
+        final DvDate dDate = (DvDate) o;
+
+        return new EqualsBuilder()
+            .append(isPartial, dDate.isPartial)
+            .append(monthKnown, dDate.monthKnown)
+            .append(dayKnown, dDate.dayKnown)
+            .isEquals();
     }
     
-    /* static field */
-    static final DateTimeFormatter eDateFormatter = ISODateTimeFormat.date(); //yyyy-MM-dd
-    static final DateTimeFormatter dateFormatter = ISODateTimeFormat.basicDate(); //yyyyMMdd
+    /**
+     * Output DvDate in extended date format if a DvDate is not constructed 
+     * via the single String constructor.
+     */   
+    public String toString(boolean isExtended) {
+    	String date = super.toString();
+        if(date == null) {
+            //TODO
+            date = "";
+        } else {
+            if(isExtended) {          
+                date = DvDateTimeParser.basicToExtendedDate(date);                    
+            } else {
+                date = date.replace("-", "");
+            }            
+        }
+        return date;
+    }
+
+    void setBooleans(boolean isPartial, boolean monthKnown, boolean dayKnown) {
+        this.isPartial = isPartial;
+        this.monthKnown = monthKnown;
+        this.dayKnown = dayKnown;
+    }
+    
+    void setBooleans(String value) {       
+        int ele = DvDateTimeParser.analyseDateString(value);
+        //isPartial, monthKnown, dayKnown
+        if(ele == 3) {
+            setDayKnown(true);
+            setMonthKnown(true);
+        } else if (ele == 2) {
+            setMonthKnown(true);
+            setIsPartial(true);
+        } else if (ele == 1) {
+            setIsPartial(true);
+        } 
+    }
+     
+    void setDayKnown(boolean dayKnown) {
+        this.dayKnown = dayKnown;
+    }
+    
+    void setMonthKnown(boolean monthKnown) {
+        this.monthKnown = monthKnown;
+    }
+    
+    void setIsPartial(boolean isPartial) {
+        this.isPartial = isPartial;
+    }
+    
+    
+    /* private fields */    
+    private boolean dayKnown;
+    private boolean monthKnown;
+    private boolean isPartial;
 }

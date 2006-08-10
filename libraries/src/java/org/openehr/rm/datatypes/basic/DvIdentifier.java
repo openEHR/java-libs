@@ -40,7 +40,7 @@ public class DvIdentifier extends DataValue {
      */
     @FullConstructor
             public DvIdentifier(@Attribute(name = "issuer", required=true) String issuer,
-            					  @Attribute(name = "assigner", required=true) String assigner,
+                                @Attribute(name = "assigner", required=true) String assigner,
                                 @Attribute(name = "id", required=true) String id,
                                 @Attribute(name = "type", required=true) String type) {
         if (StringUtils.isEmpty(issuer)) {

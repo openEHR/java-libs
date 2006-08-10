@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
@@ -27,7 +28,7 @@ import org.openehr.rm.common.archetyped.Locatable;
  * @author yinsulim
  *
  */
-public class Action extends CareEntry {
+public final class Action extends CareEntry {
 
 	/**
 	 * @param uid
@@ -38,7 +39,7 @@ public class Action extends CareEntry {
 	 * @param links
 	 * @param parent
 	 * @param language
-	 * @param encoding
+	 * @param charset
 	 * @param subject
 	 * @param provider
 	 * @param workflowID
@@ -47,15 +48,16 @@ public class Action extends CareEntry {
 	 * @param guidelineID
 	 * @param terminologyService
 	 */
+    @FullConstructor
 	public Action(@Attribute(name = "uid") ObjectID uid,
             @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
             @Attribute(name = "name", required = true) DvText name,
-            @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
+            @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
             @Attribute(name = "feederAudit") FeederAudit feederAudit,
             @Attribute(name = "links") Set<Link> links,
             @Attribute(name = "parent") Locatable parent, 
             @Attribute(name = "language", required = true) CodePhrase language,
-            @Attribute(name = "encoding", required = true) CodePhrase encoding, 
+            @Attribute(name = "charset", required = true) CodePhrase charset, 
             @Attribute(name = "subject", system = true) PartyProxy subject,
             @Attribute(name = "provider", system = true) PartyProxy provider,
             @Attribute(name = "workflowID") ObjectReference workflowID,
@@ -69,7 +71,7 @@ public class Action extends CareEntry {
             @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService
             ){
 		super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent,
-				language, encoding, subject, provider, workflowID, otherParticipations,
+				language, charset, subject, provider, workflowID, otherParticipations,
 				protocol, guidelineID, terminologyService);
 		if (time == null) {
 			throw new IllegalArgumentException("null time");
@@ -134,6 +136,35 @@ public class Action extends CareEntry {
 		return null;
 	}
 
+    /**
+     * The item at a path that is relative to this item.
+     *
+     * @param path
+     * @return the item or null if not found
+     */
+    public Object itemAtPath(String path) {
+        
+        Object item = super.itemAtPath(path);
+        if (item != null) {
+            return item;
+        }
+        String tmp = path;
+        /*String[] attributeNames = {
+            DESCRIPTION
+        };
+        Locatable [] attributes = {
+            description
+        };
+        return locateAttribute(tmp, attributeNames, attributes);
+         */
+        Object ret = checkAttribute(tmp, "description", description);
+        if( ret != null) {
+            return ret;
+        } else {
+            throw new IllegalArgumentException("invalid path: " + path);
+        }
+    }
+    
 	//POJO start
 	Action() {
 	}
@@ -160,5 +191,8 @@ public class Action extends CareEntry {
 	private ItemStructure description;
 	private ISMTransition ismTransition;
 	private InstructionDetails instructionDetails;
+        
+        /* static fields*/
+        public static final String DESCRIPTION = "description";
 
 }

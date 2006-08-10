@@ -20,8 +20,11 @@
  */
 package org.openehr.rm.composition.content.entry;
 
+import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.composition.CompositionTestBase;
+import org.openehr.rm.support.identification.ArchetypeID;
+import org.openehr.rm.support.identification.HierarchicalObjectID;
 
 public class EvaluationTest extends CompositionTestBase {
 
@@ -40,19 +43,21 @@ public class EvaluationTest extends CompositionTestBase {
      * The fixture set up called before every test method.
      */
     protected void setUp() throws Exception {
-        ItemStructure protocol = list();
-        ItemStructure data = list();
-
-        evaluation = new Evaluation(null, "at000", text("evaluation"), null,
-                null, null, subject(), provider(), protocol, null, null, null,
-                data);
+        ItemStructure protocol = list("list protocol");
+        ItemStructure data = list("list data");
+        Archetyped arch = new Archetyped(
+                new ArchetypeID("openehr-ehr_rm-evaluation.physical_examination.v3"),
+                                "1.1");
+        evaluation = new Evaluation(null, "at000", text("evaluation"), arch,
+                null, null, null, language("en"), language("en"), subject(), provider(), 
+                null, null, protocol, null, data, ts);
     }
 
     public void testValidPath() throws Exception {
         String[] validPathList = {
-            "/", "/[evaluation]",                   // root
-            "/protocol", "/[evaluation]/protocol",  // protocol
-            "/data", "/[evaluation]/data"           // data
+            "/",                   // root
+            "/protocol", //"/[evaluation]/protocol",  // protocol
+            "/data", //"/[evaluation]/data"           // data
         };
 
         for(String path : validPathList) {
@@ -61,7 +66,7 @@ public class EvaluationTest extends CompositionTestBase {
         }
 
         String[] invalidPathList = {
-            "", null, "evaluation", "/evaluation",   // bad root
+            "", null, "evaluation", "/evaluation", "/[evaluation]",  // bad root
             "/[evaluation]/state"                   // unknown attribute
         };
 
@@ -73,15 +78,15 @@ public class EvaluationTest extends CompositionTestBase {
 
     public void testItemAtPath() throws Exception {
         assertItemAtPath("/", evaluation, evaluation);
-        assertItemAtPath("/[evaluation]", evaluation, evaluation);
+        //assertItemAtPath("/[evaluation]", evaluation, evaluation);
 
         assertItemAtPath("/data", evaluation, evaluation.getData());
-        assertItemAtPath("/[evaluation]/data", evaluation,
-                evaluation.getData());
+        //assertItemAtPath("/[evaluation]/data", evaluation,
+          //      evaluation.getData());
 
         assertItemAtPath("/protocol", evaluation, evaluation.getProtocol());
-        assertItemAtPath("/[evaluation]/protocol", evaluation,
-                evaluation.getProtocol());
+        //assertItemAtPath("/[evaluation]/protocol", evaluation,
+          //      evaluation.getProtocol());
 
         String[] invalidPathList = {
             "", null, "evaluation", "/evaluation",   // bad root

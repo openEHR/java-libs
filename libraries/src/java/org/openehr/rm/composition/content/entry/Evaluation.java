@@ -60,12 +60,12 @@ public final class Evaluation extends CareEntry {
             public Evaluation(@Attribute(name = "uid") ObjectID uid,
                               @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
                               @Attribute(name = "name", required = true) DvText name,
-                              @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
+                              @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
                               @Attribute(name = "feederAudit") FeederAudit feederAudit,
                               @Attribute(name = "links") Set<Link> links,
                               @Attribute(name = "parent") Locatable parent, 
-                              @Attribute(name = "language", required = true) CodePhrase language,
-                              @Attribute(name = "encoding", required = true) CodePhrase encoding, 
+                              @Attribute(name = "language", system = true) CodePhrase language,
+                              @Attribute(name = "charset", system = true) CodePhrase charset, 
                               @Attribute(name = "subject", system = true) PartyProxy subject,
                               @Attribute(name = "provider", system = true) PartyProxy provider,
                               @Attribute(name = "workflowID") ObjectReference workflowID,
@@ -75,7 +75,7 @@ public final class Evaluation extends CareEntry {
                               @Attribute(name = "data", required = true) ItemStructure data,
                               @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
-                parent, language, encoding, subject, provider, workflowID, 
+                parent, language, charset, subject, provider, workflowID, 
                 otherParticipation, protocol, guidelineID, terminologyService);
 
         if (data == null) {
@@ -113,23 +113,31 @@ public final class Evaluation extends CareEntry {
      * @throws IllegalArgumentException if path invalid
      */
     public Object itemAtPath(String path) {
+        
         Object item = super.itemAtPath(path);
         if (item != null) {
             return item;
         }
         String whole = whole();
         String tmp = path;
-        if(tmp.startsWith(whole)) {
+        //if(tmp.startsWith(whole)) {
+        if(!whole.equals("/") && tmp.startsWith(whole)) {
             tmp = path.substring(whole.length());
         }
         // check attributes
-        String[] attributeNames = {
+        /*String[] attributeNames = {
             DATA
         };
         Locatable [] attributes = {
             data
         };
-        return locateAttribute(tmp, attributeNames, attributes);
+        return locateAttribute(tmp, attributeNames, attributes);*/
+        Object ret = checkAttribute(tmp, "data", data);
+        if( ret != null) {
+            return ret;
+        } else {
+            throw new IllegalArgumentException("invalid path: " + path);
+        }
     }
 
     // POJO start
@@ -143,6 +151,9 @@ public final class Evaluation extends CareEntry {
 
     /* fields */
     private ItemStructure data;
+    
+    /* static fields */
+    public static final String DATA = "data";
 }
 
 /*

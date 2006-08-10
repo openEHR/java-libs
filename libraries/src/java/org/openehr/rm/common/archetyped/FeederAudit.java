@@ -23,7 +23,7 @@ import org.openehr.rm.datatypes.basic.DvIdentifier;
 
 /**
  * Audit and other meta-data for systems in the feeder chain. Instances of this class are
- * immutalbe
+ * immutable
  *
  * @author Yin Su Lim
  * @version 1.0

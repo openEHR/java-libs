@@ -8,9 +8,9 @@
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL$"
- * revision:    "$LastChangedRevision$"
- * last_change: "$LastChangedDate$"
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/BRANCHES/Release-1.0/libraries/src/test/org/openehr/rm/ehr/FolderTest.java $"
+ * revision:    "$LastChangedRevision: 2 $"
+ * last_change: "$LastChangedDate: 2005-10-12 22:20:08 +0100 (Wed, 12 Oct 2005) $"
  */
 /**
  * FolderTest
@@ -18,13 +18,14 @@
  * @author Rong Chen
  * @version 1.0 
  */
-package org.openehr.rm.ehr;
+package org.openehr.rm.common.directory;
 
 import junit.framework.TestCase;
+import org.openehr.rm.ehr.*;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.terminology.TestCodeSet;
+import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 
 public class FolderTest extends TestCase {
@@ -46,15 +47,15 @@ public class FolderTest extends TestCase {
     }
 
     public void testConstructor() throws Exception {
-        ObjectID uid = new HierarchicalObjectID("470234723");
+        ObjectID uid = new HierarchicalObjectID("1.4.7.23.4.7.23");
 
         // verify a bug fix in constructor
         new Folder(uid, "at0000", text("folder name"), null,
-                null, null, null, null);
+                null, null, null, null, null);
     }
 
     private DvText text(String value) {
-        return new DvText(value, TestCodeSet.ENGLISH, TestCodeSet.LATIN_1,
+        return new DvText(value, TestCodeSetAccess.ENGLISH, TestCodeSetAccess.LATIN_1,
                 TestTerminologyService.getInstance());
     }
 }

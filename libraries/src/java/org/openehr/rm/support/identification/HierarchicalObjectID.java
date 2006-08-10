@@ -50,7 +50,7 @@ public class HierarchicalObjectID extends ObjectID {
      * @throws IllegalArgumentException if root is null
      */
     public HierarchicalObjectID(String root, String extension) {
-    		super(extension == null ? root : root + "::" + extension);
+    	this(extension == null ? root : root + "::" + extension);
     }
  
 	/**
@@ -61,17 +61,17 @@ public class HierarchicalObjectID extends ObjectID {
      * @throws IllegalArgumentException if root is null 
      */
     public HierarchicalObjectID(UID root, String extension) {
-    		if (root != null) { // must catch null root, or will get nullpointerexception
-    			if(StringUtils.isEmpty(extension)) {
-    				super.setValue(root.getValue());
-    			} else {
-    				super.setValue(root.getValue() + "::" + extension);
-    			}
-    			this.root = root;
-    			this.extension = extension;
-    		} else {
-    			throw new IllegalArgumentException("null root");
-    		}
+        if (root != null) { // must catch null root, or will get nullpointerexception
+            if(StringUtils.isEmpty(extension)) {
+                    super.setValue(root.getValue());
+            } else {
+                    super.setValue(root.getValue() + "::" + extension);
+            }
+            this.root = root;
+            this.extension = extension;
+        } else {
+                throw new IllegalArgumentException("null root");
+        }
     }
  
     /** 
@@ -82,21 +82,29 @@ public class HierarchicalObjectID extends ObjectID {
         int doubleColons = value.indexOf("::");
         // Check for root segment
         if (doubleColons == 0) {
-			throw new IllegalArgumentException("bad format, missing root");
-		}
+            throw new IllegalArgumentException("bad format, missing root");
+        }
         //the patterns below are for sorting only, the correct syntax
         //checking is handled by the UID sublcasses.
-        if (value.matches("(\\d)+(-(\\d)+)*")) { //pattern for UUID
-        		root = new UUID(value.substring(0, doubleColons));
-        } else if (value.matches("(\\d)+(\\.(\\d)+)*")) { //for ISO_OID
-        	 	root = new ISO_OID(value.substring(0, doubleColons));
-        } else if (value.matches("(\\w)+(\\.(\\w)+)*")){ //for InternetID, 
-        		root = new InternetID(value.substring(0, doubleColons));
+        String rootStr = null;
+        if(doubleColons > 0) {
+            rootStr = value.substring(0, doubleColons);
         } else {
-        		throw new IllegalArgumentException("wrong format");
+            rootStr = value;
         }
+        if (rootStr.matches("(\\d)+(-(\\d)+)*")) { //pattern for UUID
+            root = new UUID(rootStr);
+        } else if (rootStr.matches("(\\d)+(\\.(\\d)+)*")) { //for ISO_OID
+            //System.out.println("in ISO");
+            root = new ISO_OID(rootStr);
+        } else if (rootStr.matches("(\\w)+(\\.(\\w)+)*")){ //for InternetID, 
+            root = new InternetID(rootStr);
+        } else {
+            throw new IllegalArgumentException("wrong format");
+        }
+        
         if( 0 < doubleColons && doubleColons < (value.length() - 2)) {
-        		extension = value.substring(doubleColons + 2);
+            extension = value.substring(doubleColons + 2);
         }           
     }
 
@@ -107,7 +115,7 @@ public class HierarchicalObjectID extends ObjectID {
      * @return root
      */
     public UID root() {
-    		return root;
+    	return root;
     }
     
     /**
@@ -125,7 +133,7 @@ public class HierarchicalObjectID extends ObjectID {
      * @return extension
      */
     public String extension() {
-    		return extension;
+    	return extension;
     }
     
     // POJO start

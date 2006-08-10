@@ -42,7 +42,11 @@ public class Activity extends Locatable {
 		this.timing = timing;
 	}
 
-	
+	public Activity(String archetypeNodeId, DvText name, ItemStructure description,
+                DvParsable timing) {
+            this(null, archetypeNodeId, name, null, null, null, null, description, timing);
+        }
+        
 	/**
 	 * Description of the activity, in the form of an archetyped structure.
 	 * 
@@ -67,7 +71,38 @@ public class Activity extends Locatable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+        
+    public Object itemAtPath(String path) {
+        Object item = super.itemAtPath(path);
+        if (item != null) {
+            return item;
+        }
+        String tmp = path;
+        /*String[] attributeNames = {
+            DESCRIPTION
+        };
+        Locatable [] attributes = {
+            description
+        };
+        return locateAttribute(tmp, attributeNames, attributes);
+         */
+        Object ret = checkAttribute(tmp, "description", description);
+        if( ret != null) {
+            return ret;
+        } else {
+            throw new IllegalArgumentException("invalid path: " + path);
+        }
+    }
 
+    public boolean validPath(String path) {
+        try {
+            itemAtPath(path);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+    
 	//POJO start
 	Activity() {};
 	
@@ -83,4 +118,7 @@ public class Activity extends Locatable {
 	/* fields */
 	private ItemStructure description;
 	private DvParsable timing;
+        
+        /* static fields */
+        public static final String DESCRIPTION = "description";
 }

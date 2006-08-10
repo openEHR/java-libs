@@ -15,12 +15,14 @@
 
 package org.openehr.rm.demographic;
 
+import org.openehr.rm.common.generic.PartyIdentified;
+import org.openehr.rm.common.generic.PartySelf;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
-import org.openehr.rm.datastructure.history.SingleEvent;
+//import org.openehr.rm.datastructure.history.SingleEvent;
 import org.openehr.rm.datastructure.history.History;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.CodePhrase;
@@ -38,7 +40,6 @@ import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.generic.Participation;
-import org.openehr.rm.common.generic.RelatedParty;
 import org.openehr.rm.composition.Composition;
 import org.openehr.rm.composition.EventContext;
 import org.openehr.rm.composition.content.navigation.Section;
@@ -47,7 +48,7 @@ import org.openehr.rm.composition.content.entry.Instruction;
 import org.openehr.rm.composition.content.entry.Observation;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.terminology.TestTerminologyService;
-import org.openehr.rm.support.terminology.TestCodeSet;
+import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.measurement.MeasurementService;
 import org.openehr.rm.support.measurement.TestMeasurementService;
 
@@ -57,6 +58,9 @@ import java.util.Set;
 import java.util.HashSet;
 
 import junit.framework.TestCase;
+import org.openehr.rm.datastructure.history.Event;
+import org.openehr.rm.datastructure.history.PointEvent;
+import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 
 /**
  * DemographicTestBase
@@ -73,14 +77,14 @@ public class DemographicTestBase extends TestCase {
         super(name);
     }
 
-    protected SingleEvent<ItemStructure> singleEvent(String value,
+/*    protected SingleEvent<ItemStructure> singleEvent(String value,
                                                   String datetime) {
         Element element = element("test element", text(value));
         ItemSingle item =  new ItemSingle(null, "at0001", text("item single"),
                 null, null, null, element);
         return new SingleEvent<ItemStructure>("at0000",
                 text("single event"), datetime(datetime), item);
-    }
+    }*/
 
     protected ItemSingle itemSingle(String value) {
         Element element = element("test element", text(value));
@@ -132,8 +136,8 @@ public class DemographicTestBase extends TestCase {
         return new DvCount(value);
     }
 
-    protected PartyReference partyRef(String id) {
-        return new PartyReference(oid(id));
+    protected PartyReference partyRef(String id, ObjectReference.Type type) {
+        return new PartyReference(oid(id), type);
     }
 
     protected ObjectReference contriRef(String id) {
@@ -146,16 +150,23 @@ public class DemographicTestBase extends TestCase {
         return new HierarchicalObjectID(value);
     }
 
-    protected Composition composition(String id) throws Exception {
+    protected ObjectVersionID ovid(String value) {
+        return new ObjectVersionID(value);
+    }
+    
+/*    protected Composition composition(String id) throws Exception {
             ObjectID uid = oid(id);
             String meaning = "at0000";
             DvText name = text("section name");
             List<Section> content = new ArrayList<Section>();
             content.add(section());
-            return new Composition(uid, meaning, name, null,
-                    null, links(3), content, eventContext(), TestCodeSet.EVENT,
-                    new CodePhrase("test term", "4573466"), ts);
-        }
+            Archetyped archetypeDetails = new Archetyped(new ArchetypeID(
+                "openehr-ehr_rm-Composition.physical_examination.v2"), "1.0");
+            return new Composition(uid, meaning, name, archetypeDetails, null, 
+                    links(3), null, content, eventContext(), provider("1.4.5.1.12.4.2", 
+                    ObjectReference.Type.COMPOSITION), TestCodeSetAccess.EVENT,
+                    new CodePhrase("test", "present_code"), ts);
+    }*/
 
     protected Set<Link> links(int num) {
         Set<Link> links = new HashSet<Link>();
@@ -166,85 +177,94 @@ public class DemographicTestBase extends TestCase {
         return links;
     }
 
-    protected EventContext eventContext() {
+    protected EventContext eventContext() throws Exception {
         List<Participation> participations = new ArrayList<Participation>();
-        Participation part1 = new Participation(partyRef("324234"),
+                PartyReference performer = new PartyReference(
+                new HierarchicalObjectID("1.3.3.1.2.42.1"), ObjectReference.Type.ORGANISATION);
+        Participation part1 = new Participation(provider("1.3.24.2.3.4.2", 
+                ObjectReference.Type.ORGANISATION),
                 coded("participation function", "23432423"),
                 coded("participation mode", "242344"),
-                new DvInterval<DvDateTime>(datetime("2000-10-10 10:00:00"),
-                        datetime("2001-10-10 10:00:00")), ts);
+                new DvInterval<DvDateTime>(datetime("2000-10-10T10:00:00"),
+                        datetime("2001-10-10T10:00:00")), ts);
         participations.add(part1);
-        return new EventContext(partyRef("23423424"),
-                new DvInterval<DvDateTime>(datetime("2000-10-10 10:00:00"),
-                        datetime("2001-10-10 10:00:00")),
-                partyRef("23423"), participations, "event context location",
+        return new EventContext(provider("1.2.3.4.2.5",ObjectReference.Type.ORGANISATION ), 
+                datetime("2000-10-10T10:00:00"), null, 
+                participations, "event context location",
                 coded("event context setting", "2342342"),
                 itemSingle("other context"), ts);
     }
 
-    protected Section section() throws Exception {
-        ObjectID uid = oid("423412441234");
+/*    protected Section section() throws Exception {
+        ObjectID uid = oid("4.23.4.12.44.1.2");
         String meaning = "at0000";
         DvText name = text("section2 name");
         List<ContentItem> items = new ArrayList<ContentItem>();
         items.add(instruction());
-        items.add(observation());
-        return new Section(uid, meaning, name, null, null, null, items);
-    }
+        items.add(observation("observation in section"));
+        new Section("at0000", new DvText("section"), items);
+        return new Section(uid, meaning, name, null, null, null, null, items);
+    }*/
 
     protected Instruction instruction() throws Exception {
-        ObjectID uid = oid("348231-432");
+        ObjectID uid = oid("1.34.8.2.3.1.4");
         String meaning = "at0000";
         DvText name = text("instruction 2 name");
         Archetyped archetypeDetails = new Archetyped(
-                new ArchetypeID("openehr-ehr_rm-instruction2.diabetes.v1"),
-                new AccessGroupReference(oid("98542734")), "1.2");
+                new ArchetypeID("openehr-ehr_rm-instruction2.diabetes.v1"), "1.2");
         FeederAudit feederAudit = null;
         Set<Link> links = null;
-        RelatedParty subject = subject("413241234");
-        Participation provider = participation("43214321");
+
         ItemStructure protocol = itemSingle("instruction2 protocol");
         String actID = "instruction2 actId";
         ObjectReference guidelineId = guideline("543234");
-        List<Participation> participations = participationList("4321", 1);
+        ObjectReference.Type[] types = { ObjectReference.Type.PARTY};
+        List<Participation> participations = participationList("1.2.3.4.5.6.11", 1, types);
         DvState state = new DvState(coded("started", "141341234"), false);
         ItemStructure action = itemSingle("instruction2 action");
         ItemStructure profile = itemSingle("instruction2 profile");
         ItemStructure data = itemSingle("instruction2 data");
 
         return new Instruction(uid, meaning, name,
-                archetypeDetails, feederAudit, links, subject, provider,
-                protocol, actID, guidelineId, participations, state,
-                action, profile, data);
+                archetypeDetails, feederAudit, links, null, language("en"), language("en"),
+                subject("1.4.55.1.4.2.4"), provider("1.2.15.2.5.15.4", ObjectReference.Type.ORGANISATION),
+                null, participations, protocol, guidelineId, text("narrative"), null, null, null, ts);
     }
 
-    protected Observation observation() throws Exception {
-        ObjectID uid = oid("52345234523");
-        String meaning = "at0000";
-        DvText name = text("observation 2 name");
-        Archetyped archetypeDetails = new Archetyped(
-                new ArchetypeID("openehr-ehr_rm-observation2.diabetes.v1"),
-                new AccessGroupReference(oid("1343124")), "1.2");
-        FeederAudit feederAudit = null;
-        Set<Link> links = null;
-        RelatedParty subject = subject("1432");
-        Participation provider = participation("413241");
-        ItemStructure protocol = itemSingle("observation2 protocol");
-        String actID = "observation2 actId";
-        ObjectReference guidelineId = guideline("431241");
-        List<Participation> participations = participationList("4312", 5);
-        History<ItemStructure> data = singleEvent("observation2 data",
-                "2003-10-30 19:10:00");
-        History<ItemStructure> state = singleEvent("observation2 state",
-                "2003-10-31 20:15:00");
-
-        return new Observation(uid, meaning, name,
-                archetypeDetails, feederAudit, links, subject, provider,
-                protocol, actID, guidelineId, participations, data, state);
+/*    protected Observation observation(String name) throws Exception {
+        DvText meaning = new DvText(name);
+        Archetyped arch = new Archetyped(new ArchetypeID(
+                "openehr-ehr_rm-observation.physical_examination.v3"), "1.1");
+        return new Observation("at0001", meaning, arch, language("en"), language("en"), 
+                subject("1.2.52.1.1.5.2"), provider("1.5.5.12.26.15.2", ObjectReference.Type.ORGANISATION), 
+                event("history"), ts);
+    }*/
+    
+   protected History<ItemSingle> event(String name) {
+        //element = element("element name", "value");
+        String[] ITEMS = {
+            "event one", "event two", "event three"
+        };
+        String[] CODES = {
+            "code one", "code two", "code three"
+        };
+        List<Event<ItemSingle>> items = new ArrayList<Event<ItemSingle>>();
+        for (int i = 0; i < ITEMS.length; i++) {
+            Element element = element("element " + i, text(CODES[i]));
+            ItemSingle item = new ItemSingle(null, "at0001", text(ITEMS[i]),
+                    null, null, null, null, element);
+            items.add(new PointEvent<ItemSingle>(null, "at0003", text("point event"), null, 
+                    null, null, null, new DvDateTime("2006-06-25T23:11:11"), item, null));
+           // uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
+		//		parent, time, data, state
+        }
+        return new History<ItemSingle>(null, "at0002", text("history"),
+                null, null, null, null, new DvDateTime("2006-06-25T23:11:11"), items, 
+                DvDuration.getInstance("PT1h"), DvDuration.getInstance("PT3h"), null);
     }
-
-    protected RelatedParty subject(String id) {
-        return new RelatedParty(partyRef(id), coded("self", "4203281"), ts);
+   
+    protected PartySelf subject(String id) {
+        return new PartySelf(partyRef(id, ObjectReference.Type.PERSON));
     }
 
     protected ObjectReference guideline(String id) {
@@ -253,22 +273,32 @@ public class DemographicTestBase extends TestCase {
     }
 
     protected List<Participation> participationList(String id,
-                                                    int num) throws Exception {
+                            int num, ObjectReference.Type[] types) throws Exception {
         List<Participation> list = new ArrayList<Participation>();
         for (int i = 0; i < num; i++) {
-            list.add(participation(id + i));
+            list.add(participation(id + i, types[i]));
         }
         return list;
     }
 
-    protected Participation participation(String id) {
-        return new Participation(partyRef(id),
+    protected Participation participation(String id, ObjectReference.Type type) throws Exception {
+        return new Participation(provider(id, type),
                 coded("participation function", id + 1),
                 coded("participation mode ", id + 1),
                 new DvInterval<DvDateTime>(datetime("2000-10-10 10:00:00"),
                         datetime("2001-10-10 10:00:00")), ts);
     }
+    
+    protected PartyIdentified provider(String id, ObjectReference.Type type) throws Exception {
+        PartyReference performer = new PartyReference(
+                new HierarchicalObjectID(id), type);
+        return new PartyIdentified(performer, "provider's name", null);
+    }
 
+    protected CodePhrase language(String language) throws Exception {
+        return new CodePhrase("test", language);
+    }
+    
     /* fields */
     protected TerminologyService ts = TestTerminologyService.getInstance();
     protected MeasurementService ms = TestMeasurementService.getInstance();

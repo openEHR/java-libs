@@ -37,20 +37,20 @@ public class ContactTest extends DemographicTestBase {
         DvInterval<DvDate> timeValidity = new DvInterval<DvDate>(
                 date("2005-01-01"), date("2005-12-31"));
         List<Address> addresses = new ArrayList<Address>();
-        addresses.add(new Address(oid("8702534253"), "at0000",
-                text("post address"), null, null, null,
+        addresses.add(new Address(oid("address.trial"), "at0000",
+                text("post address"), null, null, null, null, 
                 itemSingle("post address details")));
-        addresses.add(new Address(oid("98707"), "at0000",
-                text("email address"), null, null, null,
+        addresses.add(new Address(oid("1.2.4.5.7.33.7"), "at0000",
+                text("email address"), null, null, null, null, 
                 itemSingle("email address details")));
 
         new Contact(null, "at0000", text("contact name"),
-                null, null, null, timeValidity, addresses);
+                null, null, null, null, timeValidity, addresses);
 
         // null addresses
         try {
             new Contact(null, "at0000", text("contact meaning"),
-                    null, null, null, timeValidity, null);
+                    null, null, null, null, timeValidity, null);
 
             fail("exception should be thrown");
 

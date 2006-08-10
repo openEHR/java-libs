@@ -29,33 +29,36 @@ public class Folder extends Locatable {
      * @throws IllegalArgumentException if name null or archetypeNodeId null
      *                                  or links not null and empty
      */
-	public Folder(ObjectID uid, String archetypeNodeId, DvText name,
-            Archetyped archetypeDetails, FeederAudit feederAudit, Set<Link> links, 
+    public Folder(ObjectID uid, String archetypeNodeId, DvText name,
+            Archetyped archetypeDetails, FeederAudit feederAudit, Set<Link> links,
             Locatable parent, List<Folder> folders, List<ObjectReference> items) {
-			super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);
-			if(folders != null && folders.size() == 0) {
-				throw new IllegalArgumentException("empty folders");
-			}			
-			this.folders = folders;
-			this.items = items;
-	}
-
-	/**
-	 * Sub-folders of this FOLDER
-	 * @return folder  	A list of folders which are the sub-folders of this FOLDER
-	 */	
-	public List<Folder> getFolders() {
-		return folders;
-	}
-
-	/**
-	 * The list of references to other versioned objects logically in this FOLDER
-	 * @return items 	List of versioned items in this FOLDER
-	 */
-	public List<ObjectReference> getItems() {
-		return items;
-	}
-
+        super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);
+        if(folders != null && folders.size() == 0) {
+            throw new IllegalArgumentException("empty folders");
+        }
+        if (items != null && items.isEmpty()) {
+            throw new IllegalArgumentException("empty compositions");
+        } //TODO: necessary?
+        this.folders = folders;
+        this.items = items;
+    }
+    
+    /**
+     * Sub-folders of this FOLDER
+     * @return folder  	A list of folders which are the sub-folders of this FOLDER
+     */
+    public List<Folder> getFolders() {
+        return folders;
+    }
+    
+    /**
+     * The list of references to other versioned objects logically in this FOLDER
+     * @return items 	List of versioned items in this FOLDER
+     */
+    public List<ObjectReference> getItems() {
+        return items;
+    }
+    
     /**
      * Equals if two folders have the same values
      *
@@ -66,15 +69,15 @@ public class Folder extends Locatable {
         if (this == o) return true;
         if (!( o instanceof Folder )) return false;
         if (!super.equals(o)) return false;
-
+        
         final Folder folder = (Folder) o;
         return new EqualsBuilder()
 //                .appendSuper(super.equals(o))
-                .append(folders, folder.folders)
-                .append(items, folder.items)
-                .isEquals();
+        .append(folders, folder.folders)
+        .append(items, folder.items)
+        .isEquals();
     }
-
+    
     /**
      * Return a hash code of this folder
      *
@@ -82,31 +85,31 @@ public class Folder extends Locatable {
      */
     public int hashCode() {
         return new HashCodeBuilder(41, 97)
-                .appendSuper(super.hashCode())
-                .append(folders)
-                .append(items)
-                .toHashCode();
+        .appendSuper(super.hashCode())
+        .append(folders)
+        .append(items)
+        .toHashCode();
     }
-	@Override
-	public String pathOfItem(Locatable item) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	//POJO starts
-	Folder() {
-	}
-	
-	void setFolders(List<Folder> folders) {
-		this.folders = folders;
-	}
-
-	void setItems(List<ObjectReference> items) {
-		this.items = items;
-	}
-	//POJO ends
-	
-	/* fields */
-	private List<Folder> folders;
-	private List<ObjectReference> items;
+    @Override
+            public String pathOfItem(Locatable item) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    //POJO starts
+    Folder() {
+    }
+    
+    void setFolders(List<Folder> folders) {
+        this.folders = folders;
+    }
+    
+    void setItems(List<ObjectReference> items) {
+        this.items = items;
+    }
+    //POJO ends
+    
+    /* fields */
+    private List<Folder> folders;
+    private List<ObjectReference> items;
 }

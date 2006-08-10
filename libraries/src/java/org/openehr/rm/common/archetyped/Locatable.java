@@ -14,6 +14,8 @@
  */
 package org.openehr.rm.common.archetyped;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datatypes.text.DvText;
@@ -226,7 +228,6 @@ public abstract class Locatable extends RMObject {
         
         // Get path in form: /<attr>[<arthcetypeNodeId>]
         String attrPathWithNode = attrPath + attribute.atNode().substring(1);
-        
         if (path.equals(attrPathWithNode) || path.equals(attrPath)) {
             return attribute;
         } else if (path.startsWith(attrPathWithNode)) {
@@ -256,11 +257,12 @@ public abstract class Locatable extends RMObject {
         if (path.startsWith(attr)) {
             path = path.substring(attr.length());
             for (Locatable locatable : attribute) {
-                String node = locatable.whole().substring(1);
+                //String node = locatable.whole().substring(1);
+                String node = locatable.nodeName();
                 if (path.startsWith(node)) {
                     if (path.equals(node)) {
                         return locatable;
-                    }
+                    }                    
                     String subpath = path.substring(node.length());
                     if (locatable.validPath(subpath)) {
                         return locatable.itemAtPath(subpath);
@@ -279,7 +281,7 @@ public abstract class Locatable extends RMObject {
      * @return true if valid
      */
     public boolean validPath(String path) {
-        if (ROOT.equals(path) || whole().equals(path)) {
+        if (ROOT.equals(path) /*|| whole().equals(path)*/) {
             return true;
         }
         return false;  // can be further processed by sub-class
@@ -309,14 +311,58 @@ public abstract class Locatable extends RMObject {
                 archetypeNodeId.toString() : archetypeNodeId + ", " + name;
     }
 
+        /**
+     * Equals if two actors has same values
+     *
+     * @param o
+     * @return equals if true
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof Locatable )) return false;
+        
+        final Locatable loc = (Locatable) o;
+        return new EqualsBuilder()
+                .append(uid, loc.uid)
+                .append(archetypeNodeId, loc.archetypeNodeId)
+                .append(name, loc.name)
+                .append(archetypeDetails, loc.archetypeDetails)
+                .append(feederAudit, loc.feederAudit)
+                .append(links, loc.links)
+                .append(parent, loc.parent)
+                .isEquals();
+
+    }
+
+    /**
+     * Return a hash code of this actor
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(11, 29)
+                .appendSuper(super.hashCode())
+                .append(uid)
+                .append(archetypeNodeId)
+                .append(name)
+                .append(archetypeDetails)
+                .append(feederAudit)
+                .append(links)
+                .append(parent)
+                .toHashCode();
+    }
+
     /**
      * Return path of current whole node
      */
     public String whole() {
-        return ROOT + "[" + getName().getValue() + "]";
+        return ROOT;// + "[" + getName().getValue() + "]";
     }
 
- 
+    public String nodeName() {
+        return "[" + getName().getValue() + "]";
+    }
+    
     public String atNode() {
     		return ROOT + "[" + getArchetypeNodeId() + "]";
     }

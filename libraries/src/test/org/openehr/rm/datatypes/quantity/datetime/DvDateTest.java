@@ -23,8 +23,9 @@ package org.openehr.rm.datatypes.quantity.datetime;
 
 import junit.framework.TestCase;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
 public class DvDateTest extends TestCase {
 
@@ -49,68 +50,137 @@ public class DvDateTest extends TestCase {
         assertTrue(dvDate("2001-01-31").compareTo(dvDate("2001-02-01")) < 0);
         assertTrue(dvDate("2001-02-11").compareTo(dvDate("2001-02-12")) < 0);
 
-        assertTrue(dvDate("2003-02-01").compareTo(dvDate("2002-12-15")) > 0);
-        assertTrue(dvDate("2003-02-02").compareTo(dvDate("2003-01-24")) > 0);
-        assertTrue(dvDate("2003-02-16").compareTo(dvDate("2003-02-15")) > 0);
+        assertTrue(dvDate("20030201").compareTo(dvDate("20021215")) > 0);
+        assertTrue(dvDate("20030202").compareTo(dvDate("20030124")) > 0);
+        assertTrue(dvDate("20030216").compareTo(dvDate("20030215")) > 0);
 
-        assertTrue(dvDate("2002-02-01").compareTo(dvDate("2002-02-01")) == 0);
+        assertTrue(dvDate("2002-02").compareTo(dvDate("2002-02-01")) == 0);
+        assertTrue(dvDate("2002-02").compareTo(dvDate("2002-02-02")) < 0);
+        assertTrue(dvDate("2002").compareTo(dvDate("2002-02-02")) < 0);
+        assertTrue(dvDate("2002-02").compareTo(dvDate("2002-01")) > 0);
+        assertTrue(dvDate("2002").compareTo(dvDate("2001-12")) > 0);
+        
     }
 
     private DvDate dvDate(String value) throws Exception {
-        return new DvDate(new SimpleDateFormat("yyyy-MM-dd").parse(value));
+        return new DvDate(value);
     }
 
     public void testToString() throws Exception {
         assertEquals(new DvDate("2001-01-15").toString(), "2001-01-15");
-        assertEquals(new DvDate(2001, 9, 15, null).toString(), "2001-10-15");
-        assertEquals(new DvDate(2001, 11, 15, null).toString(), "2001-12-15");
+        assertEquals(new DvDate("20011015").toString(), "20011015");
+        assertEquals(new DvDate("2001-10").toString(), "2001-10");
+        assertEquals(new DvDate("2001").toString(), "2001");
+        assertEquals(new DvDate(2001, 12, 15).toString(), "2001-12-15");
+        assertEquals(new DvDate(2000, 10).toString(), "2000-10");
+        assertEquals(new DvDate(2000).toString(), "2000");
     }
 
+    public void testToStringTakesBoolean() {
+        assertEquals(new DvDate("2001-01-15").toString(false), "20010115");
+        assertEquals(new DvDate("20011015").toString(true), "2001-10-15");
+        assertEquals(new DvDate("2001-10").toString(false), "200110");
+        assertEquals(new DvDate("2001").toString(true), "2001");
+        assertEquals(new DvDate(2001, 12, 15).toString(false), "20011215");
+        assertEquals(new DvDate(2000, 10).toString(true), "2000-10");
+        assertEquals(new DvDate(2000).toString(false), "2000");
+    }
+    
     public void testEquals() throws Exception {
+        //Two DvDate are equal if both indicate the same date.
         DvDate dateOne = new DvDate("2004-01-31");
-        DvDate dateTwo = new DvDate(2004, 0, 31, null);
+        DvDate dateTwo = new DvDate(2004, 1, 31);
+        DvDate dateThree = new DvDate("20040131");
         assertTrue("dateOne.equals(dateTwo): ", dateOne.equals(dateTwo));
         assertTrue("dateTWo.equals(dateOne): ", dateTwo.equals(dateOne));
+        assertTrue("dateOne.equals(dateThree): ", dateOne.equals(dateThree));
+        assertTrue("dateThree.equals(dateOne): ", dateThree.equals(dateOne));
+        assertTrue("dateTwo.equals(dateThree): ", dateTwo.equals(dateThree));
+        assertTrue("dateThree.equals(dateTwo): ", dateThree.equals(dateTwo));
+        dateOne = new DvDate("1999-09");
+        dateTwo = new DvDate(1999, 9);
+        dateThree = new DvDate("199909");
+        assertTrue("dateOne.equals(dateTwo): ", dateOne.equals(dateTwo));
+        assertTrue("dateTWo.equals(dateOne): ", dateTwo.equals(dateOne));
+        assertTrue("dateOne.equals(dateThree): ", dateOne.equals(dateThree));
+        assertTrue("dateThree.equals(dateOne): ", dateThree.equals(dateOne));
+        assertTrue("dateTwo.equals(dateThree): ", dateTwo.equals(dateThree));
+        assertTrue("dateThree.equals(dateTwo): ", dateThree.equals(dateTwo));
     }
-
+    
     public void testConstructorTakesString() throws Exception {
         String[] values = {
-            "2004-12-31", "1999-01-01"
+            "2004-12-31", "1999-01-01", "18990102", "1789-09", "166612", "2002"
         };
         for (String value : values) {
             assertEquals(new DvDate(value), dvDate(value));
         }
     }
 
-    public void testIsValidDate() throws Exception {
+    public void testConstructorTakesIntegers() throws Exception {
+        assertNotNull(new DvDate(1000));
+        assertNotNull(new DvDate(1980, 11));
+        assertNotNull(new DvDate(2000, 11, 30));
+	
+    }
+    
+   /* public void testIsValidDate() throws Exception {
         assertFalse(DvDate.isValidDate(2000, -1, 1));
-        assertFalse(DvDate.isValidDate(2000, 12, 1));
-        assertFalse(DvDate.isValidDate(2000, 0, 0));
-        assertFalse(DvDate.isValidDate(2000, 0, 32)); // january
-        assertFalse(DvDate.isValidDate(2000, 3, 31)); // april
-        assertFalse(DvDate.isValidDate(2004, 1, 30)); // feburary
-        assertFalse(DvDate.isValidDate(2005, 1, 29)); // feburary
-
-        assertTrue(DvDate.isValidDate(2000, 0, 1));
-        assertTrue(DvDate.isValidDate(2000, 0, 31));
+        assertFalse(DvDate.isValidDate(2000, 0, 1));
+        assertFalse(DvDate.isValidDate(2000, 13, 0));
+        assertFalse(DvDate.isValidDate(2000, 1, 32)); // january
+        assertFalse(DvDate.isValidDate(2000, 4, 31)); // april
+        assertFalse(DvDate.isValidDate(2004, 2, 30)); // feburary
+        assertFalse(DvDate.isValidDate(2005, 2, 29)); // feburary
+        
+        assertTrue(DvDate.isValidDate(2000, 1, 1));
+        assertTrue(DvDate.isValidDate(2000, 1, 31));
         assertTrue(DvDate.isValidDate(2000, 3, 1));
         assertTrue(DvDate.isValidDate(2004, 1, 29));  // feburary
         assertTrue(DvDate.isValidDate(2005, 1, 28)); // feburary
-    }
-
-    public void testCalendarSetMonth() throws Exception {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(1999, 10, 15);
-        assertEquals(10, calendar.get(Calendar.MONTH));
-    }
+    }*/
 
     public void testGetYearMonthDay() throws Exception {
         DvDate date = new DvDate(1999, 10, 20);
         assertEquals("year", 1999, date.getYear());
         assertEquals("month", 10, date.getMonth());
         assertEquals("day", 20, date.getDay());
+        date = new DvDate("2002-09-20");
+        assertEquals("year", 2002, date.getYear());
+        assertEquals("month", 9, date.getMonth());
+        assertEquals("day", 20, date.getDay());
+        date = new DvDate("20060107");
+        assertEquals("year", 2006, date.getYear());
+        assertEquals("month", 1, date.getMonth());
+        assertEquals("day", 7, date.getDay());
+        date = new DvDate("204611");
+        assertEquals("year", 2046, date.getYear());
+        assertEquals("month", 11, date.getMonth());
+        assertEquals("day", -1, date.getDay());
+        date = new DvDate(1988, 3);
+        assertEquals("year", 1988, date.getYear());
+        assertEquals("month", 3, date.getMonth());
+        assertEquals("day", -1, date.getDay());
+        date = new DvDate("2020");
+        assertEquals("year", 2020, date.getYear());
+        assertEquals("month", -1, date.getMonth());
+        assertEquals("day", -1, date.getDay());
     }
 
+    public void testMonthDayKnown() throws Exception {
+        DvDate date = new DvDate(1999, 10, 20);
+        assertEquals("isPartial", false, date.isPartial());
+        assertEquals("month known", true, date.monthKnown());
+        assertEquals("day known", true, date.dayKnown());
+        date = new DvDate("204611");
+        assertEquals("isPartial", true, date.isPartial());
+        assertEquals("month known", true, date.monthKnown());
+        assertEquals("day known", false, date.dayKnown());
+        date = new DvDate(2020);
+        assertEquals("isPartial", true, date.isPartial());
+        assertEquals("month known", false, date.monthKnown());
+        assertEquals("day known", false, date.dayKnown());       
+    }
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

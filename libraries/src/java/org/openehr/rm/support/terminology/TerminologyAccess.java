@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class Terminology"
+ * description: "Class TerminologyAccess"
  * keywords:    "support"
  *
  * author:      "Rong Chen <rong@acode.se>"
@@ -8,9 +8,9 @@
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL$"
- * revision:    "$LastChangedRevision$"
- * last_change: "$LastChangedDate$"
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/BRANCHES/Release-1.0/libraries/src/java/org/openehr/rm/support/terminology/TerminologyAccess.java $"
+ * revision:    "$LastChangedRevision: 2 $"
+ * last_change: "$LastChangedDate: 2005-10-12 22:20:08 +0100 (Wed, 12 Oct 2005) $"
  */
 package org.openehr.rm.support.terminology;
 
@@ -24,7 +24,7 @@ import java.util.Set;
  * @author Rong Chen
  * @version 1.0
  */
-public interface Terminology {
+public interface TerminologyAccess {
 
     /**
      * Returns identification of this terminology
@@ -72,19 +72,6 @@ public interface Terminology {
      */
     public String rubricForCode(String code, String language);
 
-    /**
-     * Return true if the code is under grouper of given name
-     * and language
-     *
-     * @param code
-     * @param name
-     * @param language
-     * @return true if the code exists
-     * @throws IllegalArgumentException if code or name or language
-     *                                  null
-     */
-    public boolean hasCodeForGroupName(CodePhrase code, String name,
-                                       String language);
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
@@ -100,7 +87,7 @@ public interface Terminology {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is Terminology.java
+ *  The Original Code is TerminologyAccess.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2004

@@ -14,8 +14,11 @@
  */
 package org.openehr.rm.datastructure.history;
 
+import java.util.ArrayList;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.FullConstructor;
+import org.openehr.rm.Attribute;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
@@ -40,7 +43,7 @@ import java.util.Set;
  * @author Rong Chen
  * @version 1.0
  */
-public abstract class History <T extends ItemStructure>
+public class History <T extends ItemStructure>
         extends DataStructure {
 
     /**
@@ -54,11 +57,19 @@ public abstract class History <T extends ItemStructure>
      * @param links
      * @throws IllegalArgumentException if origin null
      */
-    protected History(ObjectID uid, String archetypeNodeId, DvText name,
-                      Archetyped archetypeDetails, FeederAudit feederAudit,
-                      Set<Link> links, Locatable parent, DvDateTime origin,
-                      List<Event<T>> events, DvDuration period,
-                      DvDuration duration, ItemStructure summary){
+    @FullConstructor
+    public History(@Attribute(name = "uid") ObjectID uid,
+                  @Attribute(name = "archetypeNodeId", required=true) String archetypeNodeId,
+                  @Attribute(name = "name", required=true) DvText name,
+                  @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
+                  @Attribute(name = "feederAudit") FeederAudit feederAudit,
+                  @Attribute(name = "links") Set<Link> links,
+                  @Attribute(name = "parent") Locatable parent, 
+                  @Attribute(name = "origin", required=true) DvDateTime origin,
+                  @Attribute(name = "events") List<Event<T>> events,
+                  @Attribute(name = "period") DvDuration period,
+                  @Attribute(name = "duration") DvDuration duration,
+                  @Attribute(name = "summary") ItemStructure summary){
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
                 links, parent);
         if (origin == null) {
@@ -101,9 +112,9 @@ public abstract class History <T extends ItemStructure>
      * 
      * @return period
      */
-	public DvDuration getPeriod() {
-		return period;
-	}
+    public DvDuration getPeriod() {
+            return period;
+    }
 
 	/**
 	 * Duration of the entire History; either corresponds
@@ -134,14 +145,10 @@ public abstract class History <T extends ItemStructure>
 	public boolean isPeriodic() {
 		return period != null;
 	}
-
-	/**
-	 * Generate a CEN EN13606-compatible hierarchy
-	 * of the physical representation
-	 * 
-	 * @return representation
-	 */
-	public abstract Cluster getRepresentation();
+        
+    public String pathOfItem(Locatable item) {
+        return null; //TODO: implement
+    }
 	
 	/**
      * Two History objects equal if both has same values
@@ -152,7 +159,8 @@ public abstract class History <T extends ItemStructure>
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!( o instanceof History )) return false;
-
+        if (!super.equals(o)) return false;
+        
         final History history = (History) o;
 
         return new EqualsBuilder()
@@ -171,6 +179,7 @@ public abstract class History <T extends ItemStructure>
      */
     public int hashCode() {
         return new HashCodeBuilder(43, 53)
+                .appendSuper(super.hashCode())
                 .append(origin)
                 .append(events)
                 .append(period)
@@ -193,21 +202,24 @@ public abstract class History <T extends ItemStructure>
     protected History() {
     }
 
+    /**
+     * 
+     */
     void setEvents(List<Event<T>> events) {
-    		//TOODO: check this implementation...
-		if (events!= null) {
-			for(Event<T> event : events) {
-				event.assignParent(this);
-			}
-			this.events = events;
-		} else events = null;		
-	}
+        //TODO: check this implementation...        
+        if (events!= null) {          
+            for(Event<T> event : events) {
+                event.assignParent(this);
+            }
+            this.events = events;            
+        } 		
+    }
 
-	void setPeriod(DvDuration period) {
-		this.period = period;
-	}
+    void setPeriod(DvDuration period) {
+            this.period = period;
+    }
 
-	void setOrigin(DvDateTime origin) {
+    void setOrigin(DvDateTime origin) {
         this.origin = origin;
     }
 
@@ -220,6 +232,8 @@ public abstract class History <T extends ItemStructure>
 	}
 	
     // POJO end
+
+
 }
 
 /*

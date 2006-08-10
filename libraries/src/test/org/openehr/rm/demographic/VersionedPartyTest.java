@@ -14,7 +14,7 @@
  */
 package org.openehr.rm.demographic;
 
-import org.openehr.rm.support.terminology.TestCodeSet;
+import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.identification.*;
@@ -28,6 +28,9 @@ import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 
 import java.util.Set;
 import java.util.HashSet;
+import org.openehr.rm.common.generic.PartyIdentified;
+import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.datatypes.text.TestCodePhrase;
 
 /**
  * VersionedPartyTest
@@ -64,9 +67,10 @@ public class VersionedPartyTest extends DemographicTestBase {
         VersionedParty vp = versionedParty("first version");
 
         Person person = person("second version");
-        vp.commit(audit(TestCodeSet.AMENDMENT), person,
-                contribution("30002"), TestCodeSet.DRAFT, ts,
-                ObjectReference.Namespace.LOCAL);
+
+        vp.commitOriginalVersion(ovid("1.23.24.23::system.id::1.1.1"), ovid("1.23.24.23::system.id::1"),  
+                person, audit(TestCodeSetAccess.AMENDMENT), 
+                contribution("1.3.5.7"), TestCodeSetAccess.CREATION, null , ts);
         Version<Party> last = vp.latestVersion();
 
         assertEquals("size wrong", 2, vp.allVersions().size());
@@ -75,30 +79,30 @@ public class VersionedPartyTest extends DemographicTestBase {
 
     // test versioned party
     private VersionedParty versionedParty(String details) throws Exception {
-        ObjectID id = new HierarchicalObjectID("23242342");
+        HierarchicalObjectID id = new HierarchicalObjectID("1.23.24.23");
         ObjectReference owner = new ObjectReference(
-                new HierarchicalObjectID("20001"),
+                new HierarchicalObjectID("1.20.0.1"),
                 ObjectReference.Namespace.LOCAL,
                 ObjectReference.Type.FOLDER);
         Person person = person(details);
-        return new VersionedParty(id, owner, audit(TestCodeSet.CREATION),
-                person, contribution("30001"), TestCodeSet.DRAFT, ts,
-                ObjectReference.Namespace.LOCAL);
+
+        return new VersionedParty(id, owner, new DvDateTime("2006-07-18T13:44:35"),
+                ovid("1.23.24.23::system.id::1"), person, TestCodeSetAccess.CREATION, 
+                audit(TestCodeSetAccess.CREATION), contribution("1.4.6.7"), null, ts);
     }
 
     private Person person(String detailsText) throws Exception {
-        ObjectID uid = oid("93420753453");
+        ObjectID uid = oid("1.9.3.42::creating.system::1");
         DvText name = text("name");
         String meaning = "at0000";
         ItemStructure details = itemSingle(detailsText);
 
         Set<PartyIdentity> identities = new HashSet<PartyIdentity>();
         identities.add(new PartyIdentity(null, "at0000",
-                text(Agent.LEGAL_IDENTITY), null, null, null,
+            text(Agent.LEGAL_IDENTITY), null, null, null, null, 
                 itemSingle(" identity value")));
         Archetyped archetypeDetails = new Archetyped(
-                new ArchetypeID("openehr-dm_rm-Person.person.v1"), null,
-                "v1.0");
+                new ArchetypeID("openehr-dm_rm-Person.person.v1"), "v1.0");
 
         return new Person(uid, meaning, name, archetypeDetails, null, null,
                 identities, null, null, null, details, null, null);
@@ -106,10 +110,16 @@ public class VersionedPartyTest extends DemographicTestBase {
 
     // test audit
     private AuditDetails audit(DvCodedText changeType) throws Exception {
-        PartyReference committer = new PartyReference(
-                new HierarchicalObjectID("10001"));
-        return new AuditDetails("/", committer, new DvDateTime(),
-                changeType, new DvText("desc"),
+        PartyReference pr = new PartyReference(new HierarchicalObjectID("1-2-3-4-5"), 
+                ObjectReference.Type.PARTY);
+        PartyIdentified pi = new PartyIdentified(pr, "party name", null);
+        CodePhrase codePhrase =
+                new CodePhrase(TestTerminologyID.SNOMEDCT, "revisionCode");
+        DvCodedText codedText = new DvCodedText("code value", TestCodePhrase.ENGLISH,
+                TestCodePhrase.LATIN_1, codePhrase,
+                TestTerminologyService.getInstance());
+        return new AuditDetails("12.3.4.5", pi, 
+                new DvDateTime("2006-05-01T10:10:00"), codedText, null,
                 TestTerminologyService.getInstance());
     }
 

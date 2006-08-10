@@ -55,7 +55,7 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
             if (otherReferenceRanges.isEmpty()) {
                 throw new IllegalArgumentException("empty referenceRanges");
             }
-            this.otherReferenceRanges =
+            this.referenceRanges =
                     new ArrayList<ReferenceRange<T>>(otherReferenceRanges);
  /*           for (int i = 0, j = otherReferenceRanges.size(); i < j; i++) {
                 ReferenceRange range = (ReferenceRange)
@@ -66,7 +66,7 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
                 }
             }*/
         } else {
-            this.otherReferenceRanges = null;
+            this.referenceRanges = null;
         }
         this.normalRange = normalRange;
     }
@@ -78,9 +78,9 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
      * @return unmodifiable list of ReferenceRange
      *         null if not specified
      */
-    public List<ReferenceRange<T>> getOtherReferenceRanges() {
-        return otherReferenceRanges == null ?
-                null : Collections.unmodifiableList(otherReferenceRanges);
+    public List<ReferenceRange<T>> getReferenceRanges() {
+        return referenceRanges == null ?
+                null : Collections.unmodifiableList(referenceRanges);
     }
 
     /**
@@ -107,7 +107,7 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
      * @return true if has no reference range
      */
     public boolean isSimple() {
-        return otherReferenceRanges == null;
+        return referenceRanges == null;
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
     public abstract boolean isStrictlyComparableTo(DvOrdered ordered);
 
     /* fields */
-    private final List<ReferenceRange<T>> otherReferenceRanges;
+    private final List<ReferenceRange<T>> referenceRanges;
     private final DvInterval<T> normalRange;
 }
 

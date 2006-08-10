@@ -31,6 +31,7 @@ public enum SystemValue {
     MEASUREMENT_SERVICE ("measurementService"),
     SUBJECT ("subject"),
     PROVIDER ("provider"),
+    COMPOSER ("composer"),
     TERRITORY ("territory"),
     CONTEXT ("context"),
     CATEGORY ("category"),
@@ -41,7 +42,7 @@ public enum SystemValue {
     private static final Map<String, SystemValue> idMap;
     static {
         SystemValue[] list = { LANGUAGE, CHARSET, TERMINOLOGY_SERVICE,
-            MEASUREMENT_SERVICE, SUBJECT, PROVIDER, TERRITORY, CONTEXT,
+            MEASUREMENT_SERVICE, SUBJECT, PROVIDER, COMPOSER, TERRITORY, CONTEXT,
             CATEGORY, UID
         };
         idMap = new HashMap<String, SystemValue>();

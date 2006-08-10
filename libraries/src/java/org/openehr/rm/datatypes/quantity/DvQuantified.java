@@ -37,11 +37,11 @@ public abstract class DvQuantified<T extends DvQuantified> extends DvOrdered<T> 
      * @param accuracyPercent
      */
     protected DvQuantified(
-    		@Attribute (name = "otherReferenceRanges") List<ReferenceRange<T>> otherReferenceRanges,
+    		@Attribute (name = "referenceRanges") List<ReferenceRange<T>> referenceRanges,
     		@Attribute (name = "normalRange") DvInterval<T> normalRange,
     		@Attribute (name = "accuracy") double accuracy, 
     		@Attribute (name = "accuracyPercent") boolean accuracyPercent) {
-        super(otherReferenceRanges, normalRange);
+        super(referenceRanges, normalRange);
         this.accuracy = accuracy;
         this.accuracyPercent = accuracyPercent;
     }

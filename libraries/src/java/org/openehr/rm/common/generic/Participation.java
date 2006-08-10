@@ -63,14 +63,14 @@ public final class Participation extends RMObject {
         if (( function instanceof DvCodedText )
                 && ( !terminologyService.terminology(
                         TerminologyService.OPENEHR)
-                .hasCodeForGroupName(((DvCodedText) function).getDefiningCode(),
-                        "participation function", "en") )) {
+                .codesForGroupName("participation function", "en")
+                .contains(((DvCodedText) function).getDefiningCode()))) {
             throw new IllegalArgumentException("unkown function: " + function);
         }
 
         if (!terminologyService.terminology(TerminologyService.OPENEHR)
-                .hasCodeForGroupName(mode.getDefiningCode(),
-                        "participation mode", "en")) {
+                .codesForGroupName("participation mode", "en")
+                .contains(mode.getDefiningCode())) {
             throw new IllegalArgumentException("unkown mode: " + mode);
         }
         this.performer = performer;

@@ -6,6 +6,7 @@ package org.openehr.rm.datastructure.history;
 import java.util.Set;
 
 import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
@@ -33,11 +34,12 @@ public final class PointEvent<T extends ItemStructure> extends Event<T> {
 	 * @param data
 	 * @param state
 	 */
+    @FullConstructor
 	public PointEvent(
-			@Attribute(name = "uid", required = true) ObjectID uid,
+			@Attribute(name = "uid") ObjectID uid,
             @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
             @Attribute(name = "name", required = true) DvText name,
-            @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
+            @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
             @Attribute(name = "feederAudit") FeederAudit feederAudit,
             @Attribute(name = "links") Set<Link> links,
             @Attribute(name = "parent") History<T> parent,

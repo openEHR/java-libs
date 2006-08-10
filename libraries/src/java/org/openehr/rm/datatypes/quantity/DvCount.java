@@ -80,7 +80,7 @@ public final class DvCount extends DvQuantified<DvCount> {
      */
     public DvQuantified<DvCount> add(DvQuantified q) {
         final DvCount c = (DvCount) q;
-        return new DvCount(getOtherReferenceRanges(), getNormalRange(),
+        return new DvCount(getReferenceRanges(), getNormalRange(),
         		getAccuracy(), isAccuracyPercent(), magnitude + c.magnitude);
     }
 
@@ -93,7 +93,7 @@ public final class DvCount extends DvQuantified<DvCount> {
      */
     public DvQuantified<DvCount> subtract(DvQuantified q) {
         final DvCount c = (DvCount) q;
-        return new DvCount(getOtherReferenceRanges(), getNormalRange(),
+        return new DvCount(getReferenceRanges(), getNormalRange(),
         		getAccuracy(), isAccuracyPercent(), magnitude - c.magnitude);
     }
 

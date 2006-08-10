@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class TestCodeSet"
+ * description: "Class TestCodeSetAccess"
  * keywords:    "unit test"
  *
  * author:      "Rong Chen <rong@acode.se>"
@@ -8,12 +8,13 @@
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL$"
- * revision:    "$LastChangedRevision$"
- * last_change: "$LastChangedDate$"
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/BRANCHES/Release-1.0/libraries/src/test/org/openehr/rm/support/terminology/TestCodeSetAccess.java $"
+ * revision:    "$LastChangedRevision: 2 $"
+ * last_change: "$LastChangedDate: 2005-10-12 22:20:08 +0100 (Wed, 12 Oct 2005) $"
  */
 package org.openehr.rm.support.terminology;
 
+import java.util.HashSet;
 import org.openehr.rm.datatypes.basic.DvState;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
@@ -21,12 +22,12 @@ import org.openehr.rm.datatypes.text.DvCodedText;
 import java.util.Set;
 
 /**
- * TestCodeSet
- *
+ * TestCodeSetAccess
+ * 
  * @author Rong Chen
  * @version 1.0
  */
-public class TestCodeSet implements CodeSet {
+public class TestCodeSetAccess implements CodeSetAccess {
 
     /* fields */
     /**
@@ -44,17 +45,15 @@ public class TestCodeSet implements CodeSet {
      * @return Set of DvCodePhrase
      */
     public Set<CodePhrase> allCodes() {
-        return null;  // todo: implement this method
+        return allCodes;  // todo: implement this method
     }
 
-    /**
-     * Return true if this codeset contains given codePhrase
-     *
-     * @param code
-     * @return true if has
-     */
-    public boolean has(CodePhrase code) {
-        return true;
+    public boolean hasCode(CodePhrase code) {
+        return true;//allCodes.contains(code);
+    }
+
+    public boolean hasLang(CodePhrase lang) {
+        return true;//allCodes.contains(lang);
     }
 
     public static final CodePhrase ENGLISH = new CodePhrase("test", "en");
@@ -62,7 +61,16 @@ public class TestCodeSet implements CodeSet {
             "iso-8859-1");
     public static final CodePhrase NULL_FLAVOUR = new CodePhrase("test",
             "unanswered");
-
+    
+    static final Set<CodePhrase> allCodes;
+    
+    static {
+        allCodes = new HashSet<CodePhrase>();
+        allCodes.add(ENGLISH);
+        allCodes.add(LATIN_1);
+        allCodes.add(NULL_FLAVOUR);        
+    }
+    
     // change type
     public static final DvCodedText CREATION = new DvCodedText("creation",
             ENGLISH, LATIN_1, new CodePhrase("test", "creation"),
@@ -71,13 +79,24 @@ public class TestCodeSet implements CodeSet {
     public static final DvCodedText AMENDMENT = new DvCodedText("creation",
             ENGLISH, LATIN_1, new CodePhrase("test", "creation"),
             TestTerminologyService.getInstance());
+    
+    public static final DvCodedText SETTING = new DvCodedText("setting",
+            ENGLISH, LATIN_1, new CodePhrase("test", "setting_code"),
+            TestTerminologyService.getInstance());
 
+    public static final DvCodedText ISM_ACTIVE = new DvCodedText("ism states",
+            ENGLISH, LATIN_1, new CodePhrase("test", "active"),
+            TestTerminologyService.getInstance());
+    
     // composition category
     public static final DvCodedText EVENT = new DvCodedText("event",
             ENGLISH, LATIN_1, new CodePhrase("test", "event"),
             TestTerminologyService.getInstance());
 
-
+    public static final DvCodedText PERSISTENT = new DvCodedText("persistent",
+            ENGLISH, LATIN_1, new CodePhrase("test", "persistent"),
+            TestTerminologyService.getInstance());
+    
     // lifecycle state
     public static final DvState DRAFT = new DvState(new DvCodedText("draft",
             new CodePhrase("test", "draft"), ENGLISH, LATIN_1,
@@ -98,7 +117,7 @@ public class TestCodeSet implements CodeSet {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is TestCodeSet.java
+ *  The Original Code is TestCodeSetAccess.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2004

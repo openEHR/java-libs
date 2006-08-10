@@ -22,7 +22,6 @@ package org.openehr.rm.common.archetyped;
 
 import junit.framework.TestCase;
 import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.identification.AccessGroupReference;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 
 public class ArchetypedTest extends TestCase {
@@ -45,41 +44,35 @@ public class ArchetypedTest extends TestCase {
 
     public void testConstructor() throws Exception {
         new Archetyped(aid("openehr-ehr_rm-section.physical_examination.v2"),
-                agr("9345734053"), "1.1");
+                "1.1");
         new Archetyped(aid("openehr-ehr_rm-section.physical_examination.v2"),
-                null, "1.1");
+                "1.1");
 
-        assertExceptionThrown(null, agr("9345734053"), "1.1", "archetypeID");
+        assertExceptionThrown(null, "1.1", "archetypeID");
         assertExceptionThrown(aid(
                 "openehr-ehr_rm-section.physical_examination.v2"),
-                agr("9345734053"), null, "referenceModelVersion");
+                null, "referenceModelVersion");
     }
 
     public void testEquals() {
         Archetyped a1 = new Archetyped(aid(
                 "openehr-ehr_rm-section.physical_examination.v2"),
-                agr("9345734053"), "1.1");
+                "1.1");
         Archetyped a2 = new Archetyped(aid(
                 "openehr-ehr_rm-section.physical_examination.v2"),
-                agr("9345734053"), "1.1");
+                "1.1");
         assertTrue(a1.equals(a2));
         assertTrue(a2.equals(a1));
 
         Archetyped a3 = new Archetyped(aid(
                 "openehr-ehr_rm-section.physical_examination.v3"),
-                agr("9345734053"), "1.1");
-        assertFalse(a1.equals(a3));
-        assertFalse(a3.equals(a1));
-
-        a3 = new Archetyped(aid(
-                "openehr-ehr_rm-section.physical_examination.v2"),
-                agr("250734252"), "1.1");
+                "1.1");
         assertFalse(a1.equals(a3));
         assertFalse(a3.equals(a1));
 
         a3 = new Archetyped(
                 aid("openehr-ehr_rm-section.physical_examination.v2"),
-                agr("9345734053"), "1.2");
+                "1.2");
         assertFalse(a1.equals(a3));
         assertFalse(a3.equals(a1));
     }
@@ -88,16 +81,11 @@ public class ArchetypedTest extends TestCase {
         return new ArchetypeID(value);
     }
 
-    private AccessGroupReference agr(String value) {
-        return new AccessGroupReference(new HierarchicalObjectID(value));
-    }
-
     private void assertExceptionThrown(ArchetypeID archetypeID,
-                                       AccessGroupReference accessControl,
                                        String referenceModelVersion,
                                        String cause) {
         try {
-            new Archetyped(archetypeID, accessControl, referenceModelVersion);
+            new Archetyped(archetypeID, referenceModelVersion);
             fail("exception should be thrown here");
         } catch (Exception e) {
             assertTrue(e instanceof IllegalArgumentException);

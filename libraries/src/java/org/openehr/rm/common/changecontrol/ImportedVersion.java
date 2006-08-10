@@ -31,81 +31,55 @@ import org.openehr.rm.support.terminology.TerminologyService;
  * @version 1.0
  */
 public final class ImportedVersion<T> extends Version<T> {
-
-	/**
-	 * Constructs an ImportedVersion
-	 * 
-	 * @param commitAudit
-	 * @param contribution
-	 * @param originalVersion
-	 */
-	public ImportedVersion(AuditDetails commitAudit, ObjectReference contribution,             
-              OriginalVersion<T> originalVersion) {
-		if (originalVersion == null) {
-			throw new IllegalArgumentException("null original version");
-		}
-		if (commitAudit == null) {
-			throw new IllegalArgumentException("null commitAudit");
-		}
-		if (contribution == null) {
-			throw new IllegalArgumentException("null contribution");
-		}
-		setUid(originalVersion.getUid());
-		setPrecedingVersionID(originalVersion.getPrecedingVersionID());
-		setData(originalVersion.getData());
-		setCommitAudit(commitAudit);
-		setContribution(contribution);
-		this.originalVersion = originalVersion;
-	}
-
-	public ObjectVersionID getUid() {
-		return originalVersion.getUid();
-	}
-
-	public ObjectVersionID getPrecedingVersionID() {
-		return originalVersion.getPrecedingVersionID();
-	}
-	
-	public T getData() {
-		return originalVersion.getData();
-	}
-	
-	/**
-	 * The original Version object that was imported.
-	 * 
-	 * @return item
-	 */
-	public OriginalVersion<T> getOriginalVersion() {
-		return originalVersion;
-	}
-	
-	/**
-	 * Computed verions of inheritance precursor, derived as originalVersion.uid
-	 *
-	 */
-	public ObjectVersionID uid() {
-		return originalVersion.getUid();
-	}
-	
-	/**
-	 * Computed version of inheritance prevursor, derived as 
-	 * originalVersion.precidingVersionUid
-	 *
-	 */
-	public ObjectVersionID precedingVersionUid() {
-		return originalVersion.getPrecedingVersionID();
-	}
-	
-	//POJO start
-	ImportedVersion() {
-	}
-
-	void setOriginalVersion(OriginalVersion<T> originalVersion) {
-		this.originalVersion = originalVersion;
-	}
-	//POJO end
-	
-	/* fields */
-	private OriginalVersion<T> originalVersion;
+    
+    /**
+     * Constructs an ImportedVersion
+     *
+     * @param commitAudit
+     * @param contribution
+     * @param originalVersion
+     */
+    public ImportedVersion(OriginalVersion<T> original, AuditDetails commitAudit,
+            ObjectReference contribution, String signature) {
+        if (original == null) {
+            throw new IllegalArgumentException("null original version");
+        }
+        if (commitAudit == null) {
+            throw new IllegalArgumentException("null audit");
+        }
+        if (contribution == null) {
+            throw new IllegalArgumentException("null contribution");
+        }
+        this.original = original;
+        setAttributes(original.getUid(), original.getPrecedingVersionID(),
+            original.getData(), original.getLifeCycleState(), commitAudit, 
+            contribution, signature);
+    }
+    
+    /**
+     * The original Version object that was imported.
+     *
+     * @return item
+     */
+    public OriginalVersion<T> getOriginalVersion() {
+        return original;
+    }
+        
+    //POJO start
+    ImportedVersion() {
+    }
+    
+    void setOriginalVersion(OriginalVersion<T> original) {
+        if(original != null) {
+            this.original = original;
+        } else {
+            throw new IllegalArgumentException("null original version");
+        }
+    }
+    
+    //POJO end
+    
+    /* fields */
+    private OriginalVersion<T> original;
 
 }

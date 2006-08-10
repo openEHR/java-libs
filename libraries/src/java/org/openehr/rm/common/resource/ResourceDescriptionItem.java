@@ -58,6 +58,11 @@ public class ResourceDescriptionItem extends RMObject {
 		this.otherDetails = otherDetails;
 	}
 	
+        public ResourceDescriptionItem(CodePhrase language, String purpose, 
+                TerminologyService terminologyService) {
+            this(language, purpose, null, null, null, null, null, null, terminologyService);
+        }
+        
 	/**
 	 * Optional copyright statement for the resource as a knowledge resource.
 	 * 
@@ -176,7 +181,5 @@ public class ResourceDescriptionItem extends RMObject {
 	private String copyright;
 	private HashMap<String, String> originalResourceUri;
 	private HashMap<String, String> otherDetails;
-	
-
-	
+		
 }

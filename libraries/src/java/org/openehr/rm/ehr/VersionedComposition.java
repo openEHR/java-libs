@@ -39,46 +39,110 @@ import org.openehr.rm.support.terminology.TerminologyService;
  * @version 1.0
  */
 public class VersionedComposition extends VersionedObject<Composition> {
-
-	/**
-	 * Constructs a VersionComposition with first Composition created locally
-	 */
-	public VersionedComposition(HierarchicalObjectID uid, ObjectReference ownerID, 
-			DvDateTime timeCreated, ObjectVersionID versionID, Composition composition, 
-			AuditDetails commitAudit, ObjectReference contribution, 
-			DvCodedText lifecycleState, TerminologyService terminologyService) {
-		
-        super(uid, ownerID, timeCreated, versionID, composition, commitAudit, contribution, 
-        		lifecycleState, terminologyService);
-	}
-	
-	/**
-	 * Constructs a VersionComposition with first imported Composition
-	 */
-	public VersionedComposition(HierarchicalObjectID uid, ObjectReference ownerID, 
-			DvDateTime timeCreated, AuditDetails commitAudit, 
-			ObjectReference contribution, OriginalVersion<Composition> item) {
-        super(uid, ownerID, timeCreated, commitAudit, contribution, item);
+    
+    /**
+     * Constructs a VersionComposition with first Composition created locally
+     */
+    public VersionedComposition(HierarchicalObjectID uid, ObjectReference ownerID,
+            DvDateTime timeCreated, ObjectVersionID versionID, Composition composition,
+            DvCodedText lifecycleState, AuditDetails commitAudit,
+            ObjectReference contribution, String signature,
+            TerminologyService terminologyService) {
         
-	}
-
-	/**
-	 * Constructs a VersionComposition with first merged Composition
-	 */
-	public VersionedComposition(HierarchicalObjectID uid, ObjectReference ownerID, 
-			DvDateTime timeCreated, ObjectVersionID versionID,   
-			ObjectVersionID precedingVersionID, Composition composition, AuditDetails commitAudit,    
-			ObjectReference contribution, DvCodedText lifecycleState,   
-			Set<ObjectVersionID> otherInputVersionUids, TerminologyService terminologyService) {
-		
-		super(uid, ownerID, timeCreated, versionID, precedingVersionID, composition, commitAudit,
-				contribution, lifecycleState, otherInputVersionUids, terminologyService);
-	}
-	
+        super(uid, ownerIDCheck(ownerID), timeCreated, versionID, composition, lifecycleState, 
+                commitAudit, contribution, signature, terminologyService);
+    }
+    
+    /**
+     * Constructs a VersionComposition with first imported Composition
+     */
+    public VersionedComposition(HierarchicalObjectID uid, ObjectReference ownerID,
+            DvDateTime timeCreated, OriginalVersion<Composition> item,
+            AuditDetails commitAudit, ObjectReference contribution, String signature) {
+        super(uid, ownerIDCheck(ownerID), timeCreated, item, commitAudit, contribution, signature);
+        
+    }
+    
+    /**
+     * Constructs a VersionComposition with first merged Composition
+     */
+    public VersionedComposition(HierarchicalObjectID uid, ObjectReference ownerID,
+            DvDateTime timeCreated, ObjectVersionID versionID,
+            ObjectVersionID precedingVersionID, Composition composition,
+            DvCodedText lifecycleState, AuditDetails commitAudit,
+            ObjectReference contribution, Set<ObjectVersionID> otherInputVersionUids,
+            String signature, TerminologyService terminologyService) {
+        
+        super(uid, ownerIDCheck(ownerID), timeCreated, versionID, precedingVersionID, composition, 
+                lifecycleState, commitAudit, contribution, otherInputVersionUids, signature, 
+                terminologyService);
+    }
+    
+    public boolean isPersistent() {
+        Composition firstData = (Composition) allVersions().get(0).getData();
+        return firstData.isPersistent();
+    }
+    
+    public synchronized void commitImportedVersion(OriginalVersion<Composition> item, 
+            AuditDetails commitAudit, ObjectReference contribution, String signature) {
+        
+        checkAgainstFirstData(item.getData());
+        super.commitImportedVersion(item, commitAudit, contribution, signature);
+    }
+    
+    public synchronized void commitOriginalMergedVersion(ObjectVersionID versionID,
+            ObjectVersionID precedingVersionID, Composition data, DvCodedText lifecycleState,
+            AuditDetails commitAudit, ObjectReference contribution,
+            Set<ObjectVersionID> otherInputVersionUids, String signature,
+            TerminologyService terminologyService) {
+        
+        checkAgainstFirstData(data);
+        super.commitOriginalMergedVersion(versionID, precedingVersionID, data, lifecycleState,
+                commitAudit, contribution, otherInputVersionUids, signature, terminologyService);
+        
+    }
+    
+    public synchronized void commitOriginalVersion(ObjectVersionID versionID,
+            ObjectVersionID precedingVersionID, Composition data, AuditDetails commitAudit,
+            ObjectReference contribution, DvCodedText lifecycleState, String signature,
+            TerminologyService terminologyService) {
+        
+        checkAgainstFirstData(data);
+        super.commitOriginalVersion(versionID, precedingVersionID, data, commitAudit, contribution,
+                lifecycleState, signature, terminologyService);
+    }
+    
+    protected void checkAgainstFirstData(Composition data) {
+        /*if(versionCount() == 0) {
+            firstArchetypeNodeID = data.getArchetypeNodeId();
+        } else {
+            if(!data.getArchetypeNodeId().equals(firstArchetypeNodeID)) {
+                throw new IllegalArgumentException("different archetypedNodeID");
+            }
+        }*/
+        if(versionCount() > 0) {
+            Composition firstData = (Composition) allVersions().get(0).getData();
+            if(! data.getArchetypeNodeId().equals(firstData.getArchetypeNodeId())) {
+                throw new IllegalArgumentException("different archetypedNodeID");
+            }
+            if( data.isPersistent() != firstData.isPersistent()) {
+                throw new IllegalArgumentException("different persistent state");
+            }
+        }
+    }
+    
+    protected static ObjectReference ownerIDCheck(ObjectReference ownerID) {
+        if(!ownerID.getType().equals(ObjectReference.Type.EHR)) {
+            throw new IllegalArgumentException("type of ownerID is not EHR");
+        }
+        return ownerID;
+    }
+    
     // POJO start
     VersionedComposition() {
     }
     // POJO end
+
 }
 
 /*

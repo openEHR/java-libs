@@ -16,7 +16,7 @@ package org.openehr.rm.datatypes.encapsulated;
 
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.uri.DvURI;
-import org.openehr.rm.support.terminology.Terminology;
+import org.openehr.rm.support.terminology.TerminologyAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
@@ -69,23 +69,25 @@ public final class DvMultimedia extends DvEncapsulated {
                     "null integrity check algorithm");
         }
 
-        Terminology terminogy = terminologyService.terminology(
+        TerminologyAccess terminogy = terminologyService.terminology(
                 TerminologyService.OPENEHR);
 
-        if (!terminogy.hasCodeForGroupName(mediaType,
-                "media types", "en")) {
+        //if (!terminogy.hasCodeForGroupName(mediaType,
+        if (!terminogy.codesForGroupName("media types", "en").contains(mediaType)) {
             throw new IllegalArgumentException(
                     "unknown media types: " + mediaType);
         }
-        if (compressionAlgorithm != null &&
-                !terminogy.hasCodeForGroupName(compressionAlgorithm,
-                        "compression algorithm", "en")) {
+        if (!terminogy.codesForGroupName("compression algorithm", "en").contains(compressionAlgorithm)) {
+        //if (compressionAlgorithm != null &&
+          //      !terminogy.hasCodeForGroupName(compressionAlgorithm,
+            //            "compression algorithm", "en")) {
             throw new IllegalArgumentException("unknown compression algorithm: "
                     + compressionAlgorithm);
         }
-        if (integrityCheckAlgorithm != null
-                && !terminogy.hasCodeForGroupName(integrityCheckAlgorithm,
-                        "integrity check algorithm", "en")) {
+        if (!terminogy.codesForGroupName("integrity check algorithm", "en").contains(integrityCheckAlgorithm)) {
+        //if (integrityCheckAlgorithm != null
+          //      && !terminogy.hasCodeForGroupName(integrityCheckAlgorithm,
+            //            "integrity check algorithm", "en")) {
             throw new IllegalArgumentException("unknown integrity check algorithm: "
                     + integrityCheckAlgorithm);
         }

@@ -13,9 +13,14 @@
  */
 package org.openehr.rm.composition.content.entry;
 
+import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.datastructure.history.History;
+import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.composition.CompositionTestBase;
+import org.openehr.rm.support.identification.ArchetypeID;
+import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.terminology.TestTerminologyService;
 
 /**
  * ObservationTest
@@ -40,20 +45,24 @@ public class ObservationTest extends CompositionTestBase {
      * The fixture set up called before every test method.
      */
     protected void setUp() throws Exception {
-        ItemStructure protocol = list();
-        History<ItemStructure> data = event("data", list());
-        History<ItemStructure> state = event("state", list());
+        ItemStructure protocol = list("list protocol");
+        History<ItemStructure> data = event("data");
+        History<ItemStructure> state = event("state");
+        Archetyped arch = new Archetyped(
+                new ArchetypeID("openehr-ehr_rm-observation.physical_examination.v3"),
+                "1.1");
         observation = new Observation(null, "at000", text("observation"),
-                null, null, null, subject(), provider(), protocol, null,
-                null, null, data, state);
+                arch, null, null, null, language("en"), language("en"), subject(), 
+                provider(), null, null, protocol, null, data, state, 
+                TestTerminologyService.getInstance());
     }
 
     public void testValidPath() throws Exception {
         String[] validPathList = {
-            "/", "/[observation]", // root
-            "/protocol", "/[observation]/protocol", // protocol
-            "/data", "/[observation]/data", // data
-            "/state", "/[observation]/state"           // state
+            "/", //"/[observation]", // root
+            "/protocol", //"/[observation]/protocol", // protocol
+            "/data", //"/[observation]/data", // data
+            "/state", //"/[observation]/state"           // state
         };
 
         for (String path : validPathList) {
@@ -62,8 +71,8 @@ public class ObservationTest extends CompositionTestBase {
         }
 
         String[] invalidPathList = {
-            "", null, "[observation]", "/observation", // bad root
-            "/[observation]/action"                   // unknown attribute
+            "", null, "[observation]", "/observation", "/[observation]", // bad root
+            "/[observation]/action", "/action"                   // unknown attribute
         };
 
         for (String path : invalidPathList) {
@@ -74,23 +83,23 @@ public class ObservationTest extends CompositionTestBase {
 
     public void testItemAtPath() throws Exception {
         assertItemAtPath("/", observation, observation);
-        assertItemAtPath("/[observation]", observation, observation);
+        assertItemAtPath("/", observation, observation);
 
         assertItemAtPath("/data", observation, observation.getData());
-        assertItemAtPath("/[observation]/data", observation,
+        assertItemAtPath("/data", observation,
                 observation.getData());
 
         assertItemAtPath("/protocol", observation, observation.getProtocol());
-        assertItemAtPath("/[observation]/protocol", observation,
+        assertItemAtPath("/protocol", observation,
                 observation.getProtocol());
 
         assertItemAtPath("/state", observation, observation.getState());
-        assertItemAtPath("/[observation]/state", observation,
+        assertItemAtPath("/state", observation,
                 observation.getState());
 
         String[] invalidPathList = {
-            "", null, "observation", "/observation", // bad root
-            "/[observation]/action"                    // unknown attribute
+            "", null, "observation", "/observation", "/[observation]", // bad root
+            "/[observation]/action", "/action"                    // unknown attribute
         };
 
         for (String path : invalidPathList) {

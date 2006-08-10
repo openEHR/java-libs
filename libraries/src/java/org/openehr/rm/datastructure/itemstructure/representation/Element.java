@@ -74,8 +74,8 @@ public final class Element extends Item {
                 throw new IllegalArgumentException("null terminologyService");
             }
             if (!terminologyService.terminology(TerminologyService.OPENEHR)
-                    .hasCodeForGroupName(nullFlavor.getDefiningCode(),
-                            "null flavour", "en")) {
+                    .codesForGroupName("null flavour", "en")
+                    .contains(nullFlavor.getDefiningCode())) {
                 throw new IllegalArgumentException(
                         "unknown nullFlavor: " + nullFlavor);
             }

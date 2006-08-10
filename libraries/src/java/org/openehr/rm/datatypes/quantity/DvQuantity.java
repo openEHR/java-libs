@@ -148,7 +148,7 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
      */
     public DvQuantified<DvQuantity> add(DvQuantified<DvQuantity> q) {
         DvQuantity qt = (DvQuantity) q;
-        return new DvQuantity(getOtherReferenceRanges(), getNormalRange(),
+        return new DvQuantity(getReferenceRanges(), getNormalRange(),
         		getAccuracy(), isAccuracyPercent(), getUnits(),
                 magnitude + qt.magnitude, precision,
                 measurementService);
@@ -165,7 +165,7 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
      */
     public DvQuantified<DvQuantity> subtract(DvQuantified<DvQuantity> q) {
         DvQuantity qt = (DvQuantity) q;
-        return new DvQuantity(getOtherReferenceRanges(), getNormalRange(),
+        return new DvQuantity(getReferenceRanges(), getNormalRange(),
         		   getAccuracy(), isAccuracyPercent(), getUnits(),
                 magnitude - qt.magnitude, precision,
                 measurementService);
@@ -189,7 +189,7 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
      * @return negated version
      */
     public DvQuantity negate() {
-        return new DvQuantity(getOtherReferenceRanges(), getNormalRange(), 
+        return new DvQuantity(getReferenceRanges(), getNormalRange(), 
         		   getAccuracy(), isAccuracyPercent(), getUnits(), -magnitude,
                 precision, measurementService);
     }

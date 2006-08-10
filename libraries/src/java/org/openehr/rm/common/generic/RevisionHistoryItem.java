@@ -94,20 +94,20 @@ public final class RevisionHistoryItem extends RMObject {
                 .append(versionID)
                 .toHashCode();
     }
-	//POJO start
-	RevisionHistoryItem() {
-	}
+    //POJO start
+    RevisionHistoryItem() {
+    }
 
-	void setAudits(List<AuditDetails> audits) {
-		this.audits = audits;
-	}
+    void setAudits(List<AuditDetails> audits) {
+            this.audits = audits;
+    }
 
-	void setVersionID(ObjectVersionID versionID) {
-		this.versionID = versionID;
-	}
-	//POJO end
-	
-	/* fields */
-	private List<AuditDetails> audits;
-	private ObjectVersionID versionID;
+    void setVersionID(ObjectVersionID versionID) {
+            this.versionID = versionID;
+    }
+    //POJO end
+
+    /* fields */
+    private List<AuditDetails> audits;
+    private ObjectVersionID versionID;
 }

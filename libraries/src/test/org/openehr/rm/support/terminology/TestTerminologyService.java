@@ -33,27 +33,27 @@ public class TestTerminologyService implements TerminologyService {
 
 
     /**
-     * Returns a Terminology of given name
-     *
+     * Returns a TerminologyAccess of given name
+     * 
      * @param name not empty and known to this service
      * @return terminology
      * @throws IllegalArgumentException if name null, empty
      *                                  or unknown to this terminology service
      */
-    public Terminology terminology(String name) {
-        return new TestTerminology();
+    public TerminologyAccess terminology(String name) {
+        return new TestTerminologyAccess();
     }
 
     /**
-     * Returns a CodeSet of given name
-     *
+     * Returns a CodeSetAccess of given name
+     * 
      * @param name not empty and known to this service
      * @return codeSet
      * @throws IllegalArgumentException if name is null, empty
      *                                  or unknown to this terminology service
      */
-    public CodeSet codeSet(String name) {
-        return new TestCodeSet();
+    public CodeSetAccess codeSet(String name) {
+        return new TestCodeSetAccess();
     }
 
     /**

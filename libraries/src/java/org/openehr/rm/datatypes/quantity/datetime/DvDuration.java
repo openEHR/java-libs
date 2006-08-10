@@ -14,11 +14,14 @@
  */
 package org.openehr.rm.datatypes.quantity.datetime;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.joda.time.Instant;
 import org.joda.time.MutablePeriod;
 import org.joda.time.Period;
 import org.joda.time.format.ISOPeriodFormat;
 import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.datatypes.quantity.*;
@@ -58,15 +61,21 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
 
         DvDuration d = DvDuration.getInstance(value);
         this.period = d.period;
-        this.years = getYears();
+        /*this.years = getYears();
         this.months = getMonths();
+        this.weeks = getWeeks();
         this.days = getDays();
         this.hours = getHours();
         this.minutes = getMinutes();
         this.seconds = getSeconds();
         this.fractionalSeconds = getFractionalSeconds();
+         */
+        setValue(value);
     }
 
+    public DvDuration(String value) {
+        this(null, null, 0.0, false, value);
+    }
     /**
      * Constructs a Duration with referenceRange and accuracy
      *
@@ -83,7 +92,7 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
             List<ReferenceRange<DvDuration>> referenceRanges,
             DvInterval<DvDuration> normalRange, double accuracy, 
             boolean accuracyPercent, int years, int months,
-            int days, int hours, int minutes, int seconds, 
+            int weeks, int days, int hours, int minutes, int seconds, 
             double fractionalSeconds) {
 
         super(referenceRanges, normalRange, accuracy, accuracyPercent);
@@ -92,16 +101,14 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
                     "invalid fraction seconds: " + fractionalSeconds);
         }
         
-        if (!isValidCombination(years, months, days, hours, minutes, seconds, fractionalSeconds)) {
+        if (!isValidCombination(years, months, weeks, days, hours, minutes, seconds, fractionalSeconds)) {
             throw new IllegalArgumentException(
-                    "invalid days, hours, minutes or seconds, "
-            + "days: " + days + ", hours: " + hours + ", minutes: " + minutes
-            + ", seconds: " + seconds);
+                    "invalid combination for period");
         }
 
-        period = new MutablePeriod(years, months, 0, days, hours, minutes, seconds, 
+        period = new Period(years, months, weeks, days, hours, minutes, seconds, 
         		(int)(fractionalSeconds*1000));
-
+        setValue(formatter.print(period).replace(".", ","));
     }
 
     /**
@@ -113,19 +120,36 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
      * @param seconds
      * @param fractionalSeconds
      */
-    public DvDuration(int years, int months, int days, int hours, int minutes, int seconds,
+    public DvDuration(int years, int months, int weeks, int days, int hours, int minutes, int seconds,
                       double fractionalSeconds) {
-        this(null, null, 0, false, years, months, days, hours, minutes, seconds,
+        this(null, null, 0.0, false, years, months, weeks, days, hours, minutes, seconds,
                 fractionalSeconds);
     }
 
 
     protected DvDuration(List<ReferenceRange<DvDuration>> referenceRanges,
             DvInterval<DvDuration> normalRange, double accuracy, 
-            boolean accuracyPercent, MutablePeriod period) {
-    		super(referenceRanges, normalRange, accuracy, accuracyPercent);
-    		this.period = period;
+            boolean accuracyPercent, Period period) {
+            super(referenceRanges, normalRange, accuracy, accuracyPercent);
+            this.period = period;
+            setValue(formatter.print(period).replace(".", ","));
     }
+    
+    /**
+     * Create a Duration from two instances of DvWorldTime
+     * 
+     * @param start
+     * @param end
+     */
+    public static DvDuration getDifference(DvWorldDateTime start, DvWorldDateTime end) {
+        Duration d = new Duration(start.getDateTime(), end.getDateTime());
+        DvDateTime dt = (DvDateTime) end;
+        return new DvDuration(null, null, end.getAccuracy(), 
+                end.isAccuracyPercent(), d.toPeriodFrom(start.getDateTime()));
+        
+    }
+    
+    
     /**
      * Create a Duration from a ISO8601 string presentation
      *
@@ -137,15 +161,15 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
             throw new IllegalArgumentException("null value");
         }
         if (!value.matches(PATTERN)) {
-            throw new IllegalArgumentException("Wrong format: " + value);
+            throw new IllegalArgumentException("Wrong duration format: " + value);
         }
-        MutablePeriod period = null;
+        Period period = null;
         if (value.startsWith("-")) {
             value = value.substring(1, value.length()); //skip '-' 
-            period = formatter.parseMutablePeriod(value);
+            period = formatter.parsePeriod(value);
             period = negatePeriod(period);
         } else {
-        		period = formatter.parseMutablePeriod(value);
+            period = formatter.parsePeriod(value);
         }
 
         return new DvDuration(null, null, 0.0, false, period);
@@ -157,15 +181,17 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
      * @param mPeriod
      * @return a negated copy of period
      */
-    static MutablePeriod negatePeriod(MutablePeriod mPeriod) {
-    		MutablePeriod period = mPeriod.copy();
-    		period.setYears(-period.getYears());
-        period.setMonths(-period.getMonths());
-        period.setDays(-period.getDays());
-        period.setHours(-period.getHours());
-        period.setSeconds(-period.getSeconds());
-        period.setMillis(-period.getMillis());
-        return period;
+    static Period negatePeriod(Period period) {
+        MutablePeriod mPeriod = period.toMutablePeriod();
+    	mPeriod.setYears(-mPeriod.getYears());
+        mPeriod.setMonths(-mPeriod.getMonths());
+        mPeriod.setWeeks(-mPeriod.getWeeks());
+        mPeriod.setDays(-mPeriod.getDays());
+        mPeriod.setHours(-mPeriod.getHours());
+        mPeriod.setMinutes(-mPeriod.getMinutes());
+        mPeriod.setSeconds(-mPeriod.getSeconds());
+        mPeriod.setMillis(-mPeriod.getMillis());
+        return mPeriod.toPeriod();
     }
     
 
@@ -190,7 +216,7 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
 
     // convert dvduration to seconds
     private double toDouble() {
-        return Math.abs(period.toDurationFrom(new Instant()).getMillis()/1000);
+        return Math.abs(period.toDurationFrom(new Instant()).getMillis()/10E2);
     }
 
     /**
@@ -203,10 +229,15 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
      */
     public DvQuantified<DvDuration> add(DvQuantified q) {
         final DvDuration d = (DvDuration) q;
-        period.add(d.period);
-        return new DvDuration(d.getOtherReferenceRanges(), 
+
+        DateTime dt = new DateTime(0);
+        Duration duration = period.toDurationFrom(dt);
+        Duration result = duration.plus(d.period.toDurationFrom(dt));
+        Period p = result.toPeriodFrom(dt);
+ 
+        return new DvDuration(d.getReferenceRanges(), 
         		d.getNormalRange(), d.getAccuracy(),
-                d.isAccuracyPercent(), period);
+                d.isAccuracyPercent(), p);
     }
 
     /**
@@ -214,8 +245,8 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
      *
      * @return negated version
      */
-    public DvQuantified negate() {
-        return new DvDuration(getOtherReferenceRanges(), getNormalRange(), getAccuracy(),
+    public DvQuantified<DvDuration> negate() {
+        return new DvDuration(getReferenceRanges(), getNormalRange(), getAccuracy(),
         			isAccuracyPercent() ,negatePeriod(period));
     }
 
@@ -229,16 +260,15 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
      */
     public DvQuantified<DvDuration> subtract(DvQuantified q) {
         final DvDuration d = (DvDuration) q;
-        period.setYears(period.getYears() - d.getPeriod().getYears());
-        period.setMonths(period.getMonths() - d.getPeriod().getMonths());
-        period.setDays(period.getDays() - d.getPeriod().getDays());
-        period.setHours(period.getHours() - d.getPeriod().getHours());
-        period.setMinutes(period.getMinutes() - d.getPeriod().getMinutes());
-        period.setSeconds(period.getSeconds() - d.getPeriod().getSeconds());
-        period.setMillis(period.getMillis() - d.getPeriod().getMillis());
-        return new DvDuration(d.getOtherReferenceRanges(), 
+
+        DateTime dt = new DateTime(0);
+        Duration duration = period.toDurationFrom(dt);
+        Duration result = duration.minus(d.period.toDurationFrom(dt));
+        Period p = result.toPeriodFrom(dt);
+
+        return new DvDuration(d.getReferenceRanges(), 
         		d.getNormalRange(), d.getAccuracy(),
-                d.isAccuracyPercent(), period);
+                d.isAccuracyPercent(), p);
     }
 
     /**
@@ -261,7 +291,15 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
      * @return string presentation
      */
     public String toString() {
-        return formatter.print(period); 
+        String str = value == null? formatter.print(period) : value;
+        //No DvDuration will be constructed in P-1y3M24W format, it's either
+        //all negative or all positive values for each element. The only time
+        //this format will exist is after addition or subtraction. However, 
+        //turning the Period to Duration then back to Period again will make
+        //the elements all positive or negative again, because Duration is based
+        //on milli second
+               
+        return toPrefixFormat(str);  
     }
 
     /**
@@ -278,7 +316,7 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
     public int compareTo(DvOrdered o) {
         final DvDuration d = (DvDuration) o;
         
-        if (period.getYears() > d.period.getYears()) {
+        /*if (period.getYears() > d.period.getYears()) {
         		return 1;
         } else if (period.getYears() < d.period.getYears()) {
         		return -1;
@@ -286,6 +324,11 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
         if (period.getMonths() > d.period.getMonths()) {
     			return 1;
         } else if (period.getMonths() < d.period.getMonths()) {
+    			return -1;
+        }
+        if (period.getWeeks() > d.period.getWeeks()) {
+    			return 1;
+        } else if (period.getWeeks() < d.period.getWeeks()) {
     			return -1;
         }
         if (period.getDays() > d.period.getDays()) {
@@ -317,7 +360,12 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
         } else if (period.getMillis() < d.period.getMillis()) {
             return -1;
         }
-        return 0;
+        */
+        DateTime dt = new DateTime(0);
+        Duration duration = period.toDurationFrom(dt);
+        Duration otherD = d.period.toDurationFrom(dt);
+        return duration.compareTo(otherD);
+        //return 0;
     }
 
     /**
@@ -325,20 +373,23 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
      * 
      * @return years
      */
-	public int getYears() {
-		return period.getYears();
-	}
+    public int getYears() {
+            return period.getYears();
+    }
 
     /**
      * number of months of nominal 30 day length
      * 
      * @return months
      */
-	public int getMonths() {
-		return period.getMonths();
-	}
+    public int getMonths() {
+            return period.getMonths();
+    }
 
-	/**
+    public int getWeeks() {
+        return period.getWeeks();
+    }
+    /**
      * number of 24 hour days
      *
      * @return days
@@ -380,7 +431,7 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
      * @return fractional seconds
      */
     public double getFractionalSeconds() {
-        return period.getMillis() / 10E3;
+        return period.getMillis() / 10E2;
     }
 
     /**
@@ -392,13 +443,14 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
      * @param seconds
      * @return true if value
      */
-    static boolean isValidCombination(int years, int months, int days, int hours,
+    static boolean isValidCombination(int years, int months, int weeks, int days, int hours,
                              int minutes, int seconds, double fractionalSeconds) {   		
-    		int total = Math.abs(years) + Math.abs(months) + Math.abs(days) + Math.abs(hours)
-    				+ Math.abs(minutes) + Math.abs(seconds);
+    		int total = Math.abs(years) + Math.abs(months) + Math.abs(weeks) + 
+                              Math.abs(days) + Math.abs(hours) + Math.abs(minutes) +
+    				Math.abs(seconds);
     		boolean zero = total == 0 && fractionalSeconds == 0.0;
     		if (!zero) {
-    			int[] arr = {years, months, days, hours, minutes, seconds};
+    			int[] arr = {years, months, weeks, days, hours, minutes, seconds};
     	   		int max = 0;
         		int min = 0;
         		for (int i = 0; i < arr.length; i++) {       			
@@ -467,22 +519,23 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
         result = 29 * result + period.getHours();
         result = 29 * result + period.getMinutes();
         result = 29 * result + period.getSeconds();
-        temp = (period.getMillis()/10E3) != +0.0d ?
+        temp = (period.getMillis()/10E2) != +0.0d ?
                 Double.doubleToLongBits(fractionalSeconds) : 0l;
         result = 29 * result + (int) ( temp ^ ( temp >>> 32 ) );
 
         return result;
     }
 
-    MutablePeriod getPeriod() {
-    		return period;
+    Period getPeriod() {
+    	return period;
     }
+    
     
     // POJO start
     DvDuration() {
     }
-
-	void setYears (int years) {
+/*
+    void setYears (int years) {
 		MutablePeriod mp = period.toMutablePeriod();
 		mp.setYears(years);
     		this.years = years;
@@ -491,6 +544,10 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
     
     void setMonths (int months) {
     		this.months = months;
+    }
+    
+    void setWeeks(int weeks) {
+        this.weeks = weeks;
     }
     
     void setDays(int days) {
@@ -512,25 +569,36 @@ public final class DvDuration extends DvCustomaryQuantity<DvDuration> {
     void setFractionalSeconds(double fractionalSeconds) {
         this.fractionalSeconds = fractionalSeconds;
     }
+    */
+    void setValue(String value) {
+        this.value = toPrefixFormat(value);
+    }
+    
+    private String toPrefixFormat(String value) {
+        String str = value;
+        if(str.indexOf("-") > 0) {
+            str = "-" + str.replace("-", "");            
+        }
+        return str;
+    }
+    
     // POJO end
 
     /* fields */
     //keep this temporarily for persistence purpose
-    private int years;
-    private int months;
-    private int days;
-    private int hours;
-    private int minutes;
-    private int seconds;
+    //private int years, months, weeks, days, hours, minutes, seconds;
     private double fractionalSeconds;
-
-    private MutablePeriod period;
+    private String value;
+    
+    private Period period;
 
     /* static value */
     private static String PATTERN =
-            "(-)?P((\\d)*(y|Y))?((\\d)*(m|M))?((\\d)*(d|D))?T((\\d)*(h|H))?((\\d)*(m|M))?((\\d)*(s|S))?";
+            "(-)?P((\\d)+(y|Y))?((\\d)+(m|M))?((\\d)+(w|W))?((\\d)+(d|D))?" +
+            "(T((\\d)+(h|H))?((\\d)+(m|M))?((\\d)+((,|\\.)(\\d){1,3})?(s|S))?)?";
+
     //private static String PATTERN_DATE = "(-)?P((\\d)*(y|Y))?((\\d)*(m|M))?((\\d)*(d|D))";
-    private static PeriodFormatter formatter = ISOPeriodFormat.standard();
+    private static PeriodFormatter formatter = ISOPeriodFormat.standard();                                                    
 }
 
 /*

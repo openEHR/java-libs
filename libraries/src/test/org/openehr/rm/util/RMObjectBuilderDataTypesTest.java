@@ -248,7 +248,7 @@ public class RMObjectBuilderDataTypesTest extends RMObjectBuilderTestBase {
         assertTrue(obj instanceof DvDate);
         DvDate date = (DvDate) obj;
         assertEquals("year", 1999, date.getYear());
-        assertEquals("month", 9, date.getMonth());
+        assertEquals("month", 10, date.getMonth());
         assertEquals("day", 20, date.getDay());
 
         // with bad string value
@@ -271,44 +271,18 @@ public class RMObjectBuilderDataTypesTest extends RMObjectBuilderTestBase {
         }
     }
 
-    public void testBuildDvPartialDate() throws Exception {
-        String type = "DvPartialDate";
-        Map<String, Object> values;
-
-        // with month
-        values = new HashMap<String, Object>();
-        values.put("value", "1999-10");
-        RMObject obj = builder.construct(type, values);
-
-        assertTrue(obj instanceof DvPartialDate);
-        DvPartialDate date = (DvPartialDate) obj;
-        assertEquals("year", 1999, date.getYear());
-        assertEquals("month", 9, date.getMonth());
-        assertEquals("monthKnown", true, date.isMonthKnown());
-
-        // without month
-        values = new HashMap<String, Object>();
-        values.put("value", "1999");
-        obj = builder.construct(type, values);
-
-        assertTrue(obj instanceof DvPartialDate);
-        date = (DvPartialDate) obj;
-        assertEquals("year", 1999, date.getYear());
-        assertEquals("monthKnown", false, date.isMonthKnown());
-    }
-
     public void testBuildDvDateTime() throws Exception {
         String type = "DvDateTime";
 
         // without referenceRanges
         Map<String, Object> values = new HashMap<String, Object>();
-        values.put("value", "1999-10-20 18:15:45");
+        values.put("value", "1999-10-20T18:15:45");
         RMObject obj = builder.construct(type, values);
 
         assertTrue(obj instanceof DvDateTime);
         DvDateTime datetime = (DvDateTime) obj;
         assertEquals("year", 1999, datetime.getYear());
-        assertEquals("month", 9, datetime.getMonth());
+        assertEquals("month", 10, datetime.getMonth());
         assertEquals("day", 20, datetime.getDay());
         assertEquals("hour", 18, datetime.getHour());
         assertEquals("minute", 15, datetime.getMinute());
@@ -330,38 +304,12 @@ public class RMObjectBuilderDataTypesTest extends RMObjectBuilderTestBase {
         assertEquals("second", 45, datetime.getSecond());
     }
 
-    public void testBuildDvPartialTime() throws Exception {
-        String type = "DvPartialTime";
-        Map<String, Object> values;
-
-        // with minute
-        values = new HashMap<String, Object>();
-        values.put("value", "18:15");
-        RMObject obj = builder.construct(type, values);
-
-        assertTrue(obj instanceof DvPartialTime);
-        DvPartialTime time = (DvPartialTime) obj;
-        assertEquals("hour", 18, time.getHour());
-        assertEquals("minute", 15, time.getMinute());
-        assertEquals("minuteKnown", true, time.isMinuteKnown());
-
-        // without minute
-        values = new HashMap<String, Object>();
-        values.put("value", "18");
-        obj = builder.construct(type, values);
-
-        assertTrue(obj instanceof DvPartialTime);
-        time = (DvPartialTime) obj;
-        assertEquals("hour", 18, time.getHour());
-        assertEquals("minuteKnown", false, time.isMinuteKnown());
-    }
-
     public void testBuildDvDuration() throws Exception {
         String type = "DvDuration";
 
         // without referenceRanges
         Map<String, Object> values = new HashMap<String, Object>();
-        values.put("value", "P10D20H30M40S");
+        values.put("value", "P10DT20H30M40S");
         RMObject obj = builder.construct(type, values);
 
         assertTrue(obj instanceof DvDuration);

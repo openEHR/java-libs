@@ -14,6 +14,7 @@
  */
 package org.openehr.rm.demographic;
 
+import org.openehr.rm.support.identification.LocatableReference;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.identification.ObjectReference;
@@ -42,28 +43,27 @@ public class PersonTest extends DemographicTestBase {
     }
 
     public void testConstructor() throws Exception {
-        ObjectID uid = oid("93420753453");
+        ObjectID uid = oid("1.7.8.4");
         DvText name = text("person name");
         String meaning = "at0001";
         ItemStructure details = itemSingle("person details");
 
         Set<PartyIdentity> identities = new HashSet<PartyIdentity>();
         identities.add(new PartyIdentity(null, "at0000",
-                text(Agent.LEGAL_IDENTITY), null, null, null,
+                text(Agent.LEGAL_IDENTITY), null, null, null, null, 
                 itemSingle(" identity value")));
         Archetyped archetypeDetails = new Archetyped(
-                new ArchetypeID("openehr-dm_rm-person.person.v1"), null,
-                "v1.0");
+                new ArchetypeID("openehr-dm_rm-person.person.v1"), "v1.0");
 
         Set<Contact> contacts = new HashSet<Contact>();
         DvInterval<DvDate> timeValidity = new DvInterval<DvDate>(
                 date("2005-01-01"), date("2005-12-31"));
         List<Address> addresses = new ArrayList<Address>();
-        addresses.add(new Address(oid("8702534253"), "at0000",
-                text("telecom address"), null, null, null,
+        addresses.add(new Address(oid("address.ad2"), "at0000",
+                text("telecom address"), null, null, null, null,
                 itemSingle("telecom addresss details")));
         Contact contact = new Contact(null, "at0000",
-                text("contact meaning"), null, null, null, timeValidity,
+                text("contact meaning"), null, null, null, null, timeValidity,
                 addresses);
         contacts.add(contact);
 
@@ -71,21 +71,21 @@ public class PersonTest extends DemographicTestBase {
         timeValidity = new DvInterval<DvDate>(date("1960-12-25"), null);
         ObjectReference source = new ObjectReference(uid,
                 ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY);
-        ObjectReference target = new ObjectReference(oid("9873532"),
+        ObjectReference target = new ObjectReference(oid("1.7.34.8"),
                 ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY);
-        PartyRelationship relation = new PartyRelationship(oid("9870"),
-                "at0000", text("mother"), null, null, null,
+        PartyRelationship relation = new PartyRelationship(oid("1.3.6.7.3"),
+                "at0000", text("mother"), null, null, null, null,
                 itemSingle("mother to son"), timeValidity, source, target);
         relationships.add(relation);
 
-        Set<ObjectReference> reverseRelationships =
-                new HashSet<ObjectReference>();
-        reverseRelationships.add(new ObjectReference(oid("987025"),
-                ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY));
+        Set<LocatableReference> reverseRelationships =
+                new HashSet<LocatableReference>();
+        reverseRelationships.add(new LocatableReference(ovid("1.4.4.5::1.2.840.114.1.2.2::1"),
+                ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY, null));
 
         List<Capability> capabilities = new ArrayList<Capability>();
         capabilities.add(new Capability(null, "at0000",
-                text("capability meaning"), null, null, null,
+                text("capability meaning"), null, null, null, null,
                 timeValidity, itemSingle("capability credentials")));
         Set<DvText> languages = new HashSet<DvText>();
         languages.add(text("swedish"));
@@ -125,7 +125,7 @@ public class PersonTest extends DemographicTestBase {
                                       Set<PartyIdentity> identities,
                                       Set<Contact> contacts,
                                       Set<PartyRelationship> relationships,
-                                      Set<ObjectReference> revRelationships,
+                                      Set<LocatableReference> revRelationships,
                                       ItemStructure details, Set<Role> roles,
                                       Set<DvText> languages) {
         try {

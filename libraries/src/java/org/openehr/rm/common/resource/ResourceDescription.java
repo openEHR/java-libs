@@ -5,6 +5,7 @@ package org.openehr.rm.common.resource;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.Attribute;
@@ -144,11 +145,27 @@ public class ResourceDescription {
 	}
 
 	void setParentResource(AuthoredResource parentResource) {
-		this.parentResource = parentResource;
-		if (parentResource != null && (parentResource.getDescription() != this)) {
-			parentResource.setDescription(this);
-		}		
+            
+            boolean parentDesc = (parentResource != null) && 
+                    parentResource.getDescription() != this;
+            if(parentDesc) {
+               languageValidCheck(parentResource, this.details);
+            }
+            this.parentResource = parentResource;
+            if(parentDesc) {
+                this.parentResource.setDescription(this);
+            }
 	}
+        
+        void languageValidCheck(AuthoredResource parent, List<ResourceDescriptionItem> details) {
+            Set<String> languages = parent.languagesAvailable();
+            for(ResourceDescriptionItem rdi : details) {
+                if(!languages.contains(rdi.getLanguage().getCodeString())) {
+                    throw new IllegalArgumentException("breach of language validity");
+                }
+            }
+        }
+        
 	//POJO end
 	
 	/* fields */

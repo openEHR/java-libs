@@ -70,6 +70,7 @@ public class DvText extends DataValue {
             if (terminologyService == null) {
                 throw new IllegalArgumentException("null terminologyService");
             }
+            //if (!terminogyService.codeSet("languages").contains(language)) {
             if (!terminologyService.codeSet("languages").hasLang(language)) {
                 throw new IllegalArgumentException(
                         "unknown language: " + language);

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.Attribute;
+import org.openehr.rm.RMObject;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
@@ -18,6 +19,7 @@ import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
+import org.openehr.rm.support.identification.LocatableReference;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.identification.ObjectReference;
@@ -27,7 +29,7 @@ import org.openehr.rm.support.terminology.TerminologyService;
  * @author yinsulim
  *
  */
-public class InstructionDetails extends Locatable {
+public class InstructionDetails extends RMObject {
 
 	/**
 	 * @param uid
@@ -38,18 +40,10 @@ public class InstructionDetails extends Locatable {
 	 * @param links
 	 * @param parent
 	 */
-	public InstructionDetails(@Attribute(name = "uid") ObjectID uid,
-            @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
-            @Attribute(name = "name", required = true) DvText name,
-            @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
-            @Attribute(name = "feederAudit") FeederAudit feederAudit,
-            @Attribute(name = "links") Set<Link> links,
-            @Attribute(name = "parent") Locatable parent, 
-            @Attribute(name = "instructionID", required = true) ObjectVersionID instructionID,
+	public InstructionDetails(
+            @Attribute(name = "instructionID", required = true) LocatableReference instructionID,
             @Attribute(name = "activityID", required = true) String activityID,
             @Attribute(name = "wfDetails") ItemStructure wfDetails) {
-		super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
-				parent);
 		if (instructionID == null) {
 			throw new IllegalArgumentException("null instructionID");
 		}
@@ -76,7 +70,7 @@ public class InstructionDetails extends Locatable {
 	 * 
 	 * @return instructionID
 	 */
-	public ObjectVersionID getInstructionID() {
+	public LocatableReference getInstructionID() {
 		return instructionID;
 	}
 
@@ -92,27 +86,6 @@ public class InstructionDetails extends Locatable {
 		return wfDetails;
 	}
 
-
-	/**
-	 * @param archetypeNodeId
-	 * @param name
-	 */
-	public InstructionDetails(String archetypeNodeId, DvText name) {
-		super(archetypeNodeId, name);
-		// TODO Auto-generated constructor stub
-	}
-
-
-
-	/* (non-Javadoc)
-	 * @see org.openehr.rm.common.archetyped.Locatable#pathOfItem(org.openehr.rm.common.archetyped.Locatable)
-	 */
-	@Override
-	public String pathOfItem(Locatable item) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	//POJO start
 	InstructionDetails() {
 	}
@@ -121,7 +94,7 @@ public class InstructionDetails extends Locatable {
 		this.activityID = activityID;
 	}
 
-	void setInstructionID(ObjectVersionID instructionID) {
+	void setInstructionID(LocatableReference instructionID) {
 		this.instructionID = instructionID;
 	}
 
@@ -131,7 +104,7 @@ public class InstructionDetails extends Locatable {
 	//POJO end
 	
 	/* fields */
-	private ObjectVersionID instructionID;
+	private LocatableReference instructionID;
 	private String activityID;
 	private ItemStructure wfDetails;
 

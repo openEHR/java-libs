@@ -35,14 +35,14 @@ public class AddressTest extends DemographicTestBase {
 
     public void testConstructor() throws Exception {
 
-        new Address(oid("8702534253"), "at0000",
-                text("address meaning"), null, null, null,
+        new Address(oid("address.trial"), "at0000",
+                text("address meaning"), null, null, null, null,
                 itemSingle("address details"));
 
         // null details
         try {
             new Address(oid("8702534253"), "at0000",
-                        text("address meaning"), null, null, null, null);
+                        text("address meaning"), null, null, null, null, null);
 
             fail("exception should be thrown");
 

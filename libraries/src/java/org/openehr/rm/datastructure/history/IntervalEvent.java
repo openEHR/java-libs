@@ -6,6 +6,7 @@ package org.openehr.rm.datastructure.history;
 import java.util.Set;
 
 import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.*;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
@@ -34,11 +35,12 @@ public final class IntervalEvent<T extends ItemStructure> extends Event<T> {
 	 * @param data
 	 * @param state
 	 */
+    @FullConstructor
 	public IntervalEvent(
-			@Attribute(name = "uid", required = true) ObjectID uid,
+			@Attribute(name = "uid") ObjectID uid,
             @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
             @Attribute(name = "name", required = true) DvText name,
-            @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
+            @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
             @Attribute(name = "feederAudit") FeederAudit feederAudit,
             @Attribute(name = "links") Set<Link> links,
             @Attribute(name = "parent") History<T> parent,
@@ -60,9 +62,12 @@ public final class IntervalEvent<T extends ItemStructure> extends Event<T> {
 		if (terminologyService == null) {
             throw new IllegalArgumentException("null terminologyService");
         }
+        //System.out.println("get Terminology.." + terminologyService.terminology(TerminologyService.OPENEHR));
+        //System.out.println("get codes...." + terminologyService.terminology(TerminologyService.OPENEHR)
+        //.codesForGroupName("event math function", "en"));        
         if (!terminologyService.terminology(TerminologyService.OPENEHR)
-                .hasCodeForGroupName(mathFunction.getDefiningCode(),
-                        "event math function", "en")) {
+                .codesForGroupName("event math function", "en")
+                .contains(mathFunction.getDefiningCode())) {
             throw new IllegalArgumentException(
                     "unknown mathFunction: " + mathFunction);
         }
@@ -93,7 +98,7 @@ public final class IntervalEvent<T extends ItemStructure> extends Event<T> {
 
 	/**
 	 * Length of the interval during which the state was true.
-	 * Void of an instantaneous event.
+	 * Void if an instantaneous event.
 	 * 
 	 * @return width.
 	 */

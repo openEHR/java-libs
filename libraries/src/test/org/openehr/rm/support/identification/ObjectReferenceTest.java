@@ -45,13 +45,13 @@ public class ObjectReferenceTest extends TestCase {
         assertExceptionThrown(null, ObjectReference.Namespace.LOCAL,
                 ObjectReference.Type.EHR, "id");
 
-        assertExceptionThrown(hid("50734"), null,
+        assertExceptionThrown(hid("1.2.40.11.1.2.2::2"), null,
                 ObjectReference.Type.EHR, "namespace");
 
-        assertExceptionThrown(hid("50734"), ObjectReference.Namespace.LOCAL,
+        assertExceptionThrown(hid("1.2.40.11.1.2.2::2"), ObjectReference.Namespace.LOCAL,
                 null, "type");
 
-        new ObjectReference(hid("50734"), ObjectReference.Namespace.LOCAL,
+        new ObjectReference(hid("openehr.org::23"), ObjectReference.Namespace.LOCAL,
                 ObjectReference.Type.EHR);
     }
 
@@ -60,25 +60,25 @@ public class ObjectReferenceTest extends TestCase {
     }
 
     public void testEquals() throws Exception {
-        ObjectReference or1 = new ObjectReference(hid("50734"),
+        ObjectReference or1 = new ObjectReference(hid("1-2-80-11-1"),
                 ObjectReference.Namespace.LOCAL, ObjectReference.Type.EHR);
-        ObjectReference or2 = new ObjectReference(hid("50734"),
+        ObjectReference or2 = new ObjectReference(hid("1-2-80-11-1"),
                 ObjectReference.Namespace.LOCAL, ObjectReference.Type.EHR);
         assertTrue(or1.equals(or2));
         assertTrue(or2.equals(or1));
 
-        ObjectReference or3 = new ObjectReference(hid("974554"),
+        ObjectReference or3 = new ObjectReference(hid("openehr.org::23"),
                 ObjectReference.Namespace.LOCAL, ObjectReference.Type.EHR);
         assertFalse(or1.equals(or3));
         assertFalse(or3.equals(or1));
 
-        or3 = new ObjectReference(hid("50734"),
+        or3 = new ObjectReference(hid("1-2-80-11-1"),
                 ObjectReference.Namespace.DEMOGRAPHIC,
                 ObjectReference.Type.EHR);
         assertFalse(or1.equals(or3));
         assertFalse(or3.equals(or1));
 
-        or3 = new ObjectReference(hid("50734"),
+        or3 = new ObjectReference(hid("1-2-80-11-1"),
                 ObjectReference.Namespace.LOCAL,
                 ObjectReference.Type.PARTY);
         assertFalse(or1.equals(or3));

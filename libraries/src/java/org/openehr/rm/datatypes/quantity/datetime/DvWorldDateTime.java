@@ -3,21 +3,14 @@
  */
 package org.openehr.rm.datatypes.quantity.datetime;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.format.FormatUtils;
 import org.openehr.rm.datatypes.quantity.DvCustomaryQuantity;
 import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.datatypes.quantity.DvOrdered;
 import org.openehr.rm.datatypes.quantity.ReferenceRange;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
+import org.joda.time.DateTimeZone;
 
 /**
  * Abstract concept of time on the real world timeline.
@@ -26,17 +19,17 @@ import java.util.TimeZone;
  * @author Rong Chen
  * @version 1.0
  */
-public abstract class DvWorldTime <T extends DvWorldTime>
+public abstract class DvWorldDateTime <T extends DvWorldDateTime>
         extends DvCustomaryQuantity<T> {
 
-    protected DvWorldTime(List<ReferenceRange<T>> referenceRanges,
+    protected DvWorldDateTime(List<ReferenceRange<T>> referenceRanges,
 			DvInterval<T> normalRange, double accuracy, 
 			boolean accuracyPercent, DateTime datetime) {
-		super(referenceRanges, normalRange, accuracy, accuracyPercent);
-		this.dateTime = datetime;
+        super(referenceRanges, normalRange, accuracy, accuracyPercent);
+        this.dateTime = datetime;
     }
     
-	/**
+    /**
      * Construct a WorldTime string value
      *
      * @param referenceRanges null if not specified
@@ -47,12 +40,13 @@ public abstract class DvWorldTime <T extends DvWorldTime>
      * @param pattern
      * @throws IllegalArgumentException
      */
-    public DvWorldTime(List<ReferenceRange<T>> referenceRanges,
+    public DvWorldDateTime(List<ReferenceRange<T>> referenceRanges,
     				DvInterval<T> normalRange,double accuracy, 
     				boolean accuracyPercent, String value) {
         super(referenceRanges, normalRange, accuracy, accuracyPercent);
         this.dateTime = parseValue(value);
         this.value = value;
+        setBooleans(value);
     }
 
 	/**
@@ -66,15 +60,16 @@ public abstract class DvWorldTime <T extends DvWorldTime>
      * @param pattern
      * @throws IllegalArgumentException
      */
-    public DvWorldTime(List<ReferenceRange<T>> referenceRanges,
+/*    public DvWorldDateTime(List<ReferenceRange<T>> referenceRanges,
     				DvInterval<T> normalRange, double accuracy, 
     				boolean accuracyPercent) {
         super(referenceRanges, normalRange, accuracy, accuracyPercent);
         this.dateTime = new DateTime();
-    }
+    }*/
     
     abstract DateTime parseValue(String value);
 
+    abstract void setBooleans(String value);
     /**
      * Construct a WorldTime by an org.joda.time.DateTime
      *
@@ -101,7 +96,7 @@ public abstract class DvWorldTime <T extends DvWorldTime>
      *                            from being compared to this Object.
      */
     public int compareTo(DvOrdered o) {
-        DvWorldTime d = (DvWorldTime) o;
+        DvWorldDateTime d = (DvWorldDateTime) o;
         return getDateTime().compareTo(d.getDateTime());
     }
 
@@ -126,21 +121,35 @@ public abstract class DvWorldTime <T extends DvWorldTime>
     }
     
     /**
-     * Two DvDate equal if both have same year, month, day and timezone
-     *
+     * Two DvWorldDateTime are equivalent if both indicate the same point of datetime
+     * 
+     * 
+     * @param o
+     * @return true if equals
+     */
+    public boolean isEquivalent(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof DvWorldDateTime )) return false;
+        
+        final DvWorldDateTime wt = (DvWorldDateTime) o;
+		return this.dateTime.isEqual(wt.dateTime);
+    }
+   
+    /**
+     * Two DvWorldDateTime are equal if both indicate the same point of datetime.
+     * This function should be overwritten in subclass.
+     * 
      * @param o
      * @return true if equals
      */
     public boolean equals(Object o) {
-        //if (this == o) return true;
-        //if (!( o instanceof NDvWorldTime )) return false;
-        
-        DvWorldTime wt = (DvWorldTime) o;
-		return this.dateTime.equals(wt.dateTime);
+        return isEquivalent(o);
     }
-   
+ 
+    
     public String toString() {
-    		return value;
+        //return value == null? getDateTime().toString() : value;
+        return value;
     }
     
 /*    private DvDuration timeZone() {  		
@@ -150,25 +159,38 @@ public abstract class DvWorldTime <T extends DvWorldTime>
 		timezone = new DvDuration(0, 0, 0, hour, minute, 0, 0);
 	}*/
 
-    protected static String convertTimeZone(int tzMillis) {
-    		int offset = tzMillis/60000; //timezone in minutes		
-		int hour = offset/60;
-		int minute = Math.abs(offset % 60);
-		StringBuffer sb = new StringBuffer();
-		FormatUtils.appendPaddedInteger(sb, hour, 2);
-		FormatUtils.appendPaddedInteger(sb, minute, 2);
-		String result = sb.toString();
-		return tzMillis < 0 ? "-" + result : "+" + result;
+    protected String timeZoneString() {
+        int offset = dateTime.getZone().getOffset(dateTime.getMillis())/60000; //timezone in minutes
+        int minute = offset % 60 >= 0? offset % 60 : -(offset % 60);
+        int hour = offset/60;
+        if(minute == 0 && hour == 0) {
+            return "Z";
+        }else {
+            String mStr = Integer.toString(minute);
+            mStr = mStr.length() > 1? mStr : "0" + mStr;
+            String hStr = hour > 0? "+" + Integer.toString(hour) : Integer.toString(hour);
+            if(hStr.length() < 3) {
+                hStr = hStr.substring(0,1) + "0" + hStr.substring(1);
+            }
+            return hStr + mStr; 
+        }
     }
+    
+
     
     // POJO start
     void setDateTime(DateTime dateTime) {
-    		this.dateTime = dateTime;
+        this.dateTime = dateTime;
     }
     
-	protected static boolean isExtended(String value) {
-		return value.indexOf("-") > 0 || value.indexOf(":") > 0;
-	}
+    void setValue(String value) {
+        this.value = value;
+    }
+    
+    DvWorldDateTime(){}
+//    protected static boolean isExtended(String value) {
+//        return value.indexOf("-") > 0 || value.indexOf(":") > 0;
+//    }
 	
 	
     // POJO end

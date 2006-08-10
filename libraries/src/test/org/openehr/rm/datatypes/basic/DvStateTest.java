@@ -23,7 +23,7 @@ package org.openehr.rm.datatypes.basic;
 import junit.framework.TestCase;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
-import org.openehr.rm.support.terminology.TestCodeSet;
+import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 
 public class DvStateTest extends TestCase {
@@ -46,13 +46,13 @@ public class DvStateTest extends TestCase {
 
     public void testEquals() throws Exception {
         DvCodedText codeOne = new DvCodedText("some text",
-                TestCodeSet.ENGLISH, TestCodeSet.LATIN_1,
+                TestCodeSetAccess.ENGLISH, TestCodeSetAccess.LATIN_1,
                 new CodePhrase("test terms", "00001"),
                 TestTerminologyService.getInstance());
         DvState stateOne = new DvState(codeOne, false);
 
         DvCodedText codeTwo = new DvCodedText("some text",
-                TestCodeSet.ENGLISH, TestCodeSet.LATIN_1,
+                TestCodeSetAccess.ENGLISH, TestCodeSetAccess.LATIN_1,
                 new CodePhrase("test terms", "00001"),
                 TestTerminologyService.getInstance());
         DvState stateTwo = new DvState(codeTwo, false);

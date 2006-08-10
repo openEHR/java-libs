@@ -64,16 +64,12 @@ public final class EventContext extends RMObject {
     public EventContext(PartyIdentified healthCareFacility,
                         DvDateTime startTime,
                         DvDateTime endTime,
-                        PartyReference composer,
                         List<Participation> participations,
                         String location,
                         DvCodedText setting,
                         ItemStructure otherContext,
                         TerminologyService terminologyService) {
 
-        if (composer == null) {
-            throw new IllegalArgumentException("null composer");
-        }
         if (startTime == null) {
             throw new IllegalArgumentException("null startTime");
         }
@@ -90,14 +86,13 @@ public final class EventContext extends RMObject {
             throw new IllegalArgumentException("null setting");
         }
         if (!terminologyService.terminology(TerminologyService.OPENEHR)
-                .hasCodeForGroupName(setting.getDefiningCode(),
-                        "setting", "en")) {
+                .codesForGroupName("setting", "en")
+                .contains(setting.getDefiningCode())) {
             throw new IllegalArgumentException("unknown setting: " + setting);
         }
         this.healthCareFacility = healthCareFacility;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.composer = composer;
         this.participations = ( participations == null ?
                 null : new ArrayList<Participation>(participations) );
         this.location = location;
@@ -134,18 +129,6 @@ public final class EventContext extends RMObject {
      */
     public DvDateTime getEndTime() {
         return endTime;
-    }
-
-    /**
-     * The person primarily responsible for the content of the
-     * Composition (not necessarily its entry into the EHR system).
-     * This is the identifier which should appear on the screen.
-     * It may or may not be the person who entered the data.
-     *
-     * @return composer
-     */
-    public PartyReference getComposer() {
-        return composer;
     }
 
     /**
@@ -205,7 +188,6 @@ public final class EventContext extends RMObject {
         return new EqualsBuilder()
                 .append(healthCareFacility, eventContext.healthCareFacility)
                 .append(startTime, eventContext.startTime)
-                .append(composer, eventContext.composer)
                 .append(participations, eventContext.participations)
                 .append(location, eventContext.location)
                 .append(setting, eventContext.setting)
@@ -224,7 +206,6 @@ public final class EventContext extends RMObject {
                 .append(healthCareFacility)
                 .append(startTime)
                 .append(endTime)
-                .append(composer)
                 .append(participations)
                 .append(location)
                 .append(setting)
@@ -246,10 +227,6 @@ public final class EventContext extends RMObject {
 
     void setEndTime(DvDateTime endTime) {
         this.endTime = endTime;
-    }
-    
-    void setComposer(PartyReference composer) {
-        this.composer = composer;
     }
 
     void setParticipations(List<Participation> participations) {
@@ -273,7 +250,6 @@ public final class EventContext extends RMObject {
     private PartyIdentified healthCareFacility;
     private DvDateTime startTime;
     private DvDateTime endTime;
-    private PartyReference composer;
     private List<Participation> participations;
     private String location;
     private DvCodedText setting;

@@ -1,43 +1,61 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class AccessGroupReference"
- * keywords:    "common"
+ * description: "Class CodeSetAccess"
+ * keywords:    "support"
  *
  * author:      "Rong Chen <rong@acode.se>"
  * support:     "Acode HB <support@acode.se>"
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL$"
- * revision:    "$LastChangedRevision$"
- * last_change: "$LastChangedDate$"
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/support/terminology/CodeSetAccess.java $"
+ * revision:    "$LastChangedRevision: 2 $"
+ * last_change: "$LastChangedDate: 2005-10-12 22:20:08 +0100 (Wed, 12 Oct 2005) $"
  */
-package org.openehr.rm.support.identification;
+package org.openehr.rm.support.terminology;
+
+import org.openehr.rm.datatypes.text.CodePhrase;
+
+import java.util.Set;
 
 /**
- * Reference to access group in an access control service
- * 
+ * Defines interface to a code set.
+ *
  * @author Rong Chen
  * @version 1.0
  */
-public class AccessGroupReference extends ObjectReference {
-
-    // POJO start
-    AccessGroupReference() {
-    }
-    // POJO end
+public interface CodeSetAccess {
 
     /**
-     * Constructs an AccessGroupReference
+     * Returns identification of this code set
      *
-     * @param id
+     * @return ID not null or empty
      */
-    public AccessGroupReference(ObjectID id) {
-        super(id, ObjectReference.Namespace.ACCESS_CONTROL,
-                ObjectReference.Type.ACCESS_GROUP);
-    }
-}
+    public String id();
 
+    /**
+     * Returns all codes known in this code set
+     *
+     * @return Set of DvCodePhrase
+     */
+    public Set<CodePhrase> allCodes();
+
+    /**
+     * Return true if this codeSet contains given codePhrase
+     *
+     * @param code
+     * @return true if has
+     */
+    public boolean hasCode(CodePhrase code);
+    
+    /**
+     * Return true if this codeSet contains given 'lang'
+     *
+     * @param lang
+     * @return true if has
+     */
+    public boolean hasLang(CodePhrase lang);
+}
 /*
  *  ***** BEGIN LICENSE BLOCK *****
  *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -52,7 +70,7 @@ public class AccessGroupReference extends ObjectReference {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is AccessGroupReference.java
+ *  The Original Code is CodeSetAccess.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2004

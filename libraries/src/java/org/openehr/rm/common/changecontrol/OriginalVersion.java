@@ -30,40 +30,20 @@ public class OriginalVersion<T> extends Version<T> {
 	 * @param terminologyService
 	 */
 	public OriginalVersion(ObjectVersionID uid, ObjectVersionID precedingVersionID,
-			T data, AuditDetails commitAudit, ObjectReference contribution,
+            T data, DvCodedText lifeCycleState, AuditDetails commitAudit, 
+            ObjectReference contribution, String signature, 
             Set<ObjectVersionID> otherInputVersionUids, List<Attestation> attestations,
-            DvCodedText lifecycleState, boolean isMerged, 
-            TerminologyService terminologyService) {
-		super(uid, precedingVersionID, data, commitAudit, contribution);
-        if (attestations != null && attestations.isEmpty()) {
-            throw new IllegalArgumentException("empty attestations");
-        }
-        if (lifecycleState == null) {
-            throw new IllegalArgumentException("null lifecycleState");
-        }
-        if ((otherInputVersionUids == null) == isMerged ) {
-        		throw new IllegalArgumentException("breach of isMerged validity");
-        }
-        if (terminologyService == null) {
-            throw new IllegalArgumentException("null terminologyService");
-        }
-        if (!terminologyService.terminology(TerminologyService.OPENEHR)
-                .hasCodeForGroupName(
-                        lifecycleState.getDefiningCode(),
-                        "version lifecycle state", "en")) {
-            throw new IllegalArgumentException(
-                    "unknown lifecycleState: " + lifecycleState);
-        }
+            boolean isMerged, TerminologyService terminologyService) {
+            
+            super(uid, precedingVersionID, data, lifeCycleState, commitAudit, 
+                    contribution, signature, terminologyService);
+            if (attestations != null && attestations.isEmpty()) {
+                throw new IllegalArgumentException("empty attestations");
+            }
+            if ((otherInputVersionUids == null) == isMerged ) {
+                throw new IllegalArgumentException("breach of isMerged validity");
+            }
 	}
-
-    /**
-     * Lifecycle state of the content item in this version
-     *
-     * @return state
-     */
-    public DvCodedText getLifecycleState() {
-        return lifeCycleState;
-    }
     
     /**
      * List of attestations relating this version.
@@ -91,31 +71,25 @@ public class OriginalVersion<T> extends Version<T> {
     }
     
     // POJO start
-	OriginalVersion() {
-	}
-	
-	void setAttestations(List<Attestation> attestations) {
-		this.attestations = attestations;
-	}
+    OriginalVersion() {
+    }
 
-	void setIsMerged(boolean isMerged) {
-		this.isMerged = isMerged;
-	}
+    void setAttestations(List<Attestation> attestations) {
+            this.attestations = attestations;
+    }
 
-	void setLifeCycleState(DvCodedText lifeCycleState) {
-		this.lifeCycleState = lifeCycleState;
-	}
+    void setIsMerged(boolean isMerged) {
+            this.isMerged = isMerged;
+    }
 
-	void setOtherInputVersionUids(Set<ObjectVersionID> otherInputVersionUids) {
-		this.otherInputVersionUids = otherInputVersionUids;
-	}	
-	// POJO end
-	
-	/* fields */
-	private Set<ObjectVersionID> otherInputVersionUids;
-	private T data;
-	private List<Attestation> attestations;
-	private DvCodedText lifeCycleState;
-	private boolean isMerged;
+    void setOtherInputVersionUids(Set<ObjectVersionID> otherInputVersionUids) {
+            this.otherInputVersionUids = otherInputVersionUids;
+    }	
+    // POJO end
+
+    /* fields */
+    private Set<ObjectVersionID> otherInputVersionUids;
+    private List<Attestation> attestations;
+    private boolean isMerged;
 
 }

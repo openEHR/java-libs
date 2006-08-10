@@ -171,11 +171,11 @@ public abstract class Actor extends Party {
         if (ret != null) {
             return ret;
         }
-        String whole = whole();
+        //String whole = whole();
         String tmp = path;
-        if (tmp.startsWith(whole)) {
-            tmp = tmp.substring(whole.length());
-        }
+        //if (tmp.startsWith(whole)) {
+          //  tmp = tmp.substring(whole.length());
+        //}
         ret = checkAttribute(tmp, "roles", roles);
         if (ret != null) {
             return ret;
@@ -196,7 +196,6 @@ public abstract class Actor extends Party {
 
         final Actor actor = (Actor) o;
         return new EqualsBuilder()
-                .appendSuper(super.equals(o))
                 .append(roles, actor.roles)
                 .append(languages, actor.languages)
                 .isEquals();

@@ -153,7 +153,7 @@ public class ItemListTest extends DataStructureTestBase {
                 new ArrayList<Item>(Arrays.asList(elementArray)));
 
         return new ItemList(null, "at001", text(NAME), null, null, null, 
-                itemsCluster);
+                null, itemsCluster);
     }
 
     /* static fields */

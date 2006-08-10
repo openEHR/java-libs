@@ -138,11 +138,11 @@ public class Role extends Party {
         if (ret != null) {
             return ret;
         }
-        String whole = whole();
+        //String whole = whole();
         String tmp = path;
-        if (tmp.startsWith(whole)) {
-            tmp = tmp.substring(whole.length());
-        }
+        //if (tmp.startsWith(whole)) {
+          //  tmp = tmp.substring(whole.length());
+        //}
         ret = checkAttribute(tmp, "capabilities", capabilities);
         if (ret != null) {            
             return ret;

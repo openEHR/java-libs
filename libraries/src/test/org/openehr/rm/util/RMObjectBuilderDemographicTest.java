@@ -28,6 +28,8 @@ import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.demographic.*;
 
 import java.util.*;
+import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.PartyReference;
 
 /**
  * RMObjectBuilderDemographicTest
@@ -89,7 +91,7 @@ public class RMObjectBuilderDemographicTest extends RMObjectBuilderTestBase {
         String node = "at0001";
         List<Address> addresses = new ArrayList<Address>();
         addresses.add(new Address(null, node, text("address"),
-                null, null, null, itemSingle("address detail")));
+                null, null, null, null, itemSingle("address detail")));
         values.put("name", text);
         values.put("archetypeNodeId", node);
         values.put("addresses", addresses);
@@ -115,15 +117,15 @@ public class RMObjectBuilderDemographicTest extends RMObjectBuilderTestBase {
         String type = "PartyRelationship";
         Map<String, Object> values = new HashMap<String, Object>();
 
-        ObjectID uid = hid("93420753453");
+        ObjectID uid = hid("1.3.25.6");
         DvText text = text("PartyRelationship");
         String node = "at0001";
         DataStructure details = itemSingle("party relationship details");
         DvInterval<DvDate> timeValidity = new DvInterval<DvDate>(
                 new DvDate("2001-10-30"), null);
-        ObjectReference source = new ObjectReference(hid("89523470"),
+        ObjectReference source = new ObjectReference(hid("1.8.3.4.3.6.1"),
                 ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY);
-        ObjectReference target = new ObjectReference(hid("32421702"),
+        ObjectReference target = new ObjectReference(hid("1.2.13.3.7.31.1"),
                 ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY);
 
         values.put("uid", uid);
@@ -173,20 +175,22 @@ public class RMObjectBuilderDemographicTest extends RMObjectBuilderTestBase {
 
     public void testBuildRole() throws Exception {
         Map<String, Object> values = new HashMap<String, Object>();
-        ObjectID uid = hid("65463365656534");
+        ObjectID uid = hid("1.13.23.9");
         DvText text = text("role");
         String node = "at0001";
         ItemStructure details = itemSingle("role details");
         Set<PartyIdentity> identities = new HashSet<PartyIdentity>();
         identities.add(new PartyIdentity(null, node,
                 text(Agent.LEGAL_IDENTITY),
-                null, null, null, itemSingle("legal name")));
+                null, null, null, null, itemSingle("legal name")));
         Archetyped archetypeDetails = new Archetyped(
-                new ArchetypeID("openehr-dm_rm-Role.doctor.v2"), null,
-                "v1.0");
-        Actor performer = new Person(hid("9807425345"), "at0002",
-                text("doctor"), archetypeDetails, null, null, identities,
-                null, null, null, details, null, null);
+                new ArchetypeID("openehr-dm_rm-Role.doctor.v2"), "v1.0");
+        PartyReference performer = new PartyReference(
+                new HierarchicalObjectID("1.2.4.5.6.12.1"), 
+                ObjectReference.Type.PERSON);
+        //Actor performer = new Person(hid("9807425345"), "at0002",
+          //      text("doctor"), archetypeDetails, null, null, identities,
+            //    null, null, null, details, null, null);
         values.put("uid", uid);
         values.put("name", text);
         values.put("archetypeNodeId", node);
@@ -215,17 +219,16 @@ public class RMObjectBuilderDemographicTest extends RMObjectBuilderTestBase {
 
     private void verityBuildActor(String subclass) throws Exception {
         Map<String, Object> values = new HashMap<String, Object>();
-        ObjectID uid = hid("93420753453");
+        ObjectID uid = hid("1.2.4.6.17.12.5");
         DvText text = text("actor");
         String node = "at0001";
         DataStructure item = itemSingle("actor details");
         Set<PartyIdentity> identities = new HashSet<PartyIdentity>();
         identities.add(new PartyIdentity(null, "at0003",
                 text(Agent.LEGAL_IDENTITY),
-                null, null, null, itemSingle("legal name")));
+                null, null, null, null, itemSingle("legal name")));
         Archetyped archetypeDetails = new Archetyped(
-                new ArchetypeID("openehr-dm_rm-Actor.actor.v2"), null,
-                "v1.0");
+                new ArchetypeID("openehr-dm_rm-Actor.actor.v2"), "v1.0");
         values.put("uid", uid);
         values.put("name", text);
         values.put("archetypeNodeId", node);

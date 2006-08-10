@@ -70,7 +70,7 @@ public final class ItemTable extends ItemStructure {
         // Valid_structure: representation.items.forall({ITEM}.type =  CLUSTER
         // and then {ITEM}.items.forall({ITEM}.type =  ELEMENT ))
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
-                links, parent, representation);
+                links, parent, structureCheck(representation));
     }
 
     /**
@@ -87,18 +87,22 @@ public final class ItemTable extends ItemStructure {
     }
 
     // list of columns
-    private List<Item> columns() {
-        return ( (Cluster) getRepresentation() ).getItems();
-    }
+    //private List<Item> columns() {  
+    //}
 
+    private List<Item> rows() {
+        return ((Cluster) getRepresentation() ).getItems();
+    }
+    
     /**
      * Return the number of rows
      *
      * @return row count
      */
     public int rowCount() {
-        Cluster firstCol = (Cluster) columns().get(0);
-        return firstCol.getItems().size();
+        //Cluster firstCol = (Cluster) columns().get(0);
+        //return firstCol.getItems().size();
+        return rows().size();
     }
 
     /**
@@ -107,7 +111,8 @@ public final class ItemTable extends ItemStructure {
      * @return column count
      */
     public int columnCount() {
-        return columns().size();
+        Cluster firstCol = (Cluster) rows().get(0);
+        return firstCol.getItems().size();
     }
 
     /**
@@ -116,8 +121,9 @@ public final class ItemTable extends ItemStructure {
      * @return List of Text
      */
     public List<DvText> rowNames() {
-        Cluster firstCol = (Cluster) columns().get(0);
-        return fetchNames(( firstCol.getItems() ));
+        //Cluster firstCol = (Cluster) columns().get(0);
+        //return fetchNames(( firstCol.getItems() ));
+        return fetchNames(rows());
     }
 
     /**
@@ -126,7 +132,9 @@ public final class ItemTable extends ItemStructure {
      * @return List of Text
      */
     public List<DvText> columnNames() {
-        return fetchNames(columns());
+        //return fetchNames(columns());
+        Cluster firstCol = (Cluster) rows().get(0);
+        return fetchNames(( firstCol.getItems() ));
     }
 
     private List<DvText> fetchNames(List<Item> items) {
@@ -144,16 +152,18 @@ public final class ItemTable extends ItemStructure {
      * @return List of element
      * @throws IndexOutOfBoundsException
      */
-    public List<Element> ithRow(int index) {
+    public Cluster ithRow(int index) {
         if (index < 0 || index >= rowCount()) {
             throw new IndexOutOfBoundsException("invalid index");
         }
-        List<Element> rows = new ArrayList<Element>();
+        return (Cluster)rows().get(index);
+        /*List<Element> rows = new ArrayList<Element>();
         for (Item item : columns()) {
             Cluster column = (Cluster) item;
             rows.add((Element) column.getItems().get(index));
         }
         return rows;
+         */
     }
 
     /**
@@ -164,8 +174,7 @@ public final class ItemTable extends ItemStructure {
      */
     public boolean hasRowWithName(String name) {
         checkName(name);
-        Cluster firstCol = (Cluster) columns().get(0);
-        return hasItemWithName(firstCol.getItems(), name);
+        return hasItemWithName(rows(), name);
     }
 
     /**
@@ -176,8 +185,9 @@ public final class ItemTable extends ItemStructure {
      * @throws IllegalArgumentException if name null or empty
      */
     public boolean hasColumnWithName(String name) {
-        checkName(name);
-        return hasItemWithName(columns(), name);
+        checkName(name);        
+        Cluster firstRow = (Cluster) rows().get(0);
+        return hasItemWithName(firstRow.getItems(), name);
     }
 
     private void checkName(String name) {
@@ -209,9 +219,9 @@ public final class ItemTable extends ItemStructure {
      * @throws IllegalArgumentException if name null or empty
      *                                  or no row found for given name
      */
-    public List<Element> namedRow(String name) {
+    public Cluster namedRow(String name) {
         checkName(name);
-        Cluster firstCol = (Cluster) columns().get(0);
+        /*Cluster firstCol = (Cluster) columns().get(0);
         int index = indexOf(firstCol.getItems(), name);
         if (index < 0) {
             throw new IllegalArgumentException("unknow row name: " + name);
@@ -221,7 +231,13 @@ public final class ItemTable extends ItemStructure {
             Cluster column = (Cluster) item;
             rows.add((Element) column.getItems().get(index));
         }
-        return rows;
+        return rows;*/
+        int index = indexOf(rows(), name);
+        if (index < 0) {
+            throw new IllegalArgumentException("unknow row name: " + name);
+        }
+        return (Cluster)rows().get(index);
+        
     }
 
     /**
@@ -259,15 +275,15 @@ public final class ItemTable extends ItemStructure {
      * @throws IllegalArgumentException if col < 0
      *                                  or col >= columnCount or row < 0 or row >= rowCount
      */
-    public Element elementAtCell(int col, int row) {
-        if (col < 0 || col >= columnCount()) {
-            throw new IllegalArgumentException("invalid column index: " + col);
-        }
-        Cluster column = (Cluster) columns().get(col);
-        if (row < 0 || row >= column.getItems().size()) {
+    public Element elementAtCell(int row, int col) {
+        if (row < 0 || row >= rowCount()) {
             throw new IllegalArgumentException("invalid row index: " + row);
         }
-        return (Element) column.getItems().get(row);
+        Cluster targetRow = (Cluster) rows().get(row);
+        if (col < 0 || col >= targetRow.getItems().size()) {
+            throw new IllegalArgumentException("invalid column index: " + col);
+        }
+        return (Element) targetRow.getItems().get(col);
     }
 
     /**
@@ -280,20 +296,27 @@ public final class ItemTable extends ItemStructure {
      * @throws IllegalArgumentException if either key null or empty
      *                                  or no row found for given keys
      */
-    public Element elementAtNamedCell(String colKey, String rowKey) {
+    public Element elementAtNamedCell(String rowKey, String colKey) {
         if (StringUtils.isEmpty(colKey) ||
                 StringUtils.isEmpty(rowKey)) {
             throw new IllegalArgumentException("invalid keys: "
                     + colKey + ", " + rowKey);
         }
-        Cluster firstCol = (Cluster) columns().get(0);
+        Cluster firstRow = namedRow(rowKey);
+        int col = indexOf(firstRow.getItems(), colKey);
+        if (col < 0 ) {
+            throw new IllegalArgumentException(
+                    "unknown keys: " + colKey + ", " + rowKey);
+        }
+        return (Element)firstRow.getItems().get(col);
+        /*Cluster firstCol = (Cluster) columns().get(0);
         int col = indexOf(columns(), colKey);
         int row = indexOf(firstCol.getItems(), rowKey);
         if (col < 0 || row < 0) {
             throw new IllegalArgumentException(
                     "unknown keys: " + colKey + ", " + rowKey);
         }
-        return elementAtCell(col, row);
+        return elementAtCell(col, row);*/
     }
 
     /**
@@ -335,7 +358,7 @@ public final class ItemTable extends ItemStructure {
                 throw new IllegalArgumentException("invalid path: " + path);
             }
             String colname = subpart.substring(0, index);
-            Item item = itemWithName(columns(), colname, path);
+            Item item = itemWithName(rows(), colname, path);
             if(item == null) {
                 throw new IllegalArgumentException("invalid path: " + path);
             }
@@ -348,11 +371,27 @@ public final class ItemTable extends ItemStructure {
             String rowname = subpart.substring(ROW_IS.length());
             return itemWithName(column.getItems(), rowname, path);
         } else { // fetch a column
-            return itemWithName(columns(), subpart, path);
+            return itemWithName(rows(), subpart, path);
         }
     }
 
-    // return column with given name or null
+    protected static Cluster structureCheck(Cluster representation) {
+
+        for(Item row : representation.getItems()) {
+            if(row instanceof Cluster) {
+                for(Item col : ((Cluster)row).getItems()) {
+                    if(!(col instanceof Element)) {
+                        throw new IllegalArgumentException("invalid col type for itemTable, Element expected");
+                    }
+                }
+            } else {
+                throw new IllegalArgumentException("invalid row type for itemTable, Cluster expected");
+            }
+        }
+        return representation;
+    }
+    
+    // return row with given name or null
     private Item itemWithName(List<Item> items, String name, String path) {
         for (Item item : items) {
             if (item.getName().getValue().equals(name)) {

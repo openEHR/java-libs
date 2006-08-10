@@ -67,8 +67,8 @@ public class RMObjectBuilder {
                              "DvInterval", "DvQuantityRatio"};
         loadPackage("datatypes.quantity", names);
 
-        names = new String[]{"DvDate", "DvDateTime", "DvTime", "DvDuration",
-                             "DvPartialDate", "DvPartialTime"};
+        names = new String[]{"DvDate", "DvDateTime", "DvTime", "DvDuration"};
+                             //"DvPartialDate", "DvPartialTime"};
         loadPackage("datatypes.quantity.datetime", names);
 
         names = new String[]{"DvParsable", "DvMultimedia"};
@@ -82,11 +82,12 @@ public class RMObjectBuilder {
                              "ItemTree"};
         loadPackage("datastructure.itemstructure", names);
 
-        names = new String[]{"Event", "EventSeries", "SingleEvent"};
+        names = new String[]{"History", "IntervalEvent", "PointEvent"};
         loadPackage("datastructure.history", names);
 
         // load ehr classes
-        names = new String[]{"Evaluation", "Instruction", "Observation"};
+        names = new String[]{"Action", "Evaluation", "Instruction", "Observation",
+                                "AdminEntry"};
         loadPackage("composition.content.entry", names);
         loadPackage("composition.content.navigation", new String[]{"Section"});
         loadPackage("composition", new String[]{"Composition"});

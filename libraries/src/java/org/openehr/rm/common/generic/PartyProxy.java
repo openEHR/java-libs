@@ -77,9 +77,9 @@ public abstract class PartyProxy extends RMObject {
     //POJO
     protected PartyProxy() {}
     
-	void setExternalRef(PartyReference externalRef) {
-		this.externalRef = externalRef;
-	}    
+    void setExternalRef(PartyReference externalRef) {
+            this.externalRef = externalRef;
+    }    
     //POJO end
 	
     /* fields */

@@ -4,6 +4,7 @@
 package org.openehr.rm.common.changecontrol;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,167 +36,179 @@ import org.openehr.rm.support.terminology.TerminologyService;
  */
 public class VersionedObject<T> extends RMObject {
 
-	/**
-	 * Constructs a VersionObject with first originalVersion
-	 */
-	public VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID, 
-			DvDateTime timeCreated, ObjectVersionID versionID, T data, 
-			AuditDetails commitAudit, ObjectReference contribution, 
-			DvCodedText lifecycleState, TerminologyService terminologyService) {
+    /**
+     * Constructs a VersionObject with first originalVersion
+     */
+    public VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID,
+            DvDateTime timeCreated, ObjectVersionID versionID, T data,
+            DvCodedText lifecycleState, AuditDetails commitAudit,
+            ObjectReference contribution, String signature,
+            TerminologyService terminologyService) {
+        
         this(uid, ownerID, timeCreated);
-        commitOriginalVersion(versionID, null, data, commitAudit, contribution,  
-        		lifecycleState, terminologyService);
-	}
-	
-	/**
-	 * Constructs a VersionObject with first importedVersion
-	 */
-	public VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID, 
-			DvDateTime timeCreated, AuditDetails commitAudit, 
-			ObjectReference contribution, OriginalVersion<T> item) {
+        commitOriginalVersion(versionID, null, data, commitAudit, contribution,
+                lifecycleState, signature, terminologyService);
+    }
+    
+    /**
+     * Constructs a VersionObject with first importedVersion
+     */
+    public VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID,
+            DvDateTime timeCreated, OriginalVersion<T> item, AuditDetails commitAudit,
+            ObjectReference contribution, String signature) {
         this(uid, ownerID, timeCreated);
-        commitImportedVersion(commitAudit, contribution, item);
-	}
-
-	/**
-	 * Constructs a VersionObject with first merged Version
-	 */
-	public VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID, 
-			DvDateTime timeCreated, ObjectVersionID versionID,   
-			ObjectVersionID precedingVersionID, T data, AuditDetails commitAudit,    
-			ObjectReference contribution, DvCodedText lifecycleState,   
-			Set<ObjectVersionID> otherInputVersionUids, TerminologyService terminologyService) {
-		this(uid, ownerID, timeCreated);
-		commitOriginalMergedVersion(versionID, precedingVersionID, data, commitAudit,
-				contribution, lifecycleState, otherInputVersionUids, terminologyService); 
-	}
-					
-	private VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID, 
-			DvDateTime timeCreated) {
-	       if (uid == null) {
-	            throw new IllegalArgumentException("null uid");
-	        }
-	        if (ownerID == null) {
-	            throw new IllegalArgumentException("null ownerID");
-	        }
-	        if (timeCreated == null) {
-	            throw new IllegalArgumentException("null timeCreated");
-	        }
-	        this.uid = uid;
-	        this.ownerID = ownerID;
-	        this.timeCreated = timeCreated;    
-	        timeVersionMap = new TreeMap<DvDateTime, Version<T>>();
-	        idVersionMap = new TreeMap<ObjectVersionID, Version<T>>();
-	}
-
-	/**
-	 * Add a new ImportedVersion
-	 * 
-	 * @param commitAudit
-	 * @param contribution
-	 * @param item
-	 */
-	public synchronized void commitImportedVersion(AuditDetails commitAudit, ObjectReference contribution, 
-			OriginalVersion<T> item) {  
-		if (versionCount() > 0 && !hasVersionID(item.getPrecedingVersionID())) {
-			throw new IllegalArgumentException("precedingVersionID not found");
+        commitImportedVersion(item, commitAudit, contribution, signature);
+    }
+    
+    /**
+     * Constructs a VersionObject with first merged Version
+     */
+    public VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID,
+            DvDateTime timeCreated, ObjectVersionID versionID,
+            ObjectVersionID precedingVersionID, T data, DvCodedText lifecycleState,
+            AuditDetails commitAudit, ObjectReference contribution, 
+            Set<ObjectVersionID> otherInputVersionUids, String signature, 
+            TerminologyService terminologyService) {
+        this(uid, ownerID, timeCreated);
+        commitOriginalMergedVersion(versionID, precedingVersionID, data, lifecycleState, 
+                commitAudit, contribution, otherInputVersionUids, signature,
+                terminologyService);
+    }
+    
+    private VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID,
+            DvDateTime timeCreated) {
+        if (uid == null) {
+            throw new IllegalArgumentException("null uid");
         }
-        Version<T> version = new ImportedVersion<T>(commitAudit, contribution, item);
-        addVersion(version);
-	}
-	
-	private synchronized void addVersion(Version<T> version) {
-		if (!version.getUid().versionTreeID().isBranch()) {
-			int trunkNo = Integer.parseInt(version.getUid().versionTreeID().trunkVersion());
-			if (trunkNo != trunkCounter + 1) {
-				throw new IllegalArgumentException("invlalid trunk no in uid");
-			} else {
-				trunkCounter++;
-				latestTrunkUid = version.getUid();
-			}
-		}
-		timeVersionMap.put(version.getCommitAudit().getTimeCommitted(), version);
-		idVersionMap.put(version.getUid(), version);
-	}
-	
-	/**
-	 * Add a new original Version
-	 * @param versionID
-	 * @param precedingVersionID
-	 * @param data
-	 * @param commitAudit
-	 * @param contribution
-	 * @param lifecycleState
-	 * @param terminologyService
-	 */
-	public synchronized void commitOriginalVersion(ObjectVersionID versionID,   
-			 ObjectVersionID precedingVersionID, T data, AuditDetails commitAudit,    
-			 ObjectReference contribution, DvCodedText lifecycleState,   
-			 TerminologyService terminologyService) {
-		
-		if (versionCount() > 0 && !hasVersionID(precedingVersionID)) {
-			throw new IllegalArgumentException("precedingVersionID not found");
-        }	
-        Version<T> version = new OriginalVersion<T>(versionID, precedingVersionID, 
-        			data, commitAudit, contribution, null, null, lifecycleState, 
-        			false, terminologyService);
-        	addVersion(version);
-	}
+        if (ownerID == null) {
+            throw new IllegalArgumentException("null ownerID");
+        }
+        if (timeCreated == null) {
+            throw new IllegalArgumentException("null timeCreated");
+        }
+        this.uid = uid;
+        this.ownerID = ownerID;
+        this.timeCreated = timeCreated;
+        timeVersionMap = new TreeMap<DvDateTime, Version<T>>();
+        idVersionMap = new HashMap<ObjectVersionID, Version<T>>();
+    }
+    
+    /**
+     * Add a new ImportedVersion
+     *
+     * @param commitAudit
+     * @param contribution
+     * @param item
+     */
+    public synchronized void commitImportedVersion(OriginalVersion<T> item, AuditDetails commitAudit, 
+            ObjectReference contribution, String signature) {
 
-	/**
-	 * Add a new original MergedVersion
-	 * @param versionID
-	 * @param precedingVersionID
-	 * @param data
-	 * @param commitAudit
-	 * @param contribution
-	 * @param lifecycleState
-	 * @param terminologyService
-	 */
-	public synchronized void commitOriginalMergedVersion(ObjectVersionID versionID,   
-			 ObjectVersionID precedingVersionID, T data, AuditDetails commitAudit,    
-			 ObjectReference contribution, DvCodedText lifecycleState,   
-			 Set<ObjectVersionID> otherInputVersionUids, TerminologyService terminologyService) {
-		
-		if (versionCount() > 0 && !hasVersionID(precedingVersionID)) {
-			throw new IllegalArgumentException("precedingVersionID not found");
-        }	
-        Version<T> version = new OriginalVersion<T>(versionID, precedingVersionID, 
-        			data, commitAudit, contribution, otherInputVersionUids, null, lifecycleState, 
-        			true, terminologyService);
-        	addVersion(version);
-	}
-	
-	/**
-	 * Create a next logical uid for a Version based on precedingVersionID
-	 * 
-	 * @param precedingVersionID
-	 * @param systemID
-	 * @return
-	 */
-	//TODO: delete this
+        commitVersionCheck(item.getUid(), item.getPrecedingVersionID());
+        Version<T> version = new ImportedVersion<T>(item, commitAudit, contribution, signature);
+        addVersion(version);
+    }
+
+    private synchronized void commitVersionCheck(ObjectVersionID vUid, ObjectVersionID precedingVUid) {
+        if (versionCount() > 0 && !hasVersionID(precedingVUid)) {
+            throw new IllegalArgumentException("precedingVersionID not found");
+        }
+        if(!vUid.objectID().equals(this.uid.root())) {
+            throw new IllegalArgumentException("ownerID different from versionedObject");
+        }        
+    }
+    
+    private synchronized void addVersion(Version<T> version) {
+        if (!version.getUid().versionTreeID().isBranch()) {
+            int trunkNo = Integer.parseInt(version.getUid().versionTreeID().trunkVersion());
+            if (trunkNo != trunkCounter + 1) {
+                throw new IllegalArgumentException("invlalid trunk no in uid");
+            } else {
+                trunkCounter++;
+                latestTrunkUid = version.getUid();
+            }
+        }
+        timeVersionMap.put(version.getCommitAudit().getTimeCommitted(), version);
+        idVersionMap.put(version.getUid(), version);
+    }
+    
+    /**
+     * Add a new original Version
+     * @param versionID
+     * @param precedingVersionID
+     * @param data
+     * @param commitAudit
+     * @param contribution
+     * @param lifecycleState
+     * @param terminologyService
+     */
+    public synchronized void commitOriginalVersion(ObjectVersionID versionID,
+            ObjectVersionID precedingVersionID, T data, AuditDetails commitAudit,
+            ObjectReference contribution, DvCodedText lifecycleState, String signature, 
+            TerminologyService terminologyService) {
+        
+        commitVersionCheck(versionID, precedingVersionID);
+        Version<T> version = new OriginalVersion<T>(versionID, precedingVersionID,
+                data, lifecycleState, commitAudit, contribution, signature, null, null, 
+                false,  terminologyService);
+        addVersion(version);
+    }
+    
+    /**
+     * Add a new original MergedVersion
+     * @param versionID
+     * @param precedingVersionID
+     * @param data
+     * @param commitAudit
+     * @param contribution
+     * @param lifecycleState
+     * @param terminologyService
+     */
+    public synchronized void commitOriginalMergedVersion(ObjectVersionID versionID,
+            ObjectVersionID precedingVersionID, T data, DvCodedText lifecycleState, 
+            AuditDetails commitAudit, ObjectReference contribution,
+            Set<ObjectVersionID> otherInputVersionUids, String signature,
+            TerminologyService terminologyService) {
+        
+        //if (versionCount() > 0 && !hasVersionID(precedingVersionID)) {
+          //  throw new IllegalArgumentException("precedingVersionID not found");
+        //}
+        commitVersionCheck(versionID, precedingVersionID);
+        Version<T> version = new OriginalVersion<T>(versionID, precedingVersionID,
+                data, lifecycleState, commitAudit, contribution, signature, otherInputVersionUids, 
+                null, true, terminologyService);
+        addVersion(version);
+    }
+    
+    /**
+     * Create a next logical uid for a Version based on precedingVersionID
+     *
+     * @param precedingVersionID
+     * @param systemID
+     * @return
+     */
+    //TODO: delete this
 /*	private ObjectVersionID nextUid(ObjectVersionID precedingVersionID, String systemID) {
-		VersionTreeID vTreeId = null;
-		HierarchicalObjectID creatingSystemID = null; 
-		if (precedingVersionID != null) {		
-			vTreeId = precedingVersionID.versionTreeID().next();
-			creatingSystemID = precedingVersionID.creatingSystemID();
-		} else {
-			vTreeId = new VersionTreeID(Integer.toString(1));
-			creatingSystemID = new HierarchicalObjectID(systemID);
-		}      
+                VersionTreeID vTreeId = null;
+                HierarchicalObjectID creatingSystemID = null;
+                if (precedingVersionID != null) {
+                        vTreeId = precedingVersionID.versionTreeID().next();
+                        creatingSystemID = precedingVersionID.creatingSystemID();
+                } else {
+                        vTreeId = new VersionTreeID(Integer.toString(1));
+                        creatingSystemID = new HierarchicalObjectID(systemID);
+                }
         return new ObjectVersionID(uid.root(), creatingSystemID, vTreeId);
-	}*/
-	
+        }*/
+    
     /**
      * Unique identifier of this version repository.
      *
      * @return UID
      */
-    public ObjectID getUid() {
+    public HierarchicalObjectID getUid() {
         return uid;
     }
-
+    
     /**
      * Reference to object to which this versioned repository belongs,
      * eg the id of the containing EHR.
@@ -205,7 +218,7 @@ public class VersionedObject<T> extends RMObject {
     public ObjectReference getOwnerID() {
         return ownerID;
     }
-
+    
     /**
      * Time of initial creation of this versioned object.
      *
@@ -214,7 +227,7 @@ public class VersionedObject<T> extends RMObject {
     public DvDateTime getTimeCreated() {
         return timeCreated;
     }
-
+    
     /**
      * Return a list of all versions in this object.
      *
@@ -224,7 +237,7 @@ public class VersionedObject<T> extends RMObject {
         // todo: fix the order of this list
         return new ArrayList<Version<T>>(idVersionMap.values());
     }
-
+    
     /**
      * Return a list of ids of all versions in this object.
      *
@@ -234,7 +247,7 @@ public class VersionedObject<T> extends RMObject {
         // todo: fix the order of list
         return new ArrayList<ObjectVersionID>(idVersionMap.keySet());
     }
-
+    
     /**
      * Return the total number of versions in this object
      *
@@ -243,7 +256,7 @@ public class VersionedObject<T> extends RMObject {
     public synchronized int versionCount() {
         return idVersionMap.size();
     }
-
+    
     /**
      * True if a version with given id exists.
      *
@@ -254,11 +267,11 @@ public class VersionedObject<T> extends RMObject {
     public synchronized boolean hasVersionID(ObjectVersionID id) {
         if (id == null) {
             throw new IllegalArgumentException("null id");
-        }
+        }        
         return idVersionMap.containsKey(id);
-
+        
     }
-
+    
     /**
      * True if a version for given time exists.
      *
@@ -272,18 +285,18 @@ public class VersionedObject<T> extends RMObject {
         }
         return timeVersionMap.containsKey(time);
     }
-
+    
     /**
      * True if version with an id is an OriginalVersion
-     * 
+     *
      * @param uid
      */
-    public boolean isOriginalVersion(ObjectVersionID uid) {   	
-   		if (!idVersionMap.containsKey(uid)) {
-			throw new IllegalArgumentException("versionID not found");
-		}
-		Version<T> version = idVersionMap.get(uid);
-		return version instanceof OriginalVersion;
+    public boolean isOriginalVersion(ObjectVersionID uid) {
+        if (!idVersionMap.containsKey(uid)) {
+            throw new IllegalArgumentException("versionID not found");
+        }
+        Version<T> version = idVersionMap.get(uid);
+        return version instanceof OriginalVersion;
     }
     
     
@@ -295,13 +308,13 @@ public class VersionedObject<T> extends RMObject {
      * @return null if not found
      * @throws IllegalArgumentException if id null
      */
-    public synchronized Version<T> versionWithID(String id) {
+    public synchronized Version<T> versionWithID(ObjectVersionID id) {
         if (id == null) {
             throw new IllegalArgumentException("null id");
         }
         return idVersionMap.get(id);
     }
-
+    
     /**
      * Return the version for given time
      *
@@ -315,7 +328,7 @@ public class VersionedObject<T> extends RMObject {
         }
         return timeVersionMap.get(time);
     }
-
+    
     /**
      * Return the latest version.
      *
@@ -323,110 +336,103 @@ public class VersionedObject<T> extends RMObject {
      */
     public synchronized Version<T> latestVersion() {
         return (Version<T>) timeVersionMap.get(timeVersionMap.lastKey());
-
+        
     }
-
+    
     /**
      * Return the most recetly added trunk version
-     * 
+     *
      */
     public synchronized Version<T> latestTrunkVersion() {
-    		return (Version<T>) timeVersionMap.get(latestTrunkUid);
-    		
+        return (Version<T>) idVersionMap.get(latestTrunkUid);
+        
     }
     
     /**
      * Return the lifecycle state from the latest trunk version.
-     * 
+     *
      */
     public DvCodedText latestTrunkLifeCycleSate() {
-    		Version<T> trunk = latestTrunkVersion();
-    		if (trunk instanceof OriginalVersion) {
-    			OriginalVersion<T> ov = (OriginalVersion<T>) trunk;
-    			return ov.getLifecycleState();
-    		} else {
-    			ImportedVersion<T> iv = (ImportedVersion<T>) trunk;
-    			return iv.getOriginalVersion().getLifecycleState();
-    		}
+        Version<T> trunk = latestTrunkVersion();
+        return latestTrunkVersion().getLifeCycleState();
     }
-
+    
     /**
      * History of all audits and attestations in this versioned repository
-     * 
+     *
      * @return revisionHistory
      */
     public RevisionHistory revisionHistory() {
-    		ArrayList<Version<T>> versions = new ArrayList<Version<T>> (timeVersionMap.values());
-    		ArrayList<RevisionHistoryItem> revHistoryItems = new ArrayList<RevisionHistoryItem>();   		
-    		for(Version<T> version : versions) {
-    			ArrayList<AuditDetails> audits = new ArrayList<AuditDetails>();
-    			audits.add(version.getCommitAudit());
-    			if (version instanceof OriginalVersion) {
-    				OriginalVersion<T> orgVersion = (OriginalVersion<T>) version;
-    				audits.addAll(orgVersion.getAttestations());
-    			}
-    			revHistoryItems.add(new RevisionHistoryItem(audits, version.getUid()));
-    		}
-    		return new RevisionHistory(revHistoryItems);
+        ArrayList<Version<T>> versions = new ArrayList<Version<T>> (timeVersionMap.values());
+        ArrayList<RevisionHistoryItem> revHistoryItems = new ArrayList<RevisionHistoryItem>();
+        for(Version<T> version : versions) {
+            ArrayList<AuditDetails> audits = new ArrayList<AuditDetails>();
+            audits.add(version.getCommitAudit());
+            if (version instanceof OriginalVersion) {
+                OriginalVersion<T> orgVersion = (OriginalVersion<T>) version;
+                audits.addAll(orgVersion.getAttestations());
+            }
+            revHistoryItems.add(new RevisionHistoryItem(audits, version.getUid()));
+        }
+        return new RevisionHistory(revHistoryItems);
     }
     
-
+    
     /**
      * Add a new attestation to the specified version. Attestations can only
      * be added to OriginalVersion
-     * 
+     *
      * @param attestation
      * @param versionID
      */
     public synchronized void commitAttestation(Attestation attestation,
-    				ObjectVersionID versionID) {
-    		if (attestation == null) {
-    			throw new IllegalArgumentException("null attestation");
-    		}
-    		if (isOriginalVersion(versionID)) {
-    			OriginalVersion<T> oVersion = (OriginalVersion<T>) idVersionMap.get(versionID);
-    			oVersion.getAttestations().add(attestation);
-    		} else {
-    			throw new IllegalArgumentException("attestatios cannot be added to importedVersion");
-    		}
+            ObjectVersionID versionID) {
+        if (attestation == null) {
+            throw new IllegalArgumentException("null attestation");
+        }
+        if (isOriginalVersion(versionID)) {
+            OriginalVersion<T> oVersion = (OriginalVersion<T>) idVersionMap.get(versionID);
+            oVersion.getAttestations().add(attestation);
+        } else {
+            throw new IllegalArgumentException("attestatios cannot be added to importedVersion");
+        }
     }
-
+    
     //POJO start
-	protected VersionedObject() {
-	}
-	
+    protected VersionedObject() {
+    }
+    
     private Long id;
-
+    
     protected Long getId() {
         return id;
     }
-
+    
     protected void setId(Long id) {
         this.id = id;
     }
-
+    
     void setUid(HierarchicalObjectID uid) {
         this.uid = uid;
     }
-
+    
     void setOwnerID(ObjectReference ownerID) {
         this.ownerID = ownerID;
     }
-
+    
     void setTimeCreated(DvDateTime timeCreated) {
         this.timeCreated = timeCreated;
     }
-
+    
     // in order to skip map timeVersionMap to table
     void setVersions(Set<Version<T>> versions) {
-        idVersionMap = new TreeMap<ObjectVersionID, Version<T>>();
+        idVersionMap = new HashMap<ObjectVersionID, Version<T>>();
         timeVersionMap = new TreeMap<DvDateTime, Version<T>>();
         for(Version<T> version : versions) {
-            timeVersionMap.put(version.getCommitAudit().getTimeCommitted(), version);
-            idVersionMap.put(version.getUid(), version);
+            addVersion(version);
         }
     }
-
+    
     // required to map bidirectional one-to-many relationship
     Set<Version<T>> getVersions() {
         return new HashSet<Version<T>>(timeVersionMap.values());
@@ -437,14 +443,15 @@ public class VersionedObject<T> extends RMObject {
      */
     //public static final String NONE = "0";
     //public static final String FIRST = "1";
-
+    
     /* fields */
     private HierarchicalObjectID uid;
     private ObjectReference ownerID;
     private DvDateTime timeCreated;
     
     private SortedMap<DvDateTime, Version<T>> timeVersionMap;
-    private SortedMap<ObjectVersionID, Version<T>> idVersionMap;
+    //change to hashmap because ObjectVersionID doesn't implement Comparable
+    private HashMap<ObjectVersionID, Version<T>> idVersionMap; 
     private int trunkCounter;
     private ObjectVersionID latestTrunkUid;
 }

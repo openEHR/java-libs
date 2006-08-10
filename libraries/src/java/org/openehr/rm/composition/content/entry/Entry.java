@@ -64,7 +64,7 @@ public abstract class Entry extends ContentItem {
     protected Entry(ObjectID uid, String archetypeNodeId, DvText name,
                  Archetyped archetypeDetails, FeederAudit feederAudit,
                  Set<Link> links, Locatable parent, CodePhrase language,
-                 CodePhrase encoding, PartyProxy subject, 
+                 CodePhrase charset, PartyProxy subject, 
                  PartyProxy provider, ObjectReference workflowID,
                  List<Participation> otherParticipations,
                  TerminologyService terminologyService) {
@@ -74,14 +74,14 @@ public abstract class Entry extends ContentItem {
         if (language == null) {
         		throw new IllegalArgumentException("null language");
         }
-        if (encoding == null) {
-    			throw new IllegalArgumentException("null encoding");
+        if (charset == null) {
+    			throw new IllegalArgumentException("null charset");
         }
         if (subject == null) {
             throw new IllegalArgumentException("null subject");
         }
         if (!isArchetypeRoot()) {
-        		throw new IllegalArgumentException("not archetype root");
+            throw new IllegalArgumentException("not archetype root");
         }
         if (otherParticipations != null && otherParticipations.isEmpty()) {
             throw new IllegalArgumentException("empty otherParticipations");
@@ -93,7 +93,7 @@ public abstract class Entry extends ContentItem {
         		throw new IllegalArgumentException("unknown language:" + language);
         }
         this.language = language;
-        this.encoding = encoding;
+        this.charset = charset;
         this.subject = subject;
         this.provider = provider;
         this.workflwoID = workflowID;
@@ -123,10 +123,10 @@ public abstract class Entry extends ContentItem {
      * Name of charater set in which text values in this Entry 
      * are encoded. Coded from openEHR code set "character sets".
      * 
-     * @return encoding
+     * @return charset
      */
-    public CodePhrase getEncoding() {
-		return encoding;
+    public CodePhrase getCharset() {
+		return charset;
 	}
 
     /**
@@ -134,7 +134,7 @@ public abstract class Entry extends ContentItem {
      * this Entry is written. Coded from openEHR code set "languages".
      * @return
      */
-	public CodePhrase getLanguage() {
+    public CodePhrase getLanguage() {
 		return language;
 	}
 
@@ -163,7 +163,7 @@ public abstract class Entry extends ContentItem {
      * case the subject attribute is of type PartySelf
      */
     public boolean subjectIsSelf() {
-    		return (subject instanceof PartySelf);
+        return (subject instanceof PartySelf);
     }
     
     /**
@@ -173,7 +173,7 @@ public abstract class Entry extends ContentItem {
      * @return the item
      * @throws IllegalArgumentException if path invalid
      */
-    public Object itemAtPath(String path) {
+   /* public Object itemAtPath(String path) {
         Object item = super.itemAtPath(path);
         if(item != null) {
             return item;
@@ -184,15 +184,15 @@ public abstract class Entry extends ContentItem {
             tmp = tmp.substring(whole.length());
         }
         String attr = ROOT + PROTOCOL;
-        /*if (tmp.equals(attr)) {
+        if (tmp.equals(attr)) {
             return protocol;
-        }*/
-        /*if(tmp.startsWith(attr)) {
+        }
+        if(tmp.startsWith(attr)) {
             return protocol.itemAtPath(tmp.substring(attr.length()));
-        }*/
+        }
         return null;    // path needs to be further processed by sub-class
         //TODO: re-implement
-    }
+    }*/
 
     /**
      * Return true if the path is valid with respect to the current
@@ -225,8 +225,8 @@ public abstract class Entry extends ContentItem {
         this.provider = provider;
     }
 
-    void setEncoding(CodePhrase encoding) {
-		this.encoding = encoding;
+    void setCharset(CodePhrase charset) {
+		this.charset = charset;
 	}
 
 	void setLanguage(CodePhrase language) {
@@ -244,18 +244,14 @@ public abstract class Entry extends ContentItem {
 
     /* fields */
     private CodePhrase language;
-    private CodePhrase encoding;
+    private CodePhrase charset;
     private PartyProxy subject;
     private PartyProxy provider;
     private ObjectReference workflwoID;
     private List<Participation> otherParticipations;
 
     /* static fields */
-    public static final String DATA = "data";
-    public static final String STATE = "state";
-    public static final String PROTOCOL = "protocol";
-    public static final String ACTION = "action";
-    public static final String PROFILE = "profile";
+    
 }
 
 /*

@@ -67,12 +67,12 @@ public final class Instruction extends CareEntry {
             public Instruction(@Attribute(name = "uid") ObjectID uid,
                     @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
                     @Attribute(name = "name", required = true) DvText name,
-                    @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
+                    @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
                     @Attribute(name = "feederAudit") FeederAudit feederAudit,
                     @Attribute(name = "links") Set<Link> links,
                     @Attribute(name = "parent") Locatable parent, 
                     @Attribute(name = "language", required = true) CodePhrase language,
-                    @Attribute(name = "encoding", required = true) CodePhrase encoding, 
+                    @Attribute(name = "charset", required = true) CodePhrase charset, 
                     @Attribute(name = "subject", system = true) PartyProxy subject,
                     @Attribute(name = "provider", system = true) PartyProxy provider,
                     @Attribute(name = "workflowID") ObjectReference workflowID,
@@ -85,7 +85,7 @@ public final class Instruction extends CareEntry {
                     @Attribute(name = "wfDefinition") DvParsable wfDeinition,
                     @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
     		super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
-                parent, language, encoding, subject, provider, workflowID, 
+                parent, language, charset, subject, provider, workflowID, 
                 otherParticipations, protocol, guidelineID, terminologyService);
         if (narrative == null) {
         		throw new IllegalArgumentException("null narrative");
@@ -185,27 +185,36 @@ public final class Instruction extends CareEntry {
      * @param path
      * @return the item or null if not found
      */
-    public Locatable itemAtPath(String path) {
-        /*Locatable item = super.itemAtPath(path);
+    public Object itemAtPath(String path) {
+               
+        Object item = super.itemAtPath(path);
         if (item != null) {
             return item;
         }
-        String whole = whole();
         String tmp = path;
-        if (tmp.startsWith(whole)) {
-            tmp = path.substring(whole.length());
+        /*String attr = ROOT + "activities";
+        if(tmp.startsWith(attr)) {
+            tmp = tmp.substring(attr.length());
+            for(Activity activity : activities) {
+                //String node = activity.whole().substring(1);
+                String node = activity.nodeName();
+                if(tmp.startsWith(node)) {
+                    if(tmp.equals(node)) {
+                        return activity;
+                    }
+                    String subpath = tmp.substring(node.length());
+                    if(activity.validPath(subpath))  {
+                        return activity.itemAtPath(subpath);
+                    }
+                }
+            }
+        }*/
+        Object ret = checkAttribute(tmp, "activities", activities);
+        if(ret!=null) {
+            return ret;
+        } else {
+        throw new IllegalArgumentException("invalid path: " + path);
         }
-
-        // check attributes
-        String[] attributeNames = {
-            DATA, ACTION, PROFILE
-        };
-        Locatable[] attributes = {
-            data, action, profile
-        };
-        return locateAttribute(tmp, attributeNames, attributes);*/
-    	//TODO: re-implement
-    	return null;
     }
     
     // POJO start

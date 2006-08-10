@@ -47,7 +47,7 @@ public final class FeederAuditDetails extends RMObject {
     		PartyIdentified location, DvDateTime time, PartyProxy subject,
     		String versionID) {
         if (StringUtils.isEmpty(systemID)) {
-            throw new IllegalArgumentException("empty systemID");
+            throw new IllegalArgumentException("null or empty systemID");
         }
         this.systemID = systemID;
         this.provider = provider;

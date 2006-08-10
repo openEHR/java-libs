@@ -16,6 +16,7 @@ package org.openehr.rm.common.generic;
 
 import org.openehr.rm.RMObject;
 import org.openehr.rm.datatypes.encapsulated.DvEncapsulated;
+import org.openehr.rm.datatypes.encapsulated.DvMultimedia;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
@@ -47,11 +48,11 @@ public class Attestation extends AuditDetails {
     public Attestation(String systemId, PartyProxy committer,
             DvDateTime timeCommitted, DvCodedText changeType,
             DvText description, TerminologyService terminologyService,
-            DvEncapsulated proof, Set<DvEHRURI> items,
+            DvMultimedia attestedView, String proof, Set<DvEHRURI> items,
             DvText reason, boolean isPending) {
     		super(systemId, committer, timeCommitted, changeType, description, terminologyService);
-        if (items == null || items.isEmpty()) {
-            throw new IllegalArgumentException("null or empty items");
+        if (items != null && items.isEmpty()) {
+            throw new IllegalArgumentException("empty items");
         }
         if (reason == null) {
             throw new IllegalArgumentException("null reason");
@@ -59,11 +60,12 @@ public class Attestation extends AuditDetails {
         if (reason instanceof DvCodedText) {
         		DvCodedText reasonCText = (DvCodedText) reason;
         		if (!terminologyService.terminology(TerminologyService.OPENEHR)
-                .hasCodeForGroupName(reasonCText.getDefiningCode(),
-                        "attestation reason", "en")) {
+                .codesForGroupName("attestation reason", "en")
+                .contains(reasonCText.getDefiningCode())) {
         			throw new IllegalArgumentException("unkown reason: " + reason);
         		}
         }
+        this.attestedView = attestedView;
         this.proof = proof;
         this.items = new HashSet<DvEHRURI>(items);
         this.reason = reason;
@@ -71,11 +73,19 @@ public class Attestation extends AuditDetails {
     }
 
     /**
+     * Optional visual representation of content attested
+     * e.g. screen image
+     */
+    public DvMultimedia getAttestedView() {
+        return attestedView;
+    }
+    
+    /**
      * Proof of attestation
      *
      * @return proof
      */
-    public DvEncapsulated getProof() {
+    public String getProof() {
         return proof;
     }
 
@@ -115,7 +125,11 @@ public class Attestation extends AuditDetails {
     Attestation() {
     }
 
-    void setProof(DvEncapsulated proof) {
+    void setAttestedView(DvMultimedia attestedView) {
+        this.attestedView = attestedView;
+    }
+    
+    void setProof(String proof) {
         this.proof = proof;
     }
 
@@ -133,7 +147,8 @@ public class Attestation extends AuditDetails {
     // POJO end
 
     /* fields */
-    private DvEncapsulated proof;
+    private DvMultimedia attestedView;
+    private String proof;
     private Set<DvEHRURI> items;
     private DvText reason;
     private boolean isPending;

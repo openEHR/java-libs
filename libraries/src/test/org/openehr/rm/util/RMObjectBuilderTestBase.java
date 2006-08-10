@@ -21,31 +21,37 @@
 package org.openehr.rm.util;
 
 import junit.framework.TestCase;
-import org.openehr.rm.common.generic.Participation;
-import org.openehr.rm.common.generic.RelatedParty;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.common.generic.PartyIdentified;
 import org.openehr.rm.datastructure.history.Event;
-import org.openehr.rm.datastructure.itemstructure.ItemSingle;
+import org.openehr.rm.datastructure.history.History;
+import org.openehr.rm.datastructure.history.PointEvent;
+import org.openehr.rm.datastructure.itemstructure.ItemList;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
+import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
+import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
-import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.measurement.TestMeasurementService;
 import org.openehr.rm.support.terminology.TerminologyService;
-import org.openehr.rm.support.terminology.TestCodeSet;
+import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.openehr.rm.common.generic.PartySelf;
+import org.openehr.rm.datatypes.text.TestCodePhrase;
+import org.openehr.rm.support.identification.TestTerminologyID;
 
 public class RMObjectBuilderTestBase extends TestCase {
 
@@ -85,6 +91,14 @@ public class RMObjectBuilderTestBase extends TestCase {
         return new Cluster("at0002", name, items);
     }
 
+    protected Cluster clusterTable() throws Exception {
+        List<Item> items = new ArrayList<Item>();
+        DvText name = new DvText("test clusterTable", lang, charset, ts);
+        for (int i = 0; i < 3; i++) {
+            items.add(cluster());
+        }
+        return new Cluster("at0004", name, items);
+    }
     // test element
     protected Element element() throws Exception {
         DvText name = new DvText("test element", lang, charset, ts);
@@ -101,33 +115,47 @@ public class RMObjectBuilderTestBase extends TestCase {
         return new ItemSingle("at0001", name, element());
     }
 
+    protected ItemList itemList() throws Exception {
+        return new ItemList(null, "at001", text("test itemList"), null, null, null, 
+                null, cluster());
+    }
+    
     // test event
-    protected Event<ItemStructure> event() throws Exception {
+    /*protected Event<ItemStructure> event() throws Exception {
         ItemStructure item = itemSingle();
         DvDuration offset = DvDuration.getInstance("P1d");
         return new Event<ItemStructure>(item, offset);
+    }*/
+    
+/*    protected History<? extends ItemStructure> event() throws Exception { 
+        List<Event<ItemSingle>> items = new ArrayList<Event<ItemSingle>>();
+        items.add(pointEvent());
+        return new History<ItemSingle>(null, "at0002", text("history"),
+                null, null, null, null, new DvDateTime("2006-07-12T09:22:00"), 
+                items, DvDuration.getInstance("PT1h"), 
+                DvDuration.getInstance("PT3h"), null);
     }
 
+    protected PointEvent<ItemSingle> pointEvent() throws Exception {
+        return new PointEvent<ItemSingle>(null, "at0003", text("point event"),  
+                null, null, null, null, new DvDateTime("2006-07-12T08:00:00"), 
+                itemSingle(), null);
+    }
+*/    
     // test subject
-    protected RelatedParty subject() throws Exception {
+    protected PartySelf subject() throws Exception {
         PartyReference party = new PartyReference(
-                new HierarchicalObjectID("123"));
-        DvCodedText relationship = new DvCodedText("family relationship", lang,
-                charset, new CodePhrase("test", "family_code"), ts);
-        return new RelatedParty(party, relationship, ts);
+                new HierarchicalObjectID("1.2.4.5.6.12.1"), ObjectReference.Type.PARTY);
+        return new PartySelf(party);
     }
-
+    
     // test provider
-    protected Participation provider() throws Exception {
+    protected PartyIdentified provider() throws Exception {
         PartyReference performer = new PartyReference(
-                new HierarchicalObjectID("333"));
-        DvCodedText function = new DvCodedText("doctor", lang, charset,
-                new CodePhrase("test", "doctor_code"), ts);
-        DvCodedText mode = new DvCodedText("present", lang, charset,
-                new CodePhrase("test", "present_code"), ts);
-        return new Participation(performer, function, mode, time(), ts);
+                new HierarchicalObjectID("1.3.3.1"), ObjectReference.Type.ORGANISATION);
+        return new PartyIdentified(performer, "provider's name", null);
     }
-
+    
     protected HierarchicalObjectID hid(String value) throws Exception {
         return new HierarchicalObjectID(value);
     }
@@ -147,10 +175,21 @@ public class RMObjectBuilderTestBase extends TestCase {
         return new DvText(value, lang, charset, ts);
     }
 
+    protected DvCodedText codedText(String value, String code) throws Exception {
+        CodePhrase codePhrase =
+                new CodePhrase(TestTerminologyID.SNOMEDCT, code);
+        return new DvCodedText(value, TestCodePhrase.ENGLISH,
+                TestCodePhrase.LATIN_1, codePhrase,
+                TestTerminologyService.getInstance());
+         
+        //return new DvCodedText(value, lang, charset,
+          //       new CodePhrase("test", "se"), ts);
+    }
+    
     /* field */
     protected RMObjectBuilder builder;
-    protected static CodePhrase lang = TestCodeSet.ENGLISH;
-    protected static CodePhrase charset = TestCodeSet.LATIN_1;
+    protected static CodePhrase lang = TestCodeSetAccess.ENGLISH;
+    protected static CodePhrase charset = TestCodeSetAccess.LATIN_1;
     protected static TerminologyService ts = TestTerminologyService.getInstance();
 }
 /*

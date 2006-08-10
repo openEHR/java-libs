@@ -20,6 +20,7 @@ import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.PartyReference;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 
 /**
@@ -28,8 +29,11 @@ import org.openehr.rm.support.terminology.TestTerminologyService;
  * @author Rong Chen
  * @version 1.0
  */
-public class EventContextTest extends TestCase {
+public class EventContextTest extends CompositionTestBase {
 
+    public EventContextTest(String test) {
+        super(test);
+    }
     /**
      * Tests null checking for setting within the constructor
      *
@@ -37,13 +41,9 @@ public class EventContextTest extends TestCase {
      */
     public void testCreateEventContextWithNullSetting() throws Exception {
         try {
-            DvInterval<DvDateTime> time = new DvInterval<DvDateTime>(
-                    new DvDateTime("2002-10-01 10:00:00"),
-                    new DvDateTime("2002-10-01 12:30:00"));
-            PartyReference composer = new PartyReference(
-                    new HierarchicalObjectID("1213453453"));
-            new EventContext(null, time, composer, null, null, null, null,
-                    TestTerminologyService.getInstance());
+
+            new EventContext(null, time("2006-06-11T12:22:25"), null, null, null, 
+                    null, null, ts);
 
             fail("failed to thrown illeglArgumentException for null setting");
 
@@ -62,16 +62,9 @@ public class EventContextTest extends TestCase {
      * @throws Exception
      */
     public void testGetParticipations() throws Exception {
-        DvInterval<DvDateTime> time = new DvInterval<DvDateTime>(
-                new DvDateTime("2002-10-01 10:00:00"),
-                new DvDateTime("2002-10-01 12:30:00"));
-        PartyReference composer = new PartyReference(
-                new HierarchicalObjectID("1213453453"));
-        DvCodedText setting = new DvCodedText("home",
-                new CodePhrase("test term", "23432"));
-        EventContext eventContext = new EventContext(null, time, composer,
-                null, null, setting, null,
-                TestTerminologyService.getInstance());
+
+        EventContext eventContext = new EventContext(null, time("2006-06-11T12:22:25"), null, 
+                null, null, TestCodeSetAccess.SETTING, null, ts);
 
         eventContext.getParticipations();
     }

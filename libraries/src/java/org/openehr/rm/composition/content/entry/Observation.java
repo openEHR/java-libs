@@ -22,6 +22,7 @@ import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyProxy;
+import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectReference;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -66,12 +67,12 @@ public final class Observation extends CareEntry {
             public Observation(@Attribute(name = "uid") ObjectID uid,
                                @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
                                @Attribute(name = "name", required = true) DvText name,
-                               @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
+                               @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
                                @Attribute(name = "feederAudit") FeederAudit feederAudit,
                                @Attribute(name = "links") Set<Link> links,
                                @Attribute(name = "parent") Locatable parent,
                                @Attribute(name = "language", required = true) CodePhrase language,
-                               @Attribute(name = "encoding", required = true) CodePhrase encoding, 
+                               @Attribute(name = "charset", required = true) CodePhrase charset, 
                                @Attribute(name = "subject", system = true) PartyProxy subject,
                                @Attribute(name = "provider", system = true) PartyProxy provider,
                                @Attribute(name = "workflowID") ObjectReference workflowID,
@@ -84,7 +85,7 @@ public final class Observation extends CareEntry {
                                ) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent,
-                language, encoding, subject, provider, workflowID, otherParticipation, 
+                language, charset, subject, provider, workflowID, otherParticipation, 
                 protocol, guidelineID, terminologyService);
 
         if (data == null) {
@@ -104,11 +105,11 @@ public final class Observation extends CareEntry {
      * @param data
      * @throws IllegalArgumentException if date null
      */
-    public Observation(String archetypeNodeId, DvText name,
-    				CodePhrase language, CodePhrase encoding,
+    public Observation(String archetypeNodeId, DvText name, Archetyped archetypeDetails,
+                CodePhrase language, CodePhrase charset,
                  PartyProxy subject, PartyProxy provider,
                  History<ItemStructure> data, TerminologyService terminologyService) {
-        this(null, archetypeNodeId, name, null, null, null, null, language, encoding, 
+        this(null, archetypeNodeId, name, archetypeDetails, null, null, null, language, charset, 
                 subject, provider, null, null, null, null, data, null, terminologyService);
     }
 
@@ -151,15 +152,12 @@ public final class Observation extends CareEntry {
      * @return the item or null if not found
      */
     public Object itemAtPath(String path) {
+
         Object item = super.itemAtPath(path);
         if (item != null) {
             return item;
         }
-        String whole = whole();
         String tmp = path;
-        if(tmp.startsWith(whole)) {
-            tmp = path.substring(whole.length());
-        }
         String[] attributeNames = {
             DATA, STATE
         };
@@ -185,6 +183,10 @@ public final class Observation extends CareEntry {
     /* fields */
     private History<ItemStructure> data;
     private History<ItemStructure> state;
+    
+    /* static fields */
+    public static final String DATA = "data";
+    public static final String STATE = "state";
 }
 
 /*

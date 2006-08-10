@@ -86,7 +86,7 @@ public class ItemTreeTest extends DataStructureTestBase {
 
         // itemTree
         return new ItemTree(null, "at0001", text("biochemistry"), null,
-                null, null, cluster("items", "items", items));
+                null, null, null, cluster("items", "items", items));
     }
 
 

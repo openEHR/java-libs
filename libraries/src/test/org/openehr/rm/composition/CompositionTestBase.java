@@ -13,25 +13,29 @@
  */
 package org.openehr.rm.composition;
 
+import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.generic.PartyIdentified;
 import org.openehr.rm.datastructure.DataStructureTestBase;
-import org.openehr.rm.datastructure.history.SingleEvent;
+import org.openehr.rm.datastructure.history.Event;
+import org.openehr.rm.datastructure.history.History;
+import org.openehr.rm.datastructure.history.PointEvent;
 import org.openehr.rm.datastructure.itemstructure.ItemList;
+import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
+import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
-import org.openehr.rm.common.generic.RelatedParty;
-import org.openehr.rm.common.generic.Participation;
-import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
+import org.openehr.rm.support.identification.ObjectReference;
 import org.openehr.rm.support.identification.PartyReference;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
-import org.openehr.rm.support.terminology.TestCodeSet;
+import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
-import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.util.RMObjectBuilder;
 import org.openehr.rm.composition.content.navigation.Section;
 import org.openehr.rm.composition.content.ContentItem;
@@ -39,6 +43,9 @@ import org.openehr.rm.composition.content.entry.Observation;
 
 import java.util.List;
 import java.util.ArrayList;
+import org.openehr.rm.common.archetyped.Archetyped;
+import org.openehr.rm.common.generic.PartySelf;
+import org.openehr.rm.support.identification.ArchetypeID;
 
 /**
  * EntryTestBase
@@ -56,10 +63,8 @@ public class CompositionTestBase extends DataStructureTestBase {
     protected EventContext context() throws Exception {
         DvCodedText setting = new DvCodedText("setting", lang, charset,
                 new CodePhrase("test", "setting_code"), ts);
-        PartyReference composer = new PartyReference(
-                new HierarchicalObjectID("333"));
-        return new EventContext(null, time(), composer, null, null,
-                setting, null, ts);
+        return new EventContext(null, time("2006-02-01T12:00:09"), null, null, null,
+                setting, null, ts);        
     }
 
     protected Section section(String name) throws Exception {
@@ -81,12 +86,10 @@ public class CompositionTestBase extends DataStructureTestBase {
 
     protected Observation observation(String name) throws Exception {
         DvText meaning = new DvText(name);
-        return new Observation("at0000", meaning, subject(), provider(),
-                event("single", list()));
-    }
-
-    protected ItemList list() {
-        return list("list");
+        Archetyped arch = new Archetyped(new ArchetypeID(
+                "openehr-ehr_rm-observation.physical_examination.v3"), "1.1");
+        return new Observation("at0001", meaning, arch, language("en"), language("en"), 
+                subject(), provider(), event("history"), ts);
     }
 
     protected ItemList list(String name) {
@@ -102,20 +105,38 @@ public class CompositionTestBase extends DataStructureTestBase {
         }
         Cluster itemsCluster = cluster("items", "items", items);
         return new ItemList(null, "at0100", text(name), null, null, null,
-                itemsCluster);
+                null, itemsCluster);
     }
 
     public void assertItemAtPath(String path, Locatable target,
                                  Locatable expected)
             throws Exception {
-        Locatable actual = target.itemAtPath(path);
+        Locatable actual = (Locatable)target.itemAtPath(path);
         assertEquals("unexpected item: " + actual.getName().getValue()
                 + " for path: " + path, expected, actual);
     }
 
-   protected SingleEvent<ItemStructure> event(String name, ItemStructure item) {
-        return new SingleEvent<ItemStructure>("at1002", text(name),
-                new DvDateTime("2000-10-15 10:00:00"), item);
+   protected History<ItemStructure> event(String name) {
+        //element = element("element name", "value");
+        String[] ITEMS = {
+            "event one", "event two", "event three"
+        };
+        String[] CODES = {
+            "code one", "code two", "code three"
+        };
+        List<Event<ItemStructure>> items = new ArrayList<Event<ItemStructure>>();
+        for (int i = 0; i < ITEMS.length; i++) {
+            Element element = element("element " + i, CODES[i]);
+            ItemSingle item = new ItemSingle(null, "at0001", text(ITEMS[i]),
+                    null, null, null, null, element);
+            items.add(new PointEvent<ItemStructure>(null, "at0003", text("point event"), null, 
+                    null, null, null, new DvDateTime("2006-06-25T23:11:11"), item, null));
+           // uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
+		//		parent, time, data, state
+        }
+        return new History<ItemStructure>(null, "at0002", text("history"),
+                null, null, null, null, new DvDateTime("2006-06-25T23:11:11"), items, 
+                DvDuration.getInstance("PT1h"), DvDuration.getInstance("PT3h"), null);
     }
 
     // test  territory
@@ -124,35 +145,35 @@ public class CompositionTestBase extends DataStructureTestBase {
     }
 
     // test subject
-    protected RelatedParty subject() throws Exception {
+    protected PartySelf subject() throws Exception {
         PartyReference party = new PartyReference(
-                new HierarchicalObjectID("123"));
-        DvCodedText relationship = new DvCodedText("family relationship", lang,
-                charset, new CodePhrase("test", "family_code"), ts);
-        return new RelatedParty(party, relationship, ts);
+                new HierarchicalObjectID("1.2.4.5.6.12.1"), ObjectReference.Type.PARTY);
+        return new PartySelf(party);
     }
 
     // test provider
-    protected Participation provider() throws Exception {
+    protected PartyIdentified provider() throws Exception {
         PartyReference performer = new PartyReference(
-                new HierarchicalObjectID("333"));
-        DvCodedText function = new DvCodedText("doctor", lang, charset,
-                new CodePhrase("test", "doctor_code"), ts);
-        DvCodedText mode = new DvCodedText("present", lang, charset,
-                new CodePhrase("test", "present_code"), ts);
-        return new Participation(performer, function, mode, time(), ts);
+                new HierarchicalObjectID("1.3.3.1.2.42.1"), ObjectReference.Type.ORGANISATION);
+        //DvCodedText function = new DvCodedText("doctor", lang, charset,
+          //      new CodePhrase("test", "doctor_code"), ts);
+        //DvCodedText mode = new DvCodedText("present", lang, charset,
+          //      new CodePhrase("test", "present_code"), ts);
+        return new PartyIdentified(performer, "provider's name", null);
     }
 
-    protected DvInterval<DvDateTime> time() throws Exception {
-        return new DvInterval<DvDateTime>(
-                new DvDateTime("2004-10-29 22:37:00"),
-                new DvDateTime("2004-10-29 23:10:00"));
+    protected DvDateTime time(String time) throws Exception {
+        return new DvDateTime(time);
+    }
+
+    protected CodePhrase language(String language) throws Exception {
+        return new CodePhrase("test", language);
     }
 
     /* field */
     protected RMObjectBuilder builder;
-    protected static CodePhrase lang = TestCodeSet.ENGLISH;
-    protected static CodePhrase charset = TestCodeSet.LATIN_1;
+    protected static CodePhrase lang = TestCodeSetAccess.ENGLISH;
+    protected static CodePhrase charset = TestCodeSetAccess.LATIN_1;
     protected static TerminologyService ts = TestTerminologyService.getInstance();
 
 }

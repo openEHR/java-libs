@@ -13,16 +13,17 @@
  */
 package org.openehr.rm.composition;
 
+import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.terminology.TestCodeSet;
+import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
-import org.openehr.rm.support.terminology.Terminology;
-import org.openehr.rm.support.terminology.CodeSet;
+import org.openehr.rm.support.terminology.TerminologyAccess;
+import org.openehr.rm.support.terminology.CodeSetAccess;
 import org.openehr.rm.composition.content.navigation.Section;
 import org.openehr.rm.composition.content.entry.Observation;
 import org.openehr.rm.common.archetyped.Archetyped;
@@ -30,6 +31,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
+import org.openehr.rm.support.terminology.TestTerminologyAccess;
 
 /**
  * CompositionTest
@@ -45,16 +47,18 @@ public class CompositionTest extends CompositionTestBase {
 
     public void setUp() throws Exception {
         DvText name = new DvText("composition");
-        ObjectID id = new HierarchicalObjectID("111");
-        List<Section> content = new ArrayList<Section>();
+        ObjectID id = new HierarchicalObjectID("1.11.2.3.4.5.0");
+        List<ContentItem> content = new ArrayList<ContentItem>();
         content.add(section("section one"));
         content.add(section("section two", "observation"));
-        DvCodedText category = TestCodeSet.EVENT;
+        DvCodedText category = TestCodeSetAccess.EVENT;
         Archetyped archetypeDetails = new Archetyped(new ArchetypeID(
-                "openehr-ehr_rm-Composition.physical_examination.v2"), null,
-                "1.0");
-        composition = new Composition(id, "at0001", name, archetypeDetails,
-                null, null, content, context(), category, territory(), ts);
+                "openehr-ehr_rm-Composition.physical_examination.v2"), "1.0");
+        
+        composition = new Composition(id, "at0001", name, archetypeDetails, null, 
+                null, null, content, TestTerminologyAccess.ENGLISH, context(), provider(), 
+                category, territory(), ts);
+ 
     }
 
     public void tearDown() throws Exception {
@@ -71,7 +75,7 @@ public class CompositionTest extends CompositionTestBase {
         /**
          * Mock terminology service designed to test checking of territory
          */
-        TerminologyService ts = new TerminologyService () {
+        TerminologyService tsLocal = new TerminologyService () {
 
             /**
              * Returns a Terminology of given name
@@ -81,13 +85,13 @@ public class CompositionTest extends CompositionTestBase {
              * @throws IllegalArgumentException if name null, empty
              *                                  or unknown to this terminology service
              */
-            public Terminology terminology(String name) {
+            public TerminologyAccess terminology(String name) {
 
                 if( ! TerminologyService.OPENEHR.equals(name)) {
                     return null;
                 }
                 
-                return new Terminology() {
+                return new TerminologyAccess() {
 
                     public Set<CodePhrase> codesForGroupID(String groupID) {
                         return null;
@@ -131,13 +135,13 @@ public class CompositionTest extends CompositionTestBase {
              * @throws IllegalArgumentException if name is null, empty
              *                                  or unknown to this terminology service
              */
-            public CodeSet codeSet(String name) {
+            public CodeSetAccess codeSet(String name) {
 
                 if( ! "countries".equals(name)) {
                     return null;
                 }
 
-                return new CodeSet() {
+                return new CodeSetAccess() {
                     public String id() {
                         return null;
                     }
@@ -146,7 +150,11 @@ public class CompositionTest extends CompositionTestBase {
                         return null;
                     }
 
-                    public boolean has(CodePhrase code) {
+                    public boolean hasLang(CodePhrase code) {
+                        return true;
+                    }
+                    
+                    public boolean hasCode(CodePhrase code) {
                         return true;
                     }
                 };
@@ -175,26 +183,25 @@ public class CompositionTest extends CompositionTestBase {
             }
         };
         DvText name = new DvText("composition");
-        ObjectID id = new HierarchicalObjectID("111");
-        List<Section> content = new ArrayList<Section>();
+        ObjectID id = new HierarchicalObjectID("1.11.2.4.22.5.2");
+        List<ContentItem> content = new ArrayList<ContentItem>();
         content.add(section("section one"));
         content.add(section("section two", "observation"));
-        DvCodedText category = TestCodeSet.EVENT;
+        DvCodedText category = TestCodeSetAccess.EVENT;
         Archetyped archetypeDetails = new Archetyped(new ArchetypeID(
-                "openehr-ehr_rm-Composition.physical_examination.v2"), null,
-                "1.0");
+                "openehr-ehr_rm-Composition.physical_examination.v2"), "1.0");
         composition = new Composition(id, "at0001", name, archetypeDetails,
-                null, null, content, context(), category, territory(), ts);
+                null, null, null, content, TestTerminologyAccess.ENGLISH, context(), 
+                provider(), category, territory(), ts);
     }
 
     public void testValidPath() throws Exception {
         String[] validPathList = {
-            "/", "/[composition]", // root
-            "/content[section one]", "/[composition]/content[section one]",
-            "/content[section two]", "/[composition]/content[section two]",
+            "/",  // root
+            "/content[section one]", 
+            "/content[section two]", 
             "/content[section two]/items[observation]",
-            "/[composition]/content[section two]/items[observation]",
-            "/[composition]/content[section two]/items[observation]/data",
+            
         };
 
         for (String path : validPathList) {
@@ -203,9 +210,13 @@ public class CompositionTest extends CompositionTestBase {
         }
 
         String[] invalidPathList = {
-            "", null, "[composition]", "/composition", // bad root
+            "", null, "[composition]", "/composition", "/[composition]", // bad root
             "/[composition]/content", // incomplete
-            "/[composition]/content[section three]"    // unknown section
+            "/[composition]/content[section three]",    // unknown section
+            "/[composition]/content[section one]",
+            "/[composition]/content[section two]",
+            "/[composition]/content[section two]/items[observation]",
+            "/[composition]/content[section two]/items[observation]/data",
         };
 
         for (String path : invalidPathList) {
@@ -215,23 +226,16 @@ public class CompositionTest extends CompositionTestBase {
     }
 
     public void testItemAtPath() throws Exception {
-        Section sectionOne = composition.getContent().get(0);
-        Section sectionTwo = composition.getContent().get(1);
-        Observation observation = (Observation)
-                composition.getContent().get(1).getItems().get(0);
+        Section sectionOne = (Section)composition.getContent().get(0);
+        Section sectionTwo = (Section)composition.getContent().get(1);
+        Observation observation = (Observation)sectionTwo.getItems().get(0);
 
         assertEquals("section one wrong", sectionOne,
                 composition.itemAtPath("/content[section one]"));
-        assertEquals("section one wrong", sectionOne,
-                composition.itemAtPath("/[composition]/content[section one]"));
 
         assertEquals("section two wrong", sectionTwo,
                 composition.itemAtPath("/content[section two]"));
-        assertEquals("section two wrong", sectionTwo,
-                composition.itemAtPath("/[composition]/content[section two]"));
 
-        assertEquals("observation wrong", observation, composition.itemAtPath(
-                "/[composition]/content[section two]/items[observation]"));
         assertEquals("observation wrong", observation, composition.itemAtPath(
                 "/content[section two]/items[observation]"));
     }

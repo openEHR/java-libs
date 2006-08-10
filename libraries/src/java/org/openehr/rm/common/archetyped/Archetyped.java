@@ -18,7 +18,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.RMObject;
-import org.openehr.rm.support.identification.AccessGroupReference;
 import org.openehr.rm.support.identification.ArchetypeID;
 
 /**
@@ -48,7 +47,6 @@ public final class Archetyped extends RMObject {
      *                                  or referenceModelVersion empty
      */
     public Archetyped(ArchetypeID archetypeID,
-                      AccessGroupReference accessControl,
                       String referenceModelVersion) {
         if (archetypeID == null) {
             throw new IllegalArgumentException("null archetypeID");
@@ -57,7 +55,6 @@ public final class Archetyped extends RMObject {
             throw new IllegalArgumentException("empty referenceModelVersion");
         }
         this.archetypeID = archetypeID;
-        this.accessControl = accessControl;
         this.referenceModelVersion = referenceModelVersion;
     }
 
@@ -68,15 +65,6 @@ public final class Archetyped extends RMObject {
      */
     public ArchetypeID getArchetypeID() {
         return archetypeID;
-    }
-
-    /**
-     * The access control settings of this component
-     *
-     * @return accessGroupReference
-     */
-    public AccessGroupReference getAccessControl() {
-        return accessControl;
     }
 
     /**
@@ -103,7 +91,6 @@ public final class Archetyped extends RMObject {
 
         return new EqualsBuilder()
                 .append(archetypeID, archetyped.archetypeID)
-                .append(accessControl, archetyped.accessControl)
                 .append(referenceModelVersion,
                         archetyped.referenceModelVersion)
                 .isEquals();
@@ -117,7 +104,6 @@ public final class Archetyped extends RMObject {
     public int hashCode() {
         return new HashCodeBuilder(7,19)
                 .append(archetypeID)
-                .append(accessControl)
                 .append(referenceModelVersion)
                 .toHashCode();
     }
@@ -130,10 +116,6 @@ public final class Archetyped extends RMObject {
         this.archetypeID = archetypeID;
     }
 
-    void setAccessControl(AccessGroupReference accessControl) {
-        this.accessControl = accessControl;
-    }
-
     void setReferenceModelVersion(String referenceModelVersion) {
         this.referenceModelVersion = referenceModelVersion;
     }
@@ -141,7 +123,6 @@ public final class Archetyped extends RMObject {
 
     /* fields */
     private ArchetypeID archetypeID;
-    private AccessGroupReference accessControl;
     private String referenceModelVersion;
 }
 

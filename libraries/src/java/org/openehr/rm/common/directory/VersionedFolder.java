@@ -15,43 +15,47 @@ import org.openehr.rm.support.terminology.TerminologyService;
 
 public class VersionedFolder extends VersionedObject<Folder> {
 
-	/**
-	 * Constructs a VersionFolder with first Folder created locally
-	 */
-	public VersionedFolder(HierarchicalObjectID uid, ObjectReference ownerID, 
-			DvDateTime timeCreated, ObjectVersionID versionID, Folder folder, 
-			AuditDetails commitAudit, ObjectReference contribution, 
-			DvCodedText lifecycleState, TerminologyService terminologyService) {
-		
-        super(uid, ownerID, timeCreated, versionID, folder, commitAudit, contribution, 
-        		lifecycleState, terminologyService);
-	}
-	
-	/**
-	 * Constructs a VersionFolder with first imported Folder
-	 */
-	public VersionedFolder(HierarchicalObjectID uid, ObjectReference ownerID, 
-			DvDateTime timeCreated, AuditDetails commitAudit, 
-			ObjectReference contribution, OriginalVersion<Folder> item) {
-        super(uid, ownerID, timeCreated, commitAudit, contribution, item);
-        
-	}
+    /**
+     * Constructs a VersionFolder with first Folder created locally
+     */
+    public VersionedFolder(HierarchicalObjectID uid, ObjectReference ownerID, 
+                    DvDateTime timeCreated, ObjectVersionID versionID, Folder folder, 
+                    DvCodedText lifecycleState, AuditDetails commitAudit,  
+                    ObjectReference contribution, String signature, 
+                    TerminologyService terminologyService) {
 
-	/**
-	 * Constructs a VersionFolder with first merged Folder
-	 */
-	public VersionedFolder(HierarchicalObjectID uid, ObjectReference ownerID, 
-			DvDateTime timeCreated, ObjectVersionID versionID,   
-			ObjectVersionID precedingVersionID, Folder folder, AuditDetails commitAudit,    
-			ObjectReference contribution, DvCodedText lifecycleState,   
-			Set<ObjectVersionID> otherInputVersionUids, TerminologyService terminologyService) {
-		
-		super(uid, ownerID, timeCreated, versionID, precedingVersionID, folder, commitAudit,
-				contribution, lifecycleState, otherInputVersionUids, terminologyService);
-	}
-	
-	//POJO start
-	VersionedFolder() {
-	}
+        super(uid, ownerID, timeCreated, versionID, folder, lifecycleState, commitAudit, 
+             contribution, signature, terminologyService);
+    }
+
+    /**
+     * Constructs a VersionFolder with first imported Folder
+     */
+    public VersionedFolder(HierarchicalObjectID uid, ObjectReference ownerID, 
+                    DvDateTime timeCreated, OriginalVersion<Folder> item, 
+                    AuditDetails commitAudit, ObjectReference contribution, 
+                    String signature) {
+
+        super(uid, ownerID, timeCreated, item, commitAudit, contribution, signature);
+
+    }
+
+    /**
+     * Constructs a VersionFolder with first merged Folder
+     */
+    public VersionedFolder(HierarchicalObjectID uid, ObjectReference ownerID, 
+            DvDateTime timeCreated, ObjectVersionID versionID,   
+            ObjectVersionID precedingVersionID, Folder folder, DvCodedText lifecycleState,    
+            AuditDetails commitAudit, ObjectReference contribution,    
+            Set<ObjectVersionID> otherInputVersionUids, String signature, 
+            TerminologyService terminologyService) {
+
+            super(uid, ownerID, timeCreated, versionID, precedingVersionID, folder, lifecycleState, 
+                commitAudit, contribution, otherInputVersionUids, signature, terminologyService);
+    }
+
+    //POJO start
+    VersionedFolder() {
+    }
 
 }
