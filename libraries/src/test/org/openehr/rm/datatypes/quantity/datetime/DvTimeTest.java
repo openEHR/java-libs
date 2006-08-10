@@ -22,9 +22,9 @@
 package org.openehr.rm.datatypes.quantity.datetime;
 
 import junit.framework.TestCase;
-
-import java.text.SimpleDateFormat;
 import java.util.TimeZone;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 public class DvTimeTest extends TestCase {
 
@@ -36,6 +36,8 @@ public class DvTimeTest extends TestCase {
      * The fixture set up called before every test method.
      */
     protected void setUp() throws Exception {
+        zoneStr = DvDateTimeParser.convertTimeZone(
+                DateTimeZone.getDefault().getOffset(new DateTime()), false);
     }
 
     /**
@@ -109,9 +111,9 @@ public class DvTimeTest extends TestCase {
         assertEquals(dvTime("01:15:25,000+01:00").toString(), 
                 new DvTime(1, 15, 25, 0.0, TimeZone.getTimeZone("GMT+1")).toString());
         assertEquals(dvTime("00:00Z").toString(), 
-                new DvTime(0, 0, TimeZone.getTimeZone("UTC")).toString());
-        //new DvTime(1, 2, 3, null).toString() will give different results during different time 
-        //of the year due to daylight saving in the default time zone.
+                new DvTime(0, 0, TimeZone.getTimeZone("UTC")).toString());       
+        assertEquals(dvTime("01").toString(), new DvTime(1, null).toString());
+        assertEquals(dvTime("01:02:03").toString(), new DvTime(1, 2, 3, null).toString());
 
     }
 
@@ -268,6 +270,8 @@ public class DvTimeTest extends TestCase {
     public void testAdd() throws Exception {
         //TODO: testAdd
     }
+    
+    private String zoneStr;
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

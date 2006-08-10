@@ -28,6 +28,8 @@ public class DvDateTimeParserTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
+        zoneStr = DvDateTimeParser.convertTimeZone(
+                DateTimeZone.getDefault().getOffset(new DateTime()), false);
     }
 
     protected void tearDown() throws Exception {
@@ -75,11 +77,8 @@ public class DvDateTimeParserTest extends TestCase {
      * Test of padTimeValue method, of class org.openehr.rm.datatypes.quantity.datetime.DvDateTimeParser.
      */
     public void testPadValue() {
-        //1st line of  test depends on default time zone
-        //in order to pass the first two test cases, the zone offset of the expected value must be 
-        //changed to your default zone offset, i.e. +0100 is the BST offset
-        //assertEquals("232922.000+0100", DvDateTimeParser.padTimeValue("232922"));
-        //assertEquals("232922,099+0100", DvDateTimeParser.padTimeValue("232922,099"));
+        assertEquals("232922.000" + zoneStr, DvDateTimeParser.padTimeValue("232922"));
+        assertEquals("232922,099" + zoneStr, DvDateTimeParser.padTimeValue("232922,099"));
         assertEquals("131920.000Z", DvDateTimeParser.padTimeValue("131920Z"));
         assertEquals("011300.000-09", DvDateTimeParser.padTimeValue("011300-09"));      
         assertEquals("021530.123-09", DvDateTimeParser.padTimeValue("021530.123-09"));
@@ -204,9 +203,7 @@ public class DvDateTimeParserTest extends TestCase {
         //no timeZone means default zone
         assertEquals("202219.000", DvDateTimeParser.toTimeString(time, "HHmmss.SSS"));
         assertEquals("2022", DvDateTimeParser.toTimeString(time, "HHmm"));
-        //in order to pass the following test case, the zone offset of the expected value must be 
-        //changed to your default zone offset, i.e. +0100 for the BST offset
-        //assertEquals("2022+0100", DvDateTimeParser.toTimeString(time, "1000Z"));
+        assertEquals("2022" + zoneStr, DvDateTimeParser.toTimeString(time, "1000Z"));
         timezone = TimeZone.getTimeZone("GMT-02");
         time = new DateTime(1970, 4 , 1 , 12, 25, 29, 235, DateTimeZone.forTimeZone(timezone));
         assertEquals("122529.235-0200", DvDateTimeParser.toTimeString(time, "HHmmss.SSSZ")); 
@@ -255,9 +252,9 @@ public class DvDateTimeParserTest extends TestCase {
         assertEquals("1343-03-06T00", DvDateTimeParser.toDateTimeString(time, "yyyy-MM-dd'T'HH"));
         assertEquals("1343-03T00:22", DvDateTimeParser.toDateTimeString(time, "yyyy-MM'T'HH:mm"));
         assertEquals("134303T00:22:19", DvDateTimeParser.toDateTimeString(time, "100003T11:00:23"));
-        time = ISODateTimeFormat.dateTimeParser().withOffsetParsed().parseDateTime("1997-09-01T19:09:29.789-02:00");
+        time = ISODateTimeFormat.dateTimeParser().withOffsetParsed().parseDateTime("1997-09-01T19:09:29.789");
         //no timeZone means default zone
-        assertEquals("19970901T190929,789-0200", DvDateTimeParser.toDateTimeString(time, "yyyyMMdd'T'HHmmss,SSSZ"));
+        assertEquals("19970901T190929,789" + zoneStr, DvDateTimeParser.toDateTimeString(time, "yyyyMMdd'T'HHmmss,SSSZ"));
         assertEquals("19970901T1909", DvDateTimeParser.toDateTimeString(time, "20000101T1922"));
         assertEquals("1997-09T19:09", DvDateTimeParser.toDateString(time, "yyyy-MM'T'HH:mm"));
 
@@ -352,4 +349,6 @@ public class DvDateTimeParserTest extends TestCase {
         assertEquals("1626-08-31T02-01:00", DvDateTimeParser.basicToExtendedDateTime("16260831T02-0100"));
         assertEquals("1772-02-29T23", DvDateTimeParser.basicToExtendedDateTime("1772-02-29T23"));
     }
+    
+    private String zoneStr;
 }
