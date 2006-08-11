@@ -19,7 +19,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.log4j.Logger;
 import org.openehr.am.archetype.constraintmodel.*;
-import org.openehr.am.archetype.description.ArchetypeDescription;
+import org.openehr.rm.common.resource.ArchetypeDescription;
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.support.identification.ArchetypeID;

@@ -12,7 +12,7 @@
  * revision:    "$LastChangedRevision$"
  * last_change: "$LastChangedDate$"
  */
-package org.openehr.am.archetype.description;
+package org.openehr.rm.common.resource;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.openehr.rm.datatypes.text.DvCodedText;

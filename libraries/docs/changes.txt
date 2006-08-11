@@ -206,3 +206,6 @@ updated ADLOutputter accordingly
 
 2006-07-12
 added adlVersion and renamed conceptCode to concept on Archetype class
+
+2006-08-08
+externalized ADLOutputter
