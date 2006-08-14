@@ -1,8 +1,16 @@
 /*
- * AdminEntryTest.java
- * JUnit based test
+ * component:   "openEHR Reference Implementation"
+ * description: "Class AdminEntryTest"
+ * keywords:    "unit test"
  *
- * Created on August 8, 2006, 10:59 PM
+ * author:      "Yin Su Lim <y.lim@chime.ucl.ac.uk>"
+ * support:     "CHIME, UCL"
+ * copyright:   "Copyright (c) 2006 UCL, UK"
+ * license:     "See notice at bottom of class"
+ *
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/BRANCHES/RM-1.0-update/libraries/src/test/org/openehr/rm/composition/content/entry/AdminEntryTest.java $"
+ * revision:    "$LastChangedRevision: 50 $"
+ * last_change: "$LastChangedDate: 2006-08-10 12:21:46 +0100 (Thu, 10 Aug 2006) $"
  */
 
 package org.openehr.rm.composition.content.entry;
@@ -13,10 +21,6 @@ import org.openehr.rm.composition.CompositionTestBase;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.support.identification.ArchetypeID;
 
-/**
- *
- * @author yinsulim
- */
 public class AdminEntryTest extends CompositionTestBase {
     
     public AdminEntryTest(String testName) {
@@ -88,3 +92,33 @@ public class AdminEntryTest extends CompositionTestBase {
     
     private AdminEntry adminEntry;
 }
+
+/*
+ *  ***** BEGIN LICENSE BLOCK *****
+ *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ *  The contents of this file are subject to the Mozilla Public License Version
+ *  1.1 (the 'License'); you may not use this file except in compliance with
+ *  the License. You may obtain a copy of the License at
+ *  http://www.mozilla.org/MPL/
+ *
+ *  Software distributed under the License is distributed on an 'AS IS' basis,
+ *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing rights and limitations under the
+ *  License.
+ *
+ *  The Original Code is AdminEntryTest.java
+ *
+ *  The Initial Developer of the Original Code is Rong Chen.
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  the Initial Developer. All Rights Reserved.
+ *
+ *  Contributor(s):
+ *
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ *  ***** END LICENSE BLOCK *****
+ */

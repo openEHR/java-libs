@@ -1,5 +1,16 @@
-/**
- * 
+/*
+ * component:   "openEHR Reference Implementation"
+ * description: "Class DvWorldTime"
+ * keywords:    "datatypes"
+ *
+ * author:      "Rong Chen <rong@acode.se>"
+ * support:     "Acode HB <support@acode.se>"
+ * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
+ * license:     "See notice at bottom of class"
+ *
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/datatypes/quantity/datetime/DvWorldTime.java $"
+ * revision:    "$LastChangedRevision: 53 $"
+ * last_change: "$LastChangedDate: 2006-08-11 13:20:08 +0100 (Fri, 11 Aug 2006) $"
  */
 package org.openehr.rm.datatypes.quantity.datetime;
 
@@ -215,7 +226,7 @@ public abstract class DvWorldDateTime <T extends DvWorldDateTime>
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is NDvWorldTime.java
+ *  The Original Code is DvWorldTime.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2004

@@ -1,8 +1,22 @@
 /*
- * HistoryTest.java
- * JUnit based test
+ * component:   "openEHR Reference Implementation"
+ * description: "Class HistoryTest"
+ * keywords:    "unit test"
  *
- * Created on July 13, 2006, 6:39 PM
+ * author:      "Yin Su Lim <y.lim@chime.ucl.ac.uk>"
+ * support:     "CHIME, UCL"
+ * copyright:   "Copyright (c) 2006 UCL, UK"
+ * license:     "See notice at bottom of class"
+ *
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/BRANCHES/RM-1.0-update/libraries/src/test/org/openehr/rm/datastructure/history/HistoryTest.java $"
+ * revision:    "$LastChangedRevision: 50 $"
+ * last_change: "$LastChangedDate: 2006-08-10 12:21:46 +0100 (Thu, 10 Aug 2006) $"
+ */
+/**
+ * HistoryTest
+ *
+ * @author Yin Su Lim
+ * @version 1.0 
  */
 
 package org.openehr.rm.datastructure.history;
@@ -33,10 +47,6 @@ import java.util.List;
 import java.util.Set;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 
-/**
- *
- * @author yinsulim
- */
 public class HistoryTest extends DataStructureTestBase {
     
     public HistoryTest(String testName) {
@@ -149,11 +159,8 @@ public class HistoryTest extends DataStructureTestBase {
                 DvDuration.getInstance("PT3h"), null);
 
     }
-    
-
-
-    
-        /* static fields */
+        
+    /* static fields */
     private static final String NAME = "history";
     private Element element;
     private static final String ELEMENT_NAME = "element name";
@@ -166,3 +173,33 @@ public class HistoryTest extends DataStructureTestBase {
     private static final String TIME = "2006-07-07T10:29:00";
     
 }
+
+/*
+ *  ***** BEGIN LICENSE BLOCK *****
+ *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ *  The contents of this file are subject to the Mozilla Public License Version
+ *  1.1 (the 'License'); you may not use this file except in compliance with
+ *  the License. You may obtain a copy of the License at
+ *  http://www.mozilla.org/MPL/
+ *
+ *  Software distributed under the License is distributed on an 'AS IS' basis,
+ *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing rights and limitations under the
+ *  License.
+ *
+ *  The Original Code is HistoryTest.java
+ *
+ *  The Initial Developer of the Original Code is Rong Chen.
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  the Initial Developer. All Rights Reserved.
+ *
+ *  Contributor(s):
+ *
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ *  ***** END LICENSE BLOCK *****
+ */

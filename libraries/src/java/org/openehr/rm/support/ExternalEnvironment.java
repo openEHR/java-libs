@@ -1,16 +1,16 @@
 /*
  * component:   "openEHR Reference Implementation"
  * description: "Class ExternalEnvironment"
- * keywords:    "reference model"
+ * keywords:    "support"
  *
- * author:      "Yin Su Lim <y.lim@chime.ucl.ac.ukŒ>"
- * support:     ""
- * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
+ * author:      "Yin Su Lim <y.lim@chime.ucl.ac.uk>"
+ * support:     "CHIME, UCL"
+ * copyright:   "Copyright (c) 2006 UCL, UK"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/ExternalEnvironment.java $"
- * revision:    "$LastChangedRevision: 2 $"
- * last_change: "$LastChangedDate: 2005-10-12 22:20:08 +0100 (Wed, 12 Oct 2005) $"
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/support/ExternalEnvironment.java $"
+ * revision:    "$LastChangedRevision: 53 $"
+ * last_change: "$LastChangedDate: 2006-08-11 13:20:08 +0100 (Fri, 11 Aug 2006) $"
  */
 package org.openehr.rm.support;
 

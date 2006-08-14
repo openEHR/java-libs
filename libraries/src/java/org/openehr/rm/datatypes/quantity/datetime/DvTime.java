@@ -1,5 +1,16 @@
-/**
- * 
+/*
+ * component:   "openEHR Reference Implementation"
+ * description: "Class DvTime"
+ * keywords:    "datatypes"
+ *
+ * author:      "Yin Su Lim <y.lim@chime.ucl.ac.uk>"
+ * support:     "CHIME, UCL"
+ * copyright:   "Copyright (c) 2006 UCL, UK"
+ * license:     "See notice at bottom of class"
+ *
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/datatypes/quantity/datetime/DvTime.java $"
+ * revision:    "$LastChangedRevision: 53 $"
+ * last_change: "$LastChangedDate: 2006-08-11 13:20:08 +0100 (Fri, 11 Aug 2006) $"
  */
 package org.openehr.rm.datatypes.quantity.datetime;
 
@@ -23,9 +34,15 @@ import org.openehr.rm.datatypes.quantity.ReferenceRange;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
- * @author yinsulim
- * Current DvTime implementation only takes 3 decimal digits for fractional second, and 
- * does not take 24 for hour
+ * Represents an absolute point in time from an origin usually
+ * interpreted as meaning the start of the current day, specified to
+ * the second.
+ *
+ * @author Yin Su Lim
+ * @version 1.0
+ *
+ * Warning: Current DvTime implementation only takes 3 decimal digits for fractional second, and 
+ * does not take 24 for hour!
  *
  */
 public class DvTime extends DvWorldDateTime<DvTime> {
@@ -345,3 +362,33 @@ public class DvTime extends DvWorldDateTime<DvTime> {
     
     private boolean isPartial, minuteKnown, secondKnown, fractionalSecKnown;
 }
+
+/*
+ *  ***** BEGIN LICENSE BLOCK *****
+ *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ *  The contents of this file are subject to the Mozilla Public License Version
+ *  1.1 (the 'License'); you may not use this file except in compliance with
+ *  the License. You may obtain a copy of the License at
+ *  http://www.mozilla.org/MPL/
+ *
+ *  Software distributed under the License is distributed on an 'AS IS' basis,
+ *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing rights and limitations under the
+ *  License.
+ *
+ *  The Original Code is DvTime.java
+ *
+ *  The Initial Developer of the Original Code is Rong Chen.
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  the Initial Developer. All Rights Reserved.
+ *
+ *  Contributor(s):
+ *
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ *  ***** END LICENSE BLOCK *****
+ */
