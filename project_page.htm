@@ -11,16 +11,15 @@
 			<span style="font-style: italic;">open</span>EHR Java Reference
 			Implementation Project </h1>
 		<hr style="width: 100%; height: 2px;"/>
-		<h2>Vital Statistics</h2>
 		
-		<table style="text-align: left; width: 100%;" border="1" cellpadding="2"
+		
+		<table style="text-align: left; width: 100%;" border="0" cellpadding="2"
 			cellspacing="2">
 			<tbody>
 				<tr>
 					<td style="background-color: rgb(204, 204, 255);" colspan="2"
 						rowspan="1">
-						<p class="table_cell_top_heading">Java Reference
-							Implementation</p>
+						<p class="table_cell_top_heading"><h2>Vital Statistics</h2></p>
 					</td>
 				</tr>
 				<tr>
@@ -46,19 +45,6 @@
 						Rodrigo Filgueira, Erik Sundvall, Mattias Forss, Johan
 						Hjalmarsson, Jonas Andersson, Joakim Fredriksson, Routis
 						Haralampos </td>
-				</tr>
-				<tr>
-					<td class="table_cell_left_heading"
-						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
-						<span style="font-weight: bold;">Team Coordinator</span>
-						<br/>
-					</td>
-					<td
-						style="vertical-align: top; background-color: rgb(255, 255, 230);">
-						Thomas Beale (Ocean Informatics, CHIME, UCL; <a
-							href="mailto:tXXhomas.beXXale@oceaninformaXXtics.biXz">
-						email</a>; remove XXs from email address)
-						<br/> </td>
 				</tr>
 				<tr>
 					<td class="table_cell_left_heading"
@@ -101,6 +87,17 @@
 				</tr>
 				<tr>
 					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;"> Language(s) &  Technologies</span>
+						<br/>
+					</td>
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						<span style="font-weight: bold;">Java 1.5</span> 
+						<br/> </td>
+				</tr>
+				<tr>
+					<td class="table_cell_left_heading"
 						style="vertical-align: top; background-color: rgb(255, 255, 204);">
 						<span style="font-weight: bold;">
 							<br/>
@@ -111,7 +108,7 @@
 						style="vertical-align: top; background-color: rgb(255, 255, 230);">
 						<ul>
 							<li>Subversion repository name =
-								<span style="font-weight: bold;">
+								<span style="font-weight: bold;color: rgb(204, 0, 0);">
 									ref_impl_java</span>; URLs:
 								<ul>
 									<li> repository top: <a
@@ -123,12 +120,7 @@
 										web-view</a>
 									</li>
 								</ul> </li>
-							<li> <a
-									href="http://www.acode.se/release/kernel/apidocs/">
-								online javadoc</a>
-							</li>
-							<li> <a href="docs/design.html">design document</a>
-							</li>
+							
 						</ul>
 					</td>
 				</tr>
@@ -145,12 +137,15 @@
 						<ul>
 							<li><a href="readme.txt">release notes</a>
 							</li>
-							<li><a href="install.txt">detailed installation
+							<li><a href="libraries/docs/install.txt">detailed installation
 								instructions</a>
 							</li>
-							<li><a href="http://www.acode.se/release/kernel/">
-								binaries and apidocs</a>
+							<li> <a
+									href="http://www.acode.se/release/kernel/apidocs/">
+								online javadoc</a>
 							</li>
+							<li> <a href="libraries/docs/design.html">design document</a>
+							</li>							
 						</ul>
 					</td>
 				</tr>
@@ -213,7 +208,7 @@
 				central to the archetype method. We are aiming for this implementation to
 				become the openEHR reference implementation of the kernel for the Java
 				language.</li>
-			<li>ADL parser</li>
+			<li>ADL parser and serializer</li>
 			
 		</ul>
 		
@@ -239,21 +234,25 @@
 		
 		<h2>Component Descriptions
 			<br/> </h2>
-		<h3>The Kernel&nbsp;</h3>
+		<h3>The Kernel</h3>
 		
 		<ul>
-			
-			<li>archetypes based object creation and validation</li>
-			
-			<li>ADL output from archetype object model</li>
+			<li>Java implementation of the RM and AOM</li>
+			<li>Archetypes based RM object creation and validation</li>
 			
 		</ul>
 		<h3>ADL Parser</h3>
 		<ul>
-			<li> A Java implementation of ADL parser targeting ADL 1.4</li>
+			<li> Java implementation of ADL parser targeting ADL 1.4</li>
 			<li> Fully integrated with the Java Kernel </li>
 			
 			<li> limited post-parsing validation </li>
+			
+		</ul> </ul>
+		
+		<h3>ADL Serializer</h3> 
+		<ul>
+			<li> From AOM to ADL</li>
 			
 		</ul> </ul>
 		
