@@ -20,7 +20,7 @@
 package se.acode.openehr.parser;
 
 import org.openehr.am.archetype.Archetype;
-import org.openehr.am.archetype.output.ADLOutputter;
+import org.openehr.am.serialize.ADLSerializer;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -46,7 +46,7 @@ public class RoundTripTest extends ParserTestBase {
         Archetype archetypeOne = parser.parse();
 
         // output AOM into ADL
-        ADLOutputter outputter = new ADLOutputter();
+        ADLSerializer outputter = new ADLSerializer();
         StringWriter writer = new StringWriter();
         outputter.output(archetypeOne, writer);
 

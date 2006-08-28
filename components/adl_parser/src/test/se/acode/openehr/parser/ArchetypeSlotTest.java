@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.StringWriter;
 
 import org.openehr.am.archetype.*;
-import org.openehr.am.archetype.output.ADLOutputter;
 
 import junit.framework.TestCase;
 
@@ -24,12 +23,7 @@ public class ArchetypeSlotTest extends ParserTestBase {
         ADLParser parser = new ADLParser(new File(dir,
                 "openEHR-EHR-COMPOSITION.archetype_slot.test.adl"));
         Archetype archetype = parser.parse();
-        assertNotNull(archetype);
-        
-        ADLOutputter outputter = new ADLOutputter();
-        StringWriter writer = new StringWriter();
-        outputter.output(archetype, writer);
+        assertNotNull(archetype);        
 
-        // System.out.println(writer.toString());
     }
 }

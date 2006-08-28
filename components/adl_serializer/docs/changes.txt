@@ -1,0 +1,5 @@
+2006/08/09
+.initial version of the serializer
+
+2006/08/26
+.updated import of RM classes

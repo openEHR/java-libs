@@ -40,7 +40,7 @@ import org.openehr.rm.datatypes.quantity.datetime.*;
 import org.openehr.rm.datatypes.text.*;
 
 import org.openehr.am.archetype.Archetype;
-import org.openehr.am.archetype.description.*;
+import org.openehr.rm.common.resource.*;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
 import org.openehr.am.archetype.constraintmodel.domain.*;

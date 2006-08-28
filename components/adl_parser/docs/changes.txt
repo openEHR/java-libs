@@ -41,3 +41,6 @@
 
 2006/07/11
 .fixed "T" in the iso datetime pattern
+
+2006/08/28
+.updated dependency to adl-serializer

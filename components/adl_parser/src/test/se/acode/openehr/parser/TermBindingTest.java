@@ -16,7 +16,6 @@ package se.acode.openehr.parser;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.ontology.TermBindingItem;
 import org.openehr.am.archetype.ontology.OntologyBinding;
-import org.openehr.am.archetype.output.ADLOutputter;
 
 import java.io.File;
 import java.io.StringWriter;

@@ -19,8 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openehr.am.archetype.description.ArchetypeDescription;
-import org.openehr.am.archetype.description.ArchetypeDescriptionItem;
+import org.openehr.rm.common.resource.ArchetypeDescription;
+import org.openehr.rm.common.resource.ArchetypeDescriptionItem;
 
 public class DescriptionTest extends SerializerTestBase {
 

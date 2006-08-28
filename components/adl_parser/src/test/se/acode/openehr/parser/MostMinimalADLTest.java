@@ -14,7 +14,6 @@
 package se.acode.openehr.parser;
 
 import org.openehr.am.archetype.Archetype;
-import org.openehr.am.archetype.output.ADLOutputter;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -42,14 +41,6 @@ public class MostMinimalADLTest extends ParserTestBase {
                 "adl-test-entry.most_minimal.test.adl"));
         Archetype archetype = parser.parse();
         assertNotNull(archetype);
-        
-        /*ADLOutputter outputter = new ADLOutputter();
-        StringWriter writer = new StringWriter();
-        outputter.output(archetype, writer);
-
-        System.out.println(writer.toString());*/
-
-
     }
 }
 

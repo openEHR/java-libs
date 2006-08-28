@@ -109,5 +109,11 @@
 			<version>[3.7,)</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>adl-serializer</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
