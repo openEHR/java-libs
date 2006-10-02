@@ -9,7 +9,32 @@
 	<version>0.1-SNAPSHOT</version>
 	<name>openEHR Archetype Object Model</name>
 	<url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>
-	
+	<ciManagement>
+		<system>continuum</system>
+		<notifiers>
+			<notifier>
+				<type>mail</type>
+				<configuration>
+					<address>rong.acode@gmail.com</address>
+				</configuration>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+	<developers>
+		<developer>
+			<id>rong.chen</id>
+			<name>Rong Chen</name>
+			<email>rong.acode@gmail.com</email>
+		</developer>
+	</developers>
+	<scm>
+		<connection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/openehr-aom</connection>
+		<developerConnection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/openehr-aom</developerConnection>
+		<url>
+			http://my.openehr.org/wsvn/ref_impl_java/BRANCHES/sandbox/openehr-aom/</url>
+	</scm>
 	<organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>
