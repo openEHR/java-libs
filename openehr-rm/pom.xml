@@ -9,11 +9,32 @@
 	<version>0.1-SNAPSHOT</version>
 	<name>openEHR Reference Model</name>
 	<url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>
+	<ciManagement>
+		<system>continuum</system>
+		<notifiers>
+			<notifier>
+				<type>mail</type>
+				<configuration>
+					<address>rong.acode@gmail.com</address>
+				</configuration>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+	<developers>
+		<developer>
+			<id>rong.chen</id>
+			<name>Rong Chen</name>
+			<email>rong.acode@gmail.com</email>
+		</developer>
+	</developers>
 	<scm>
-        <connection>scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/openehr-rm</connection>
-        <developerConnection>scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/openehr-rm</developerConnection>
-        <url>http://my.openehr.org/wsvn/ref_impl_java/BRANCHES/sandbox/openehr-rm/</url>
-    </scm>
+		<connection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/openehr-rm</connection>
+		<developerConnection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/openehr-rm</developerConnection>
+		<url>
+			http://my.openehr.org/wsvn/ref_impl_java/BRANCHES/sandbox/openehr-rm/</url>
+	</scm>
 	
 	<organization>
 		<name>openEHR</name>
@@ -34,12 +55,12 @@
 				</configuration>
 			</plugin>
 			<plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-scm-plugin</artifactId>
-              <configuration>
-                 <goals>install</goals>
-              </configuration>
-           </plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-scm-plugin</artifactId>
+				<configuration>
+					<goals>install</goals>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	
