@@ -14,7 +14,7 @@
  */
 package org.openehr.rm.common.resource;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -39,7 +39,7 @@ public class ResourceDescriptionItem extends RMObject {
 	 */
 	public ResourceDescriptionItem( CodePhrase language, String purpose,
 			List<String> keywords, String use, String misuse, String copyright,
-			HashMap<String, String> originalResourceUri, HashMap<String, String> otherDetails,
+			Map<String, String> originalResourceUri, Map<String, String> otherDetails,
 			TerminologyService terminologyService) {
 		if (language == null) {
 			throw new IllegalArgumentException("null language");
@@ -123,7 +123,7 @@ public class ResourceDescriptionItem extends RMObject {
 	 * 
 	 * @return originalResourceUri
 	 */
-	public HashMap<String, String> getOriginalResourceUri() {
+	public Map<String, String> getOriginalResourceUri() {
 		return originalResourceUri;
 	}
 	
@@ -133,7 +133,7 @@ public class ResourceDescriptionItem extends RMObject {
 	 * 
 	 * @return otherDetails
  	 */
-	public HashMap<String, String> getOtherDetails() {
+	public Map<String, String> getOtherDetails() {
 		return otherDetails;
 	}
 	
@@ -172,10 +172,10 @@ public class ResourceDescriptionItem extends RMObject {
 	void setMisuse(String misuse) {
 		this.misuse = misuse;
 	}
-	void setOriginalResourceUri(HashMap<String, String> originalResourceUri) {
+	void setOriginalResourceUri(Map<String, String> originalResourceUri) {
 		this.originalResourceUri = originalResourceUri;
 	}
-	void setOtherDetails(HashMap<String, String> otherDetails) {
+	void setOtherDetails(Map<String, String> otherDetails) {
 		this.otherDetails = otherDetails;
 	}
 	void setPurpose(String purpose) {
@@ -193,8 +193,8 @@ public class ResourceDescriptionItem extends RMObject {
 	private String use;
 	private String misuse;
 	private String copyright;
-	private HashMap<String, String> originalResourceUri;
-	private HashMap<String, String> otherDetails;
+	private Map<String, String> originalResourceUri;
+	private Map<String, String> otherDetails;
 		
 }
 

@@ -14,7 +14,7 @@
  */
 package org.openehr.rm.common.resource;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -38,8 +38,8 @@ public class TranslationDetails extends RMObject {
 	 * @param accreditation
 	 * @param otherDetails
 	 */
-	public TranslationDetails(CodePhrase language, HashMap<String, String> author,
-			String accreditation, HashMap<String, String> otherDetails, 
+	public TranslationDetails(CodePhrase language, Map<String, String> author,
+			String accreditation, Map<String, String> otherDetails, 
 			TerminologyService terminologyService) {
 		if (language == null) {
 			throw new IllegalArgumentException("null language");
@@ -74,7 +74,7 @@ public class TranslationDetails extends RMObject {
 	 * 
 	 * @return author
 	 */
-	public HashMap<String, String> getAuthor() {
+	public Map<String, String> getAuthor() {
 		return author;
 	}
 	
@@ -92,7 +92,7 @@ public class TranslationDetails extends RMObject {
 	 * 
 	 * @return otherDetails
 	 */
-	public HashMap<String, String> getOtherDetails() {
+	public Map<String, String> getOtherDetails() {
 		return otherDetails;
 	}	
 
@@ -137,7 +137,7 @@ public class TranslationDetails extends RMObject {
 		this.accreditation = accreditation;
 	}
 
-	void setAuthor(HashMap<String, String> author) {
+	void setAuthor(Map<String, String> author) {
 		this.author = author;
 	}
 
@@ -145,16 +145,16 @@ public class TranslationDetails extends RMObject {
 		this.language = language;
 	}
 
-	void setOtherDetails(HashMap<String, String> otherDetails) {
+	void setOtherDetails(Map<String, String> otherDetails) {
 		this.otherDetails = otherDetails;
 	}	
 	//POJO end
 	
 	/* fields */
 	private CodePhrase language;
-	private HashMap<String, String> author;
+	private Map<String, String> author;
 	private String accreditation;
-	private HashMap<String, String> otherDetails;
+	private Map<String, String> otherDetails;
 }
 
 /*

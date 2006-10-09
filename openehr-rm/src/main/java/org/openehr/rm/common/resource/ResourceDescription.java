@@ -14,9 +14,7 @@
  */
 package org.openehr.rm.common.resource;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.Attribute;
@@ -34,12 +32,12 @@ public class ResourceDescription {
 	 * Construct ResourceDescription
 	 */
 	public ResourceDescription(
-			@Attribute(name = "originalAuthor", required = true) HashMap<String, String> originalAuthor,
+			@Attribute(name = "originalAuthor", required = true) Map<String, String> originalAuthor,
 			@Attribute(name = "otherContributors") List<String> otherContributors,
 			@Attribute(name = "lifecycleState", required = true) String lifecycleState,
 			@Attribute(name = "details", required = true) List<ResourceDescriptionItem> details,
 			@Attribute(name = "resourcePackageUri") String resourcePackageUri,
-			@Attribute(name = "otherDetails") HashMap<String, String> otherDetails,
+			@Attribute(name = "otherDetails") Map<String, String> otherDetails,
 			@Attribute(name = "parentResource") AuthoredResource parentResource ){
 		if (originalAuthor == null || originalAuthor.size() == 0 ) {
 			throw new IllegalArgumentException("null or empty originalAuthor");
@@ -85,7 +83,7 @@ public class ResourceDescription {
 	 * 
 	 * @return originalAuthor
 	 */
-	public HashMap<String, String> getOriginalAuthor() {
+	public Map<String, String> getOriginalAuthor() {
 		return originalAuthor;
 	}
 
@@ -105,7 +103,7 @@ public class ResourceDescription {
 	 * 
 	 * @return otherDetails
 	 */
-	public HashMap<String, String> getOtherDetails() {
+	public Map<String, String> getOtherDetails() {
 		return otherDetails;
 	}
 
@@ -139,7 +137,7 @@ public class ResourceDescription {
 		this.lifecycleState = lifecycleState;
 	}
 
-	void setOriginalAuthor(HashMap<String, String> originalAuthor) {
+	void setOriginalAuthor(Map<String, String> originalAuthor) {
 		this.originalAuthor = originalAuthor;
 	}
 
@@ -147,7 +145,7 @@ public class ResourceDescription {
 		this.otherContributors = otherContributors;
 	}
 
-	void setOtherDetails(HashMap<String, String> otherDetails) {
+	void setOtherDetails(Map<String, String> otherDetails) {
 		this.otherDetails = otherDetails;
 	}
 
@@ -180,12 +178,12 @@ public class ResourceDescription {
 	//POJO end
 	
 	/* fields */
-	private HashMap<String, String> originalAuthor;
+	private Map<String, String> originalAuthor;
 	private List<String> otherContributors;
 	private String lifecycleState;
 	private List<ResourceDescriptionItem> details;
 	private String resourcePackageUri;
-	private HashMap<String, String> otherDetails;
+	private Map<String, String> otherDetails;
 	private AuthoredResource parentResource;
 }
 

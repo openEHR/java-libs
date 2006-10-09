@@ -26,6 +26,11 @@
 			<name>Rong Chen</name>
 			<email>rong.acode@gmail.com</email>
 		</developer>
+		<developer>
+			<id>yinsu.lim</id>
+			<name>Yin Su Lim</name>
+			<email>y.lim@chime.ucl.ac.uk</email>
+		</developer>
 	</developers>
 	<scm>
 		<connection>

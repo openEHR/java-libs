@@ -64,14 +64,14 @@ public class DvDateTimeParser {
                 //dealing with extended format(complete and partial)               
                 dt = eTimeParser.parseDateTime(value);
             } catch (Exception e) {
-                throw new IllegalArgumentException("invalid value for time in extended format");
+                throw new IllegalArgumentException("invalid value for time in extended format: " + value);
             }
         } else if(value.matches(BTIME_COMPLETE)) {
             value = value.replace(",", ".");
             try {
                 dt = timeFormatter.parseDateTime(padTimeValue(value));
             } catch (Exception e) {
-                throw new IllegalArgumentException("invalid value for time in basic format");
+                throw new IllegalArgumentException("invalid value for time in basic format: " + value);
             }
         } else if(value.matches(TIME_PARTIAL)) {
             DateTimeFormatter partial = null;
@@ -98,10 +98,10 @@ public class DvDateTimeParser {
             try {
                 dt = partial.parseDateTime(value);
             } catch (Exception e) {
-                throw new IllegalArgumentException("invalid partial time value in basic format");
+                throw new IllegalArgumentException("invalid partial time value in basic format: " + value);
             }
         } else {
-            throw new IllegalArgumentException("invalid format for time");
+            throw new IllegalArgumentException("invalid format for time: " + value);
         }
 
         return dt;
@@ -112,14 +112,14 @@ public class DvDateTimeParser {
             throw new IllegalArgumentException("null value for date");
         }
         if (!value.matches(EXT_DATE) && !value.matches(BDATE)) {
-            throw new IllegalArgumentException("invalid pattern for date");
+            throw new IllegalArgumentException("invalid pattern for date: " + value);
         }
         DateTime dt = null;
         if (value.indexOf("-") > 0 || value.length() == 4) {
             try {
                 dt = ISODateTimeFormat.dateElementParser().withOffsetParsed().parseDateTime(value);
             } catch (Exception e) {
-                throw new IllegalArgumentException("invalid value for extended date");
+                throw new IllegalArgumentException("invalid value for extended date: " + value);
             }
         } else {
             int size = analyseDateString(value);
@@ -132,7 +132,7 @@ public class DvDateTimeParser {
             try {
                 dt = formatter.parseDateTime(value);
             } catch (Exception e) {
-                throw new IllegalArgumentException("invalid value for basic date");
+                throw new IllegalArgumentException("invalid value for basic date: " + value);
             }
         }
         return dt;
@@ -143,14 +143,14 @@ public class DvDateTimeParser {
             throw new IllegalArgumentException("null value for datetime");
         }
         if (!value.matches(EXT_DATETIME) && !value.matches(BDATETIME)) {
-            throw new IllegalArgumentException("invalid pattern for datetime");
+            throw new IllegalArgumentException("invalid pattern for datetime: " + value);
         }
         DateTime dt = null;
         if(value.indexOf("-") > 0) {
             try {
                 dt = ISODateTimeFormat.dateTimeParser().withOffsetParsed().parseDateTime(value);
             } catch (Exception e) {
-                throw new IllegalArgumentException("invalid value for datetime");
+                throw new IllegalArgumentException("invalid value for datetime: " + value);
             }
         } else {  
             value = value.replace(".", ",");

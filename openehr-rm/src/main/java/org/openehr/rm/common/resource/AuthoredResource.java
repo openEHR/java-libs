@@ -14,7 +14,7 @@
  */
 package org.openehr.rm.common.resource;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,7 +43,7 @@ public abstract class AuthoredResource extends RMObject {
 	 * @param revisionHistory
 	 * @param isControlled
 	 */
-	public AuthoredResource(CodePhrase originalLanguage, HashMap<String, 
+	public AuthoredResource(CodePhrase originalLanguage, Map<String, 
 			TranslationDetails> translations, ResourceDescription description,
 			RevisionHistory revisionHistory, boolean isControlled, 
 			TerminologyService terminologyService) {
@@ -118,7 +118,7 @@ public abstract class AuthoredResource extends RMObject {
 	 * 
 	 * @return translations
 	 */
-	public HashMap<String, TranslationDetails> getTranslations() {
+	public Map<String, TranslationDetails> getTranslations() {
 		return translations;
 	}
 	
@@ -223,14 +223,14 @@ public abstract class AuthoredResource extends RMObject {
 		this.revisionHistory = revisionHistory;
 	}
 
-	void setTranslations(HashMap<String, TranslationDetails> translations) {
+	void setTranslations(Map<String, TranslationDetails> translations) {
 		this.translations = translations;
 	}	
 	//POJO end
 	
 	/* fields */
 	private CodePhrase originalLanguage;
-	private HashMap<String, TranslationDetails> translations;
+	private Map<String, TranslationDetails> translations;
 	private ResourceDescription description;
 	private RevisionHistory revisionHistory;
 	private boolean isControlled;
