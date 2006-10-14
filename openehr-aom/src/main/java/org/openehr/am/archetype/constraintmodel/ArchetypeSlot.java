@@ -15,6 +15,7 @@
 package org.openehr.am.archetype.constraintmodel;
 
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.am.archetype.assertion.Assertion;
 
 import java.util.Set;
 
@@ -40,7 +41,8 @@ public class ArchetypeSlot extends CObject {
      */
     public ArchetypeSlot(String path, String rmTypeName,
                          Interval<Integer> occurrences,
-                         String nodeID, Set includes, Set excludes) {
+                         String nodeID, Set<Assertion> includes, 
+                         Set<Assertion> excludes) {
 
         super(false, path, rmTypeName, occurrences, nodeID);
 
@@ -64,7 +66,7 @@ public class ArchetypeSlot extends CObject {
      *
      * @return List of Assertion
      */
-    public Set getIncludes() {
+    public Set<Assertion> getIncludes() {
         return includes;
     }
 
@@ -74,7 +76,7 @@ public class ArchetypeSlot extends CObject {
      *
      * @return List of Assertion
      */
-    public Set getExcludes() {
+    public Set<Assertion> getExcludes() {
         return excludes;
     }
 
@@ -110,8 +112,8 @@ public class ArchetypeSlot extends CObject {
     }
 
     /* fields */
-    private Set includes;
-    private Set excludes; 
+    private Set<Assertion> includes;
+    private Set<Assertion> excludes; 
 }
 
 /*
