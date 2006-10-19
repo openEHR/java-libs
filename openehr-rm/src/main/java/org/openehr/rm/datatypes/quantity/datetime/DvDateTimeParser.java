@@ -39,14 +39,14 @@ public class DvDateTimeParser {
     static final DateTimeFormatter eTimeParser = ISODateTimeFormat.timeParser().withOffsetParsed(); //extended
     //static final DateTimeFormatter eTimePrinter = ISODateTimeFormat.time(); //extended printer
     private static final String EXT_TIME =
-            "(\\d){2}(:(\\d){2}(:(\\d){2}((,|\\.)(\\d){3})?)?)?(Z|(\\+|-)(\\d){2}(:(\\d){2})?)?";
+            "(\\d){2}(:(\\d){2}(:(\\d){2}((,|\\.)(\\d){3})?)?)?(Z|(\\+|-)(\\d){2}((:)?(\\d){2})?)?";
     private static final String BTIME_COMPLETE = "(\\d){6}((,|\\.)(\\d){3})?(Z|(\\+|-)(\\d){2,4})?";
     private static final String TIME_PARTIAL = "((\\d){2}|(\\d){4})(Z|(\\+|-)(\\d){2,4})?";
     private static final String EXT_DATE = "(\\d){4}(-(\\d){2}(-(\\d){2})?)?";
     private static final String BDATE = "(\\d){4}((\\d){2}((\\d){2})?)?";
     private static final String BDATETIME = "(\\d){8}T((\\d){2}|(\\d){4}|(\\d){6}((,|\\.)(\\d){3})?)(Z|(\\+|-)(\\d){2,4})?";
     private static final String EXT_DATETIME = 
-       "(\\d){4}-(\\d){2}-(\\d){2}T(\\d){2}(:(\\d){2}(:(\\d){2}((,|\\.)(\\d){3})?)?)?(Z|(\\+|-)(\\d){2}(:(\\d){2})?)?";
+       "(\\d){4}-(\\d){2}-(\\d){2}T(\\d){2}(:(\\d){2}(:(\\d){2}((,|\\.)(\\d){3})?)?)?(Z|(\\+|-)(\\d){2}((:)?(\\d){2})?)?";
     //For pasing date element
     
     

@@ -50,11 +50,16 @@ public class DvDateTimeParserTest extends TestCase {
      * Test of parseTime method, of class org.openehr.rm.datatypes.quantity.datetime.DvDateTimeParser.
      */
     public void testParseTime() {        
-        String value = "23:59:59";
-        String[] values = {"23", "23:30", "23:30Z", "23+11", "2330", "1000Z", "11Z", "153722", 
-                            "225523.9", "102030.01", "191817.289", "102030.001-01, 102030,001-10"};//strings that pass
-        DateTime result = DvDateTimeParser.parseTime(value);
-        assertNotNull(result);  
+        String[] values = {
+        		"23", "23:30", "23:30Z", "23+11", "2330", "1000Z", "11Z", "153722", 
+                //"225523.9", "102030.01", "191817.289", "102030.001-01, 102030,001-10",
+                "23:59:59", "12:35:45.666", "12:35:45-0700"
+                            
+        };//strings that should pass
+        for(int i = 0; i < values.length; i++) {
+        	DateTime result = DvDateTimeParser.parseTime(values[i]);
+        	assertNotNull(result);
+        }
     }
     
     /**
@@ -62,7 +67,9 @@ public class DvDateTimeParserTest extends TestCase {
      */
     public void testParseDate() {        
         //String value = "199912";
-        String[] values = {"1333", "1982-02-19", "1982-02", "29491213", "199002"};//strings that pass
+        String[] values = {
+        		"1333", "1982-02-19", "1982-02", "29491213", "199002"
+        };//strings that pass
         DateTime result = null;
         for(int i = 0; i < values.length; i++) {
             result = DvDateTimeParser.parseDate(values[i]);

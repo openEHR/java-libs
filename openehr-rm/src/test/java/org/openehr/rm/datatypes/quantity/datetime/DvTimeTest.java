@@ -79,7 +79,8 @@ public class DvTimeTest extends TestCase {
             "20:10:55", "00:00:59Z", "12:12:30-01:00", "21:23:34.234",
             "01:02:03.009+02:30", "21:23:34,234", "08:10:33,001Z", "01:02:03,009+02:30", 
             "201055", "000059Z", "121230-0100", "212334.234", 
-            "010203.009+0230", "212334,234", "081033,001Z", "010203,009+0230"};
+            "010203.009+0230", "212334,234", "081033,001Z", "010203,009+0230",
+            "12:35:45.666", "12:35:45-0700"};
 
         for (String value : values) {
             assertEquals(new DvTime(value), dvTime(value));
@@ -159,8 +160,7 @@ public class DvTimeTest extends TestCase {
         assertFalse(DvTime.isValidISO8601Time("256678"));
         assertFalse(DvTime.isValidISO8601Time("005500U"));
         assertFalse(DvTime.isValidISO8601Time("-000001"));
-        assertFalse(DvTime.isValidISO8601Time("003001+02:30"));
-        assertFalse(DvTime.isValidISO8601Time("12:30:10-0230"));
+        assertFalse(DvTime.isValidISO8601Time("003001+02:30"));        
         assertFalse(DvTime.isValidISO8601Time("00:03:09.999+25:30"));
               
         assertTrue(DvTime.isValidISO8601Time("23:59:59"));
@@ -169,7 +169,7 @@ public class DvTimeTest extends TestCase {
         assertTrue(DvTime.isValidISO8601Time("14:25:20-00:00"));
         assertTrue(DvTime.isValidISO8601Time("22:46:08-01"));
         assertTrue(DvTime.isValidISO8601Time("204724-11"));
-        
+        assertTrue(DvTime.isValidISO8601Time("12:30:10-0230"));
     }
 
     public void testIsEquivalent() throws Exception {
