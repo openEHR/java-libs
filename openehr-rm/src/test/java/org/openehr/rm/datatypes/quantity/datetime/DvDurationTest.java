@@ -66,7 +66,8 @@ public class DvDurationTest extends TestCase {
             "P10DT9H7s", "PT9H0M8S", "P1Y2M3W4D",
             "P9y6dT2.99s", "P35WT45H", "P20M33DT79m",
             "PT0,19s", "-P1Y2m3W4dT5H6m7,8s",
-            "-PT0H0m56s", "P", "P0Y", "P0DT0s", "PT0H" 
+            "-PT0H0m56s", "P", "P0Y", "P0DT0s", "PT0H",
+            "PT0s"
         };
         int[][] data = {
             {0, 12, 32, 10, 9, 8, 7, 898}, {0, 0, 0, 10, 9, 8, 7, 0},
@@ -79,7 +80,8 @@ public class DvDurationTest extends TestCase {
             {0, 20, 0, 33, 0, 79, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 190},
             {-1, -2, -3, -4, -5, -6, -7, -800}, {0, 0, 0, 0, 0, 0, -56, 0},
             {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}
+            {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0}
         };
         for (int i = 0; i < value.length; i++) {
             assertDuration(value[ i ], data[ i ]);
