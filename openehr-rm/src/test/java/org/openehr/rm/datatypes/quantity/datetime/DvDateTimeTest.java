@@ -81,7 +81,8 @@ public class DvDateTimeTest extends TestCase {
 
     public void testConstructorTakesString() throws Exception {
         String[] values = {
-            "2004-10-31T20:10:55", "2000-01-01T00:00:59"
+            "2004-10-31T20:10:55", "2000-01-01T00:00:59",
+            "2000-01-01T00:00:59+1200"
         };
         for(String value : values) {
             assertEquals(new DvDateTime(value), dvDate(value));

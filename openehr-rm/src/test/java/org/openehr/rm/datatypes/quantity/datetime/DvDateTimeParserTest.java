@@ -68,7 +68,7 @@ public class DvDateTimeParserTest extends TestCase {
     public void testParseDate() {        
         //String value = "199912";
         String[] values = {
-        		"1333", "1982-02-19", "1982-02", "29491213", "199002"
+        		"1333", "1982-02-19", "1982-02", "29491213", "199002"        		
         };//strings that pass
         DateTime result = null;
         for(int i = 0; i < values.length; i++) {
@@ -82,9 +82,11 @@ public class DvDateTimeParserTest extends TestCase {
      */
     public void testParseDateTime() {
        
-        String[] values = {"1999-09-10T23:59:59.010-02:00", "2009-12-12T00:12", "2009-12-12T00:12-01:00", "2000-12-01T10Z", 
-                           "1900-01-04T11+02:00", "19990910T235959,000+0100", "19441116T005900.000", "19001217T205933", 
-                           "19441116T00+0900", "13440916T00" };//strings that pass
+        String[] values = {
+        		"1999-09-10T23:59:59.010-02:00", "2009-12-12T00:12", "2009-12-12T00:12-01:00", "2000-12-01T10Z", 
+                "1900-01-04T11+02:00", "19990910T235959,000+0100", "19441116T005900.000", "19001217T205933", 
+                "19441116T00+0900", "13440916T00", "2000-01-01T00:00:59+1200" 
+        };//strings that pass
         for(int i = 0; i < values.length; i++) {
             DateTime result = DvDateTimeParser.parseDateTime(values[i]);
             assertNotNull(result);
