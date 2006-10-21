@@ -21,13 +21,6 @@
 package org.openehr.rm.datatypes.quantity.datetime;
 
 import junit.framework.TestCase;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.joda.time.MutablePeriod;
-import org.joda.time.PeriodType;
-import org.joda.time.format.ISOPeriodFormat;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
 
 public class DvDurationTest extends TestCase {
 

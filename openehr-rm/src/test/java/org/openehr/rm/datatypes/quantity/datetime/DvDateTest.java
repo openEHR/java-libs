@@ -23,10 +23,6 @@ package org.openehr.rm.datatypes.quantity.datetime;
 
 import junit.framework.TestCase;
 
-import java.util.Calendar;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
-
 public class DvDateTest extends TestCase {
 
     public DvDateTest(String test) {

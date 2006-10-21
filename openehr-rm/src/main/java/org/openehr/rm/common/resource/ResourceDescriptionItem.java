@@ -56,10 +56,12 @@ public class ResourceDescriptionItem extends RMObject {
 		if (copyright != null && StringUtils.isEmpty(copyright)) {
 			throw new IllegalArgumentException("empty copyright");
 		}
-		if (terminologyService == null) {
-			throw new IllegalArgumentException("null terminologyService");
-		}
-		if (!terminologyService.codeSet("languages").hasLang(language)) {
+//		 TODO: by-pass terminologyService for the parser 
+		// if (terminologyService == null) {
+		//	throw new IllegalArgumentException("null terminologyService");
+		//}
+		if (terminologyService != null 
+				&& !terminologyService.codeSet("languages").hasLang(language)) {
 			throw new IllegalArgumentException("unknown language:" + language);
 		}
 		this.language = language;
