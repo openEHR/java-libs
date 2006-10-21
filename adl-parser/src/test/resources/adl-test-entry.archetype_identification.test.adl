@@ -1,0 +1,23 @@
+archetype (adl_version=1.4; controlled)
+	adl-test-ENTRY.archetype_identification.draft
+	
+concept 
+	[at0000]	--  test
+
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test">; 
+					description = <"test">
+				>
+			>
+		>
+	>
