@@ -1,0 +1,29 @@
+<model>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>openehr</groupId>
+  <artifactId>ref_impl_java</artifactId>
+  <packaging>pom</packaging>
+  <version>1</version>
+  <organization>
+    <name>The openEHR Foundataion</name>
+  </organization>
+  <modules>
+    <module>openehr-rm</module>
+    <module>openehr-aom</module>
+    <module>openehr-ap</module>
+    <module>adl-serializer</module>
+    <module>adl-parser</module>
+    <module>openehr-dao</module>
+  </modules>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</model>
