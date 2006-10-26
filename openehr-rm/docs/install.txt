@@ -1,0 +1,74 @@
+openEHR REFERENCE JAVA KERNEL VERSION 1.2 INSTALL INSTRUCTIONS
+
+INTRODUCTION:
+-----------------
+
+This document describes how to install the java source files for the openEHR
+reference java kernel.
+
+-----------------
+STATUS:
+-----------------
+
+As at 23rd February 2005, the compilation and running of this code has been
+successfully performed on Redhat 8, Redhat 9 and Debian 3.0 Linux distributions
+and Windows 2000, Windows XP
+
+-----------------
+REQUIREMENTS:
+-----------------
+
+To compile the code and make use of the libraries, you must have:
+
+Java Development Kit 1.5 / 5.0 installed *and running* on your operating system,
+with the JAVA_HOME variable defined (see your operating system instructions on
+how to accomplish path variables)
+
+Maven 1.0.2 from http://maven.apache.org/ installed and runnable
+
+Familiarize yourself with the documentation for the software outlined above
+
+-----------------
+RUNNING:
+-----------------
+
+To compile the source files:
+
+1. open up your shell / terminal or MS-DOS command line screen
+
+2. 'cd' to your project directory where the project.xml is placed (usually under
+   the project root directory 'kernel_java-dev' in your openEHR download
+   directory (see http://www.openehr.org/developer/t_bk_um_top.htm )
+
+3. Run the following commands from the shell / terminal or MS-DOS command line
+   screen:
+
+  -to run unit tests, type the command "maven test"
+
+  -to build a jar file, type the command "maven jar"
+
+  -to install a jar file into the local maven repository, type the command
+   "maven jar:install"
+
+  -to build the javadoc api, type the command "maven javadoc" 
+
+7. jar files and the javadoc api should appear under the target subdirectory
+
+-----------------
+RECOMMENDATIONS:
+-----------------
+
+Ensure that the maven 'bin' directory is on your System Path
+
+Under no circumstances amend the project's installed Directory Structure
+
+-----------------
+PROBLEM REPORTING:
+------------------
+
+Please report any problems, issues or bugs to
+
+http://coruscant.chime.ucl.ac.uk:8200/openEHR_Collector/projects/reference_implementations/javakernel/PR/folder_contents
+
+THE openEHR FOUNDATION
+Acode, Sweden
