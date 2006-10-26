@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+<head>
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <title>openEHR java reference kernel Project</title>
+  <link rel="stylesheet" href="http://www.openehr.org/styles/oe.css" type="text/css" />
+</head>
+
+
+<body>
+
+
+
+
+
+
+<h1>Developer Guidelines for the <br />
+<span style="font-style: italic;">open</span>EHR Java
+Reference Kernel Project
+</h1>
+
+
+
+
+
+
+<hr style="width: 100%; height: 2px;" />
+<h2>Overview</h2>
+The guidelines described below represent the quality assurance steps
+ageed by developers on this project, in ensuring the quality of the
+contents of the repository and its resulting software. The guidelines
+may be somewhat project-specific, and may be improved as time goes on.
+However, the statements below represent at any time the agreed approach
+of the team.<br />
+<h2>Builds</h2>
+<p>A build prior to commit should always be successful - the build process of the project 
+should never break in any revision regardless if it's a public release 
+or just internal development revision. In the java kernel case, it means 
+run "maven clean test" should always ends with "BUILD SUCCESSFUL" - no 
+compile error, no failed test. This requires the commitor always run 
+clean test locally before commit any changes.</p>
+<p>The normal work flow together with subversion operation is as following:
+<br />
+</p>
+<ol>
+  <li>start local copy - "svn co project_name"<br />
+OR<br />
+update local copy - "svn update" depends if there is a local copy 
+or not&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+  <li>do changes locally, which is usually involves writing production 
+code, writing test code, running test code to see if test pass or not&nbsp;</li>
+  <li>just before commit do last "svn update" and fix any conflicts</li>
+  <li>run "maven clean test" again if there is any new local changes</li>
+  <li>commit the changes using "svn commit"
+  </li>
+</ol>
+<h2>Testing</h2>
+<p>The following guidelines apply to test cases and implemented features:</p>
+<ol>
+  <li>No test should be 'left behind' - when the production code gets updated and 
+improved so does the unit test code. Broken test due to updates in the 
+production code must be fixed so it can pass. Only when the feature in 
+the production is deprecated, can the test be removed from the source.</li>
+  <li>No feature is considered implemented without according unit test runs 
+successfully. One could even start with a broken test, and implement the 
+feature in the production code and see the test passes, aka Test Driven 
+Development. The point is that each feature in the production code 
+should be accompanied by a unit test to provide minimal verification and 
+serve as safety net when the production code evolves. Only when the 
+production code is so simple that it can't possible break, then there is 
+no need to test. Usually the unit test is organized in the same package 
+as the production code but in different file directory.</li>
+  <li>Fixing a bug should always start with writing a unit test to 
+demonstrate the bug with smallest amount of code possible, then proceed 
+to production code to fix the bug and see the test passes. The initial 
+test that exposes the bug should remain in the source tree.</li>
+</ol>
+<h2>Notes</h2>
+<h3>Supporting Infrastructure</h3>
+<p>When start to work with more than one components (kernel,parser) and 
+worry about the dependencies between components, we need to have a build 
+machine that can check out latest code from the subversion repository 
+and run all the build script from individual projects (in the order of 
+dependency) to see if any one fails, publish the result and notify the 
+developer if anything goes wrong. This process should be triggered every 
+time a change has been committed. Ideally, all developers should have the 
+same environment as the build server and run integration test locally 
+before commit any changes. But sometimes it could be too time consuming 
+to do it locally (the build machine is usually a very fast one), so the 
+developer could commit some changes and wait to see if the integration 
+test passes on the build machine. If not, the developer is responsible 
+to either correct (error in other project) or revert the change (most 
+likely).
+</p>
+
+<p>Another thing which is maven related is, in Acode we build and store our 
+components on our internal build machine and publish them through a web 
+server so they can be downloaded by other maven projects. It will be 
+nice to have similar arrangement on openEHR's server so that the user 
+doesn't have to manually download components to fix the dependency. 
+Naturally the build process and integration test should be connected, 
+only successful integration test will lead to publishing of newly 
+created components.</p>
+
+
+
+
+
+
+<hr style="width: 100%; height: 2px;" />
+<span class="footer">Last
+changed: $Date: 2005-10-12 23:20:08 +0200 (Wed, 12 Oct 2005) $ $Revision: 2 $</span><br />
+
+
+
+
+
+
+<br />
+
+
+
+
+
+
+<br />
+
+
+
+
+
+
+</body>
+</html>
