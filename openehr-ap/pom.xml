@@ -29,11 +29,11 @@
 	</developers>
 	<scm>
 		<connection>
-			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/openehr-ap</connection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/openehr-ap</connection>
 		<developerConnection>
-			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/openehr-ap</developerConnection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/openehr-ap</developerConnection>
 		<url>
-			http://my.openehr.org/wsvn/ref_impl_java/BRANCHES/sandbox/openehr-ap/</url>
+			http://my.openehr.org/wsvn/ref_impl_java/TRUNK/openehr-ap/</url>
 	</scm>
 	<organization>
 		<name>openEHR</name>
