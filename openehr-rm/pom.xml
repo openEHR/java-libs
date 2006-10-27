@@ -34,11 +34,11 @@
 	</developers>
 	<scm>
 		<connection>
-			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/openehr-rm</connection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/openehr-rm</connection>
 		<developerConnection>
-			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/openehr-rm</developerConnection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/openehr-rm</developerConnection>
 		<url>
-			http://my.openehr.org/wsvn/ref_impl_java/BRANCHES/sandbox/openehr-rm/</url>
+			http://my.openehr.org/wsvn/ref_impl_java/TRUNK/openehr-rm/</url>
 	</scm>
 	
 	<organization>
