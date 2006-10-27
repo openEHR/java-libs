@@ -29,11 +29,11 @@
 	</developers>
 	<scm>
 		<connection>
-			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/adl-parser</connection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/adl-parser</connection>
 		<developerConnection>
-			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/adl-parser</developerConnection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/adl-parser</developerConnection>
 		<url>
-			http://my.openehr.org/wsvn/ref_impl_java/BRANCHES/sandbox/adl-parser/</url>
+			http://my.openehr.org/wsvn/ref_impl_java/TRUNK/adl-parser/</url>
 	</scm>
 	<organization>
 		<name>openEHR</name>
