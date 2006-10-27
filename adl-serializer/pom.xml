@@ -28,11 +28,11 @@
 	</developers>
 	<scm>
 		<connection>
-			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/adl-serializer</connection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/adl-serializer</connection>
 		<developerConnection>
-			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/sandbox/adl-serializer</developerConnection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/adl-serializer</developerConnection>
 		<url>
-			http://my.openehr.org/wsvn/ref_impl_java/BRANCHES/sandbox/adl-serializer/</url>
+			http://my.openehr.org/wsvn/ref_impl_java/TRUNK/adl-serializer/</url>
 	</scm>
 	<organization>
 		<name>openEHR</name>
