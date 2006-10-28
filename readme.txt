@@ -20,17 +20,17 @@ AUTHORS
         Rong Chen, Goran Pestana
         Acode HB, Sweden <http://www.acode.se>
 		
-		Yin Su Lim
-		University College London, UK
+        Yin Su Lim
+        University College London, UK
 
 Contributors
-		Nathan Lee, Rodrigo Filgueira, Erik Sundvall, Mattias Forss, 
-		Johan Hjalmarsson, Jonas Andersson, Joakim Fredriksson, Routis Haralampos
+        Nathan Lee, Rodrigo Filgueira, Erik Sundvall, Mattias Forss, 
+        Johan Hjalmarsson, Jonas Andersson, Joakim Fredriksson, Routis Haralampos
 
 COPYRIGHT
         The software, including all files in this directory and subdirectories
         is copyrighted to the original authors and contributors, 2004,2005,2006. 
-		All Rights Reserved.
+        All Rights Reserved.
 
 LICENSE
         The softwrare are subject to the Mozilla Public License Version
@@ -49,12 +49,6 @@ LICENSE
         and other provisions required by the GPL or the LGPL. If you do not delete
         the provisions above, a recipient may use your version of this file under
         the terms of any one of the MPL, the GPL or the LGPL.
-
-DIRECTORY STRUCTURE OF THE REPOSITORY
-		This repository is structured using the top-level structure defined at
-		http://www.openehr.org/developer/d_svn_um_dir_struct.htm. Due to java's 
-		needs, directory structures beneath the top level are fairly typical of
-		recommended java structures.
 
 BUILD
         The build script requires JDK and Maven to run. It has been tested with
