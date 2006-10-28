@@ -2,12 +2,12 @@ Java openEHR Implementation project
 -----------------------------------
 
 VERSION
-        Current version 1.2
+        Release-1.0.1 RC
 
 STATUS
-        Based on openEHR target release 0.95 and implemented Reference Model -
+        Based on openEHR release 1.0.1 RC and implemented Reference Model -
         EHR, EHR Extract, Demographics, Common, Data Structures, Data Types
-        and Support, and Archetype Object Model.
+        and Support, and Archetype Object Model, openEHR Archetype Profile.
 
         Besides, support for archetypes based object creation has been added
         into Archetype Object Model classes.
@@ -17,12 +17,20 @@ STATUS
         with support for archetype based object creation and validation.
 
 AUTHORS
-        Rong Chen, Göran Pestana
+        Rong Chen, Goran Pestana
         Acode HB, Sweden <http://www.acode.se>
+		
+		Yin Su Lim
+		University College London, UK
+
+Contributors
+		Nathan Lee, Rodrigo Filgueira, Erik Sundvall, Mattias Forss, 
+		Johan Hjalmarsson, Jonas Andersson, Joakim Fredriksson, Routis Haralampos
 
 COPYRIGHT
         The software, including all files in this directory and subdirectories
-        is copyrighted to Acode HB, Sweden, 2004,2005. All Rights Reserved.
+        is copyrighted to the original authors and contributors, 2004,2005,2006. 
+		All Rights Reserved.
 
 LICENSE
         The softwrare are subject to the Mozilla Public License Version
@@ -42,13 +50,6 @@ LICENSE
         the provisions above, a recipient may use your version of this file under
         the terms of any one of the MPL, the GPL or the LGPL.
 
-ACKNOWLEDGEMENT
-        Thank Thomas Beale for answering questions and good discussion during
-        development of this software.
-
-        Thank people from UCL for good collaboration and particulary Nathan Lee
-        for authoring installation instructions.
-        
 DIRECTORY STRUCTURE OF THE REPOSITORY
 		This repository is structured using the top-level structure defined at
 		http://www.openehr.org/developer/d_svn_um_dir_struct.htm. Due to java's 
@@ -57,8 +58,7 @@ DIRECTORY STRUCTURE OF THE REPOSITORY
 
 BUILD
         The build script requires JDK and Maven to run. It has been tested with
-        J2SDK 1.5.0 and Maven 1.0.2 on both Linux and Windows. It should work
+        J2SDK 1.5.0 and Maven 2.0.4 on both Linux and Windows. It should work
         on other platforms with Java support as well.
 
         See install.txt for detailed installation instruction.
-xx

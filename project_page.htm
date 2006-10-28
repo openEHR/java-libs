@@ -44,9 +44,10 @@
 					</td>
 
 					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">
-						Rong Chen<br />
+						Rong Chen; (ACODE, <a href="mailto:rXXong@acXXode.sXXe">
+						email</a>; remove XXs from email address)
+						<br />
  </td>
-
 				</tr>
 
 				<tr>
@@ -73,21 +74,6 @@
 						ref_impl_java@openehr.org - <a href="http://www.chime.ucl.ac.uk/mailman/listinfo/ref_impl_java">http://www.chime.ucl.ac.uk/mailman/listinfo/ref_impl_java</a>.<br />
  </td>
     </tr>
-    <tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
-						<span style="font-weight: bold;">Project Leader</span>
-						<br />
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">
-						Rong Chen; (ACODE, <a href="mailto:rXXong@acXXode.sXXe">
-						email</a>; remove XXs from email address)
-						<br />
- </td>
-
-				</tr>
 
 				<tr>
 
@@ -256,7 +242,7 @@ Downloads</span>
 					</td>
 
 					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">
-						Release 0.95
+						Release 1.0.1 RC
 						<br />
  </td>
 
@@ -324,7 +310,7 @@ Downloads</span>
 			<li>
 				<span style="font-style: italic; font-weight: bold;">open</span>
 				<span style="font-weight: bold;">EHR Archetype Model</span>:
-				Archetype Object Model, openEHR Archetype Profile, Archetype Definition Language (in the parser) </li>
+				Archetype Object Model, openEHR Archetype Profile, Archetype Definition Language </li>
 
 			
 		
@@ -340,408 +326,28 @@ Downloads</span>
 
 		
 		
-<h2>Component Descriptions
+<h3>Component Descriptions
 			<br />
- </h2>
-
-		
-<h3>The Kernel</h3>
-
-		
-		
-<ul>
-
-			<li>Java implementation of the RM and AOM</li>
-
-			<li>Archetypes based RM object creation and validation</li>
-
-			
-		
-</ul>
-
-		
-<h3>ADL Parser</h3>
+ </h3>
 
 		
 <ul>
 
-			<li> Java implementation of ADL parser targeting ADL 1.4</li>
-
-			<li> Fully integrated with the Java Kernel </li>
-
+			<li><b>openehr-rm</b> Java implementation of the Reference Models (RM)</li>
 			
-			<li> limited post-parsing validation </li>
+			<li><b>openehr-aom</b> Java implementation of the Archetype Object Model (AOM)</li>
 
+			<li><b>openehr-ap</b> Java implementation of the openEHR Archetype Profile (AP)</li>
 			
+			<li><b>adl-serializer</b> ADL serialization from AOM, AP objects</li>
+			
+			<li><b>adl-parser</b> Archetypes in ADL format to AOM, AP objects</li>
+
+			<li><b>openehr-dao</b> Data Access Object interfaces for RM</li>	
 		
 </ul>
- 
-		
-		
-<h3>ADL Serializer</h3>
- 
-		
-<ul>
-
-			<li> From AOM to ADL</li>
-
-			
-		
-</ul>
- 
-		
-		
-<h2>Change log</h2>
 
 		
-<ul>
-
-			<li><a href="libraries/docs/changes.txt">kernel changes</a></li>
-
-		    <li><a href="components/adl_parser/docs/changes.txt">parser changes</a></li>
-
-		
-</ul>
-		
-		
-<h2>TO DO</h2>
-
-		<span style="font-weight: bold;"></span>
-		
-		
-<p>
-		
-		</p>
-<table style="text-align: left; width: 849px; height: 192px;" border="1" cellpadding="2" cellspacing="2">
-
-			<tbody>
-
-				<tr>
-
-					<td class="footer table_cell_left_heading" colspan="3" rowspan="1" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-						
-      <div style="text-align: center;"></div>
-
-						
-      <div style="text-align: center;">
-							<span class="table_cell_top_heading">MAINLINE Release
-								1.0 Development</span>
-						</div>
-
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-						Job </td>
-
-					<td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-						Description </td>
-
-					<td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-						Who </td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						Update the RM </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						Update the Reference Model classes according to the Release 1.0
-						specifications </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						Update the AOM </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						Update the Archetype Object Model classes according to the
-						Release 1.0 specifications </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						Update the ADL Parser </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						Update the ADL Parser according to the Release 1.0 specifications
-						</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						DbC support </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						Implement Design by Contract properly in the kernel code </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						Object creation </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						Improve the current object creation logic </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						ADL output </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						Improve the ADL output feature </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-			
-  </tbody>
-		
-</table>
-
-		
-<p>
-		</p>
-<table style="text-align: left; width: 849px; height: 192px;" border="1" cellpadding="2" cellspacing="2">
-
-			<tbody>
-
-				<tr>
-
-					<td class="footer table_cell_left_heading" colspan="3" rowspan="1" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-						
-      <div style="text-align: center;"></div>
-
-						
-      <div style="text-align: center;">
-							<span class="table_cell_top_heading">RM Update towards
-								Release 1.0</span>
-						</div>
-
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-						Job </td>
-
-					<td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-						Description </td>
-
-					<td class="table_cell_top_heading" style="vertical-align: top; background-color: rgb(204, 204, 255);">
-						Who </td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						common_im </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						
-      <ul>
-
-							<li>Move directory package from ehr into common</li>
-
-							<li>Add resource package, and move two description classes
-								from AOM</li>
-
-							<li>Update generic package, and move some classes from
-								change control</li>
-
-							<li>Update change control package, add 3 new classes</li>
-
-						
-      </ul>
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						data_structures_im </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						
-      <ul>
-
-							<li>Update history package, add new classes</li>
-
-							<li>Update item structure package: some small
-								adjustment</li>
-
-						
-      </ul>
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						data_types_im </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						
-      <ul>
-
-							<li>Update DvQuantified</li>
-
-							<li>Update DvEHRURI</li>
-
-						
-      </ul>
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						demographic_im </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						
-      <ul>
-
-							<li>Minor changes related to the root classes</li>
-
-						
-      </ul>
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						ehr_im </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						
-      <ul>
-
-							<li>Update Instruction class and add related classes</li>
-
-							<li>Add newly introduced AdminEntry</li>
-
-							<li>Add new CareEntry and update all its subclasses</li>
-
-							<li>Move directly package to common_im</li>
-
-							<li>Add EHRStatus class</li>
-
-						
-      </ul>
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						integraion_im </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						
-      <ul>
-
-							<li>Add GenericEntry class</li>
-
-						
-      </ul>
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 153); height: 60px;">
-						support_im </td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-						
-      <ul>
-
-							<li>Update PartyRef class</li>
-
-							<li>Add 3 new classes: ObjectVersionID, VersionTreeID and
-								LocatableRef</li>
-
-						
-      </ul>
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 204); height: 60px;">
-					</td>
-
-				</tr>
-
-			
-  </tbody>
-		
-</table>
 
 		
 		<br />
