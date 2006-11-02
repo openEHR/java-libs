@@ -96,7 +96,7 @@ public abstract class Entry extends ContentItem {
         this.charset = charset;
         this.subject = subject;
         this.provider = provider;
-        this.workflwoID = workflowID;
+        this.workflowID = workflowID;
         this.otherParticipations = ( otherParticipations == null ? null :
                 new ArrayList<Participation>(otherParticipations) );
     }
@@ -144,8 +144,8 @@ public abstract class Entry extends ContentItem {
      *
      * @return workflow ID or null if unspecified
      */
-    public ObjectReference getWorkflwoID() {
-        return workflwoID;
+    public ObjectReference getWorkflowID() {
+        return workflowID;
     }
 
     /**
@@ -233,8 +233,8 @@ public abstract class Entry extends ContentItem {
 		this.language = language;
 	}
 
-	void setWorkflwoID(ObjectReference guidelineID) {
-        this.workflwoID = guidelineID;
+	void setWorkflowID(ObjectReference guidelineID) {
+        this.workflowID = guidelineID;
     }
 
     void setOtherParticipations(List<Participation> otherParticipations) {
@@ -247,7 +247,7 @@ public abstract class Entry extends ContentItem {
     private CodePhrase charset;
     private PartyProxy subject;
     private PartyProxy provider;
-    private ObjectReference workflwoID;
+    private ObjectReference workflowID;
     private List<Participation> otherParticipations;
 
     /* static fields */
