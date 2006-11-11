@@ -39,6 +39,7 @@ public class DescriptionTest extends SerializerTestBase {
 		keywords.add("apple");
 		keywords.add("pear");
 		Map<String, String> urls = new HashMap<String, String>();
+		urls.put("key", "value");
 		Map<String, String> others = new HashMap<String, String>();
 
 		ResourceDescriptionItem item = new ResourceDescriptionItem(ENGLISH,
@@ -52,8 +53,9 @@ public class DescriptionTest extends SerializerTestBase {
 				+ "    keywords = <\"apple\",\"pear\">\r\n"
 				+ "    copyright = <\"copyright\">\r\n"
 				+ "    use = <\"use\">\r\n" + "    misuse = <\"misuse\">\r\n"
-				// TODO: fix it
-				//		+ "    original_resource_uri = <\"original_res_url\">\r\n"
+				+ "    original_resource_uri = <\r\n"
+				+ "        [\"key\"] = <\"value\">\r\n"
+				+ "    >\r\n"
 				+ ">\r\n");
 	}
 
