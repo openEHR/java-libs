@@ -193,16 +193,18 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
         printNoneEmptyString("copyright", item.getCopyright(), indent + 1, out);
         printNoneEmptyString("use", item.getUse(), indent + 1, out);
         printNoneEmptyString("misuse", item.getMisuse(), indent + 1, out);
-        // TODO: fix it
-        //printNoneEmptyStringList("original_resource_uri", 
-        //		item.getOriginalResourceUri(), indent + 1, out);
+        printNoneEmptyStringMap("original_resource_uri", 
+        		item.getOriginalResourceUri(), indent + 1, out);
+
         
         // other details not printed
         
         indent(indent, out);
         out.write(">");
         newline(out);
-    }	private void printNoneEmptyString(String label, String value, int indent,
+    }	
+
+	private void printNoneEmptyString(String label, String value, int indent,
 			Writer out) throws IOException {
 
 		if (StringUtils.isEmpty(value)) {
@@ -233,6 +235,27 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 				out.write(",");
 			}
 		}				
+		out.write(">");
+		newline(out);
+	}
+	
+	private void printNoneEmptyStringMap(String label, Map<String, String> map, int indent, Writer out) throws IOException {
+		if (map == null || map.isEmpty()) {
+			return;
+		}
+		
+		indent(indent, out);
+		out.write(label);
+		out.write(" = <");
+		newline(out);
+		
+		for (String key : map.keySet()) {
+			indent(2, out);
+			out.write("[\"" + key + "\"] = <\"" + map.get(key) + "\">");
+			newline(out);
+		}	
+		
+		indent(indent, out);
 		out.write(">");
 		newline(out);
 	}
