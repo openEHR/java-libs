@@ -703,6 +703,8 @@ ResourceDescriptionItem arch_description_item() :
 {
   "[" lang = string_value() "]" <SYM_EQ> "<"
   (
+    <SYM_LANGUAGE> <SYM_EQ> "<" string_value() ">"
+  | 
     <SYM_PURPOSE> <SYM_EQ> "<" purpose = string_value() ">"
   |  
           

@@ -13,6 +13,7 @@ description
 	>
 	details = <
 		["en"] = <
+			language = <"en">
 			purpose = <"For recording a problem, condition or issue that has ongoing significance to the person's health.">
 			use = <"Used for recording any problem, present or past - so is used for recording past history as well as current problems. Used with changed 'Subject of care' for recording problems of relatives and so for family history.">
 			keywords = <"issue", "condition">
