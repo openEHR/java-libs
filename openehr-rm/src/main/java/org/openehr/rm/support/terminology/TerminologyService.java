@@ -16,7 +16,7 @@ package org.openehr.rm.support.terminology;
 
 
 /**
- * Defines inteface to access a terminology service
+ * Defines interface to access a terminology service
  *
  * @author Rong Chen
  * @version 1.0
