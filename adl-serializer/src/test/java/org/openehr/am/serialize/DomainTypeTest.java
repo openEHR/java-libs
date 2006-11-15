@@ -26,6 +26,7 @@ import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
 import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
+import org.openehr.am.openehrprofile.datatypes.text.CDvCodedText;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
 
@@ -51,6 +52,25 @@ public class DomainTypeTest extends SerializerTestBase {
 		ccoded = new CCodedText("/path", terminology, Arrays.asList(codes));
 		clean();
 		outputter.printCCodedText(ccoded, 1, out);
+		verify("    [local::at3102.0]\r\n");
+	}
+	
+	public void testPrintCDvCodedText() throws Exception {
+		String[] codes = { "at2001", "at2002", "at2003" };
+		String terminology = "local";
+		CDvCodedText ccoded = new CDvCodedText("/path", terminology, Arrays
+				.asList(codes));
+
+		clean();
+		outputter.printCDvCodedText(ccoded, 1, out);
+		verify("    [" + terminology + "::\r\n" + "    " + codes[0] + ",\r\n"
+				+ "    " + codes[1] + ",\r\n" + "    " + codes[2] + "]\r\n");
+
+		// test the single code term
+		codes = new String[] { "at3102.0" };
+		ccoded = new CDvCodedText("/path", terminology, Arrays.asList(codes));
+		clean();
+		outputter.printCDvCodedText(ccoded, 1, out);
 		verify("    [local::at3102.0]\r\n");
 	}
 

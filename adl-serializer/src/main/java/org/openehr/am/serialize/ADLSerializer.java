@@ -35,6 +35,7 @@ import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
+import org.openehr.am.openehrprofile.datatypes.text.CDvCodedText;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -177,32 +178,31 @@ public class ADLSerializer {
 		newline(out);
 	}
 
-protected void printDescriptionItem(ResourceDescriptionItem item,
-                                        int indent, Writer out)
-            throws IOException {
-        indent(indent, out);
-        out.write("[\"");
-        out.write(item.getLanguage().getCodeString());
-        out.write("\"] = <");
-        newline(out);
+	protected void printDescriptionItem(ResourceDescriptionItem item,
+			int indent, Writer out) throws IOException {
+		indent(indent, out);
+		out.write("[\"");
+		out.write(item.getLanguage().getCodeString());
+		out.write("\"] = <");
+		newline(out);
 
-        printNoneEmptyString("language", item.getLanguage().getCodeString(), 
-        		indent + 1, out);
-        printNoneEmptyString("purpose", item.getPurpose(), indent + 1, out);        
-        printNoneEmptyStringList("keywords", item.getKeywords(), indent + 1, out); 
-        printNoneEmptyString("copyright", item.getCopyright(), indent + 1, out);
-        printNoneEmptyString("use", item.getUse(), indent + 1, out);
-        printNoneEmptyString("misuse", item.getMisuse(), indent + 1, out);
-        printNoneEmptyStringMap("original_resource_uri", 
-        		item.getOriginalResourceUri(), indent + 1, out);
+		printNoneEmptyString("language", item.getLanguage().getCodeString(),
+				indent + 1, out);
+		printNoneEmptyString("purpose", item.getPurpose(), indent + 1, out);
+		printNoneEmptyStringList("keywords", item.getKeywords(), indent + 1,
+				out);
+		printNoneEmptyString("copyright", item.getCopyright(), indent + 1, out);
+		printNoneEmptyString("use", item.getUse(), indent + 1, out);
+		printNoneEmptyString("misuse", item.getMisuse(), indent + 1, out);
+		printNoneEmptyStringMap("original_resource_uri", item
+				.getOriginalResourceUri(), indent + 1, out);
 
-        
-        // other details not printed
-        
-        indent(indent, out);
-        out.write(">");
-        newline(out);
-    }	
+		// other details not printed
+
+		indent(indent, out);
+		out.write(">");
+		newline(out);
+	}
 
 	private void printNoneEmptyString(String label, String value, int indent,
 			Writer out) throws IOException {
@@ -227,34 +227,35 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 		indent(indent, out);
 		out.write(label);
 		out.write(" = <");
-		for(int i = 0, j = list.size(); i < j; i++) {
+		for (int i = 0, j = list.size(); i < j; i++) {
 			out.write("\"");
 			out.write(list.get(i));
 			out.write("\"");
-			if(i != j - 1) {
+			if (i != j - 1) {
 				out.write(",");
 			}
-		}				
+		}
 		out.write(">");
 		newline(out);
 	}
-	
-	private void printNoneEmptyStringMap(String label, Map<String, String> map, int indent, Writer out) throws IOException {
+
+	private void printNoneEmptyStringMap(String label, Map<String, String> map,
+			int indent, Writer out) throws IOException {
 		if (map == null || map.isEmpty()) {
 			return;
 		}
-		
+
 		indent(indent, out);
 		out.write(label);
 		out.write(" = <");
 		newline(out);
-		
+
 		for (String key : map.keySet()) {
 			indent(2, out);
 			out.write("[\"" + key + "\"] = <\"" + map.get(key) + "\">");
 			newline(out);
-		}	
-		
+		}
+
 		indent(indent, out);
 		out.write(">");
 		newline(out);
@@ -468,6 +469,8 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 			printCDvOrdinal((CDvOrdinal) cdomain, indent, out);
 		} else if (cdomain instanceof CDvQuantity) {
 			printCDvQuantity((CDvQuantity) cdomain, indent, out);
+		} else if (cdomain instanceof CDvCodedText) {
+			printCDvCodedText((CDvCodedText) cdomain, indent, out);
 		}
 		// unknow CDomainType
 	}
@@ -517,18 +520,50 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 				out.write(ccoded.getCodeList().get(0));
 				out.write("]");
 				newline(out);
-			}	
+			}
 		} else if (ccoded.getReference() != null) {
 			out.write("[" + ccoded.getReference() + "]");
 			newline(out);
 		}
 	}
 
+	protected void printCDvCodedText(CDvCodedText ccoded, int indent, Writer out)
+			throws IOException {
+
+		indent(indent, out);
+
+		if (ccoded.getTerminologyId() != null) {
+			out.write("[" + ccoded.getTerminologyId().getValue() + "::");
+		}
+
+		if (ccoded.getCodeList() != null) {
+			if (ccoded.getCodeList().size() > 1) {
+				newline(out);
+
+				for (int i = 0, j = ccoded.getCodeList().size(); i < j; i++) {
+					if (j > 1) {
+						indent(indent, out);
+					}
+					out.write(ccoded.getCodeList().get(i));
+					if (i != j - 1) {
+						out.write(",");
+					} else {
+						out.write("]");
+					}
+					newline(out);
+				}
+			} else {
+				out.write(ccoded.getCodeList().get(0));
+				out.write("]");
+				newline(out);
+			}
+		} 
+	}
+
 	protected void printCDvOrdinal(CDvOrdinal cordinal, int indent, Writer out)
 			throws IOException {
 
-		for (Iterator<Ordinal> it = cordinal.getList().iterator(); 
-				it.hasNext();) {
+		for (Iterator<Ordinal> it = cordinal.getList().iterator(); it.hasNext();) {
 			Ordinal ordinal = it.next();
 			CodePhrase symbol = ordinal.getSymbol();
 			indent(indent, out);
@@ -545,15 +580,15 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 		}
 	}
 
-	protected void printCDvQuantity(CDvQuantity cquantity, int indent, Writer out)
-			throws IOException {
+	protected void printCDvQuantity(CDvQuantity cquantity, int indent,
+			Writer out) throws IOException {
 		indent(indent, out);
 		out.write("C_QUANTITY <");
 		newline(out);
 		indent(indent + 1, out);
 		CodePhrase property = cquantity.getProperty();
-		if(property != null) {
-			out.write("property = <[");			
+		if (property != null) {
+			out.write("property = <[");
 			out.write(property.getTerminologyID().getValue());
 			out.write("::");
 			out.write(property.getCodeString());
@@ -561,12 +596,12 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 		}
 		newline(out);
 		List<CDvQuantityItem> list = cquantity.getList();
-		if(list != null) {
-			indent(indent + 1, out);			
+		if (list != null) {
+			indent(indent + 1, out);
 			out.write("list = <");
 			newline(out);
 			int index = 1;
-			for(CDvQuantityItem item : list) {
+			for (CDvQuantityItem item : list) {
 				indent(indent + 2, out);
 				out.write("[\"");
 				out.write(Integer.toString(index));
@@ -578,7 +613,7 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 				out.write("\">");
 				newline(out);
 				Interval<Double> value = item.getValue();
-				if(value != null) {
+				if (value != null) {
 					indent(indent + 3, out);
 					out.write("magnitude = <");
 					printInterval(value, out);
@@ -593,7 +628,7 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 			indent(indent + 1, out);
 			out.write(">");
 			newline(out);
-		}		
+		}
 		indent(indent, out);
 		out.write(">");
 		newline(out);
@@ -625,7 +660,7 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 			indent(1, out);
 			out.write("terminologies_available = <");
 			for (String terminology : ontology.getTerminologies()) {
-				out.write("\"");				
+				out.write("\"");
 				out.write(terminology);
 				out.write("\", ");
 			}
@@ -636,7 +671,7 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 		indent(1, out);
 		out.write("term_definitions = <");
 		newline(out);
-		for (OntologyDefinitions defs : ontology.getTermDefinitionsList()) {			
+		for (OntologyDefinitions defs : ontology.getTermDefinitionsList()) {
 			indent(2, out);
 			out.write("[\"");
 			out.write(defs.getLanguage());
@@ -680,7 +715,7 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 			out.write("constraint_definitions = <");
 			newline(out);
 			for (OntologyDefinitions constraintdefs : ontology
-					.getConstraintDefinitionsList()) {				
+					.getConstraintDefinitionsList()) {
 				indent(2, out);
 				out.write("[\"");
 				out.write(constraintdefs.getLanguage());
@@ -723,9 +758,9 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 		if (ontology.getTermBindingList() != null) {
 			indent(1, out);
 			out.write("term_binding = <");
-			newline(out);			
+			newline(out);
 			for (int i = 0; i < ontology.getTermBindingList().size(); i++) {
-				OntologyBinding bind = ontology.getTermBindingList().get(i);				
+				OntologyBinding bind = ontology.getTermBindingList().get(i);
 				indent(2, out);
 				out.write("[\"");
 				out.write(bind.getTerminology());
@@ -770,7 +805,8 @@ protected void printDescriptionItem(ResourceDescriptionItem item,
 			out.write("constraint_binding = <");
 			newline(out);
 			for (int i = 0; i < ontology.getConstraintBindingList().size(); i++) {
-				OntologyBinding bind = ontology.getConstraintBindingList().get(i);				
+				OntologyBinding bind = ontology.getConstraintBindingList().get(
+						i);
 				indent(2, out);
 				out.write("[\"");
 				out.write(bind.getTerminology());
