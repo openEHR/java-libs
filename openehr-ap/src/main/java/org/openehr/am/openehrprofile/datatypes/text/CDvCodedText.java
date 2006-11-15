@@ -74,7 +74,10 @@ public class CDvCodedText extends CDomainType {
 		}
 		
 		//Any_allowed_validity: code_list.is_empty implies any_allowed
-		
+		this.codeList = codeList;
+		this.query = query;
+		this.subset = subset;
+		this.terminologyId = terminologyId;
 	}
 	
 	/**
