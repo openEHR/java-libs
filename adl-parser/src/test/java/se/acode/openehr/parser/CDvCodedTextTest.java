@@ -20,8 +20,8 @@
 package se.acode.openehr.parser;
 
 import org.openehr.am.archetype.constraintmodel.CObject;
-import org.openehr.am.archetype.constraintmodel.domain.*;
 import org.openehr.am.archetype.Archetype;
+import org.openehr.am.openehrprofile.datatypes.text.CDvCodedText;
 
 import java.util.*;
 
@@ -57,13 +57,14 @@ public class CDvCodedTextTest extends ParserTestBase {
     public void testCCodedText() throws Exception {
         CObject node = archetype.node(
                 "/types[at0001]/items[at10002]/value");
-        assertTrue("CCodedText expected", node instanceof CCodedText);
-        CCodedText ccodedtext = (CCodedText) node;
-        assertEquals("terminology", "local", ccodedtext.getTerminology());
+        assertTrue("CCodedText expected", node instanceof CDvCodedText);
+        CDvCodedText CDvCodedText = (CDvCodedText) node;
+        assertEquals("terminology", "local", 
+        		CDvCodedText.getTerminologyId().getValue());
         String[] codes = {
             "at2001.0", "at2001.1", "at2001.2"
         };
-        List<String> codeList = ccodedtext.getCodeList();
+        List<String> codeList = CDvCodedText.getCodeList();
         assertEquals("codes.size", codes.length, codeList.size());
         for(int i = 0; i < codes.length; i++) {
             assertEquals("code", codes[i], codeList.get(i));

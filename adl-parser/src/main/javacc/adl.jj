@@ -44,9 +44,9 @@ import org.openehr.rm.support.terminology.*;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
-import org.openehr.am.archetype.constraintmodel.domain.*;
 import org.openehr.am.archetype.ontology.*;
 import org.openehr.am.openehrprofile.datatypes.quantity.*;
+import org.openehr.am.openehrprofile.datatypes.text.CDvCodedText;
 
 /**
  * JavaCC grammer file for Archteype Definition Language (ADL)
@@ -1889,7 +1889,10 @@ CObject c_object(String path) :
       c = archetype_slot(path)
     |
       ref = constraint_ref()
-      { c = new CCodedText(path, ref); }
+      { 
+      	// before switch to openehr-ap: c = new CCodedText(path, ref);
+      	c = new CDvCodedText(path, "local", ref);       	
+      }
     |
       c = c_coded_term(path)
     |
@@ -2352,7 +2355,7 @@ org.openehr.am.openehrprofile.datatypes.quantity.Ordinal ordinal() :
   }
 }
 
-CCodedText term_code_constraint(String path) :
+CDvCodedText term_code_constraint(String path) :
 {
   Token t;
   String terminology = null;
@@ -2378,7 +2381,7 @@ CCodedText term_code_constraint(String path) :
   	// leave lexical state "TERM_CODE"
   	token_source.SwitchTo(CADL);
   	
-  	return new CCodedText(path, terminology, codeList); 
+  	return new CDvCodedText(path, terminology, codeList); 
   }
 }
 
@@ -2692,9 +2695,9 @@ CBoolean c_boolean() :
   }
 }
 
-CCodedText c_coded_term(String path) :
+CDvCodedText c_coded_term(String path) :
 {
-  CCodedText constraint;
+  CDvCodedText constraint;
   String reference = null;
 }
 {
@@ -2703,7 +2706,7 @@ CCodedText c_coded_term(String path) :
   |
     reference = local_code_value()
     {
-      constraint = new CCodedText(path, reference);
+      constraint = new CDvCodedText(path, "local", reference);
     }
   )
   { return constraint; }
