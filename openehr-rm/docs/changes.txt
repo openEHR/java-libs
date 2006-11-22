@@ -182,3 +182,6 @@ bug fix in the constructor of ArchetypeOntology class
 
 2006-08-09
 upgrade to 1.0.1 
+
+2006-11-22
+Modification in DvDateTimeParserTest to make all tests pass
