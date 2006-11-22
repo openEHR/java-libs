@@ -16,6 +16,7 @@ package org.openehr.rm.datatypes.quantity;
 
 import org.openehr.rm.Attribute;
 import org.openehr.rm.datatypes.basic.DataValue;
+import org.openehr.rm.datatypes.text.DvCodedText;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -117,10 +118,26 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
      * @return true if two instances are strictly comparable
      */
     public abstract boolean isStrictlyComparableTo(DvOrdered ordered);
+    
+    //  POJO start
+    /**
+	 * @param normalRange The normalRange to set.
+	 */
+	public void setNormalRange(DvInterval<T> normalRange) {
+		this.normalRange = normalRange;
+	}
+
+	/**
+	 * @param referenceRanges The referenceRanges to set.
+	 */
+	public void setReferenceRanges(List<ReferenceRange<T>> referenceRanges) {
+		this.referenceRanges = referenceRanges;
+	}
+    // POJO end
 
     /* fields */
-    private final List<ReferenceRange<T>> referenceRanges;
-    private final DvInterval<T> normalRange;
+    private List<ReferenceRange<T>> referenceRanges;
+    private DvInterval<T> normalRange;	
 }
 
 /*
@@ -140,10 +157,10 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
  *  The Original Code is DvOrdered.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2006
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Bert Verhees
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

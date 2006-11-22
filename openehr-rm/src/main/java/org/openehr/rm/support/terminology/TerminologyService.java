@@ -44,7 +44,7 @@ public interface TerminologyService {
     public CodeSetAccess codeSet(String name);
 
     /**
-     * Returns ture if terminology of given name known by this service
+     * Returns true if terminology of given name known by this service
      *
      * @param name not empty
      * @return true if has given terminology
