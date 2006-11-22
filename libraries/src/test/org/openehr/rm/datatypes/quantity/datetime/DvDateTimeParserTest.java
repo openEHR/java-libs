@@ -38,8 +38,8 @@ public class DvDateTimeParserTest extends TestCase {
         super(testName);
     }
 
-    protected void setUp() throws Exception {
-        zoneStr = DvDateTimeParser.convertTimeZone(
+    protected void setUp() throws Exception { 
+        DvDateTimeParser.convertTimeZone(
                 DateTimeZone.getDefault().getOffset(new DateTime()), false);
     }
 
@@ -88,8 +88,8 @@ public class DvDateTimeParserTest extends TestCase {
      * Test of padTimeValue method, of class org.openehr.rm.datatypes.quantity.datetime.DvDateTimeParser.
      */
     public void testPadValue() {
-        assertEquals("232922.000" + zoneStr, DvDateTimeParser.padTimeValue("232922"));
-        assertEquals("232922,099" + zoneStr, DvDateTimeParser.padTimeValue("232922,099"));
+        assertEquals("232922.000" + getZoneString(new DateTime()), DvDateTimeParser.padTimeValue("232922"));
+        assertEquals("232922,099" + getZoneString(new DateTime()), DvDateTimeParser.padTimeValue("232922,099"));
         assertEquals("131920.000Z", DvDateTimeParser.padTimeValue("131920Z"));
         assertEquals("011300.000-09", DvDateTimeParser.padTimeValue("011300-09"));      
         assertEquals("021530.123-09", DvDateTimeParser.padTimeValue("021530.123-09"));
@@ -210,11 +210,17 @@ public class DvDateTimeParserTest extends TestCase {
         assertEquals("20:22+04:00", DvDateTimeParser.toTimeString(time, "HH:mmZZ"));
         assertEquals("20:22+04:00", DvDateTimeParser.toTimeString(time, "19:19Z"));
         assertEquals("20:22:19,000", DvDateTimeParser.toTimeString(time, "19:19:00,010"));
-        time = new DateTime(1970, 2 , 1 , 20, 22, 19, 0); //constructor without timezone
+        /* If the default timezone is London, say, then the following datetime will be
+         * 2006-06-30T20:59:00.000+01:00, because at that point of datetime, the timezone offset
+         * value will be +0100. In Joda, timezone and tzoffset value are different. tzOffset value 
+         * always depends on a datetime and zone.
+         */
         //no timeZone means default zone
-        assertEquals("202219.000", DvDateTimeParser.toTimeString(time, "HHmmss.SSS"));
-        assertEquals("2022", DvDateTimeParser.toTimeString(time, "HHmm"));
-        assertEquals("2022" + zoneStr, DvDateTimeParser.toTimeString(time, "1000Z"));
+        time = new DateTime(1972, 5, 30, 20, 59, 0, 0); //constructor without timezone
+        
+        assertEquals("205900.000", DvDateTimeParser.toTimeString(time, "HHmmss.SSS"));
+        assertEquals("2059", DvDateTimeParser.toTimeString(time, "HHmm"));
+        assertEquals("2059" + getZoneString(time), DvDateTimeParser.toTimeString(time, "1000Z"));
         timezone = TimeZone.getTimeZone("GMT-02");
         time = new DateTime(1970, 4 , 1 , 12, 25, 29, 235, DateTimeZone.forTimeZone(timezone));
         assertEquals("122529.235-0200", DvDateTimeParser.toTimeString(time, "HHmmss.SSSZ")); 
@@ -265,7 +271,8 @@ public class DvDateTimeParserTest extends TestCase {
         assertEquals("134303T00:22:19", DvDateTimeParser.toDateTimeString(time, "100003T11:00:23"));
         time = ISODateTimeFormat.dateTimeParser().withOffsetParsed().parseDateTime("1997-09-01T19:09:29.789");
         //no timeZone means default zone
-        assertEquals("19970901T190929,789" + zoneStr, DvDateTimeParser.toDateTimeString(time, "yyyyMMdd'T'HHmmss,SSSZ"));
+        assertEquals("19970901T190929,789" + getZoneString(time), 
+                DvDateTimeParser.toDateTimeString(time, "yyyyMMdd'T'HHmmss,SSSZ"));
         assertEquals("19970901T1909", DvDateTimeParser.toDateTimeString(time, "20000101T1922"));
         assertEquals("1997-09T19:09", DvDateTimeParser.toDateString(time, "yyyy-MM'T'HH:mm"));
 
@@ -361,7 +368,11 @@ public class DvDateTimeParserTest extends TestCase {
         assertEquals("1772-02-29T23", DvDateTimeParser.basicToExtendedDateTime("1772-02-29T23"));
     }
     
-    private String zoneStr;
+    String getZoneString(DateTime dt) {
+        return DvDateTimeParser.convertTimeZone(
+                DateTimeZone.getDefault().getOffset(dt), false);
+    }
+    //private String zoneStr;
 }
 
 /*

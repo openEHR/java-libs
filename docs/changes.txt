@@ -181,4 +181,10 @@ bug fix for term binding in ADL parser
 bug fix in the constructor of ArchetypeOntology class
 
 2006-08-09
-upgrade to 1.0.1 
+upgrade to 1.0.1
+
+2006-08-14
+update header/footer text
+
+2006-11-22
+Modification in DvDateTimeParserTest due to daylight saving
