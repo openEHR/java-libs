@@ -41,6 +41,7 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -332,8 +333,8 @@ public class ADLSerializer {
 	protected void printArchetypeSlot(ArchetypeSlot slot, int indent, Writer out)
 			throws IOException {
 
-		// print rmTypeName and nodeId
 		indent(indent, out);
+		out.write("allow_archetype ");
 		out.write(slot.getRmTypeName());
 		if (StringUtils.isNotEmpty(slot.getNodeID())) {
 			out.write("[" + slot.getNodeID() + "]");
@@ -342,30 +343,32 @@ public class ADLSerializer {
 		printOccurrences(slot.getOccurrences(), out);
 		out.write(" matches {");
 
-		// print all attributes
 		if (slot.isAnyAllowed()) {
 			out.write("*");
 		} else {
 			if (!slot.getIncludes().isEmpty()) {
-				out.write("include");
-				newline(out);
-				indent(indent, out);
-				for (Object include : slot.getIncludes()) {
-					out.write("included: " + include);
-					newline(out);
-				}
-			} else if (!slot.getExcludes().isEmpty()) {
-				out.write("exclude");
-				newline(out);
-				indent(indent, out);
-				for (Object exclude : slot.getExcludes()) {
-					out.write("excluded: " + exclude);
-					newline(out);
-				}
+				printInvariants(slot.getIncludes(), "include", indent, out);
+			}
+			if (!slot.getExcludes().isEmpty()) {
+				printInvariants(slot.getExcludes(), "exclude", indent, out);
 			}
 		}
+		newline(out);
+		indent(indent, out);
 		out.write("}");
 		newline(out);
+	}
+	
+	private void printInvariants(Collection invariants, String purpose,
+			int indent, Writer out)	throws IOException {
+		newline(out);
+		indent(indent + 1, out);
+		out.write(purpose);
+		for (Object invariant : invariants) {
+			newline(out);
+			indent(indent + 2, out);
+			out.write(invariant.toString());			
+		}
 	}
 
 	protected void printCAttribute(CAttribute cattribute, int indent, Writer out)
