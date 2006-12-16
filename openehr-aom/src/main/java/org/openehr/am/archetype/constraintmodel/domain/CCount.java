@@ -24,6 +24,7 @@ import org.openehr.rm.support.basic.Interval;
  *
  * @author Rong Chen
  * @version 1.0
+ * @deprecated 
  */
 public final class CCount extends CDomainType {
 

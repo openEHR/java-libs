@@ -24,6 +24,7 @@ import org.openehr.rm.support.basic.Interval;
  *
  * @author Rong Chen
  * @version 1.0
+ * @deprecated use CDvQuantity from openehr-ap instead
  */
 public class CQuantity extends CDomainType {
 

@@ -26,6 +26,7 @@ import java.util.*;
  *
  * @author Rong Chen
  * @version 1.0
+ * @deprecated Use CDvOrdinal from openehr-ap instead
  */
 public final class COrdinal extends CDomainType {
 

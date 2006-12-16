@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Rong Chen
  * @version 1.0
+ * @deprecated use Ordinal from openehr-ap instead
  */
 public final class Ordinal {
 
