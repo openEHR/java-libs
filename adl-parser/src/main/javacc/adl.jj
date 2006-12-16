@@ -1890,8 +1890,7 @@ CObject c_object(String path) :
     |
       ref = constraint_ref()
       { 
-      	// before switch to openehr-ap: c = new CCodedText(path, ref);
-      	c = new CDvCodedText(path, "local", ref);       	
+      	c = new CDvCodedText(path, ref);       	
       }
     |
       c = c_coded_term(path)
@@ -2698,15 +2697,15 @@ CBoolean c_boolean() :
 CDvCodedText c_coded_term(String path) :
 {
   CDvCodedText constraint;
-  String reference = null;
+  String query = null;
 }
 {
   (
     constraint = term_code_constraint(path)
   |
-    reference = local_code_value()
+    query = local_code_value()
     {
-      constraint = new CDvCodedText(path, "local", reference);
+      constraint = new CDvCodedText(path, query);
     }
   )
   { return constraint; }
