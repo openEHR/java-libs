@@ -83,15 +83,13 @@ public class CDvCodedText extends CDomainType {
 	}
 
 	/**
-	 * Simplified constructor of this constraint
+	 * Creates a terminology query based CDvCodedText
 	 * 
 	 * @param path
-	 * @param terminologyId
-	 * @param singleCode
+	 * @param query
 	 */
-	public CDvCodedText(String path, String terminologyId, String singleCode) {
-		this(path, null, null, new TerminologyID(terminologyId), Arrays
-				.asList(new String[] { singleCode }), null, null);
+	public CDvCodedText(String path, String query) {
+		this(path, null, null, null, null, null, query);
 	}
 
 	/**

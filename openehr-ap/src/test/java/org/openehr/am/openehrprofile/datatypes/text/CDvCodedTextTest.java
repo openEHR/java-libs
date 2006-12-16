@@ -32,15 +32,14 @@ public class CDvCodedTextTest extends TestCase {
 		assertEquals(codeList, constraint.getCodeList());		
 	}
 	
-	public void testCreateCDvCodedTextWithSingleCode() {
+	public void testCreateCDvCodedTextWithQuery() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		String terminologyId = "local";
-		String code = "at0001";
+		String query = "ac0001"; // not the actual query
 		
-		CDvCodedText constraint = new CDvCodedText(path, terminologyId, code);
+		CDvCodedText constraint = new CDvCodedText(path, query);
 		
 		assertNotNull(constraint);
-		assertTrue(constraint.getCodeList().contains(code));		
+		assertEquals("query", "ac0001", constraint.getQuery());		
 	}
 	
 	public void testCreateCDvCodedTextWithCodeList() {
