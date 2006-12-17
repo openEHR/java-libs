@@ -20,7 +20,9 @@ public abstract class ExpressionItem {
 	public final static String BOOLEAN = "BOOLEAN";
 	public final static String REAL = "REAL";
 	public final static String INTEGER = "INTEGER";
+	public final static String STRING = "STRING";
 	public final static String ARCHETYPE = "ARCHETYPE";
+	public final static String RM = "RM";	
 	
 	public ExpressionItem(String type) {
 		this.type = type;

@@ -15,8 +15,6 @@
  
 package org.openehr.am.archetype.assertion;
 
-import org.openehr.rm.RMObject;
-
 public class ExpressionLeaf extends ExpressionItem {
 	
 	/**
@@ -34,6 +32,50 @@ public class ExpressionLeaf extends ExpressionItem {
 	}
 	public ReferenceType getReferenceType() {
 		return referenceType;
+	}
+	
+	/**
+	 * Creates an expression leaf with integer constant
+	 * 
+	 * @param i
+	 * @return
+	 */
+	public static final ExpressionLeaf intConstant(int i) {
+		return new ExpressionLeaf(ExpressionItem.INTEGER, new Integer(i),
+				ExpressionLeaf.ReferenceType.CONSTANT);
+	}
+	
+	/**
+	 * Creates an expression leaf with real constant
+	 * 
+	 * @param d
+	 * @return
+	 */
+	public static final ExpressionLeaf realConstant(double d) {
+		return new ExpressionLeaf(ExpressionItem.REAL, new Double(d),
+				ExpressionLeaf.ReferenceType.CONSTANT);
+	}
+	
+	/**
+	 * Creates an expression leaf with string constant
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static final ExpressionLeaf stringConstant(String str) {
+		return new ExpressionLeaf(ExpressionItem.STRING, str,
+				ExpressionLeaf.ReferenceType.CONSTANT);
+	}
+	
+	/**
+	 * Creates an expression leaf with path constant
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static final ExpressionLeaf pathConstant(String path) {
+		return new ExpressionLeaf(ExpressionItem.RM, path,
+				ExpressionLeaf.ReferenceType.CONSTANT);
 	}
 	
 	private Object item;
