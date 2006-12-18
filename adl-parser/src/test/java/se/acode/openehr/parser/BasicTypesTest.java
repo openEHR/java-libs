@@ -554,41 +554,6 @@ public class BasicTypesTest extends ParserTestBase {
 				"2006-03-31T01:12:00");
 	}
 
-	/**
-	 * Tests duration constraints parsing
-	 * 
-	 * @throws Exception
-	 */
-	public void testDurationConstraint() throws Exception {
-		List list = getConstraints(7);
-
-		assertCDuration(list.get(0), "PT0s", null);
-
-		assertCDuration(list.get(1), "P1d", null);
-
-		assertCDuration(list.get(2), "PT2h5m0s", null);
-
-		assertCDuration(list.get(3), null, new Interval(DvDuration
-				.getInstance("PT1h55m0s"), DvDuration.getInstance("PT2h5m0s")));
-
-		assertCDuration(list.get(4), null, new Interval(null, DvDuration
-				.getInstance("PT1h"), false, true));
-		
-		// assumed values
-		assertCDuration(list.get(5), "PT0s", null, "P1d");
-
-		assertCDuration(list.get(6), "P1d", null, "P1d");
-
-		assertCDuration(list.get(7), "PT2h5m0s", null, "P1d");
-
-		assertCDuration(list.get(8), null, new Interval(DvDuration
-				.getInstance("PT1h55m0s"), DvDuration.getInstance("PT2h5m0s")), "P1d");
-
-		assertCDuration(list.get(9), null, new Interval(null, DvDuration
-				.getInstance("PT1h"), false, true), "P1d");
-
-	}
-
 	private Interval greaterThan(Comparable value) {
 		return new Interval(value, null, false, false);
 	}

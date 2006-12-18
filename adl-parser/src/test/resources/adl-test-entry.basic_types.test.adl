@@ -221,24 +221,6 @@ definition
                 -- newly supported pattern with "T" in the middle
                 date_time_attr21 matches {yyyy-??-??T??:??:??}
             }
-        }
-        duration_attributes matches {
-            LIST matches {
-                duration_attr1 matches {PT0s}
-                duration_attr2 matches {P1d}
-                duration_attr3 matches {PT2h5m0s}
-                duration_attr4 matches {|PT1h55m0s..PT2h5m0s|}
-                duration_attr5 matches {|<=PT1h|}
-                -- duration_attr6 matches {PT30s, PT45s, PT1m0s, PT2m0s} -- Not currently in ADL syntax
-                -- duration_attr7 matches {|P1d +/PT4h|}
-                
-                -- assumed values
-                duration_attr11 matches {PT0s; P1d}
-                duration_attr12 matches {P1d; P1d}
-                duration_attr13 matches {PT2h5m0s; P1d}
-                duration_attr14 matches {|PT1h55m0s..PT2h5m0s|; P1d}
-                duration_attr15 matches {|<=PT1h|; P1d}
-            }
         }        
     }
 ontology 

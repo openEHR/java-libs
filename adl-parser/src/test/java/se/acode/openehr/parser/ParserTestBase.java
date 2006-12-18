@@ -43,6 +43,9 @@ public class ParserTestBase extends TestCase {
         super(test);
     }
     
+    public ParserTestBase(){    	
+    }
+    
     protected InputStream loadFromClasspath(String adl) throws Exception {
     	return this.getClass().getClassLoader().getResourceAsStream(adl);
     }
@@ -160,7 +163,7 @@ public class ParserTestBase extends TestCase {
 
     void assertCDuration(Object obj, String value, Interval interval, String assumed)
             throws Exception {
-        CDuration c = (CDuration) fetchFirst(obj);
+        CDuration c = (CDuration) ((CPrimitiveObject) obj).getItem();
         assertEquals("list", value == null ? null : DvDuration.getInstance(value),
                 c.getValue());
         assertEquals("interval", interval, c.getInterval());
