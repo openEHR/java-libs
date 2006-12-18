@@ -23,6 +23,15 @@ definition
                 	ELEMENT[at1005] matches {	-- duration
                 		value matches {|<=PT1h|}
                 	}
+                	ELEMENT[at1006] matches {	-- duration
+                		value matches {P1DT1H2M3S}
+                	}
+                	ELEMENT[at1007] matches {	-- duration
+                		value matches {P1W2DT1H2M3S}
+                	}
+                	ELEMENT[at1008] matches {	-- duration
+                		value matches {P3M1W2DT1H2M3S}
+                	}
 					
 					-- duration7 matches {PT30s, PT45s, PT1m0s, PT2m0s} -- Not currently in ADL syntax
                 	-- duration8 matches {|P1d +/PT4h|}

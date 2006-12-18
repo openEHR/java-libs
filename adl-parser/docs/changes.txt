@@ -3,3 +3,4 @@
 
 2006/12/18
 .separated CDurationTest from BasicTypesTest
+.updated CDuration parsing regarding months and weeks in ISO8601 DURATION format

@@ -1,7 +1,5 @@
 package se.acode.openehr.parser;
 
-import java.util.List;
-
 import org.openehr.am.archetype.Archetype;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 import org.openehr.rm.support.basic.Interval;
@@ -45,6 +43,15 @@ public class CDurationTest extends ParserTestBase {
 				null,
 				new Interval<DvDuration>(null, DvDuration.getInstance("PT1h"), 
 						false, true));
+		
+		assertCDuration(archetype.node("/types[at0001]/items[at1006]/value"), 
+				"P1DT1H2M3S", null);
+		
+		assertCDuration(archetype.node("/types[at0001]/items[at1007]/value"), 
+				"P1W2DT1H2M3S", null);
+		
+		assertCDuration(archetype.node("/types[at0001]/items[at1008]/value"), 
+				"P3M1W2DT1H2M3S", null);
 
 		// assumed values
 		assertCDuration(archetype.node("/types[at0001]/items[at1010]/value"), 
