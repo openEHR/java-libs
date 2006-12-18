@@ -47,12 +47,18 @@ public class CDurationTest extends ParserTestBase {
 		assertCDuration(archetype.node("/types[at0001]/items[at1006]/value"), 
 				"P1DT1H2M3S", null);
 		
+		// bug fix for ISO durationg with weeks
 		assertCDuration(archetype.node("/types[at0001]/items[at1007]/value"), 
 				"P1W2DT1H2M3S", null);
 		
+		// bug fix for ISO duration with months
 		assertCDuration(archetype.node("/types[at0001]/items[at1008]/value"), 
 				"P3M1W2DT1H2M3S", null);
 
+		// to supported newly added duration pattern
+		//assertCDuration(archetype.node("/types[at0001]/items[at1009]/value"), 
+		//		"PYMW", null);
+		
 		// assumed values
 		assertCDuration(archetype.node("/types[at0001]/items[at1010]/value"), 
 				"PT0s", null, "P1d");
