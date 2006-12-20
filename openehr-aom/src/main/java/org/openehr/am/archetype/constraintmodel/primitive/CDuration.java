@@ -43,8 +43,21 @@ public final class CDuration extends CPrimitive {
 		this.value = value;
 		this.interval = interval;
 		this.assumedValue = assumedValue;
+		this.pattern = null;
 	}
-
+	
+	/**
+	 * Creates a Duration constraint by pattern
+	 * 
+	 * @param pattern
+	 */
+	public CDuration(String pattern) {
+		this.pattern = pattern;
+		this.interval = null;
+		this.value = null;
+		this.assumedValue = null;
+	}
+	
 	/**
 	 * Constructs a DurationConstraint without assumed value
 	 * 
@@ -83,6 +96,15 @@ public final class CDuration extends CPrimitive {
 	public DvDuration getValue() {
 		return value;
 	}
+	
+	/**
+	 * Gets the pattern of this duration constraint
+	 * 
+	 * @return null if unspecified
+	 */
+	public String getPattern() {
+		return pattern;
+	}
 
 	/**
 	 * Interval of Durations specifying constraint
@@ -117,6 +139,7 @@ public final class CDuration extends CPrimitive {
 	private final DvDuration value;
 	private final Interval<DvDuration> interval;
 	private final DvDuration assumedValue;	
+	private final String pattern;
 }
 
 /*

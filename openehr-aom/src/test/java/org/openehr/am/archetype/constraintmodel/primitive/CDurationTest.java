@@ -54,6 +54,11 @@ public class CDurationTest extends TestCase {
         assertEquals(DvDuration.getInstance("PT1h"),
                 cd.assignedValue());
     }
+    
+    public void testCreateCDurationByPattern() {
+    	CDuration cd = new CDuration("PDTH");
+    	assertEquals("pattern wrong", "PDTH", cd.getPattern());
+    }
 
 }
 /*
