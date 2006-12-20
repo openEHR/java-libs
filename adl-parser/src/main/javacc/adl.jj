@@ -380,6 +380,10 @@ TOKEN : /* IDENTIFIERS - ADL */
   ((<DIG>)+["d","D"])?("T"((<DIG>)+["h","H"])?((<DIG>)+["m","M"])?
   ((<DIG>)+["s","S"])?)?>
 |
+  < V_ISO8601_DURATION_PATTERN: "P"["w","W"]|"P"(["y","Y"])?(["m","M"])?
+  (["d","D"])?"T"(["h","H"])?(["m","M"])?(["s","S"])? |"P"(["y","Y"])?
+  (["m","M"])?(["d","D"])?>
+|
   < V_DATE: (["0"-"9"]){4} "-" ( "0"["1"-"9"] | "1"["0"-"2"] ) "-"
             ( "0"["1"-"9"] | ["1"-"2"]["0"-"9"]|"3"["0"-"1"] ) >
 |
@@ -2619,9 +2623,14 @@ CDuration c_duration() :
   DvDuration value = null;
   Interval interval = null;
   DvDuration assumed = null;
+  Token t = null;
+  String pattern = null;
 }
 {
-  (
+ (
+    t = <V_ISO8601_DURATION_PATTERN>
+    { pattern = t.image; }  
+  |
     value = duration_value()
   |
     interval = duration_interval_value()
@@ -2630,7 +2639,7 @@ CDuration c_duration() :
     ";" assumed = duration_value()
   ]
   {
-    return new CDuration(value, interval, assumed);
+    return new CDuration(value, interval, assumed, pattern);
   }
 }
 

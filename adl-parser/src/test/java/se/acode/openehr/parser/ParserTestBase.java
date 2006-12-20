@@ -159,25 +159,33 @@ public class ParserTestBase extends TestCase {
     void assertCTime(Object obj, String pattern, Interval interval,
             String[] values) throws Exception {
     	assertCTime(obj, pattern, interval, values, null);
-    }
-
-    void assertCDuration(Object obj, String value, Interval interval, String assumed)
-            throws Exception {
+    }   
+    
+    // full assertion with CDuration
+    void assertCDuration(Object obj, String value, Interval interval, 
+    		String assumed, String pattern) throws Exception {    
         CDuration c = (CDuration) ((CPrimitiveObject) obj).getItem();
         assertEquals("list", value == null ? null : DvDuration.getInstance(value),
                 c.getValue());
         assertEquals("interval", interval, c.getInterval());
         assertEquals("assumed value", 
-        		assumed == null? null : DvDuration.getInstance(assumed), c.assumedValue());
+        		assumed == null? null 
+        				: DvDuration.getInstance(assumed), c.assumedValue());
+        assertEquals("pattern wrong", pattern, c.getPattern());
     }
     
-    // without assumed value
+    // without pattern
+    void assertCDuration(Object obj, String value, Interval interval, 
+    		String assumed) throws Exception {
+    	assertCDuration(obj, value, interval, assumed, null);
+    }
+    
+    // without assumed value, pattern
     void assertCDuration(Object obj, String value, Interval interval)
     		throws Exception {
     	assertCDuration(obj, value, interval, null);
     }
-    	
-
+    
     // fetch the first CPrimitive from the CAttribute
     CPrimitive fetchFirst(Object obj) {
         return ( (CPrimitiveObject) ( (CAttribute) obj ).getChildren()

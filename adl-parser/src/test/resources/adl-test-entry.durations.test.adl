@@ -32,9 +32,9 @@ definition
                 	ELEMENT[at1008] matches {	-- duration
                 		value matches {P3M1W2DT1H2M3S}
                 	}
-                	-- ELEMENT[at1009] matches {	-- duration
-                	--	value matches {PYMW}
-                	-- }
+                	ELEMENT[at1009] matches {	-- duration
+                		value matches {PDTH}
+                	}
 					
 					-- duration7 matches {PT30s, PT45s, PT1m0s, PT2m0s} -- Not currently in ADL syntax
                 	-- duration8 matches {|P1d +/PT4h|}
@@ -53,6 +53,9 @@ definition
                 	}
                 	ELEMENT[at1014] matches {	-- duration with assumed values
                 		value matches {|<=PT1h|; P1d}
+                	}
+                	ELEMENT[at1015] matches {	-- duration
+                		value matches {PDTH; P1d}
                 	}
                 }
             }

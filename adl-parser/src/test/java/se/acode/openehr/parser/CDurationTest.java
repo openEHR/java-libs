@@ -56,8 +56,8 @@ public class CDurationTest extends ParserTestBase {
 				"P3M1W2DT1H2M3S", null);
 
 		// to supported newly added duration pattern
-		//assertCDuration(archetype.node("/types[at0001]/items[at1009]/value"), 
-		//		"PYMW", null);
+		assertCDuration(archetype.node("/types[at0001]/items[at1009]/value"), 
+				null, null, null, "PDTH");
 		
 		// assumed values
 		assertCDuration(archetype.node("/types[at0001]/items[at1010]/value"), 
@@ -78,6 +78,9 @@ public class CDurationTest extends ParserTestBase {
 				null,
 				new Interval<DvDuration>(null, DvDuration.getInstance("PT1h"), 
 						false, true), "P1d");
+		// to supported newly added duration pattern
+		assertCDuration(archetype.node("/types[at0001]/items[at1015]/value"), 
+				null, null, "P1d", "PDTH");
 	}
 
 	private Archetype archetype;
