@@ -32,30 +32,22 @@ public final class CDuration extends CPrimitive {
 	 * @param interval
 	 *            Interval<DvDuration>
 	 * @param assumedValue
+	 * @param pattern null if unspecified
 	 */
 	public CDuration(DvDuration value, Interval<DvDuration> interval,
-			DvDuration assumedValue) {
-		if ((interval != null && value != null)
-				|| (interval == null && value == null)) {
+			DvDuration assumedValue, String pattern) {
+		if (interval != null && value != null) {
 			throw new IllegalArgumentException(
-					"both value and interval null or not null");
+					"both value and interval not null");
+		}		
+		if (interval == null && value == null && pattern == null) {
+			throw new IllegalArgumentException(
+					"value, interval and pattern all null ");
 		}
 		this.value = value;
 		this.interval = interval;
 		this.assumedValue = assumedValue;
-		this.pattern = null;
-	}
-	
-	/**
-	 * Creates a Duration constraint by pattern
-	 * 
-	 * @param pattern
-	 */
-	public CDuration(String pattern) {
 		this.pattern = pattern;
-		this.interval = null;
-		this.value = null;
-		this.assumedValue = null;
 	}
 	
 	/**
@@ -66,7 +58,7 @@ public final class CDuration extends CPrimitive {
 	 *            Interval<DvDuration>
 	 */
 	public CDuration(DvDuration value, Interval<DvDuration> interval) {
-		this(value, interval, null);
+		this(value, interval, null, null);
 	}
 
 	/**

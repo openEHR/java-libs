@@ -56,7 +56,7 @@ public class CDurationTest extends TestCase {
     }
     
     public void testCreateCDurationByPattern() {
-    	CDuration cd = new CDuration("PDTH");
+    	CDuration cd = new CDuration(null, null, null, "PDTH");
     	assertEquals("pattern wrong", "PDTH", cd.getPattern());
     }
 
