@@ -5,7 +5,7 @@
  *
  * author:      "Rong Chen <rong@acode.se>"
  * support:     "Acode HB <support@acode.se>"
- * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
+ * copyright:   "Copyright (c) 2004,2006 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
  * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/am/archetype/constraintmodel/primitive/CDuration.java $"
@@ -133,7 +133,7 @@ public final class CDuration extends CPrimitive {
  * The Original Code is CDuration.java
  * 
  * The Initial Developer of the Original Code is Rong Chen. Portions created by
- * the Initial Developer are Copyright (C) 2003-2004 the Initial Developer. All
+ * the Initial Developer are Copyright (C) 2003-2006 the Initial Developer. All
  * Rights Reserved.
  * 
  * Contributor(s):

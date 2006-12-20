@@ -78,6 +78,17 @@ public class ExpressionLeaf extends ExpressionItem {
 				ExpressionLeaf.ReferenceType.CONSTANT);
 	}
 	
+	/**
+	 * Creates an expression leaf with boolean constant
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static final ExpressionLeaf booleanConstant(boolean b) {
+		return new ExpressionLeaf(ExpressionItem.BOOLEAN, new Boolean(b),
+				ExpressionLeaf.ReferenceType.CONSTANT);
+	}
+	
 	private Object item;
 	private ReferenceType referenceType;
 	
