@@ -26,17 +26,31 @@ import org.openehr.rm.support.basic.Interval;
 public class CDvQuantityItem {	
 	
 	/**
-	 * Constructor
+	 * Constructor 
 	 * 
 	 * @param value 
 	 * @param units not null or empty
 	 * @throws IllegalArgumentException if units null or empty
 	 */
 	public CDvQuantityItem(Interval<Double> value, String units) {
+		this(value, null, units);
+	}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param value 
+	 * @param precision null if unspecified
+	 * @param units not null or empty
+	 * @throws IllegalArgumentException if units null or empty
+	 */
+	public CDvQuantityItem(Interval<Double> value, Interval<Integer> precision,
+			String units) {
 		if(StringUtils.isEmpty(units)) {
 			throw new IllegalArgumentException("units null or empty");
 		}
 		this.value = value;
+		this.precision = precision;
 		this.units = units;
 	}
 	
@@ -58,8 +72,18 @@ public class CDvQuantityItem {
 		return value;
 	}
 	
+	/**
+	 * Gets precision of this item
+	 * 
+	 * @return null if unspecified
+	 */
+	public Interval<Integer> getPrecision() {
+		return precision;
+	}
+	
 	/* fields */
 	private Interval<Double> value;
+	private Interval<Integer> precision;
 	private String units;	
 }
 
