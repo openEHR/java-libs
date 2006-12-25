@@ -32,30 +32,41 @@ definition
                 	ELEMENT[at1008] matches {	-- duration
                 		value matches {P3M1W2DT1H2M3S}
                 	}
-                	ELEMENT[at1009] matches {	-- duration
+                	ELEMENT[at1009] matches {	-- duration pattern
                 		value matches {PDTH}
                 	}
-					
-					-- duration7 matches {PT30s, PT45s, PT1m0s, PT2m0s} -- Not currently in ADL syntax
-                	-- duration8 matches {|P1d +/PT4h|}
-                                	
-                	ELEMENT[at1010] matches {	-- duration with assumed values
+                	ELEMENT[at1010] matches {	-- duration interval
+                		value matches {|PT10M|}
+                	}
+                	
+                	-- matches {PT30s, PT45s, PT1m0s, PT2m0s} -- Not currently in ADL syntax
+                	-- matches {|P1d +/PT4h|}
+                }           	
+            }     	
+                	
+			LIST[at0002] matches {
+                items cardinality matches {0..*} matches {                		
+					ELEMENT[at1001] matches {	-- duration with assumed values
                 		value matches {PT0s; P1d}
                 	}
-                	ELEMENT[at1011] matches {	-- duration with assumed values
+                	ELEMENT[at1002] matches {	-- duration with assumed values
                 		value matches {P1d; P1d}
                 	}
-                	ELEMENT[at1012] matches {	-- duration with assumed values
+                	ELEMENT[at1003] matches {	-- duration with assumed values
                 		value matches {PT2h5m0s; P1d}
                 	}
-                	ELEMENT[at1013] matches {	-- duration with assumed values
+                	ELEMENT[at1004] matches {	-- duration with assumed values
                 		value matches {|PT1h55m0s..PT2h5m0s|; P1d}
                 	}
-                	ELEMENT[at1014] matches {	-- duration with assumed values
+                	ELEMENT[at1005] matches {	-- duration with assumed values
                 		value matches {|<=PT1h|; P1d}
                 	}
-                	ELEMENT[at1015] matches {	-- duration
+                	ELEMENT[at1006] matches {	-- duration
                 		value matches {PDTH; P1d}
+                	}
+                	
+                	ELEMENT[at1010] matches {	-- duration interval
+                		value matches {|PT10M|; PT12M}
                 	}
                 }
             }

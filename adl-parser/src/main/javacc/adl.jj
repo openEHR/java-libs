@@ -1759,7 +1759,7 @@ Interval duration_interval_value() :
 {
   <SYM_INTERVAL_DELIM>
   (
-    lower = duration_value() <SYM_ELLIPSIS> upper = duration_value()
+    lower = duration_value() [ <SYM_ELLIPSIS> upper = duration_value() ]
     {
       i = new Interval(lower, upper, true, true);
     }
