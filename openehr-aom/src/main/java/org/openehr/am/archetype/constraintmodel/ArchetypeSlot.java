@@ -34,6 +34,7 @@ public class ArchetypeSlot extends CObject {
      * @param rmTypeName
      * @param occurrences
      * @param nodeID
+     * @param parent
      * @param includes
      * @param excludes
      * @throws IllegalArgumentException if includes not null and empty
@@ -41,15 +42,12 @@ public class ArchetypeSlot extends CObject {
      */
     public ArchetypeSlot(String path, String rmTypeName,
                          Interval<Integer> occurrences,
-                         String nodeID, Set<Assertion> includes, 
-                         Set<Assertion> excludes) {
+                         String nodeID, CAttribute parent,
+                         Set<Assertion> includes, Set<Assertion> excludes) {
 
-        super(false, path, rmTypeName, occurrences, nodeID);
+    	super(includes == null && excludes == null, path, rmTypeName, 
+    			occurrences, nodeID, parent);
 
-        if (includes == null && excludes == null) {
-            throw new IllegalArgumentException(
-                    "both includes and excludes null");
-        }
         if(includes != null && includes.isEmpty()) {
             throw new IllegalArgumentException("empty includes");
         }

@@ -14,6 +14,12 @@ import java.util.*;
  */
 public class ArchetypeSlotTest extends TestCase {
 	
+	public void testCreateEmptyArchetypeSlot() {
+		ArchetypeSlot slot = new ArchetypeSlot("/path", "Entry", null, "at001",
+				null, null, null);
+		assertTrue("anyAllowed expected for empty slot", slot.isAnyAllowed());
+	}
+	
 	/**
 	 * Tests to create a simple archetype slot
 	 */ 
@@ -53,8 +59,7 @@ public class ArchetypeSlotTest extends TestCase {
 		Set<Assertion> excludes = new HashSet<Assertion>();
 		excludes.add(exclude);
 		ArchetypeSlot slot = new ArchetypeSlot("/[at001]", "SECTION", 
-				new Interval<Integer>(0, null), "at001", includes, 
-				excludes);
-		
-	}
+				new Interval<Integer>(0, null), "at001", null, includes, 
+				excludes);		
+	}	
 }

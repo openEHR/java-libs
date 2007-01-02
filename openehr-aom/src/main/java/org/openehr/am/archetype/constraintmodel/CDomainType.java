@@ -33,19 +33,9 @@ public abstract class CDomainType extends CObject {
 	 * @param occurrences
 	 * @param nodeID
 	 */
-	protected CDomainType(String path, String rmTypeName,
-			Interval<Integer> occurrences, String nodeID) {
-		super(false, path, rmTypeName, occurrences, nodeID);
-	}
-
-	/**
-	 * Creates an ObjectConstraint
-	 *
-	 * @param path
-	 * @param rmTypeName
-	 */
-	protected CDomainType(String path, String rmTypeName) {
-		this(path, rmTypeName, null, null);
+	protected CDomainType(boolean anyAllowed, String path, String rmTypeName,
+			Interval<Integer> occurrences, String nodeID, CAttribute parent) {
+		super(anyAllowed, path, rmTypeName, occurrences, nodeID, parent);
 	}
 
 	/**

@@ -35,7 +35,7 @@ public final class CCount extends CDomainType {
      * @param magnitude
      */
     public CCount(String path, Interval<Integer> magnitude) {
-        super(path, "DvCount");
+        super(false, path, "DvCount", null, null, null);
         if (magnitude == null) {
             throw new IllegalArgumentException("null magnitude");
         }

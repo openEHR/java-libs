@@ -15,6 +15,7 @@
 package org.openehr.am.archetype.constraintmodel;
 
 import org.openehr.am.archetype.constraintmodel.primitive.CPrimitive;
+import org.openehr.rm.support.basic.Interval;
 /**
  * PrimitiveObjectConstraint
  *
@@ -23,6 +24,21 @@ import org.openehr.am.archetype.constraintmodel.primitive.CPrimitive;
  */
 public class CPrimitiveObject extends CObject {
 
+	/**
+     * Constructs a PrimitiveObjectConstraint
+     *
+     * @param path
+     * @param item
+     * @throws IllegalArgumentException if item null
+     */
+    public CPrimitiveObject(String path, String rmTypeName,
+            Interval<Integer> occurrences, String nodeId, CAttribute parent, 
+            CPrimitive item) {
+
+        super(item == null, path, rmTypeName, occurrences, nodeId, parent);
+        this.item = item;
+    }
+    
     /**
      * Return true if the constraint has limit the possible value to
      * be only one, which means the value has been assigned by the archetype
@@ -35,26 +51,9 @@ public class CPrimitiveObject extends CObject {
     }
 
     /**
-     * Constructs a PrimitiveObjectConstraint
-     *
-     * @param path
-     * @param item
-     * @throws IllegalArgumentException if item null
-     */
-    public CPrimitiveObject(String path, CPrimitive item) {
-
-        super(false, path, item.getType());
-
-        if (item == null) {
-            throw new IllegalArgumentException("null item");
-        }
-        this.item = item;
-    }
-
-    /**
      * Object actually defining the constraint.
      *
-     * @return primitive constraint
+     * @return primitive constraint null if unspecified
      */
     public CPrimitive getItem() {
         return item;

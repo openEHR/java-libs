@@ -15,6 +15,7 @@
 package org.openehr.am.archetype.constraintmodel;
 
 import org.apache.commons.lang.StringUtils;
+import org.openehr.rm.support.basic.Interval;
 
 /**
  * Reference to a constraint described in the same archetype, but outside
@@ -31,12 +32,18 @@ public final class ConstraintRef extends CObject {
      * Constructs a ConstraintRef
      *
      * @param path
+     * @param rmTypeName
+     * @param occurrences
+     * @param nodeId
+     * @param parent
      * @param reference
      * @throws IllegalArgumentException if reference null
      */
-    public ConstraintRef(String path, String rmTypeName, String reference) {
+    public ConstraintRef(String path, String rmTypeName,
+            Interval<Integer> occurrences, String nodeId, CAttribute parent, 
+            String reference) {
 
-        super(false, path, rmTypeName);
+        super(false, path, rmTypeName, occurrences, nodeId, parent);
 
         if(StringUtils.isEmpty(reference)) {
             throw new IllegalArgumentException("null reference");

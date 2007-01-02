@@ -37,35 +37,26 @@ public abstract class CObject extends ArchetypeConstraint {
      * @param rmTypeName
      * @param occurrences null indicates {1..1}
      * @param nodeID
+     * @param parent	null if no parent
      * @throws IllegalArgumentException if rmTypeName null or empty,
      *                                  or nodeID null or empty
      */
     protected CObject(boolean anyAllowed, String path, String rmTypeName,
-                      Interval<Integer> occurrences, String nodeID) {
+                      Interval<Integer> occurrences, String nodeID,
+                      CAttribute parent) {
 
         super(anyAllowed, path);
 
         if (StringUtils.isEmpty(rmTypeName)) {
             throw new IllegalArgumentException("null or empty rmTypeName");
         }
-
         if (nodeID != null && StringUtils.isEmpty(nodeID)) {
             throw new IllegalArgumentException("empty nodeID");
         }
         this.rmTypeName = rmTypeName;
         this.occurrences = occurrences;
         this.nodeID = nodeID;
-    }
-
-    /**
-     * Creates an ObjectConstraint without occurrences or nodeID
-     *
-     * @param anyAllowed
-     * @param path
-     * @param rmTypeName
-     */
-    protected CObject(boolean anyAllowed, String path, String rmTypeName) {
-        this(anyAllowed, path, rmTypeName, null, null);
+        this.parent = parent;
     }
 
     /**
@@ -96,6 +87,15 @@ public abstract class CObject extends ArchetypeConstraint {
      */
     public String getNodeID() {
         return nodeID;
+    }
+    
+    /**
+     * Gets CAttribute that owns this CObject
+     * 
+     * @return the parent of this CObject
+     */
+    public CAttribute getParent() {
+    	return parent;
     }
 
     /**
@@ -151,6 +151,7 @@ public abstract class CObject extends ArchetypeConstraint {
                 .append(rmTypeName)
                 .append(occurrences)
                 .append(nodeID)
+                .append(parent)
                 .toHashCode();
     }
 
@@ -175,6 +176,7 @@ public abstract class CObject extends ArchetypeConstraint {
     private final String rmTypeName;
     private final Interval<Integer> occurrences;
     private final String nodeID;
+    private final CAttribute parent;
 }
 
 /*

@@ -25,40 +25,29 @@ import org.openehr.rm.support.basic.Interval;
  * @version 1.0
  */
 public class ArchetypeInternalRef extends CObject {
-    /**
-     * Construct an ArchetypeInternalRef
-     *
-     * @param path
-     * @param rmTypeName
-     * @param targetPath
-     * @throws IllegalArgumentException if targetpath null or empty
-     */
-    public ArchetypeInternalRef(String path, String rmTypeName,
-                                String targetPath) {
-        super(false, path, rmTypeName);
-
-        if (StringUtils.isEmpty(targetPath)) {
-            throw new IllegalArgumentException("null or emtpy targetPath");
-        }
-        // todo: and then ultimate_root.has_path(target_path)
-        this.targetPath = targetPath;
-    }
-
-    /**
+    
+	/**
      * Creates an ObjectConstraint
      *
      * @param path
      * @param rmTypeName
      * @param occurrences null indicates {1..1}
      * @param nodeID
-     * @param targetPath
+     * @param parent
+     * @param targetPath not null or empty
      * @throws IllegalArgumentException if rmTypeName null or empty,
      *                                  or nodeID null or empty
      */
     public ArchetypeInternalRef(String path, String rmTypeName,
                                 Interval<Integer> occurrences, String nodeID,
-                                String targetPath) {
-        super(false, path, rmTypeName, occurrences, nodeID);
+                                CAttribute parent, String targetPath) {
+        
+    	super(false, path, rmTypeName, occurrences, nodeID, parent);        
+    	
+    	if (StringUtils.isEmpty(targetPath)) {
+            throw new IllegalArgumentException("null or emtpy targetPath");
+        }
+        // TODO: and then ultimate_root.has_path(target_path)
         this.targetPath = targetPath;
     }
 
@@ -126,7 +115,7 @@ public class ArchetypeInternalRef extends CObject {
  *  The Original Code is ArchetypeInternalRef.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2006
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

@@ -5,7 +5,7 @@
  *
  * author:      "Rong Chen <rong@acode.se>"
  * support:     "Acode HB <support@acode.se>"
- * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
+ * copyright:   "Copyright (c) 2006 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
  * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/am/archetype/constraintmodel/CComplexObject.java $"
@@ -40,22 +40,17 @@ public final class CComplexObject extends CObject {
      * @param invariants
      */
     public CComplexObject(String path, String rmTypeName,
-                          Interval<Integer> occurrences,
-                          String nodeID, List<CAttribute> attributes,
-                          Set<Object> invariants) {
+                          Interval<Integer> occurrences, String nodeID, 
+                          List<CAttribute> attributes, CAttribute parent) {
 
-        super(attributes == null, path, rmTypeName, occurrences, nodeID);
+        super(attributes == null, path, rmTypeName, occurrences, nodeID, 
+        		parent);
 
         if (attributes != null && attributes.isEmpty()) {
             throw new IllegalArgumentException("empty attributes");
         }
-        if (invariants != null && invariants.isEmpty()) {
-            throw new IllegalArgumentException("empty invariants");
-        }
         this.attributes = ( attributes == null
-                ? null : new ArrayList<CAttribute>(attributes) );
-        this.invariants =
-                ( invariants == null ? null : new HashSet<Object>(invariants) );
+                ? null : new ArrayList<CAttribute>(attributes) );        
     }
 
     /**
@@ -67,18 +62,6 @@ public final class CComplexObject extends CObject {
     public List<CAttribute> getAttributes() {
         return attributes == null ?
                 null : Collections.unmodifiableList(attributes);
-    }
-
-    /**
-     * Invariant statements about this object. Statements are expressed in
-     * first order predicate logic, and usually refer to at least two
-     * attributes.
-     *
-     * @return invariants
-     */
-    public Set<Object> getInvariants() {
-        return invariants == null ?
-                null : Collections.unmodifiableSet(invariants);
     }
 
     /**
@@ -130,7 +113,6 @@ public final class CComplexObject extends CObject {
         return new EqualsBuilder()
                 .appendSuper(super.equals(o))
                 .append(attributes, ccobj.attributes)
-                .append(invariants, ccobj.invariants)
                 .isEquals();
     }
 
@@ -143,13 +125,11 @@ public final class CComplexObject extends CObject {
         return new HashCodeBuilder(13, 29)
                 .appendSuper(super.hashCode())
                 .append(attributes)
-                .append(invariants)
                 .toHashCode();
     }
 
     /* fields */
-    private final List<CAttribute> attributes;
-    private final Set<Object> invariants;  // Set<Assertion>    
+    private final List<CAttribute> attributes;    
 }
 
 /*
@@ -169,7 +149,7 @@ public final class CComplexObject extends CObject {
  *  The Original Code is CComplexObject.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2006
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

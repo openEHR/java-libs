@@ -14,17 +14,20 @@
  */
 package org.openehr.am.archetype;
 
+import java.util.*;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.openehr.am.archetype.constraintmodel.*;
+import org.openehr.am.archetype.assertion.Assertion;
+import org.openehr.am.archetype.constraintmodel.ArchetypeInternalRef;
+import org.openehr.am.archetype.constraintmodel.CAttribute;
+import org.openehr.am.archetype.constraintmodel.CComplexObject;
+import org.openehr.am.archetype.constraintmodel.CObject;
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
-import org.openehr.rm.common.resource.ResourceDescription;
-
+import org.openehr.rm.common.resource.AuthoredResource;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.identification.ObjectID;
-
-import java.util.*;
 
 /**
  * Archetype equivalent to ARCHETYPED class in Common reference model. Defines
@@ -37,6 +40,8 @@ import java.util.*;
  * @author Rong Chen
  * @version 1.0
  */
+
+// TODO: extends AuthoredResource
 public final class Archetype {
 
 	/**
@@ -52,8 +57,10 @@ public final class Archetype {
 	 * @throws IllegalArgumentException if description null or ontology null
 	 */
 	public Archetype(String adlVersion, String id, String parentId,
-			String conceptCode, ResourceDescription description,
-			CComplexObject definition, ArchetypeOntology ontology) {
+			String conceptCode, AuthoredResource description,
+			CComplexObject definition, ArchetypeOntology ontology, 
+			Set<Assertion> invariants) {	
+		
 		if (id != null && StringUtils.isEmpty(id)) {
 			throw new IllegalArgumentException("empty id");
 		}
@@ -71,11 +78,10 @@ public final class Archetype {
 		this.description = description;
 		this.definition = definition;
 		this.ontology = ontology;
+		this.invariants = invariants;
 		this.pathNodeMap = new HashMap<String, CObject>();
 		this.pathInputMap = new HashMap<String, String>();
 		this.inputPathMap = new HashMap<String, String>();
-		this.requiredInput = new HashSet<String>();
-		inputCounter = 0;
 		loadMaps(definition, true);
 		loadInternalRefs(definition, true, null);
 	}
@@ -92,9 +98,11 @@ public final class Archetype {
 	 * @throws IllegalArgumentException if description null or ontology null
 	 */
 	public Archetype(String id, String parentId, String conceptCode,
-			ResourceDescription description, CComplexObject definition,
+			AuthoredResource description, CComplexObject definition,
 			ArchetypeOntology ontology) {
-		this(null, id, parentId, conceptCode, description, definition, ontology);
+		
+		this(null, id, parentId, conceptCode, description, definition, 
+				ontology, null);
 	}
 
 	private void loadMaps(CObject node, boolean required) {
@@ -230,17 +238,7 @@ public final class Archetype {
 	 */
 	public ArchetypeID getParentArchetypeId() {
 		return parentArchetypeId;
-	}
-
-	/**
-	 * Description and lifecycle information of the archetype - all archetype
-	 * information which is not required at runtime.
-	 *
-	 * @return description
-	 */
-	public ResourceDescription getDescription() {
-		return description;
-	}
+	}	
 
 	/**
 	 * Root node of this archetype
@@ -250,6 +248,18 @@ public final class Archetype {
 	public CComplexObject getDefinition() {
 		return definition;
 	}
+	
+	/**
+     * Invariant statements about this object. Statements are expressed in
+     * first order predicate logic, and usually refer to at least two
+     * attributes.
+     *
+     * @return invariants
+     */
+    public Set<Assertion> getInvariants() {
+        return invariants == null ?
+                null : Collections.unmodifiableSet(invariants);
+    }
 
 	/**
 	 * Ontology definition of this archetype
@@ -258,6 +268,15 @@ public final class Archetype {
 	 */
 	public ArchetypeOntology getOntology() {
 		return ontology;
+	}
+	
+	/**
+	 * Description of this archetype
+	 * 
+	 * @return the description
+	 */
+	public AuthoredResource getDescription() {
+		return description;
 	}
 
 	/**
@@ -329,14 +348,14 @@ public final class Archetype {
 	private final String concept;
 
 	private final ArchetypeID parentArchetypeId;
-
-	private final ResourceDescription description;
+	
+	private final AuthoredResource description;
 
 	private final CComplexObject definition;
 
 	private final ArchetypeOntology ontology;
-
-	private int inputCounter;
+	
+	private final Set<Assertion> invariants;
 
 	/* calculated fields */
 	private final Map<String, CObject> pathNodeMap;
@@ -344,15 +363,6 @@ public final class Archetype {
 	private final Map<String, String> pathInputMap;
 
 	private final Map<String, String> inputPathMap;
-
-	private final Set<String> requiredInput;
-
-	/**
-	 * prefix for all input names
-	 */
-	public static final String INPUT = "input";
-
-	/* static field */
 }
 
 /*
