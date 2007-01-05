@@ -16,11 +16,13 @@
 package org.openehr.am.openehrprofile.datatypes.basic;
 
 import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
+import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
+import org.openehr.rm.support.basic.Interval;
 
 /**
- * Constrainer type for DV_STATE instances. The attribute c_value defines a
+ * Constraint type for DV_STATE instances. The attribute c_value defines a
  * state/event table which constrains the allowed values of the attribute 
  * value in a DV_STATE instance, as well as the order of transitions between
  * values.
@@ -37,8 +39,11 @@ public class CDvState extends CDomainType {
 	 * @param value not null
 	 * @throws IllegalArgumentException if value null
 	 */
-	public CDvState(String path, StateMachine value) {
-		super(path, "DvState");
+	public CDvState(String path, Interval<Integer> occurrences, String nodeId,
+            CAttribute parent, StateMachine value) {
+		
+		super(false, path, "DvState", occurrences, nodeId, parent);
+		
 		if(value == null) {
 			throw new IllegalArgumentException("value null");
 		}

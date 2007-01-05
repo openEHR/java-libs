@@ -1,0 +1,6 @@
+2006/12/31
+.updated constructors to support parent attribute
+.replaced CDvCodedText with CCodePhrase
+
+2006/12/16
+.updated class CDvCodedText regarding query attribute

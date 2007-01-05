@@ -17,10 +17,12 @@ package org.openehr.am.openehrprofile.datatypes.quantity;
 
 import java.util.*;
 
-import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
+import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
+import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.support.basic.Interval;
 
 /**
  * This class represents constrain instances of DV_QUANTITY.
@@ -41,16 +43,15 @@ public class CDvQuantity extends CDomainType {
 	 * @throws IllegalArgumentException if list is empty, 
 	 *             or both list and property null
 	 */
-	public CDvQuantity(String path, List<CDvQuantityItem> list,
+	public CDvQuantity(String path, Interval<Integer> occurrences, 
+			String nodeId, CAttribute parent, List<CDvQuantityItem> list,
 			CodePhrase property) {
 
-		super(path, "DvQuantity");
+		super(list == null && property == null, path, "DvQuantity",
+				occurrences, nodeId, parent);
 
 		if (list != null && list.isEmpty()) {
 			throw new IllegalArgumentException("empty list");
-		}
-		if(list == null && property == null) {
-			throw new IllegalArgumentException("both list and property null");
 		}
 		this.list = list == null ? list 
 				: new ArrayList<CDvQuantityItem>(list);

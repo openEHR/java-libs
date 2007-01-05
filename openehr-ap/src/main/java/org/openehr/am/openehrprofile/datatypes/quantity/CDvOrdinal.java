@@ -18,6 +18,7 @@ package org.openehr.am.openehrprofile.datatypes.quantity;
 import java.util.*;
 
 import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
+import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
 import org.openehr.rm.support.basic.Interval;
@@ -41,23 +42,14 @@ public class CDvOrdinal extends CDomainType {
 	 * @throws IllegalArgument if list null or empty
 	 */
 	public CDvOrdinal(String path, Interval<Integer> occurrences, 
-			String nodeID, Set<Ordinal> list) {
-		super(path, "DvOrdinal", occurrences, nodeID);
-		if(list == null || list.isEmpty()) {
-			throw new IllegalArgumentException("list is null or empty");
+			String nodeID, CAttribute parent, Set<Ordinal> list) {
+		
+		super(list == null, path, "DvOrdinal", occurrences, nodeID, parent);
+		
+		if(list != null && list.isEmpty()) {
+			throw new IllegalArgumentException("list is empty");
 		}
-		this.list = new LinkedHashSet<Ordinal>(list);
-	}
-	
-	/**
-	 * Creates a CDvOrdinal with path and list
-	 * 
-	 * @param path
-	 * @param list
-	 * @throws IllegalArgument if list null or empty
-	 */
-	public CDvOrdinal(String path, Set<Ordinal> list) {
-		this(path, null, null, list);		
+		this.list = list;
 	}
 
 	@Override

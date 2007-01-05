@@ -15,16 +15,14 @@
 
 package org.openehr.am.openehrprofile.datatypes.text;
 
-import java.util.Arrays;
+import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
+import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.identification.TerminologyID;
-
-import java.util.List;
 
 /**
  * Express constraints on instances of DV_CODED_TEXT.
@@ -32,7 +30,7 @@ import java.util.List;
  * @author Rong Chen
  * 
  */
-public class CDvCodedText extends CDomainType {
+public class CCodePhrase extends CDomainType {
 
 	/**
 	 * Creates a CDvCodedText
@@ -41,103 +39,46 @@ public class CDvCodedText extends CDomainType {
 	 * @param rmTypeName
 	 * @param occurrences
 	 * @param nodeID
+	 * @param parent
 	 * @param terminologyId
 	 *            null if unspecified
 	 * @param codeList
 	 *            null if unspecified
-	 * @param subset
-	 *            null if unspecified
-	 * @param query
-	 *            null if unspecified
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException 
 	 */
-	public CDvCodedText(String path, Interval<Integer> occurrences,
-			String nodeID, TerminologyID terminologyId, List<String> codeList,
-			String subset, String query) {
+	public CCodePhrase(String path, Interval<Integer> occurrences,
+			String nodeID, CAttribute parent, TerminologyID terminologyId, 
+			List<String> codeList) {
 
-		super(path, "DvCodedText", occurrences, nodeID);
+		super(terminologyId == null && codeList == null,
+				path, "CodePhrase", occurrences, nodeID, parent);
 
-		if (terminologyId != null && codeList == null) {
-			throw new IllegalArgumentException("codeList null");
-		}
-
-		if (subset != null) {
-			if (StringUtils.isEmpty(subset)) {
-				throw new IllegalArgumentException("subset empty");
+		if (codeList != null) {
+			if(codeList.isEmpty()) {
+				throw new IllegalArgumentException("codeList empty");
 			}
 			if (terminologyId == null) {
 				throw new IllegalArgumentException("terminologyId null");
-			}
+			}		
 		}
 
-		if (terminologyId == null && query == null) {
-			throw new IllegalArgumentException(
-					"both terminologyId and query null");
-		}
-
-		// Any_allowed_validity: code_list.is_empty implies any_allowed
-		this.codeList = codeList;
-		this.query = query;
-		this.subset = subset;
 		this.terminologyId = terminologyId;
-	}
+		this.codeList = codeList;		
+	}	
 
 	/**
-	 * Creates a terminology query based CDvCodedText
+	 * List of codes
 	 * 
-	 * @param path
-	 * @param query
-	 */
-	public CDvCodedText(String path, String query) {
-		this(path, null, null, null, null, null, query);
-	}
-
-	/**
-	 * Simplified constructor of this constraint
-	 * 
-	 * @param path
-	 * @param terminologyId
-	 * @param codeList
-	 */
-	public CDvCodedText(String path, String terminologyId, 
-			List<String> codeList) {
-		this(path, null, null, new TerminologyID(terminologyId), codeList,
-				null, null);
-	}
-
-	/**
-	 * List of codes; may be empty
-	 * 
-	 * @return empty if unspecifed
+	 * @return null if unspecifed
 	 */
 	public List<String> getCodeList() {
 		return codeList;
-	}
-
-	/*
-	 * Constraint in terms of an abstract query expression to be addressed to a
-	 * terminology.
-	 * 
-	 * @return null if unspecified
-	 */
-	public String getQuery() {
-		return query;
-	}
-
-	/**
-	 * Optional name of subset in terminology from which codes must come. Only
-	 * useful for terminologies which support subsetting.
-	 * 
-	 * @return list of codes, empty unspecified
-	 */
-	public String getSubset() {
-		return subset;
-	}
+	}	
 
 	/**
 	 * Syntax string expressing constraint on allowed primary terms
 	 * 
-	 * @return terminologyId
+	 * @return null if unspecified
 	 */
 	public TerminologyID getTerminologyId() {
 		return terminologyId;
@@ -168,12 +109,7 @@ public class CDvCodedText extends CDomainType {
 	}
 
 	private TerminologyID terminologyId;
-
 	private List<String> codeList;
-
-	private String subset;
-
-	private String query;
 }
 
 /*
@@ -187,7 +123,7 @@ public class CDvCodedText extends CDomainType {
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
  * 
- * The Original Code is CDvCodedText.java
+ * The Original Code is CCodePhrase.java
  * 
  * The Initial Developer of the Original Code is Rong Chen. Portions created by
  * the Initial Developer are Copyright (C) 2003-2006 the Initial Developer. All
