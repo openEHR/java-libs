@@ -439,6 +439,7 @@ public class VersionedObject<T> extends RMObject {
     void setVersions(Set<Version<T>> versions) {
         idVersionMap = new HashMap<ObjectVersionID, Version<T>>();
         timeVersionMap = new TreeMap<DvDateTime, Version<T>>();
+		trunkCounter = 0;
         for(Version<T> version : versions) {
             addVersion(version);
         }

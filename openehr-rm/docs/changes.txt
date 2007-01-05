@@ -185,3 +185,6 @@ upgrade to 1.0.1
 
 2006-11-22
 Modification in DvDateTimeParserTest to make all tests pass
+
+2007-01-05
+bug fix in setVersions() in VersionedObject class

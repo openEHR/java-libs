@@ -265,6 +265,21 @@ public class VersionedObjectTest extends ChangeControlTestBase {
         assertEquals("versionWithID", "the merged data", version.getData());     
         
     }
+	
+    //for debugging setVersions()
+    public void testSetVersions() throws Exception {
+        String firstData = "the first one";
+        String firstCSID = "1.2.40.14.1.2.2";
+        String time = "2006-07-14T14:33:29";
+        VersionedObject<String> repository = repository(firstData,
+                firstCSID, time);
+        ObjectVersionID fVUid = new ObjectVersionID(repository.getUid().root().toString(), 
+                firstCSID, "1");
+        Set<Version<String>> newVersions = new HashSet<Version<String>>();
+        newVersions.add(orgVersion("setVersion data", fVUid.toString(), null, time));
+        repository.setVersions(newVersions);
+        assertEquals("data after set", "setVersion data", repository.latestVersion().getData());
+    }
 
     VersionedObject<String> repositoryImport(String orgData, String dStrVersionID, String pVersionID,
             String time) {
