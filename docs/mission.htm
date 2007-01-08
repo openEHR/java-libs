@@ -34,31 +34,7 @@
 				most optimal solutions for given deployment requirement.</li>
 			<li>Provide software components as building blocks for full-fledge
 				EHR systems under favourable Open Source Software licenses.</li>
-		</ol>
-		
-		<h2>Notes</h2>
-		
-		<h3>Supporting Infrastructure</h3>
-		<p>When start to work with more than one components (kernel,parser) and worry about
-			the dependencies between components, we need to have a build machine that can
-			check out latest code from the subversion repository and run all the build script
-			from individual projects (in the order of dependency) to see if any one fails,
-			publish the result and notify the developer if anything goes wrong. This process
-			should be triggered every time a change has been committed. Ideally, all
-			developers should have the same environment as the build server and run
-			integration test locally before commit any changes. But sometimes it could be
-			too time consuming to do it locally (the build machine is usually a very fast one),
-			so the developer could commit some changes and wait to see if the integration test
-			passes on the build machine. If not, the developer is responsible to either
-			correct (error in other project) or revert the change (most likely). </p>
-		
-		<p>Another thing which is maven related is, in Acode we build and store our components
-			on our internal build machine and publish them through a web server so they can be
-			downloaded by other maven projects. It will be nice to have similar arrangement
-			on openEHR's server so that the user doesn't have to manually download
-			components to fix the dependency. Naturally the build process and integration
-			test should be connected, only successful integration test will lead to
-			publishing of newly created components.</p>
+		</ol>		
 		
 		<hr style="width: 100%; height: 2px;"/>
 		<span class="footer">Last changed: $Date$ $Revision$</span>
