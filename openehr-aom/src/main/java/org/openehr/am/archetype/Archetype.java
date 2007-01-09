@@ -25,9 +25,14 @@ import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CObject;
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
+import org.openehr.rm.common.generic.RevisionHistory;
 import org.openehr.rm.common.resource.AuthoredResource;
+import org.openehr.rm.common.resource.ResourceDescription;
+import org.openehr.rm.common.resource.TranslationDetails;
+import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
  * Archetype equivalent to ARCHETYPED class in Common reference model. Defines
@@ -41,8 +46,7 @@ import org.openehr.rm.support.identification.ObjectID;
  * @version 1.0
  */
 
-// TODO: extends AuthoredResource
-public final class Archetype {
+public final class Archetype extends AuthoredResource {
 
 	/**
 	 * Constructs an Archetype
@@ -51,15 +55,25 @@ public final class Archetype {
 	 * @param id
 	 * @param parentId
 	 * @param concept
+	 * @param originalLanguage
+	 * @param translations
 	 * @param description
+	 * @param revisionHistory
+	 * @param isControlled
 	 * @param definition
 	 * @param ontology
 	 * @throws IllegalArgumentException if description null or ontology null
 	 */
-	public Archetype(String adlVersion, String id, String parentId,
-			String conceptCode, AuthoredResource description,
-			CComplexObject definition, ArchetypeOntology ontology, 
-			Set<Assertion> invariants) {	
+public Archetype(String adlVersion, String id, String parentId,	String concept, 
+			CodePhrase originalLanguage,
+			Map<String, TranslationDetails> translations,
+			ResourceDescription description, RevisionHistory revisionHistory,
+			boolean isControlled, CComplexObject definition, 
+			ArchetypeOntology ontology,	Set<Assertion> invariants,
+			TerminologyService terminologyService) {	
+		
+		super(originalLanguage, translations, description, revisionHistory,
+			isControlled, terminologyService);
 		
 		if (id != null && StringUtils.isEmpty(id)) {
 			throw new IllegalArgumentException("empty id");
@@ -72,10 +86,9 @@ public final class Archetype {
 		}
 		this.adlVersion = adlVersion;
 		this.archetypeId = new ArchetypeID(id);
-		this.concept = conceptCode;
+		this.concept = concept;
 		this.parentArchetypeId = (parentId == null ? null : new ArchetypeID(
 				parentId));
-		this.description = description;
 		this.definition = definition;
 		this.ontology = ontology;
 		this.invariants = invariants;
@@ -86,42 +99,23 @@ public final class Archetype {
 		loadInternalRefs(definition, true, null);
 	}
 
-	/**
-	 * Constructs an Archetype
-	 *
-	 * @param id
-	 * @param parentId
-	 * @param concept
-	 * @param description
-	 * @param definition
-	 * @param ontology
-	 * @throws IllegalArgumentException if description null or ontology null
-	 */
-	public Archetype(String id, String parentId, String conceptCode,
-			AuthoredResource description, CComplexObject definition,
-			ArchetypeOntology ontology) {
-		
-		this(null, id, parentId, conceptCode, description, definition, 
-				ontology, null);
-	}
-
 	private void loadMaps(CObject node, boolean required) {
 		pathNodeMap.put(node.path(), node);
 
 		// TODO
 		/*if (node instanceof LeafConstraint) {
-			LeafConstraint leaf = (LeafConstraint) node;
-			if (!leaf.hasAssignedValue()) {
-				inputCounter++;
-				String input = INPUT + inputCounter;
-				pathInputMap.put(node.path(), input);
-				inputPathMap.put(input, node.path());
-				if (required && node.isRequired()) {
-					requiredInput.add(node.path());
-				}
-			}
-			return;
-		}*/
+		 LeafConstraint leaf = (LeafConstraint) node;
+		 if (!leaf.hasAssignedValue()) {
+		 inputCounter++;
+		 String input = INPUT + inputCounter;
+		 pathInputMap.put(node.path(), input);
+		 inputPathMap.put(input, node.path());
+		 if (required && node.isRequired()) {
+		 requiredInput.add(node.path());
+		 }
+		 }
+		 return;
+		 }*/
 
 		if (!(node instanceof CComplexObject)) {
 			return; // other types of cobject
@@ -149,21 +143,21 @@ public final class Archetype {
 	private void loadInternalRefs(CObject node, boolean required, String refPath) {
 
 		// TODO
-	/*	if ((node instanceof LeafConstraint) && refPath != null) {
-			LeafConstraint leaf = (LeafConstraint) node;
-			if (!leaf.hasAssignedValue()) {
-				inputCounter++;
-				String input = INPUT + inputCounter;
-				String path = refPath + ArchetypeInternalRef.USE_NODE
-						+ node.path();
-				pathInputMap.put(path, input);
-				inputPathMap.put(input, path);
-				if (required && node.isRequired()) {
-					requiredInput.add(path);
-				}
-			}
-			return;
-		}*/
+		/*	if ((node instanceof LeafConstraint) && refPath != null) {
+		 LeafConstraint leaf = (LeafConstraint) node;
+		 if (!leaf.hasAssignedValue()) {
+		 inputCounter++;
+		 String input = INPUT + inputCounter;
+		 String path = refPath + ArchetypeInternalRef.USE_NODE
+		 + node.path();
+		 pathInputMap.put(path, input);
+		 inputPathMap.put(input, path);
+		 if (required && node.isRequired()) {
+		 requiredInput.add(path);
+		 }
+		 }
+		 return;
+		 }*/
 
 		if (node instanceof ArchetypeInternalRef) {
 			ArchetypeInternalRef ref = (ArchetypeInternalRef) node;
@@ -238,7 +232,7 @@ public final class Archetype {
 	 */
 	public ArchetypeID getParentArchetypeId() {
 		return parentArchetypeId;
-	}	
+	}
 
 	/**
 	 * Root node of this archetype
@@ -248,18 +242,18 @@ public final class Archetype {
 	public CComplexObject getDefinition() {
 		return definition;
 	}
-	
+
 	/**
-     * Invariant statements about this object. Statements are expressed in
-     * first order predicate logic, and usually refer to at least two
-     * attributes.
-     *
-     * @return invariants
-     */
-    public Set<Assertion> getInvariants() {
-        return invariants == null ?
-                null : Collections.unmodifiableSet(invariants);
-    }
+	 * Invariant statements about this object. Statements are expressed in
+	 * first order predicate logic, and usually refer to at least two
+	 * attributes.
+	 *
+	 * @return invariants
+	 */
+	public Set<Assertion> getInvariants() {
+		return invariants == null ? null : Collections
+				.unmodifiableSet(invariants);
+	}
 
 	/**
 	 * Ontology definition of this archetype
@@ -268,16 +262,7 @@ public final class Archetype {
 	 */
 	public ArchetypeOntology getOntology() {
 		return ontology;
-	}
-	
-	/**
-	 * Description of this archetype
-	 * 
-	 * @return the description
-	 */
-	public AuthoredResource getDescription() {
-		return description;
-	}
+	}	
 
 	/**
 	 * Version of this archetype, extracted from id.
@@ -316,7 +301,7 @@ public final class Archetype {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this,
 				ToStringStyle.MULTI_LINE_STYLE);
-	}	
+	}
 
 	/**
 	 * Find input name by node path
@@ -348,13 +333,11 @@ public final class Archetype {
 	private final String concept;
 
 	private final ArchetypeID parentArchetypeId;
-	
-	private final AuthoredResource description;
 
 	private final CComplexObject definition;
 
 	private final ArchetypeOntology ontology;
-	
+
 	private final Set<Assertion> invariants;
 
 	/* calculated fields */

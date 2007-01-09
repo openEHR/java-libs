@@ -1,3 +1,9 @@
+2006/1/09
+.
+
+2006/1/07
+.Archetype extends AuthoredResource
+
 2006/12/30
 .added parent attribute to CObject and its children
 .adjusted the constructor of CDomainType to support allowAny

@@ -35,7 +35,9 @@ public class CPrimitiveObject extends CObject {
             Interval<Integer> occurrences, String nodeId, CAttribute parent, 
             CPrimitive item) {
 
-        super(item == null, path, rmTypeName, occurrences, nodeId, parent);
+        super(item == null, path, 
+        		item == null ? null : item.getType(), occurrences, nodeId,
+        				parent);
         this.item = item;
     }
     
