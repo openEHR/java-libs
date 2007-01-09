@@ -41,7 +41,7 @@
 			Model.</p>
 		
 		<p>Tools are listed separately since they don't belong to any specific layer since
-			they can be used as standalone applications or as part of the larger system.</p>
+			they can be used as stand-alone applications or as part of the larger system.</p>
 		
 		<h2>Domain Layer</h2>
 		
@@ -88,7 +88,18 @@
 			objects - EHRs or Demographics. The implementations of this layer will ideally
 			be accessed through well-defined common interface, e.g. Data Access Objects to
 			hide implementation details. Different flavor of the implementations should
-			be supported</p>
+			be supported.</p>
+		<ol>
+			<li><b>DAO interfaces</b> these are interfaces for CRUD
+				(Create/Read/Update/Delete) operations on high level domain objects,
+				e.g. EHR Composition. These intefaces should be implemented by concrete
+				persistence components</li>
+			<li><b>Hibernate 2 Implementation</b> this is an existing components
+				implements the DAOs by OR Mapping tool Hibernate 2</li>
+			<li><b>Hibernate 3 Implementation</b> this components implements the DAOs by
+				OR Mapping tool Hibernate 3</li>
+			<li><b>OODB implementation</b> is based on Object Oriented Database</li>
+		</ol>
 		
 		<h2>Presentation Layer</h2> Components in this layer presents data to the user and
 		intercept data entry from the user
@@ -110,19 +121,17 @@
 		
 		<h2>Tools</h2>
 		<ol>
-			<li><b>Screen Form Generator</b> this component generates GUI screen forms
-				based on the semantics in the Templates and Archetypes</li>
-			<li><b>Form Validator</b> this components provides user data entry
-				validation based on constraints defined by the Archetypes. It is required
-				to work closely with the Kernel component for validation and provide
-				meaningful error message for the end user. </li>
-			<li><b>Archetype Service</b> minimal feature includes storage, retrieval
-				and versioning of archetypes</li>
-			<li><b>Terminology Service</b> * a minimal openEHR terminology service
-				necessary for the kernel work properly - the initial coding was done as part
-				of the parser component and it should be extracted as standard alone
-				component. * a generic terminology service that can serve different
-				international terminologies will be required in full-blown systems</li>
+			<li><b>ADL Parser</b> this component implements the ADL 1.4 specification. It
+				parse an Archetype in ADL format and produces its object form in AOM</li>
+			<li><b>Archetype Editor</b> this is a GUI based Archtype authoring
+				application built on top of the Java components </li>
+			<li><b>Archetype Validator</b> this component provides validation of
+				Archetypes in AOM format against targeting Reference Model, e.g.
+				correctness of names of the classes and attributes, and the semantics in the
+				constraints, e.g. check the validity of an ArchetypeInternalReference
+				</li>
+			<li><b>ADL Serializer</b> this component provides conversion of Archetypes
+				from object form to serialized text form in ADL format</li>
 		</ol>
 		
 		<hr style="width: 100%; height: 2px;"/>
