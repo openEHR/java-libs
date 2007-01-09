@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+	<head>
+		
+		<title>openEHR Java Reference Implementation Project -- Road Map</title>
+		<link rel="stylesheet" href="http://www.openehr.org/styles/oe.css"
+			type="text/css"/>
+	</head>
+	
+	<body>
+		<h1>The Road Map of the
+			<br/>
+			<span style="font-style: italic;">open</span>EHR Java Reference
+			Implementation Project </h1>
+		
+		<hr style="width: 100%; height: 2px;"/>
+		
+		<h2>Purpose</h2> This document provides technical description of the openEHR Java
+		Reference Implementation Project. It lists all the existing components already
+		provided by the Java project and their status for new comers to the Java project can get
+		a quick impression on what the Java project can actually provide. It also informs
+		about up-coming components to plan future development and coordinate possible
+		collaborations.
+		<br/>
+		
+		<h2>Related Documents</h2>
+		<ol type="1">
+			<li>The openEHR Architecture Overview</li>
+			<li>The Mission Statement of the Java project.</li>
+			<li>The openEHR Java Implementation Technology Specification</li>
+		</ol>
+		
+		<h2>Overview</h2>
+		<p>This road-map lists all the components that are necessary to build a complete EHR
+			system. As convention, these components are categorized into three principal
+			layers - Domain, Persistence and Presentation. Since openEHR systems are based
+			on two-level model approach, the Domain Layer gets more complicated than that of
+			any conventional Enterprise Applications. Instead of hard-coded into
+			software artifacts, domain models are expressed in the form of the Archetype
+			Model.</p>
+		
+		<p>Tools are listed separately since they don't belong to any specific layer since
+			they can be used as standalone applications or as part of the larger system.</p>
+		
+		<h2>Domain Layer</h2>
+		
+		<h3>Kernel Components</h3>
+		<ol>
+			<li><b>openEHR RM Core</b> implements openEHR Reference Information Model
+				Common, Support, Data Types, Data Structures specifications</li>
+			<li><b>openEHR RM Domain</b> implements openEHR Reference Information Model
+				EHR, Demogrhpics, EHR Extract, Messaging specifications</li>
+			<li><b>openEHR AOM</b> implements openEHR Archetype Object Model
+				specification</li>
+			<li><b>openEHR AP</b> implements openEHR Archetype Model - openEHR Archetype
+				Profile</li>
+		</ol>
+		
+		<h3>Service Components</h3> Implementation of up-coming services components.
+		Some of the key components are:
+		<ol>
+			<li><b>EHR Service</b> implementation of EHR Service Model for high level EHR
+				object storage and retrieval</li>
+			<li><b>Demographic Service</b> for high level Demographic object storage and
+				retrieval </li>
+			<li><b>Archetype Service</b> minimal feature includes storage, retrieval
+				and versioning of archetypes</li>
+			<li><b>Terminology Service</b> * a minimal openEHR terminology service
+				necessary for the kernel work properly - the initial coding was done as part
+				of the parser component and it should be extracted as standard alone
+				component. * a generic terminology service that can serve different
+				international terminologies will be required in full-blown systems</li>
+			<li><b>Query Service</b> is a generic data retrieval service for fine-grained
+				queries</li>
+		</ol>
+		
+		<h3>Wrappers</h3>
+		<p>Wrappers are essentially Data Transfer Objects that transfer data before
+			different layers and have little logic besides getters and setters. This will
+			fulfill the need for missing direct setters of attributes in immutable RM
+			classes which are required for certain type of OR mapping. * Wrappers can group
+			low level RM objects into coarse-grained objects to facilitate data transfer
+			and mappings. </p>
+		
+		<h2>Persistence Layer</h2>
+		<p>This layer provides generic storage and retrieval service for high level domain
+			objects - EHRs or Demographics. The implementations of this layer will ideally
+			be accessed through well-defined common interface, e.g. Data Access Objects to
+			hide implementation details. Different flavor of the implementations should
+			be supported</p>
+		
+		<h2>Presentation Layer</h2> Components in this layer presents data to the user and
+		intercept data entry from the user
+		<ol>
+			<li><b>Screen Form Generator</b> this component generates GUI screen forms
+				based on the semantics in the Templates and Archetypes</li>
+			<li><b>Form Validator</b> this components provides user data entry
+				validation based on constraints defined by the Archetypes. It is required
+				to work closely with the Kernel component for validation and provide
+				meaningful error message for the end user. </li>
+			<li><b>Archetype Service</b> minimal feature includes storage, retrieval
+				and versioning of archetypes</li>
+			<li><b>Terminology Service</b> * a minimal openEHR terminology service
+				necessary for the kernel work properly - the initial coding was done as part
+				of the parser component and it should be extracted as standard alone
+				component. * a generic terminology service that can serve different
+				international terminologies will be required in full-blown systems</li>
+		</ol>
+		
+		<h2>Tools</h2>
+		<ol>
+			<li><b>Screen Form Generator</b> this component generates GUI screen forms
+				based on the semantics in the Templates and Archetypes</li>
+			<li><b>Form Validator</b> this components provides user data entry
+				validation based on constraints defined by the Archetypes. It is required
+				to work closely with the Kernel component for validation and provide
+				meaningful error message for the end user. </li>
+			<li><b>Archetype Service</b> minimal feature includes storage, retrieval
+				and versioning of archetypes</li>
+			<li><b>Terminology Service</b> * a minimal openEHR terminology service
+				necessary for the kernel work properly - the initial coding was done as part
+				of the parser component and it should be extracted as standard alone
+				component. * a generic terminology service that can serve different
+				international terminologies will be required in full-blown systems</li>
+		</ol>
+		
+		<hr style="width: 100%; height: 2px;"/>
+		<span class="footer">Last changed: $Date: 2007-01-08 18:21:28 +0100 (Mon, 08 Jan
+			2007) $ $Revision: 148 $</span> </body>
+</html>
