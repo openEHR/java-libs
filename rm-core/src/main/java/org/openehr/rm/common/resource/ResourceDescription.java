@@ -18,7 +18,6 @@ import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.Attribute;
-import org.openehr.rm.support.identification.ObjectID;
 
 /**
  * Defines the descriptive meta-data of a resource.

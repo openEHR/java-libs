@@ -4,7 +4,7 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>openehr</groupId>
-	<artifactId>rm-core</artifactId>
+	<artifactId>openehr-rm-core</artifactId>
 	<packaging>jar</packaging>
 	<version>0.1-SNAPSHOT</version>
 	<name>openEHR Reference Model Core</name>
