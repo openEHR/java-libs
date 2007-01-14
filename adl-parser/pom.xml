@@ -94,7 +94,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>openehr</groupId>
-			<artifactId>openehr-rm</artifactId>
+			<artifactId>openehr-rm-core</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>openehr-rm-domain</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -106,13 +111,7 @@
 			<groupId>openehr</groupId>
 			<artifactId>openehr-ap</artifactId>
 			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>openehr</groupId>
-			<artifactId>adl-serializer</artifactId>
-			<version>0.1-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>		
+		</dependency>	
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

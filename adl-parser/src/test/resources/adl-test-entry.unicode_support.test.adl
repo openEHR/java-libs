@@ -2,6 +2,9 @@ archetype
 	adl-test-ENTRY.unicode_support.draft
 concept 
 	[at0000]	--  empty definition test
+language
+	original_language = <"en"> 
+	
 
 definition
 	ENTRY[at0000] matches {*}

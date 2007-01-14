@@ -1,8 +1,12 @@
 archetype 	
 	adl-test-ENTRY.test.draft
+
 concept 
 	[at0000]	--  basic data types test 1
 
+language
+	original_language = <"en"> 
+	
 definition
 	ENTRY[at0000] matches {	
         types matches {

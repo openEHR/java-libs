@@ -1,3 +1,14 @@
+2007/01/14
+.removed RoundTripTest and adl-serializer dependency
+
+2007/01/07
+.added archetype language part parsing
+.AuthoredResource is used for archetype description
+
+2006/12/30
+.updated other CDomainTypes support
+.replaced CDvCodedText with CCodePhrase
+
 2006/12/16
 .updated CDvCodedText support regarding query
 

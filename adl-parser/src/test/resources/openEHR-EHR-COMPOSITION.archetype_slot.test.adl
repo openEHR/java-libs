@@ -4,6 +4,9 @@ archetype
 concept
 	[at0000]
 
+language
+	original_language = <"en"> 	
+
 definition
 	COMPOSITION[at0000] matches {	-- Encounter
 		content matches {

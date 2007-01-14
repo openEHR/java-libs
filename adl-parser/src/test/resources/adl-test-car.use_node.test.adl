@@ -3,6 +3,9 @@ archetype
 concept
 	[at0000] 	   									-- car
 
+language
+	original_language = <"en"> 
+	
 definition
 	CAR [at0000] matches {
 		wheels matches {

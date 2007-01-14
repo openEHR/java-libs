@@ -4,6 +4,9 @@ archetype
 concept 
 	[at0000]	--  test
 
+language
+	original_language = <"en"> 
+	
 description
 	original_author = <
 		["name"] = <"Sam Heard">

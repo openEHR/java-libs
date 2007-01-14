@@ -1,9 +1,12 @@
 archetype
-	adl-test-ENTRY.domain_types.test
+	adl-test-ENTRY.c_code_phrase.test
 
 concept
 	[at0000]
 
+language
+	original_language = <"en"> 
+	
 definition
 	ENTRY[at0000] matches {	
         types matches {
@@ -17,12 +20,7 @@ definition
                             at2001.2; 	-- completed
                             at2001.0]   -- assumed value
                         }
-                    }
-                    ELEMENT[at10003] matches {	-- coded_text with query
-                        value matches {
-                            [ac2001] -- cool query to some terminology server
-                        }
-                    }			
+                    }	
                 }
             }
         }

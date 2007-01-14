@@ -2,6 +2,9 @@ archetype
 	adl-test-ENTRY.structure_test1.draft
 concept 
 	[at0000]	--  structure test 1
+language
+	original_language = <"en"> 
+	
 
 definition
 	ENTRY[at0000] matches {

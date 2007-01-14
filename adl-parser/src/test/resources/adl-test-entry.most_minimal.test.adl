@@ -1,8 +1,12 @@
 archetype
 	adl-test-ENTRY.most_minimal.draft
+
 concept 
 	[at0000]	--  empty definition test
 
+language
+	original_language = <"en"> 
+	
 definition
 	ENTRY[at0000] matches {*}
 

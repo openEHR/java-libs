@@ -39,14 +39,17 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.quantity.datetime.*;
 import org.openehr.rm.datatypes.text.*;
 import org.openehr.rm.common.resource.*;
+import org.openehr.rm.common.generic.RevisionHistory;
+import org.openehr.rm.support.identification.*;
 import org.openehr.rm.support.terminology.*;
 
 import org.openehr.am.archetype.Archetype;
+import org.openehr.am.archetype.assertion.Assertion;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
 import org.openehr.am.archetype.ontology.*;
 import org.openehr.am.openehrprofile.datatypes.quantity.*;
-import org.openehr.am.openehrprofile.datatypes.text.CDvCodedText;
+import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 
 /**
  * JavaCC grammer file for Archteype Definition Language (ADL)
@@ -192,10 +195,18 @@ PARSER_END(ADLParser)
 | <SYM_UNCONTROLLED: "uncontrolled"> : DEFAULT
 | <SYM_SPECIALIZE: "speciali"["s","z"]"e"([" ","\t","\r","\n"])*"\n"> : DEFAULT
 | <SYM_CONCEPT: "concept"([" ","\t","\r","\n"])*"\n" > : DEFAULT
+| <SYM_LANGUAGE: "language"([" ","\t","\r","\n"])*"\n"> : LANGUAGE
 | <SYM_DEFINITION: "definition"([" ","\t","\r","\n"])*"\n" > : CADL
 | <SYM_DESCRIPTION: "description"([" ","\t","\r","\n"])*"\n" > : DESCRIPTION
 | <SYM_ONTOLOGY: "ontology"([" ","\t","\r","\n"])*"\n" > : ONTOLOGY
 }
+
+< LANGUAGE > TOKEN [IGNORE_CASE]: /* KEYWORDS - archetype language */
+{
+  < SYM_ORIGINAL_LANGUAGE: "original_language">
+| < SYM_TRANSLATIONS: "translations">
+}
+
 
 < DESCRIPTION, ONTOLOGY > TOKEN [IGNORE_CASE]: /* KEYWORDS - ADL description */
 {
@@ -212,7 +223,6 @@ PARSER_END(ADLParser)
 | < SYM_VERSION: "version">
 | < SYM_STATUS: "status">
 | < SYM_REVISION: "revision">
-| < SYM_LANGUAGE: "language">
 | < SYM_PURPOSE: "purpose">
 | < SYM_USE: "use">
 | < SYM_MISUSE: "misuse">
@@ -220,6 +230,7 @@ PARSER_END(ADLParser)
 | < SYM_KEYWORDS: "keywords">
 | < SYM_RIGHTS: "rights">
 | < SYM_DESCRIPTION_WORD: "description">
+| <SYM_LANGUAGE_WORD: "language">
 }
 
 < * > TOKEN [IGNORE_CASE]: /* KEYWORDS - dADL */
@@ -548,12 +559,18 @@ Archetype archetype() :
   Token t;	
   String id;
   String adlVersion = null;
-  boolean controlled = false;
+  boolean isControlled = false;
   String parent = null;
   String concept;
+  String lang;
+  Map<String, TranslationDetails> translations = null; 
+  TranslationDetails translationDetails = null;
+  RevisionHistory revisionHistory = null;
   ResourceDescription description = null;
   CComplexObject definition;
   ArchetypeOntology ontology;
+  Set<Assertion> invariants = null; // TODO
+  TerminologyService terminologyService = null; // TODO
 }
 {
   <SYM_ARCHETYPE>	
@@ -562,7 +579,7 @@ Archetype archetype() :
     adlVersion = adl_version() 
     [ 
       <SYM_SEMICOLON>
-      controlled = controlled() 
+      isControlled = controlled() 
     ]
     <SYM_R_PARENTHESIS>
   ]
@@ -572,7 +589,16 @@ Archetype archetype() :
 
   [ parent = arch_specialisation() ]
   concept = arch_concept()
-
+  
+  <SYM_LANGUAGE>  
+  	<SYM_ORIGINAL_LANGUAGE> <SYM_EQ> "<" lang = string_value() ">"  	
+    [ 
+      <SYM_TRANSLATIONS> <SYM_EQ> "<"
+      
+      { translations = new HashMap<String, TranslationDetails>(); }       
+        
+      ">"	
+    ] 
   [ description = arch_description() ]
 
   definition = arch_definition()
@@ -581,8 +607,11 @@ Archetype archetype() :
   <EOF>
 
   {
-    return new Archetype(adlVersion, id, parent, concept, description, 
-    					definition, ontology);
+  	CodePhrase originalLanguage = new CodePhrase("languages", lang);   
+    
+    return new Archetype(adlVersion, id, parent, concept, originalLanguage,
+    		translations, description, revisionHistory, isControlled,
+    		definition, ontology, invariants, terminologyService);
   }
 }
 
@@ -637,7 +666,7 @@ ResourceDescription arch_description() :
   String archetypePackageURI = null;
   Map otherDetails = new HashMap(); // not used
   Archetype parentArchetype = null;
-  AuthoredResource authoredResource = null; // not used
+  AuthoredResource parent = null; // not used  
 }
 {
    <SYM_DESCRIPTION>
@@ -663,12 +692,17 @@ ResourceDescription arch_description() :
    
    [ <SYM_COPYRIGHT> <SYM_EQ> "<" string_value() ">" ]
    
-   [ <SYM_OTHER_CONTRIBUTORS> <SYM_EQ> "<" otherContributors = string_list_value() ">" ]
+   [ 
+     <SYM_OTHER_CONTRIBUTORS> <SYM_EQ> "<" 
+       [ otherContributors = string_list_value() ] 
+     ">" 
+   ]
    {
-     return new ResourceDescription(originalAuthor, otherContributors,
-                                     lifecycleState, details,
-                                     archetypePackageURI, otherDetails,
-                                     authoredResource);
+     ResourceDescription resourceDescription = new ResourceDescription(
+     		originalAuthor, otherContributors, lifecycleState, details,
+            archetypePackageURI, otherDetails, parent);
+
+     return resourceDescription;     
    }
 }
 
@@ -708,7 +742,7 @@ ResourceDescriptionItem arch_description_item() :
 {
   "[" lang = string_value() "]" <SYM_EQ> "<"
   (
-    <SYM_LANGUAGE> <SYM_EQ> "<" string_value() ">"
+    <SYM_LANGUAGE_WORD> <SYM_EQ> "<" string_value() ">"
   | 
     <SYM_PURPOSE> <SYM_EQ> "<" purpose = string_value() ">"
   |  
@@ -1823,17 +1857,16 @@ CComplexObject cadl_text() :
   CComplexObject c;
 }
 {
-  c = c_complex_object(null)
+  c = c_complex_object(null, null)
   { return c; }
 }
 
-CComplexObject c_complex_object(String path) :
+CComplexObject c_complex_object(String path, CAttribute parent) :
 {
   String type;
   String nodeID = null;
   Interval occurrences = null;
   List attributes;
-  Set invariants = null;
 }
 {
   type = type_identifier()
@@ -1847,12 +1880,10 @@ CComplexObject c_complex_object(String path) :
     }    
   }
   <SYM_MATCHES> <SYM_START_CBLOCK>
-    attributes = c_complex_object_body(path)
-    [ invariants = c_invariants() ]
+    attributes = c_complex_object_body(path)   
   <SYM_END_CBLOCK>
   {
-    return new CComplexObject(path, type, occurrences, nodeID, attributes,
-                              invariants);
+    return new CComplexObject(path, type, occurrences, nodeID, attributes, parent);
   }
 }
 
@@ -1878,50 +1909,47 @@ List c_complex_object_body(String path) :
   }
 }
 
-CObject c_object(String path) :
+CObject c_object(String path, CAttribute parent) :
 {
   CObject c = null;
   String ref = null;
 }
 {
   (
-      c = c_dv_quantity(path)    
+      c = c_dv_quantity(path, parent)    
     |
-      c = c_complex_object(path)
+      c = c_complex_object(path, parent)
     |
-      c = archetype_internal_ref(path)
+      c = archetype_internal_ref(path, parent)
     |
-      c = archetype_slot(path)
+      c = archetype_slot(path, parent)
     |
-      ref = constraint_ref()
-      { 
-      	c = new CDvCodedText(path, ref);       	
-      }
-    |
-      c = c_coded_term(path)
+      c = c_code_phrase(path, parent)
     |
       LOOKAHEAD( 3 )
-      c = c_dv_ordinal(path)
+      c = c_dv_ordinal(path, parent)
     |
       LOOKAHEAD( 3 )
-      c = c_primitive_object(path)
+      c = c_primitive_object(path, parent)
   )
   {
     return c;
   }
 }
 
-ArchetypeInternalRef archetype_internal_ref(String path) :
+ArchetypeInternalRef archetype_internal_ref(String path, CAttribute parent) :
 {
   String type;
   String target;
 }
 {
-  <SYM_USE_NODE> type = type_identifier() target = adl_path()
-  { return new ArchetypeInternalRef(path, type, target); }
+  <SYM_USE_NODE> type = type_identifier() target = adl_path()  
+  { 
+  	return new ArchetypeInternalRef(path, type, null, null, parent, target); 
+  }
 }
 
-ArchetypeSlot archetype_slot(String path) :
+ArchetypeSlot archetype_slot(String path, CAttribute parent) :
 {
   String type;
   String nodeID = null;
@@ -1938,11 +1966,12 @@ ArchetypeSlot archetype_slot(String path) :
     [ excludes = c_excludes() ]
   <SYM_END_CBLOCK>
   {
-    return new ArchetypeSlot(path, type, occurrences, nodeID, includes, excludes);
+    return new ArchetypeSlot(path, type, occurrences, nodeID, parent, includes, 
+    		excludes);
   }
 }
 
-CPrimitiveObject c_primitive_object(String path) :
+CPrimitiveObject c_primitive_object(String path, CAttribute parent) :
 {
   CPrimitive c;
 }
@@ -1972,7 +2001,7 @@ CPrimitiveObject c_primitive_object(String path) :
     LOOKAHEAD( c_real() )
     c = c_real()
   )
-  { return new CPrimitiveObject(path, c); }
+  { return new CPrimitiveObject(path, null, null, parent, c); }
 }
 
 void c_any() :
@@ -2001,7 +2030,7 @@ CAttribute c_attribute(String path) :
   [ existence = c_existence() ]
   [ cardinality = c_cardinality() ]
   <SYM_MATCHES> <SYM_START_CBLOCK>
-    children = c_attr_values(path +  name)
+    children = c_attr_values(path +  name, null) // TODO fix parent
   <SYM_END_CBLOCK>
   {
   	path += name;
@@ -2016,7 +2045,7 @@ CAttribute c_attribute(String path) :
   }
 }
 
-List c_attr_values(String path) :
+List c_attr_values(String path, CAttribute parent) :
 {
   List list = null;
   CObject c = null;
@@ -2029,7 +2058,7 @@ List c_attr_values(String path) :
     { list = new ArrayList(); }
     (
       LOOKAHEAD(2)
-      c = c_object(path)
+      c = c_object(path, parent)
       { list.add(c); }
     )*
   )
@@ -2099,7 +2128,7 @@ void Boolean_expression() :
 |
   LOOKAHEAD( 3 ) attribute_identifier() <SYM_MATCHES>
                  (
-                   <SYM_START_CBLOCK> c_primitive_object("?") <SYM_END_CBLOCK>
+                   <SYM_START_CBLOCK> c_primitive_object("?", null) <SYM_END_CBLOCK>
                  |
                    <V_REGEXP>
                  )
@@ -2148,7 +2177,7 @@ void Boolean_expression_sub() :
 | 
   LOOKAHEAD( 3 )
   attribute_identifier() <SYM_MATCHES>(
-                   <SYM_START_CBLOCK> c_primitive_object(null) <SYM_END_CBLOCK>
+                   <SYM_START_CBLOCK> c_primitive_object(null, null) <SYM_END_CBLOCK>
                  |
                    <V_REGEXP>
                  )
@@ -2318,7 +2347,7 @@ Interval occurrence_spec() :
 
 /* ---------------------- leaf constraint types ----------------------- */
 
-CDvOrdinal c_dv_ordinal(String path) :
+CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
 {
   Set list = new HashSet();
   org.openehr.am.openehrprofile.datatypes.quantity.Ordinal o;
@@ -2329,7 +2358,9 @@ CDvOrdinal c_dv_ordinal(String path) :
     "," o = ordinal()
         { list.add(o); }
   )*
-  { return new CDvOrdinal(path, list); }
+  { 
+  	return new CDvOrdinal(path, null, null, parent, list); 
+  }
 }
 
 org.openehr.am.openehrprofile.datatypes.quantity.Ordinal ordinal() :
@@ -2359,10 +2390,11 @@ org.openehr.am.openehrprofile.datatypes.quantity.Ordinal ordinal() :
   }
 }
 
-CDvCodedText term_code_constraint(String path) :
+CCodePhrase c_code_phrase(String path, CAttribute parent) :
 {
   Token t;
   String terminology = null;
+  TerminologyID terminologyId = null;
   List codeList = new ArrayList();
   String assumed = null;
 }
@@ -2372,6 +2404,7 @@ CDvCodedText term_code_constraint(String path) :
 		// remove leading "[" and trailing "::"
     	terminology = t.image; 
     	terminology = terminology.substring(1, terminology.length() - 2);
+    	terminologyId = new TerminologyID(terminology);
     }
     [
       t = <V_TERM_CODE> { codeList.add(t.image); }
@@ -2385,11 +2418,11 @@ CDvCodedText term_code_constraint(String path) :
   	// leave lexical state "TERM_CODE"
   	token_source.SwitchTo(CADL);
   	
-  	return new CDvCodedText(path, terminology, codeList); 
+  	return new CCodePhrase(path, null, null, parent, terminologyId, codeList); 
   }
 }
 
-CDvQuantity c_dv_quantity(String path) :
+CDvQuantity c_dv_quantity(String path, CAttribute parent) :
 {
   CodePhrase property = null;
   String terminology = null;
@@ -2414,7 +2447,7 @@ CDvQuantity c_dv_quantity(String path) :
 	  ">"
     ]
   ">"	   
-  { return new CDvQuantity(path, list, property); }
+  { return new CDvQuantity(path, null, null, parent, list, property); }
 }
 
 CodePhrase code_phrase() :
@@ -2702,23 +2735,6 @@ CBoolean c_boolean() :
   {
     return new CBoolean(trueAllowed, falseAllowed, assumed, hasAssumed);
   }
-}
-
-CDvCodedText c_coded_term(String path) :
-{
-  CDvCodedText constraint;
-  String query = null;
-}
-{
-  (
-    constraint = term_code_constraint(path)
-  |
-    query = local_code_value()
-    {
-      constraint = new CDvCodedText(path, query);
-    }
-  )
-  { return constraint; }
 }
 
 String constraint_ref() :

@@ -1,12 +1,15 @@
-archetype (adl_version=1.4)
-	adl-test-ENTRY.archetype_identification.draft
-
-concept 
-	[at0000]	--  test
-
+archetype 
+	adl-test-ENTRY.archetype_language.draft
+	
 language
 	original_language = <"en"> 
-		
+	
+concept 
+	[at0000]	--  test
+	
+language -- TODO support translations
+	original_language = <"en"> 
+	
 definition
 	ENTRY[at0000] matches {*}
 
