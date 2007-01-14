@@ -12,13 +12,24 @@ definition
         types matches {
             LIST[at0001] matches {
                 items cardinality matches {0..*} matches {
-                    ELEMENT[at10002] matches {	-- coded_text
+                    ELEMENT[at10002] matches {	-- code_phrase
+                        value matches {
+                            [icd10::
+                            	F43.00, -- acute stress reaction, mild
+								F43.01, -- acute stress reaction, moderate
+								F32.02] -- acute stress reaction, severe
+                        }
+                    }	
+                }
+                items cardinality matches {0..*} matches {
+                    ELEMENT[at10003] matches {	-- code_phrase
                         value matches {
                             [local::
-                            at2001.0, 	-- initial
-                            at2001.1, 	-- wait
-                            at2001.2; 	-- completed
-                            at2001.0]   -- assumed value
+								at1311, -- Colo-colonic anastomosis
+								at1312, -- Ileo-colonic anastomosis
+								at1313, -- Colo-anal anastomosis
+								at1314, -- Ileo-anal anastomosis
+								at1315] -- Colostomy
                         }
                     }	
                 }
@@ -43,16 +54,6 @@ ontology
 				["at0002"] = <
 					text = <"*">
 					description = <"*">
-				>
-			>
-		>
-	>
-	constraint_definitions = < 
-		["en"] = <
-			items = <
-				["ac2001"] = <
-					text = <"domain types test">
-					description = <"domain types test">
 				>
 			>
 		>

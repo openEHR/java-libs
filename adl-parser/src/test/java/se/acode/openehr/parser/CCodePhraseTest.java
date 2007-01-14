@@ -54,18 +54,41 @@ public class CCodePhraseTest extends ParserTestBase {
 		archetype = null;
 	}
 
-	public void testParseCCodePhrase() throws Exception {
+	/**
+	 * Verifies parsing of a simple CCodePhrase
+	 * 
+	 * @throws Exception
+	 */
+	public void testParseExternalCodes() throws Exception {
 		CObject node = archetype.node("/types[at0001]/items[at10002]/value");
-		assertTrue("CCodePhrase expected, got " + node.getClass(), 
-				node instanceof CCodePhrase);
-		CCodePhrase cCodePhrase = (CCodePhrase) node;
-		assertEquals("terminology", "local", cCodePhrase.getTerminologyId()
-				.getValue());
-		String[] codes = { "at2001.0", "at2001.1", "at2001.2" };
+		String[] codes = { "F43.00", "F43.01", "F32.02" };
+		assertCCodePhrase(node, "icd10", codes);
+	}
+	
+	/**
+	 * Verifies parsing of a simple CCodePhrase with codes defined locally
+	 * 
+	 * @throws Exception
+	 */
+	public void testParseLocalCodes() throws Exception {
+		CObject node = archetype.node("/types[at0001]/items[at10003]/value");
+		String[] codeList = { "at1311","at1312", "at1313", "at1314","at1315" }; 
+		assertCCodePhrase(node, "local", codeList);
+	}
+	
+	private void assertCCodePhrase(CObject actual, String terminologyId,
+			String[] codes) {
+		assertTrue("CCodePhrase expected, got " + actual.getClass(), 
+				actual instanceof CCodePhrase);
+		CCodePhrase cCodePhrase = (CCodePhrase) actual;
+		assertEquals("terminology", terminologyId, 
+				cCodePhrase.getTerminologyId().getValue());
 		List<String> codeList = cCodePhrase.getCodeList();
-		assertEquals("codes.size", codes.length, codeList.size());
+		assertEquals("codes.size wrong", codes.length, codeList.size());
+		
 		for (int i = 0; i < codes.length; i++) {
-			assertEquals("code", codes[i], codeList.get(i));
+			Object c = codeList.get(i);
+			assertEquals("code wrong, got: " + c, codes[i], c);
 		}
 		
 		// TODO verify assumed values
