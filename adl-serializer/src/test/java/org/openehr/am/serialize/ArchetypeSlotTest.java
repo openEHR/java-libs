@@ -55,7 +55,7 @@ public class ArchetypeSlotTest extends SerializerTestBase {
 		Interval<Integer> occurrences = new Interval<Integer>(1, null, true,
 				false);
 		ArchetypeSlot slot = new ArchetypeSlot("/path", "OBSERVATION",
-				occurrences, "at0001", includes, excludes);
+				occurrences, "at0001", null, includes, excludes);
 
 		clean();
 		outputter.printArchetypeSlot(slot, 0, out);

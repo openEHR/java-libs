@@ -14,21 +14,16 @@
  */
 package org.openehr.am.serialize;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import org.openehr.am.archetype.constraintmodel.domain.CCodedText;
-import org.openehr.am.archetype.constraintmodel.domain.CCount;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
 import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
-import org.openehr.am.openehrprofile.datatypes.text.CDvCodedText;
+import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.identification.TerminologyID;
 
 public class DomainTypeTest extends SerializerTestBase {
 
@@ -36,50 +31,24 @@ public class DomainTypeTest extends SerializerTestBase {
 		super(test);
 	}
 
-	public void testPrintCCodedText() throws Exception {
+	public void testPrintCCodePhrase() throws Exception {
 		String[] codes = { "at2001", "at2002", "at2003" };
 		String terminology = "local";
-		CCodedText ccoded = new CCodedText("/path", terminology, Arrays
-				.asList(codes));
+		CCodePhrase ccoded = new CCodePhrase("/path", null, null, null, 
+				new TerminologyID(terminology), Arrays.asList(codes));
 
 		clean();
-		outputter.printCCodedText(ccoded, 1, out);
+		outputter.printCCodePhrase(ccoded, 1, out);
 		verify("    [" + terminology + "::\r\n" + "    " + codes[0] + ",\r\n"
 				+ "    " + codes[1] + ",\r\n" + "    " + codes[2] + "]\r\n");
 
 		// test the single code term
 		codes = new String[] { "at3102.0" };
-		ccoded = new CCodedText("/path", terminology, Arrays.asList(codes));
+		ccoded = new CCodePhrase("/path", null, null, null, 
+				new TerminologyID(terminology), Arrays.asList(codes));
 		clean();
-		outputter.printCCodedText(ccoded, 1, out);
+		outputter.printCCodePhrase(ccoded, 1, out);
 		verify("    [local::at3102.0]\r\n");
-	}
-	
-	public void testPrintCDvCodedText() throws Exception {
-		String[] codes = { "at2001", "at2002", "at2003" };
-		String terminology = "local";
-		CDvCodedText ccoded = new CDvCodedText("/path", terminology, Arrays
-				.asList(codes));
-
-		clean();
-		outputter.printCDvCodedText(ccoded, 1, out);
-		verify("    [" + terminology + "::\r\n" + "    " + codes[0] + ",\r\n"
-				+ "    " + codes[1] + ",\r\n" + "    " + codes[2] + "]\r\n");
-
-		// test the single code term
-		codes = new String[] { "at3102.0" };
-		ccoded = new CDvCodedText("/path", terminology, Arrays.asList(codes));
-		clean();
-		outputter.printCDvCodedText(ccoded, 1, out);
-		verify("    [local::at3102.0]\r\n");
-	}
-
-	public void testPrintCCount() throws Exception {
-		clean();
-		CCount ccount = new CCount("/path", new Interval<Integer>(0, 3));
-		outputter.printCCount(ccount, 0, out);
-		verify("COUNT matches {\r\n" + "    magnitude matches {|0..3|}\r\n"
-				+ "}\r\n");
 	}
 
 	public void testPrintCDvOrdinal() throws Exception {
@@ -87,7 +56,7 @@ public class DomainTypeTest extends SerializerTestBase {
 		for (int i = 1; i <= 4; i++) {
 			list.add(new Ordinal(i, new CodePhrase("local", "at200" + i)));
 		}
-		CDvOrdinal cordinal = new CDvOrdinal("/path", list);
+		CDvOrdinal cordinal = new CDvOrdinal("/path", null, null, null, list);
 		clean();
 		outputter.printCDvOrdinal(cordinal, 0, out);
 		verify("1|[local::at2001],\r\n" + "2|[local::at2002],\r\n"
@@ -103,7 +72,8 @@ public class DomainTypeTest extends SerializerTestBase {
 		list.add(item1);
 		list.add(item2);
 		CodePhrase property = new CodePhrase("openehr", "128");
-		CDvQuantity cquantity = new CDvQuantity("/path", list, property);
+		CDvQuantity cquantity = new CDvQuantity("/path", null, null, null, 
+				list, property);
 
 		clean();
 		outputter.printCDvQuantity(cquantity, 0, out);

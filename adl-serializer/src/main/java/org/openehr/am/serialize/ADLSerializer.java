@@ -29,13 +29,11 @@ import org.openehr.am.archetype.ontology.QueryBindingItem;
 import org.openehr.am.archetype.ontology.TermBindingItem;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
-import org.openehr.am.archetype.constraintmodel.domain.CCodedText;
-import org.openehr.am.archetype.constraintmodel.domain.CCount;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
-import org.openehr.am.openehrprofile.datatypes.text.CDvCodedText;
+import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -464,73 +462,18 @@ public class ADLSerializer {
 
 	protected void printCDomainType(CDomainType cdomain, int indent, Writer out)
 			throws IOException {
-		if (cdomain instanceof CCount) {
-			printCCount((CCount) cdomain, indent, out);
-		} else if (cdomain instanceof CCodedText) {
-			printCCodedText((CCodedText) cdomain, indent, out);
-		} else if (cdomain instanceof CDvOrdinal) {
+		if (cdomain instanceof CDvOrdinal) {
 			printCDvOrdinal((CDvOrdinal) cdomain, indent, out);
 		} else if (cdomain instanceof CDvQuantity) {
 			printCDvQuantity((CDvQuantity) cdomain, indent, out);
-		} else if (cdomain instanceof CDvCodedText) {
-			printCDvCodedText((CDvCodedText) cdomain, indent, out);
+		}  
+		 else if (cdomain instanceof CCodePhrase) {
+		    printCCodePhrase((CCodePhrase) cdomain, indent, out);
 		}
 		// unknow CDomainType
 	}
 
-	/* not using DV_COUNT because this is a domain type extension */
-	protected void printCCount(CCount ccount, int indent, Writer out)
-			throws IOException {
-		indent(indent, out);
-		out.write("COUNT matches {");
-		newline(out);
-		indent(indent + 1, out);
-		out.write("magnitude matches {");
-		printInterval(ccount.getMagnitude(), out);
-		out.write("}");
-		newline(out);
-		indent(indent, out);
-		out.write("}");
-		newline(out);
-	}
-
-	protected void printCCodedText(CCodedText ccoded, int indent, Writer out)
-			throws IOException {
-
-		indent(indent, out);
-
-		if (ccoded.getTerminology() != null) {
-			out.write("[" + ccoded.getTerminology() + "::");
-		}
-
-		if (ccoded.getCodeList() != null) {
-			if (ccoded.getCodeList().size() > 1) {
-				newline(out);
-
-				for (int i = 0, j = ccoded.getCodeList().size(); i < j; i++) {
-					if (j > 1) {
-						indent(indent, out);
-					}
-					out.write(ccoded.getCodeList().get(i));
-					if (i != j - 1) {
-						out.write(",");
-					} else {
-						out.write("]");
-					}
-					newline(out);
-				}
-			} else {
-				out.write(ccoded.getCodeList().get(0));
-				out.write("]");
-				newline(out);
-			}
-		} else if (ccoded.getReference() != null) {
-			out.write("[" + ccoded.getReference() + "]");
-			newline(out);
-		}
-	}
-
-	protected void printCDvCodedText(CDvCodedText ccoded, int indent, Writer out)
+	protected void printCCodePhrase(CCodePhrase ccoded, int indent, Writer out)
 			throws IOException {
 
 		indent(indent, out);
