@@ -16,8 +16,9 @@ package org.openehr.am.archetype.constraintmodel;
 
 import org.openehr.am.archetype.constraintmodel.primitive.CPrimitive;
 import org.openehr.rm.support.basic.Interval;
+
 /**
- * PrimitiveObjectConstraint
+ * PrimitiveObject Constraint
  *
  * @author Rong Chen
  * @version 1.0
@@ -25,75 +26,75 @@ import org.openehr.rm.support.basic.Interval;
 public class CPrimitiveObject extends CObject {
 
 	/**
-     * Constructs a PrimitiveObjectConstraint
-     *
-     * @param path
-     * @param item
-     * @throws IllegalArgumentException if item null
-     */
-    public CPrimitiveObject(String path, String rmTypeName,
-            Interval<Integer> occurrences, String nodeId, CAttribute parent, 
-            CPrimitive item) {
+	 * Constructs a PrimitiveObjectConstraint
+	 *
+	 * @param path
+	 * @param occurrences
+	 * @param nodeId
+	 * @param parent
+	 * @param item
+	 */
+	public CPrimitiveObject(String path, Interval<Integer> occurrences,
+			String nodeId, CAttribute parent, CPrimitive item) {
 
-        super(item == null, path, 
-        		item == null ? null : item.getType(), occurrences, nodeId,
-        				parent);
-        this.item = item;
-    }
-    
-    /**
-     * Return true if the constraint has limit the possible value to
-     * be only one, which means the value has been assigned by the archetype
-     * author at design time
-     *
-     * @return true if has
-     */
-    public boolean hasAssignedValue() {
-        return item.hasAssignedValue();
-    }
+		super(item == null, path, item == null ? null : item.getType(),
+				occurrences, nodeId, parent);
+		this.item = item;
+	}
 
-    /**
-     * Object actually defining the constraint.
-     *
-     * @return primitive constraint null if unspecified
-     */
-    public CPrimitive getItem() {
-        return item;
-    }
+	/**
+	 * Return true if the constraint has limit the possible value to
+	 * be only one, which means the value has been assigned by the archetype
+	 * author at design time
+	 *
+	 * @return true if has
+	 */
+	public boolean hasAssignedValue() {
+		return item.hasAssignedValue();
+	}
 
-    /**
-     * True if this node is a valid archetype node.
-     *
-     * @return ture if valid
-     */
-    public boolean isValid() {
-        return false;  // todo: implement this method
-    }
+	/**
+	 * Object actually defining the constraint.
+	 *
+	 * @return primitive constraint null if unspecified
+	 */
+	public CPrimitive getItem() {
+		return item;
+	}
 
-    /**
-     * True if the relative path exists at this node.
-     *
-     * @param path
-     * @return ture if has
-     * @throws IllegalArgumentException if path null
-     */
-    public boolean hasPath(String path) {
-        return false;  // todo: implement this method
-    }
+	/**
+	 * True if this node is a valid archetype node.
+	 *
+	 * @return ture if valid
+	 */
+	public boolean isValid() {
+		return false; // todo: implement this method
+	}
 
-    /**
-     * True if constraints represented by other are narrower than this node.
-     *
-     * @param constraint
-     * @return true if subset
-     * @throws IllegalArgumentException if constraint null
-     */
-    public boolean isSubsetOf(ArchetypeConstraint constraint) {
-        return false;  // todo: implement this method
-    }
- 
-    /* fields */
-    private CPrimitive item;
+	/**
+	 * True if the relative path exists at this node.
+	 *
+	 * @param path
+	 * @return ture if has
+	 * @throws IllegalArgumentException if path null
+	 */
+	public boolean hasPath(String path) {
+		return false; // todo: implement this method
+	}
+
+	/**
+	 * True if constraints represented by other are narrower than this node.
+	 *
+	 * @param constraint
+	 * @return true if subset
+	 * @throws IllegalArgumentException if constraint null
+	 */
+	public boolean isSubsetOf(ArchetypeConstraint constraint) {
+		return false; // todo: implement this method
+	}
+
+	/* fields */
+	private CPrimitive item;
 }
 
 /*

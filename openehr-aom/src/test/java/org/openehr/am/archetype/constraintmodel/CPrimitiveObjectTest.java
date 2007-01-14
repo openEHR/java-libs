@@ -8,6 +8,6 @@ public class CPrimitiveObjectTest extends TestCase {
 	
 	public void testConstructorWithItem() {
 		CString item = new CString("file.*", null);
-		new CPrimitiveObject("/path", null, null, null, null, item);		
+		new CPrimitiveObject("/path", null, null, null, item);		
 	}
 }

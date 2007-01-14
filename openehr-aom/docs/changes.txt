@@ -1,5 +1,5 @@
 2006/1/09
-.
+.take away unnecessary rmTypeName from CPrimitiveObject constructor
 
 2006/1/07
 .Archetype extends AuthoredResource
