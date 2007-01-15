@@ -1,5 +1,6 @@
 2007/01/14
 .added support for CCodePhrase
+.added support for archetype language
 
 2006/12/16
 .updated support for ArchetypeSlot

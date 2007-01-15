@@ -32,65 +32,71 @@ import org.openehr.am.archetype.ontology.TermBindingItem;
  * @author Rong Chen
  */
 public class OntologyTest extends SerializerTestBase {
-	
+
 	public OntologyTest(String test) {
 		super(test);
 	}
-	
-	public void testPrintOntology() throws Exception {
-        DefinitionItem item = new DefinitionItem("at0001",
-                "text at0001", "desc at0001");
-        List<DefinitionItem> items = new ArrayList<DefinitionItem>();
-        items.add(item);
-        item = new DefinitionItem("at0002", "text at0002", "desc at0002");
-        items.add(item);
-        OntologyDefinitions definitions = new OntologyDefinitions("en", items);
-        List<OntologyDefinitions> termDefinitionsList =
-                new ArrayList<OntologyDefinitions>();
-        termDefinitionsList.add(definitions);
 
-        item = new DefinitionItem("ac0001", "text ac0001", "desc ac0001");
-        items = new ArrayList<DefinitionItem>();
-        items.add(item);
-        item = new DefinitionItem("ac0002", "text ac0002", "desc ac0002");
-        items.add(item);
-        definitions = new OntologyDefinitions("en", items);
-        List<OntologyDefinitions> constraintDefinitionsList =
-                new ArrayList<OntologyDefinitions>();
-        constraintDefinitionsList.add(definitions);
-        
-        List<String> languages = new ArrayList<String>();
-        languages.add("en");
-        List<String> terminologies = new ArrayList<String>();
-        terminologies.add("local");
-        
-        List<String> terms = new ArrayList<String>();
-        terms.add("[local::100000]");
-        TermBindingItem termBindItem = new TermBindingItem("at0001",terms); 
-        List<OntologyBindingItem> termBindList = new ArrayList<OntologyBindingItem>();
-        termBindList.add(termBindItem);
-        terms = new ArrayList<String>();
-        terms.add("[local::200000]");
-        termBindItem = new TermBindingItem("at0002",terms); 
-        termBindList.add(termBindItem);
-        OntologyBinding ontologyBind = new OntologyBinding("local",termBindList);
-        List<OntologyBinding> termBindingList = new ArrayList<OntologyBinding>();
-        termBindingList.add(ontologyBind);
-        
-        Query query = new Query("http://terminology.org?terminology_id=snomed_ct&&has_relation=[102002];with_target=[128004]");
-        QueryBindingItem queryBindItem = new QueryBindingItem("ac0001",query); 
-        List<OntologyBindingItem> constraintBindList = new ArrayList<OntologyBindingItem>();
-        constraintBindList.add(queryBindItem);
-        ontologyBind = new OntologyBinding("local",constraintBindList);
-        List<OntologyBinding> constraintBindingList = new ArrayList<OntologyBinding>();
-        constraintBindingList.add(ontologyBind);
-        
-        ArchetypeOntology ontology = new ArchetypeOntology("en", languages,
-                terminologies, termDefinitionsList, constraintDefinitionsList, termBindingList, constraintBindingList);
-        clean();
-        outputter.printOntology(ontology, out);
-        verifyByFile("ontology.adl");
-    }
+	public void testPrintOntology() throws Exception {
+		DefinitionItem item = new DefinitionItem("at0001", "text at0001",
+				"desc at0001");
+		List<DefinitionItem> items = new ArrayList<DefinitionItem>();
+		items.add(item);
+		item = new DefinitionItem("at0002", "text at0002", "desc at0002");
+		items.add(item);
+		OntologyDefinitions definitions = new OntologyDefinitions("en", items);
+		List<OntologyDefinitions> termDefinitionsList = 
+			new ArrayList<OntologyDefinitions>();
+		termDefinitionsList.add(definitions);
+
+		item = new DefinitionItem("ac0001", "text ac0001", "desc ac0001");
+		items = new ArrayList<DefinitionItem>();
+		items.add(item);
+		item = new DefinitionItem("ac0002", "text ac0002", "desc ac0002");
+		items.add(item);
+		definitions = new OntologyDefinitions("en", items);
+		List<OntologyDefinitions> constraintDefinitionsList = 
+			new ArrayList<OntologyDefinitions>();
+		constraintDefinitionsList.add(definitions);
+
+		List<String> languages = new ArrayList<String>();
+		languages.add("en");
+		List<String> terminologies = new ArrayList<String>();
+		terminologies.add("local");
+
+		List<String> terms = new ArrayList<String>();
+		terms.add("[local::100000]");
+		TermBindingItem termBindItem = new TermBindingItem("at0001", terms);
+		List<OntologyBindingItem> termBindList = 
+			new ArrayList<OntologyBindingItem>();
+		termBindList.add(termBindItem);
+		terms = new ArrayList<String>();
+		terms.add("[local::200000]");
+		termBindItem = new TermBindingItem("at0002", terms);
+		termBindList.add(termBindItem);
+		OntologyBinding ontologyBind = new OntologyBinding("local",
+				termBindList);
+		List<OntologyBinding> termBindingList = new ArrayList<OntologyBinding>();
+		termBindingList.add(ontologyBind);
+
+		Query query = new Query("http://terminology.org?terminology_id=" +
+				"snomed_ct&&has_relation=[102002];with_target=[128004]");
+		QueryBindingItem queryBindItem = new QueryBindingItem("ac0001", query);
+		List<OntologyBindingItem> constraintBindList = 
+			new ArrayList<OntologyBindingItem>();
+		constraintBindList.add(queryBindItem);
+		ontologyBind = new OntologyBinding("local", constraintBindList);
+		List<OntologyBinding> constraintBindingList = 
+			new ArrayList<OntologyBinding>();
+		constraintBindingList.add(ontologyBind);
+
+		ArchetypeOntology ontology = new ArchetypeOntology("en", languages,
+				terminologies, termDefinitionsList, constraintDefinitionsList,
+				termBindingList, constraintBindingList);
+		clean();
+		outputter.printOntology(ontology, out);
+		verifyByFile("ontology.adl");
+	}
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

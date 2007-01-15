@@ -113,7 +113,8 @@ public class SerializerTestBase extends TestCase
 			String lineExpected = expected.get(i).trim();
 			String lineActual = actual.get(i).trim();
 			if( ! lineExpected.equals(lineActual)) {
-				assertEquals(">>> line no." + i + " different.. ", lineExpected, lineActual);
+				assertEquals(">>> line no." + i + " different.. got: " 
+						+ lineActual, lineExpected, lineActual);
 			}
 		}
 		

@@ -14,6 +14,7 @@
  */
 package org.openehr.am.serialize;
 
+import org.openehr.rm.common.resource.AuthoredResource;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
 import org.openehr.rm.datatypes.text.CodePhrase;
@@ -101,18 +102,21 @@ public class ADLSerializer {
 		printHeader(archetype.getArchetypeId(), archetype
 				.getParentArchetypeId(), archetype.getConcept(), out);
 		newline(out);
-
-		printDescription(archetype.getDescription(), out);
+		
+		printLanguage(archetype, out);
 		newline(out);
-
+		
+		printDescription(archetype.getDescription(), out);
+		newline(out);	
+		
 		printDefinition(archetype.getDefinition(), out);
 		newline(out);
-
+		
 		printOntology(archetype.getOntology(), out);
 		out.flush();
 		out.close();
 	}
-
+	
 	protected void printHeader(ArchetypeID id, ArchetypeID parentId,
 			String conceptCode, Writer out) throws IOException {
 
@@ -134,6 +138,18 @@ public class ADLSerializer {
 		newline(out);
 		indent(1, out);
 		out.write("[" + conceptCode + "]");
+		newline(out);
+	}
+	
+	protected void printLanguage(AuthoredResource authored,
+			Writer out) throws IOException {
+
+		out.write("language");
+		newline(out);
+		indent(1, out);
+		out.write("original_language = <\"");
+		out.write(authored.getOriginalLanguage().getCodeString());
+		out.write("\">");
 		newline(out);
 	}
 
