@@ -64,7 +64,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>openehr</groupId>
-			<artifactId>rm-core</artifactId>
+			<artifactId>openehr-rm-core</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
