@@ -21,7 +21,7 @@ import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
-import org.openehr.am.openehrprofile.datatypes.text.CDvCodedText;
+import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
@@ -675,8 +675,8 @@ public class XMLSerializer {
     protected void printCDomainType(CDomainType cdomain, int indent, CustomWriter out)
             throws IOException {
         
-        if (cdomain instanceof CDvCodedText) {
-            printCDvCodedText((CDvCodedText) cdomain, indent, out);
+        if (cdomain instanceof CCodePhrase) {
+            printCCodePhrase((CCodePhrase) cdomain, indent, out);
         } else if (cdomain instanceof CDvOrdinal) {
             printCDvOrdinal((CDvOrdinal) cdomain, indent, out);
         } else if (cdomain instanceof CDvQuantity) {
@@ -687,26 +687,23 @@ public class XMLSerializer {
         }
     }
 
-    protected void printCDvCodedText(CDvCodedText ccoded, int indent, CustomWriter out)
+    protected void printCCodePhrase(CCodePhrase ccp, int indent, CustomWriter out)
             throws IOException {
 
         indent(indent, out);
         out.writeln("<children xsi:type=\"at:C_CODED_TEXT\">"); // TODO: Says C_CODED_TERM in specifications....       
-        printCObjectElements(ccoded, indent + 1, out);
+        printCObjectElements(ccp, indent + 1, out);
         
-        if(ccoded.getTerminologyId() != null) {
-            printNoneEmptyString("terminology", ccoded.getTerminologyId().getValue(), indent + 1, out);
+        if(ccp.getTerminologyId() != null) {
+            printNoneEmptyString("terminology", ccp.getTerminologyId().getValue(), indent + 1, out);
         }
         
-        if (ccoded.getCodeList() != null) {
-            final List<String> codeList = ccoded.getCodeList();
+        if (ccp.getCodeList() != null) {
+            final List<String> codeList = ccp.getCodeList();
             
             for (int i = 0, j = codeList.size(); i < j; i++) {
                 printNoneEmptyString("code_list", codeList.get(i), indent + 1, out);
             }
-        } else if (ccoded.getQuery() != null) {
-            // TODO: Change element name to query? See the Archetype Profile specification of C_DV_CODED_TEXT
-            printNoneEmptyString("reference", ccoded.getQuery(), indent + 1, out);
         }
         
         indent(indent, out);
