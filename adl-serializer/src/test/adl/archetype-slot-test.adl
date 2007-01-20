@@ -1,0 +1,7 @@
+allow_archetype OBSERVATION[at0001] occurrences matches {1..*} matches {
+	include
+		domain_concept matches {/blood_pressure.v1/}
+		domain_concept matches {/blood_pressure.v2/}
+	exclude
+	    domain_concept matches {/.*/}
+}

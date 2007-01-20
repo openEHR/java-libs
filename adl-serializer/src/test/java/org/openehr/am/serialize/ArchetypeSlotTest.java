@@ -59,13 +59,83 @@ public class ArchetypeSlotTest extends SerializerTestBase {
 
 		clean();
 		outputter.printArchetypeSlot(slot, 0, out);
-		verify("allow_archetype OBSERVATION[at0001] occurrences matches {1..*} matches {\r\n"
-				+ "    include\r\n"
-				+ "        domain_concept matches {/blood_pressure.v1/}\r\n"
-				+ "        domain_concept matches {/blood_pressure.v2/}\r\n"
-				+ "    exclude\r\n"
-				+ "        domain_concept matches {/.*/}\r\n"
-				+ "}\r\n");
+		verifyByFile("archetype-slot-test.adl");
+	}
+	
+	public void testPrintArchetypeSlotWithEmptyExcludes() throws Exception {
+		final ExpressionItem concept = new ExpressionLeaf(
+				ExpressionItem.ARCHETYPE, "domain_concept",
+				ExpressionLeaf.ReferenceType.ATTRIBUTE);
+		
+		// Use linked hashsets to get the ordering right when we run [clean, install].
+		final LinkedHashSet<Assertion> includes = new LinkedHashSet<Assertion>();
+		final LinkedHashSet<Assertion> excludes = null;
+		ExpressionLeaf aid = new ExpressionLeaf(ExpressionItem.ARCHETYPE,
+				"/blood_pressure.v1/", ExpressionLeaf.ReferenceType.CONSTANT);
+		ExpressionItem expression = new ExpressionBinaryOperator(
+				ExpressionItem.BOOLEAN, OperatorKind.OP_MATCHES, false,
+				concept, aid);
+		String stringExpression = "domain_concept matches {/blood_pressure.v1/}";
+		Assertion assertion = new Assertion(expression, stringExpression);
+		includes.add(assertion);
+		aid = new ExpressionLeaf(ExpressionItem.ARCHETYPE,
+				"/blood_pressure.v2/", ExpressionLeaf.ReferenceType.CONSTANT);
+		expression = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN,
+				OperatorKind.OP_MATCHES, false, concept, aid);
+		stringExpression = "domain_concept matches {/blood_pressure.v2/}";
+		assertion = new Assertion(expression, stringExpression);
+		includes.add(assertion);	
+
+		Interval<Integer> occurrences = new Interval<Integer>(1, null, true,
+				false);
+		ArchetypeSlot slot = new ArchetypeSlot("/path", "OBSERVATION",
+				occurrences, "at0001", null, includes, excludes);
+
+		clean();
+		outputter.printArchetypeSlot(slot, 0, out);
+		verifyByFile("archetype-slot-empty-excludes-test.adl");
+	}
+	
+	public void testPrintArchetypeSlotWithEmptyIncludes() throws Exception {
+		final ExpressionItem concept = new ExpressionLeaf(
+				ExpressionItem.ARCHETYPE, "domain_concept",
+				ExpressionLeaf.ReferenceType.ATTRIBUTE);
+		
+		// Use linked hashsets to get the ordering right when we run [clean, install].
+		final LinkedHashSet<Assertion> includes = null;
+		final LinkedHashSet<Assertion> excludes = new LinkedHashSet<Assertion>();
+		ExpressionLeaf aid = null;
+		ExpressionItem expression = null;
+		String stringExpression = null;
+		Assertion assertion = null;
+		
+		aid = new ExpressionLeaf(ExpressionItem.ARCHETYPE, "/.*/",
+				ExpressionLeaf.ReferenceType.CONSTANT);
+		expression = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN,
+				OperatorKind.OP_MATCHES, false, concept, aid);
+		stringExpression = "domain_concept matches {/.*/}";
+		assertion = new Assertion(expression, stringExpression);
+		excludes.add(assertion);
+
+		Interval<Integer> occurrences = new Interval<Integer>(1, null, true,
+				false);
+		ArchetypeSlot slot = new ArchetypeSlot("/path", "OBSERVATION",
+				occurrences, "at0001", null, includes, excludes);
+
+		clean();
+		outputter.printArchetypeSlot(slot, 0, out);
+		verifyByFile("archetype-slot-empty-includes-test.adl");
+	}
+	
+	public void testPrintAnyAllowedSlot() throws Exception {
+		LinkedHashSet<Assertion> includes = null;
+		LinkedHashSet<Assertion> excludes = null;
+		ArchetypeSlot slot = new ArchetypeSlot("/path", "OBSERVATION",
+			null, "at0001", null, includes, excludes);
+		
+		clean();
+		outputter.printArchetypeSlot(slot, 0, out);		
+		verifyByFile("archetype-slot-any-allowed-test.adl");
 	}
 }
 /*

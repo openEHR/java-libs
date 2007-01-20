@@ -358,18 +358,18 @@ public class ADLSerializer {
 		out.write(" matches {");
 
 		if (slot.isAnyAllowed()) {
-			out.write("*");
+			out.write("*}");
 		} else {
-			if (!slot.getIncludes().isEmpty()) {
+			if (slot.getIncludes() != null && !slot.getIncludes().isEmpty()) {
 				printInvariants(slot.getIncludes(), "include", indent, out);
 			}
-			if (!slot.getExcludes().isEmpty()) {
+			if (slot.getExcludes() != null && !slot.getExcludes().isEmpty()) {
 				printInvariants(slot.getExcludes(), "exclude", indent, out);
 			}
+			newline(out);
+			indent(indent, out);
+			out.write("}");			
 		}
-		newline(out);
-		indent(indent, out);
-		out.write("}");
 		newline(out);
 	}
 	
