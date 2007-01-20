@@ -360,10 +360,10 @@ public class ADLSerializer {
 		if (slot.isAnyAllowed()) {
 			out.write("*}");
 		} else {
-			if (slot.getIncludes() != null && !slot.getIncludes().isEmpty()) {
+			if (slot.getIncludes() != null) {
 				printInvariants(slot.getIncludes(), "include", indent, out);
 			}
-			if (slot.getExcludes() != null && !slot.getExcludes().isEmpty()) {
+			if (slot.getExcludes() != null) {
 				printInvariants(slot.getExcludes(), "exclude", indent, out);
 			}
 			newline(out);
