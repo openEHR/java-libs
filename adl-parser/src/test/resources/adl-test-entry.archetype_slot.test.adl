@@ -1,5 +1,5 @@
 archetype
-	openEHR-EHR-COMPOSITION.archetype_slot.test
+	adl-test-entry.archetype_slot.test
 
 concept
 	[at0000]
@@ -8,11 +8,14 @@ language
 	original_language = <"en"> 	
 
 definition
-	COMPOSITION[at0000] matches {	-- Encounter
+	Entry[at0000] matches {	-- Encounter
 		content matches {
 			allow_archetype SECTION occurrences matches {0..1} matches {
 				include
-					domain_concept matches {/..*/}
+					domain_concept matches {/blood_pressure.v1/}
+					domain_concept matches {/blood_pressure.v2/}
+				exclude
+				    domain_concept matches {/.*/}
 			}
 		}
 	}

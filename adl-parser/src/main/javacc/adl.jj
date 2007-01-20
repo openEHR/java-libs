@@ -1940,12 +1940,16 @@ CObject c_object(String path, CAttribute parent) :
 ArchetypeInternalRef archetype_internal_ref(String path, CAttribute parent) :
 {
   String type;
+  Interval occurrences = null;
   String target;
 }
 {
-  <SYM_USE_NODE> type = type_identifier() target = adl_path()  
+  <SYM_USE_NODE> type = type_identifier() 
+   [ occurrences = c_occurrences() ]  
+  target = adl_path()  
   { 
-  	return new ArchetypeInternalRef(path, type, null, null, parent, target); 
+  	return new ArchetypeInternalRef(path, type, occurrences, null, parent, 
+  			target); 
   }
 }
 
