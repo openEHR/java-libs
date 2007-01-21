@@ -21,6 +21,7 @@ import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
+import org.openehr.rm.datatypes.quantity.DvOrdinal;
 import org.openehr.rm.support.basic.Interval;
 
 /**
@@ -30,7 +31,7 @@ import org.openehr.rm.support.basic.Interval;
  * @author Rong Chen
  * @version 1.0
  */
-public class CDvOrdinal<DvOrdinal> extends CDomainType {
+public class CDvOrdinal extends CDomainType<DvOrdinal> {
 	
 	/**
 	 * Creates a CDvOrdinal
@@ -82,7 +83,7 @@ public class CDvOrdinal<DvOrdinal> extends CDomainType {
 	}
 
 	@Override
-	public boolean validValue(Object arg0) {
+	public boolean validValue(DvOrdinal arg0) {
 		// TODO Auto-generated method stub
 		return false;
 	}
