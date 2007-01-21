@@ -30,33 +30,14 @@ public class DomainTypeTest extends SerializerTestBase {
 	public DomainTypeTest(String test) {
 		super(test);
 	}
-
-	public void testPrintCCodePhrase() throws Exception {
-		String[] codes = { "at2001", "at2002", "at2003" };
-		String terminology = "local";
-		CCodePhrase ccoded = new CCodePhrase("/path", null, null, null, 
-				new TerminologyID(terminology), Arrays.asList(codes));
-
-		clean();
-		outputter.printCCodePhrase(ccoded, 1, out);
-		verify("    [" + terminology + "::\r\n" + "    " + codes[0] + ",\r\n"
-				+ "    " + codes[1] + ",\r\n" + "    " + codes[2] + "]\r\n");
-
-		// test the single code term
-		codes = new String[] { "at3102.0" };
-		ccoded = new CCodePhrase("/path", null, null, null, 
-				new TerminologyID(terminology), Arrays.asList(codes));
-		clean();
-		outputter.printCCodePhrase(ccoded, 1, out);
-		verify("    [local::at3102.0]\r\n");
-	}
-
+	
 	public void testPrintCDvOrdinal() throws Exception {
 		Set<Ordinal> list = new LinkedHashSet<Ordinal>();
 		for (int i = 1; i <= 4; i++) {
 			list.add(new Ordinal(i, new CodePhrase("local", "at200" + i)));
 		}
-		CDvOrdinal cordinal = new CDvOrdinal("/path", null, null, null, list);
+		CDvOrdinal cordinal = new CDvOrdinal("/path", null, null, null, list, 
+				null, null);
 		clean();
 		outputter.printCDvOrdinal(cordinal, 0, out);
 		verify("1|[local::at2001],\r\n" + "2|[local::at2002],\r\n"
@@ -73,7 +54,7 @@ public class DomainTypeTest extends SerializerTestBase {
 		list.add(item2);
 		CodePhrase property = new CodePhrase("openehr", "128");
 		CDvQuantity cquantity = new CDvQuantity("/path", null, null, null, 
-				list, property);
+				list, property, null, null);
 
 		clean();
 		outputter.printCDvQuantity(cquantity, 0, out);

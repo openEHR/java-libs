@@ -510,12 +510,21 @@ public class ADLSerializer {
 					if (i != j - 1) {
 						out.write(",");
 					} else {
+						if(ccoded.hasAssumedValue()) {
+							out.write(";");
+							newline(out);
+							indent(indent, out);
+							out.write(ccoded.getAssumedValue().getCodeString());
+						}
 						out.write("]");
 					}
 					newline(out);
 				}
 			} else {
 				out.write(ccoded.getCodeList().get(0));
+				if(ccoded.hasAssumedValue()) {
+					out.write(";" + ccoded.getAssumedValue().getCodeString());
+				}
 				out.write("]");
 				newline(out);
 			}

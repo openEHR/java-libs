@@ -1,5 +1,6 @@
 2007/01/20
 .bug fix related to null includes or excludes in printArchetypeSlot
+.added support for assumedValue in CCodePhrase
 
 2007/01/14
 .added support for CCodePhrase
