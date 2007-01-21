@@ -21,6 +21,7 @@ import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
+import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.identification.TerminologyID;
 
@@ -30,7 +31,7 @@ import org.openehr.rm.support.identification.TerminologyID;
  * @author Rong Chen
  * 
  */
-public class CCodePhrase extends CDomainType {
+public class CCodePhrase extends CDomainType<CodePhrase> {
 
 	/**
 	 * Creates a CDvCodedText
@@ -48,10 +49,12 @@ public class CCodePhrase extends CDomainType {
 	 */
 	public CCodePhrase(String path, Interval<Integer> occurrences,
 			String nodeID, CAttribute parent, TerminologyID terminologyId, 
-			List<String> codeList) {
+			List<String> codeList, CodePhrase defaultValue, 
+			CodePhrase assumedValue) {
 
 		super(terminologyId == null && codeList == null,
-				path, "CodePhrase", occurrences, nodeID, parent);
+				path, "CodePhrase", occurrences, nodeID, defaultValue, 
+				assumedValue, parent);
 
 		if (codeList != null) {
 			if(codeList.isEmpty()) {
@@ -85,12 +88,6 @@ public class CCodePhrase extends CDomainType {
 	}
 
 	@Override
-	public CComplexObject standardRepresentation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean isValid() {
 		// TODO Auto-generated method stub
 		return false;
@@ -107,7 +104,29 @@ public class CCodePhrase extends CDomainType {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	@Override
+	public boolean validValue(CodePhrase value) {
+		if(value == null) {
+			return false;
+		}
+		if(terminologyId != null 
+				&& !terminologyId.equals(value.getTerminologyID())) {
+			return false;
+		}
+		if(codeList != null && !codeList.contains(value.getCodeString())) {
+			return false;
+		}
+	
+		return true;
+	}
 
+	@Override
+	public CComplexObject standardEquivalent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	private TerminologyID terminologyId;
 	private List<String> codeList;
 }

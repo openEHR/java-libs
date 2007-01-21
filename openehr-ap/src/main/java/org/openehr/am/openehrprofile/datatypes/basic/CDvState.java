@@ -19,6 +19,7 @@ import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
+import org.openehr.rm.datatypes.basic.DvState;
 import org.openehr.rm.support.basic.Interval;
 
 /**
@@ -30,7 +31,7 @@ import org.openehr.rm.support.basic.Interval;
  * @author Rong Chen
  * @version 1.0
  */
-public class CDvState extends CDomainType {
+public class CDvState extends CDomainType<DvState> {
 
 	/**
 	 * Creates a CDvState with path and stateMachine 
@@ -60,7 +61,7 @@ public class CDvState extends CDomainType {
 	}
 
 	@Override
-	public CComplexObject standardRepresentation() {
+	public CComplexObject standardEquivalent() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -83,7 +84,13 @@ public class CDvState extends CDomainType {
 		return false;
 	}
 	
-	private StateMachine value;	
+	private StateMachine value;
+
+	@Override
+	public boolean validValue(DvState arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}	
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

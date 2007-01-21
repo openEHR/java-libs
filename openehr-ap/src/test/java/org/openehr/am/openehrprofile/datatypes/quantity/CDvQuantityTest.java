@@ -19,7 +19,7 @@ public class CDvQuantityTest extends TestCase {
 		CodePhrase property = null;
 		
 		CDvQuantity constraint = new CDvQuantity(path, occurrences, nodeId,
-				parent, list, property);
+				parent, list, property, null, null);
 		assertTrue("anyAllowed expected", constraint.isAnyAllowed());
 	}
 }

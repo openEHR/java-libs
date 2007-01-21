@@ -1,3 +1,6 @@
+2006/01/20
+.updated constructors to allow defaultValue and assumedValue
+
 2006/12/31
 .updated constructors to support parent attribute
 .replaced CDvCodedText with CCodePhrase

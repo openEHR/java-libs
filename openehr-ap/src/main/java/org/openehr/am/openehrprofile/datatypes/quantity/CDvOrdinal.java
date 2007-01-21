@@ -30,7 +30,7 @@ import org.openehr.rm.support.basic.Interval;
  * @author Rong Chen
  * @version 1.0
  */
-public class CDvOrdinal extends CDomainType {
+public class CDvOrdinal<DvOrdinal> extends CDomainType {
 	
 	/**
 	 * Creates a CDvOrdinal
@@ -42,20 +42,16 @@ public class CDvOrdinal extends CDomainType {
 	 * @throws IllegalArgument if list null or empty
 	 */
 	public CDvOrdinal(String path, Interval<Integer> occurrences, 
-			String nodeID, CAttribute parent, Set<Ordinal> list) {
+			String nodeID, CAttribute parent, Set<Ordinal> list,
+			DvOrdinal defaultValue, DvOrdinal assumedValue) {
 		
-		super(list == null, path, "DvOrdinal", occurrences, nodeID, parent);
+		super(list == null, path, "DvOrdinal", occurrences, nodeID, 
+				null, null, parent);
 		
 		if(list != null && list.isEmpty()) {
 			throw new IllegalArgumentException("list is empty");
 		}
 		this.list = list;
-	}
-
-	@Override
-	public CComplexObject standardRepresentation() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -83,6 +79,18 @@ public class CDvOrdinal extends CDomainType {
 	 */
 	public Set<Ordinal> getList() {
 		return Collections.unmodifiableSet(list);
+	}
+
+	@Override
+	public boolean validValue(Object arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public CComplexObject standardEquivalent() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	private Set<Ordinal> list;

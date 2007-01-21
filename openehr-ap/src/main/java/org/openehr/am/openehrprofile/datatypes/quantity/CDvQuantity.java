@@ -21,6 +21,7 @@ import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
+import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
 
@@ -30,7 +31,7 @@ import org.openehr.rm.support.basic.Interval;
  * @author Rong Chen
  * @version 1.0
  */
-public class CDvQuantity extends CDomainType {
+public class CDvQuantity extends CDomainType<DvQuantity> {
 
 	/**
 	 * Constructor
@@ -45,10 +46,11 @@ public class CDvQuantity extends CDomainType {
 	 */
 	public CDvQuantity(String path, Interval<Integer> occurrences, 
 			String nodeId, CAttribute parent, List<CDvQuantityItem> list,
-			CodePhrase property) {
+			CodePhrase property, DvQuantity defaultValue, 
+			DvQuantity assumedValue) {
 
 		super(list == null && property == null, path, "DvQuantity",
-				occurrences, nodeId, parent);
+				occurrences, nodeId, null, null, parent);
 
 		if (list != null && list.isEmpty()) {
 			throw new IllegalArgumentException("empty list");
@@ -75,13 +77,7 @@ public class CDvQuantity extends CDomainType {
 	 */
 	public CodePhrase getProperty() {
 		return property;
-	}
-
-	@Override
-	public CComplexObject standardRepresentation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	}	
 
 	@Override
 	public boolean hasPath(String path) {
@@ -101,10 +97,21 @@ public class CDvQuantity extends CDomainType {
 		return false;
 	}
 
+	@Override
+	public boolean validValue(DvQuantity arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public CComplexObject standardEquivalent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	/* fields */
 	private List<CDvQuantityItem> list;
-
-	private CodePhrase property;
+	private CodePhrase property;	
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

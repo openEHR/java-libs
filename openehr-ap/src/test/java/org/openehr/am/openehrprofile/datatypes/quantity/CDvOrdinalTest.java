@@ -13,7 +13,8 @@ public class CDvOrdinalTest extends TestCase {
 		String nodeId = "at0010";
 		CAttribute parent = null;
 		
-		CDvOrdinal c = new CDvOrdinal(path, occurrences, nodeId, parent, null);
+		CDvOrdinal c = new CDvOrdinal(path, occurrences, nodeId, parent, null,
+				null, null);
 		assertTrue("anyAllowed expected", c.isAnyAllowed());		
 	}
 }
