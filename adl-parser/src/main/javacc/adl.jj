@@ -38,6 +38,7 @@ import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.quantity.datetime.*;
 import org.openehr.rm.datatypes.text.*;
+import org.openehr.rm.datatypes.quantity.*;
 import org.openehr.rm.common.resource.*;
 import org.openehr.rm.common.generic.RevisionHistory;
 import org.openehr.rm.support.identification.*;
@@ -2355,6 +2356,8 @@ CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
 {
   Set list = new HashSet();
   org.openehr.am.openehrprofile.datatypes.quantity.Ordinal o;
+  DvOrdinal defaultValue = null;
+  DvOrdinal assumedValue = null;
 }
 {
   o = ordinal() { list.add(o); }
@@ -2363,7 +2366,8 @@ CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
         { list.add(o); }
   )*
   { 
-  	return new CDvOrdinal(path, null, null, parent, list); 
+  	return new CDvOrdinal(path, null, null, parent, list, defaultValue,
+  		assumedValue); 
   }
 }
 
@@ -2401,6 +2405,8 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
   TerminologyID terminologyId = null;
   List codeList = new ArrayList();
   String assumed = null;
+  CodePhrase assumedValue = null;
+  CodePhrase defaultValue = null; // not used 
 }
 {
   t = <V_TERMINOLOGY_ID_BLOCK> 
@@ -2415,14 +2421,21 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
       (
         [","] t = <V_TERM_CODE> { codeList.add(t.image); }
       )*
-      [ ";" t = <V_TERM_CODE> { assumed = t.image; } ]	
+      [ 
+        ";" t = <V_TERM_CODE> 
+        { 
+          assumed = t.image; 
+          assumedValue = new CodePhrase(terminologyId, assumed);
+        } 
+      ]	
     ]
   "]"
   { 
   	// leave lexical state "TERM_CODE"
   	token_source.SwitchTo(CADL);
   	
-  	return new CCodePhrase(path, null, null, parent, terminologyId, codeList); 
+  	return new CCodePhrase(path, null, null, parent, terminologyId, codeList,
+  		defaultValue, assumedValue); 
   }
 }
 
@@ -2434,6 +2447,8 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
   List list = null;
   CDvQuantityItem item = null;  
   Token t = null;
+  DvQuantity defaultValue = null;
+  DvQuantity assumedValue = null;
 }
 {
   <SYM_C_QUANTITY> "<"
@@ -2451,7 +2466,10 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
 	  ">"
     ]
   ">"	   
-  { return new CDvQuantity(path, null, null, parent, list, property); }
+  { 
+  	return new CDvQuantity(path, null, null, parent, list, property, 
+  		defaultValue, assumedValue); 
+  }
 }
 
 CodePhrase code_phrase() :

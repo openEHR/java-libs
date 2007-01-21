@@ -1,6 +1,7 @@
 2007/01/20
 .added overwritting occurrences for ArchetypeInternalRef
 .improved ArchetypeSlotTest
+.added support for assumedValue in CCodePhrase
 
 2007/01/14
 .removed RoundTripTest and adl-serializer dependency

@@ -22,6 +22,7 @@ package se.acode.openehr.parser;
 import org.openehr.am.archetype.constraintmodel.CObject;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
+import org.openehr.rm.datatypes.text.CodePhrase;
 
 import java.util.*;
 
@@ -62,7 +63,7 @@ public class CCodePhraseTest extends ParserTestBase {
 	public void testParseExternalCodes() throws Exception {
 		CObject node = archetype.node("/types[at0001]/items[at10002]/value");
 		String[] codes = { "F43.00", "F43.01", "F32.02" };
-		assertCCodePhrase(node, "icd10", codes);
+		assertCCodePhrase(node, "icd10", codes, "F43.01");
 	}
 	
 	/**
@@ -73,11 +74,11 @@ public class CCodePhraseTest extends ParserTestBase {
 	public void testParseLocalCodes() throws Exception {
 		CObject node = archetype.node("/types[at0001]/items[at10003]/value");
 		String[] codeList = { "at1311","at1312", "at1313", "at1314","at1315" }; 
-		assertCCodePhrase(node, "local", codeList);
+		assertCCodePhrase(node, "local", codeList, null);
 	}
 	
 	private void assertCCodePhrase(CObject actual, String terminologyId,
-			String[] codes) {
+			String[] codes, String assumedValue) {
 		assertTrue("CCodePhrase expected, got " + actual.getClass(), 
 				actual instanceof CCodePhrase);
 		CCodePhrase cCodePhrase = (CCodePhrase) actual;
@@ -91,7 +92,13 @@ public class CCodePhraseTest extends ParserTestBase {
 			assertEquals("code wrong, got: " + c, codes[i], c);
 		}
 		
-		// TODO verify assumed values
+		if(assumedValue == null) {
+			assertFalse(cCodePhrase.hasAssumedValue());
+		} else {
+			assertTrue("expected assumedValue", cCodePhrase.hasAssumedValue());
+			assertEquals("assumed value wrong", assumedValue, 
+				cCodePhrase.getAssumedValue().getCodeString());
+		}
 	}
 
 	private Archetype archetype;

@@ -17,7 +17,8 @@ definition
                             [icd10::
                             	F43.00, -- acute stress reaction, mild
 								F43.01, -- acute stress reaction, moderate
-								F32.02] -- acute stress reaction, severe
+								F32.02; -- acute stress reaction, severe
+								F43.01] -- assumed value
                         }
                     }	
                 }
