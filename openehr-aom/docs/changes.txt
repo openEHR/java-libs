@@ -1,3 +1,7 @@
+2006/1/20
+.updated CDomainType to add default and assumed value
+.removed CCount and domain package
+
 2006/1/09
 .take away unnecessary rmTypeName from CPrimitiveObject constructor
 

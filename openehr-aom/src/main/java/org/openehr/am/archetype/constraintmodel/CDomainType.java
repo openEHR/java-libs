@@ -23,10 +23,10 @@ import org.openehr.rm.support.basic.Interval;
  * @author Rong Chen
  * @version 1.0
  */
-public abstract class CDomainType extends CObject {
+public abstract class CDomainType<T> extends CObject {
 
 	/**
-	 * Constructs a DomainTypeConstraint
+	 * Constructs a DomainTypeConstraint without default value or assumed value
 	 *
 	 * @param path
 	 * @param rmTypeName
@@ -35,15 +35,76 @@ public abstract class CDomainType extends CObject {
 	 */
 	protected CDomainType(boolean anyAllowed, String path, String rmTypeName,
 			Interval<Integer> occurrences, String nodeID, CAttribute parent) {
-		super(anyAllowed, path, rmTypeName, occurrences, nodeID, parent);
+		this(anyAllowed, path, rmTypeName, occurrences, nodeID, null, null,
+				parent);
 	}
+	
+	/**
+	 * Constructs a DomainTypeConstraint without default value or assumed value
+	 *
+	 * @param path
+	 * @param rmTypeName
+	 * @param occurrences
+	 * @param nodeID
+	 * @param defaultValue
+	 * @param assumedValue
+	 */
+	protected CDomainType(boolean anyAllowed, String path, String rmTypeName,
+			Interval<Integer> occurrences, String nodeID,		
+			T defaultValue, T assumedValue, CAttribute parent) {
+		
+		super(anyAllowed, path, rmTypeName, occurrences, nodeID, parent);
+		
+		if(assumedValue != null && !validValue(assumedValue)) {
+			throw new IllegalArgumentException("invalid assumedValue");
+		}
+		
+		this.defaultValue = defaultValue;
+		this.assumedValue = assumedValue;
+	}
+	
+	/**
+	 * Returns true if a_value is valid with respect to constraint expressed in 
+	 * concrete instance of this type.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public abstract boolean validValue(T value);
 
 	/**
 	 * Standard form of constraint
 	 *
 	 * @return Standard form of constraint
 	 */
-	public abstract CComplexObject standardRepresentation();	
+	public abstract CComplexObject standardEquivalent();
+	
+	/**
+	 * Returns true if there is an assumed value
+	 * 
+	 * @return
+	 */
+	public boolean hasAssumedValue() {
+		return assumedValue != null;
+	}
+	
+	/**
+	 * @return Returns the assumedValue.
+	 */
+	public T getAssumedValue() {
+		return assumedValue;
+	}
+
+	/**
+	 * @return Returns the defaultValue.
+	 */
+	public T getDefaultValue() {
+		return defaultValue;
+	}    
+	
+	private final T defaultValue;
+	private final T assumedValue;
+	
 }
 
 /*

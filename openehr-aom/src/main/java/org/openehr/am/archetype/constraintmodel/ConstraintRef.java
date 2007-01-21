@@ -48,6 +48,7 @@ public final class ConstraintRef extends CObject {
         if(StringUtils.isEmpty(reference)) {
             throw new IllegalArgumentException("null reference");
         }
+        // TODO archetype.ontology.has_constraint(reference)
         this.reference = reference;
     }
 
