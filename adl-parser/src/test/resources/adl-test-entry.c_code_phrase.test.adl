@@ -34,6 +34,13 @@ definition
                         }
                     }	
                 }
+                items cardinality matches {0..*} matches {
+                    ELEMENT[at10004] matches {	-- code_phrase
+                        value matches {
+                            [icd10::] -- empty code list
+                        }
+                    }	
+                }
             }
         }
 	}

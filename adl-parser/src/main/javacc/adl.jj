@@ -2403,7 +2403,7 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
   Token t;
   String terminology = null;
   TerminologyID terminologyId = null;
-  List codeList = new ArrayList();
+  List codeList = null;
   String assumed = null;
   CodePhrase assumedValue = null;
   CodePhrase defaultValue = null; // not used 
@@ -2417,7 +2417,11 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
     	terminologyId = new TerminologyID(terminology);
     }
     [
-      t = <V_TERM_CODE> { codeList.add(t.image); }
+      t = <V_TERM_CODE> 
+      { 
+      	codeList = new ArrayList();
+      	codeList.add(t.image); 
+      }
       (
         [","] t = <V_TERM_CODE> { codeList.add(t.image); }
       )*

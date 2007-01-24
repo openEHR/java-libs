@@ -77,21 +77,37 @@ public class CCodePhraseTest extends ParserTestBase {
 		assertCCodePhrase(node, "local", codeList, null);
 	}
 	
+	public void testParseEmptyCodeList() throws Exception {
+		CObject node = archetype.node("/types[at0001]/items[at10004]/value");
+		String[] codeList = null; 
+		assertCCodePhrase(node, "icd10", codeList, null);
+	}
+	
 	private void assertCCodePhrase(CObject actual, String terminologyId,
 			String[] codes, String assumedValue) {
+		
+		// check type
 		assertTrue("CCodePhrase expected, got " + actual.getClass(), 
 				actual instanceof CCodePhrase);
 		CCodePhrase cCodePhrase = (CCodePhrase) actual;
+		
+		// check terminology
 		assertEquals("terminology", terminologyId, 
 				cCodePhrase.getTerminologyId().getValue());
-		List<String> codeList = cCodePhrase.getCodeList();
-		assertEquals("codes.size wrong", codes.length, codeList.size());
 		
-		for (int i = 0; i < codes.length; i++) {
-			Object c = codeList.get(i);
-			assertEquals("code wrong, got: " + c, codes[i], c);
+		// check code list
+		if(codes == null) {
+			assertNull("codeList expected null", cCodePhrase.getCodeList());
+		} else {
+			List<String> codeList = cCodePhrase.getCodeList();
+			assertEquals("codes.size wrong", codes.length, codeList.size());		
+			for (int i = 0; i < codes.length; i++) {
+				Object c = codeList.get(i);
+				assertEquals("code wrong, got: " + c, codes[i], c);
+			}
 		}
 		
+		// check assumed value
 		if(assumedValue == null) {
 			assertFalse(cCodePhrase.hasAssumedValue());
 		} else {
