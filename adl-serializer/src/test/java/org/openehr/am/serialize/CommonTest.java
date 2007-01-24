@@ -104,17 +104,7 @@ public class CommonTest extends SerializerTestBase {
 		outputter.printInterval(new Interval<Integer>(0, null, true, false),
 				out);
 		verify("|>=0|");
-	}
-
-	/* verify bug fix */
-	public void testPrintCString() throws Exception {
-		clean();
-		List<String> values = new ArrayList<String>();
-		String value = "some value";
-		values.add(value);
-		outputter.printCString(new CString(null, values), out);
-		verify("\"" + value + "\"");
-	}
+	}	
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

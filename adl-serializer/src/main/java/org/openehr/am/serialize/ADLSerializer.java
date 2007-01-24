@@ -534,21 +534,33 @@ public class ADLSerializer {
 	protected void printCDvOrdinal(CDvOrdinal cordinal, int indent, Writer out)
 			throws IOException {
 
-		for (Iterator<Ordinal> it = cordinal.getList().iterator(); it.hasNext();) {
-			Ordinal ordinal = it.next();
-			CodePhrase symbol = ordinal.getSymbol();
+		for (Iterator<Ordinal> it = cordinal.getList().iterator(); 
+				it.hasNext();) {
+			Ordinal ordinal = it.next();			
 			indent(indent, out);
-			out.write(Integer.toString(ordinal.getValue()));
-			out.write("|[");
-			out.write(symbol.getTerminologyID().getValue());
-			out.write("::");
-			out.write(symbol.getCodeString());
-			out.write("]");
+			printOrdinal(ordinal, out);
 			if (it.hasNext()) {
 				out.write(",");
+			} else if(cordinal.hasAssumedValue()) {
+				out.write(";");
 			}
+			newline(out);			
+		}
+		if(cordinal.hasAssumedValue()) {
+			printOrdinal(cordinal.getAssumedValue(), out);
 			newline(out);
 		}
+	}
+	
+	protected void printOrdinal(Ordinal ordinal, Writer out) 
+			throws IOException {
+		CodePhrase symbol = ordinal.getSymbol();
+		out.write(Integer.toString(ordinal.getValue()));
+		out.write("|[");
+		out.write(symbol.getTerminologyID().getValue());
+		out.write("::");
+		out.write(symbol.getCodeString());
+		out.write("]");		
 	}
 
 	protected void printCDvQuantity(CDvQuantity cquantity, int indent,
@@ -846,6 +858,14 @@ public class ADLSerializer {
 		} else {
 			out.write("false");
 		}
+		if(cboolean.hasAssumedValue()) {
+			out.write("; ");
+			if(cboolean.assumedValue().booleanValue()) {
+				out.write("true");
+			} else {
+				out.write("false");
+			}
+ 		}
 	}
 
 	protected void printCDate(CDate cdate, Writer out) throws IOException {
@@ -855,6 +875,10 @@ public class ADLSerializer {
 			out.write(cdate.getList().get(0).toString());
 		} else {
 			printInterval(cdate.getInterval(), out);
+		}
+		if(cdate.hasAssumedValue()) {
+			out.write("; ");
+			out.write(cdate.assumedValue().toString());
 		}
 	}
 
@@ -867,6 +891,10 @@ public class ADLSerializer {
 		} else {
 			printInterval(cdatetime.getInterval(), out);
 		}
+		if(cdatetime.hasAssumedValue()) {
+			out.write("; ");
+			out.write(cdatetime.assumedValue().toString());
+		}
 	}
 
 	protected void printCTime(CTime ctime, Writer out) throws IOException {
@@ -877,14 +905,24 @@ public class ADLSerializer {
 		} else {
 			printInterval(ctime.getInterval(), out);
 		}
+		if(ctime.hasAssumedValue()) {
+			out.write("; ");
+			out.write(ctime.assumedValue().toString());
+		}
 	}
 
 	protected void printCDuration(CDuration cduration, Writer out)
 			throws IOException {
 		if (cduration.getValue() != null) {
 			out.write(cduration.getValue().toString());
+		} else if(cduration.getPattern() != null) {
+			out.write(cduration.getPattern());
 		} else {
 			printInterval(cduration.getInterval(), out);
+		}
+		if(cduration.assumedValue() != null) {
+			out.write("; ");
+			out.write(cduration.assumedValue().toString());
 		}
 	}
 
@@ -895,6 +933,10 @@ public class ADLSerializer {
 		} else {
 			printInterval(cinteger.getInterval(), out);
 		}
+		if(cinteger.assumedValue() != null) {
+			out.write("; ");
+			out.write(cinteger.assumedValue().toString());
+		}
 	}
 
 	protected void printCReal(CReal creal, Writer out) throws IOException {
@@ -903,6 +945,10 @@ public class ADLSerializer {
 		} else {
 			printInterval(creal.getInterval(), out);
 		}
+		if(creal.assumedValue() != null) {
+			out.write("; ");
+			out.write(creal.assumedValue().toString());
+		}
 	}
 
 	protected void printCString(CString cstring, Writer out) throws IOException {
@@ -910,6 +956,10 @@ public class ADLSerializer {
 			out.write("/" + cstring.getPattern() + "/");
 		} else {
 			printList(cstring.getList(), out, true);
+		}
+		if(cstring.hasAssumedValue()) {
+			out.write("; ");
+			out.write("\"" + cstring.assumedValue() + "\"");
 		}
 	}
 

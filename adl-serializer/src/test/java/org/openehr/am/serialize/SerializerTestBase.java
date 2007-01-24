@@ -42,6 +42,7 @@ public class SerializerTestBase extends TestCase
 	 */
 	protected void setUp() throws Exception {
 		outputter = new ADLSerializer();
+		clean();
 	}
 
 	/**

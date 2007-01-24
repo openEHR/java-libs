@@ -1,3 +1,8 @@
+2007/01/24
+.added assumedValue in all CPrimitive types
+.added assumedValue in CDvOrdinal output
+.added pattern in CDuration output
+
 2007/01/20
 .bug fix related to null includes or excludes in printArchetypeSlot
 .added support for assumedValue in CCodePhrase
