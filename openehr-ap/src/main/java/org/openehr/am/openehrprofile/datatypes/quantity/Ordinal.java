@@ -15,6 +15,8 @@
 
 package org.openehr.am.openehrprofile.datatypes.quantity;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.datatypes.text.CodePhrase;
 
 /**
@@ -69,6 +71,28 @@ public final class Ordinal {
     public String toString() {
         return "[" + symbol.getTerminologyID() + "] " + value 
         + "|" + symbol.getCodeString();    
+    }
+    
+    /**
+     * Returns true if fields are the same
+     */
+    public boolean equals(Object o) {
+    	if (this == o) return true;
+        if (!( o instanceof Ordinal )) return false;
+
+        final Ordinal ordinal = (Ordinal) o;
+
+        return new EqualsBuilder()
+                .append(value, ordinal.value)
+                .append(symbol, ordinal.symbol)
+                .isEquals();
+    }
+    
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(value)
+                .append(symbol)
+                .toHashCode();
     }
 
     /* fields */

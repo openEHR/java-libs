@@ -31,7 +31,7 @@ import org.openehr.rm.support.basic.Interval;
  * @author Rong Chen
  * @version 1.0
  */
-public class CDvOrdinal extends CDomainType<DvOrdinal> {
+public class CDvOrdinal extends CDomainType<Ordinal> {
 	
 	/**
 	 * Creates a CDvOrdinal
@@ -47,7 +47,7 @@ public class CDvOrdinal extends CDomainType<DvOrdinal> {
 			DvOrdinal defaultValue, Ordinal assumedValue) {
 		
 		super(list == null, path, "DvOrdinal", occurrences, nodeID, 
-				null, null, parent);
+				null, assumedValue, parent);
 		
 		if(list != null && list.isEmpty()) {
 			throw new IllegalArgumentException("list is empty");
@@ -83,9 +83,9 @@ public class CDvOrdinal extends CDomainType<DvOrdinal> {
 	}
 
 	@Override
-	public boolean validValue(DvOrdinal arg0) {
+	public boolean validValue(Ordinal arg0) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
