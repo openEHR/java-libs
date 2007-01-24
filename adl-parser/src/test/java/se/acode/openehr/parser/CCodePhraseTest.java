@@ -63,7 +63,13 @@ public class CCodePhraseTest extends ParserTestBase {
 	public void testParseExternalCodes() throws Exception {
 		CObject node = archetype.node("/types[at0001]/items[at10002]/value");
 		String[] codes = { "F43.00", "F43.01", "F32.02" };
-		assertCCodePhrase(node, "icd10", codes, "F43.01");
+		assertCCodePhrase(node, "icd10", codes, null);
+	}
+	
+	public void testParseExternalCodesWithAssumedValue() throws Exception {
+		CObject node = archetype.node("/types[at0001]/items[at10005]/value");
+		String[] codes = { "F43.00", "F43.01", "F32.02" };
+		assertCCodePhrase(node, "icd10", codes, "F43.00");
 	}
 	
 	/**

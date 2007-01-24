@@ -20,7 +20,18 @@ definition
                             3|[local::at0003.3],  	-- solution
                             4|[local::at0003.4]  	-- suspension
                         }
-                    }                    		
+                    }   
+                    ELEMENT[at10002] matches {	-- ordinal with assumed value
+                        value matches {
+                            0|[local::at0003.0], 	-- capsule
+                            1|[local::at0003.1], 	-- powder
+                            2|[local::at0003.2],  	-- tablet
+                            3|[local::at0003.3],  	-- solution
+                            4|[local::at0003.4];  	-- suspension
+                            0|[local::at0003.0]     -- assumed value
+                        }
+                    }   
+                                     		
                 }
             }
         }

@@ -17,12 +17,9 @@ definition
                             [icd10::
                             	F43.00, -- acute stress reaction, mild
 								F43.01, -- acute stress reaction, moderate
-								F32.02; -- acute stress reaction, severe
-								F43.01] -- assumed value
+								F32.02] -- acute stress reaction, severe
                         }
-                    }	
-                }
-                items cardinality matches {0..*} matches {
+                    }	                
                     ELEMENT[at10003] matches {	-- code_phrase
                         value matches {
                             [local::
@@ -33,11 +30,18 @@ definition
 								at1315] -- Colostomy
                         }
                     }	
-                }
-                items cardinality matches {0..*} matches {
                     ELEMENT[at10004] matches {	-- code_phrase
                         value matches {
                             [icd10::] -- empty code list
+                        }
+                    }	
+                    ELEMENT[at10005] matches {	-- with assumed value
+                        value matches {
+                            [icd10::
+                            	F43.00, -- acute stress reaction, mild
+								F43.01, -- acute stress reaction, moderate
+								F32.02; -- acute stress reaction, severe
+								F43.00] -- assumed value
                         }
                     }	
                 }
