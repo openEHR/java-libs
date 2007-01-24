@@ -44,7 +44,7 @@ public class CDvOrdinal extends CDomainType<DvOrdinal> {
 	 */
 	public CDvOrdinal(String path, Interval<Integer> occurrences, 
 			String nodeID, CAttribute parent, Set<Ordinal> list,
-			DvOrdinal defaultValue, DvOrdinal assumedValue) {
+			DvOrdinal defaultValue, Ordinal assumedValue) {
 		
 		super(list == null, path, "DvOrdinal", occurrences, nodeID, 
 				null, null, parent);
