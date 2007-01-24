@@ -51,6 +51,13 @@ public class TerminologyIDTest extends TestCase {
             assertTID(new TerminologyID(SECTIONS[i][0], SECTIONS[i][1]), i);
         }
     }
+    
+    public void testEquals() {
+    	TerminologyID id1 = new TerminologyID("ICD9", "1999");
+    	TerminologyID id2 = new TerminologyID("ICD9", "1999");
+    	assertTrue("equals expected", id1.equals(id2));
+    	assertTrue("equals expected", id2.equals(id1));
+    }
 
     private void assertTID(TerminologyID tid, int i) {
         assertEquals("value", STRING_VALUE[i], tid.getValue());
