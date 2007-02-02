@@ -206,6 +206,9 @@ PARSER_END(ADLParser)
 {
   < SYM_ORIGINAL_LANGUAGE: "original_language">
 | < SYM_TRANSLATIONS: "translations">
+| < SYM_AUTHOR: "author">
+| < SYM_ACCREDITATION: "accreditation">
+| < SYM_LANG_OTHER_DETAILS: "other_details">
 }
 
 
@@ -596,7 +599,7 @@ Archetype archetype() :
     [ 
       <SYM_TRANSLATIONS> <SYM_EQ> "<"
       
-      { translations = new HashMap<String, TranslationDetails>(); }       
+      { translations = translations(); }       
         
       ">"	
     ] 
@@ -614,6 +617,59 @@ Archetype archetype() :
     		translations, description, revisionHistory, isControlled,
     		definition, ontology, invariants, terminologyService);
   }
+}
+
+Map<String, TranslationDetails> translations() : 
+{
+  Token t;
+  String lang;
+  TranslationDetails td;	
+  Map<String, TranslationDetails> map = new HashMap<String, TranslationDetails>();
+  Map<String, String> author;
+  String  accreditation;
+  Map<String, String> otherDetails = null;
+}
+{
+  (
+    <SYM_L_BRACKET> lang = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
+      <SYM_AUTHOR> <SYM_EQ> <SYM_LT>
+        author = string_string_map()
+      <SYM_GT>
+      <SYM_ACCREDITATION> <SYM_EQ> <SYM_LT>
+        accreditation = string_value()
+      <SYM_GT>
+      [ 
+        <SYM_LANG_OTHER_DETAILS> <SYM_EQ> <SYM_LT>
+          otherDetails = string_string_map()
+        <SYM_GT>
+      ]
+    <SYM_GT>	    	    
+    { 
+      CodePhrase language = new CodePhrase("languages", lang);	
+      
+      // TODO null terminology service
+      td = new TranslationDetails(language, author, accreditation, 
+      		otherDetails, null); 
+      map.put(lang, td);
+    }
+  )+
+  { return map; }	
+}
+
+Map<String, String> string_string_map() :
+{
+  Map<String, String> map = new HashMap();	
+  String key;
+  String value;	 	
+}
+{ 
+  (
+    <SYM_L_BRACKET> key = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>     	
+      value = string_value()
+    <SYM_GT>    
+    { map.put(key, value); }  
+  )*		
+  { return map; }	
 }
 
 String adl_version() :

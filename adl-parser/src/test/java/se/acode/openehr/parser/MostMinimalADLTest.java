@@ -37,7 +37,13 @@ public class MostMinimalADLTest extends ParserTestBase {
         ADLParser parser = new ADLParser(loadFromClasspath(
                 "adl-test-entry.most_minimal.test.adl"));
         Archetype archetype = parser.parse();
+        
         assertNotNull(archetype);
+        
+        assertEquals("originalLanguage wrong", "en", 
+        		archetype.getOriginalLanguage().getCodeString());
+        
+        
     }
 }
 
