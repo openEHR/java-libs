@@ -8,6 +8,7 @@ language
 	original_language = <"en"> 
 	translations = <
         ["de"] = <
+        	language = <"de">
             author = <
             	["name"] = <"Harry Potter">
             	["email"] = <"harry@something.somewhere.co.uk">            	
@@ -19,7 +20,8 @@ language
             >
         >
         ["ru"] = <
-            author = <
+        	language = <"ru">
+        	author = <
             	["name"] = <"Vladimir Nabokov">
             	["email"] = <"vladimir@something.somewhere.ru">            
             >

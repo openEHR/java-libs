@@ -206,6 +206,7 @@ PARSER_END(ADLParser)
 {
   < SYM_ORIGINAL_LANGUAGE: "original_language">
 | < SYM_TRANSLATIONS: "translations">
+| < SYM_LANG_LANGUAGE: "language">
 | < SYM_AUTHOR: "author">
 | < SYM_ACCREDITATION: "accreditation">
 | < SYM_LANG_OTHER_DETAILS: "other_details">
@@ -632,6 +633,9 @@ Map<String, TranslationDetails> translations() :
 {
   (
     <SYM_L_BRACKET> lang = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
+      <SYM_LANG_LANGUAGE> <SYM_EQ> <SYM_LT>
+        string_value() // TODO check with lang?
+      <SYM_GT>
       <SYM_AUTHOR> <SYM_EQ> <SYM_LT>
         author = string_string_map()
       <SYM_GT>
