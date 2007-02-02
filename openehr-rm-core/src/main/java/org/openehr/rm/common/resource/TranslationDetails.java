@@ -47,10 +47,9 @@ public class TranslationDetails extends RMObject {
 		if (author == null) {
 			throw new IllegalArgumentException("null author");
 		}
-		if (terminologyService == null) {
-			throw new IllegalArgumentException("null terminologyService");
-		}
-		if (!terminologyService.codeSet("languages").hasLang(language)) {
+		
+		if (terminologyService != null && 
+				!terminologyService.codeSet("languages").hasLang(language)) {
 			throw new IllegalArgumentException("unknown language " + language);
 		}
 		this.language = language;
