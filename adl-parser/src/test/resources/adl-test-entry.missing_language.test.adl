@@ -1,0 +1,23 @@
+archetype
+	adl-test-ENTRY.missing_language.draft
+
+concept 
+	[at0000]	--  testing missing language compatibility
+
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	primary_language = <"zh">
+	languages_available = <"zh", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
+	>

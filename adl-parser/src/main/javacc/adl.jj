@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005,2006 ACODE HB, Sweden.
+ * Copyright (C) 2005,2006,2007 ACODE HB, Sweden.
  * All Rights Reserved.
  *
  * This program is free software; you can redistribute it and/or
@@ -65,16 +65,47 @@ import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 
 public class ADLParser {
 
+  /* static fields */
+  private static final String CHARSET = "UTF-8";
+
+  /* member fields */
+  private boolean missingLanguageCompatible = false;
+  	
   /* =======================  public constructors  ======================== */
 
   /* Constructor that takes file as input */
   public ADLParser(File file) throws IOException {
-      this(new FileInputStream(file), "UTF-8");
+      this(new FileInputStream(file), CHARSET);
   }
 
   /* Constructor that takes string as input */
   public ADLParser(String value) {
       this(new BufferedReader(new StringReader(value)));
+  }
+  
+  /* Constructor that takes file as input */
+  public ADLParser(File file, boolean missingLanguageCompatible) 
+  		throws IOException {
+      this(new FileInputStream(file), CHARSET);
+      this.missingLanguageCompatible = missingLanguageCompatible;
+  }
+
+  /* Constructor that takes string as input */
+  public ADLParser(String value, boolean missingLanguageCompatible) {
+      this(new BufferedReader(new StringReader(value)));
+      this.missingLanguageCompatible = missingLanguageCompatible;
+  }
+  
+  /* Constructor that takes Reader as input */
+  public ADLParser(Reader reader, boolean missingLanguageCompatible) {
+      this(reader);
+      this.missingLanguageCompatible = missingLanguageCompatible;
+  }
+  
+  /* Constructor that takes InputStream as input */
+  public ADLParser(InputStream input, boolean missingLanguageCompatible) {
+      this(input);
+      this.missingLanguageCompatible = missingLanguageCompatible;
   }
 
   /* =========================  public interface ======================== */
@@ -86,7 +117,7 @@ public class ADLParser {
 
   /* re-initial the parser */
   public void reInit(File file) throws IOException {
-      ReInit(new FileInputStream(file), "UTF-8");
+      ReInit(new FileInputStream(file), CHARSET);
   }
 
   /* re-initial the parser */
@@ -567,7 +598,7 @@ Archetype archetype() :
   boolean isControlled = false;
   String parent = null;
   String concept;
-  String lang;
+  String lang = null;
   Map<String, TranslationDetails> translations = null; 
   TranslationDetails translationDetails = null;
   RevisionHistory revisionHistory = null;
@@ -595,7 +626,8 @@ Archetype archetype() :
   [ parent = arch_specialisation() ]
   concept = arch_concept()
   
-  <SYM_LANGUAGE>  
+  [
+    <SYM_LANGUAGE>  
   	<SYM_ORIGINAL_LANGUAGE> <SYM_EQ> "<" lang = string_value() ">"  	
     [ 
       <SYM_TRANSLATIONS> <SYM_EQ> "<"
@@ -603,7 +635,9 @@ Archetype archetype() :
       { translations = translations(); }       
         
       ">"	
-    ] 
+    ]
+  ]
+   
   [ description = arch_description() ]
 
   definition = arch_definition()
@@ -612,8 +646,11 @@ Archetype archetype() :
   <EOF>
 
   {
-  	CodePhrase originalLanguage = new CodePhrase("languages", lang);   
-    
+  	if(missingLanguageCompatible) {
+  		lang = ontology.getPrimaryLanguage();		
+  	}
+    CodePhrase originalLanguage = new CodePhrase("languages", lang);     	
+  	
     return new Archetype(adlVersion, id, parent, concept, originalLanguage,
     		translations, description, revisionHistory, isControlled,
     		definition, ontology, invariants, terminologyService);
