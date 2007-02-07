@@ -16,12 +16,13 @@ public class EmptyOtherContributorsTest extends ParserTestBase {
     }
     
     public void setUp() throws Exception {
-    	ADLParser parser = new ADLParser(loadFromClasspath(
-        	"adl-test-entry.empty_other_contributors.test.adl"));
-    	archetype = parser.parse();
+    	
     }
     
     public void testParseEmptyOtherContributors() throws Exception {
+    	ADLParser parser = new ADLParser(loadFromClasspath(
+    	"adl-test-entry.empty_other_contributors.test.adl"));
+    	Archetype archetype = parser.parse();
     	assertNotNull(archetype);
     	assertNull("other_contributors not null", 
     			archetype.getDescription().getOtherContributors());

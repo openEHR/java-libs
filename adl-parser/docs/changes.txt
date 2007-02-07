@@ -1,3 +1,6 @@
+2007/02/07
+.fixed parsing issue caused by the order of description attributes
+
 2007/02/03
 .testcase verifies node paths after parsing
 .backwards compatibility of archetypes without language section

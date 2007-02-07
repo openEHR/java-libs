@@ -769,7 +769,6 @@ ResourceDescription arch_description() :
 {
    <SYM_DESCRIPTION>
    (
-
      <SYM_LIFECYCLE_STATE> <SYM_EQ> "<" lifecycleState = string_value() ">"
    |
      <SYM_ARCHETYPE_PACKAGE_URI> <SYM_EQ> "<" archetypePackageURI = string_value() ">"
@@ -785,16 +784,13 @@ ResourceDescription arch_description() :
      ">"
    |
    	 <SYM_ORIGINAL_AUTHOR> <SYM_EQ> originalAuthor = map_value()         
-    
-   )*
-   
-   [ <SYM_COPYRIGHT> <SYM_EQ> "<" string_value() ">" ]
-   
-   [ 
+   |    
+     <SYM_COPYRIGHT> <SYM_EQ> "<" string_value() ">" 
+   |    
      <SYM_OTHER_CONTRIBUTORS> <SYM_EQ> "<" 
        [ otherContributors = string_list_value() ] 
-     ">" 
-   ]
+     ">"    
+   )*
    {
      ResourceDescription resourceDescription = new ResourceDescription(
      		originalAuthor, otherContributors, lifecycleState, details,
