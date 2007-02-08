@@ -139,7 +139,7 @@ public class ADLParser {
     if (args.length == 1) {
       System.out.println(title + "  Reading from file " + args[0] + " . . .");
       try {
-        parser = new ADLParser(new File(args[0]));
+        parser = new ADLParser(new File(args[0]), true);
       } catch (IOException e) {
         System.out.println(title + "  File " + args[0] + " not found.");
         return;
