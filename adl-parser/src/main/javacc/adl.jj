@@ -316,7 +316,8 @@ PARSER_END(ADLParser)
 | < SYM_EXCLUDE: "exclude">
 | < SYM_START_CBLOCK: "{">
 | < SYM_END_CBLOCK: "}">
-| < SYM_C_QUANTITY: "c_quantity" >: DOMAIN_TYPE_C_QUANTITY
+| < SYM_PRECISION: "precision">
+| < SYM_C_DV_QUANTITY: "c_dv_quantity" >: DOMAIN_TYPE_C_QUANTITY
 | < SYM_UNITS: "units">: DOMAIN_TYPE_C_QUANTITY 
 }
 
@@ -324,6 +325,7 @@ PARSER_END(ADLParser)
 {
   < SYM_PROPERTY: "property">
 | < SYM_LIST: "list">  
+| < SYM_ASSUMED_VALUE: "assumed_value">
 | < SYM_C_QUANTITY_UNITS: "units"> 
 | < SYM_MAGNITUDE: "magnitude">: CADL
 | < V_TERMINOLOGY_ID_BLOCK_CQ: "["(<LET_DIG_DUDSLR>)+"::" > : TERM_CODE
@@ -2551,7 +2553,7 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
   DvQuantity assumedValue = null;
 }
 {
-  <SYM_C_QUANTITY> "<"
+  <SYM_C_DV_QUANTITY> "<"
     [    	
 	  <SYM_PROPERTY> <SYM_EQ> "<" property = code_phrase() ">"  
     ] 
@@ -2598,15 +2600,29 @@ CodePhrase code_phrase() :
 CDvQuantityItem c_dv_quantity_item() :
 {
   Interval value = null;
+  Interval precision = null;
   String units;  	
 }
 {
   "[" string_value() "]" <SYM_EQ> "<"
-    (<SYM_C_QUANTITY_UNITS>|<SYM_UNITS>) <SYM_EQ> "<" units = string_value() ">"
+    
+    (<SYM_C_QUANTITY_UNITS>|<SYM_UNITS>) <SYM_EQ> "<" 
+      units = string_value() 
+    ">"
+    
     <SYM_MAGNITUDE> <SYM_EQ> "<" 
-      value = real_interval_value() ">"
+      value = real_interval_value()       
+    ">"
+    
+    [
+      <SYM_PRECISION> <SYM_EQ> "<" 
+        precision = integer_interval_value()
+      ">"
+	]
   ">"
-  { return new CDvQuantityItem(value, units); } 		
+  { 
+  	return new CDvQuantityItem(value, precision, units); 
+  } 		
 }
 
 CInteger c_integer() :

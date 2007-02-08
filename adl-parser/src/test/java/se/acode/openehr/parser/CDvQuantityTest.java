@@ -72,14 +72,19 @@ public class CDvQuantityTest extends ParserTestBase {
         // verify item list
         List<CDvQuantityItem> list = cdvquantity.getList();
         assertEquals("unexpected size of list", 2, list.size());
-        assertCDvQuantityItem(list.get(0), "yr", new Interval<Double>(0.0, 200.0));
-        assertCDvQuantityItem(list.get(1), "mth", new Interval<Double>(1.0, 36.0));
+        assertCDvQuantityItem(list.get(0), "yr", 
+        		new Interval<Double>(0.0, 200.0), new Interval<Integer>(2, 2));
+        assertCDvQuantityItem(list.get(1), "mth", 
+        		new Interval<Double>(1.0, 36.0), new Interval<Integer>(2, 2));
     }
     
     private void assertCDvQuantityItem(CDvQuantityItem item, String units,
-    		Interval<Double> value) {
+    		Interval<Double> magnitude, Interval<Integer> precision) {
     	assertEquals("unexpected units", units, item.getUnits());
-    	assertEquals("unexpected value interval", value, item.getValue());
+    	assertEquals("unexpected magnitude interval", magnitude, 
+    			item.getValue());
+    	assertEquals("unexpected precision interval", precision, 
+    			item.getPrecision());    	
     }
 
     private Archetype archetype;
