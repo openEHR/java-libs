@@ -59,7 +59,7 @@ definition
                 integer_attr16 matches {|<=10|; 8}
                 integer_attr17 matches {|-10..-5|; -7}
                 
-                -- fixed value as interval
+                -- single value as interval
                 integer_attr18 matches {|100|}
             }
         }
@@ -83,7 +83,10 @@ definition
                 real_attr14 matches {|<10.0|; 2.0}
                 real_attr15 matches {|>=10.0|; 10.0}
                 real_attr16 matches {|<=10.0|; 9.0}
-                real_attr17 matches {|-10.0..-5.0|; -8.0}                
+                real_attr17 matches {|-10.0..-5.0|; -8.0}         
+                
+                -- single value as interval
+                real_attr18 matches {|100.0|}       
             }
         }
         date_attributes matches {
@@ -116,6 +119,9 @@ definition
                 date_attr21 matches {|<= 2004-09-20|; 2003-09-20}
                 date_attr22 matches {|> 2004-09-20|; 2005-01-02}
                 date_attr23 matches {|>= 2004-09-20|; 2005-10-30}
+                
+                 -- single value as interval
+                 date_attr24 matches {|2004-09-20|}
             }
         }
         time_attributes matches {
@@ -167,7 +173,9 @@ definition
                 time_attr39  matches {|> 12:35|; 10:00:00}
                 time_attr40  matches {|>= 12:35|; 10:00:00}
 
-
+				-- single value as interval
+				time_attr41  matches {|12:35|}
+				
                 -- time_attr7 matches {64:02:25, ...} -- Not currently in ADL syntax
             }
         }
@@ -224,6 +232,9 @@ definition
                 
                 -- newly supported pattern with "T" in the middle
                 date_time_attr21 matches {yyyy-??-??T??:??:??}
+                
+                -- single value as interval
+                date_time_attr22 matches {|2000-01-01T00:00:00|}
             }
         }        
     }

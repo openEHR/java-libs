@@ -1527,7 +1527,11 @@ Interval real_interval_value() :
 {
   <SYM_INTERVAL_DELIM>
   (
-    lower = real_value() <SYM_ELLIPSIS> upper = real_value()
+    lower = real_value() 
+    { upper = lower; }
+    [ 
+      <SYM_ELLIPSIS> upper = real_value() 
+    ]
     {
       i = new Interval(new Double(lower), new Double(upper), true, true);
     }
@@ -1655,7 +1659,9 @@ Interval date_interval_value() :
 {
     <SYM_INTERVAL_DELIM>
   (
-    lower = date_value() <SYM_ELLIPSIS> upper = date_value()
+    lower = date_value() 
+    { upper = lower; }
+    [ <SYM_ELLIPSIS> upper = date_value() ]
     {
       i = new Interval(lower, upper, true, true);
     }
@@ -1741,7 +1747,9 @@ Interval time_interval_value() :
 {
     <SYM_INTERVAL_DELIM>
   (
-    lower = time_value() <SYM_ELLIPSIS> upper = time_value()
+    lower = time_value()
+    { upper = lower; }
+    [ <SYM_ELLIPSIS> upper = time_value() ]
     {
       i = new Interval(lower, upper, true, true);
     }
@@ -1823,7 +1831,9 @@ Interval date_time_interval_value() :
 {
     <SYM_INTERVAL_DELIM>
   (
-    lower = date_time_value() <SYM_ELLIPSIS> upper = date_time_value()
+    lower = date_time_value() 
+    { upper = lower; }
+    [ <SYM_ELLIPSIS> upper = date_time_value() ]
     {
       i = new Interval(lower, upper, true, true);
     }

@@ -24,7 +24,6 @@ import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
-import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 import org.openehr.rm.datatypes.quantity.datetime.DvTime;
 
 import java.util.*;
