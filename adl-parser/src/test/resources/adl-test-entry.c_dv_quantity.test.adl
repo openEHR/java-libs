@@ -27,11 +27,12 @@ definition
 										magnitude = <|1.0..36.0|>
 										precision = <|2|>
 									>									
+								>								
+								assumed_value = <
+									units = <"yr">
+									magnitude = <8.0>
+									precision = <2>
 								>
-								-- TODO fix it
-								-- assumed_value = <
-								--	units = <"yr">
-								-- >
 							>
 						}
                     }		

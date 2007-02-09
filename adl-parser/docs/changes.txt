@@ -1,4 +1,5 @@
 2007/02/08
+.added support for assumed_value in c_dv_quantity
 .the command line parser is created with missingLanguageCompatible falg set
 .added support for single value interval for primitive types
 .updated C_DV_QUANTITY parsing

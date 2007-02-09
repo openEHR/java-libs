@@ -113,6 +113,11 @@
 			<version>0.1-SNAPSHOT</version>
 		</dependency>	
 		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>measure-serv</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>		
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>

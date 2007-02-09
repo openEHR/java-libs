@@ -23,8 +23,10 @@ import org.openehr.am.archetype.constraintmodel.CObject;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
+import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.measurement.*;
 
 import java.util.*;
 
@@ -76,6 +78,11 @@ public class CDvQuantityTest extends ParserTestBase {
         		new Interval<Double>(0.0, 200.0), new Interval<Integer>(2, 2));
         assertCDvQuantityItem(list.get(1), "mth", 
         		new Interval<Double>(1.0, 36.0), new Interval<Integer>(2, 2));
+        
+        MeasurementService ms = SimpleMeasurementService.getInstance();
+        DvQuantity expected = new DvQuantity("yr", 8.0, 2, ms);
+        assertEquals("assumed value wrong", expected, 
+        		cdvquantity.getAssumedValue());        
     }
     
     private void assertCDvQuantityItem(CDvQuantityItem item, String units,

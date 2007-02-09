@@ -43,6 +43,7 @@ import org.openehr.rm.common.resource.*;
 import org.openehr.rm.common.generic.RevisionHistory;
 import org.openehr.rm.support.identification.*;
 import org.openehr.rm.support.terminology.*;
+import org.openehr.rm.support.measurement.*;
 
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.assertion.Assertion;
@@ -70,6 +71,8 @@ public class ADLParser {
 
   /* member fields */
   private boolean missingLanguageCompatible = false;
+  private MeasurementService measureServ = 
+  			SimpleMeasurementService.getInstance();
   	
   /* =======================  public constructors  ======================== */
 
@@ -319,13 +322,13 @@ PARSER_END(ADLParser)
 | < SYM_PRECISION: "precision">
 | < SYM_C_DV_QUANTITY: "c_dv_quantity" >: DOMAIN_TYPE_C_QUANTITY
 | < SYM_UNITS: "units">: DOMAIN_TYPE_C_QUANTITY 
+| < SYM_ASSUMED_VALUE: "assumed_value">
 }
 
 < DOMAIN_TYPE_C_QUANTITY > TOKEN [IGNORE_CASE]:
 {
   < SYM_PROPERTY: "property">
 | < SYM_LIST: "list">  
-| < SYM_ASSUMED_VALUE: "assumed_value">
 | < SYM_C_QUANTITY_UNITS: "units"> 
 | < SYM_MAGNITUDE: "magnitude">: CADL
 | < V_TERMINOLOGY_ID_BLOCK_CQ: "["(<LET_DIG_DUDSLR>)+"::" > : TERM_CODE
@@ -2577,11 +2580,36 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
 	    )+	  	  
 	  ">"
     ]
+    
+    [
+      <SYM_ASSUMED_VALUE> <SYM_EQ> "<"
+        assumedValue = dv_quantity() 
+      ">"
+    ]
   ">"	   
   { 
   	return new CDvQuantity(path, null, null, parent, list, property, 
   		defaultValue, assumedValue); 
   }
+}
+
+DvQuantity dv_quantity() :
+{
+  String units = null;
+  double magnitude = 0;
+  int  precision = 0;
+}
+{
+  (	
+    <SYM_UNITS> <SYM_EQ> "<" units = string_value() ">"
+  |  
+    <SYM_MAGNITUDE> <SYM_EQ> "<" magnitude = real_value() ">"	  
+  |  
+    <SYM_PRECISION> <SYM_EQ> "<" precision = integer_value() ">"	
+  )*  
+  { 
+  	return new DvQuantity(units, magnitude, precision, measureServ); 
+  }	
 }
 
 CodePhrase code_phrase() :
