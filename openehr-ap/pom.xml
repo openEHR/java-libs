@@ -78,6 +78,12 @@
 			<version>2.0</version>
 		</dependency>
 		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>measure-serv</artifactId>
+			<version>0.1-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>

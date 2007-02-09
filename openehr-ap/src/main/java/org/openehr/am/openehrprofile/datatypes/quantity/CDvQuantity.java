@@ -50,7 +50,7 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 			DvQuantity assumedValue) {
 
 		super(list == null && property == null, path, "DvQuantity",
-				occurrences, nodeId, null, null, parent);
+				occurrences, nodeId, defaultValue, assumedValue, parent);
 
 		if (list != null && list.isEmpty()) {
 			throw new IllegalArgumentException("empty list");
@@ -100,7 +100,7 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 	@Override
 	public boolean validValue(DvQuantity arg0) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

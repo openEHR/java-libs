@@ -1,4 +1,7 @@
-2006/01/20
+2007/02/08
+.fixed a bug in the constructor of CDvQuantity
+
+2007/01/20
 .updated constructors to allow defaultValue and assumedValue
 
 2006/12/31
