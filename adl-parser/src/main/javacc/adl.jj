@@ -2021,7 +2021,6 @@ List c_complex_object_body(String path) :
 CObject c_object(String path, CAttribute parent) :
 {
   CObject c = null;
-  String ref = null;
 }
 {
   (
@@ -2040,9 +2039,26 @@ CObject c_object(String path, CAttribute parent) :
     |
       LOOKAHEAD( 3 )
       c = c_primitive_object(path, parent)
+    |
+      c = constraint_ref_obj(path, parent)
   )
   {
     return c;
+  }
+}
+
+ConstraintRef constraint_ref_obj(String path, CAttribute parent) :
+{
+  String reference;
+  String rmTypeName = "CodePhrase";
+  Interval<Integer> occurrences = null;
+  String nodeId = null;  
+}
+{
+  reference = constraint_ref()
+  {
+ 	return new ConstraintRef(path, rmTypeName, occurrences, nodeId, parent,
+    						reference);
   }
 }
 
