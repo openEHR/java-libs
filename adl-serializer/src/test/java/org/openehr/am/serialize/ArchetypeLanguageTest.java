@@ -1,6 +1,6 @@
 package org.openehr.am.serialize;
 
-import java.util.Map;
+import java.util.*;
 
 import org.openehr.rm.common.generic.RevisionHistory;
 import org.openehr.rm.common.resource.AuthoredResource;
@@ -17,7 +17,20 @@ public class ArchetypeLanguageTest extends SerializerTestBase {
 
 	public void testPrintArchetypeLanguage() throws Exception {
 		CodePhrase originalLanguage = new CodePhrase("iso639-2", "en");
-		Map<String, TranslationDetails> translations = null;
+		Map<String, TranslationDetails> translations = 
+			new HashMap<String, TranslationDetails>();
+		SortedMap<String, String> author = new TreeMap<String,String>();
+		author.put("name", "Harry Potter");
+		author.put("email", "harry@something.somewhere.co.uk");
+		SortedMap<String, String> otherDetails = new TreeMap<String, String>();
+		otherDetails.put("reviewer 1", "Ron Weasley");
+		otherDetails.put("reviewer 2", "Rubeus Hagrid");	
+		
+		TranslationDetails td = new TranslationDetails(
+				new CodePhrase("languages", "de"), author, 
+				"British Medical Translator id 00400595", otherDetails, null);
+		translations.put("de", td);
+		
 		ResourceDescription description = null;
 		RevisionHistory revisionHistory = null;
 		boolean isControlled = false;

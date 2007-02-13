@@ -1,3 +1,11 @@
+2007/02/13
+.added support for translations
+.fixed archetypeInternalRef output bug
+.fixed unclosed brace when code list is empty
+
+2007/02/11
+.archetype language support
+
 2007/01/24
 .added assumedValue in all CPrimitive types
 .added assumedValue in CDvOrdinal output

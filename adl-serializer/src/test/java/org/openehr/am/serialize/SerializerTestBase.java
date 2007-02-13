@@ -23,7 +23,6 @@ import org.openehr.rm.support.terminology.TerminologyAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 import junit.framework.TestCase;
-import org.apache.commons.io.FileUtils;
 
 public class SerializerTestBase extends TestCase 
 	implements TerminologyService, CodeSetAccess {
@@ -35,6 +34,9 @@ public class SerializerTestBase extends TestCase
 	 */
 	public SerializerTestBase(String test) {
 		super(test);
+	}
+	
+	public SerializerTestBase() {		
 	}
 
 	/**

@@ -17,6 +17,7 @@ package org.openehr.am.serialize;
 import org.openehr.rm.common.resource.AuthoredResource;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
+import org.openehr.rm.common.resource.TranslationDetails;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.basic.Interval;
@@ -151,6 +152,76 @@ public class ADLSerializer {
 		out.write(authored.getOriginalLanguage().getCodeString());
 		out.write("\">");
 		newline(out);
+		if(authored.getTranslations() != null) {
+			indent(1, out);
+			out.write("translations = <");
+			newline(out);
+			Map<String, TranslationDetails> translations = 
+				authored.getTranslations();
+			for(String lang : translations.keySet()) {
+				TranslationDetails td = translations.get(lang);
+				
+				indent(2, out);
+				out.write("[\"");
+				out.write(lang);
+				out.write("\"] = <");				
+				newline(out);
+				
+				indent(2, out);
+				out.write("language = <\"");	
+				out.write(lang);
+				out.write("\">");
+				newline(out);
+				
+				indent(2, out);
+				out.write("author = <");
+				newline(out);				
+				printMap(td.getAuthor(), out, 3);				
+				indent(2, out);
+				out.write(">");
+				newline(out);
+				
+				if(td.getAccreditation() != null) {
+					indent(2, out);
+					out.write("accreditation = <\"");	
+					out.write(td.getAccreditation());
+					out.write("\">");
+					newline(out);
+				}
+				
+				if(td.getOtherDetails() != null) {
+					indent(2, out);
+					out.write("other_details = <");
+					newline(out);				
+					printMap(td.getOtherDetails(), out, 3);				
+					indent(2, out);
+					out.write(">");
+					newline(out);
+				}				
+				indent(2, out);
+				out.write(">");
+				newline(out);				
+			}
+			indent(1, out);
+			out.write(">");
+			newline(out);			
+		}		
+	}
+	
+	protected void printMap(Map<String,String> map, Writer out, int indent) 
+			throws IOException {
+		if(map == null || map.size() == 0) {
+			return;
+		}
+		for(String key : map.keySet()) {
+			indent(indent, out);
+			out.write("[\"");
+			out.write(key);
+			out.write("\"] = <\"");
+			out.write(map.get(key));
+			out.write("\">");			
+			newline(out);
+		}
 	}
 
 	protected void printDescription(ResourceDescription description, Writer out)
@@ -336,10 +407,10 @@ public class ADLSerializer {
 	protected void printArchetypeInternalRef(ArchetypeInternalRef ref,
 			int indent, Writer out) throws IOException {
 		indent(indent, out);
-		printOccurrences(ref.getOccurrences(), out);
-		out.write(" use_node ");
+		out.write("use_node ");
 		out.write(ref.getRmTypeName());
-		out.write(" ");
+		printOccurrences(ref.getOccurrences(), out);
+		out.write(" ");		
 		out.write(ref.getTargetPath());
 		newline(out);
 	}
@@ -527,8 +598,11 @@ public class ADLSerializer {
 				}
 				out.write("]");
 				newline(out);
-			}
-		} 
+			} 
+		} else {
+			out.write("]");
+			newline(out);
+		}
 	}
 
 	protected void printCDvOrdinal(CDvOrdinal cordinal, int indent, Writer out)

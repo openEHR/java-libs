@@ -34,7 +34,7 @@ public class CCodePhraseTest extends SerializerTestBase {
 		clean();
 		outputter.printCCodePhrase(ccoded, 0, out);
 		verify("[local::at3102.0]\r\n");
-	}
+	}	
 	
 	public void testPrintCCodePhraseWithSingleCodeAssumedValue() 
 			throws Exception {
@@ -60,5 +60,13 @@ public class CCodePhraseTest extends SerializerTestBase {
 		outputter.printCCodePhrase(ccoded, 0, out);
 		verifyByFile("c-code-phrase-test.adl");		
 	}
-
+	
+	public void testPrintCCodePhraseWithNoCode() throws Exception {
+		String terminology = "local";
+		CCodePhrase ccoded = new CCodePhrase("/path", null, null, null, 
+				new TerminologyID(terminology), null, null,	null);
+		clean();
+		outputter.printCCodePhrase(ccoded, 0, out);
+		verify("[local::]\r\n");
+	}
 }
