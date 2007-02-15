@@ -1,3 +1,6 @@
+2007/02/15
+.fixed parsing translations without accreditation
+
 2007/02/14
 .improved c_dv_quantity parsing
 

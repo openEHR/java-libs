@@ -670,21 +670,26 @@ Map<String, TranslationDetails> translations() :
   TranslationDetails td;	
   Map<String, TranslationDetails> map = new HashMap<String, TranslationDetails>();
   Map<String, String> author;
-  String  accreditation;
+  String  accreditation = null;
   Map<String, String> otherDetails = null;
 }
 {
   (
     <SYM_L_BRACKET> lang = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
+      
       <SYM_LANG_LANGUAGE> <SYM_EQ> <SYM_LT>
         string_value() // TODO check with lang?
       <SYM_GT>
       <SYM_AUTHOR> <SYM_EQ> <SYM_LT>
         author = string_string_map()
       <SYM_GT>
-      <SYM_ACCREDITATION> <SYM_EQ> <SYM_LT>
-        accreditation = string_value()
-      <SYM_GT>
+      
+      [
+      	<SYM_ACCREDITATION> <SYM_EQ> <SYM_LT>
+        	accreditation = string_value()
+      	<SYM_GT>
+      ]
+      
       [ 
         <SYM_LANG_OTHER_DETAILS> <SYM_EQ> <SYM_LT>
           otherDetails = string_string_map()
