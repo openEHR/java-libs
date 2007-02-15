@@ -1,3 +1,8 @@
+2007/02/14
+.better interval output for same lower and upper limit
+.added precision in CDvQuantity output
+.added ConstraintRef output
+
 2007/02/13
 .added support for translations
 .fixed archetypeInternalRef output bug

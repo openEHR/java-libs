@@ -16,37 +16,16 @@ package org.openehr.am.serialize;
 
 import java.util.*;
 
-import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
-import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
-import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
-import org.openehr.rm.support.identification.TerminologyID;
 
-public class DomainTypeTest extends SerializerTestBase {
-
-	public DomainTypeTest(String test) {
-		super(test);
-	}
-	
-	public void testPrintCDvOrdinal() throws Exception {
-		Set<Ordinal> list = new LinkedHashSet<Ordinal>();
-		for (int i = 1; i <= 4; i++) {
-			list.add(new Ordinal(i, new CodePhrase("local", "at200" + i)));
-		}
-		CDvOrdinal cordinal = new CDvOrdinal("/path", null, null, null, list, 
-				null, null);
-		clean();
-		outputter.printCDvOrdinal(cordinal, 0, out);
-		verify("1|[local::at2001],\r\n" + "2|[local::at2002],\r\n"
-				+ "3|[local::at2003],\r\n" + "4|[local::at2004]\r\n");
-	}
+public class CDvQuantityTest extends SerializerTestBase {
 
 	public void testPrintCDvQuantity() throws Exception {
 		CDvQuantityItem item1 = new CDvQuantityItem(new Interval<Double>(0.0,
-				200.0), "year");
+				200.0), new Interval<Integer>(2, 2), "year");
 		CDvQuantityItem item2 = new CDvQuantityItem(new Interval<Double>(1.0,
 				36.0), "month");
 		List<CDvQuantityItem> list = new ArrayList<CDvQuantityItem>();
@@ -58,14 +37,7 @@ public class DomainTypeTest extends SerializerTestBase {
 
 		clean();
 		outputter.printCDvQuantity(cquantity, 0, out);
-		verify("C_QUANTITY <\r\n" + "    property = <[openehr::128]>\r\n"
-				+ "    list = <\r\n" + "        [\"1\"] = <\r\n"
-				+ "            units = <\"year\">\r\n"
-				+ "            magnitude = <|0.0..200.0|>\r\n"
-				+ "        >\r\n" + "        [\"2\"] = <\r\n"
-				+ "            units = <\"month\">\r\n"
-				+ "            magnitude = <|1.0..36.0|>\r\n" + "        >\r\n"
-				+ "    >\r\n" + ">\r\n");
+		verifyByFile("c-dv-quantity-test.adl");
 	}
 
 }

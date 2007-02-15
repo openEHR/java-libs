@@ -513,7 +513,17 @@ public class ADLSerializer {
 			printArchetypeInternalRef((ArchetypeInternalRef) cobj, indent, out);
 		} else if (cobj instanceof ArchetypeSlot) {
 			printArchetypeSlot((ArchetypeSlot) cobj, indent, out);
+		} else if (cobj instanceof ConstraintRef) {
+			printConstraintRef((ConstraintRef) cobj, indent, out);
 		}
+	}
+	
+	protected void printConstraintRef(ConstraintRef ref, int indent, Writer out) throws IOException {
+		indent(indent, out);
+		out.write("[");
+		out.write(ref.getReference());
+		out.write("]");
+		newline(out);
 	}
 
 	protected void printCardinality(Cardinality cardinality, Writer out)
@@ -640,7 +650,7 @@ public class ADLSerializer {
 	protected void printCDvQuantity(CDvQuantity cquantity, int indent,
 			Writer out) throws IOException {
 		indent(indent, out);
-		out.write("C_QUANTITY <");
+		out.write("C_DV_QUANTITY <");
 		newline(out);
 		indent(indent + 1, out);
 		CodePhrase property = cquantity.getProperty();
@@ -674,6 +684,15 @@ public class ADLSerializer {
 					indent(indent + 3, out);
 					out.write("magnitude = <");
 					printInterval(value, out);
+					out.write(">");
+					newline(out);
+				}
+				
+				Interval<Integer> precision = item.getPrecision();
+				if (precision != null) {
+					indent(indent + 3, out);
+					out.write("precision = <");
+					printInterval(precision, out);
 					out.write(">");
 					newline(out);
 				}
@@ -1061,9 +1080,15 @@ public class ADLSerializer {
 			throws IOException {
 		out.write("|");
 		if (interval.getLower() != null && interval.getUpper() != null) {
-			out.write(interval.getLower().toString());
-			out.write("..");
-			out.write(interval.getUpper().toString());
+			if(interval.getLower().equals(interval.getUpper())
+					&& interval.isLowerInclusive() 
+					&& interval.isUpperInclusive()) {
+				out.write(interval.getLower().toString());
+			} else {
+				out.write(interval.getLower().toString());
+				out.write("..");
+				out.write(interval.getUpper().toString());
+			}
 		} else if (interval.getLower() == null) {
 			out.write("<");
 			if (interval.isUpperInclusive()) {

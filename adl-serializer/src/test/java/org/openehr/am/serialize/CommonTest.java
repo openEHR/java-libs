@@ -104,6 +104,11 @@ public class CommonTest extends SerializerTestBase {
 		outputter.printInterval(new Interval<Integer>(0, null, true, false),
 				out);
 		verify("|>=0|");
+		
+		clean();
+		outputter.printInterval(new Interval<Integer>(2, 2, true, true),
+				out);
+		verify("|2|");		
 	}	
 }
 /*
