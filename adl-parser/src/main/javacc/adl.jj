@@ -319,7 +319,6 @@ PARSER_END(ADLParser)
 | < SYM_EXCLUDE: "exclude">
 | < SYM_START_CBLOCK: "{">
 | < SYM_END_CBLOCK: "}">
-| < SYM_PRECISION: "precision">
 | < SYM_C_DV_QUANTITY: "c_dv_quantity" >: DOMAIN_TYPE_C_QUANTITY
 | < SYM_UNITS: "units">: DOMAIN_TYPE_C_QUANTITY 
 | < SYM_ASSUMED_VALUE: "assumed_value">
@@ -330,7 +329,9 @@ PARSER_END(ADLParser)
   < SYM_PROPERTY: "property">
 | < SYM_LIST: "list">  
 | < SYM_C_QUANTITY_UNITS: "units"> 
-| < SYM_MAGNITUDE: "magnitude">: CADL
+| < SYM_PRECISION: "precision">
+| < SYM_MAGNITUDE: "magnitude">
+| < SYM_C_QUANTITY_ASSUMED_VALUE: "assumed_value">
 | < V_TERMINOLOGY_ID_BLOCK_CQ: "["(<LET_DIG_DUDSLR>)+"::" > : TERM_CODE
 }
 
@@ -2583,11 +2584,12 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
 }
 {
   <SYM_C_DV_QUANTITY> "<"
-    [    	
-	  <SYM_PROPERTY> <SYM_EQ> "<" property = code_phrase() ">"  
-    ] 
-
-	[
+    (
+        	
+	  <SYM_PROPERTY> <SYM_EQ> "<" property = code_phrase() ">" 	 	  
+    
+    | 
+    	
 	  { list = new ArrayList(); }
 	  <SYM_LIST> <SYM_EQ> "<"	  
 	    ( 
@@ -2595,18 +2597,21 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
 	      { list.add(item); }
 	    )+	  	  
 	  ">"
-    ]
+	  
+    )*   
     
     [
-      <SYM_ASSUMED_VALUE> <SYM_EQ> "<"
+      <SYM_C_QUANTITY_ASSUMED_VALUE> <SYM_EQ> "<"
         assumedValue = dv_quantity() 
       ">"
     ]
   ">"	   
   { 
+  	{ token_source.SwitchTo(CADL); }
+  	
   	return new CDvQuantity(path, null, null, parent, list, property, 
-  		defaultValue, assumedValue); 
-  }
+  		defaultValue, assumedValue);  		  	
+  } 
 }
 
 DvQuantity dv_quantity() :
@@ -2617,7 +2622,7 @@ DvQuantity dv_quantity() :
 }
 {
   (	
-    <SYM_UNITS> <SYM_EQ> "<" units = string_value() ">"
+    <SYM_C_QUANTITY_UNITS> <SYM_EQ> "<" units = string_value() ">"
   |  
     <SYM_MAGNITUDE> <SYM_EQ> "<" magnitude = real_value() ">"	  
   |  

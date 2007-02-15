@@ -39,19 +39,6 @@ import java.util.*;
 
 public class CDvQuantityTest extends ParserTestBase {
 
-    public CDvQuantityTest(String test) throws Exception {
-        super(test);
-    }
-
-    /**
-     * The fixture set up called before every test method.
-     */
-    protected void setUp() throws Exception {
-        ADLParser parser = new ADLParser(loadFromClasspath(
-                "adl-test-entry.c_dv_quantity.test.adl"));
-        archetype = parser.parse();
-    }
-
     /**
      * The fixture clean up called after every test method.
      */
@@ -59,8 +46,12 @@ public class CDvQuantityTest extends ParserTestBase {
         archetype = null;
     }
 
-    public void testCDvQuantity() throws Exception {
-        CObject node = archetype.node(
+    public void testParseFullCDvQuantity() throws Exception {
+    	ADLParser parser = new ADLParser(loadFromClasspath(
+        	"adl-test-entry.c_dv_quantity_full.test.adl"));
+    	archetype = parser.parse();
+        
+    	CObject node = archetype.node(
                 "/types[at0001]/items[at10005]/value");
         assertTrue("CDvQuantity expected", node instanceof CDvQuantity);
         CDvQuantity cdvquantity = (CDvQuantity) node;
@@ -92,6 +83,24 @@ public class CDvQuantityTest extends ParserTestBase {
     			item.getValue());
     	assertEquals("unexpected precision interval", precision, 
     			item.getPrecision());    	
+    }
+    
+    public void testParseCDvQuantityOnlyWithProperty() throws Exception {
+    	ADLParser parser = new ADLParser(loadFromClasspath(
+        	"adl-test-entry.c_dv_quantity_property.test.adl"));
+    	archetype = parser.parse();
+    }
+    
+    public void testParseCDvQuantityOnlyWithList() throws Exception {
+    	ADLParser parser = new ADLParser(loadFromClasspath(
+        	"adl-test-entry.c_dv_quantity_list.test.adl"));
+    	archetype = parser.parse();
+    }
+    
+    public void testParseCDvQuantityReversed() throws Exception {
+    	ADLParser parser = new ADLParser(loadFromClasspath(
+        	"adl-test-entry.c_dv_quantity_reversed.test.adl"));
+    	archetype = parser.parse();
     }
 
     private Archetype archetype;
