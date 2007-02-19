@@ -46,7 +46,7 @@ import org.openehr.rm.support.terminology.*;
 import org.openehr.rm.support.measurement.*;
 
 import org.openehr.am.archetype.Archetype;
-import org.openehr.am.archetype.assertion.Assertion;
+import org.openehr.am.archetype.assertion.*;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
 import org.openehr.am.archetype.ontology.*;
@@ -1244,6 +1244,57 @@ AttributeValue attr_val() :
   { return av; }
 }
 
+Set c_includes() :
+{
+  Set set ;
+}
+{
+  <SYM_INCLUDE> set = assertions()
+  { return set; }
+}
+
+Set c_excludes() :
+{
+  Set set;
+}
+{
+  <SYM_EXCLUDE> set = assertions()
+  { return set; }
+}
+
+Set assertions() :
+{
+  Set set = new HashSet();
+  Assertion a;
+}
+{
+  (
+    a = assertion()
+    {
+      set.add(a);
+    }
+  )+
+  { return set; }
+}
+
+Assertion assertion() :
+{
+  String tag = null; 
+  ExpressionItem expression;
+  String stringExpression = null; 
+  List<AssertionVariable> variables = null;	
+}
+{
+  [ 
+    LOOKAHEAD(2)
+    tag = any_identifier() ":" 
+  ] 
+  expression = boolean_expression()
+  { 
+    return new Assertion(tag, expression, stringExpression, variables); 
+  }
+}
+
 Object basic_object_val() :
 {
   Object value;
@@ -1995,7 +2046,7 @@ CComplexObject c_complex_object(String path, CAttribute parent) :
     }    
   }
   <SYM_MATCHES> <SYM_START_CBLOCK>
-    attributes = c_complex_object_body(path)   
+    attributes = c_complex_object_body(path) 
   <SYM_END_CBLOCK>
   {
     return new CComplexObject(path, type, occurrences, nodeID, attributes, parent);
@@ -2094,8 +2145,11 @@ ArchetypeSlot archetype_slot(String path, CAttribute parent) :
 }
 {
   <SYM_ALLOW_ARCHETYPE> type = type_identifier()
+  
   [ nodeID = constraint_ref() ]
-  [ occurrences = c_occurrences() ]
+  
+  occurrences = c_occurrences() 
+  
   <SYM_MATCHES> <SYM_START_CBLOCK>
     [ includes = c_includes() ]
     [ excludes = c_excludes() ]
@@ -2107,6 +2161,15 @@ ArchetypeSlot archetype_slot(String path, CAttribute parent) :
 }
 
 CPrimitiveObject c_primitive_object(String path, CAttribute parent) :
+{
+  CPrimitive c;
+}
+{
+  c = c_primitive()
+  { return new CPrimitiveObject(path, null, null, parent, c); }
+}
+
+CPrimitive c_primitive() :
 {
   CPrimitive c;
 }
@@ -2136,7 +2199,7 @@ CPrimitiveObject c_primitive_object(String path, CAttribute parent) :
     LOOKAHEAD( c_real() )
     c = c_real()
   )
-  { return new CPrimitiveObject(path, null, null, parent, c); }
+  { return c; }
 }
 
 void c_any() :
@@ -2205,25 +2268,7 @@ Set c_invariants() :
   Set set;
 }
 {
-  <SYM_INVARIANT> set = invariants()
-  { return set; }
-}
-
-Set c_includes() :
-{
-  Set set ;
-}
-{
-  <SYM_INCLUDE> set = invariants()
-  { return set; }
-}
-
-Set c_excludes() :
-{
-  Set set;
-}
-{
-  <SYM_EXCLUDE> set = invariants()
+  <SYM_INVARIANT> set = assertions()
   { return set; }
 }
 
@@ -2253,6 +2298,219 @@ Invariant invariant() :
 }
 
 /* ----------------------- expressions ----------------------- */
+ExpressionItem boolean_expression() :
+{
+  ExpressionItem item = null;	
+}
+{  
+  LOOKAHEAD( 2 )	
+  item = boolean_leaf()
+|
+  LOOKAHEAD( 2 )
+  item = boolean_node()
+  
+  { return item; }
+}
+
+ExpressionItem boolean_node() :
+{
+  ExpressionItem ret = null;
+  ExpressionItem item = null;
+  ExpressionItem item2 = null;  
+  OperatorKind op = null;
+  String path = null;
+  boolean precedenceOverridden = false; // TODO
+  Token t = null;	
+  String attrId = null;
+  CPrimitive cp = null;
+}
+{
+(
+  <SYM_EXISTS> path = adl_path()
+  { 
+  	item = ExpressionLeaf.pathConstant(path);
+  	ret = new ExpressionUnaryOperator(ExpressionItem.BOOLEAN,
+  		OperatorKind.OP_EXISTS, precedenceOverridden, item);
+  }
+|
+  attrId = attribute_identifier() <SYM_MATCHES>
+                 (
+                   <SYM_START_CBLOCK> cp = c_primitive() <SYM_END_CBLOCK>
+                   { item2 = new ExpressionLeaf(cp.getType(), cp, 
+                   				ExpressionLeaf.ReferenceType.CONSTANT);  }
+                 |
+                   t = <V_REGEXP>
+                   { item2 = ExpressionLeaf.stringConstant(t.image);  }
+                 )
+  { 
+  	// TODO reference type as ATTRIBUTE?
+  	item = ExpressionLeaf.stringConstant(attrId);
+  	ret = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN, 
+  					OperatorKind.OP_MATCHES, false, item, item2);
+  }	   
+|
+  <SYM_NOT> item = boolean_expression()
+  {
+  	ret = new ExpressionUnaryOperator(ExpressionItem.BOOLEAN,
+  		OperatorKind.OP_NOT, precedenceOverridden, item); 
+  }
+|
+  LOOKAHEAD( 3 )
+  item = arithmetic_expression()
+  (
+      "=" 
+      { op = OperatorKind.OP_EQ; }
+    | 
+      <SYM_NE> 
+      { op = OperatorKind.OP_NE; }
+    | 
+      <SYM_LT> 
+      { op = OperatorKind.OP_LT; }
+    | 
+      <SYM_GT> 
+      { op = OperatorKind.OP_GT; }
+    | 
+      <SYM_LE> 
+      { op = OperatorKind.OP_LE; }
+    | 
+      <SYM_GE>
+      { op = OperatorKind.OP_GE; }
+  )
+  item2 = arithmetic_expression()  
+  { 
+  	ret = new ExpressionBinaryOperator(item.getType(), op, false, item, item2);
+  }
+|
+  LOOKAHEAD( 3 ) 
+  item = boolean_leaf() 
+  (
+	  (
+	    <SYM_AND> 
+	    { op = OperatorKind.OP_AND; }
+	  | 
+	    <SYM_OR>  
+	    { op = OperatorKind.OP_OR; }
+	  |
+	    <SYM_XOR> 
+	    { op = OperatorKind.OP_XOR; }
+	  |    
+	    <SYM_IMPLIES> 
+	    { op = OperatorKind.OP_IMPLIES; }
+	  )
+	  item2 = boolean_expression()
+  )
+  { 
+  	if(item2 == null) {
+  		ret = item;
+  	} else {
+  	ret = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN, op, false, 
+  		item, item2);
+  	}
+  }
+)
+  { return ret; }
+}
+
+ExpressionItem boolean_leaf() :
+{
+  ExpressionItem item = null;
+}
+{
+ 
+  LOOKAHEAD( 3 )
+  "(" item = boolean_expression() ")"
+|
+  <SYM_TRUE>
+  { item = ExpressionLeaf.booleanConstant(true); }
+| 
+  <SYM_FALSE>
+  { item = ExpressionLeaf.booleanConstant(false); }
+ 
+  { return item; }	  
+}
+
+ExpressionItem arithmetic_expression() :
+{
+  ExpressionItem item = null;  
+}
+{
+  LOOKAHEAD( 3 )
+  item = arithmetic_leaf()
+  |
+  LOOKAHEAD( 3 )
+  item = arithmetic_node()
+  { return item; }
+}
+
+ExpressionItem arithmetic_node() :
+{
+  ExpressionItem item = null;
+  ExpressionItem left = null;
+  ExpressionItem right = null;
+  OperatorKind op = null;
+}
+{
+  left = arithmetic_leaf() 
+  (
+	(
+	    "+" 
+	    { op = OperatorKind.OP_PLUS; }
+	  | 
+	    "-" 
+	    { op = OperatorKind.OP_MINUS; }
+	  | 
+	    "*" 
+	    { op = OperatorKind.OP_MULTIPLY; }
+	  | 
+	    "/" 
+	    { op = OperatorKind.OP_DIVIDE; }
+	  | 
+	    "^" 
+	    { op = OperatorKind.OP_EXP; }  
+	)  
+	  
+	right = arithmetic_expression()	  	
+  )  
+  { 
+  	if(right == null) {
+		item = left;
+  	} else {  	
+  		item = new ExpressionBinaryOperator(right.getType(), op, false, left, 
+  				right);	 
+  	}
+  	return item; 
+  }
+}
+
+ExpressionItem arithmetic_leaf() :
+{ 
+  ExpressionItem item = null;
+  Token t = null;
+  String str = null;
+}
+{
+  "(" item = arithmetic_expression() ")"
+| 
+  t = <V_INTEGER>
+  {
+  	int i = Integer.parseInt(t.image);
+  	item = ExpressionLeaf.intConstant(i);
+  }
+| 
+  t = <V_REAL>
+  {
+  	double d = Double.parseDouble(t.image);
+  	item = ExpressionLeaf.realConstant(d);
+  }
+|
+  str = call_path() 
+  {
+  	item = ExpressionLeaf.stringConstant(str);
+  }  
+  {  return item; }
+}
+
+
 
 void Boolean_expression() :
 {}
@@ -3063,8 +3321,23 @@ String path_segment() :
   { return buf.toString(); }	
 }
 
-void call_path() :
-{}
+String call_path() :
 {
-  ( adl_path() "." attribute_identifier() )+ "." attribute_identifier()
+  StringBuffer buf = new StringBuffer();
+  String tmp;
+}
+{
+  ( 
+    tmp = adl_path() 
+    { buf.append(tmp); }
+    
+    "." tmp = attribute_identifier() 
+    { buf.append("." + tmp); }
+  )+ 
+  
+  "." tmp = attribute_identifier()  
+  { 
+  	buf.append("." + tmp);
+  	return buf.toString(); 
+  }
 }

@@ -1,3 +1,6 @@
+2007/02/18
+.improved assertion and archetype_slot parsing
+
 2007/02/15
 .fixed parsing translations without accreditation
 

@@ -1,8 +1,10 @@
 package se.acode.openehr.parser;
 
 import org.openehr.am.archetype.*;
+import org.openehr.am.archetype.assertion.Assertion;
 import org.openehr.am.archetype.constraintmodel.ArchetypeSlot;
 import org.openehr.am.archetype.constraintmodel.CObject;
+import org.openehr.rm.support.basic.Interval;
 
 public class ArchetypeSlotTest extends ParserTestBase {
 
@@ -26,7 +28,14 @@ public class ArchetypeSlotTest extends ParserTestBase {
         assertTrue("ArchetypeSlot expected", node instanceof ArchetypeSlot);
         
         ArchetypeSlot slot = (ArchetypeSlot) node;
-        assertEquals("includes total wrong", 2, slot.getIncludes().size());
-        assertEquals("Excludes total wrong", 1, slot.getExcludes().size());
+        assertEquals("nodeId wrong", "at0001", slot.getNodeID());
+        assertEquals("rmTypeName wrong", "SECTION", slot.getRmTypeName());
+        assertEquals("occurrences wrong", new Interval<Integer>(0, 1), 
+        		slot.getOccurrences());
+        
+        assertEquals("includes total wrong", 1, slot.getIncludes().size());
+        assertEquals("Excludes total wrong", 2, slot.getExcludes().size());
+        
+        Assertion assertion = slot.getIncludes().iterator().next();        
     }
 }
