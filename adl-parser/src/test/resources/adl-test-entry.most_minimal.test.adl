@@ -5,15 +5,12 @@ concept
 	[at0000]	--  empty definition test
 
 language
-	original_language = <"en"> 
+	original_language = <[ISO_639-1::en]>
 	
 definition
 	ENTRY[at0000] matches {*}
 
 ontology 
-	primary_language = <"en">
-	languages_available = <"en", ...>
-
 	term_definitions = <
 		["en"] = <
 			items = <

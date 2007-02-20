@@ -5,12 +5,12 @@ concept
     [at0000]    -- Body mass index
 
 language
-	original_language = <"en"> 
+	original_language = <[ISO_639-1::en]>
 
 description
     details = <
         ["en"] = <
-            language = <"en">
+            language = <[ISO_639-1::en]>
             purpose = <"To record the body mass index. This is index is calculated by dividing the weight in kg by the height in metres squared.">
             use = <"To record BMI">
             keywords = <"obesity", "index">

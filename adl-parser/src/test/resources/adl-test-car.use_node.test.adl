@@ -4,7 +4,7 @@ concept
 	[at0000] 	   									-- car
 
 language
-	original_language = <"en"> 
+	original_language = <[ISO_639-1::en]>
 	
 definition
 	CAR [at0000] matches {

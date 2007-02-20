@@ -5,7 +5,7 @@ concept
 	[at0000]	--  basic data types test 1
 
 language
-	original_language = <"en"> 
+	original_language = <[ISO_639-1::en]>
 	
 definition
 	ENTRY[at0000] matches {	

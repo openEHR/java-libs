@@ -269,7 +269,7 @@ PARSER_END(ADLParser)
 | < SYM_KEYWORDS: "keywords">
 | < SYM_RIGHTS: "rights">
 | < SYM_DESCRIPTION_WORD: "description">
-| <SYM_LANGUAGE_WORD: "language">
+| < SYM_LANGUAGE_WORD: "language">
 }
 
 < * > TOKEN [IGNORE_CASE]: /* KEYWORDS - dADL */
@@ -332,7 +332,6 @@ PARSER_END(ADLParser)
 | < SYM_PRECISION: "precision">
 | < SYM_MAGNITUDE: "magnitude">
 | < SYM_C_QUANTITY_ASSUMED_VALUE: "assumed_value">
-| < V_TERMINOLOGY_ID_BLOCK_CQ: "["(<LET_DIG_DUDSLR>)+"::" > : TERM_CODE
 }
 
 < * > TOKEN: /* SYMBOLS - common */
@@ -476,7 +475,9 @@ TOKEN : /* IDENTIFIERS - ADL */
 |
   < #PATH_SEGMENT: "/" <V_ATTRIBUTE_IDENTIFIER> ( <V_LOCAL_TERM_CODE_REF>)? >
 |
-  < ADL_PATH: (  <PATH_SEGMENT> )+ >                    
+  < ADL_PATH: (  <PATH_SEGMENT> )+ >      
+| 
+  < V_CODE_PHRASE: "["(<LET_DIG_DUDSLR>)+"::"(<LET_DIG_DUDS>)+"]">              
 }
 
 /* ----------------------- TOKEN - dADL ---------------------------- */
@@ -605,6 +606,9 @@ Archetype archetype() :
   String parent = null;
   String concept;
   String lang = null;
+  String langTerm = null;
+  String langCode = null;
+  CodePhrase originalLanguage = null;
   Map<String, TranslationDetails> translations = null; 
   TranslationDetails translationDetails = null;
   RevisionHistory revisionHistory = null;
@@ -634,7 +638,7 @@ Archetype archetype() :
   
   [
     <SYM_LANGUAGE>  
-  	<SYM_ORIGINAL_LANGUAGE> <SYM_EQ> "<" lang = string_value() ">"  	
+  	<SYM_ORIGINAL_LANGUAGE> <SYM_EQ> "<" originalLanguage = code_phrase() ">"
     [ 
       <SYM_TRANSLATIONS> <SYM_EQ> "<"
       
@@ -653,9 +657,9 @@ Archetype archetype() :
 
   {
   	if(missingLanguageCompatible) {
-  		lang = ontology.getPrimaryLanguage();		
-  	}
-    CodePhrase originalLanguage = new CodePhrase("languages", lang);     	
+  		langCode = ontology.getPrimaryLanguage();		
+  		originalLanguage = new CodePhrase("ISO_639-1", langCode);  
+  	}       	
   	
     return new Archetype(adlVersion, id, parent, concept, originalLanguage,
     		translations, description, revisionHistory, isControlled,
@@ -663,10 +667,29 @@ Archetype archetype() :
   }
 }
 
+CodePhrase code_phrase() : 
+{
+  Token t; 	
+  String lang = null;
+  String langTerm = null;
+  String langCode = null;
+}
+{
+  t = <V_CODE_PHRASE> 
+    { 
+  	  lang = t.image; 
+  	  int i = lang.indexOf("::");
+  	  langTerm = lang.substring(1, i);
+  	  langCode = lang.substring(i + 2, lang.length() - 1);
+    }  	  
+  { return new CodePhrase(langTerm, langCode); }	
+}
+
 Map<String, TranslationDetails> translations() : 
 {
   Token t;
-  String lang;
+  String langAsKey;
+  CodePhrase language;
   TranslationDetails td;	
   Map<String, TranslationDetails> map = new HashMap<String, TranslationDetails>();
   Map<String, String> author;
@@ -675,11 +698,9 @@ Map<String, TranslationDetails> translations() :
 }
 {
   (
-    <SYM_L_BRACKET> lang = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
+    <SYM_L_BRACKET> langAsKey = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
       
-      <SYM_LANG_LANGUAGE> <SYM_EQ> <SYM_LT>
-        string_value() // TODO check with lang?
-      <SYM_GT>
+      <SYM_LANG_LANGUAGE> <SYM_EQ> "<" language = code_phrase() ">"
       <SYM_AUTHOR> <SYM_EQ> <SYM_LT>
         author = string_string_map()
       <SYM_GT>
@@ -697,12 +718,10 @@ Map<String, TranslationDetails> translations() :
       ]
     <SYM_GT>	    	    
     { 
-      CodePhrase language = new CodePhrase("languages", lang);	
-      
       // TODO null terminology service
       td = new TranslationDetails(language, author, accreditation, 
       		otherDetails, null); 
-      map.put(lang, td);
+      map.put(langAsKey, td);
     }
   )+
   { return map; }	
@@ -833,7 +852,8 @@ Map map_value() :
 
 ResourceDescriptionItem arch_description_item() :
 {
-  String lang = null;	
+  String langAsKey = null;	
+  CodePhrase lang = null;	
   String purpose = null;
   String use = null;
   String misuse = null;
@@ -845,9 +865,9 @@ ResourceDescriptionItem arch_description_item() :
   TerminologyService terminologyService = null; // not used
 }
 {
-  "[" lang = string_value() "]" <SYM_EQ> "<"
+  "[" langAsKey = string_value() "]" <SYM_EQ> "<"
   (
-    <SYM_LANGUAGE_WORD> <SYM_EQ> "<" string_value() ">"
+    <SYM_LANGUAGE_WORD> <SYM_EQ> "<" lang = code_phrase() ">"
   | 
     <SYM_PURPOSE> <SYM_EQ> "<" purpose = string_value() ">"
   |  
@@ -885,7 +905,6 @@ ResourceDescriptionItem arch_description_item() :
    )*
   ">"
   {
-  	CodePhrase langCode = new CodePhrase("languages", lang);    
     if(use != null && use.trim().length() == 0) {
       use = null;
     }
@@ -896,7 +915,7 @@ ResourceDescriptionItem arch_description_item() :
       copyright = null;
     }  
 
-    return new ResourceDescriptionItem(langCode, purpose, keywords,
+    return new ResourceDescriptionItem(lang, purpose, keywords,
     	use, misuse, copyright, originalResourceURI, otherDetails,
     	terminologyService);
   }
@@ -918,8 +937,8 @@ CComplexObject arch_definition() :
 
 ArchetypeOntology arch_ontology() :
 {
-  String primaryLanguage;
-  List languages;
+  String primaryLanguage = null;
+  List languages = null;
   List terminologies = null;
   List termDefinitionsList = new ArrayList();
   List constraintDefinitionsList = new ArrayList();
@@ -934,8 +953,8 @@ ArchetypeOntology arch_ontology() :
 }
 {
   <SYM_ONTOLOGY>
-  primaryLanguage = primary_language()
-  languages = languages_available()
+  [primaryLanguage = primary_language()]
+  [languages = languages_available()]
   [ terminologies = terminologies_available() ]
 
   termDefinitionsList = term_definitions_list()
@@ -1143,7 +1162,7 @@ TermBindingItem term_binding_item() :
          }
     )*
   ">"
-  { return new TermBindingItem(code, terms);; }
+  { return new TermBindingItem(code, terms); }
 }
 
 QueryBindingItem query_binding_item() :
@@ -1990,11 +2009,11 @@ Interval duration_interval_value() :
 
 String term_code() :
 {
-  Token t;
+  CodePhrase code;
 }
 {
-  t = <V_QUALIFIED_TERM_CODE_REF>
-  { return t.image; }
+  code = code_phrase()
+  { return "[" + code.getTerminologyID() + "::" + code.getCodeString() + "]"; }
 }
 
 List term_code_list_value() :
@@ -2766,26 +2785,13 @@ org.openehr.am.openehrprofile.datatypes.quantity.Ordinal ordinal() :
 {
   Token t;
   int value;
-  String terminology;
-  String code;
+  CodePhrase code;
 }
 {
-  value = integer_value()
-  "|" 
-    t = <V_TERMINOLOGY_ID_BLOCK> 
-    { 
-		// remove leading "[" and trailing "::"
-    	terminology = t.image; 
-    	terminology = terminology.substring(1, terminology.length() - 2);
-    }
-    t = <V_TERM_CODE> { code = t.image; }
-  "]"
+  value = integer_value() "|" code = code_phrase()
   { 
-  	// leave lexical state "TERM_CODE"
-  	token_source.SwitchTo(CADL);
-  	
   	return new org.openehr.am.openehrprofile.datatypes.quantity.Ordinal(
-  		value, new CodePhrase(terminology, code)); 
+  		value, code); 
   }
 }
 
@@ -2895,29 +2901,6 @@ DvQuantity dv_quantity() :
   	return new DvQuantity(units, magnitude, precision, measureServ); 
   }	
 }
-
-CodePhrase code_phrase() :
-{
-  Token t = null;	
-  String terminology = null;
-  String code = null;
-}
-{
-  t = <V_TERMINOLOGY_ID_BLOCK_CQ> 
-	{ 
-      // remove leading "[" and trailing "::"
-	  terminology = t.image; 
-	  terminology = terminology.substring(1, terminology.length() - 2);
-	}	
-	t = <V_TERM_CODE> { code = t.image; }	    
-  "]" 	  	  
-  {
-  	// leave lexical state "TERM_CODE"
-  	token_source.SwitchTo(DOMAIN_TYPE_C_QUANTITY);
-  	
-  	return new CodePhrase(terminology, code);
-  }  	
-}	 	
 
 CDvQuantityItem c_dv_quantity_item() :
 {

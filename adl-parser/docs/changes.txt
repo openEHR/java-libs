@@ -1,3 +1,7 @@
+2007/02/19
+.made ontology primary_language and languages optional
+.use code_phrase for language parsing in translations and descriptions
+
 2007/02/18
 .improved assertion and archetype_slot parsing
 

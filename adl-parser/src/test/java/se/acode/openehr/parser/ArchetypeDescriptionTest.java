@@ -71,7 +71,7 @@ public class ArchetypeDescriptionTest extends ParserTestBase {
 
 		ResourceDescriptionItem item = details.get(0);
 		assertNotNull("descriptionItem null", item);
-		CodePhrase language = new CodePhrase("languages", "en");
+		CodePhrase language = new CodePhrase("ISO_639-1", "en");
 		assertEquals("language wrong", language, item.getLanguage());
 
 		assertEquals(
