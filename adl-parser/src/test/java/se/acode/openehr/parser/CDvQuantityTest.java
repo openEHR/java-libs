@@ -102,6 +102,12 @@ public class CDvQuantityTest extends ParserTestBase {
         	"adl-test-entry.c_dv_quantity_reversed.test.adl"));
     	archetype = parser.parse();
     }
+    
+    public void testParseCDvQuantityItemWithOnlyUnits() throws Exception {
+    	ADLParser parser = new ADLParser(loadFromClasspath(
+        	"adl-test-entry.c_dv_quantity_item_units_only.test.adl"));
+    	archetype = parser.parse();
+    }
 
     private Archetype archetype;
 }

@@ -68,9 +68,13 @@ public class ADLParser {
 
   /* static fields */
   private static final String CHARSET = "UTF-8";
+  private static final String ATTRIBUTE_UNKNOWN = "__unknown__";
 
-  /* member fields */
+  /* member flags for backwards compatibility */
   private boolean missingLanguageCompatible = false;
+  private boolean emptyPurposeCompatible = false;
+  
+  /* member fields */  
   private MeasurementService measureServ = 
   			SimpleMeasurementService.getInstance();
   	
@@ -87,28 +91,35 @@ public class ADLParser {
   }
   
   /* Constructor that takes file as input */
-  public ADLParser(File file, boolean missingLanguageCompatible) 
-  		throws IOException {
+  public ADLParser(File file, boolean missingLanguageCompatible,
+      boolean emptyPurposeCompatible) throws IOException {
       this(new FileInputStream(file), CHARSET);
       this.missingLanguageCompatible = missingLanguageCompatible;
+      this.emptyPurposeCompatible = emptyPurposeCompatible;
   }
 
   /* Constructor that takes string as input */
-  public ADLParser(String value, boolean missingLanguageCompatible) {
+  public ADLParser(String value, boolean missingLanguageCompatible,
+  		boolean emptyPurposeCompatible) {
       this(new BufferedReader(new StringReader(value)));
       this.missingLanguageCompatible = missingLanguageCompatible;
+      this.emptyPurposeCompatible = emptyPurposeCompatible;
   }
   
   /* Constructor that takes Reader as input */
-  public ADLParser(Reader reader, boolean missingLanguageCompatible) {
+  public ADLParser(Reader reader, boolean missingLanguageCompatible,
+  		boolean emptyPurposeCompatible) {
       this(reader);
       this.missingLanguageCompatible = missingLanguageCompatible;
+      this.emptyPurposeCompatible = emptyPurposeCompatible;
   }
   
   /* Constructor that takes InputStream as input */
-  public ADLParser(InputStream input, boolean missingLanguageCompatible) {
+  public ADLParser(InputStream input, boolean missingLanguageCompatible,
+  		boolean emptyPurposeCompatible) {
       this(input);
       this.missingLanguageCompatible = missingLanguageCompatible;
+      this.emptyPurposeCompatible = emptyPurposeCompatible;
   }
 
   /* =========================  public interface ======================== */
@@ -142,7 +153,8 @@ public class ADLParser {
     if (args.length == 1) {
       System.out.println(title + "  Reading from file " + args[0] + " . . .");
       try {
-        parser = new ADLParser(new File(args[0]), true);
+      	// be permissive in console mode
+        parser = new ADLParser(new File(args[0]), true, true);
       } catch (IOException e) {
         System.out.println(title + "  File " + args[0] + " not found.");
         return;
@@ -166,7 +178,7 @@ public class ADLParser {
     			continue;
     		}
     		if(parser == null) {
-    			parser = new ADLParser(files[i]);
+    			parser = new ADLParser(files[i], true, true);
     		} else {
     			parser.reInit(files[i]);
     		}    		
@@ -432,9 +444,9 @@ TOKEN : /* IDENTIFIERS - ADL */
   ((<DIG>)+["d","D"])?("T"((<DIG>)+["h","H"])?((<DIG>)+["m","M"])?
   ((<DIG>)+["s","S"])?)?>
 |
-  < V_ISO8601_DURATION_PATTERN: "P"["w","W"]|"P"(["y","Y"])?(["m","M"])?
-  (["d","D"])?"T"(["h","H"])?(["m","M"])?(["s","S"])? |"P"(["y","Y"])?
-  (["m","M"])?(["d","D"])?>
+  < V_ISO8601_DURATION_CONSTRAINT_PATTERN: "P"(["y","Y"])?(["m","M"])?
+  (["w","W"])?(["d","D"])?"T"(["h","H"])?(["m","M"])?(["s","S"])? 
+  |"P"(["y","Y"])?(["m","M"])?(["w","W"])?(["d","D"])?>
 |
   < V_DATE: (["0"-"9"]){4} "-" ( "0"["1"-"9"] | "1"["0"-"2"] ) "-"
             ( "0"["1"-"9"] | ["1"-"2"]["0"-"9"]|"3"["0"-"1"] ) >
@@ -656,7 +668,7 @@ Archetype archetype() :
   <EOF>
 
   {
-  	if(missingLanguageCompatible) {
+  	if(originalLanguage == null && missingLanguageCompatible) {
   		langCode = ontology.getPrimaryLanguage();		
   		originalLanguage = new CodePhrase("ISO_639-1", langCode);  
   	}       	
@@ -792,7 +804,7 @@ ResourceDescription arch_description() :
   List details = new ArrayList();
   ResourceDescriptionItem item = null;
   String archetypePackageURI = null;
-  Map otherDetails = new HashMap(); // not used
+  Map otherDetails = null;
   Archetype parentArchetype = null;
   AuthoredResource parent = null; // not used  
 }
@@ -801,7 +813,9 @@ ResourceDescription arch_description() :
    (
      <SYM_LIFECYCLE_STATE> <SYM_EQ> "<" lifecycleState = string_value() ">"
    |
-     <SYM_ARCHETYPE_PACKAGE_URI> <SYM_EQ> "<" archetypePackageURI = string_value() ">"
+     <SYM_ARCHETYPE_PACKAGE_URI> <SYM_EQ> "<" 
+       archetypePackageURI = string_value() 
+     ">"
    |
      <SYM_DETAILS> <SYM_EQ> "<"
          (
@@ -813,13 +827,23 @@ ResourceDescription arch_description() :
          )+
      ">"
    |
-   	 <SYM_ORIGINAL_AUTHOR> <SYM_EQ> originalAuthor = map_value()         
+   	 <SYM_ORIGINAL_AUTHOR> <SYM_EQ> "<" 
+   	 	originalAuthor = string_string_map()         
+   	 ">"
    |    
      <SYM_COPYRIGHT> <SYM_EQ> "<" string_value() ">" 
    |    
      <SYM_OTHER_CONTRIBUTORS> <SYM_EQ> "<" 
-       [ otherContributors = string_list_value() ] 
+        ( 
+          otherContributors = string_list_value()   
+        |
+          otherContributors = index_string_list()
+        )   
      ">"    
+   | 
+     <SYM_OTHER_DETAILS> <SYM_EQ> "<"
+     	otherDetails = string_string_map()
+     ">"
    )*
    {
      ResourceDescription resourceDescription = new ResourceDescription(
@@ -827,26 +851,6 @@ ResourceDescription arch_description() :
             archetypePackageURI, otherDetails, parent);
 
      return resourceDescription;     
-   }
-}
-
-Map map_value() :
-{
-  Map map = new HashMap();
-  String key = null;
-  String value = null;
-}
-{
-  "<"
-       (
-         "[" key = string_value() "]" <SYM_EQ> "<" value = string_value() ">"
-         {
-           if( key != null && value != null) map.put(key, value);
-         }
-       )+
-   ">"
-   {
-     return map;
    }
 }
 
@@ -872,7 +876,7 @@ ResourceDescriptionItem arch_description_item() :
     <SYM_PURPOSE> <SYM_EQ> "<" purpose = string_value() ">"
   |  
           
-      <SYM_KEYWORDS> <SYM_EQ> "<" 
+    <SYM_KEYWORDS> <SYM_EQ> "<" 
         (
           LOOKAHEAD(2) 
           keywords = string_list_value() 
@@ -897,11 +901,14 @@ ResourceDescriptionItem arch_description_item() :
      <SYM_COPYRIGHT> <SYM_EQ> "<" copyright = string_value() ">" 
    
    |     
-      
-      { String url = null; }
-      <SYM_ORIGINAL_RESOURCE_URI> <SYM_EQ> "<" url = string_value() ">" 
-      // TODO: where is the key for url?
-      { originalResourceURI.put(url, url); }	
+     <SYM_ORIGINAL_RESOURCE_URI> <SYM_EQ> "<" 
+     	originalResourceURI = string_string_map()
+	 ">"	
+   | 
+     <SYM_OTHER_DETAILS> <SYM_EQ> "<"
+     	otherDetails = string_string_map()
+     ">"	 
+	
    )*
   ">"
   {
@@ -914,6 +921,10 @@ ResourceDescriptionItem arch_description_item() :
     if(copyright != null && copyright.trim().length() == 0) {
       copyright = null;
     }  
+    
+    if((purpose == null || purpose.length() == 0) && emptyPurposeCompatible) {
+    	purpose = ATTRIBUTE_UNKNOWN;
+    } 
 
     return new ResourceDescriptionItem(lang, purpose, keywords,
     	use, misuse, copyright, originalResourceURI, otherDetails,
@@ -1133,7 +1144,7 @@ OntologyBinding ontology_binding_body() :
 	      LOOKAHEAD( term_binding_item() )
 	      item = term_binding_item()
 	      { bindingList.add(item); }
-	    )+
+	    )*
 	 ">"
   ">"
   { return new OntologyBinding(terminology, bindingList); }
@@ -1452,6 +1463,21 @@ String string_value() :
   {
     return value.substring(1, value.length() - 1);
   }
+}
+
+List index_string_list() :{
+  List list = new ArrayList();
+  String value = null;
+  String index = null; // not used
+}
+{
+  (
+    <SYM_L_BRACKET> index = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
+      ( value = string_value())    
+      { list.add(value); }
+    <SYM_GT>
+  )*
+  { return list.isEmpty() ? null : list; }
 }
 
 List string_list_value() :
@@ -2054,7 +2080,7 @@ CComplexObject c_complex_object(String path, CAttribute parent) :
   List attributes;
 }
 {
-  type = type_identifier()
+  type = type_identifier() [ "<"  type_identifier() ">" ]
   [ nodeID = constraint_ref() ]
   [ occurrences = c_occurrences() ]
   {
@@ -2167,7 +2193,7 @@ ArchetypeSlot archetype_slot(String path, CAttribute parent) :
   
   [ nodeID = constraint_ref() ]
   
-  occurrences = c_occurrences() 
+  [ occurrences = c_occurrences() ] 
   
   <SYM_MATCHES> <SYM_START_CBLOCK>
     [ includes = c_includes() ]
@@ -2804,8 +2830,10 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
   String assumed = null;
   CodePhrase assumedValue = null;
   CodePhrase defaultValue = null; // not used 
+  CodePhrase singleValue = null;
 }
 {
+  (	
   t = <V_TERMINOLOGY_ID_BLOCK> 
     { 
 		// remove leading "[" and trailing "::"
@@ -2831,13 +2859,24 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
       ]	
     ]
   "]"
-  { 
-  	// leave lexical state "TERM_CODE"
-  	token_source.SwitchTo(CADL);
-  	
+    { 
+    	// leave lexical state "TERM_CODE"
+    	token_source.SwitchTo(CADL); 
+    }
+  | 
+    singleValue = code_phrase()
+    { 
+      codeList = new ArrayList();
+      codeList.add(singleValue.getCodeString());
+      terminologyId = singleValue.getTerminologyID();
+    }
+  )
+  {   	
   	return new CCodePhrase(path, null, null, parent, terminologyId, codeList,
   		defaultValue, assumedValue); 
   }
+  
+  
 }
 
 CDvQuantity c_dv_quantity(String path, CAttribute parent) :
@@ -2915,9 +2954,11 @@ CDvQuantityItem c_dv_quantity_item() :
       units = string_value() 
     ">"
     
-    <SYM_MAGNITUDE> <SYM_EQ> "<" 
-      value = real_interval_value()       
-    ">"
+    [
+      <SYM_MAGNITUDE> <SYM_EQ> "<" 
+        value = real_interval_value()       
+      ">"
+    ]
     
     [
       <SYM_PRECISION> <SYM_EQ> "<" 
@@ -2929,6 +2970,22 @@ CDvQuantityItem c_dv_quantity_item() :
   	return new CDvQuantityItem(value, precision, units); 
   } 		
 }
+
+List<String> string_list() :
+{
+  List<String> list = new ArrayList();
+  String value = null;
+}
+{
+  (
+    <SYM_L_BRACKET> string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>     	
+      value = string_value()
+    <SYM_GT>    
+    { list.add(value); }  
+  )*		
+	
+  { return list; }		
+}	
 
 CInteger c_integer() :
 {
@@ -3104,7 +3161,7 @@ CDuration c_duration() :
 }
 {
  (
-    t = <V_ISO8601_DURATION_PATTERN>
+    t = <V_ISO8601_DURATION_CONSTRAINT_PATTERN>
     { pattern = t.image; }  
   |
     value = duration_value()

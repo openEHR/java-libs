@@ -44,6 +44,11 @@ definition
 								F43.00] -- assumed value
                         }
                     }	
+                    ELEMENT[at10006] matches {	-- code_phrase
+                        value matches {
+                            [openehr::431] -- single code
+                        }
+                    }	
                 }
             }
         }
