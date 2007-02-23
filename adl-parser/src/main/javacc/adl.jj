@@ -2790,6 +2790,7 @@ CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
   Set list = new HashSet();
   org.openehr.am.openehrprofile.datatypes.quantity.Ordinal o;
   DvOrdinal defaultValue = null;
+  int assumed = -1;
   Ordinal assumedValue = null;
 }
 {
@@ -2799,7 +2800,16 @@ CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
         { list.add(o); }
   )*
   [
-  	";" assumedValue = ordinal()  	
+  	";" assumed = integer_value()
+  	{
+  	  for(Iterator it = list.iterator(); it.hasNext();) {
+  	  	Ordinal ord = (Ordinal) it.next();
+  	  	if(ord.getValue() == assumed) {
+  	  		assumedValue = ord;
+  	  		break;
+  	  	}
+  	  }	  
+  	}  	
   ]
   { 
   	return new CDvOrdinal(path, null, null, parent, list, defaultValue,

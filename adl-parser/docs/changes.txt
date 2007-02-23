@@ -1,3 +1,6 @@
+2007/02/23
+.updated assumed value parsing for CDvQuantity
+
 2007/02/20
 .added support for empty purpose
 .fixed parsing c_code_phrase with single code

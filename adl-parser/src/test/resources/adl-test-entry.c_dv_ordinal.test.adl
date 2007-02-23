@@ -28,7 +28,7 @@ definition
                             2|[local::at0003.2],  	-- tablet
                             3|[local::at0003.3],  	-- solution
                             4|[local::at0003.4];  	-- suspension
-                            0|[local::at0003.0]     -- assumed value
+                            0     -- assumed value
                         }
                     }   
                                      		
