@@ -2916,13 +2916,13 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
 	    )+	  	  
 	  ">"
 	  
-    )*   
+   |   
     
-    [
       <SYM_C_QUANTITY_ASSUMED_VALUE> <SYM_EQ> "<"
         assumedValue = dv_quantity() 
       ">"
-    ]
+    
+    )*
   ">"	   
   { 
   	{ token_source.SwitchTo(CADL); }
