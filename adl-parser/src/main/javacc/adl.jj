@@ -2080,7 +2080,7 @@ CComplexObject c_complex_object(String path, CAttribute parent) :
   List attributes;
 }
 {
-  type = type_identifier() [ "<"  type_identifier() ">" ]
+  type = type_identifier()
   [ nodeID = constraint_ref() ]
   [ occurrences = c_occurrences() ]
   {
@@ -3275,10 +3275,16 @@ String any_identifier() :
 String type_identifier() :
 {
   Token t;
+  String type;
 }
 {
-  t = <V_TYPE_IDENTIFIER>
-  { return t.image; }
+  t = <V_TYPE_IDENTIFIER> 
+  { type = t.image; }
+  [ 
+    "<"  t = <V_TYPE_IDENTIFIER> ">" 
+    { type += "<" + t.image + ">"; }
+  ]
+  { return type; }
 }
 
 String attribute_identifier() :

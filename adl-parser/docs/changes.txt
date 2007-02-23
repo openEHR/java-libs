@@ -1,6 +1,7 @@
 2007/02/23
 .updated assumed value parsing for CDvQuantity
 .added support for CDvQuantity starts with assumed value
+.added support for generics in type_identifier
 
 2007/02/20
 .added support for empty purpose

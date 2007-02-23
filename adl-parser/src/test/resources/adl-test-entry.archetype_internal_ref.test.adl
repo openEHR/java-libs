@@ -1,5 +1,5 @@
 archetype
-	adl-test-entry.archetype_slot.test
+	adl-test-entry.archetype_internal_ref.test
 
 concept
 	[at0000]
@@ -15,8 +15,7 @@ definition
 		attribute2 matches {
 			use_node SECTION occurrences matches {1..2} /attribute1
 		}
-	}
-
+	}	
 
 ontology
 	primary_language = <"en">
