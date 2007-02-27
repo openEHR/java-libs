@@ -22,7 +22,7 @@ definition
                 string_attr7 matches {/this|that|something else/; "those"}
                 string_attr8 matches {/cardio.*/; "cardio.txt"}
                 string_attr9 matches {^mg|mg/ml|mg/g^; "mg"} 
-                string_attr10 matches {"apple","pear"; "orange"}                                                              
+                string_attr10 matches {"apple","pear"; "orange"}
             }
         }
         boolean_attributes matches {
