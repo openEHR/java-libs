@@ -1,0 +1,61 @@
+archetype (adl_version=1.4)
+	adl-test-OUTER.mixed_types.draft
+
+concept
+	[at0000]	-- outer object
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+		["submission"] = <"01/05/2004">
+		["organisation"] = <"OceanInformatics.biz">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test archetype for mixed node types">
+			keywords = <"ADL", "test">
+			copyright = <"copyright (c) 2004 The openEHR Foundation">
+		>
+	>
+	lifecycle_state = <"draft">
+
+definition
+	OUTER[at0000] matches {	-- outer object
+		items cardinality matches {0..*; ordered} matches {
+			COMPLEX_OBJECT[at0001] matches {*}
+			use_node COMPLEX_OBJECT /items[at0001]
+			use_node COMPLEX_OBJECT /items[at0002]
+			COMPLEX_OBJECT[at0002] matches {*}
+			allow_archetype COMPLEX_OBJECT matches {
+				include
+					archetype_id/value matches {/.*/}
+			}
+			COMPLEX_OBJECT[at0003] matches {*}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"outer object">
+					text = <"outer object">
+				>
+				["at0001"] = <
+					description = <"complex object 1">
+					text = <"complex object 1">
+				>
+				["at0002"] = <
+					description = <"complex object 2">
+					text = <"complex object 2">
+				>
+				["at0003"] = <
+					description = <"complex object 3">
+					text = <"complex object 3">
+				>
+			>
+		>
+	>

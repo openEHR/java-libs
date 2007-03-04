@@ -15,6 +15,10 @@ definition
 		attribute2 matches {
 			use_node SECTION occurrences matches {1..2} /attribute1
 		}
+		attribute3 matches {
+			use_node COMPLEX_OBJECT /items[at0001]
+			use_node COMPLEX_OBJECT /items[at0002]			
+		}
 	}	
 
 ontology

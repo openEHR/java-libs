@@ -231,7 +231,7 @@ PARSER_END(ADLParser)
 
 < * > SPECIAL_TOKEN : /* COMMENTS */
 {
-  <SINGLE_LINE_COMMENT: "--" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+  <SINGLE_LINE_COMMENT: "--" (~["\n","\r"])*>
 }
 
 < * > TOKEN [IGNORE_CASE]: /* RESERVED WORDS AND LITERALS - ADL */
@@ -432,15 +432,6 @@ TOKEN : /* IDENTIFIERS - ADL */
              ("_"(<DIG>){3})*(["e","E"](["+","-"])?(<DIG>){1,3}
              ("_"(<DIG>){3})*)?>
 |
-  < #V_STRING_CORE2: (~["\\","\n","\""])*
-              (
-                ("\\\"" (~["\\","\n","\""])*)
-               |
-                ("\n" ["\r", " ", "\t"])
-			   | 
-                (~["\\","\n","\""])
-              )* >
-|
   < V_STRING: 
     "\"" 
   	( 
@@ -500,10 +491,6 @@ TOKEN : /* IDENTIFIERS - ADL */
                       "#" ( (["0"-"9"])+ | "x" (["0"-"9","a"-"f","A"-"F"])+ )
                     ) ";'">
 |
-  < #PATH_SEGMENT: "/" <V_ATTRIBUTE_IDENTIFIER> ( <V_LOCAL_TERM_CODE_REF>)? >
-|
-  < ADL_PATH: (  <PATH_SEGMENT> )+ >      
-| 
   < V_CODE_PHRASE: "["(<LET_DIG_DUDSLR>)+"::"(<LET_DIG_DUDS>)+"]">              
 }
 
@@ -534,8 +521,16 @@ TOKEN : /* IDENTIFIERS - ADL */
   < V_TERMINOLOGY_ID_BLOCK: "["(<LET_DIG_DUDSLR>)+"::" > : TERM_CODE	
 |
   < V_REGEXP: (["=","!"]"~ ")? (
-  ( "/"(~["/","}"])*("\\/"(~["/","}"]))*"/" | "^"(~["^","\n"])*"^")) >
+  ( "/"(~["/","{", "}","\r","\n"])*("\\/"(~["/","}","\r","\n"]))*"/" 
+  | "^"(~["^","\n","\r"])*"^")) >
 |
+  < #PATH_SEGMENT:  <V_ATTRIBUTE_IDENTIFIER> ( <V_LOCAL_TERM_CODE_REF>)? >
+|
+  < V_RELATIVE_PATH: <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* >      
+| 
+  < V_ABSOLUTE_PATH: "/" <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* >      
+| 
+  
   < #YY: ["y","Y"]>
 |
   < #MMQX_2: (["m","M","?","X"]){2}>
@@ -2188,7 +2183,7 @@ ArchetypeInternalRef archetype_internal_ref(String path, CAttribute parent) :
 {
   <SYM_USE_NODE> type = type_identifier() 
    [ occurrences = c_occurrences() ]  
-  target = adl_path()  
+  target = absolute_path()  
   { 
   	return new ArchetypeInternalRef(path, type, occurrences, null, parent, 
   			target); 
@@ -2332,31 +2327,6 @@ Set c_invariants() :
   { return set; }
 }
 
-Set invariants() :
-{
-  Set set = new HashSet();
-  Invariant i;
-}
-{
-  (
-    i = invariant()
-    {
-      set.add(i);
-    }
-  )+
-  { return set; }
-}
-
-Invariant invariant() :
-{
-  Invariant i = new Invariant();
-}
-{
-  [ LOOKAHEAD( 2 ) any_identifier() ":" ] Boolean_expression()
-
-  { return i; }
-}
-
 /* ----------------------- expressions ----------------------- */
 ExpressionItem boolean_expression() :
 {
@@ -2386,14 +2356,15 @@ ExpressionItem boolean_node() :
 }
 {
 (
-  <SYM_EXISTS> path = adl_path()
+  <SYM_EXISTS> path = absolute_path()
   { 
   	item = ExpressionLeaf.pathConstant(path);
   	ret = new ExpressionUnaryOperator(ExpressionItem.BOOLEAN,
   		OperatorKind.OP_EXISTS, precedenceOverridden, item);
   }
 |
-  attrId = attribute_identifier() <SYM_MATCHES>
+  LOOKAHEAD( 2 )
+  attrId = relative_path() <SYM_MATCHES>
                  (
                    <SYM_START_CBLOCK> cp = c_primitive() <SYM_END_CBLOCK>
                    { item2 = new ExpressionLeaf(cp.getType(), cp, 
@@ -2563,7 +2534,7 @@ ExpressionItem arithmetic_leaf() :
   	item = ExpressionLeaf.realConstant(d);
   }
 |
-  str = call_path() 
+  str = absolute_path() 
   {
   	item = ExpressionLeaf.stringConstant(str);
   }  
@@ -2571,132 +2542,6 @@ ExpressionItem arithmetic_leaf() :
 }
 
 
-
-void Boolean_expression() :
-{}
-{
-  LOOKAHEAD( 3 ) <SYM_EXISTS> adl_path()
-|
-  LOOKAHEAD( 3 ) "(" Boolean_expression() ")"
-|
-  LOOKAHEAD( 3 ) attribute_identifier() <SYM_MATCHES>
-                 (
-                   <SYM_START_CBLOCK> c_primitive_object("?", null) <SYM_END_CBLOCK>
-                 |
-                   <V_REGEXP>
-                 )
-|
-  LOOKAHEAD( 3 ) <SYM_TRUE>
-|
-  LOOKAHEAD( 3 ) <SYM_FALSE>
-|
-  LOOKAHEAD( 3 ) <SYM_NOT> Boolean_expression()
-|
-  LOOKAHEAD( 3 )
-  Arithmetic_expression()
-  (
-    "=" | <SYM_NE> | <SYM_LT> | <SYM_GT> | <SYM_LE> | <SYM_GE>
-  )
-  Arithmetic_expression()
-|
-  LOOKAHEAD( (Boolean_expression_sub() )+ )
-  ( LOOKAHEAD( 4 ) Boolean_expression_sub() )+
-  (
-    <SYM_XOR> Boolean_expression()
-  |
-    <SYM_AND> [ LOOKAHEAD( 2 ) <SYM_THEN> ] Boolean_expression()
-    [ LOOKAHEAD( 2 ) <SYM_AND> ]
-  |
-    <SYM_OR>  [ LOOKAHEAD( 2 ) <SYM_ELSE> ] Boolean_expression()
-    [ LOOKAHEAD( 2 ) <SYM_OR> ]
-  |
-    <SYM_IMPLIES> Boolean_expression()
-  )
-|
-  LOOKAHEAD( call_path() )
-  call_path()
-}
-
-void Boolean_expression_sub() :
-{}
-{
-  <SYM_EXISTS> adl_path()
-|
-  LOOKAHEAD( 3 )
-  "(" Boolean_expression() ")"
-|
-  LOOKAHEAD( 3 )
-  call_path()
-| 
-  LOOKAHEAD( 3 )
-  attribute_identifier() <SYM_MATCHES>(
-                   <SYM_START_CBLOCK> c_primitive_object(null, null) <SYM_END_CBLOCK>
-                 |
-                   <V_REGEXP>
-                 )
-| <SYM_TRUE>
-| <SYM_FALSE>
-| <SYM_NOT> Boolean_expression()
-|
-  LOOKAHEAD( 3 )
-  Arithmetic_expression()
-  (
-    "=" | <SYM_NE> | <SYM_LT> | <SYM_GT> | <SYM_LE> | <SYM_GE>
-  )
-  Arithmetic_expression()
-}
-
-void Arithmetic_expression() :
-{}
-{
-  LOOKAHEAD( 3 )
-  call_path()
-|
-  LOOKAHEAD( 3 )
-  "(" Arithmetic_expression() ")"
-|
-  LOOKAHEAD( 2 )
-  <V_INTEGER>
-|
-  LOOKAHEAD( 2 )
-  <V_REAL>
-|
-  LOOKAHEAD( 2 )
-  string_value()
-|
-  LOOKAHEAD( 2 )
-  <V_CHARACTER>
-|
-  LOOKAHEAD( 3 )
-  "+" Arithmetic_expression() <SYM_NOT>
-|
-  LOOKAHEAD( 3 )
-  "-" Arithmetic_expression() <SYM_NOT>
-|
-  ( LOOKAHEAD( 3 ) Arithmetic_expression_sub() )+
-  (
-    "+" Arithmetic_expression()
-  | "-" Arithmetic_expression()
-  | "*" Arithmetic_expression()
-  | "/" Arithmetic_expression()
-  | "^" Arithmetic_expression()
-  | <SYM_MODULO> Arithmetic_expression()
-  | <SYM_DIV> Arithmetic_expression()
-  )
-}
-
-void Arithmetic_expression_sub() :
-{}
-{
-  call_path()
-| "(" Arithmetic_expression() ")"
-| <V_INTEGER>
-| <V_REAL>
-| string_value()
-| <V_CHARACTER>
-| "+" Arithmetic_expression() <SYM_NOT>
-| "-" Arithmetic_expression() <SYM_NOT>
-}
 
 /* ---------------- existence, occurrences, cardinality ---------------- */
 
@@ -3312,68 +3157,30 @@ String attribute_identifier() :
 }
 
 
-String adl_path() :
-{  
-  String path = null;
-  Token t;
-}
-{
-  t = <ADL_PATH>	
-  // path = movable_path() | path = absolute_path() | path = relative_path()
-  {
-  	path = t.image;  
-  	return path; 
-  }
-}
-
-String movable_path() :
-{ 
-  String path; 
-}
-{
-  "//" path = relative_path()	
-  { return "//" + path; }
-}
-
 String absolute_path() :
 { 
   String path; 
   StringBuffer buf;
+  Token t;
 }
 {
-  <SYM_SLASH> path = relative_path()
-  {
-  	buf = new StringBuffer("/");
-  	buf.append(path); 
-  }
-  (
-    LOOKAHEAD( 2 )
-    <SYM_SLASH> path = relative_path()
-    {
-      buf.append("/");
-      buf.append(path);
-    }	
-  )* 	
-  { return "/" + path; }
+  t = <V_ABSOLUTE_PATH>
+  { return t.image; }
 }
 
 String relative_path() :
 { 
   StringBuffer buf;
-  String seg;	
+  String path;	
+  Token t;
 }
 {
-  seg = path_segment()
-  { buf = new StringBuffer(seg); }
-  ( 
-    LOOKAHEAD( 2 )
-    <SYM_SLASH> seg = path_segment()
-    {
-      buf.append("/");
-      buf.append(seg); 
-    } 
-  )*	
-  { return buf.toString(); }
+  (  
+    t = <V_RELATIVE_PATH>    
+  | 
+    t = <V_ATTRIBUTE_IDENTIFIER>    
+  )
+  { return t.image; }
 }
 
 String path_segment() :
@@ -3390,25 +3197,4 @@ String path_segment() :
     { buf.append(t.image); }
   ]  	
   { return buf.toString(); }	
-}
-
-String call_path() :
-{
-  StringBuffer buf = new StringBuffer();
-  String tmp;
-}
-{
-  ( 
-    tmp = adl_path() 
-    { buf.append(tmp); }
-    
-    "." tmp = attribute_identifier() 
-    { buf.append("." + tmp); }
-  )+ 
-  
-  "." tmp = attribute_identifier()  
-  { 
-  	buf.append("." + tmp);
-  	return buf.toString(); 
-  }
 }
