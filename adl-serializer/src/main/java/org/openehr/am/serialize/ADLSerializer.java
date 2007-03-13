@@ -107,8 +107,10 @@ public class ADLSerializer {
 		printLanguage(archetype, out);
 		newline(out);
 		
-		printDescription(archetype.getDescription(), out);
-		newline(out);	
+		if(archetype.getDescription() != null) {
+			printDescription(archetype.getDescription(), out);
+			newline(out);	
+		}
 		
 		printDefinition(archetype.getDefinition(), out);
 		newline(out);
@@ -135,6 +137,7 @@ public class ADLSerializer {
 			newline(out);
 		}
 
+		newline(out);
 		out.write("concept");
 		newline(out);
 		indent(1, out);
@@ -148,9 +151,13 @@ public class ADLSerializer {
 		out.write("language");
 		newline(out);
 		indent(1, out);
-		out.write("original_language = <\"");
+		out.write("original_language = <");
+		out.write("[");
+		out.write(authored.getOriginalLanguage().getTerminologyID().getValue());
+		out.write("::");
 		out.write(authored.getOriginalLanguage().getCodeString());
-		out.write("\">");
+		out.write("]");
+		out.write(">");
 		newline(out);
 		if(authored.getTranslations() != null) {
 			indent(1, out);
@@ -167,22 +174,26 @@ public class ADLSerializer {
 				out.write("\"] = <");				
 				newline(out);
 				
-				indent(2, out);
-				out.write("language = <\"");	
-				out.write(lang);
-				out.write("\">");
+				indent(3, out);
+				out.write("language = <");
+				out.write("[");
+				out.write(td.getLanguage().getTerminologyID().getValue());
+				out.write("::");
+				out.write(td.getLanguage().getCodeString());
+				out.write("]");
+				out.write(">");
 				newline(out);
 				
-				indent(2, out);
+				indent(3, out);
 				out.write("author = <");
 				newline(out);				
-				printMap(td.getAuthor(), out, 3);				
-				indent(2, out);
+				printMap(td.getAuthor(), out, 4);				
+				indent(3, out);
 				out.write(">");
 				newline(out);
 				
 				if(td.getAccreditation() != null) {
-					indent(2, out);
+					indent(3, out);
 					out.write("accreditation = <\"");	
 					out.write(td.getAccreditation());
 					out.write("\">");
@@ -190,22 +201,23 @@ public class ADLSerializer {
 				}
 				
 				if(td.getOtherDetails() != null) {
-					indent(2, out);
+					indent(3, out);
 					out.write("other_details = <");
 					newline(out);				
-					printMap(td.getOtherDetails(), out, 3);				
-					indent(2, out);
+					printMap(td.getOtherDetails(), out, 4);				
+					indent(3, out);
 					out.write(">");
 					newline(out);
-				}				
+				}
+				
 				indent(2, out);
-				out.write(">");
-				newline(out);				
+				out.write(">");				
+				newline(out);
 			}
 			indent(1, out);
 			out.write(">");
-			newline(out);			
-		}		
+			newline(out);
+		}
 	}
 	
 	protected void printMap(Map<String,String> map, Writer out, int indent) 
@@ -272,8 +284,15 @@ public class ADLSerializer {
 		out.write("\"] = <");
 		newline(out);
 
-		printNoneEmptyString("language", item.getLanguage().getCodeString(),
-				indent + 1, out);
+		indent(indent + 1, out);
+		out.write("language = <");
+		out.write("[");
+		out.write(item.getLanguage().getTerminologyID().getValue());
+		out.write("::");
+		out.write(item.getLanguage().getCodeString());
+		out.write("]>");
+		newline(out);
+		
 		printNoneEmptyString("purpose", item.getPurpose(), indent + 1, out);
 		printNoneEmptyStringList("keywords", item.getKeywords(), indent + 1,
 				out);
@@ -716,21 +735,21 @@ public class ADLSerializer {
 		out.write("ontology");
 		newline(out);
 
-		indent(1, out);
-		out.write("primary_language = <\"");
-		out.write(ontology.getPrimaryLanguage());
-		out.write("\">");
-		newline(out);
-
-		indent(1, out);
-		out.write("languages_available = <");
-		for (String lang : ontology.getLanguages()) {
-			out.write("\"");
-			out.write(lang);
-			out.write("\", ");
-		}
-		out.write("...>");
-		newline(out);
+//		indent(1, out);
+//		out.write("primary_language = <\"");
+//		out.write(ontology.getPrimaryLanguage());
+//		out.write("\">");
+//		newline(out);
+//
+//		indent(1, out);
+//		out.write("languages_available = <");
+//		for (String lang : ontology.getLanguages()) {
+//			out.write("\"");
+//			out.write(lang);
+//			out.write("\", ");
+//		}
+//		out.write("...>");
+//		newline(out);
 
 		if (ontology.getTerminologies() != null) {
 			indent(1, out);

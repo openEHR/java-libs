@@ -1,6 +1,4 @@
 ontology
-    primary_language = <"en">
-    languages_available = <"en", ...>
     terminologies_available = <"SNOMED_CT", "ICD10", ...>
     term_definitions = <
         ["en"] = <

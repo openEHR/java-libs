@@ -11,11 +11,7 @@ import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
 import org.openehr.am.archetype.ontology.DefinitionItem;
 import org.openehr.am.archetype.ontology.OntologyBinding;
-import org.openehr.am.archetype.ontology.OntologyBindingItem;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
-import org.openehr.am.archetype.ontology.Query;
-import org.openehr.am.archetype.ontology.QueryBindingItem;
-import org.openehr.am.archetype.ontology.TermBindingItem;
 import org.openehr.rm.common.generic.RevisionHistory;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.TranslationDetails;
@@ -39,7 +35,7 @@ public class SimpleArchetypeTest extends SerializerTestBase {
 		String id = "adl-test-ENTRY.most_minimal.draft";
 		String parentId = null;
 		String concept = "at0000";
-		CodePhrase originalLanguage = new CodePhrase("iso639-2", "en");
+		CodePhrase originalLanguage = new CodePhrase("ISO_639-1", "en");
 
 		Map<String, TranslationDetails> translations = null;
 		ResourceDescription description = null;
@@ -78,6 +74,6 @@ public class SimpleArchetypeTest extends SerializerTestBase {
 
 		clean();
 		outputter.output(archetype, out);
-		verifyByFile("adl-test-entry.most_minimal.test.adl");					  					
+		verifyByFile("adl-test-entry.most_minimal.test.adl");
 	}
 }

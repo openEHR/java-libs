@@ -16,7 +16,7 @@ public class ArchetypeLanguageTest extends SerializerTestBase {
 	}
 
 	public void testPrintArchetypeLanguage() throws Exception {
-		CodePhrase originalLanguage = new CodePhrase("iso639-2", "en");
+		CodePhrase originalLanguage = new CodePhrase("ISO_639-1", "en");
 		Map<String, TranslationDetails> translations = 
 			new HashMap<String, TranslationDetails>();
 		SortedMap<String, String> author = new TreeMap<String,String>();
@@ -27,7 +27,7 @@ public class ArchetypeLanguageTest extends SerializerTestBase {
 		otherDetails.put("reviewer 2", "Rubeus Hagrid");	
 		
 		TranslationDetails td = new TranslationDetails(
-				new CodePhrase("languages", "de"), author, 
+				new CodePhrase("ISO_639-1", "de"), author, 
 				"British Medical Translator id 00400595", otherDetails, null);
 		translations.put("de", td);
 		

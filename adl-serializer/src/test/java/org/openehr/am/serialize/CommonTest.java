@@ -46,7 +46,7 @@ public class CommonTest extends SerializerTestBase {
 				conceptCode, out);
 
 		verify("archetype\r\n" + "    " + id + "\r\n" + "specialize\r\n"
-				+ "    " + parentId + "\r\n" + "concept\r\n" + "    ["
+				+ "    " + parentId + "\r\n\r\n" + "concept\r\n" + "    ["
 				+ conceptCode + "]\r\n");
 	}
 

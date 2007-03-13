@@ -1,6 +1,4 @@
 ontology
-    primary_language = <"en">
-    languages_available = <"en", "zh", ...>
     term_definitions = <
         ["en"] = <
             items = <
