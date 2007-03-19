@@ -1,3 +1,6 @@
+2007/03/18
+.non-inclusive integer and real interval parsing
+
 2007/03/16
 .fixed missing upper bound for duration interval
 

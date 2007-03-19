@@ -157,6 +157,16 @@ public class BasicTypesTest extends ParserTestBase {
 		
 		assertCInteger(list.get(16), new Interval<Integer>(new Integer(100),
 				new Integer(100)), null, null);
+		
+		// non-inclusive intervals
+		assertCInteger(list.get(17), new Interval<Integer>(new Integer(0),
+				new Integer(100), false, true), null, null);
+		
+		assertCInteger(list.get(18), new Interval<Integer>(new Integer(0),
+				new Integer(100), true, false), null, null);
+		
+		assertCInteger(list.get(19), new Interval<Integer>(new Integer(0),
+				new Integer(100), false, false), null, null);
 	}
 
 	/**
@@ -203,6 +213,20 @@ public class BasicTypesTest extends ParserTestBase {
 
 		assertCReal(list.get(15), new Interval<Double>(new Double(-10.0),
 				new Double(-5.0)), null, -8.0);
+		
+		// single value as interval
+		assertCReal(list.get(16), new Interval<Double>(new Double(100.0),
+				new Double(100.0)), null, null);
+		
+		// non-inclusive interval
+		assertCReal(list.get(17), new Interval<Double>(new Double(0.0),
+				new Double(100.0), false, true), null, null);
+		
+		assertCReal(list.get(18), new Interval<Double>(new Double(0.0),
+				new Double(100.0), true, false), null, null);
+		
+		assertCReal(list.get(19), new Interval<Double>(new Double(0.0),
+				new Double(100.0), false, false), null, null);		
 	}
 
 	/**
