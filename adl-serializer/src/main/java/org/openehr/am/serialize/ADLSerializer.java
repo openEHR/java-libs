@@ -29,6 +29,7 @@ import org.openehr.am.archetype.ontology.OntologyDefinitions;
 import org.openehr.am.archetype.ontology.DefinitionItem;
 import org.openehr.am.archetype.ontology.QueryBindingItem;
 import org.openehr.am.archetype.ontology.TermBindingItem;
+import org.openehr.am.archetype.assertion.Assertion;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
@@ -41,10 +42,10 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * ADL serializer for the openEHR Java kernel
@@ -451,10 +452,10 @@ public class ADLSerializer {
 			out.write("*}");
 		} else {
 			if (slot.getIncludes() != null) {
-				printInvariants(slot.getIncludes(), "include", indent, out);
+				printAssertions(slot.getIncludes(), "include", indent, out);
 			}
 			if (slot.getExcludes() != null) {
-				printInvariants(slot.getExcludes(), "exclude", indent, out);
+				printAssertions(slot.getExcludes(), "exclude", indent, out);
 			}
 			newline(out);
 			indent(indent, out);
@@ -463,15 +464,24 @@ public class ADLSerializer {
 		newline(out);
 	}
 	
-	private void printInvariants(Collection invariants, String purpose,
+	private void printAssertions(Set<Assertion> assertions, String purpose,
 			int indent, Writer out)	throws IOException {
 		newline(out);
 		indent(indent + 1, out);
 		out.write(purpose);
-		for (Object invariant : invariants) {
+		
+		for (Assertion assertion : assertions) {
 			newline(out);
 			indent(indent + 2, out);
-			out.write(invariant.toString());			
+			
+			// FIXME: The string expression is null when an archetype is parsed, but after the archetype is recreated in the archetype 
+			// editor, the string expression exists. Please provide a valid string expression from the parser since it's _much_ easier to 
+			// maintain this line of code instead of adding hundreds of lines just to output some expressions, operators etc.
+			// Opening an archetype directly in the ADL format view will show the output of the parsed archetype in this way:
+			//
+			// include
+			//     null
+			out.write(assertion.getStringExpression());
 		}
 	}
 

@@ -8,6 +8,7 @@ import org.openehr.am.archetype.assertion.ExpressionItem;
 import org.openehr.am.archetype.assertion.ExpressionLeaf;
 import org.openehr.am.archetype.assertion.OperatorKind;
 import org.openehr.am.archetype.constraintmodel.ArchetypeSlot;
+import org.openehr.am.archetype.constraintmodel.primitive.CString;
 import org.openehr.rm.support.basic.Interval;
 
 /**
@@ -29,7 +30,7 @@ public class ArchetypeSlotTest extends SerializerTestBase {
 		final LinkedHashSet<Assertion> includes = new LinkedHashSet<Assertion>();
 		final LinkedHashSet<Assertion> excludes = new LinkedHashSet<Assertion>();
 		ExpressionLeaf aid = new ExpressionLeaf(ExpressionItem.ARCHETYPE,
-				"/blood_pressure.v1/", ExpressionLeaf.ReferenceType.CONSTANT);
+				new CString("/blood_pressure.v1/", null), ExpressionLeaf.ReferenceType.CONSTANT);
 		ExpressionItem expression = new ExpressionBinaryOperator(
 				ExpressionItem.BOOLEAN, OperatorKind.OP_MATCHES, false,
 				concept, aid);
@@ -37,7 +38,7 @@ public class ArchetypeSlotTest extends SerializerTestBase {
 		Assertion assertion = new Assertion(expression, stringExpression);
 		includes.add(assertion);
 		aid = new ExpressionLeaf(ExpressionItem.ARCHETYPE,
-				"/blood_pressure.v2/", ExpressionLeaf.ReferenceType.CONSTANT);
+				new CString("/blood_pressure.v2/", null), ExpressionLeaf.ReferenceType.CONSTANT);
 		expression = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN,
 				OperatorKind.OP_MATCHES, false, concept, aid);
 		stringExpression = "domain_concept matches {/blood_pressure.v2/}";
