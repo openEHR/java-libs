@@ -16,3 +16,7 @@
 2006/12/16
 .added convenient factory methods in ExpressionLeaf
 .added STRING as constant type in ExpressionItem
+
+2007/04/18
+.added class ArchetypeTerm 
+.added constraintDefinition() and termDefinition() in ArchetypeOntology
