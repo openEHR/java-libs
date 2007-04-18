@@ -1,3 +1,7 @@
+2007/04/18
+.added support for comment in term/constraint definitions
+.updated parser due to AOM changes
+
 2007/03/18
 .non-inclusive integer and real interval parsing
 

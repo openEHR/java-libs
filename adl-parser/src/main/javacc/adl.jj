@@ -281,6 +281,7 @@ PARSER_END(ADLParser)
 | < SYM_KEYWORDS: "keywords">
 | < SYM_RIGHTS: "rights">
 | < SYM_DESCRIPTION_WORD: "description">
+| < SYM_COMMENT: "comment">
 | < SYM_LANGUAGE_WORD: "language">
 }
 
@@ -1064,7 +1065,7 @@ OntologyDefinitions definitions_body() :
   OntologyDefinitions definitions;
   String language;
   List list = new ArrayList();
-  DefinitionItem item;
+  ArchetypeTerm term;
 }
 {
   "[" language = string_value() "]"
@@ -1072,9 +1073,9 @@ OntologyDefinitions definitions_body() :
     <SYM_ITEMS> <SYM_EQ> "<"
 	    [
 	      (
-	        item = definition_item()
+	        term = archetype_term()
 	        {
-	          list.add(item);
+	          list.add(term);
 	        }
 	      )+
 	    ]
@@ -1102,6 +1103,35 @@ DefinitionItem definition_item() :
     )
   ">"
   { return new DefinitionItem(code, text, description); }
+}
+
+ArchetypeTerm archetype_term() :
+{
+  String code;
+  String value = null;
+  ArchetypeTerm term;
+}
+{
+  "[" 
+     code = local_code_value() 
+     { term = new ArchetypeTerm(code); }
+     
+   "]" <SYM_EQ> "<"
+    ( 
+      <SYM_TEXT> <SYM_EQ> "<" 
+          value = string_value() { term.addItem("text", value); } 
+        ">" [ ";" ]
+      |
+      <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" 
+          value = string_value() { term.addItem("description", value); }
+        ">" [ ";" ]
+      |
+      <SYM_COMMENT> <SYM_EQ> "<" 
+          value = string_value() { term.addItem("comment", value); }
+        ">" [ ";" ]
+    )*
+  ">"
+  { return term; }
 }
 
 List term_binding_list() :

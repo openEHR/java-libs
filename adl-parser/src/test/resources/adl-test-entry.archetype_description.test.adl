@@ -53,7 +53,7 @@ ontology
 		["en"] = <
 			items = <
 				["at0000"] = <
-					text = <"test">; 
+					text = <"test"> 
 					description = <"test">
 				>
 			>
