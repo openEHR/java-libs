@@ -104,8 +104,7 @@ public class AdminEntry extends Entry {
         if (item != null) {
             return item;
         }
-        String tmp = path;
-        Object ret = checkAttribute(tmp, "data", data);
+        Object ret = checkAttribute(path, "data", data);
         if (ret == null) {
             throw new IllegalArgumentException("invalid path: " + path);
         }

@@ -75,13 +75,12 @@ public abstract class CareEntry extends Entry {
         if(item != null) {
             return item;
         }
-        String tmp = path;
         String attr = ROOT + PROTOCOL;
-        if (tmp.equals(attr)) {
+        if (path.equals(attr)) {
             return protocol;
         }
-        if(tmp.startsWith(attr)) {
-            return protocol.itemAtPath(tmp.substring(attr.length()));
+        if(path.startsWith(attr)) {
+            return protocol.itemAtPath(path.substring(attr.length()));
         }
         return null;    // path needs to be further processed by sub-class
     }

@@ -163,7 +163,6 @@ public final class Action extends CareEntry {
         if (item != null) {
             return item;
         }
-        String tmp = path;
         /*String[] attributeNames = {
             DESCRIPTION
         };
@@ -172,7 +171,7 @@ public final class Action extends CareEntry {
         };
         return locateAttribute(tmp, attributeNames, attributes);
          */
-        Object ret = checkAttribute(tmp, "description", description);
+        Object ret = checkAttribute(path, "description", description);
         if( ret != null) {
             return ret;
         } else {

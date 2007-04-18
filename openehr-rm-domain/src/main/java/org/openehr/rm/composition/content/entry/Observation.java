@@ -157,14 +157,13 @@ public final class Observation extends CareEntry {
         if (item != null) {
             return item;
         }
-        String tmp = path;
         String[] attributeNames = {
             DATA, STATE
         };
         Locatable [] attributes = {
             data, state
         };
-        return locateAttribute(tmp, attributeNames, attributes);
+        return locateAttribute(path, attributeNames, attributes);
     }
 
     // POJO start

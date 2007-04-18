@@ -90,16 +90,7 @@ public class Activity extends Locatable {
         if (item != null) {
             return item;
         }
-        String tmp = path;
-        /*String[] attributeNames = {
-            DESCRIPTION
-        };
-        Locatable [] attributes = {
-            description
-        };
-        return locateAttribute(tmp, attributeNames, attributes);
-         */
-        Object ret = checkAttribute(tmp, "description", description);
+        Object ret = checkAttribute(path, "description", description);
         if( ret != null) {
             return ret;
         } else {
