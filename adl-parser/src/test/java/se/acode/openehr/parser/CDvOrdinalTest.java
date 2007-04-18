@@ -77,6 +77,14 @@ public class CDvOrdinalTest extends ParserTestBase {
         assertCDvOrdinal(node, terminology, codes, assumed);
     }
     
+    public void testEmptyCDvOrdinal() throws Exception {
+    	CObject node = archetype.node(
+    		"/types[at0001]/items[at10003]/value");
+    	assertTrue("CDvOrdinal expected", node instanceof CDvOrdinal);
+        CDvOrdinal cordinal = (CDvOrdinal) node;
+        assertTrue(cordinal.isAnyAllowed());
+    }
+    
     private void assertCDvOrdinal(CObject node, String terminoloy,
     		String[] codes,	Ordinal assumedValue) {
     	

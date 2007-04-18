@@ -377,6 +377,7 @@ PARSER_END(ADLParser)
 | < SYM_DIV: "//">
 | < SYM_ELLIPSIS: "..">
 | < SYM_LIST_CONTINUE: "...">
+| < SYM_C_DV_ORDINAL: "C_DV_ORDINAL" >
 }
 
 < * > TOKEN : /* LOCAL TOKENS */
@@ -2728,27 +2729,34 @@ CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
   Ordinal assumedValue = null;
 }
 {
-  o = ordinal() { list.add(o); }
-  (
-    "," o = ordinal()
-        { list.add(o); }
-  )*
-  [
-  	";" assumed = integer_value()
-  	{
-  	  for(Iterator it = list.iterator(); it.hasNext();) {
-  	  	Ordinal ord = (Ordinal) it.next();
-  	  	if(ord.getValue() == assumed) {
-  	  		assumedValue = ord;
-  	  		break;
-  	  	}
-  	  }	  
-  	}  	
-  ]
-  { 
-  	return new CDvOrdinal(path, null, null, parent, list, defaultValue,
-  		assumedValue); 
-  }
+  	
+	  o = ordinal() { list.add(o); }
+	  (
+	    "," o = ordinal()
+	        { list.add(o); }
+	  )*
+	  [
+	  	";" assumed = integer_value()
+	  	{
+	  	  for(Iterator it = list.iterator(); it.hasNext();) {
+	  	  	Ordinal ord = (Ordinal) it.next();
+	  	  	if(ord.getValue() == assumed) {
+	  	  		assumedValue = ord;
+	  	  		break;
+	  	  	}
+	  	  }	  
+	  	}  	
+	  ]
+	  { 
+	  	return new CDvOrdinal(path, null, null, parent, list, defaultValue,
+	  		assumedValue); 
+	  }
+  |
+      <SYM_C_DV_ORDINAL> <SYM_LT> <SYM_GT>    
+  	  {
+  	  	// any allowed
+  	    return new CDvOrdinal(path, null, null, parent, null, null, null);
+  	  }
 }
 
 org.openehr.am.openehrprofile.datatypes.quantity.Ordinal ordinal() :

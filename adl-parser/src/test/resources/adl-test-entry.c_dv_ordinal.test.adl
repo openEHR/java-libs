@@ -30,6 +30,12 @@ definition
                             4|[local::at0003.4];  	-- suspension
                             0     -- assumed value
                         }
+                    } 
+                    ELEMENT[at10003] matches {	-- ordinal with assumed value
+                        value matches {		-- any allowed
+                            C_DV_ORDINAL < 
+                            >
+                        }
                     }   
                                      		
                 }
