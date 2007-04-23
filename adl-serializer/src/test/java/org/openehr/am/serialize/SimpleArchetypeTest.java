@@ -9,7 +9,7 @@ import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.assertion.Assertion;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
-import org.openehr.am.archetype.ontology.DefinitionItem;
+import org.openehr.am.archetype.ontology.ArchetypeTerm;
 import org.openehr.am.archetype.ontology.OntologyBinding;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
 import org.openehr.rm.common.generic.RevisionHistory;
@@ -44,9 +44,9 @@ public class SimpleArchetypeTest extends SerializerTestBase {
 		CComplexObject definition = new CComplexObject("/", "ENTRY", null,
 				"at0000", null, null);
 
-		DefinitionItem item = new DefinitionItem("at0000", "most minimal",
+		ArchetypeTerm item = new ArchetypeTerm("at0000", "most minimal",
 				"most minimal");
-		List<DefinitionItem> items = new ArrayList<DefinitionItem>();
+		List<ArchetypeTerm> items = new ArrayList<ArchetypeTerm>();
 		items.add(item);
 		OntologyDefinitions definitions = new OntologyDefinitions("en", items);
 		List<OntologyDefinitions> termDefinitionsList = 

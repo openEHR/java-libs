@@ -24,9 +24,9 @@ import org.openehr.rm.support.basic.Interval;
 
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
+import org.openehr.am.archetype.ontology.ArchetypeTerm;
 import org.openehr.am.archetype.ontology.OntologyBinding;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
-import org.openehr.am.archetype.ontology.DefinitionItem;
 import org.openehr.am.archetype.ontology.QueryBindingItem;
 import org.openehr.am.archetype.ontology.TermBindingItem;
 import org.openehr.am.archetype.assertion.Assertion;
@@ -773,93 +773,29 @@ public class ADLSerializer {
 			newline(out);
 		}
 
+		// *** Term definition section *** (ADL 1.4 spec 8.6.3)
 		indent(1, out);
 		out.write("term_definitions = <");
 		newline(out);
-		for (OntologyDefinitions defs : ontology.getTermDefinitionsList()) {
-			indent(2, out);
-			out.write("[\"");
-			out.write(defs.getLanguage());
-			out.write("\"] = <");
-			newline(out);
-			indent(3, out);
-			out.write("items = <");
-			newline(out);
-			for (DefinitionItem item : defs.getDefinitions()) {
-				indent(4, out);
-				out.write("[\"");
-				out.write(item.getCode());
-				out.write("\"] = <");
-				newline(out);
-				indent(5, out);
-				out.write("text = <\"");
-				out.write(item.getText());
-				out.write("\">");
-				newline(out);
-				indent(5, out);
-				out.write("description = <\"");
-				out.write(item.getDescription());
-				out.write("\">");
-				newline(out);
-				indent(4, out);
-				out.write(">");
-				newline(out);
-			}
-			for (int i = 3; i > 1; i--) {
-				indent(i, out);
-				out.write(">");
-				newline(out);
-			}
-		}
+		List<OntologyDefinitions> termDefinitionsList = ontology.getTermDefinitionsList();
+		printDefinitionList(out, termDefinitionsList);
 		indent(1, out);
 		out.write(">");
 		newline(out);
 
-		if (ontology.getConstraintDefinitionsList() != null) {
+		// *** Constraint definition section *** (ADL 1.4 spec 8.6.4)
+		List<OntologyDefinitions> constraintDefinitionsList = ontology.getConstraintDefinitionsList();
+		if (constraintDefinitionsList != null) {
 			indent(1, out);
 			out.write("constraint_definitions = <");
 			newline(out);
-			for (OntologyDefinitions constraintdefs : ontology
-					.getConstraintDefinitionsList()) {
-				indent(2, out);
-				out.write("[\"");
-				out.write(constraintdefs.getLanguage());
-				out.write("\"] = <");
-				newline(out);
-				indent(3, out);
-				out.write("items = <");
-				newline(out);
-				for (DefinitionItem item : constraintdefs.getDefinitions()) {
-					indent(4, out);
-					out.write("[\"");
-					out.write(item.getCode());
-					out.write("\"] = <");
-					newline(out);
-					indent(5, out);
-					out.write("text = <\"");
-					out.write(item.getText());
-					out.write("\">");
-					newline(out);
-					indent(5, out);
-					out.write("description = <\"");
-					out.write(item.getDescription());
-					out.write("\">");
-					newline(out);
-					indent(4, out);
-					out.write(">");
-					newline(out);
-				}
-				for (int i = 3; i > 1; i--) {
-					indent(i, out);
-					out.write(">");
-					newline(out);
-				}
-			}
+			printDefinitionList(out, constraintDefinitionsList);
 			indent(1, out);
 			out.write(">");
 			newline(out);
 		}
 
+		// *** Term binding section *** (ADL 1.4 spec 8.6.5)
 		if (ontology.getTermBindingList() != null) {
 			indent(1, out);
 			out.write("term_binding = <");
@@ -905,6 +841,7 @@ public class ADLSerializer {
 			newline(out);
 		}
 
+		// *** Constraint binding section *** (ADL 1.4 spec 8.6.6)
 		if (ontology.getConstraintBindingList() != null) {
 			indent(1, out);
 			out.write("constraint_binding = <");
@@ -943,6 +880,43 @@ public class ADLSerializer {
 			indent(1, out);
 			out.write(">");
 			newline(out);
+		}
+	}
+
+	private void printDefinitionList(Writer out, List<OntologyDefinitions> termDefinitionsList) throws IOException {
+		for (OntologyDefinitions defs : termDefinitionsList) {
+			indent(2, out);
+			out.write("[\"");
+			out.write(defs.getLanguage());
+			out.write("\"] = <");
+			newline(out);
+			indent(3, out);
+			out.write("items = <");
+			newline(out);
+			for (ArchetypeTerm term : defs.getDefinitions()) {
+				indent(4, out);
+				out.write("[\"");
+				out.write(term.getCode());
+				out.write("\"] = <");
+				newline(out);
+				for (Map.Entry<String, String> entry : term.getItems().entrySet()) {
+					indent(5, out);
+					out.write(entry.getKey());
+					out.write(" = <\"");
+					out.write(entry.getValue());
+					out.write("\">");
+					newline(out);
+				}
+				newline(out);
+				indent(4, out);
+				out.write(">");
+				newline(out);
+			}
+			for (int i = 3; i > 1; i--) {
+				indent(i, out);
+				out.write(">");
+				newline(out);
+			}
 		}
 	}
 
@@ -1173,7 +1147,7 @@ public class ADLSerializer {
  * the Initial Developer are Copyright (C) 2004-2005 the Initial Developer. All
  * Rights Reserved.
  * 
- * Contributor(s): Mattias Forss, Johan Hjalmarsson
+ * Contributor(s): Mattias Forss, Johan Hjalmarsson, Erik Sundvall
  * 
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
