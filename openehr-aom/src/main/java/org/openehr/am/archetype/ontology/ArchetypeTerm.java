@@ -22,9 +22,22 @@ import org.apache.commons.lang.StringUtils;
 public class ArchetypeTerm {
 
 	/**
+	 * Constant added for convenience for commonly occuring key value in
+	 * the item map. Actual string content is "text" (without quotes).
+	 */
+	public final static String TEXT = "text";
+
+	/**
+	 * Constant added for convenience for commonly occuring key value in
+	 * the item map. Actual string content is "description" (without quotes).
+	 */
+	public final static String DESCRIPTION = "description";
+
+	
+	/**
 	 * Creates an ArchetypeTerm 
 	 * 
-	 * @param code not null or empty
+	 * @param code not null or empty (atNNNN or acNNNN codes depening on usage context) 
 	 * @throws IllegalArgumentException if null or empty code
 	 */
 	public ArchetypeTerm(String code) {
@@ -33,6 +46,19 @@ public class ArchetypeTerm {
 		}
 		this.code = code;
 		items = new LinkedHashMap<String, String>();
+	}
+	
+	/**
+	 * Convenience constructor that calls the other constructor [ArchetypeTerm(String code)]
+	 * and then adds two items to the hashmap using the keys described in parameters below.
+	 * @param code not null or empty (atNNNN or acNNNN codes depening on usage context)
+	 * @param text the String that will be stored in the item map under the key "text"
+	 * @param description the String that will be stored in the item map under the key "description"
+	 */
+	public ArchetypeTerm(String code, String text, String description){
+		this(code);
+		addItem(TEXT, text);
+		addItem(DESCRIPTION, description);
 	}
 
 	/**
@@ -100,7 +126,7 @@ public class ArchetypeTerm {
  *  Portions created by the Initial Developer are Copyright (C) 2003-2007
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Erik Sundvall
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
