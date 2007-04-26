@@ -417,7 +417,9 @@ TOKEN : /* IDENTIFIERS - ADL */
   < #V_LOCAL_CODE_CORE: "a"["c","t"](["0"-"9","."])+>
 |
   < V_LOCAL_CODE: "\""<V_LOCAL_CODE_CORE>"\"">
-|
+| 
+  < V_ABSOLUTE_PATH_WQ: "\"/" <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* "\"" >      
+| 
   < V_LOCAL_CODE_PATH: "\"["<V_LOCAL_CODE_CORE>"]/"
   (<V_ATTRIBUTE_IDENTIFIER>("/"<V_ATTRIBUTE_IDENTIFIER>)*"["<V_LOCAL_CODE_CORE>"]/")*"\"">
 |
@@ -531,8 +533,7 @@ TOKEN : /* IDENTIFIERS - ADL */
   < V_RELATIVE_PATH: <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* >      
 | 
   < V_ABSOLUTE_PATH: "/" <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* >      
-| 
-  
+|   
   < #YY: ["y","Y"]>
 |
   < #MMQX_2: (["m","M","?","X"]){2}>
@@ -1244,8 +1245,11 @@ String local_code_path_value() :
   Token t;
 }
 {
-  t = <V_LOCAL_CODE_PATH>
-  { return t.image; }
+  t = <V_ABSOLUTE_PATH_WQ>
+  { 
+    String value = t.image;
+    return value.substring(1, value.length() - 1);
+  }
 }
 
 

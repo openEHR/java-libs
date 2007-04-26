@@ -65,6 +65,23 @@ public class TermBindingTest extends ParserTestBase {
         assertEquals("wrong terms size", 2, item.getTerms().size());
         assertEquals("wrong 1st term", "[icd10::1000]", item.getTerms().get(0));
         assertEquals("wrong 2nd term", "[icd10::1001]", item.getTerms().get(1));
+    }
+    
+    public void testPathBasedBinding() throws Exception {
+    	ADLParser parser = new ADLParser(loadFromClasspath(
+        	"adl-test-entry.term_binding2.test.adl"));
+    	Archetype archetype = parser.parse();
+
+    	OntologyBinding binding = archetype.getOntology().getTermBindingList().get(0);
+        assertEquals("wrong binding terminology", "LNC205", binding.getTerminology());
+
+        TermBindingItem item = (TermBindingItem) binding.getBindingList().get(0);
+
+        assertEquals("wrong local code path", 
+        		"/data[at0002]/events[at0003]/data[at0001]/item[at0004]", 
+        		item.getCode());
+        assertEquals("wrong terms size", 1, item.getTerms().size());
+        assertEquals("wrong term", "[LNC205::8310-5]", item.getTerms().get(0));
 
     }
 }

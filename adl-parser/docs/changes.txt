@@ -1,3 +1,6 @@
+2007/04/26
+.updated parsing path-based term binding
+
 2007/04/18
 .added support for comment in term/constraint definitions
 .updated parser due to AOM changes
