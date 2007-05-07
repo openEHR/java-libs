@@ -26,6 +26,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @version 1.0
  */
 
+@Deprecated
 public class DefinitionItem {
 
     public DefinitionItem(String code, String text, String description) {

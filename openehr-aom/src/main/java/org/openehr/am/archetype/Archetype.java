@@ -99,6 +99,33 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 		loadInternalRefs(definition, true, null);
 	}
 
+	/**
+	 * Set of language-independent paths extracted
+	 * from archetype. Paths obey Xpath-like syntax
+	 * and are formed from alternations of
+	 * C_OBJECT.node_id and
+	 * C_ATTRIBUTE.rm_attribute_name values.
+	 * 
+	 * @return set of paths
+	 */
+	public Set<String> physicalPaths() {
+		return pathNodeMap.keySet();
+	}	
+	
+	/**
+	 * Set of language-dependent paths extracted
+	 * from archetype. Paths obey the same syntax as
+	 * physical_paths, but with node_ids replaced by
+	 * their meanings from the ontology.
+	 * 
+	 * @param language
+	 * @return set of paths
+	 */
+	public Set<String> logicalPaths(String language) {
+		// TODO 
+		return null;
+	}
+
 	private void loadMaps(CObject node, boolean required) {
 		pathNodeMap.put(node.path(), node);
 

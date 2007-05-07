@@ -2,10 +2,10 @@ package org.openehr.am.serialize;
 
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
+import org.openehr.am.archetype.ontology.ArchetypeTerm;
 import org.openehr.am.archetype.ontology.OntologyBinding;
 import org.openehr.am.archetype.ontology.OntologyBindingItem;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
-import org.openehr.am.archetype.ontology.DefinitionItem;
 import org.openehr.am.archetype.ontology.QueryBindingItem;
 import org.openehr.am.archetype.ontology.TermBindingItem;
 import org.openehr.am.archetype.assertion.Assertion;
@@ -238,31 +238,46 @@ public class XMLSerializer {
         printEmptyString("terminology_id", cp.getTerminologyID().getValue(), indent, out);
     }
     
-    private void printDefinitionItem(DefinitionItem defItem, int indent,
+    private void printDefinitionItem(ArchetypeTerm term, int indent,
             CustomWriter out) throws IOException {
-        if(defItem == null) {
+        if(term == null) {
             return;
         }
         
-        // Text
+//        // Text
+//        indent(indent, out);
+//        out.writeln("<item>");
+//        indent(indent + 1, out);
+//        out.writeln("<key>text</key>");
+//        indent(indent + 1, out);
+//        out.writeln("<value>" + term.getItem(ArchetypeTerm.TEXT) + "</value>");
+//        indent(indent, out);
+//        out.writeln("</item>");
+//        
+//        // Description
+//        indent(indent, out);
+//        out.writeln("<item>");
+//        indent(indent + 1, out);
+//        out.writeln("<key>description</key>");
+//        indent(indent + 1, out);
+//        out.writeln("<value>" + term.getItem(ArchetypeTerm.DESCRIPTION) + "</value>");
+//        indent(indent, out);
+//        out.writeln("</item>");
+
+        // General iteration over all items (replacing commented out code above)
+        // due to change of spec and ref_impl
+        for (Map.Entry<String, String> entry : term.getItems().entrySet()) {
         indent(indent, out);
         out.writeln("<item>");
         indent(indent + 1, out);
-        out.writeln("<key>text</key>");
+        out.writeln("<key>"+entry.getKey()+"</key>");
         indent(indent + 1, out);
-        out.writeln("<value>" + defItem.getText() + "</value>");
+        out.writeln("<value>" + entry.getValue() + "</value>");
         indent(indent, out);
         out.writeln("</item>");
+		}
         
-        // Description
-        indent(indent, out);
-        out.writeln("<item>");
-        indent(indent + 1, out);
-        out.writeln("<key>description</key>");
-        indent(indent + 1, out);
-        out.writeln("<value>" + defItem.getDescription() + "</value>");
-        indent(indent, out);
-        out.writeln("</item>");
+        
     }
     
     private void printEmptyStringMap(String label, Map<String, String> map, int indent,
@@ -809,13 +824,13 @@ public class XMLSerializer {
                 out.writeln("<term_definitions>");
                 printEmptyString("language", defs.getLanguage(), 3, out);
                 
-                for (DefinitionItem item : defs.getDefinitions()) {
+                for (ArchetypeTerm term : defs.getDefinitions()) {
                     indent(3, out);
                     out.writeln("<terms>");
-                    printEmptyString("code", item.getCode(), 4, out);
+                    printEmptyString("code", term.getCode(), 4, out);
                     indent(4, out);
                     out.writeln("<items>");
-                    printDefinitionItem(item, 5, out);
+                    printDefinitionItem(term, 5, out);
                     indent(4, out);
                     out.writeln("</items>");
                     indent(3, out);
@@ -835,13 +850,13 @@ public class XMLSerializer {
                 out.writeln("<constraint_definitions>");
                 printEmptyString("language", defs.getLanguage(), 3, out);
                 
-                for (DefinitionItem item : defs.getDefinitions()) {
+                for (ArchetypeTerm term : defs.getDefinitions()) {
                     indent(3, out);
                     out.writeln("<terms>");
-                    printEmptyString("code", item.getCode(), 4, out);
+                    printEmptyString("code", term.getCode(), 4, out);
                     indent(4, out);
                     out.writeln("<items>");
-                    printDefinitionItem(item, 5, out);
+                    printDefinitionItem(term, 5, out);
                     indent(4, out);
                     out.writeln("</items>");
                     indent(3, out);
@@ -1224,6 +1239,7 @@ public class XMLSerializer {
  *
  * Contributor(s):  Mattias Forss <mattias.forss@gmail.com>
  *                  Rong Chen
+ *                  Erik Sundvall
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or

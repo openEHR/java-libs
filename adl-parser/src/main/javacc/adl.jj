@@ -46,7 +46,7 @@ import org.openehr.rm.support.terminology.*;
 import org.openehr.rm.support.measurement.*;
 
 import org.openehr.am.archetype.Archetype;
-import org.openehr.am.archetype.assertion.Assertion;
+import org.openehr.am.archetype.assertion.*;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
 import org.openehr.am.archetype.ontology.*;
@@ -68,9 +68,13 @@ public class ADLParser {
 
   /* static fields */
   private static final String CHARSET = "UTF-8";
+  private static final String ATTRIBUTE_UNKNOWN = "__unknown__";
 
-  /* member fields */
+  /* member flags for backwards compatibility */
   private boolean missingLanguageCompatible = false;
+  private boolean emptyPurposeCompatible = false;
+  
+  /* member fields */  
   private MeasurementService measureServ = 
   			SimpleMeasurementService.getInstance();
   	
@@ -87,28 +91,35 @@ public class ADLParser {
   }
   
   /* Constructor that takes file as input */
-  public ADLParser(File file, boolean missingLanguageCompatible) 
-  		throws IOException {
+  public ADLParser(File file, boolean missingLanguageCompatible,
+      boolean emptyPurposeCompatible) throws IOException {
       this(new FileInputStream(file), CHARSET);
       this.missingLanguageCompatible = missingLanguageCompatible;
+      this.emptyPurposeCompatible = emptyPurposeCompatible;
   }
 
   /* Constructor that takes string as input */
-  public ADLParser(String value, boolean missingLanguageCompatible) {
+  public ADLParser(String value, boolean missingLanguageCompatible,
+  		boolean emptyPurposeCompatible) {
       this(new BufferedReader(new StringReader(value)));
       this.missingLanguageCompatible = missingLanguageCompatible;
+      this.emptyPurposeCompatible = emptyPurposeCompatible;
   }
   
   /* Constructor that takes Reader as input */
-  public ADLParser(Reader reader, boolean missingLanguageCompatible) {
+  public ADLParser(Reader reader, boolean missingLanguageCompatible,
+  		boolean emptyPurposeCompatible) {
       this(reader);
       this.missingLanguageCompatible = missingLanguageCompatible;
+      this.emptyPurposeCompatible = emptyPurposeCompatible;
   }
   
   /* Constructor that takes InputStream as input */
-  public ADLParser(InputStream input, boolean missingLanguageCompatible) {
+  public ADLParser(InputStream input, boolean missingLanguageCompatible,
+  		boolean emptyPurposeCompatible) {
       this(input);
       this.missingLanguageCompatible = missingLanguageCompatible;
+      this.emptyPurposeCompatible = emptyPurposeCompatible;
   }
 
   /* =========================  public interface ======================== */
@@ -142,7 +153,8 @@ public class ADLParser {
     if (args.length == 1) {
       System.out.println(title + "  Reading from file " + args[0] + " . . .");
       try {
-        parser = new ADLParser(new File(args[0]), true);
+      	// be permissive in console mode
+        parser = new ADLParser(new File(args[0]), true, true);
       } catch (IOException e) {
         System.out.println(title + "  File " + args[0] + " not found.");
         return;
@@ -166,7 +178,7 @@ public class ADLParser {
     			continue;
     		}
     		if(parser == null) {
-    			parser = new ADLParser(files[i]);
+    			parser = new ADLParser(files[i], true, true);
     		} else {
     			parser.reInit(files[i]);
     		}    		
@@ -219,7 +231,7 @@ PARSER_END(ADLParser)
 
 < * > SPECIAL_TOKEN : /* COMMENTS */
 {
-  <SINGLE_LINE_COMMENT: "--" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+  <SINGLE_LINE_COMMENT: "--" (~["\n","\r"])*>
 }
 
 < * > TOKEN [IGNORE_CASE]: /* RESERVED WORDS AND LITERALS - ADL */
@@ -269,7 +281,8 @@ PARSER_END(ADLParser)
 | < SYM_KEYWORDS: "keywords">
 | < SYM_RIGHTS: "rights">
 | < SYM_DESCRIPTION_WORD: "description">
-| <SYM_LANGUAGE_WORD: "language">
+| < SYM_COMMENT: "comment">
+| < SYM_LANGUAGE_WORD: "language">
 }
 
 < * > TOKEN [IGNORE_CASE]: /* KEYWORDS - dADL */
@@ -332,7 +345,6 @@ PARSER_END(ADLParser)
 | < SYM_PRECISION: "precision">
 | < SYM_MAGNITUDE: "magnitude">
 | < SYM_C_QUANTITY_ASSUMED_VALUE: "assumed_value">
-| < V_TERMINOLOGY_ID_BLOCK_CQ: "["(<LET_DIG_DUDSLR>)+"::" > : TERM_CODE
 }
 
 < * > TOKEN: /* SYMBOLS - common */
@@ -365,6 +377,7 @@ PARSER_END(ADLParser)
 | < SYM_DIV: "//">
 | < SYM_ELLIPSIS: "..">
 | < SYM_LIST_CONTINUE: "...">
+| < SYM_C_DV_ORDINAL: "C_DV_ORDINAL" >
 }
 
 < * > TOKEN : /* LOCAL TOKENS */
@@ -404,7 +417,9 @@ TOKEN : /* IDENTIFIERS - ADL */
   < #V_LOCAL_CODE_CORE: "a"["c","t"](["0"-"9","."])+>
 |
   < V_LOCAL_CODE: "\""<V_LOCAL_CODE_CORE>"\"">
-|
+| 
+  < V_ABSOLUTE_PATH_WQ: "\"/" <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* "\"" >      
+| 
   < V_LOCAL_CODE_PATH: "\"["<V_LOCAL_CODE_CORE>"]/"
   (<V_ATTRIBUTE_IDENTIFIER>("/"<V_ATTRIBUTE_IDENTIFIER>)*"["<V_LOCAL_CODE_CORE>"]/")*"\"">
 |
@@ -421,11 +436,17 @@ TOKEN : /* IDENTIFIERS - ADL */
              ("_"(<DIG>){3})*(["e","E"](["+","-"])?(<DIG>){1,3}
              ("_"(<DIG>){3})*)?>
 |
-  < V_STRING: "\"" <V_STRING_CORE> "\"">
-|
-  < #V_STRING_CORE: (~["\\","\n","\""])*
-              ("\\\"" (~["\\","\n","\""])* "\\\"")*
-              (~["\\","\n","\""])* >
+  < V_STRING: 
+    "\"" 
+  	( 
+      ("\\\"" (~["\"","\n", "\\"])* )
+      |
+      ("\n" (["\r", " ", "\t"])* )
+      |
+      (~["\\","\n","\""])*
+    )*
+    "\""
+  >           
 |
   < V_CHARACTER: "'"~["\\","\n","'"]"'" | <CHAR_REF> >
 |
@@ -433,9 +454,9 @@ TOKEN : /* IDENTIFIERS - ADL */
   ((<DIG>)+["d","D"])?("T"((<DIG>)+["h","H"])?((<DIG>)+["m","M"])?
   ((<DIG>)+["s","S"])?)?>
 |
-  < V_ISO8601_DURATION_PATTERN: "P"["w","W"]|"P"(["y","Y"])?(["m","M"])?
-  (["d","D"])?"T"(["h","H"])?(["m","M"])?(["s","S"])? |"P"(["y","Y"])?
-  (["m","M"])?(["d","D"])?>
+  < V_ISO8601_DURATION_CONSTRAINT_PATTERN: "P"(["y","Y"])?(["m","M"])?
+  (["w","W"])?(["d","D"])?"T"(["h","H"])?(["m","M"])?(["s","S"])? 
+  |"P"(["y","Y"])?(["m","M"])?(["w","W"])?(["d","D"])?>
 |
   < V_DATE: (["0"-"9"]){4} "-" ( "0"["1"-"9"] | "1"["0"-"2"] ) "-"
             ( "0"["1"-"9"] | ["1"-"2"]["0"-"9"]|"3"["0"-"1"] ) >
@@ -474,9 +495,7 @@ TOKEN : /* IDENTIFIERS - ADL */
                       "#" ( (["0"-"9"])+ | "x" (["0"-"9","a"-"f","A"-"F"])+ )
                     ) ";'">
 |
-  < #PATH_SEGMENT: "/" <V_ATTRIBUTE_IDENTIFIER> ( <V_LOCAL_TERM_CODE_REF>)? >
-|
-  < ADL_PATH: (  <PATH_SEGMENT> )+ >                    
+  < V_CODE_PHRASE: "["(<LET_DIG_DUDSLR>)+"::"(<LET_DIG_DUDS>)+"]">              
 }
 
 /* ----------------------- TOKEN - dADL ---------------------------- */
@@ -506,8 +525,15 @@ TOKEN : /* IDENTIFIERS - ADL */
   < V_TERMINOLOGY_ID_BLOCK: "["(<LET_DIG_DUDSLR>)+"::" > : TERM_CODE	
 |
   < V_REGEXP: (["=","!"]"~ ")? (
-  ( "/"(~["/","}"])*("\\/"(~["/","}"]))*"/" | "^"(~["^","\n"])*"^")) >
+  ( "/"(~["/","{", "}","\r","\n"])*("\\/"(~["/","}","\r","\n"]))*"/" 
+  | "^"(~["^","\n","\r"])*"^")) >
 |
+  < #PATH_SEGMENT:  <V_ATTRIBUTE_IDENTIFIER> ( <V_LOCAL_TERM_CODE_REF>)? >
+|
+  < V_RELATIVE_PATH: <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* >      
+| 
+  < V_ABSOLUTE_PATH: "/" <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* >      
+|   
   < #YY: ["y","Y"]>
 |
   < #MMQX_2: (["m","M","?","X"]){2}>
@@ -605,6 +631,9 @@ Archetype archetype() :
   String parent = null;
   String concept;
   String lang = null;
+  String langTerm = null;
+  String langCode = null;
+  CodePhrase originalLanguage = null;
   Map<String, TranslationDetails> translations = null; 
   TranslationDetails translationDetails = null;
   RevisionHistory revisionHistory = null;
@@ -634,7 +663,7 @@ Archetype archetype() :
   
   [
     <SYM_LANGUAGE>  
-  	<SYM_ORIGINAL_LANGUAGE> <SYM_EQ> "<" lang = string_value() ">"  	
+  	<SYM_ORIGINAL_LANGUAGE> <SYM_EQ> "<" originalLanguage = code_phrase() ">"
     [ 
       <SYM_TRANSLATIONS> <SYM_EQ> "<"
       
@@ -652,10 +681,10 @@ Archetype archetype() :
   <EOF>
 
   {
-  	if(missingLanguageCompatible) {
-  		lang = ontology.getPrimaryLanguage();		
-  	}
-    CodePhrase originalLanguage = new CodePhrase("languages", lang);     	
+  	if(originalLanguage == null && missingLanguageCompatible) {
+  		langCode = ontology.getPrimaryLanguage();		
+  		originalLanguage = new CodePhrase("ISO_639-1", langCode);  
+  	}       	
   	
     return new Archetype(adlVersion, id, parent, concept, originalLanguage,
     		translations, description, revisionHistory, isControlled,
@@ -663,10 +692,29 @@ Archetype archetype() :
   }
 }
 
+CodePhrase code_phrase() : 
+{
+  Token t; 	
+  String lang = null;
+  String langTerm = null;
+  String langCode = null;
+}
+{
+  t = <V_CODE_PHRASE> 
+    { 
+  	  lang = t.image; 
+  	  int i = lang.indexOf("::");
+  	  langTerm = lang.substring(1, i);
+  	  langCode = lang.substring(i + 2, lang.length() - 1);
+    }  	  
+  { return new CodePhrase(langTerm, langCode); }	
+}
+
 Map<String, TranslationDetails> translations() : 
 {
   Token t;
-  String lang;
+  String langAsKey;
+  CodePhrase language;
   TranslationDetails td;	
   Map<String, TranslationDetails> map = new HashMap<String, TranslationDetails>();
   Map<String, String> author;
@@ -675,11 +723,9 @@ Map<String, TranslationDetails> translations() :
 }
 {
   (
-    <SYM_L_BRACKET> lang = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
+    <SYM_L_BRACKET> langAsKey = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
       
-      <SYM_LANG_LANGUAGE> <SYM_EQ> <SYM_LT>
-        string_value() // TODO check with lang?
-      <SYM_GT>
+      <SYM_LANG_LANGUAGE> <SYM_EQ> "<" language = code_phrase() ">"
       <SYM_AUTHOR> <SYM_EQ> <SYM_LT>
         author = string_string_map()
       <SYM_GT>
@@ -697,12 +743,10 @@ Map<String, TranslationDetails> translations() :
       ]
     <SYM_GT>	    	    
     { 
-      CodePhrase language = new CodePhrase("languages", lang);	
-      
       // TODO null terminology service
       td = new TranslationDetails(language, author, accreditation, 
       		otherDetails, null); 
-      map.put(lang, td);
+      map.put(langAsKey, td);
     }
   )+
   { return map; }	
@@ -773,7 +817,7 @@ ResourceDescription arch_description() :
   List details = new ArrayList();
   ResourceDescriptionItem item = null;
   String archetypePackageURI = null;
-  Map otherDetails = new HashMap(); // not used
+  Map otherDetails = null;
   Archetype parentArchetype = null;
   AuthoredResource parent = null; // not used  
 }
@@ -782,7 +826,9 @@ ResourceDescription arch_description() :
    (
      <SYM_LIFECYCLE_STATE> <SYM_EQ> "<" lifecycleState = string_value() ">"
    |
-     <SYM_ARCHETYPE_PACKAGE_URI> <SYM_EQ> "<" archetypePackageURI = string_value() ">"
+     <SYM_ARCHETYPE_PACKAGE_URI> <SYM_EQ> "<" 
+       archetypePackageURI = string_value() 
+     ">"
    |
      <SYM_DETAILS> <SYM_EQ> "<"
          (
@@ -794,13 +840,23 @@ ResourceDescription arch_description() :
          )+
      ">"
    |
-   	 <SYM_ORIGINAL_AUTHOR> <SYM_EQ> originalAuthor = map_value()         
+   	 <SYM_ORIGINAL_AUTHOR> <SYM_EQ> "<" 
+   	 	originalAuthor = string_string_map()         
+   	 ">"
    |    
      <SYM_COPYRIGHT> <SYM_EQ> "<" string_value() ">" 
    |    
      <SYM_OTHER_CONTRIBUTORS> <SYM_EQ> "<" 
-       [ otherContributors = string_list_value() ] 
+        ( 
+          otherContributors = string_list_value()   
+        |
+          otherContributors = index_string_list()
+        )   
      ">"    
+   | 
+     <SYM_OTHER_DETAILS> <SYM_EQ> "<"
+     	otherDetails = string_string_map()
+     ">"
    )*
    {
      ResourceDescription resourceDescription = new ResourceDescription(
@@ -811,29 +867,10 @@ ResourceDescription arch_description() :
    }
 }
 
-Map map_value() :
-{
-  Map map = new HashMap();
-  String key = null;
-  String value = null;
-}
-{
-  "<"
-       (
-         "[" key = string_value() "]" <SYM_EQ> "<" value = string_value() ">"
-         {
-           if( key != null && value != null) map.put(key, value);
-         }
-       )+
-   ">"
-   {
-     return map;
-   }
-}
-
 ResourceDescriptionItem arch_description_item() :
 {
-  String lang = null;	
+  String langAsKey = null;	
+  CodePhrase lang = null;	
   String purpose = null;
   String use = null;
   String misuse = null;
@@ -845,14 +882,14 @@ ResourceDescriptionItem arch_description_item() :
   TerminologyService terminologyService = null; // not used
 }
 {
-  "[" lang = string_value() "]" <SYM_EQ> "<"
+  "[" langAsKey = string_value() "]" <SYM_EQ> "<"
   (
-    <SYM_LANGUAGE_WORD> <SYM_EQ> "<" string_value() ">"
+    <SYM_LANGUAGE_WORD> <SYM_EQ> "<" lang = code_phrase() ">"
   | 
     <SYM_PURPOSE> <SYM_EQ> "<" purpose = string_value() ">"
   |  
           
-      <SYM_KEYWORDS> <SYM_EQ> "<" 
+    <SYM_KEYWORDS> <SYM_EQ> "<" 
         (
           LOOKAHEAD(2) 
           keywords = string_list_value() 
@@ -877,15 +914,17 @@ ResourceDescriptionItem arch_description_item() :
      <SYM_COPYRIGHT> <SYM_EQ> "<" copyright = string_value() ">" 
    
    |     
-      
-      { String url = null; }
-      <SYM_ORIGINAL_RESOURCE_URI> <SYM_EQ> "<" url = string_value() ">" 
-      // TODO: where is the key for url?
-      { originalResourceURI.put(url, url); }	
+     <SYM_ORIGINAL_RESOURCE_URI> <SYM_EQ> "<" 
+     	originalResourceURI = string_string_map()
+	 ">"	
+   | 
+     <SYM_OTHER_DETAILS> <SYM_EQ> "<"
+     	otherDetails = string_string_map()
+     ">"	 
+	
    )*
   ">"
   {
-  	CodePhrase langCode = new CodePhrase("languages", lang);    
     if(use != null && use.trim().length() == 0) {
       use = null;
     }
@@ -895,8 +934,12 @@ ResourceDescriptionItem arch_description_item() :
     if(copyright != null && copyright.trim().length() == 0) {
       copyright = null;
     }  
+    
+    if((purpose == null || purpose.length() == 0) && emptyPurposeCompatible) {
+    	purpose = ATTRIBUTE_UNKNOWN;
+    } 
 
-    return new ResourceDescriptionItem(langCode, purpose, keywords,
+    return new ResourceDescriptionItem(lang, purpose, keywords,
     	use, misuse, copyright, originalResourceURI, otherDetails,
     	terminologyService);
   }
@@ -918,8 +961,8 @@ CComplexObject arch_definition() :
 
 ArchetypeOntology arch_ontology() :
 {
-  String primaryLanguage;
-  List languages;
+  String primaryLanguage = null;
+  List languages = null;
   List terminologies = null;
   List termDefinitionsList = new ArrayList();
   List constraintDefinitionsList = new ArrayList();
@@ -934,8 +977,8 @@ ArchetypeOntology arch_ontology() :
 }
 {
   <SYM_ONTOLOGY>
-  primaryLanguage = primary_language()
-  languages = languages_available()
+  [primaryLanguage = primary_language()]
+  [languages = languages_available()]
   [ terminologies = terminologies_available() ]
 
   termDefinitionsList = term_definitions_list()
@@ -1024,7 +1067,7 @@ OntologyDefinitions definitions_body() :
   OntologyDefinitions definitions;
   String language;
   List list = new ArrayList();
-  DefinitionItem item;
+  ArchetypeTerm term;
 }
 {
   "[" language = string_value() "]"
@@ -1032,9 +1075,9 @@ OntologyDefinitions definitions_body() :
     <SYM_ITEMS> <SYM_EQ> "<"
 	    [
 	      (
-	        item = definition_item()
+	        term = archetype_term()
 	        {
-	          list.add(item);
+	          list.add(term);
 	        }
 	      )+
 	    ]
@@ -1062,6 +1105,35 @@ DefinitionItem definition_item() :
     )
   ">"
   { return new DefinitionItem(code, text, description); }
+}
+
+ArchetypeTerm archetype_term() :
+{
+  String code;
+  String value = null;
+  ArchetypeTerm term;
+}
+{
+  "[" 
+     code = local_code_value() 
+     { term = new ArchetypeTerm(code); }
+     
+   "]" <SYM_EQ> "<"
+    ( 
+      <SYM_TEXT> <SYM_EQ> "<" 
+          value = string_value() { term.addItem("text", value); } 
+        ">" [ ";" ]
+      |
+      <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" 
+          value = string_value() { term.addItem("description", value); }
+        ">" [ ";" ]
+      |
+      <SYM_COMMENT> <SYM_EQ> "<" 
+          value = string_value() { term.addItem("comment", value); }
+        ">" [ ";" ]
+    )*
+  ">"
+  { return term; }
 }
 
 List term_binding_list() :
@@ -1114,7 +1186,7 @@ OntologyBinding ontology_binding_body() :
 	      LOOKAHEAD( term_binding_item() )
 	      item = term_binding_item()
 	      { bindingList.add(item); }
-	    )+
+	    )*
 	 ">"
   ">"
   { return new OntologyBinding(terminology, bindingList); }
@@ -1143,7 +1215,7 @@ TermBindingItem term_binding_item() :
          }
     )*
   ">"
-  { return new TermBindingItem(code, terms);; }
+  { return new TermBindingItem(code, terms); }
 }
 
 QueryBindingItem query_binding_item() :
@@ -1173,8 +1245,11 @@ String local_code_path_value() :
   Token t;
 }
 {
-  t = <V_LOCAL_CODE_PATH>
-  { return t.image; }
+  t = <V_ABSOLUTE_PATH_WQ>
+  { 
+    String value = t.image;
+    return value.substring(1, value.length() - 1);
+  }
 }
 
 
@@ -1242,6 +1317,57 @@ AttributeValue attr_val() :
     ]
   <SYM_GT>
   { return av; }
+}
+
+Set c_includes() :
+{
+  Set set ;
+}
+{
+  <SYM_INCLUDE> set = assertions()
+  { return set; }
+}
+
+Set c_excludes() :
+{
+  Set set;
+}
+{
+  <SYM_EXCLUDE> set = assertions()
+  { return set; }
+}
+
+Set assertions() :
+{
+  Set set = new HashSet();
+  Assertion a;
+}
+{
+  (
+    a = assertion()
+    {
+      set.add(a);
+    }
+  )+
+  { return set; }
+}
+
+Assertion assertion() :
+{
+  String tag = null; 
+  ExpressionItem expression;
+  String stringExpression = null; 
+  List<AssertionVariable> variables = null;	
+}
+{
+  [ 
+    LOOKAHEAD(2)
+    tag = any_identifier() ":" 
+  ] 
+  expression = boolean_expression()
+  { 
+    return new Assertion(tag, expression, stringExpression, variables); 
+  }
 }
 
 Object basic_object_val() :
@@ -1384,6 +1510,21 @@ String string_value() :
   }
 }
 
+List index_string_list() :{
+  List list = new ArrayList();
+  String value = null;
+  String index = null; // not used
+}
+{
+  (
+    <SYM_L_BRACKET> index = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
+      ( value = string_value())    
+      { list.add(value); }
+    <SYM_GT>
+  )*
+  { return list.isEmpty() ? null : list; }
+}
+
 List string_list_value() :
 {
   List list = new ArrayList();
@@ -1450,18 +1591,38 @@ Interval integer_interval_value() :
 {
   Interval i = null;
   int lower = 0;
-  int upper = 0;
+  int upper = 0;  
 }
 {
   <SYM_INTERVAL_DELIM>
   (
+    LOOKAHEAD( 3 )    
+    {
+      boolean lowerInclusive = true;
+	  boolean upperInclusive = true; 
+	  boolean upperSpecified = false; 	
+    }
+    [
+      <SYM_GT> { lowerInclusive = false; }
+	]
     lower = integer_value() 
     { upper = lower; }
     [ 
-      <SYM_ELLIPSIS> upper = integer_value()       
+      <SYM_ELLIPSIS> 
+      [ 
+        <SYM_LT> {  upperInclusive = false; } 
+      ] 
+      upper = integer_value()
+      { upperSpecified =true; }       
     ]
     {
-      i = new Interval(new Integer(lower), new Integer(upper), true, true);
+      if(!lowerInclusive && !upperSpecified) {
+      	// specical case for |>100|
+      	i = new Interval(new Integer(lower), null, false, false);
+      } else {
+      	i = new Interval(new Integer(lower), new Integer(upper), lowerInclusive, 
+      	                 upperInclusive);
+      }	
     }
   |
     <SYM_LT> upper = integer_value()
@@ -1469,14 +1630,14 @@ Interval integer_interval_value() :
       i = new Interval(null, new Integer(upper), false, false);
     }
   |
-    <SYM_LE> upper = integer_value()
-    {
-      i = new Interval(null, new Integer(upper), false, true);
-    }
-  |
     <SYM_GT> lower = integer_value()
     {
       i = new Interval(new Integer(lower), null, false, false);
+    }
+  |
+    <SYM_LE> upper = integer_value()
+    {
+      i = new Interval(null, new Integer(upper), false, true);
     }
   |
     <SYM_GE> lower = integer_value()
@@ -1536,13 +1697,33 @@ Interval real_interval_value() :
 {
   <SYM_INTERVAL_DELIM>
   (
+    LOOKAHEAD( 3 )    
+    {
+      boolean lowerInclusive = true;
+	  boolean upperInclusive = true; 
+	  boolean upperSpecified = false; 	
+    }
+    [
+      <SYM_GT> { lowerInclusive = false; }
+	]
     lower = real_value() 
     { upper = lower; }
     [ 
-      <SYM_ELLIPSIS> upper = real_value() 
+      <SYM_ELLIPSIS> 
+      [ 
+        <SYM_LT> {  upperInclusive = false; } 
+      ]
+      upper = real_value()       
+      { upperSpecified = true; } 
     ]
     {
-      i = new Interval(new Double(lower), new Double(upper), true, true);
+      if(!lowerInclusive && !upperSpecified) {
+      	// specical case for |>100.0|
+      	i = new Interval(new Double(lower), null, false, false);
+      } else {	 
+        i = new Interval(new Double(lower), new Double(upper), lowerInclusive, 
+                         upperInclusive);
+      }
     }
   |
     <SYM_LT> upper = real_value()
@@ -1908,7 +2089,11 @@ Interval duration_interval_value() :
 {
   <SYM_INTERVAL_DELIM>
   (
-    lower = duration_value() [ <SYM_ELLIPSIS> upper = duration_value() ]
+    lower = duration_value() 
+    { upper = lower; }
+    [ 
+      <SYM_ELLIPSIS> upper = duration_value() 
+    ]
     {
       i = new Interval(lower, upper, true, true);
     }
@@ -1939,11 +2124,11 @@ Interval duration_interval_value() :
 
 String term_code() :
 {
-  Token t;
+  CodePhrase code;
 }
 {
-  t = <V_QUALIFIED_TERM_CODE_REF>
-  { return t.image; }
+  code = code_phrase()
+  { return "[" + code.getTerminologyID() + "::" + code.getCodeString() + "]"; }
 }
 
 List term_code_list_value() :
@@ -1995,7 +2180,7 @@ CComplexObject c_complex_object(String path, CAttribute parent) :
     }    
   }
   <SYM_MATCHES> <SYM_START_CBLOCK>
-    attributes = c_complex_object_body(path)   
+    attributes = c_complex_object_body(path) 
   <SYM_END_CBLOCK>
   {
     return new CComplexObject(path, type, occurrences, nodeID, attributes, parent);
@@ -2077,7 +2262,7 @@ ArchetypeInternalRef archetype_internal_ref(String path, CAttribute parent) :
 {
   <SYM_USE_NODE> type = type_identifier() 
    [ occurrences = c_occurrences() ]  
-  target = adl_path()  
+  target = absolute_path()  
   { 
   	return new ArchetypeInternalRef(path, type, occurrences, null, parent, 
   			target); 
@@ -2094,8 +2279,11 @@ ArchetypeSlot archetype_slot(String path, CAttribute parent) :
 }
 {
   <SYM_ALLOW_ARCHETYPE> type = type_identifier()
+  
   [ nodeID = constraint_ref() ]
-  [ occurrences = c_occurrences() ]
+  
+  [ occurrences = c_occurrences() ] 
+  
   <SYM_MATCHES> <SYM_START_CBLOCK>
     [ includes = c_includes() ]
     [ excludes = c_excludes() ]
@@ -2107,6 +2295,15 @@ ArchetypeSlot archetype_slot(String path, CAttribute parent) :
 }
 
 CPrimitiveObject c_primitive_object(String path, CAttribute parent) :
+{
+  CPrimitive c;
+}
+{
+  c = c_primitive()
+  { return new CPrimitiveObject(path, null, null, parent, c); }
+}
+
+CPrimitive c_primitive() :
 {
   CPrimitive c;
 }
@@ -2136,7 +2333,7 @@ CPrimitiveObject c_primitive_object(String path, CAttribute parent) :
     LOOKAHEAD( c_real() )
     c = c_real()
   )
-  { return new CPrimitiveObject(path, null, null, parent, c); }
+  { return c; }
 }
 
 void c_any() :
@@ -2205,180 +2402,225 @@ Set c_invariants() :
   Set set;
 }
 {
-  <SYM_INVARIANT> set = invariants()
+  <SYM_INVARIANT> set = assertions()
   { return set; }
-}
-
-Set c_includes() :
-{
-  Set set ;
-}
-{
-  <SYM_INCLUDE> set = invariants()
-  { return set; }
-}
-
-Set c_excludes() :
-{
-  Set set;
-}
-{
-  <SYM_EXCLUDE> set = invariants()
-  { return set; }
-}
-
-Set invariants() :
-{
-  Set set = new HashSet();
-  Invariant i;
-}
-{
-  (
-    i = invariant()
-    {
-      set.add(i);
-    }
-  )+
-  { return set; }
-}
-
-Invariant invariant() :
-{
-  Invariant i = new Invariant();
-}
-{
-  [ LOOKAHEAD( 2 ) any_identifier() ":" ] Boolean_expression()
-
-  { return i; }
 }
 
 /* ----------------------- expressions ----------------------- */
-
-void Boolean_expression() :
-{}
+ExpressionItem boolean_expression() :
 {
-  LOOKAHEAD( 3 ) <SYM_EXISTS> adl_path()
+  ExpressionItem item = null;	
+}
+{  
+  LOOKAHEAD( 2 )	
+  item = boolean_leaf()
 |
-  LOOKAHEAD( 3 ) "(" Boolean_expression() ")"
+  LOOKAHEAD( 2 )
+  item = boolean_node()
+  
+  { return item; }
+}
+
+ExpressionItem boolean_node() :
+{
+  ExpressionItem ret = null;
+  ExpressionItem item = null;
+  ExpressionItem item2 = null;  
+  OperatorKind op = null;
+  String path = null;
+  boolean precedenceOverridden = false; // TODO
+  Token t = null;	
+  String attrId = null;
+  CPrimitive cp = null;
+}
+{
+(
+  <SYM_EXISTS> path = absolute_path()
+  { 
+  	item = ExpressionLeaf.pathConstant(path);
+  	ret = new ExpressionUnaryOperator(ExpressionItem.BOOLEAN,
+  		OperatorKind.OP_EXISTS, precedenceOverridden, item);
+  }
 |
-  LOOKAHEAD( 3 ) attribute_identifier() <SYM_MATCHES>
+  LOOKAHEAD( 2 )
+  attrId = relative_path() <SYM_MATCHES>
                  (
-                   <SYM_START_CBLOCK> c_primitive_object("?", null) <SYM_END_CBLOCK>
+                   <SYM_START_CBLOCK> cp = c_primitive() <SYM_END_CBLOCK>
+                   { item2 = new ExpressionLeaf(cp.getType(), cp, 
+                   				ExpressionLeaf.ReferenceType.CONSTANT);  }
                  |
-                   <V_REGEXP>
+                   t = <V_REGEXP>
+                   { item2 = ExpressionLeaf.stringConstant(t.image);  }
                  )
+  { 
+  	// TODO reference type as ATTRIBUTE?
+  	item = ExpressionLeaf.stringConstant(attrId);
+  	ret = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN, 
+  					OperatorKind.OP_MATCHES, false, item, item2);
+  }	   
 |
-  LOOKAHEAD( 3 ) <SYM_TRUE>
-|
-  LOOKAHEAD( 3 ) <SYM_FALSE>
-|
-  LOOKAHEAD( 3 ) <SYM_NOT> Boolean_expression()
+  <SYM_NOT> item = boolean_expression()
+  {
+  	ret = new ExpressionUnaryOperator(ExpressionItem.BOOLEAN,
+  		OperatorKind.OP_NOT, precedenceOverridden, item); 
+  }
 |
   LOOKAHEAD( 3 )
-  Arithmetic_expression()
+  item = arithmetic_expression()
   (
-    "=" | <SYM_NE> | <SYM_LT> | <SYM_GT> | <SYM_LE> | <SYM_GE>
+      "=" 
+      { op = OperatorKind.OP_EQ; }
+    | 
+      <SYM_NE> 
+      { op = OperatorKind.OP_NE; }
+    | 
+      <SYM_LT> 
+      { op = OperatorKind.OP_LT; }
+    | 
+      <SYM_GT> 
+      { op = OperatorKind.OP_GT; }
+    | 
+      <SYM_LE> 
+      { op = OperatorKind.OP_LE; }
+    | 
+      <SYM_GE>
+      { op = OperatorKind.OP_GE; }
   )
-  Arithmetic_expression()
+  item2 = arithmetic_expression()  
+  { 
+  	ret = new ExpressionBinaryOperator(item.getType(), op, false, item, item2);
+  }
 |
-  LOOKAHEAD( (Boolean_expression_sub() )+ )
-  ( LOOKAHEAD( 4 ) Boolean_expression_sub() )+
+  LOOKAHEAD( 3 ) 
+  item = boolean_leaf() 
   (
-    <SYM_XOR> Boolean_expression()
-  |
-    <SYM_AND> [ LOOKAHEAD( 2 ) <SYM_THEN> ] Boolean_expression()
-    [ LOOKAHEAD( 2 ) <SYM_AND> ]
-  |
-    <SYM_OR>  [ LOOKAHEAD( 2 ) <SYM_ELSE> ] Boolean_expression()
-    [ LOOKAHEAD( 2 ) <SYM_OR> ]
-  |
-    <SYM_IMPLIES> Boolean_expression()
+	  (
+	    <SYM_AND> 
+	    { op = OperatorKind.OP_AND; }
+	  | 
+	    <SYM_OR>  
+	    { op = OperatorKind.OP_OR; }
+	  |
+	    <SYM_XOR> 
+	    { op = OperatorKind.OP_XOR; }
+	  |    
+	    <SYM_IMPLIES> 
+	    { op = OperatorKind.OP_IMPLIES; }
+	  )
+	  item2 = boolean_expression()
   )
-|
-  LOOKAHEAD( call_path() )
-  call_path()
+  { 
+  	if(item2 == null) {
+  		ret = item;
+  	} else {
+  	ret = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN, op, false, 
+  		item, item2);
+  	}
+  }
+)
+  { return ret; }
 }
 
-void Boolean_expression_sub() :
-{}
+ExpressionItem boolean_leaf() :
 {
-  <SYM_EXISTS> adl_path()
-|
+  ExpressionItem item = null;
+}
+{
+ 
   LOOKAHEAD( 3 )
-  "(" Boolean_expression() ")"
+  "(" item = boolean_expression() ")"
 |
-  LOOKAHEAD( 3 )
-  call_path()
+  <SYM_TRUE>
+  { item = ExpressionLeaf.booleanConstant(true); }
 | 
-  LOOKAHEAD( 3 )
-  attribute_identifier() <SYM_MATCHES>(
-                   <SYM_START_CBLOCK> c_primitive_object(null, null) <SYM_END_CBLOCK>
-                 |
-                   <V_REGEXP>
-                 )
-| <SYM_TRUE>
-| <SYM_FALSE>
-| <SYM_NOT> Boolean_expression()
-|
-  LOOKAHEAD( 3 )
-  Arithmetic_expression()
-  (
-    "=" | <SYM_NE> | <SYM_LT> | <SYM_GT> | <SYM_LE> | <SYM_GE>
-  )
-  Arithmetic_expression()
+  <SYM_FALSE>
+  { item = ExpressionLeaf.booleanConstant(false); }
+ 
+  { return item; }	  
 }
 
-void Arithmetic_expression() :
-{}
+ExpressionItem arithmetic_expression() :
+{
+  ExpressionItem item = null;  
+}
 {
   LOOKAHEAD( 3 )
-  call_path()
-|
+  item = arithmetic_leaf()
+  |
   LOOKAHEAD( 3 )
-  "(" Arithmetic_expression() ")"
-|
-  LOOKAHEAD( 2 )
-  <V_INTEGER>
-|
-  LOOKAHEAD( 2 )
-  <V_REAL>
-|
-  LOOKAHEAD( 2 )
-  string_value()
-|
-  LOOKAHEAD( 2 )
-  <V_CHARACTER>
-|
-  LOOKAHEAD( 3 )
-  "+" Arithmetic_expression() <SYM_NOT>
-|
-  LOOKAHEAD( 3 )
-  "-" Arithmetic_expression() <SYM_NOT>
-|
-  ( LOOKAHEAD( 3 ) Arithmetic_expression_sub() )+
-  (
-    "+" Arithmetic_expression()
-  | "-" Arithmetic_expression()
-  | "*" Arithmetic_expression()
-  | "/" Arithmetic_expression()
-  | "^" Arithmetic_expression()
-  | <SYM_MODULO> Arithmetic_expression()
-  | <SYM_DIV> Arithmetic_expression()
-  )
+  item = arithmetic_node()
+  { return item; }
 }
 
-void Arithmetic_expression_sub() :
-{}
+ExpressionItem arithmetic_node() :
 {
-  call_path()
-| "(" Arithmetic_expression() ")"
-| <V_INTEGER>
-| <V_REAL>
-| string_value()
-| <V_CHARACTER>
-| "+" Arithmetic_expression() <SYM_NOT>
-| "-" Arithmetic_expression() <SYM_NOT>
+  ExpressionItem item = null;
+  ExpressionItem left = null;
+  ExpressionItem right = null;
+  OperatorKind op = null;
 }
+{
+  left = arithmetic_leaf() 
+  (
+	(
+	    "+" 
+	    { op = OperatorKind.OP_PLUS; }
+	  | 
+	    "-" 
+	    { op = OperatorKind.OP_MINUS; }
+	  | 
+	    "*" 
+	    { op = OperatorKind.OP_MULTIPLY; }
+	  | 
+	    "/" 
+	    { op = OperatorKind.OP_DIVIDE; }
+	  | 
+	    "^" 
+	    { op = OperatorKind.OP_EXP; }  
+	)  
+	  
+	right = arithmetic_expression()	  	
+  )  
+  { 
+  	if(right == null) {
+		item = left;
+  	} else {  	
+  		item = new ExpressionBinaryOperator(right.getType(), op, false, left, 
+  				right);	 
+  	}
+  	return item; 
+  }
+}
+
+ExpressionItem arithmetic_leaf() :
+{ 
+  ExpressionItem item = null;
+  Token t = null;
+  String str = null;
+}
+{
+  "(" item = arithmetic_expression() ")"
+| 
+  t = <V_INTEGER>
+  {
+  	int i = Integer.parseInt(t.image);
+  	item = ExpressionLeaf.intConstant(i);
+  }
+| 
+  t = <V_REAL>
+  {
+  	double d = Double.parseDouble(t.image);
+  	item = ExpressionLeaf.realConstant(d);
+  }
+|
+  str = absolute_path() 
+  {
+  	item = ExpressionLeaf.stringConstant(str);
+  }  
+  {  return item; }
+}
+
+
 
 /* ---------------- existence, occurrences, cardinality ---------------- */
 
@@ -2487,47 +2729,51 @@ CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
   Set list = new HashSet();
   org.openehr.am.openehrprofile.datatypes.quantity.Ordinal o;
   DvOrdinal defaultValue = null;
+  int assumed = -1;
   Ordinal assumedValue = null;
 }
 {
-  o = ordinal() { list.add(o); }
-  (
-    "," o = ordinal()
-        { list.add(o); }
-  )*
-  [
-  	";" assumedValue = ordinal()  	
-  ]
-  { 
-  	return new CDvOrdinal(path, null, null, parent, list, defaultValue,
-  		assumedValue); 
-  }
+  	
+	  o = ordinal() { list.add(o); }
+	  (
+	    "," o = ordinal()
+	        { list.add(o); }
+	  )*
+	  [
+	  	";" assumed = integer_value()
+	  	{
+	  	  for(Iterator it = list.iterator(); it.hasNext();) {
+	  	  	Ordinal ord = (Ordinal) it.next();
+	  	  	if(ord.getValue() == assumed) {
+	  	  		assumedValue = ord;
+	  	  		break;
+	  	  	}
+	  	  }	  
+	  	}  	
+	  ]
+	  { 
+	  	return new CDvOrdinal(path, null, null, parent, list, defaultValue,
+	  		assumedValue); 
+	  }
+  |
+      <SYM_C_DV_ORDINAL> <SYM_LT> <SYM_GT>    
+  	  {
+  	  	// any allowed
+  	    return new CDvOrdinal(path, null, null, parent, null, null, null);
+  	  }
 }
 
 org.openehr.am.openehrprofile.datatypes.quantity.Ordinal ordinal() :
 {
   Token t;
   int value;
-  String terminology;
-  String code;
+  CodePhrase code;
 }
 {
-  value = integer_value()
-  "|" 
-    t = <V_TERMINOLOGY_ID_BLOCK> 
-    { 
-		// remove leading "[" and trailing "::"
-    	terminology = t.image; 
-    	terminology = terminology.substring(1, terminology.length() - 2);
-    }
-    t = <V_TERM_CODE> { code = t.image; }
-  "]"
+  value = integer_value() "|" code = code_phrase()
   { 
-  	// leave lexical state "TERM_CODE"
-  	token_source.SwitchTo(CADL);
-  	
   	return new org.openehr.am.openehrprofile.datatypes.quantity.Ordinal(
-  		value, new CodePhrase(terminology, code)); 
+  		value, code); 
   }
 }
 
@@ -2540,8 +2786,10 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
   String assumed = null;
   CodePhrase assumedValue = null;
   CodePhrase defaultValue = null; // not used 
+  CodePhrase singleValue = null;
 }
 {
+  (	
   t = <V_TERMINOLOGY_ID_BLOCK> 
     { 
 		// remove leading "[" and trailing "::"
@@ -2567,13 +2815,24 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
       ]	
     ]
   "]"
-  { 
-  	// leave lexical state "TERM_CODE"
-  	token_source.SwitchTo(CADL);
-  	
+    { 
+    	// leave lexical state "TERM_CODE"
+    	token_source.SwitchTo(CADL); 
+    }
+  | 
+    singleValue = code_phrase()
+    { 
+      codeList = new ArrayList();
+      codeList.add(singleValue.getCodeString());
+      terminologyId = singleValue.getTerminologyID();
+    }
+  )
+  {   	
   	return new CCodePhrase(path, null, null, parent, terminologyId, codeList,
   		defaultValue, assumedValue); 
   }
+  
+  
 }
 
 CDvQuantity c_dv_quantity(String path, CAttribute parent) :
@@ -2603,13 +2862,13 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
 	    )+	  	  
 	  ">"
 	  
-    )*   
+   |   
     
-    [
       <SYM_C_QUANTITY_ASSUMED_VALUE> <SYM_EQ> "<"
         assumedValue = dv_quantity() 
       ">"
-    ]
+    
+    )*
   ">"	   
   { 
   	{ token_source.SwitchTo(CADL); }
@@ -2638,29 +2897,6 @@ DvQuantity dv_quantity() :
   }	
 }
 
-CodePhrase code_phrase() :
-{
-  Token t = null;	
-  String terminology = null;
-  String code = null;
-}
-{
-  t = <V_TERMINOLOGY_ID_BLOCK_CQ> 
-	{ 
-      // remove leading "[" and trailing "::"
-	  terminology = t.image; 
-	  terminology = terminology.substring(1, terminology.length() - 2);
-	}	
-	t = <V_TERM_CODE> { code = t.image; }	    
-  "]" 	  	  
-  {
-  	// leave lexical state "TERM_CODE"
-  	token_source.SwitchTo(DOMAIN_TYPE_C_QUANTITY);
-  	
-  	return new CodePhrase(terminology, code);
-  }  	
-}	 	
-
 CDvQuantityItem c_dv_quantity_item() :
 {
   Interval value = null;
@@ -2674,9 +2910,11 @@ CDvQuantityItem c_dv_quantity_item() :
       units = string_value() 
     ">"
     
-    <SYM_MAGNITUDE> <SYM_EQ> "<" 
-      value = real_interval_value()       
-    ">"
+    [
+      <SYM_MAGNITUDE> <SYM_EQ> "<" 
+        value = real_interval_value()       
+      ">"
+    ]
     
     [
       <SYM_PRECISION> <SYM_EQ> "<" 
@@ -2688,6 +2926,22 @@ CDvQuantityItem c_dv_quantity_item() :
   	return new CDvQuantityItem(value, precision, units); 
   } 		
 }
+
+List<String> string_list() :
+{
+  List<String> list = new ArrayList();
+  String value = null;
+}
+{
+  (
+    <SYM_L_BRACKET> string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>     	
+      value = string_value()
+    <SYM_GT>    
+    { list.add(value); }  
+  )*		
+	
+  { return list; }		
+}	
 
 CInteger c_integer() :
 {
@@ -2863,7 +3117,7 @@ CDuration c_duration() :
 }
 {
  (
-    t = <V_ISO8601_DURATION_PATTERN>
+    t = <V_ISO8601_DURATION_CONSTRAINT_PATTERN>
     { pattern = t.image; }  
   |
     value = duration_value()
@@ -2967,10 +3221,16 @@ String any_identifier() :
 String type_identifier() :
 {
   Token t;
+  String type;
 }
 {
-  t = <V_TYPE_IDENTIFIER>
-  { return t.image; }
+  t = <V_TYPE_IDENTIFIER> 
+  { type = t.image; }
+  [ 
+    "<"  t = <V_TYPE_IDENTIFIER> ">" 
+    { type += "<" + t.image + ">"; }
+  ]
+  { return type; }
 }
 
 String attribute_identifier() :
@@ -2983,68 +3243,30 @@ String attribute_identifier() :
 }
 
 
-String adl_path() :
-{  
-  String path = null;
-  Token t;
-}
-{
-  t = <ADL_PATH>	
-  // path = movable_path() | path = absolute_path() | path = relative_path()
-  {
-  	path = t.image;  
-  	return path; 
-  }
-}
-
-String movable_path() :
-{ 
-  String path; 
-}
-{
-  "//" path = relative_path()	
-  { return "//" + path; }
-}
-
 String absolute_path() :
 { 
   String path; 
   StringBuffer buf;
+  Token t;
 }
 {
-  <SYM_SLASH> path = relative_path()
-  {
-  	buf = new StringBuffer("/");
-  	buf.append(path); 
-  }
-  (
-    LOOKAHEAD( 2 )
-    <SYM_SLASH> path = relative_path()
-    {
-      buf.append("/");
-      buf.append(path);
-    }	
-  )* 	
-  { return "/" + path; }
+  t = <V_ABSOLUTE_PATH>
+  { return t.image; }
 }
 
 String relative_path() :
 { 
   StringBuffer buf;
-  String seg;	
+  String path;	
+  Token t;
 }
 {
-  seg = path_segment()
-  { buf = new StringBuffer(seg); }
-  ( 
-    LOOKAHEAD( 2 )
-    <SYM_SLASH> seg = path_segment()
-    {
-      buf.append("/");
-      buf.append(seg); 
-    } 
-  )*	
-  { return buf.toString(); }
+  (  
+    t = <V_RELATIVE_PATH>    
+  | 
+    t = <V_ATTRIBUTE_IDENTIFIER>    
+  )
+  { return t.image; }
 }
 
 String path_segment() :
@@ -3061,10 +3283,4 @@ String path_segment() :
     { buf.append(t.image); }
   ]  	
   { return buf.toString(); }	
-}
-
-void call_path() :
-{}
-{
-  ( adl_path() "." attribute_identifier() )+ "." attribute_identifier()
 }

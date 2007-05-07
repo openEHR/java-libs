@@ -3,7 +3,7 @@ archetype
 concept
 	[at0000]	--  empty definition test
 language
-	original_language = <"en"> 
+	original_language = <[ISO_639-1::en]>
 	
 
 definition

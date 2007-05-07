@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
-import org.openehr.am.archetype.ontology.DefinitionItem;
+import org.openehr.am.archetype.ontology.ArchetypeTerm;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
 
 /**
@@ -33,44 +33,72 @@ public class MultipleLanguageTest extends SerializerTestBase {
 	}
 	
 	public void testPrintOntology() throws Exception {
-        DefinitionItem item = new DefinitionItem("at0001",
-                "text at0001", "desc at0001");
-        List<DefinitionItem> items = new ArrayList<DefinitionItem>();
-        items.add(item);
-        item = new DefinitionItem("at0002", "text at0002", "desc at0002");
-        items.add(item);
-        OntologyDefinitions definitions = new OntologyDefinitions("en", items);
+
+		// *** TERM DEFINITIONS (in two languages) *** 
+		
+		// A main list containing the sublists for different languages 
         List<OntologyDefinitions> termDefinitionsList =
-                new ArrayList<OntologyDefinitions>();
-        termDefinitionsList.add(definitions);
-        
-        item = new DefinitionItem("at0001", "text at0001", "desc at0001");
-        items = new ArrayList<DefinitionItem>();
+            new ArrayList<OntologyDefinitions>();
+		
+        // A term list (used for English terms)
+        List<ArchetypeTerm> items = new ArrayList<ArchetypeTerm>();
+
+		// First example (for pedagocical purposes) shows how to use
+		// the short general constructor, followed by adding items
+		// step by step. Other keys could be used as well if there is
+		// more information available.
+		ArchetypeTerm item = new ArchetypeTerm("at0001");
+        item.addItem(ArchetypeTerm.TEXT, "text at0001");
+        item.addItem(ArchetypeTerm.DESCRIPTION, "desc at0001");
         items.add(item);
-        item = new DefinitionItem("at0002", "text at0002", "desc at0002");
+        
+        // In the rest of the examples a convenience constructor is used
+        // that preforms several steps at once.
+        item = new ArchetypeTerm("at0002", "text at0002", "desc at0002");
+        items.add(item);
+        
+        // Wrap the first list and tag it as English
+        OntologyDefinitions definitions = new OntologyDefinitions("en", items);
+        
+        // Add it to the main list 
+        termDefinitionsList.add(definitions);
+
+        
+        // make a new list object and use it for Chinese terms
+        items = new ArrayList<ArchetypeTerm>();
+        item = new ArchetypeTerm("at0001", "text at0001", "desc at0001");
+        items.add(item);
+        item = new ArchetypeTerm("at0002", "text at0002", "desc at0002");
         items.add(item);
         definitions = new OntologyDefinitions("zh", items);
+        // Add it to the main list
         termDefinitionsList.add(definitions);
+
         
-        item = new DefinitionItem("ac0001", "text ac0001", "desc ac0001");
-        items = new ArrayList<DefinitionItem>();
+		// *** CONSTRAINT DEFINITIONS (in two languages) ***
+
+        List<OntologyDefinitions> constraintDefinitionsList =
+            new ArrayList<OntologyDefinitions>();        
+
+        // English
+        items = new ArrayList<ArchetypeTerm>();
+        item = new ArchetypeTerm("ac0001", "text ac0001", "desc ac0001");
         items.add(item);
-        item = new DefinitionItem("ac0002", "text ac0002", "desc ac0002");
+        item = new ArchetypeTerm("ac0002", "text ac0002", "desc ac0002");
         items.add(item);
         definitions = new OntologyDefinitions("en", items);
-        List<OntologyDefinitions> constraintDefinitionsList =
-                new ArrayList<OntologyDefinitions>();        
         constraintDefinitionsList.add(definitions);
         
-        item = new DefinitionItem("ac0001", "text ac0001", "desc ac0001");
-        items = new ArrayList<DefinitionItem>();
+        // Chinese
+        item = new ArchetypeTerm("ac0001", "text ac0001", "desc ac0001");
+        items = new ArrayList<ArchetypeTerm>();
         items.add(item);
-        item = new DefinitionItem("ac0002", "text ac0002", "desc ac0002");
+        item = new ArchetypeTerm("ac0002", "text ac0002", "desc ac0002");
         items.add(item);
         definitions = new OntologyDefinitions("zh", items);
         constraintDefinitionsList.add(definitions);
         
-        
+        // List available languages
         List<String> languages = new ArrayList<String>();
         languages.add("en");
         languages.add("zh");        
@@ -78,6 +106,7 @@ public class MultipleLanguageTest extends SerializerTestBase {
         ArchetypeOntology ontology = new ArchetypeOntology("en", languages,
                 null, termDefinitionsList, constraintDefinitionsList, 
                 null, null);
+        
         clean();
         outputter.printOntology(ontology, out);
         verifyByFile("multi-language.adl");
@@ -103,7 +132,7 @@ public class MultipleLanguageTest extends SerializerTestBase {
  *  Portions created by the Initial Developer are Copyright (C) 2004-2006
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s): Mattias Forss
+ *  Contributor(s): Mattias Forss, Erik Sundvall
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

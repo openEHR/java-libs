@@ -35,10 +35,7 @@ public final class Ordinal {
      * @throws IllegalArgumentException if symbol null
      */
     public Ordinal(int value, CodePhrase symbol) {
-    	if(value < 0) {
-    		throw new IllegalArgumentException("value less than 0");
-    	}
-        if(symbol == null) {
+    	if(symbol == null) {
             throw new IllegalArgumentException("symbo null");
         }
         this.value = value;

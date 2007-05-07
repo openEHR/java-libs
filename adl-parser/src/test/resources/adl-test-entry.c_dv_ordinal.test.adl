@@ -5,7 +5,7 @@ concept
 	[at0000]
 
 language
-	original_language = <"en"> 
+	original_language = <[ISO_639-1::en]>
 	
 definition
 	ENTRY[at0000] matches {	
@@ -28,7 +28,13 @@ definition
                             2|[local::at0003.2],  	-- tablet
                             3|[local::at0003.3],  	-- solution
                             4|[local::at0003.4];  	-- suspension
-                            0|[local::at0003.0]     -- assumed value
+                            0     -- assumed value
+                        }
+                    } 
+                    ELEMENT[at10003] matches {	-- ordinal with assumed value
+                        value matches {		-- any allowed
+                            C_DV_ORDINAL < 
+                            >
                         }
                     }   
                                      		

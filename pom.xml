@@ -13,6 +13,7 @@
     <module>openehr-aom</module>
     <module>openehr-ap</module>
     <module>adl-serializer</module>
+    <module>xml-serializer</module>
     <module>measure-serv</module>
     <module>adl-parser</module>
   </modules>

@@ -17,18 +17,11 @@ package org.openehr.rm.ehr;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
-import org.openehr.rm.common.archetyped.Archetyped;
-import org.openehr.rm.common.archetyped.FeederAudit;
-import org.openehr.rm.common.archetyped.Link;
-import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectReference;
-import org.openehr.rm.support.identification.PartyReference;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
-import org.openehr.rm.datatypes.text.DvText;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * The EHR class is the centre node of the EHR  repository  for a
@@ -57,7 +50,7 @@ public class EHR extends RMObject {
                                 @Attribute(name = "contributions", required=true) List<ObjectReference> contributions,
                                 @Attribute(name = "ehrStatus", required = true) ObjectReference ehrStatus,
                                 @Attribute(name = "directory") ObjectReference directory,
-                                @Attribute(name = "allCompositions", required=true) List<ObjectReference> allCompositions) {
+                                @Attribute(name = "compositions", required=true) List<ObjectReference> compositions) {
         
     		if (systemID == null) {
     			throw new IllegalArgumentException("null systemID");
@@ -68,7 +61,7 @@ public class EHR extends RMObject {
     		if (timeCreated == null) {
     			throw new IllegalArgumentException("null timeCreated");
     		}
-    		if (contributions == null || contributions.isEmpty()) {
+    		if (contributions == null) {
     			throw new IllegalArgumentException("null contributions");
     		}    		
         for (ObjectReference ref : contributions) {
@@ -77,10 +70,10 @@ public class EHR extends RMObject {
                         "non-contribution type object reference");
             }
         }
-        if (allCompositions == null || allCompositions.isEmpty()) {
-            throw new IllegalArgumentException("null or empty allCompositions");
+        if (compositions == null) {
+            throw new IllegalArgumentException("null compositions");
         }
-        for (ObjectReference ref : allCompositions) {
+        for (ObjectReference ref : compositions) {
             if (!ObjectReference.Type.VERSIONED_COMPOSITION.equals(
                     ref.getType())) {
                 throw new IllegalArgumentException(
@@ -99,7 +92,7 @@ public class EHR extends RMObject {
         this.contributions = contributions;
         this.ehrStatus = ehrStatus;
         this.directory = directory;
-        this.allCompositions = allCompositions;
+        this.compositions = compositions;
     }
     
     /**
@@ -164,8 +157,8 @@ public class EHR extends RMObject {
      *
      * @return list of objectReference
      */
-    public List<ObjectReference> getAllCompositions() {
-        return allCompositions;
+    public List<ObjectReference> getCompositions() {
+        return compositions;
     }
 
     // POJO start
@@ -206,8 +199,8 @@ public class EHR extends RMObject {
         this.directory = directory;
     }
 
-    void setAllCompositions(List<ObjectReference> allCompositions) {
-        this.allCompositions = allCompositions;
+    void setCompositions(List<ObjectReference> compositions) {
+        this.compositions = compositions;
     }
     // POJO end
 
@@ -218,7 +211,7 @@ public class EHR extends RMObject {
     List<ObjectReference> contributions;
     ObjectReference ehrStatus;
     ObjectReference directory;
-    List<ObjectReference> allCompositions;
+    List<ObjectReference> compositions;
 }
 
 /*
@@ -238,10 +231,10 @@ public class EHR extends RMObject {
  *  The Original Code is EHR.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2007
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Erik Sundvall
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

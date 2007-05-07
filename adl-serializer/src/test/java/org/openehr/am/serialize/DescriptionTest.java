@@ -48,7 +48,7 @@ public class DescriptionTest extends SerializerTestBase {
 		clean();
 		outputter.printDescriptionItem(item, 0, out);
 
-		verify("[\"en\"] = <\r\n" + "    language = <\"en\">\r\n"
+		verify("[\"en\"] = <\r\n" + "    language = <[ISO_639-1::en]>\r\n"
 				+ "    purpose = <\"purpose\">\r\n"
 				+ "    keywords = <\"apple\",\"pear\">\r\n"
 				+ "    copyright = <\"copyright\">\r\n"
@@ -66,7 +66,7 @@ public class DescriptionTest extends SerializerTestBase {
 		authorMap.put("name", author);
 
 		List<ResourceDescriptionItem> items = new ArrayList<ResourceDescriptionItem>();
-		String[][] others = { { "revision", "1.1" }, { "adl_version", "0.9" },
+		String[][] others = { { "revision", "1.1" }, { "adl_version", "1.4" },
 				{ "rights", "all rights reserved" } };
 		Map<String, String> otherDetails = new HashMap<String, String>();
 		for (String[] pair : others) {
@@ -85,7 +85,7 @@ public class DescriptionTest extends SerializerTestBase {
 				+ "        [\"name\"] = <\"" + author + "\">\r\n" + "    >\r\n"
 				+ "    lifecycle_state = <\"" + status + "\">\r\n"
 				+ "    details = <\r\n" + "        [\"en\"] = <\r\n"
-				+ "            language = <\"en\">\r\n"
+				+ "            language = <[ISO_639-1::en]>\r\n"
 				+ "            purpose = <\"purpose of this archetype\">\r\n"
 				+ "        >\r\n" + "    >\r\n");
 	}

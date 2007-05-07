@@ -191,7 +191,6 @@ public final class Instruction extends CareEntry {
         if (item != null) {
             return item;
         }
-        String tmp = path;
         /*String attr = ROOT + "activities";
         if(tmp.startsWith(attr)) {
             tmp = tmp.substring(attr.length());
@@ -209,7 +208,7 @@ public final class Instruction extends CareEntry {
                 }
             }
         }*/
-        Object ret = checkAttribute(tmp, "activities", activities);
+        Object ret = checkAttribute(path, "activities", activities);
         if(ret!=null) {
             return ret;
         } else {

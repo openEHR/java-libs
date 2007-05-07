@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
-import org.openehr.am.archetype.ontology.DefinitionItem;
+import org.openehr.am.archetype.ontology.ArchetypeTerm;
 import org.openehr.am.archetype.ontology.OntologyBinding;
 import org.openehr.am.archetype.ontology.OntologyBindingItem;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
@@ -38,21 +38,21 @@ public class OntologyTest extends SerializerTestBase {
 	}
 
 	public void testPrintOntology() throws Exception {
-		DefinitionItem item = new DefinitionItem("at0001", "text at0001",
+		ArchetypeTerm item = new ArchetypeTerm("at0001", "text at0001",
 				"desc at0001");
-		List<DefinitionItem> items = new ArrayList<DefinitionItem>();
+		List<ArchetypeTerm> items = new ArrayList<ArchetypeTerm>();
 		items.add(item);
-		item = new DefinitionItem("at0002", "text at0002", "desc at0002");
+		item = new ArchetypeTerm("at0002", "text at0002", "desc at0002");
 		items.add(item);
 		OntologyDefinitions definitions = new OntologyDefinitions("en", items);
 		List<OntologyDefinitions> termDefinitionsList = 
 			new ArrayList<OntologyDefinitions>();
 		termDefinitionsList.add(definitions);
 
-		item = new DefinitionItem("ac0001", "text ac0001", "desc ac0001");
-		items = new ArrayList<DefinitionItem>();
+		item = new ArchetypeTerm("ac0001", "text ac0001", "desc ac0001");
+		items = new ArrayList<ArchetypeTerm>();
 		items.add(item);
-		item = new DefinitionItem("ac0002", "text ac0002", "desc ac0002");
+		item = new ArchetypeTerm("ac0002", "text ac0002", "desc ac0002");
 		items.add(item);
 		definitions = new OntologyDefinitions("en", items);
 		List<OntologyDefinitions> constraintDefinitionsList = 
@@ -118,7 +118,7 @@ public class OntologyTest extends SerializerTestBase {
  *  Portions created by the Initial Developer are Copyright (C) 2004-2006
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s): 
+ *  Contributor(s): Erik Sundvall
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

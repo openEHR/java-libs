@@ -46,15 +46,37 @@ public class CDvQuantityTest extends ParserTestBase {
         archetype = null;
     }
 
-    public void testParseFullCDvQuantity() throws Exception {
+    public void testParseFullCDvQuantityStartsWithProperty() throws Exception {
     	ADLParser parser = new ADLParser(loadFromClasspath(
         	"adl-test-entry.c_dv_quantity_full.test.adl"));
-    	archetype = parser.parse();
-        
+    	archetype = parser.parse();        
     	CObject node = archetype.node(
                 "/types[at0001]/items[at10005]/value");
-        assertTrue("CDvQuantity expected", node instanceof CDvQuantity);
-        CDvQuantity cdvquantity = (CDvQuantity) node;
+    	verifyCDvQuantityValue(node);      
+    }
+    
+    public void testParseFullCDvQuantityStartsWithList() throws Exception {
+    	ADLParser parser = new ADLParser(loadFromClasspath(
+        	"adl-test-entry.c_dv_quantity_full2.test.adl"));
+    	archetype = parser.parse();        
+    	CObject node = archetype.node(
+                "/types[at0001]/items[at10005]/value");
+        verifyCDvQuantityValue(node);       
+    }
+    
+    public void testParseFullCDvQuantityStartsWithAssumedValue() throws Exception {
+    	ADLParser parser = new ADLParser(loadFromClasspath(
+        	"adl-test-entry.c_dv_quantity_full3.test.adl"));
+    	archetype = parser.parse();        
+    	CObject node = archetype.node(
+                "/types[at0001]/items[at10005]/value");
+        verifyCDvQuantityValue(node);       
+    }
+    
+    private void verifyCDvQuantityValue(CObject node) {
+    	assertTrue("CDvQuantity expected", node instanceof CDvQuantity);
+        
+    	CDvQuantity cdvquantity = (CDvQuantity) node;
         
         // verify property 
         CodePhrase property = cdvquantity.getProperty();
@@ -102,6 +124,27 @@ public class CDvQuantityTest extends ParserTestBase {
         	"adl-test-entry.c_dv_quantity_reversed.test.adl"));
     	archetype = parser.parse();
     }
+    
+    public void testParseCDvQuantityItemWithOnlyUnits() throws Exception {
+    	ADLParser parser = new ADLParser(loadFromClasspath(
+        	"adl-test-entry.c_dv_quantity_item_units_only.test.adl"));
+    	archetype = parser.parse();
+    }
 
+    public void testParseEmptyCDvQuantity() throws Exception {
+    	ADLParser parser = new ADLParser(loadFromClasspath(
+        	"adl-test-entry.c_dv_quantity_empty.test.adl"));
+    	archetype = parser.parse();
+    	CObject node = archetype.node(
+        	"/types[at0001]/items[at10005]/value");
+    	assertTrue("CDvQuantity expected", node instanceof CDvQuantity);
+        
+    	CDvQuantity cdvquantity = (CDvQuantity) node;
+    	assertNull(cdvquantity.getList());
+    	assertNull(cdvquantity.getProperty());
+    	assertNull(cdvquantity.getAssumedValue());
+    	assertTrue(cdvquantity.isAnyAllowed());
+    }
+    
     private Archetype archetype;
 }

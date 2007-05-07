@@ -69,7 +69,6 @@ public class ArchetypeIDTest extends TestCase {
 
             // domain concept part
             "openehr-ehr_rm-section.physical+examination.v2", // illegal char
-            "openehr-ehr_rm-section.physical-examination-prenatal.v1", // too many sections
 
             // version part
             "hl7-rim-act.progress_note.", // missing version
@@ -115,6 +114,18 @@ public class ArchetypeIDTest extends TestCase {
     public void testBase() {
         String base = "openehr-ehr_rm-section.physical_examination";
         assertEquals(base, new ArchetypeID(base + ".v1").base());
+    }
+    
+    public void testMultipleSpecialisation() {
+    	ArchetypeID aid = null;
+    	try {
+    		aid = new ArchetypeID("openEHR-EHR-CLUSTER.exam-generic-joint.v1");
+    		
+    		assertEquals("wrong specialisation", "joint", aid.specialisation());
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		fail("failed to create ArchetypeID with multiple specialisation");
+    	}
     }
 
 

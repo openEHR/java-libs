@@ -1,3 +1,40 @@
+2007/04/26
+.updated parsing path-based term binding
+
+2007/04/18
+.added support for comment in term/constraint definitions
+.updated parser due to AOM changes
+.added support for empty C_DV_ORDINAL
+
+2007/03/18
+.non-inclusive integer and real interval parsing
+
+2007/03/16
+.fixed missing upper bound for duration interval
+
+2007/02/26
+.improved special string parsing
+
+2007/02/23
+.updated assumed value parsing for CDvQuantity
+.added support for CDvQuantity starts with assumed value
+.added support for generics in type_identifier
+
+2007/02/20
+.added support for empty purpose
+.fixed parsing c_code_phrase with single code
+.fixed parsing other_details, original_resource_uri, other_contributors
+.fixed parsing c_dv_quantity_item only with units
+.fixed parsing generic types
+.fixed c_duration pattern
+
+2007/02/19
+.made ontology primary_language and languages optional
+.use code_phrase for language parsing in translations and descriptions
+
+2007/02/18
+.improved assertion and archetype_slot parsing
+
 2007/02/15
 .fixed parsing translations without accreditation
 

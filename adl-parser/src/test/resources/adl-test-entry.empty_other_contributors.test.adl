@@ -5,7 +5,7 @@ concept
 	[at0000]	--  test
 
 language
-	original_language = <"en"> 
+	original_language = <[ISO_639-1::en]>
 	
 description
 	original_author = <
@@ -13,7 +13,7 @@ description
 	>
 	details = <
 		["en"] = <
-			language = <"en">
+			language = <[ISO_639-1::en]>
 			purpose = <"purpose">
 			use = <"use">
 			misuse = <"misuse">

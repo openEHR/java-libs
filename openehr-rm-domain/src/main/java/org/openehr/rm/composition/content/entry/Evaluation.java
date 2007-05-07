@@ -124,14 +124,6 @@ public final class Evaluation extends CareEntry {
         if(!whole.equals("/") && tmp.startsWith(whole)) {
             tmp = path.substring(whole.length());
         }
-        // check attributes
-        /*String[] attributeNames = {
-            DATA
-        };
-        Locatable [] attributes = {
-            data
-        };
-        return locateAttribute(tmp, attributeNames, attributes);*/
         Object ret = checkAttribute(tmp, "data", data);
         if( ret != null) {
             return ret;

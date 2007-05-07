@@ -43,7 +43,7 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
      * @param accuracyPercent
      * @param units
      * @param magnitude
-     * @param precision          >= 0
+     * @param precision          >= -1
      * @param measurementService null if not specified only if units
      *                           not specified as well
      * @throws IllegalArgumentException
@@ -51,7 +51,7 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
     @FullConstructor
             public DvQuantity(@Attribute (name = "referenceRanges") List<ReferenceRange<DvQuantity>> referenceRanges,
                               @Attribute (name = "normalRange") DvInterval<DvQuantity> normalRange,
-            					@Attribute (name = "accuracy") double accuracy,
+                              @Attribute (name = "accuracy") double accuracy,
                               @Attribute (name = "accuracyPercent") boolean accuracyPercent,
                               @Attribute (name = "units", required = true) String units,
                               @Attribute (name = "magnitude", required = true) double magnitude,
@@ -60,7 +60,7 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
         
         super(referenceRanges, normalRange, accuracy, accuracyPercent, units);
 
-        if (precision < 0) {
+        if (precision < -1) {
             throw new IllegalArgumentException("negative precision");
         }
         if (StringUtils.isNotEmpty(units)

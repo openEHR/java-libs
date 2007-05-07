@@ -58,23 +58,24 @@ public class ArchetypeOntology {
         this.constraintBindingList = constraintBindingList;
 
         // load defintionsMap
-        definitionsMap = new HashMap<String, Map<String, DefinitionItem>>();
-        loadDefs(definitionsMap, termDefinitionsList);
-        loadDefs(definitionsMap, constDefinitionsList);
+        termDefinitionMap = new HashMap<String, Map<String, ArchetypeTerm>>();
+        constraintDefinitionMap = new HashMap<String, Map<String, ArchetypeTerm>>();
+        loadDefs(termDefinitionMap, termDefinitionsList);
+        loadDefs(constraintDefinitionMap, constDefinitionsList);
     }
 
-    private void loadDefs(Map<String, Map<String, DefinitionItem>> map,
+    private void loadDefs(Map<String, Map<String, ArchetypeTerm>> map,
                           List<OntologyDefinitions> list) {
         if (list == null) {
             return;
         }
-        Map<String, DefinitionItem> codeMap = null;
+        Map<String, ArchetypeTerm> codeMap = null;
         for (OntologyDefinitions defs : list) {
             codeMap = map.get(defs.getLanguage());
             if (null == codeMap) {
-              codeMap = new HashMap<String, DefinitionItem>();
+              codeMap = new HashMap<String, ArchetypeTerm>();
             }
-            for (DefinitionItem item : defs.getDefinitions()) {
+            for (ArchetypeTerm item : defs.getDefinitions()) {
                 codeMap.put(item.getCode(), item);
             }
             map.put(defs.getLanguage(), codeMap);
@@ -110,19 +111,37 @@ public class ArchetypeOntology {
     }
 
     // null if not found
-    public DefinitionItem definition(String language, String code) {
-        Map<String, DefinitionItem> map = definitionsMap.get(language);
+    private ArchetypeTerm definition(String language, String code,
+    		Map<String, Map<String, ArchetypeTerm>> definitionMap) {
+        Map<String, ArchetypeTerm> map = definitionMap.get(language);
         if (map == null) {
             return null;
         }
         return map.get(code);
     }
 
-    // null if not found
-    public DefinitionItem definition(String code) {
-        return definition(primaryLanguage, code);
+    /**
+     * Constraint definition for a code, in a specified language.
+     * 
+     * @param language
+     * @param code
+     * @return null if not found
+     */
+    public ArchetypeTerm constraintDefinition(String language, String code) {
+    	return definition(language, code, constraintDefinitionMap);
     }
-
+    
+    /**
+     * Term definition for a code, in a specified language.
+     * 
+     * @param language
+     * @param code
+     * @return null if not found
+     */
+    public ArchetypeTerm termDefinition(String language, String code) {
+    	return definition(language, code, termDefinitionMap);
+    }
+    
     /**
      * String representation of this object
      *
@@ -192,7 +211,8 @@ public class ArchetypeOntology {
 
     /* calculated fields */
     // outer map language as key, inner map code as key
-    private Map<String, Map<String, DefinitionItem>> definitionsMap;
+    private Map<String, Map<String, ArchetypeTerm>> termDefinitionMap;
+    private Map<String, Map<String, ArchetypeTerm>> constraintDefinitionMap;
 }
 
 /*

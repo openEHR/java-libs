@@ -5,7 +5,7 @@ concept
 	[at0000]
 
 language
-	original_language = <"en"> 
+	original_language = <[ISO_639-1::en]>
 	
 definition
 	ENTRY[at0000] matches {	
@@ -42,6 +42,11 @@ definition
 								F43.01, -- acute stress reaction, moderate
 								F32.02; -- acute stress reaction, severe
 								F43.00] -- assumed value
+                        }
+                    }	
+                    ELEMENT[at10006] matches {	-- code_phrase
+                        value matches {
+                            [openehr::431] -- single code
                         }
                     }	
                 }

@@ -67,7 +67,8 @@ public class CDurationTest extends ParserTestBase {
 	 */
 	public void testParseSingleDurationInverval() throws Exception {
 		Interval<DvDuration> interval = new Interval<DvDuration> (
-				DvDuration.getInstance("PT10M"), null);
+				DvDuration.getInstance("PT10M"), 
+				DvDuration.getInstance("PT10M"));
 		assertCDuration(archetype.node("/types[at0001]/items[at1010]/value"), 
 				null, interval, null, null);
 		

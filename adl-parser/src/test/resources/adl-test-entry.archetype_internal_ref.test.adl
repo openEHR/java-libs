@@ -1,11 +1,11 @@
 archetype
-	adl-test-entry.archetype_slot.test
+	adl-test-entry.archetype_internal_ref.test
 
 concept
 	[at0000]
 
 language
-	original_language = <"en"> 	
+	original_language = <[ISO_639-1::en]> 	
 
 definition
 	Entry[at0000] matches {	-- Encounter
@@ -15,8 +15,11 @@ definition
 		attribute2 matches {
 			use_node SECTION occurrences matches {1..2} /attribute1
 		}
-	}
-
+		attribute3 matches {
+			use_node COMPLEX_OBJECT /items[at0001]
+			use_node COMPLEX_OBJECT /items[at0002]			
+		}
+	}	
 
 ontology
 	primary_language = <"en">

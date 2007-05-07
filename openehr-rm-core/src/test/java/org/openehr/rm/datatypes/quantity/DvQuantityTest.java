@@ -47,7 +47,7 @@ public class DvQuantityTest extends TestCase {
     // also test equals() from both Quantified and Measurable
     public void testEquals() throws Exception {
 
-        MeasurementService ms = new TestMeasurementService();
+        
 
         DvQuantity q1 = new DvQuantity("mg", 10, 2, ms);
         DvQuantity q2 = new DvQuantity("mg", 10, 2, ms);
@@ -93,7 +93,6 @@ public class DvQuantityTest extends TestCase {
 
     public void testToString() throws Exception {
 
-        MeasurementService ms = new TestMeasurementService();
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
 
         DvQuantity q = new DvQuantity("kg", 78, 2, ms);
@@ -120,6 +119,16 @@ public class DvQuantityTest extends TestCase {
         expected = "78"  + symbols.getDecimalSeparator() + "500";
         assertEquals(expected, q.toString());
     }
+    
+    public void testCreateWithUnlimitedPrecision() {
+    	try { 
+    		new DvQuantity("mg", 12, -1, ms);
+    	} catch(Exception e) {
+    		fail("failed to create DvQuantity with unlimited precision");
+    	}
+    }
+    
+    private MeasurementService ms = new TestMeasurementService();
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

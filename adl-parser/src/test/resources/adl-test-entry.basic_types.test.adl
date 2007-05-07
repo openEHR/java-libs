@@ -5,7 +5,7 @@ concept
 	[at0000]	--  basic data types test 1
 
 language
-	original_language = <"en"> 
+	original_language = <[ISO_639-1::en]> 
 	
 definition
 	ENTRY[at0000] matches {
@@ -22,7 +22,7 @@ definition
                 string_attr7 matches {/this|that|something else/; "those"}
                 string_attr8 matches {/cardio.*/; "cardio.txt"}
                 string_attr9 matches {^mg|mg/ml|mg/g^; "mg"} 
-                string_attr10 matches {"apple","pear"; "orange"}                                                              
+                string_attr10 matches {"apple","pear"; "orange"}
             }
         }
         boolean_attributes matches {
@@ -61,6 +61,12 @@ definition
                 
                 -- single value as interval
                 integer_attr18 matches {|100|}
+                
+               -- non-inclusive interval
+               integer_attr19 matches {|>0..100|}                
+               integer_attr20 matches {|0..<100|}                
+               integer_attr21 matches {|>0..<100|}                
+
             }
         }
         real_attributes matches {
@@ -86,7 +92,12 @@ definition
                 real_attr17 matches {|-10.0..-5.0|; -8.0}         
                 
                 -- single value as interval
-                real_attr18 matches {|100.0|}       
+                real_attr18 matches {|100.0|} 
+                
+                -- non-inclusive interval
+                real_attr19 matches {|>0.0..100.0|}                
+                real_attr20 matches {|0.0..<100.0|}                
+                real_attr21 matches {|>0.0..<100.0|}        
             }
         }
         date_attributes matches {

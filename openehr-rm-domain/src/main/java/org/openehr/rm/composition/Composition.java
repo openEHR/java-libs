@@ -20,7 +20,6 @@ import org.openehr.rm.common.archetyped.*;
 import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.composition.content.ContentItem;
-import org.openehr.rm.composition.content.navigation.Section;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.text.DvCodedText;
@@ -232,8 +231,7 @@ public final class Composition extends Locatable {
         if (ret != null) {
             return ret;
         }
-        String tmp = path;
-        ret = checkAttribute(tmp, "content", content);
+        ret = checkAttribute(path, "content", content);
         if (ret == null) {
             throw new IllegalArgumentException("invalid path: " + path);
         }

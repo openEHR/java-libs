@@ -5,7 +5,7 @@ concept
 	[at0000]	--  basic data types test 1
 
 language
-	original_language = <"en"> 
+	original_language = <[ISO_639-1::en]>
 	
 definition
 	ENTRY[at0000] matches {	
@@ -41,6 +41,9 @@ definition
                 	}
                 	ELEMENT[at1010] matches {	-- duration interval
                 		value matches {|PT10M|}
+                	}
+                	ELEMENT[at1011] matches {	-- duration ISO8601 pattern
+                		value matches {PYMWDTHMS} 
                 	}
                 	
                 	-- matches {PT30s, PT45s, PT1m0s, PT2m0s} -- Not currently in ADL syntax

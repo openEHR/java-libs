@@ -131,7 +131,7 @@ public class SerializerTestBase extends TestCase
 	protected StringWriter out;
 	
 	/* static fields */
-	protected static final CodePhrase ENGLISH = new CodePhrase("iso-639", "en");
+	protected static final CodePhrase ENGLISH = new CodePhrase("ISO_639-1", "en");
 
 	// mocked terminologyService
 	public CodeSetAccess codeSet(String arg0) {

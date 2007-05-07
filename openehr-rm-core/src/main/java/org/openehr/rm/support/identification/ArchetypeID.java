@@ -64,16 +64,16 @@ public final class ArchetypeID extends ObjectID {
         rmEntity = tokens.nextToken();
 
         tokens = new StringTokenizer(domainConcept, SECTION_SEPARATOR);
-        if (tokens.countTokens() < 1 || tokens.countTokens() > 2) {
-            throw new IllegalArgumentException("bad format, too many sections for domainConcept, " +
-                    value);
+        if (tokens.countTokens() < 1) {
+            throw new IllegalArgumentException(
+            		"bad format, too few sections for domainConcept, " + value);
         }
         conceptName = tokens.nextToken();
-        if (tokens.hasMoreTokens()) {
+        specialisation = null;
+        while(tokens.hasMoreTokens()) {
+        	// only the last one should be kept    		
             specialisation = tokens.nextToken();
-        } else {
-            specialisation = null;
-        }
+        } 
         validateAll();
     }
 
@@ -124,6 +124,7 @@ public final class ArchetypeID extends ObjectID {
         validateName(rmName, "rm_name");
         validateName(rmEntity, "rm_entity");
         validateName(conceptName, "concept_name");
+        
         if (specialisation != null) {
             validateName(specialisation, "specialisation");
         }

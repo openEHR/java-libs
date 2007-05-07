@@ -12,9 +12,10 @@ public class MissingLanguageTest extends ParserTestBase {
 
 	public void testMissingLanguageCompatibility() throws Exception {
 		boolean missingLanguageCompatible = true;
+		boolean emptyPurposeCompatible = false;
 		ADLParser parser = new ADLParser(loadFromClasspath(
 				"adl-test-entry.missing_language.test.adl"), 
-				missingLanguageCompatible);
+				missingLanguageCompatible, emptyPurposeCompatible);
 		Archetype archetype = parser.parse();
 		assertNotNull(archetype);
 		

@@ -1,8 +1,8 @@
 language
-	original_language = <"en"> 
+	original_language = <[ISO_639-1::en]> 
 	translations = <
         ["de"] = <
-        	language = <"de">
+        	language = <[ISO_639-1::de]>
             author = <
             	["email"] = <"harry@something.somewhere.co.uk">            	
             	["name"] = <"Harry Potter">            	

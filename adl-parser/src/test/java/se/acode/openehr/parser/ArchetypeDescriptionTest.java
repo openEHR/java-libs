@@ -33,7 +33,7 @@ public class ArchetypeDescriptionTest extends ParserTestBase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testArchetypeDescription() throws Exception {
+	public void testParseFullArchetypeDescription() throws Exception {
 		ADLParser parser = new ADLParser(
 				loadFromClasspath("adl-test-entry.archetype_description.test.adl"));
 		Archetype archetype = parser.parse();
@@ -50,9 +50,8 @@ public class ArchetypeDescriptionTest extends ParserTestBase {
 
 		List<String> otherContributors = description.getOtherContributors();
 		assertNotNull(otherContributors);
-		assertEquals(2, otherContributors.size());
-		assertEquals("Author1", otherContributors.get(0));
-		assertEquals("Author2", otherContributors.get(1));
+		assertEquals(1, otherContributors.size());
+		assertEquals("Ian McNicoll, MD", otherContributors.get(0));
 
 		assertEquals("lifecycleState wrong", "AuthorDraft", description
 				.getLifecycleState());
@@ -61,8 +60,12 @@ public class ArchetypeDescriptionTest extends ParserTestBase {
 		assertEquals("resourcePackageUri",
 				"www.aihw.org.au/data_sets/diabetic_archetypes.html",
 				description.getResourcePackageUri());
+		
+		Map<String, String> map = description.getOtherDetails();
+		assertEquals("details 1", map.get("other 1"));
+		assertEquals("details 2", map.get("other 2"));
+	
 
-		// TODO: other_details
 		// TODO: parent_resource
 
 		List<ResourceDescriptionItem> details = description.getDetails();
@@ -71,7 +74,7 @@ public class ArchetypeDescriptionTest extends ParserTestBase {
 
 		ResourceDescriptionItem item = details.get(0);
 		assertNotNull("descriptionItem null", item);
-		CodePhrase language = new CodePhrase("languages", "en");
+		CodePhrase language = new CodePhrase("ISO_639-1", "en");
 		assertEquals("language wrong", language, item.getLanguage());
 
 		assertEquals(
@@ -99,8 +102,14 @@ public class ArchetypeDescriptionTest extends ParserTestBase {
 		keywords.add("condition");
 		assertEquals("keywords wrong", keywords, item.getKeywords());
 
-		// TODO: original_resource_uri
-		// TODO: other_details
+		map  = details.get(0).getOriginalResourceUri();
+		assertEquals("http://guidelines.are.us/wherever/fr", 
+				map.get("ligne guide"));
+		assertEquals("http://some%20medline%20ref", map.get("medline"));
+		
+		map = details.get(0).getOtherDetails();
+		assertEquals("item details 1", map.get("item other 1"));
+		assertEquals("item details 2", map.get("item other 2"));
 	}
 
 	public void testParseOriginalAuthorAsLast() throws Exception {
@@ -124,3 +133,4 @@ public class ArchetypeDescriptionTest extends ParserTestBase {
 	}
 
 }
+

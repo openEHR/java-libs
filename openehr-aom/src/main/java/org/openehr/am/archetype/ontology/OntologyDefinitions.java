@@ -36,7 +36,7 @@ public class OntologyDefinitions {
      * @param definitions
      */
     public OntologyDefinitions(String language,
-                               List<DefinitionItem> definitions) {
+                               List<ArchetypeTerm> definitions) {
         this.language = language;
         this.definitions = definitions;
     }
@@ -45,7 +45,7 @@ public class OntologyDefinitions {
         return language;
     }
 
-    public List<DefinitionItem> getDefinitions() {
+    public List<ArchetypeTerm> getDefinitions() {
         return definitions;
     }
 
@@ -91,7 +91,7 @@ public class OntologyDefinitions {
 
     /* fields */
     private String language;
-    private List<DefinitionItem> definitions;
+    private List<ArchetypeTerm> definitions;
 }
 
 /*

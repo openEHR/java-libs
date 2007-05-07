@@ -10,7 +10,7 @@ public class ArchetypeOntologyTest extends TestCase {
 	 * 
 	 * @throws Exception
 	 */
-	public void testConstructor() throws Exception {
+	public void testCreateAndGetDefinitions() throws Exception {
 		String primaryLanguage = "en";
 		List<String> languages = new ArrayList<String>();
 		languages.add("en");
@@ -19,30 +19,37 @@ public class ArchetypeOntologyTest extends TestCase {
 		terminologies.add("SNOMED CT");
 		
 		List<OntologyDefinitions> termDefinitionsList = new ArrayList<OntologyDefinitions>();
-		List<DefinitionItem> items = new ArrayList<DefinitionItem>();
-		DefinitionItem item0001 = 
-			new DefinitionItem("at0001", "blood pressure", "description of BP");
+		List<ArchetypeTerm> items = new ArrayList<ArchetypeTerm>();
+		ArchetypeTerm item0001 = new ArchetypeTerm("at0001"); 
+		item0001.addItem("text", "blood pressure");
+		item0001.addItem("description", "description of BP");
 		items.add(item0001);
 		termDefinitionsList.add(new OntologyDefinitions("en", items));
 		
 		List<OntologyDefinitions> constDefinitionsList = new ArrayList<OntologyDefinitions>();
-		items = new ArrayList<DefinitionItem>();
-		DefinitionItem item0002 = 
-			new DefinitionItem("at0002", "systolic pressure", "description SP");
+		items = new ArrayList<ArchetypeTerm>();
+		ArchetypeTerm item0002 = new ArchetypeTerm("at0002");
+		item0002.addItem("text", "systolic pressure");
+		item0002.addItem("description", "description SP");
 		items.add(item0002);
 		constDefinitionsList.add(new OntologyDefinitions("en", items));
 		
 		ArchetypeOntology ontology = new ArchetypeOntology(primaryLanguage, languages,
 				terminologies, termDefinitionsList, constDefinitionsList, null, null);
 		
-		// check if defnitions are still there
-		DefinitionItem item = ontology.definition("at0001");
+		// check term defnition
+		ArchetypeTerm item = ontology.termDefinition("en", "at0001");
 		assertNotNull("definition of [at0001] not found", item);
 		assertEquals("item wrong", item0001, item);
 		
-		item = ontology.definition("at0002");
+		assertNull(ontology.termDefinition("en", "at0002"));
+		
+		// check constraint definition
+		item = ontology.constraintDefinition("en", "at0002");
 		assertNotNull("definition of [at0002] not found", item);
 		assertEquals("item wrong", item0002, item);
+		
+		assertNull(ontology.constraintDefinition("en", "at0001"));
 	}
 
 }
