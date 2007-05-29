@@ -20,3 +20,6 @@
 2007/04/18
 .added class ArchetypeTerm 
 .added constraintDefinition() and termDefinition() in ArchetypeOntology
+
+2007/05/29
+.fixed a path related issue in CAttribute

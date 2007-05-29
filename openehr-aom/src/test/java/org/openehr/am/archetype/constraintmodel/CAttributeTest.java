@@ -42,16 +42,16 @@ public class CAttributeTest extends TestCase {
 
 	public void testParentNodePath() throws Exception {
 		CAttribute cattr = new TestCAttribute(
-				"/[at0001]/content[at0003]/.items", "items");
+				"/[at0001]/content[at0003]/items", "items");
 
 		assertEquals("/[at0001]/content[at0003]", cattr.parentNodePath());
 	}
 
 	public void testChildNodePathBase() throws Exception {
 		CAttribute cattr = new TestCAttribute(
-				"/[at0001]/content[at0003]/.items", "items");
-		assertEquals("/[at0001]/content[at0003]/items", cattr
-				.childNodePathBase());
+				"/[at0001]/content[at0003]/items", "items");
+		assertEquals("/[at0001]/content[at0003]/items", 
+				cattr.childNodePathBase());
 	}
 
 	private static final class TestCAttribute extends CAttribute {
