@@ -37,7 +37,8 @@ what you are reading now"}
 
 multiple lines, just like"}
 
-				                                                                         
+				                           
+				-- another multi-line string starting with empty line                                                                         
                 string_attr23 matches {"
                 
                 this is what it is used 
@@ -57,6 +58,12 @@ multiple lines, just like"}
 				multiple lines, just like
 				
 				"}
+				
+				-- units = <"/min">, possibile confict with path syntax
+				units_1 matches {"/min"}
+				
+				-- units = 
+				units_2 matches {"km/h"}
 
             }
         }                
