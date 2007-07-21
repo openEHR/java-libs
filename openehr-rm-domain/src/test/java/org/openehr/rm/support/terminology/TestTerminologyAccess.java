@@ -146,6 +146,13 @@ public class TestTerminologyAccess implements TerminologyAccess {
 
 	public static final CodePhrase NULL_FLAVOUR = new CodePhrase("test",
 			"unanswered");
+	
+	public static final CodePhrase SOME_STATE = new CodePhrase("ISM states", 
+			"some state");
+	
+	public static final CodePhrase SOME_TRANSITION = new CodePhrase(
+			"ISM transitions", "some transition");
+
 
 	static Set<CodePhrase> CODES;
 	static {
@@ -160,6 +167,8 @@ public class TestTerminologyAccess implements TerminologyAccess {
 		CODES.add(CREATION);
 		CODES.add(ENGLISH);
 		CODES.add(ACTIVE);
+		CODES.add(SOME_STATE);
+		CODES.add(SOME_TRANSITION);
 	}
 
 }

@@ -66,6 +66,9 @@ public final class ISMTransition extends RMObject {
                         .contains(transition.getDefiningCode())) {
 			throw new IllegalArgumentException("unknown transition:" + transition);
 		}
+		this.currentState = currentState;
+		this.transition = transition;
+		this.careflowStep = careflowStep;		
 	}
 
 	/**
