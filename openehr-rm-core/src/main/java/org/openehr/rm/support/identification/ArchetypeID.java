@@ -281,7 +281,7 @@ public final class ArchetypeID extends ObjectID {
      *
      * @return true if equals
      */
-    public boolean equalsIngoreVersionID(ArchetypeID id) {
+    public boolean equalsIgnoreVersionID(ArchetypeID id) {
         return new EqualsBuilder()
                 .append(qualifiedRmEntity, id.qualifiedRmEntity)
                 .append(domainConcept, id.domainConcept)

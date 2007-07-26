@@ -106,7 +106,7 @@ public class ArchetypeIDTest extends TestCase {
                                            String versionTwo,
                                            boolean expected) {
         assertEquals(expected,
-                new ArchetypeID(baseOne + versionOne).equalsIngoreVersionID(
+                new ArchetypeID(baseOne + versionOne).equalsIgnoreVersionID(
                         new ArchetypeID(baseTwo + versionTwo)));
 
     }
