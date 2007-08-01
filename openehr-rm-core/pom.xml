@@ -20,7 +20,13 @@
 			<name>Yin Su Lim</name>
 			<email>y.lim@chime.ucl.ac.uk</email>
 		</developer>
-	</developers>	
+	</developers>
+	<scm>
+		<connection>scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/openehr-rm-core</connection>
+		<developerConnection>scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/openehr-rm-core</developerConnection>
+		<url> http://my.openehr.org/wsvn/ref_impl_java/TRUNK/openehr-rm-core/</url>
+	</scm>
+	
 	<organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>
