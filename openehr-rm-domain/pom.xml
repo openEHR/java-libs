@@ -32,7 +32,11 @@
 			<email>y.lim@chime.ucl.ac.uk</email>
 		</developer>
 	</developers>
-		
+	<scm>
+		<connection>scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/openehr-rm-domain</connection>
+		<developerConnection>scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/openehr-rm-domain</developerConnection>
+		<url> http://my.openehr.org/wsvn/ref_impl_java/TRUNK/openehr-rm-domain/</url>
+	</scm>	
 	<organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>
