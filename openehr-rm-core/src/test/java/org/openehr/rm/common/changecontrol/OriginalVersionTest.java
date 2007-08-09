@@ -33,7 +33,7 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.TestCodePhrase;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
-import org.openehr.rm.support.identification.LocatableReference;
+import org.openehr.rm.support.identification.LocatableRef;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.identification.PartyRef;
@@ -73,9 +73,9 @@ public class OriginalVersionTest extends TestCase {
         AuditDetails audit1 = new AuditDetails("12.3.4.5", pi, 
                 new DvDateTime("2006-05-01T10:10:00"), codedText, null,
                 TestTerminologyService.getInstance());
-        ObjectRef lr = new LocatableReference(new ObjectVersionID(
+        ObjectRef lr = new LocatableRef(new ObjectVersionID(
                 "1.23.51.66::1.2.840.114.1.2.2::2"), ObjectRef.Namespace.LOCAL,
-                ObjectRef.Type.CONTRIBUTION, "");
+                ObjectRef.Type.CONTRIBUTION, null);
         OriginalVersion<String> ov = new OriginalVersion<String>(uid, null, "A Party Info", 
                 codedText, audit1, lr, null, null, null, false, 
                 TestTerminologyService.getInstance());

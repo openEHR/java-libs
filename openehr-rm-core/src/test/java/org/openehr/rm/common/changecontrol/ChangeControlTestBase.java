@@ -32,7 +32,7 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.TestCodePhrase;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
-import org.openehr.rm.support.identification.LocatableReference;
+import org.openehr.rm.support.identification.LocatableRef;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.identification.PartyRef;
@@ -74,8 +74,8 @@ public class ChangeControlTestBase extends TestCase {
                 TestTerminologyService.getInstance());
     }
     
-    protected LocatableReference contribution(String objectVersionID, String path) {
-        return new LocatableReference(new ObjectVersionID(
+    protected LocatableRef contribution(String objectVersionID, String path) {
+        return new LocatableRef(new ObjectVersionID(
                 objectVersionID), ObjectRef.Namespace.LOCAL,
                 ObjectRef.Type.CONTRIBUTION, path);
     }
@@ -94,7 +94,7 @@ public class ChangeControlTestBase extends TestCase {
         AuditDetails audit1 = new AuditDetails("12.3.4.5", pi, 
                 new DvDateTime(time), codedText, null,
                 TestTerminologyService.getInstance());
-        ObjectRef lr = new LocatableReference(new ObjectVersionID(
+        ObjectRef lr = new LocatableRef(new ObjectVersionID(
                 "1.23.51.66::1.2.840.114.1.2.2::2"), ObjectRef.Namespace.LOCAL,
                 ObjectRef.Type.CONTRIBUTION, "");
         
@@ -114,7 +114,7 @@ public class ChangeControlTestBase extends TestCase {
     
     protected ImportedVersion<String> importedVersion(String data, boolean isMerged,
             String uidStr, String orgTime, String importTime) {
-        ObjectRef lr = new LocatableReference(new ObjectVersionID(
+        ObjectRef lr = new LocatableRef(new ObjectVersionID(
                 "1.20.51.60::1.2.840.114.1.2.2::1"), ObjectRef.Namespace.LOCAL,
                 ObjectRef.Type.CONTRIBUTION, "");
         PartyIdentified pi = new PartyIdentified(new PartyRef(
