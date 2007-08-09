@@ -20,7 +20,7 @@ import org.openehr.rm.common.generic.Attestation;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.datatypes.basic.DvState;
 import org.openehr.rm.datatypes.text.DvCodedText;
@@ -46,7 +46,7 @@ public abstract class Version <T> extends RMObject {
      */
     public Version(ObjectVersionID uid, ObjectVersionID precedingVersionID,
                    T data, DvCodedText lifeCycleState, AuditDetails commitAudit, 
-                   ObjectReference contribution, String signature,
+                   ObjectRef contribution, String signature,
                    TerminologyService terminologyService) {
 
         if (uid == null) {
@@ -61,7 +61,7 @@ public abstract class Version <T> extends RMObject {
         if (contribution == null) {
             throw new IllegalArgumentException("null contribution");
         }
-        if (!contribution.getType().equals(ObjectReference.Type.CONTRIBUTION)) {
+        if (!contribution.getType().equals(ObjectRef.Type.CONTRIBUTION)) {
             throw new IllegalArgumentException("contribution not of type CONTRIBUTION");
         }
         if (uid.versionTreeID().isFirst() == (precedingVersionID != null)) {
@@ -149,7 +149,7 @@ public abstract class Version <T> extends RMObject {
      *
      * @return contribution
      */
-    public ObjectReference getContribution() {
+    public ObjectRef getContribution() {
         return contribution;
     }
 
@@ -194,7 +194,7 @@ public abstract class Version <T> extends RMObject {
         this.precedingVersionID = precedingVersionID;
     }
 
-    void setContribution(ObjectReference contribution) {
+    void setContribution(ObjectRef contribution) {
         this.contribution = contribution;
     }
 
@@ -204,7 +204,7 @@ public abstract class Version <T> extends RMObject {
         
     protected void setAttributes(ObjectVersionID uid, 
                ObjectVersionID precedingVersionID, T data, DvCodedText lifeCycleState,  
-               AuditDetails commitAudit, ObjectReference contribution, 
+               AuditDetails commitAudit, ObjectRef contribution, 
                String signature) {
         this.uid = uid;
         this.precedingVersionID = precedingVersionID;
@@ -221,7 +221,7 @@ public abstract class Version <T> extends RMObject {
     private AuditDetails commitAudit;
     private ObjectVersionID uid; 
     private ObjectVersionID precedingVersionID;
-    private ObjectReference contribution;
+    private ObjectRef contribution;
     private T data;
     private DvCodedText lifeCycleState;
     private String signature;

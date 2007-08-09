@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class ObjectReference"
+ * description: "Class ObjectRef"
  * keywords:    "common"
  *
  * author:      "Rong Chen <rong@acode.se>"
@@ -8,7 +8,7 @@
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/support/identification/ObjectReference.java $"
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/support/identification/ObjectRef.java $"
  * revision:    "$LastChangedRevision: 2 $"
  * last_change: "$LastChangedDate: 2005-10-12 22:20:08 +0100 (Wed, 12 Oct 2005) $"
  */
@@ -29,7 +29,7 @@ import org.openehr.rm.RMObject;
  * @author Rong Chen
  * @version 1.0
  */
-public class ObjectReference extends RMObject {
+public class ObjectRef extends RMObject {
 
     /**
      * List of known object reference types
@@ -67,14 +67,14 @@ public class ObjectReference extends RMObject {
     }
 
     /**
-     * Constructs an ObjectReference by id, namespace and type
+     * Constructs an ObjectRef by id, namespace and type
      *
      * @param id        not null
      * @param namespace not null or empty
      * @param type      not null or empty
      * @throws IllegalArgumentException if any invalid parameter
      */
-    public ObjectReference(ObjectID id, Namespace namespace,
+    public ObjectRef(ObjectID id, Namespace namespace,
                            Type type) {
         if (id == null) {
             throw new IllegalArgumentException("null id");
@@ -136,9 +136,9 @@ public class ObjectReference extends RMObject {
      */
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!( o instanceof ObjectReference )) return false;
+        if (!( o instanceof ObjectRef )) return false;
 
-        final ObjectReference objRef = (ObjectReference) o;
+        final ObjectRef objRef = (ObjectRef) o;
 
         return new EqualsBuilder()
                 .append(id, objRef.id)
@@ -161,7 +161,7 @@ public class ObjectReference extends RMObject {
     }
 
     /**
-     * Return string presentation of this ObjectReference
+     * Return string presentation of this ObjectRef
      *
      * @return string presentation
      */
@@ -177,7 +177,7 @@ public class ObjectReference extends RMObject {
     }
 
     // POJO start
-    ObjectReference() {
+    ObjectRef() {
     }
 
     private void setOid(ObjectID id) {
@@ -225,7 +225,7 @@ public class ObjectReference extends RMObject {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is ObjectReference.java
+ *  The Original Code is ObjectRef.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2004

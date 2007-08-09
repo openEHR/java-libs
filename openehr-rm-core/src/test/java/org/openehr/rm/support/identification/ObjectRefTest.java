@@ -23,9 +23,9 @@ package org.openehr.rm.support.identification;
 
 import junit.framework.TestCase;
 
-public class ObjectReferenceTest extends TestCase {
+public class ObjectRefTest extends TestCase {
 
-    public ObjectReferenceTest(String test) {
+    public ObjectRefTest(String test) {
         super(test);
     }
 
@@ -42,17 +42,17 @@ public class ObjectReferenceTest extends TestCase {
     }
 
     public void testConstructor() throws Exception {
-        assertExceptionThrown(null, ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.EHR, "id");
+        assertExceptionThrown(null, ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.EHR, "id");
 
         assertExceptionThrown(hid("1.2.40.11.1.2.2::2"), null,
-                ObjectReference.Type.EHR, "namespace");
+                ObjectRef.Type.EHR, "namespace");
 
-        assertExceptionThrown(hid("1.2.40.11.1.2.2::2"), ObjectReference.Namespace.LOCAL,
+        assertExceptionThrown(hid("1.2.40.11.1.2.2::2"), ObjectRef.Namespace.LOCAL,
                 null, "type");
 
-        new ObjectReference(hid("openehr.org::23"), ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.EHR);
+        new ObjectRef(hid("openehr.org::23"), ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.EHR);
     }
 
     private ObjectID hid(String value) {
@@ -60,37 +60,37 @@ public class ObjectReferenceTest extends TestCase {
     }
 
     public void testEquals() throws Exception {
-        ObjectReference or1 = new ObjectReference(hid("1-2-80-11-1"),
-                ObjectReference.Namespace.LOCAL, ObjectReference.Type.EHR);
-        ObjectReference or2 = new ObjectReference(hid("1-2-80-11-1"),
-                ObjectReference.Namespace.LOCAL, ObjectReference.Type.EHR);
+        ObjectRef or1 = new ObjectRef(hid("1-2-80-11-1"),
+                ObjectRef.Namespace.LOCAL, ObjectRef.Type.EHR);
+        ObjectRef or2 = new ObjectRef(hid("1-2-80-11-1"),
+                ObjectRef.Namespace.LOCAL, ObjectRef.Type.EHR);
         assertTrue(or1.equals(or2));
         assertTrue(or2.equals(or1));
 
-        ObjectReference or3 = new ObjectReference(hid("openehr.org::23"),
-                ObjectReference.Namespace.LOCAL, ObjectReference.Type.EHR);
+        ObjectRef or3 = new ObjectRef(hid("openehr.org::23"),
+                ObjectRef.Namespace.LOCAL, ObjectRef.Type.EHR);
         assertFalse(or1.equals(or3));
         assertFalse(or3.equals(or1));
 
-        or3 = new ObjectReference(hid("1-2-80-11-1"),
-                ObjectReference.Namespace.DEMOGRAPHIC,
-                ObjectReference.Type.EHR);
+        or3 = new ObjectRef(hid("1-2-80-11-1"),
+                ObjectRef.Namespace.DEMOGRAPHIC,
+                ObjectRef.Type.EHR);
         assertFalse(or1.equals(or3));
         assertFalse(or3.equals(or1));
 
-        or3 = new ObjectReference(hid("1-2-80-11-1"),
-                ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.PARTY);
+        or3 = new ObjectRef(hid("1-2-80-11-1"),
+                ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.PARTY);
         assertFalse(or1.equals(or3));
         assertFalse(or3.equals(or1));
     }
 
     private void assertExceptionThrown(ObjectID id,
-                                       ObjectReference.Namespace namespace,
-                                       ObjectReference.Type type,
+                                       ObjectRef.Namespace namespace,
+                                       ObjectRef.Type type,
                                        String cause) {
         try {
-            new ObjectReference(id, namespace, type);
+            new ObjectRef(id, namespace, type);
             fail("exception should be thrown");
         } catch (Exception e) {
             assertTrue(e instanceof IllegalArgumentException);

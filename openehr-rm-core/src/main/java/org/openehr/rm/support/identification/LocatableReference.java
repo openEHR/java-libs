@@ -27,7 +27,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Yin Su Lim
  * @version 1.0
  */
-public class LocatableReference extends ObjectReference {
+public class LocatableReference extends ObjectRef {
 
     /**
      * Construct a LocatableReference
@@ -72,7 +72,7 @@ public class LocatableReference extends ObjectReference {
      */
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!( o instanceof ObjectReference )) return false;
+        if (!( o instanceof ObjectRef )) return false;
         if (!super.equals(o)) return false;
         
         final LocatableReference locRef = (LocatableReference) o;

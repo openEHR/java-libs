@@ -20,7 +20,7 @@ import java.util.Set;
 import org.openehr.rm.common.generic.Attestation;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.datatypes.text.DvCodedText;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.terminology.TerminologyService;
 
@@ -42,7 +42,7 @@ public class OriginalVersion<T> extends Version<T> {
 	 */
 	public OriginalVersion(ObjectVersionID uid, ObjectVersionID precedingVersionID,
             T data, DvCodedText lifeCycleState, AuditDetails commitAudit, 
-            ObjectReference contribution, String signature, 
+            ObjectRef contribution, String signature, 
             Set<ObjectVersionID> otherInputVersionUids, List<Attestation> attestations,
             boolean isMerged, TerminologyService terminologyService) {
             

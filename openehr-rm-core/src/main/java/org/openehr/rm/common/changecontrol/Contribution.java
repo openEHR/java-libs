@@ -16,7 +16,7 @@ package org.openehr.rm.common.changecontrol;
 
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.RMObject;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -39,7 +39,7 @@ public class Contribution extends RMObject {
      * @param versions not null or empty
      * @param audit    not null
      */
-    public Contribution(ObjectID uid, Set<ObjectReference> versions,
+    public Contribution(ObjectID uid, Set<ObjectRef> versions,
                         AuditDetails audit) {
         if (uid == null) {
             throw new IllegalArgumentException("null uid");
@@ -82,9 +82,9 @@ public class Contribution extends RMObject {
      * include paths pointing to any number of VERSION items,
      * ie items of type COMPOSITION and FOLDER.
      *
-     * @return <code>Set</code> of <code>ObjectReference</code>
+     * @return <code>Set</code> of <code>ObjectRef</code>
      */
-    public Set<ObjectReference> getVersions() {
+    public Set<ObjectRef> getVersions() {
         return versions;
     }
 
@@ -132,14 +132,14 @@ public class Contribution extends RMObject {
         this.audit = audit;
     }
 
-    void setVersions(Set<ObjectReference> versions) {
+    void setVersions(Set<ObjectRef> versions) {
         this.versions = versions;
     }
     // POJO end
 
     /* fields */
     private ObjectID uid;
-    private Set<ObjectReference> versions;
+    private Set<ObjectRef> versions;
     private AuditDetails audit;
 }
 

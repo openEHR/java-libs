@@ -25,7 +25,7 @@ import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 
 public class Folder extends Locatable {
 
@@ -45,7 +45,7 @@ public class Folder extends Locatable {
      */
     public Folder(ObjectID uid, String archetypeNodeId, DvText name,
             Archetyped archetypeDetails, FeederAudit feederAudit, Set<Link> links,
-            Locatable parent, List<Folder> folders, List<ObjectReference> items) {
+            Locatable parent, List<Folder> folders, List<ObjectRef> items) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);
         if(folders != null && folders.size() == 0) {
             throw new IllegalArgumentException("empty folders");
@@ -69,7 +69,7 @@ public class Folder extends Locatable {
      * The list of references to other versioned objects logically in this FOLDER
      * @return items 	List of versioned items in this FOLDER
      */
-    public List<ObjectReference> getItems() {
+    public List<ObjectRef> getItems() {
         return items;
     }
     
@@ -118,14 +118,14 @@ public class Folder extends Locatable {
         this.folders = folders;
     }
     
-    void setItems(List<ObjectReference> items) {
+    void setItems(List<ObjectRef> items) {
         this.items = items;
     }
     //POJO ends
     
     /* fields */
     private List<Folder> folders;
-    private List<ObjectReference> items;
+    private List<ObjectRef> items;
 }
 
 /*

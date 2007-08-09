@@ -19,7 +19,7 @@ import java.util.List;
 import org.openehr.rm.common.generic.Attestation;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.datatypes.text.DvCodedText;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.terminology.TerminologyService;
 
@@ -40,7 +40,7 @@ public final class ImportedVersion<T> extends Version<T> {
      * @param originalVersion
      */
     public ImportedVersion(OriginalVersion<T> original, AuditDetails commitAudit,
-            ObjectReference contribution, String signature) {
+            ObjectRef contribution, String signature) {
         if (original == null) {
             throw new IllegalArgumentException("null original version");
         }

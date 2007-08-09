@@ -37,7 +37,7 @@ import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.identification.VersionTreeID;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -129,9 +129,9 @@ public class VersionedObjectTest extends ChangeControlTestBase {
     VersionedObject<String> repository(String firstData, String creatingSysID,
             String time) throws Exception {
         HierarchicalObjectID id = new HierarchicalObjectID("1-2-5-2-4");
-        ObjectReference ehrRef = new ObjectReference(
-                new HierarchicalObjectID("ehrdomain::1"), ObjectReference.Namespace.LOCAL,               
-                ObjectReference.Type.EHR);
+        ObjectRef ehrRef = new ObjectRef(
+                new HierarchicalObjectID("ehrdomain::1"), ObjectRef.Namespace.LOCAL,               
+                ObjectRef.Type.EHR);
         ObjectVersionID vUid = new ObjectVersionID(id.root(), new HierarchicalObjectID(creatingSysID),
                 new VersionTreeID("1"));
         return new VersionedObject<String>(id, ehrRef, new DvDateTime(time),
@@ -272,9 +272,9 @@ public class VersionedObjectTest extends ChangeControlTestBase {
         OriginalVersion<String> data = orgVersion(orgData, dStrVersionID, pVersionID, 
                 time);
         HierarchicalObjectID id = data.ownerID();
-        ObjectReference ehrRef = new ObjectReference(
-                new HierarchicalObjectID("ehrdomain::1"), ObjectReference.Namespace.LOCAL,               
-                ObjectReference.Type.EHR);
+        ObjectRef ehrRef = new ObjectRef(
+                new HierarchicalObjectID("ehrdomain::1"), ObjectRef.Namespace.LOCAL,               
+                ObjectRef.Type.EHR);
 
         return new VersionedObject<String>(id, ehrRef, new DvDateTime(time),
             data, audit("1-6-7-7-2", "Yinsu", "changeTypeCode", time),

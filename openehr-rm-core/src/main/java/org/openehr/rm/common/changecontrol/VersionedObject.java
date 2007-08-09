@@ -31,7 +31,7 @@ import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.identification.VersionTreeID;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -50,10 +50,10 @@ public class VersionedObject<T> extends RMObject {
     /**
      * Constructs a VersionObject with first originalVersion
      */
-    public VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID,
+    public VersionedObject(HierarchicalObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, ObjectVersionID versionID, T data,
             DvCodedText lifecycleState, AuditDetails commitAudit,
-            ObjectReference contribution, String signature,
+            ObjectRef contribution, String signature,
             TerminologyService terminologyService) {
         
         this(uid, ownerID, timeCreated);
@@ -64,9 +64,9 @@ public class VersionedObject<T> extends RMObject {
     /**
      * Constructs a VersionObject with first importedVersion
      */
-    public VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID,
+    public VersionedObject(HierarchicalObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, OriginalVersion<T> item, AuditDetails commitAudit,
-            ObjectReference contribution, String signature) {
+            ObjectRef contribution, String signature) {
         this(uid, ownerID, timeCreated);
         commitImportedVersion(item, commitAudit, contribution, signature);
     }
@@ -74,10 +74,10 @@ public class VersionedObject<T> extends RMObject {
     /**
      * Constructs a VersionObject with first merged Version
      */
-    public VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID,
+    public VersionedObject(HierarchicalObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, ObjectVersionID versionID,
             ObjectVersionID precedingVersionID, T data, DvCodedText lifecycleState,
-            AuditDetails commitAudit, ObjectReference contribution, 
+            AuditDetails commitAudit, ObjectRef contribution, 
             Set<ObjectVersionID> otherInputVersionUids, String signature, 
             TerminologyService terminologyService) {
         this(uid, ownerID, timeCreated);
@@ -86,7 +86,7 @@ public class VersionedObject<T> extends RMObject {
                 terminologyService);
     }
     
-    private VersionedObject(HierarchicalObjectID uid, ObjectReference ownerID,
+    private VersionedObject(HierarchicalObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated) {
         if (uid == null) {
             throw new IllegalArgumentException("null uid");
@@ -112,7 +112,7 @@ public class VersionedObject<T> extends RMObject {
      * @param item
      */
     public synchronized void commitImportedVersion(OriginalVersion<T> item, AuditDetails commitAudit, 
-            ObjectReference contribution, String signature) {
+            ObjectRef contribution, String signature) {
 
         commitVersionCheck(item.getUid(), item.getPrecedingVersionID());
         Version<T> version = new ImportedVersion<T>(item, commitAudit, contribution, signature);
@@ -154,7 +154,7 @@ public class VersionedObject<T> extends RMObject {
      */
     public synchronized void commitOriginalVersion(ObjectVersionID versionID,
             ObjectVersionID precedingVersionID, T data, AuditDetails commitAudit,
-            ObjectReference contribution, DvCodedText lifecycleState, String signature, 
+            ObjectRef contribution, DvCodedText lifecycleState, String signature, 
             TerminologyService terminologyService) {
         
         commitVersionCheck(versionID, precedingVersionID);
@@ -176,7 +176,7 @@ public class VersionedObject<T> extends RMObject {
      */
     public synchronized void commitOriginalMergedVersion(ObjectVersionID versionID,
             ObjectVersionID precedingVersionID, T data, DvCodedText lifecycleState, 
-            AuditDetails commitAudit, ObjectReference contribution,
+            AuditDetails commitAudit, ObjectRef contribution,
             Set<ObjectVersionID> otherInputVersionUids, String signature,
             TerminologyService terminologyService) {
         
@@ -226,7 +226,7 @@ public class VersionedObject<T> extends RMObject {
      *
      * @return OwnerID
      */
-    public ObjectReference getOwnerID() {
+    public ObjectRef getOwnerID() {
         return ownerID;
     }
     
@@ -427,7 +427,7 @@ public class VersionedObject<T> extends RMObject {
         this.uid = uid;
     }
     
-    void setOwnerID(ObjectReference ownerID) {
+    void setOwnerID(ObjectRef ownerID) {
         this.ownerID = ownerID;
     }
     
@@ -457,7 +457,7 @@ public class VersionedObject<T> extends RMObject {
     
     /* fields */
     private HierarchicalObjectID uid;
-    private ObjectReference ownerID;
+    private ObjectRef ownerID;
     private DvDateTime timeCreated;
     
     private SortedMap<DvDateTime, Version<T>> timeVersionMap;

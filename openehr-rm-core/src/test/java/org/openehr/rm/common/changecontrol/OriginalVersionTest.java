@@ -34,7 +34,7 @@ import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.TestCodePhrase;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.LocatableReference;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.identification.PartyReference;
 import org.openehr.rm.support.identification.TestTerminologyID;
@@ -69,13 +69,13 @@ public class OriginalVersionTest extends TestCase {
                 TestTerminologyService.getInstance());
         PartyIdentified pi = new PartyIdentified(new PartyReference(
                 new HierarchicalObjectID("1-2-3-4-5"), 
-                ObjectReference.Type.PARTY), "committer name", null);
+                ObjectRef.Type.PARTY), "committer name", null);
         AuditDetails audit1 = new AuditDetails("12.3.4.5", pi, 
                 new DvDateTime("2006-05-01T10:10:00"), codedText, null,
                 TestTerminologyService.getInstance());
-        ObjectReference lr = new LocatableReference(new ObjectVersionID(
-                "1.23.51.66::1.2.840.114.1.2.2::2"), ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.CONTRIBUTION, "");
+        ObjectRef lr = new LocatableReference(new ObjectVersionID(
+                "1.23.51.66::1.2.840.114.1.2.2::2"), ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.CONTRIBUTION, "");
         OriginalVersion<String> ov = new OriginalVersion<String>(uid, null, "A Party Info", 
                 codedText, audit1, lr, null, null, null, false, 
                 TestTerminologyService.getInstance());
@@ -95,7 +95,7 @@ public class OriginalVersionTest extends TestCase {
     
     private void assertContructorError(ObjectVersionID uid, ObjectVersionID pVersionID,
             String data, DvCodedText codedText, AuditDetails audit, 
-            ObjectReference contribution, String signature, 
+            ObjectRef contribution, String signature, 
             Set<ObjectVersionID> otherUids, List<Attestation> attestations,
             boolean isMerged, TerminologyService terminologyService) {
 

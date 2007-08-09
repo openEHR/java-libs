@@ -33,7 +33,7 @@ import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.TestCodePhrase;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.LocatableReference;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.identification.PartyReference;
 import org.openehr.rm.support.identification.TestTerminologyID;
@@ -63,7 +63,7 @@ public class ChangeControlTestBase extends TestCase {
     protected AuditDetails audit(String id, String name, String changeType, String dt) {
         PartyIdentified pi = new PartyIdentified(new PartyReference(
                 new HierarchicalObjectID(id), 
-                ObjectReference.Type.PARTY), name, null);
+                ObjectRef.Type.PARTY), name, null);
         CodePhrase codePhrase =
                 new CodePhrase(TestTerminologyID.SNOMEDCT, "revisionCode");
         DvCodedText codedText = new DvCodedText(changeType, TestCodePhrase.ENGLISH,
@@ -76,8 +76,8 @@ public class ChangeControlTestBase extends TestCase {
     
     protected LocatableReference contribution(String objectVersionID, String path) {
         return new LocatableReference(new ObjectVersionID(
-                objectVersionID), ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.CONTRIBUTION, path);
+                objectVersionID), ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.CONTRIBUTION, path);
     }
     
     protected OriginalVersion<String> originalVersion(String data, boolean isMerged,
@@ -90,13 +90,13 @@ public class ChangeControlTestBase extends TestCase {
                 TestTerminologyService.getInstance());
         PartyIdentified pi = new PartyIdentified(new PartyReference(
                 new HierarchicalObjectID("1-2-3-4-5"), 
-                ObjectReference.Type.PARTY), "committer name", null);
+                ObjectRef.Type.PARTY), "committer name", null);
         AuditDetails audit1 = new AuditDetails("12.3.4.5", pi, 
                 new DvDateTime(time), codedText, null,
                 TestTerminologyService.getInstance());
-        ObjectReference lr = new LocatableReference(new ObjectVersionID(
-                "1.23.51.66::1.2.840.114.1.2.2::2"), ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.CONTRIBUTION, "");
+        ObjectRef lr = new LocatableReference(new ObjectVersionID(
+                "1.23.51.66::1.2.840.114.1.2.2::2"), ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.CONTRIBUTION, "");
         
         if(isMerged) {
             Set<ObjectVersionID> otherUids = new HashSet<ObjectVersionID>();
@@ -114,12 +114,12 @@ public class ChangeControlTestBase extends TestCase {
     
     protected ImportedVersion<String> importedVersion(String data, boolean isMerged,
             String uidStr, String orgTime, String importTime) {
-        ObjectReference lr = new LocatableReference(new ObjectVersionID(
-                "1.20.51.60::1.2.840.114.1.2.2::1"), ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.CONTRIBUTION, "");
+        ObjectRef lr = new LocatableReference(new ObjectVersionID(
+                "1.20.51.60::1.2.840.114.1.2.2::1"), ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.CONTRIBUTION, "");
         PartyIdentified pi = new PartyIdentified(new PartyReference(
                 new HierarchicalObjectID("1-2-5-4-1"), 
-                ObjectReference.Type.PARTY), "committer name", null);
+                ObjectRef.Type.PARTY), "committer name", null);
         DvCodedText codedText = new DvCodedText("complete", TestCodePhrase.ENGLISH,
                 TestCodePhrase.LATIN_1, new CodePhrase(TestTerminologyID.SNOMEDCT, "revisionCode"),
                 TestTerminologyService.getInstance());

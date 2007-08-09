@@ -22,7 +22,7 @@ package org.openehr.rm.support.identification;
  * @author Rong Chen
  * @version 1.0
  */
-public class PartyReference extends ObjectReference {
+public class PartyReference extends ObjectRef {
 
     // POJO start
     PartyReference() {
@@ -35,15 +35,15 @@ public class PartyReference extends ObjectReference {
      * @param id
      * @throws IllegalArgumentException if id or type null
      */
-    public PartyReference(ObjectID id, ObjectReference.Type type) {
-        super(id, ObjectReference.Namespace.DEMOGRAPHIC,
+    public PartyReference(ObjectID id, ObjectRef.Type type) {
+        super(id, ObjectRef.Namespace.DEMOGRAPHIC,
                 type);
-        if (!type.equals(ObjectReference.Type.PARTY) &&
-        		!type.equals(ObjectReference.Type.PERSON) && 
-        		!type.equals(ObjectReference.Type.ORGANISATION) &&
-        		!type.equals(ObjectReference.Type.GROUP) &&
-        		!type.equals(ObjectReference.Type.AGENT) && 
-        		!type.equals(ObjectReference.Type.ROLE)) {
+        if (!type.equals(ObjectRef.Type.PARTY) &&
+        		!type.equals(ObjectRef.Type.PERSON) && 
+        		!type.equals(ObjectRef.Type.ORGANISATION) &&
+        		!type.equals(ObjectRef.Type.GROUP) &&
+        		!type.equals(ObjectRef.Type.AGENT) && 
+        		!type.equals(ObjectRef.Type.ROLE)) {
         		throw new IllegalArgumentException("incorrect type for party");
         }
     }

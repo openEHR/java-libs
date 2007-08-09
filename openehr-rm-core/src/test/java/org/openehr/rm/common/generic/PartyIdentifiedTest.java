@@ -28,7 +28,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.datatypes.basic.DvIdentifier;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.PartyReference;
 
 public class PartyIdentifiedTest extends TestCase {
@@ -51,7 +51,7 @@ public class PartyIdentifiedTest extends TestCase {
 
     public void test() {
         PartyReference pr = new PartyReference(new HierarchicalObjectID("1-2-3-4-5"), 
-                ObjectReference.Type.PARTY);
+                ObjectRef.Type.PARTY);
         PartyIdentified pi = new PartyIdentified(pr, "party name", null);
         PartyIdentified pi2 = new PartyIdentified(pr, "party name", null);
         assertEquals(pi, pi2);
