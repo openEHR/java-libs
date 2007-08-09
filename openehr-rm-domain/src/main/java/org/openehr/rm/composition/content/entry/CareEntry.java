@@ -27,7 +27,7 @@ import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
@@ -57,9 +57,9 @@ public abstract class CareEntry extends Entry {
                  Archetyped archetypeDetails, FeederAudit feederAudit,
                  Set<Link> links, Locatable parent, CodePhrase language,
                  CodePhrase charset, PartyProxy subject, 
-                 PartyProxy provider, ObjectReference workflowID,
+                 PartyProxy provider, ObjectRef workflowID,
                  List<Participation> otherParticipations,
-                 ItemStructure protocol, ObjectReference guidelineID, 
+                 ItemStructure protocol, ObjectRef guidelineID, 
                  TerminologyService terminologyService) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent, 
@@ -91,7 +91,7 @@ public abstract class CareEntry extends Entry {
      * 
      * @return guidelineID
      */
-    public ObjectReference getGuidelineID() {
+    public ObjectRef getGuidelineID() {
     		return guidelineID;
     }
     
@@ -108,7 +108,7 @@ public abstract class CareEntry extends Entry {
     CareEntry() {
     }
     
-	void setGuidelineID(ObjectReference guidelineID) {
+	void setGuidelineID(ObjectRef guidelineID) {
 		this.guidelineID = guidelineID;
 	}
 	void setProtocol(ItemStructure protocol) {
@@ -119,7 +119,7 @@ public abstract class CareEntry extends Entry {
     /* fields */
         
    private ItemStructure protocol;
-   private ObjectReference guidelineID;
+   private ObjectRef guidelineID;
 
    /* static fields */
    public static final String PROTOCOL = "protocol";

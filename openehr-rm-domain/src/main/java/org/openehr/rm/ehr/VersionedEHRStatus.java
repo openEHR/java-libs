@@ -37,7 +37,7 @@ import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.terminology.TerminologyService;
 
@@ -52,10 +52,10 @@ public class VersionedEHRStatus extends VersionedObject<EHRStatus> {
 	/**
 	 * Constructs a VersionEHRStatus with first EHRStatus created locally
 	 */
-	public VersionedEHRStatus(HierarchicalObjectID uid, ObjectReference ownerID, 
+	public VersionedEHRStatus(HierarchicalObjectID uid, ObjectRef ownerID, 
 			DvDateTime timeCreated, ObjectVersionID versionID, EHRStatus ehrStatus, 
 			DvCodedText lifecycleState, AuditDetails commitAudit, 
-                        ObjectReference contribution, String signature,
+                        ObjectRef contribution, String signature,
                         TerminologyService terminologyService) {
 		
         super(uid, ownerID, timeCreated, versionID, ehrStatus, lifecycleState, commitAudit, 
@@ -65,9 +65,9 @@ public class VersionedEHRStatus extends VersionedObject<EHRStatus> {
 	/**
 	 * Constructs a VersionEHRStatus with first imported EHRStatus
 	 */
-	public VersionedEHRStatus(HierarchicalObjectID uid, ObjectReference ownerID, 
+	public VersionedEHRStatus(HierarchicalObjectID uid, ObjectRef ownerID, 
 			DvDateTime timeCreated, OriginalVersion<EHRStatus> item,
-                        AuditDetails commitAudit, ObjectReference contribution, 
+                        AuditDetails commitAudit, ObjectRef contribution, 
                         String signature) {
         super(uid, ownerID, timeCreated, item, commitAudit, contribution, signature);
         
@@ -76,10 +76,10 @@ public class VersionedEHRStatus extends VersionedObject<EHRStatus> {
 	/**
 	 * Constructs a VersionEHRStatus with first merged EHRStatus
 	 */
-	public VersionedEHRStatus(HierarchicalObjectID uid, ObjectReference ownerID, 
+	public VersionedEHRStatus(HierarchicalObjectID uid, ObjectRef ownerID, 
 			DvDateTime timeCreated, ObjectVersionID versionID,   
 			ObjectVersionID precedingVersionID, EHRStatus ehrStatus, DvCodedText lifecycleState, 
-                        AuditDetails commitAudit, ObjectReference contribution,   			  
+                        AuditDetails commitAudit, ObjectRef contribution,   			  
 			Set<ObjectVersionID> otherInputVersionUids, String signature,
                         TerminologyService terminologyService) {
 		

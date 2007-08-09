@@ -136,14 +136,14 @@ public class DemographicTestBase extends TestCase {
         return new DvCount(value);
     }
 
-    protected PartyReference partyRef(String id, ObjectReference.Type type) {
-        return new PartyReference(oid(id), type);
+    protected PartyRef partyRef(String id, ObjectRef.Type type) {
+        return new PartyRef(oid(id), type);
     }
 
-    protected ObjectReference contriRef(String id) {
-        return new ObjectReference(oid(id),
-                ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.CONTRIBUTION);
+    protected ObjectRef contriRef(String id) {
+        return new ObjectRef(oid(id),
+                ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.CONTRIBUTION);
     }
 
     protected ObjectID oid(String value) {
@@ -164,7 +164,7 @@ public class DemographicTestBase extends TestCase {
                 "openehr-ehr_rm-Composition.physical_examination.v2"), "1.0");
             return new Composition(uid, meaning, name, archetypeDetails, null, 
                     links(3), null, content, eventContext(), provider("1.4.5.1.12.4.2", 
-                    ObjectReference.Type.COMPOSITION), TestCodeSetAccess.EVENT,
+                    ObjectRef.Type.COMPOSITION), TestCodeSetAccess.EVENT,
                     new CodePhrase("test", "present_code"), ts);
     }*/
 
@@ -179,16 +179,16 @@ public class DemographicTestBase extends TestCase {
 
     protected EventContext eventContext() throws Exception {
         List<Participation> participations = new ArrayList<Participation>();
-                PartyReference performer = new PartyReference(
-                new HierarchicalObjectID("1.3.3.1.2.42.1"), ObjectReference.Type.ORGANISATION);
+                PartyRef performer = new PartyRef(
+                new HierarchicalObjectID("1.3.3.1.2.42.1"), ObjectRef.Type.ORGANISATION);
         Participation part1 = new Participation(provider("1.3.24.2.3.4.2", 
-                ObjectReference.Type.ORGANISATION),
+                ObjectRef.Type.ORGANISATION),
                 coded("participation function", "23432423"),
                 coded("participation mode", "242344"),
                 new DvInterval<DvDateTime>(datetime("2000-10-10T10:00:00"),
                         datetime("2001-10-10T10:00:00")), ts);
         participations.add(part1);
-        return new EventContext(provider("1.2.3.4.2.5",ObjectReference.Type.ORGANISATION ), 
+        return new EventContext(provider("1.2.3.4.2.5",ObjectRef.Type.ORGANISATION ), 
                 datetime("2000-10-10T10:00:00"), null, 
                 participations, "event context location",
                 coded("event context setting", "2342342"),
@@ -217,8 +217,8 @@ public class DemographicTestBase extends TestCase {
 
         ItemStructure protocol = itemSingle("instruction2 protocol");
         String actID = "instruction2 actId";
-        ObjectReference guidelineId = guideline("543234");
-        ObjectReference.Type[] types = { ObjectReference.Type.PARTY};
+        ObjectRef guidelineId = guideline("543234");
+        ObjectRef.Type[] types = { ObjectRef.Type.PARTY};
         List<Participation> participations = participationList("1.2.3.4.5.6.11", 1, types);
         DvState state = new DvState(coded("started", "141341234"), false);
         ItemStructure action = itemSingle("instruction2 action");
@@ -227,7 +227,7 @@ public class DemographicTestBase extends TestCase {
 
         return new Instruction(uid, meaning, name,
                 archetypeDetails, feederAudit, links, null, language("en"), language("en"),
-                subject("1.4.55.1.4.2.4"), provider("1.2.15.2.5.15.4", ObjectReference.Type.ORGANISATION),
+                subject("1.4.55.1.4.2.4"), provider("1.2.15.2.5.15.4", ObjectRef.Type.ORGANISATION),
                 null, participations, protocol, guidelineId, text("narrative"), null, null, null, ts);
     }
 
@@ -236,7 +236,7 @@ public class DemographicTestBase extends TestCase {
         Archetyped arch = new Archetyped(new ArchetypeID(
                 "openehr-ehr_rm-observation.physical_examination.v3"), "1.1");
         return new Observation("at0001", meaning, arch, language("en"), language("en"), 
-                subject("1.2.52.1.1.5.2"), provider("1.5.5.12.26.15.2", ObjectReference.Type.ORGANISATION), 
+                subject("1.2.52.1.1.5.2"), provider("1.5.5.12.26.15.2", ObjectRef.Type.ORGANISATION), 
                 event("history"), ts);
     }*/
     
@@ -264,16 +264,16 @@ public class DemographicTestBase extends TestCase {
     }
    
     protected PartySelf subject(String id) {
-        return new PartySelf(partyRef(id, ObjectReference.Type.PERSON));
+        return new PartySelf(partyRef(id, ObjectRef.Type.PERSON));
     }
 
-    protected ObjectReference guideline(String id) {
-        return new ObjectReference(oid(id), ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.GUIDELINE);
+    protected ObjectRef guideline(String id) {
+        return new ObjectRef(oid(id), ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.GUIDELINE);
     }
 
     protected List<Participation> participationList(String id,
-                            int num, ObjectReference.Type[] types) throws Exception {
+                            int num, ObjectRef.Type[] types) throws Exception {
         List<Participation> list = new ArrayList<Participation>();
         for (int i = 0; i < num; i++) {
             list.add(participation(id + i, types[i]));
@@ -281,7 +281,7 @@ public class DemographicTestBase extends TestCase {
         return list;
     }
 
-    protected Participation participation(String id, ObjectReference.Type type) throws Exception {
+    protected Participation participation(String id, ObjectRef.Type type) throws Exception {
         return new Participation(provider(id, type),
                 coded("participation function", id + 1),
                 coded("participation mode ", id + 1),
@@ -289,8 +289,8 @@ public class DemographicTestBase extends TestCase {
                         datetime("2001-10-10 10:00:00")), ts);
     }
     
-    protected PartyIdentified provider(String id, ObjectReference.Type type) throws Exception {
-        PartyReference performer = new PartyReference(
+    protected PartyIdentified provider(String id, ObjectRef.Type type) throws Exception {
+        PartyRef performer = new PartyRef(
                 new HierarchicalObjectID(id), type);
         return new PartyIdentified(performer, "provider's name", null);
     }

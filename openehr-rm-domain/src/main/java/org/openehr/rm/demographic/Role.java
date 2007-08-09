@@ -21,8 +21,8 @@ import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.LocatableReference;
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.support.identification.LocatableRef;
+import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
@@ -81,11 +81,11 @@ public class Role extends Party {
                         @Attribute(name = "identities", required = true) Set<PartyIdentity> identities,
                         @Attribute(name = "contacts") Set<Contact> contacts,
                         @Attribute(name = "relationships") Set<PartyRelationship> relationships,
-                        @Attribute(name = "reverseRelationships") Set<LocatableReference> reverseRelationships,
+                        @Attribute(name = "reverseRelationships") Set<LocatableRef> reverseRelationships,
                         @Attribute(name = "details") ItemStructure details,
                         @Attribute(name = "capabilities") List<Capability> capabilities,
                         @Attribute(name = "timeValidity") DvInterval<DvDate> timeValidity,
-                        @Attribute(name = "performer", required = true) PartyReference performer) {
+                        @Attribute(name = "performer", required = true) PartyRef performer) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
                 identities, contacts, relationships, reverseRelationships,
@@ -118,11 +118,11 @@ public class Role extends Party {
         this.timeValidity = timeValidity;
     }
 
-    public PartyReference getPerformer() {
+    public PartyRef getPerformer() {
         return performer;
     }
 
-    protected void setPerformer(PartyReference performer) {
+    protected void setPerformer(PartyRef performer) {
         this.performer = performer;
     }
 
@@ -191,7 +191,7 @@ public class Role extends Party {
 
     private List<Capability> capabilities;
     private DvInterval<DvDate> timeValidity;
-    private PartyReference performer;
+    private PartyRef performer;
 }
 
 /*

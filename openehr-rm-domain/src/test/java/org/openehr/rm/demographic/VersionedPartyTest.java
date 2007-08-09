@@ -29,8 +29,8 @@ import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.support.identification.ObjectRef;
+import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.support.identification.TerminologyID;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.terminology.TestCodeSetAccess;
@@ -85,10 +85,10 @@ public class VersionedPartyTest extends DemographicTestBase {
     // test versioned party
     private VersionedParty versionedParty(String details) throws Exception {
         HierarchicalObjectID id = new HierarchicalObjectID("1.23.24.23");
-        ObjectReference owner = new ObjectReference(
+        ObjectRef owner = new ObjectRef(
                 new HierarchicalObjectID("1.20.0.1"),
-                ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.FOLDER);
+                ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.FOLDER);
         Person person = person(details);
 
         return new VersionedParty(id, owner, new DvDateTime("2006-07-18T13:44:35"),
@@ -115,8 +115,8 @@ public class VersionedPartyTest extends DemographicTestBase {
 
     // test audit
     private AuditDetails audit(DvCodedText changeType) throws Exception {
-        PartyReference pr = new PartyReference(new HierarchicalObjectID("1-2-3-4-5"), 
-                ObjectReference.Type.PARTY);
+        PartyRef pr = new PartyRef(new HierarchicalObjectID("1-2-3-4-5"), 
+                ObjectRef.Type.PARTY);
         PartyIdentified pi = new PartyIdentified(pr, "party name", null);
         CodePhrase codePhrase =
                 new CodePhrase(TestTerminologyAccess.OPENEHR, "revisionCode");
@@ -128,10 +128,10 @@ public class VersionedPartyTest extends DemographicTestBase {
     }
 
     // test contribution
-    private ObjectReference contribution(String id) throws Exception {
-        return new ObjectReference(new HierarchicalObjectID(id),
-                ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.CONTRIBUTION);
+    private ObjectRef contribution(String id) throws Exception {
+        return new ObjectRef(new HierarchicalObjectID(id),
+                ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.CONTRIBUTION);
     }
 
     private TerminologyService ts = TestTerminologyService.getInstance();   

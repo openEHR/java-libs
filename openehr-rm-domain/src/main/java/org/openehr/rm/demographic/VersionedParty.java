@@ -25,7 +25,7 @@ import org.openehr.rm.common.directory.Folder;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.datatypes.basic.DvState;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
@@ -43,10 +43,10 @@ public class VersionedParty extends VersionedObject<Party> {
 	/**
 	 * Constructs a VersionParty with first Party created locally
 	 */
-	public VersionedParty(HierarchicalObjectID uid, ObjectReference ownerID, 
+	public VersionedParty(HierarchicalObjectID uid, ObjectRef ownerID, 
 			DvDateTime timeCreated, ObjectVersionID versionID, Party party, 
 			DvCodedText lifecycleState, AuditDetails commitAudit, 
-                        ObjectReference contribution, String signature,
+                        ObjectRef contribution, String signature,
                         TerminologyService terminologyService) {
 		
         super(uid, ownerID, timeCreated, versionID, party, lifecycleState, commitAudit, contribution, 
@@ -56,9 +56,9 @@ public class VersionedParty extends VersionedObject<Party> {
 	/**
 	 * Constructs a VersionParty with first imported Party
 	 */
-	public VersionedParty(HierarchicalObjectID uid, ObjectReference ownerID, 
+	public VersionedParty(HierarchicalObjectID uid, ObjectRef ownerID, 
 			DvDateTime timeCreated, OriginalVersion<Party> item,
-                        AuditDetails commitAudit, ObjectReference contribution,
+                        AuditDetails commitAudit, ObjectRef contribution,
 			String signature) {
 
         super(uid, ownerID, timeCreated, item, commitAudit, contribution, signature);
@@ -68,10 +68,10 @@ public class VersionedParty extends VersionedObject<Party> {
 	/**
 	 * Constructs a VersionParty with first merged Party
 	 */
-	public VersionedParty(HierarchicalObjectID uid, ObjectReference ownerID, 
+	public VersionedParty(HierarchicalObjectID uid, ObjectRef ownerID, 
 			DvDateTime timeCreated, ObjectVersionID versionID,   
 			ObjectVersionID precedingVersionID, Party party, DvCodedText lifecycleState,
-                        AuditDetails commitAudit, ObjectReference contribution,  
+                        AuditDetails commitAudit, ObjectRef contribution,  
 			Set<ObjectVersionID> otherInputVersionUids, String signature,
                         TerminologyService terminologyService) {
 		

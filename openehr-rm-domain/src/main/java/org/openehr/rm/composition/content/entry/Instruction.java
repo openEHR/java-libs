@@ -21,7 +21,7 @@ import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.common.generic.PartyRelated;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.basic.DvState;
@@ -75,10 +75,10 @@ public final class Instruction extends CareEntry {
                     @Attribute(name = "charset", required = true) CodePhrase charset, 
                     @Attribute(name = "subject", system = true) PartyProxy subject,
                     @Attribute(name = "provider", system = true) PartyProxy provider,
-                    @Attribute(name = "workflowID") ObjectReference workflowID,
+                    @Attribute(name = "workflowID") ObjectRef workflowID,
                     @Attribute(name = "otherParticipation") List<Participation> otherParticipations,
                     @Attribute(name = "protocol") ItemStructure protocol,
-                    @Attribute(name = "guidelineID") ObjectReference guidelineID,
+                    @Attribute(name = "guidelineID") ObjectRef guidelineID,
                     @Attribute(name = "narrative", required = true) DvText narrative,
                     @Attribute(name = "activities") List<Activity> activities,
                     @Attribute(name = "expiryTime") DvDateTime expiryTime,

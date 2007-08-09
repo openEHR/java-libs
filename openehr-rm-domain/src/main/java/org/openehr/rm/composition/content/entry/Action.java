@@ -30,7 +30,7 @@ import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 import org.openehr.rm.common.archetyped.Locatable;
@@ -75,10 +75,10 @@ public final class Action extends CareEntry {
             @Attribute(name = "charset", required = true) CodePhrase charset,
             @Attribute(name = "subject", system = true) PartyProxy subject,
             @Attribute(name = "provider", system = true) PartyProxy provider,
-            @Attribute(name = "workflowID") ObjectReference workflowID,
+            @Attribute(name = "workflowID") ObjectRef workflowID,
             @Attribute(name = "otherParticipation") List<Participation> otherParticipations,
             @Attribute(name = "protocol") ItemStructure protocol,
-            @Attribute(name = "guidelineID") ObjectReference guidelineID,
+            @Attribute(name = "guidelineID") ObjectRef guidelineID,
             @Attribute(name = "time", required = true) DvDateTime time,
             @Attribute(name = "description", required = true) ItemStructure description,
             @Attribute(name = "ismTransition", required = true) ISMTransition ismTransition,

@@ -18,7 +18,7 @@ package org.openehr.rm.demographic;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 
@@ -41,10 +41,10 @@ public class PartyRelationshipTest extends DemographicTestBase {
         DvInterval<DvDate> time = new DvInterval<DvDate>(
                         date("1980-05-13"), null);
         ItemStructure details = itemSingle("father to son");
-        ObjectReference source = new ObjectReference(oid("1.9.0.8.57.34.25"),
-                ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY);
-        ObjectReference target = new ObjectReference(oid("1.9.8.0.70.78.0"),
-                ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY);
+        ObjectRef source = new ObjectRef(oid("1.9.0.8.57.34.25"),
+                ObjectRef.Namespace.LOCAL, ObjectRef.Type.PARTY);
+        ObjectRef target = new ObjectRef(oid("1.9.8.0.70.78.0"),
+                ObjectRef.Namespace.LOCAL, ObjectRef.Type.PARTY);
 
         new PartyRelationship(oid, meaning, name, null, null, null, null, 
                 details, time, source, target);
@@ -65,8 +65,8 @@ public class PartyRelationshipTest extends DemographicTestBase {
     private void assertException(ObjectID oid, String meaning,
                                  DvText name, ItemStructure details,
                                  DvInterval<DvDate> timeValidity,
-                                 ObjectReference source,
-                                 ObjectReference target)
+                                 ObjectRef source,
+                                 ObjectRef target)
             throws Exception {
 
         try {

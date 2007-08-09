@@ -22,7 +22,7 @@ import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.DvInterval;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.Attribute;
@@ -68,8 +68,8 @@ public class PartyRelationship extends Locatable {
             @Attribute(name = "parent") Locatable parent,
             @Attribute(name = "details") ItemStructure details,
             @Attribute(name = "timeValidity") DvInterval<DvDate> timeValidity,
-            @Attribute(name = "source", required = true) ObjectReference source,
-            @Attribute(name = "target", required = true) ObjectReference target) {
+            @Attribute(name = "source", required = true) ObjectRef source,
+            @Attribute(name = "target", required = true) ObjectRef target) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);
 
@@ -169,19 +169,19 @@ public class PartyRelationship extends Locatable {
         this.timeValidity = timeValidity;
     }
 
-    public ObjectReference getSource() {
+    public ObjectRef getSource() {
         return source;
     }
 
-    protected void setSource(ObjectReference source) {
+    protected void setSource(ObjectRef source) {
         this.source = source;
     }
 
-    public ObjectReference getTarget() {
+    public ObjectRef getTarget() {
         return target;
     }
 
-    protected void setTarget(ObjectReference target) {
+    protected void setTarget(ObjectRef target) {
         this.target = target;
     }
 
@@ -224,8 +224,8 @@ public class PartyRelationship extends Locatable {
     /* fields */
     private ItemStructure details;
     private DvInterval<DvDate> timeValidity;
-    private ObjectReference source;
-    private ObjectReference target;
+    private ObjectRef source;
+    private ObjectRef target;
 }
 
 /*

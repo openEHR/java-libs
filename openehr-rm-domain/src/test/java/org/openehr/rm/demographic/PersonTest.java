@@ -14,10 +14,10 @@
  */
 package org.openehr.rm.demographic;
 
-import org.openehr.rm.support.identification.LocatableReference;
+import org.openehr.rm.support.identification.LocatableRef;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
@@ -69,19 +69,19 @@ public class PersonTest extends DemographicTestBase {
 
         Set<PartyRelationship> relationships = new HashSet<PartyRelationship>();
         timeValidity = new DvInterval<DvDate>(date("1960-12-25"), null);
-        ObjectReference source = new ObjectReference(uid,
-                ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY);
-        ObjectReference target = new ObjectReference(oid("1.7.34.8"),
-                ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY);
+        ObjectRef source = new ObjectRef(uid,
+                ObjectRef.Namespace.LOCAL, ObjectRef.Type.PARTY);
+        ObjectRef target = new ObjectRef(oid("1.7.34.8"),
+                ObjectRef.Namespace.LOCAL, ObjectRef.Type.PARTY);
         PartyRelationship relation = new PartyRelationship(oid("1.3.6.7.3"),
                 "at0000", text("mother"), null, null, null, null,
                 itemSingle("mother to son"), timeValidity, source, target);
         relationships.add(relation);
 
-        Set<LocatableReference> reverseRelationships =
-                new HashSet<LocatableReference>();
-        reverseRelationships.add(new LocatableReference(ovid("1.4.4.5::1.2.840.114.1.2.2::1"),
-                ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY, null));
+        Set<LocatableRef> reverseRelationships =
+                new HashSet<LocatableRef>();
+        reverseRelationships.add(new LocatableRef(ovid("1.4.4.5::1.2.840.114.1.2.2::1"),
+                ObjectRef.Namespace.LOCAL, ObjectRef.Type.PARTY, null));
 
         List<Capability> capabilities = new ArrayList<Capability>();
         capabilities.add(new Capability(null, "at0000",
@@ -125,7 +125,7 @@ public class PersonTest extends DemographicTestBase {
                                       Set<PartyIdentity> identities,
                                       Set<Contact> contacts,
                                       Set<PartyRelationship> relationships,
-                                      Set<LocatableReference> revRelationships,
+                                      Set<LocatableRef> revRelationships,
                                       ItemStructure details, Set<Role> roles,
                                       Set<DvText> languages) {
         try {

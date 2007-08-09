@@ -30,10 +30,10 @@ import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.identification.LocatableReference;
+import org.openehr.rm.support.identification.LocatableRef;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectVersionID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
@@ -54,7 +54,7 @@ public class InstructionDetails extends RMObject {
 	 * @param parent
 	 */
 	public InstructionDetails(
-            @Attribute(name = "instructionID", required = true) LocatableReference instructionID,
+            @Attribute(name = "instructionID", required = true) LocatableRef instructionID,
             @Attribute(name = "activityID", required = true) String activityID,
             @Attribute(name = "wfDetails") ItemStructure wfDetails) {
 		if (instructionID == null) {
@@ -83,7 +83,7 @@ public class InstructionDetails extends RMObject {
 	 * 
 	 * @return instructionID
 	 */
-	public LocatableReference getInstructionID() {
+	public LocatableRef getInstructionID() {
 		return instructionID;
 	}
 
@@ -107,7 +107,7 @@ public class InstructionDetails extends RMObject {
 		this.activityID = activityID;
 	}
 
-	void setInstructionID(LocatableReference instructionID) {
+	void setInstructionID(LocatableRef instructionID) {
 		this.instructionID = instructionID;
 	}
 
@@ -117,7 +117,7 @@ public class InstructionDetails extends RMObject {
 	//POJO end
 	
 	/* fields */
-	private LocatableReference instructionID;
+	private LocatableRef instructionID;
 	private String activityID;
 	private ItemStructure wfDetails;
 

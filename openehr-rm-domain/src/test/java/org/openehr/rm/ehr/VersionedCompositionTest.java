@@ -105,10 +105,10 @@ public class VersionedCompositionTest extends CompositionTestBase {
             throws Exception {
         HierarchicalObjectID id = new HierarchicalObjectID("1.2.4.7");
         Composition firstData = composition(node, text);
-        ObjectReference ehrRef = new ObjectReference(
+        ObjectRef ehrRef = new ObjectRef(
                 new HierarchicalObjectID("1.2.0.0.0.1.2"),
-                ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.EHR);
+                ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.EHR);
   
         return new VersionedComposition(id, ehrRef, new DvDateTime(), 
                 new ObjectVersionID("1.2.4.7::1.2.40.14.1.2.2::1"), firstData, 
@@ -125,10 +125,10 @@ public class VersionedCompositionTest extends CompositionTestBase {
     }
 
     // test contribution
-    private ObjectReference contribution(String id) throws Exception {
-        return new ObjectReference(new HierarchicalObjectID(id),
-                ObjectReference.Namespace.LOCAL,
-                ObjectReference.Type.CONTRIBUTION);
+    private ObjectRef contribution(String id) throws Exception {
+        return new ObjectRef(new HierarchicalObjectID(id),
+                ObjectRef.Namespace.LOCAL,
+                ObjectRef.Type.CONTRIBUTION);
     }
 
     // test composition

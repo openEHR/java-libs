@@ -18,7 +18,7 @@ import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 
 import java.util.List;
@@ -47,10 +47,10 @@ public class EHR extends RMObject {
     @FullConstructor public EHR (@Attribute(name = "systemID", required = true) HierarchicalObjectID systemID,
                                 @Attribute(name = "ehrID", required=true) HierarchicalObjectID ehrID,
                                 @Attribute(name = "timeCreated", required=true) DvDateTime timeCreated,
-                                @Attribute(name = "contributions", required=true) List<ObjectReference> contributions,
-                                @Attribute(name = "ehrStatus", required = true) ObjectReference ehrStatus,
-                                @Attribute(name = "directory") ObjectReference directory,
-                                @Attribute(name = "compositions", required=true) List<ObjectReference> compositions) {
+                                @Attribute(name = "contributions", required=true) List<ObjectRef> contributions,
+                                @Attribute(name = "ehrStatus", required = true) ObjectRef ehrStatus,
+                                @Attribute(name = "directory") ObjectRef directory,
+                                @Attribute(name = "compositions", required=true) List<ObjectRef> compositions) {
         
     		if (systemID == null) {
     			throw new IllegalArgumentException("null systemID");
@@ -64,8 +64,8 @@ public class EHR extends RMObject {
     		if (contributions == null) {
     			throw new IllegalArgumentException("null contributions");
     		}    		
-        for (ObjectReference ref : contributions) {
-            if (!ObjectReference.Type.CONTRIBUTION.equals(ref.getType())) {
+        for (ObjectRef ref : contributions) {
+            if (!ObjectRef.Type.CONTRIBUTION.equals(ref.getType())) {
                 throw new IllegalArgumentException(
                         "non-contribution type object reference");
             }
@@ -73,14 +73,14 @@ public class EHR extends RMObject {
         if (compositions == null) {
             throw new IllegalArgumentException("null compositions");
         }
-        for (ObjectReference ref : compositions) {
-            if (!ObjectReference.Type.VERSIONED_COMPOSITION.equals(
+        for (ObjectRef ref : compositions) {
+            if (!ObjectRef.Type.VERSIONED_COMPOSITION.equals(
                     ref.getType())) {
                 throw new IllegalArgumentException(
                         "non-versioned_composition type object reference");
             }
         }
-        if (directory != null && !ObjectReference.Type.VERSIONED_FOLDER.equals(
+        if (directory != null && !ObjectRef.Type.VERSIONED_FOLDER.equals(
                 directory.getType())) {
         		throw new IllegalArgumentException(
         				"non-versioned_folder type object reference");
@@ -109,7 +109,7 @@ public class EHR extends RMObject {
      *  
      * @return ehrStatus
      */
-	public ObjectReference getEhrStatus() {
+	public ObjectRef getEhrStatus() {
 		return ehrStatus;
 	}
 
@@ -137,9 +137,9 @@ public class EHR extends RMObject {
      * references to any number of VERSION instances, ie items of
      * type VERSIONED_COMPOSITION and DIRECTORY.
      *
-     * @return List of ObjectReference
+     * @return List of ObjectRef
      */
-    public List<ObjectReference> getContributions() {
+    public List<ObjectRef> getContributions() {
         return contributions;
     }
 
@@ -148,7 +148,7 @@ public class EHR extends RMObject {
      *
      * @return directory
      */
-    public ObjectReference getDirectory() {
+    public ObjectRef getDirectory() {
         return directory;
     }
 
@@ -157,7 +157,7 @@ public class EHR extends RMObject {
      *
      * @return list of objectReference
      */
-    public List<ObjectReference> getCompositions() {
+    public List<ObjectRef> getCompositions() {
         return compositions;
     }
 
@@ -179,7 +179,7 @@ public class EHR extends RMObject {
 		this.ehrID = ehrID;
 	}
 
-	void setEhrStatus(ObjectReference ehrStatus) {
+	void setEhrStatus(ObjectRef ehrStatus) {
 		this.ehrStatus = ehrStatus;
 	}
 
@@ -191,15 +191,15 @@ public class EHR extends RMObject {
         this.timeCreated = timeCreated;
     }
 
-    void setContributions(List<ObjectReference> contributions) {
+    void setContributions(List<ObjectRef> contributions) {
         this.contributions = contributions;
     }
 
-    void setDirectory(ObjectReference directory) {
+    void setDirectory(ObjectRef directory) {
         this.directory = directory;
     }
 
-    void setCompositions(List<ObjectReference> compositions) {
+    void setCompositions(List<ObjectRef> compositions) {
         this.compositions = compositions;
     }
     // POJO end
@@ -208,10 +208,10 @@ public class EHR extends RMObject {
     HierarchicalObjectID systemID;
     HierarchicalObjectID ehrID;
     DvDateTime timeCreated;
-    List<ObjectReference> contributions;
-    ObjectReference ehrStatus;
-    ObjectReference directory;
-    List<ObjectReference> compositions;
+    List<ObjectRef> contributions;
+    ObjectRef ehrStatus;
+    ObjectRef directory;
+    List<ObjectRef> compositions;
 }
 
 /*

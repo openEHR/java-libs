@@ -15,7 +15,7 @@
 package org.openehr.rm.demographic;
 
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.LocatableReference;
+import org.openehr.rm.support.identification.LocatableRef;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
@@ -77,7 +77,7 @@ public abstract class Actor extends Party {
             @Attribute(name = "identities", required = true) Set<PartyIdentity> identities,
             @Attribute(name = "contacts") Set<Contact> contacts,
             @Attribute(name = "relationships") Set<PartyRelationship> relationships,
-            @Attribute(name = "reverseRelationships") Set<LocatableReference> reverseRelationships,
+            @Attribute(name = "reverseRelationships") Set<LocatableRef> reverseRelationships,
             @Attribute(name = "details") ItemStructure details,
             @Attribute(name = "roles") Set<Role> roles,
             @Attribute(name = "languages") Set<DvText> languages) {

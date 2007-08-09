@@ -15,7 +15,7 @@
 package org.openehr.rm.ehrextract;
 
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.common.generic.Participation;
 
 import java.util.Set;
@@ -46,7 +46,7 @@ public class EHRExtract {
      * @throws IllegalArgumentException
      */
     public EHRExtract(DvDateTime timeCreated, String ehrId,
-                   PartyReference subjectOfCare, PartyReference originator,
+                   PartyRef subjectOfCare, PartyRef originator,
                    Set<Participation> otherParticipations,
                    boolean includeMultimedia, int followLinks,
                    XFolder directory, XTerminology terminology,
@@ -72,11 +72,11 @@ public class EHRExtract {
         return ehrId;
     }
 
-    public PartyReference getSubjectOfCare() {
+    public PartyRef getSubjectOfCare() {
         return subjectOfCare;
     }
 
-    public PartyReference getOriginator() {
+    public PartyRef getOriginator() {
         return originator;
     }
 
@@ -111,8 +111,8 @@ public class EHRExtract {
     /* fields */
     private DvDateTime timeCreated;
     private String ehrId;
-    private PartyReference subjectOfCare;
-    private PartyReference originator;
+    private PartyRef subjectOfCare;
+    private PartyRef originator;
     private Set<Participation> otherParticipations;
     private boolean includeMultimedia;
     private int followLinks;

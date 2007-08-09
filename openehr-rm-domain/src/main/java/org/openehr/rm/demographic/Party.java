@@ -19,8 +19,8 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.identification.LocatableReference;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.LocatableRef;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -66,7 +66,7 @@ public abstract class Party extends Locatable {
                     Archetyped archetypeDetails, FeederAudit feederAudit,
                     Set<Link> links, Set<PartyIdentity> identities, 
                     Set<Contact> contacts, Set<PartyRelationship> relationships,
-                    Set<LocatableReference> reverseRelationships,
+                    Set<LocatableRef> reverseRelationships,
                     ItemStructure details) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, null);
 
@@ -206,12 +206,12 @@ public abstract class Party extends Locatable {
         this.relationships = relationships;
     }
 
-    public Set<LocatableReference> getReverseRelationships() {
+    public Set<LocatableRef> getReverseRelationships() {
         return reverseRelationships;
     }
 
     protected void setReverseRelationships(
-            Set<LocatableReference> reverseRelationships) {
+            Set<LocatableRef> reverseRelationships) {
         this.reverseRelationships = reverseRelationships;
     }
 
@@ -265,7 +265,7 @@ public abstract class Party extends Locatable {
     private Set<PartyIdentity> identities;
     private Set<Contact> contacts;
     private Set<PartyRelationship> relationships;
-    private Set<LocatableReference> reverseRelationships;
+    private Set<LocatableRef> reverseRelationships;
     private ItemStructure details;
 }
 

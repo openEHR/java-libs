@@ -17,16 +17,12 @@ package org.openehr.rm.ehr;
 import java.util.Set;
 
 import org.openehr.rm.common.changecontrol.OriginalVersion;
-import org.openehr.rm.common.changecontrol.Version;
 import org.openehr.rm.common.changecontrol.VersionedObject;
-import org.openehr.rm.common.directory.Folder;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
-import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.composition.Composition;
-import org.openehr.rm.datatypes.basic.DvState;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -43,10 +39,10 @@ public class VersionedComposition extends VersionedObject<Composition> {
     /**
      * Constructs a VersionComposition with first Composition created locally
      */
-    public VersionedComposition(HierarchicalObjectID uid, ObjectReference ownerID,
+    public VersionedComposition(HierarchicalObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, ObjectVersionID versionID, Composition composition,
             DvCodedText lifecycleState, AuditDetails commitAudit,
-            ObjectReference contribution, String signature,
+            ObjectRef contribution, String signature,
             TerminologyService terminologyService) {
         
         super(uid, ownerIDCheck(ownerID), timeCreated, versionID, composition, lifecycleState, 
@@ -56,9 +52,9 @@ public class VersionedComposition extends VersionedObject<Composition> {
     /**
      * Constructs a VersionComposition with first imported Composition
      */
-    public VersionedComposition(HierarchicalObjectID uid, ObjectReference ownerID,
+    public VersionedComposition(HierarchicalObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, OriginalVersion<Composition> item,
-            AuditDetails commitAudit, ObjectReference contribution, String signature) {
+            AuditDetails commitAudit, ObjectRef contribution, String signature) {
         super(uid, ownerIDCheck(ownerID), timeCreated, item, commitAudit, contribution, signature);
         
     }
@@ -66,11 +62,11 @@ public class VersionedComposition extends VersionedObject<Composition> {
     /**
      * Constructs a VersionComposition with first merged Composition
      */
-    public VersionedComposition(HierarchicalObjectID uid, ObjectReference ownerID,
+    public VersionedComposition(HierarchicalObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, ObjectVersionID versionID,
             ObjectVersionID precedingVersionID, Composition composition,
             DvCodedText lifecycleState, AuditDetails commitAudit,
-            ObjectReference contribution, Set<ObjectVersionID> otherInputVersionUids,
+            ObjectRef contribution, Set<ObjectVersionID> otherInputVersionUids,
             String signature, TerminologyService terminologyService) {
         
         super(uid, ownerIDCheck(ownerID), timeCreated, versionID, precedingVersionID, composition, 
@@ -84,7 +80,7 @@ public class VersionedComposition extends VersionedObject<Composition> {
     }
     
     public synchronized void commitImportedVersion(OriginalVersion<Composition> item, 
-            AuditDetails commitAudit, ObjectReference contribution, String signature) {
+            AuditDetails commitAudit, ObjectRef contribution, String signature) {
         
         checkAgainstFirstData(item.getData());
         super.commitImportedVersion(item, commitAudit, contribution, signature);
@@ -92,7 +88,7 @@ public class VersionedComposition extends VersionedObject<Composition> {
     
     public synchronized void commitOriginalMergedVersion(ObjectVersionID versionID,
             ObjectVersionID precedingVersionID, Composition data, DvCodedText lifecycleState,
-            AuditDetails commitAudit, ObjectReference contribution,
+            AuditDetails commitAudit, ObjectRef contribution,
             Set<ObjectVersionID> otherInputVersionUids, String signature,
             TerminologyService terminologyService) {
         
@@ -104,7 +100,7 @@ public class VersionedComposition extends VersionedObject<Composition> {
     
     public synchronized void commitOriginalVersion(ObjectVersionID versionID,
             ObjectVersionID precedingVersionID, Composition data, AuditDetails commitAudit,
-            ObjectReference contribution, DvCodedText lifecycleState, String signature,
+            ObjectRef contribution, DvCodedText lifecycleState, String signature,
             TerminologyService terminologyService) {
         
         checkAgainstFirstData(data);
@@ -131,8 +127,8 @@ public class VersionedComposition extends VersionedObject<Composition> {
         }
     }
     
-    protected static ObjectReference ownerIDCheck(ObjectReference ownerID) {
-        if(!ownerID.getType().equals(ObjectReference.Type.EHR)) {
+    protected static ObjectRef ownerIDCheck(ObjectRef ownerID) {
+        if(!ownerID.getType().equals(ObjectRef.Type.EHR)) {
             throw new IllegalArgumentException("type of ownerID is not EHR");
         }
         return ownerID;

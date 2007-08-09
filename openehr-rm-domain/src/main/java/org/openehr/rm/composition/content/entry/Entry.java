@@ -23,7 +23,7 @@ import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.common.generic.PartyRelated;
 import org.openehr.rm.common.generic.PartySelf;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
@@ -65,7 +65,7 @@ public abstract class Entry extends ContentItem {
                  Archetyped archetypeDetails, FeederAudit feederAudit,
                  Set<Link> links, Locatable parent, CodePhrase language,
                  CodePhrase charset, PartyProxy subject, 
-                 PartyProxy provider, ObjectReference workflowID,
+                 PartyProxy provider, ObjectRef workflowID,
                  List<Participation> otherParticipations,
                  TerminologyService terminologyService) {
 
@@ -144,7 +144,7 @@ public abstract class Entry extends ContentItem {
      *
      * @return workflow ID or null if unspecified
      */
-    public ObjectReference getWorkflowID() {
+    public ObjectRef getWorkflowID() {
         return workflowID;
     }
 
@@ -233,7 +233,7 @@ public abstract class Entry extends ContentItem {
 		this.language = language;
 	}
 
-	void setWorkflowID(ObjectReference guidelineID) {
+	void setWorkflowID(ObjectRef guidelineID) {
         this.workflowID = guidelineID;
     }
 
@@ -247,7 +247,7 @@ public abstract class Entry extends ContentItem {
     private CodePhrase charset;
     private PartyProxy subject;
     private PartyProxy provider;
-    private ObjectReference workflowID;
+    private ObjectRef workflowID;
     private List<Participation> otherParticipations;
 
     /* static fields */

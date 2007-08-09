@@ -17,7 +17,7 @@ package org.openehr.rm.message;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.demographic.Party;
 import org.openehr.rm.common.generic.Attestation;
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.DvOrdinal;
 import org.apache.commons.lang.StringUtils;
@@ -56,9 +56,9 @@ public class Message extends RMObject {
      * @param content
      * @throws IllegalArgumentException
      */
-    public Message(DvDateTime timeSent, PartyReference sender,
-                   PartyReference receiver, PartyReference senderNode,
-                   PartyReference receiverNode, String sendersReference,
+    public Message(DvDateTime timeSent, PartyRef sender,
+                   PartyRef receiver, PartyRef senderNode,
+                   PartyRef receiverNode, String sendersReference,
                    Initiator initiator, DvOrdinal urgency,
                    Attestation signature, Set<Party> parties,
                    MessageContent content) {
@@ -121,7 +121,7 @@ public class Message extends RMObject {
      *
      * @return sender
      */
-    public PartyReference getSender() {
+    public PartyRef getSender() {
         return sender;
     }
 
@@ -130,7 +130,7 @@ public class Message extends RMObject {
      *
      * @return receiver
      */
-    public PartyReference getReceiver() {
+    public PartyRef getReceiver() {
         return receiver;
     }
 
@@ -139,7 +139,7 @@ public class Message extends RMObject {
      *
      * @return senderNode
      */
-    public PartyReference getSenderNode() {
+    public PartyRef getSenderNode() {
         return senderNode;
     }
 
@@ -148,7 +148,7 @@ public class Message extends RMObject {
      *
      * @return receiverNode
      */
-    public PartyReference getReceiverNode() {
+    public PartyRef getReceiverNode() {
         return receiverNode;
     }
 
@@ -212,10 +212,10 @@ public class Message extends RMObject {
 
     /* fields */
     private DvDateTime timeSent;
-    private PartyReference sender;
-    private PartyReference receiver;
-    private PartyReference senderNode;
-    private PartyReference receiverNode;
+    private PartyRef sender;
+    private PartyRef receiver;
+    private PartyRef senderNode;
+    private PartyRef receiverNode;
     private String sendersReference;
     private Initiator initiator;
     private DvOrdinal urgency;

@@ -24,7 +24,7 @@ import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.datastructure.history.History;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
@@ -75,10 +75,10 @@ public final class Observation extends CareEntry {
                                @Attribute(name = "charset", required = true) CodePhrase charset, 
                                @Attribute(name = "subject", system = true) PartyProxy subject,
                                @Attribute(name = "provider", system = true) PartyProxy provider,
-                               @Attribute(name = "workflowID") ObjectReference workflowID,
+                               @Attribute(name = "workflowID") ObjectRef workflowID,
                                @Attribute(name = "otherParticipation") List<Participation> otherParticipation,
                                @Attribute(name = "protocol") ItemStructure protocol,
-                               @Attribute(name = "guidelineID") ObjectReference guidelineID,                              
+                               @Attribute(name = "guidelineID") ObjectRef guidelineID,                              
                                @Attribute(name = "data", required = true) History<ItemStructure> data,
                                @Attribute(name = "state") History<ItemStructure> state,
                                @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService
