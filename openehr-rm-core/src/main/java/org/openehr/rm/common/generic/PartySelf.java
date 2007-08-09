@@ -14,7 +14,7 @@
  */
 package org.openehr.rm.common.generic;
 
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.support.identification.PartyRef;
 
 public final class PartySelf extends PartyProxy {
 
@@ -26,7 +26,7 @@ public final class PartySelf extends PartyProxy {
      *@param identifiers
      *@throws IllegalArgumentException if identifiers is empty
      */
-    public PartySelf(PartyReference externalRef) {
+    public PartySelf(PartyRef externalRef) {
         super(externalRef);
     }
     

@@ -20,7 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.datatypes.basic.DvIdentifier;
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.support.identification.PartyRef;
 
 /**
 * Represent proxy data for an identified party.
@@ -38,7 +38,7 @@ public class PartyIdentified extends PartyProxy {
 	 *@param identifiers
 	 *@throws IllegalArgumentException if identifiers is empty
 	 */
-	public PartyIdentified(PartyReference externalRef, String name,
+	public PartyIdentified(PartyRef externalRef, String name,
 			List<DvIdentifier> identifiers) {
 		super(externalRef);
 		if(externalRef == null && name == null && identifiers == null) {

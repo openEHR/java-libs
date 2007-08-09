@@ -36,7 +36,7 @@ import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.LocatableReference;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.support.identification.TestTerminologyID;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.terminology.TestTerminologyService;
@@ -67,7 +67,7 @@ public class OriginalVersionTest extends TestCase {
         DvCodedText codedText = new DvCodedText("complete", TestCodePhrase.ENGLISH,
                 TestCodePhrase.LATIN_1, codePhrase,
                 TestTerminologyService.getInstance());
-        PartyIdentified pi = new PartyIdentified(new PartyReference(
+        PartyIdentified pi = new PartyIdentified(new PartyRef(
                 new HierarchicalObjectID("1-2-3-4-5"), 
                 ObjectRef.Type.PARTY), "committer name", null);
         AuditDetails audit1 = new AuditDetails("12.3.4.5", pi, 

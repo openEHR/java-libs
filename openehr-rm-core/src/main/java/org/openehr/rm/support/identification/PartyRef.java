@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class PartyReference"
+ * description: "Class PartyRef"
  * keywords:    "common"
  *
  * author:      "Rong Chen <rong@acode.se>"
@@ -8,7 +8,7 @@
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/support/identification/PartyReference.java $"
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/support/identification/PartyRef.java $"
  * revision:    "$LastChangedRevision: 2 $"
  * last_change: "$LastChangedDate: 2005-10-12 22:20:08 +0100 (Wed, 12 Oct 2005) $"
  */
@@ -22,20 +22,20 @@ package org.openehr.rm.support.identification;
  * @author Rong Chen
  * @version 1.0
  */
-public class PartyReference extends ObjectRef {
+public class PartyRef extends ObjectRef {
 
     // POJO start
-    PartyReference() {
+	PartyRef() {
     }
     // POJO end
 
     /**
-     * Construt a PartyReference
+     * Construt a PartyRef
      *
      * @param id
      * @throws IllegalArgumentException if id or type null
      */
-    public PartyReference(ObjectID id, ObjectRef.Type type) {
+    public PartyRef(ObjectID id, ObjectRef.Type type) {
         super(id, ObjectRef.Namespace.DEMOGRAPHIC,
                 type);
         if (!type.equals(ObjectRef.Type.PARTY) &&
@@ -46,8 +46,7 @@ public class PartyReference extends ObjectRef {
         		!type.equals(ObjectRef.Type.ROLE)) {
         		throw new IllegalArgumentException("incorrect type for party");
         }
-    }
-    
+    }    
 }
 
 /*
@@ -64,7 +63,7 @@ public class PartyReference extends ObjectRef {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is PartyReference.java
+ *  The Original Code is PartyRef.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2004

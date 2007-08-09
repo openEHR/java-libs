@@ -29,7 +29,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.datatypes.basic.DvIdentifier;
 import org.openehr.rm.support.identification.HierarchicalObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.support.identification.PartyRef;
 
 public class PartyIdentifiedTest extends TestCase {
     
@@ -50,7 +50,7 @@ public class PartyIdentifiedTest extends TestCase {
     }
 
     public void test() {
-        PartyReference pr = new PartyReference(new HierarchicalObjectID("1-2-3-4-5"), 
+        PartyRef pr = new PartyRef(new HierarchicalObjectID("1-2-3-4-5"), 
                 ObjectRef.Type.PARTY);
         PartyIdentified pi = new PartyIdentified(pr, "party name", null);
         PartyIdentified pi2 = new PartyIdentified(pr, "party name", null);

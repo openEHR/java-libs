@@ -17,7 +17,7 @@ package org.openehr.rm.common.generic;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.RMObject;
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.support.identification.PartyRef;
 
 /**
 * Abstract concept of a proxy description of a party
@@ -34,7 +34,7 @@ public abstract class PartyProxy extends RMObject {
      * @throws IllegalArgumentException if name null or archetypeNodeId null
      *                                  or links not null and empty
      */
-    protected PartyProxy(PartyReference externalRef) {
+    protected PartyProxy(PartyRef externalRef) {
     		this.externalRef = externalRef;	
 	}
   
@@ -43,7 +43,7 @@ public abstract class PartyProxy extends RMObject {
      * 
      * @return externalRef
      */
-    public PartyReference getExternalRef() {
+    public PartyRef getExternalRef() {
     		return externalRef;
     }
  
@@ -77,13 +77,13 @@ public abstract class PartyProxy extends RMObject {
     //POJO
     protected PartyProxy() {}
     
-    void setExternalRef(PartyReference externalRef) {
+    void setExternalRef(PartyRef externalRef) {
             this.externalRef = externalRef;
     }    
     //POJO end
 	
     /* fields */
-    private PartyReference externalRef;
+    private PartyRef externalRef;
 
 }
 

@@ -19,7 +19,7 @@ import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.RMObject;
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.datatypes.basic.DvIdentifier;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -40,7 +40,7 @@ public final class PartyRelated extends PartyIdentified {
      * @param terminologyService not null
      * @throws IllegalArgumentException if relationship invalid
      */
-    public PartyRelated(PartyReference externalRef, String name,
+    public PartyRelated(PartyRef externalRef, String name,
 			List<DvIdentifier> identifiers, DvCodedText relationship,
                         TerminologyService terminologyService) {
     		super(externalRef, name, identifiers);
