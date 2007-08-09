@@ -28,7 +28,8 @@ import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.basic.DataValue;
 import org.openehr.rm.datatypes.quantity.DvQuantity;
-import org.openehr.rm.datatypes.quantity.DvQuantityRatio;
+import org.openehr.rm.datatypes.quantity.DvProportion;
+import org.openehr.rm.datatypes.quantity.ProportionKind;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
@@ -77,7 +78,7 @@ public class DataStructureTestBase extends TestCase {
 
     // create an element by name, and ratio
     protected Element element(String name, double numerator, double denominator) {
-        return element(name, ratio(numerator, denominator));
+        return element(name, proportion(numerator, denominator));
     }
 
     // create an element with text value
@@ -116,9 +117,8 @@ public class DataStructureTestBase extends TestCase {
     }
 
     // create a quantityRatio
-    protected DvQuantityRatio ratio(double numerator, double denominator) {
-        return new DvQuantityRatio(new DvQuantity(numerator),
-                new DvQuantity(denominator));
+    protected DvProportion proportion(double numerator, double denominator) {
+        return new DvProportion(numerator, denominator, ProportionKind.FRACTION, 0);
     }
 
     protected static final String sep = ItemStructure.PATH_SEPARATOR;        

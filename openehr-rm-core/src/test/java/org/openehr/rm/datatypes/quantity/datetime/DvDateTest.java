@@ -116,25 +116,8 @@ public class DvDateTest extends TestCase {
     public void testConstructorTakesIntegers() throws Exception {
         assertNotNull(new DvDate(1000));
         assertNotNull(new DvDate(1980, 11));
-        assertNotNull(new DvDate(2000, 11, 30));
-	
-    }
-    
-   /* public void testIsValidDate() throws Exception {
-        assertFalse(DvDate.isValidDate(2000, -1, 1));
-        assertFalse(DvDate.isValidDate(2000, 0, 1));
-        assertFalse(DvDate.isValidDate(2000, 13, 0));
-        assertFalse(DvDate.isValidDate(2000, 1, 32)); // january
-        assertFalse(DvDate.isValidDate(2000, 4, 31)); // april
-        assertFalse(DvDate.isValidDate(2004, 2, 30)); // feburary
-        assertFalse(DvDate.isValidDate(2005, 2, 29)); // feburary
-        
-        assertTrue(DvDate.isValidDate(2000, 1, 1));
-        assertTrue(DvDate.isValidDate(2000, 1, 31));
-        assertTrue(DvDate.isValidDate(2000, 3, 1));
-        assertTrue(DvDate.isValidDate(2004, 1, 29));  // feburary
-        assertTrue(DvDate.isValidDate(2005, 1, 28)); // feburary
-    }*/
+        assertNotNull(new DvDate(2000, 11, 30));	
+    }    
 
     public void testGetYearMonthDay() throws Exception {
         DvDate date = new DvDate(1999, 10, 20);

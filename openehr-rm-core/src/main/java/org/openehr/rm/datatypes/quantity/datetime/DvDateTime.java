@@ -25,13 +25,11 @@ import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.datatypes.quantity.DvOrdered;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.MutableDateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
-import org.openehr.rm.datatypes.quantity.DvQuantified;
-import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.quantity.ReferenceRange;
+import org.openehr.rm.datatypes.text.CodePhrase;
 
 /**
  * Represents a point in time, specified to the second.
@@ -41,340 +39,363 @@ import org.openehr.rm.datatypes.quantity.ReferenceRange;
  */
 public class DvDateTime extends DvWorldDateTime<DvDateTime> {
 
-    /* static fields */
-    static final DateTimeFormatter eDTimeFormatter = ISODateTimeFormat.dateTime(); //extended formatter
-    static final DateTimeFormatter dTimeFormatter = ISODateTimeFormat.basicDateTime();
-	
-    /**
-     * Construct a DvDateTime
-     *
-     * @param referenceRanges null if not specified
-     * @param accuracy        0 if not specified
-     * @param accuracyPercent
-     * @param value
-     * @throws IllegalArgumentException
-     */
-    @FullConstructor
-            public DvDateTime(
-            @Attribute(name = "referenceRanges") List<ReferenceRange<DvDateTime>> referenceRanges,
-            @Attribute(name = "normalRange") DvInterval<DvDateTime> normalRange,
-            @Attribute(name = "accuracy") double accuracy,
-            @Attribute(name = "accuracyPercent") boolean accuracyPercent,
-            @Attribute(name = "value", required = true) String value) {
-        super(referenceRanges, normalRange, accuracy, accuracyPercent, value);
-    }
+	/* static fields */
+	static final DateTimeFormatter eDTimeFormatter = ISODateTimeFormat
+			.dateTime(); //extended formatter
 
-    protected DvDateTime(List<ReferenceRange<DvDateTime>> referenceRanges,
-            DvInterval<DvDateTime> normalRange, double accuracy, boolean accuracyPercent, 
-	    DateTime datetime, String pattern) {
-        super(referenceRanges, normalRange, accuracy, accuracyPercent, datetime);
-        setValue(DvDateTimeParser.toDateTimeString(getDateTime(), pattern));
-        setBooleans(pattern);
-    }
-     
-    /**
-     * Construct a DvDateTime by current date and time
-     * 
-     * @param referenceRanges
-     * @param normalRange
-     * @param accuracy
-     * @param accuracyPercent
-     */
-    public DvDateTime() {
-	super(null, null, 0.0, false, DvDateTimeParser.defaultDateTime());
-        setValue(DvDateTimeParser.toDateTimeString(getDateTime(), "yyyy-MM-dd'T'HH:mm:ss,SSS"));
-        setBooleans(false, true, true, true);
-    }
+	static final DateTimeFormatter dTimeFormatter = ISODateTimeFormat
+			.basicDateTime();
 
-    /**
-     * Construct a DvDateTime by value
-     * 
-     * @param value
-     */
-    public DvDateTime(String value) {
-            this(null, null, 0.0, false, value);
-    }
-	
-    /**
-     * Constructs a complete DvDateTime
-     *
-     * @param year
-     * @param month    starts with 0
-     * @param day   day of month
-     * @param hour  hour of day
-     * @param minute
-     * @param second
-     * @param timezone null if use default timezone
-     */
-    public DvDateTime(int year, int month, int day, int hour, int minute, int second, 
-    		double fractionalSec, TimeZone timezone) {
-    	super(null, null, 0.0, false, 
-    		DvDateTimeParser.convertDateTime(year, month, day, hour, minute, second, fractionalSec, timezone));
-        String format = timezone == null ? "yyyyMMdd'T'HH:mm:ss,SSS" : "yyyyMMdd'T'HH:mm:ss,SSSZZ";
-        setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
-        setBooleans(false, true, true, true);
-    }
-    
-    public DvDateTime(int year, int month, int day, int hour, int minute, int second, TimeZone timezone) {
-        super(null, null, 0.0, false, 
-                DvDateTimeParser.convertDateTime(year, month, day, hour, minute, second, 0.0, timezone));
-        String format = timezone == null ? "yyyyMMdd'T'HH:mm:ss" : "yyyyMMdd'T'HH:mm:ssZZ";
-        setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
-        setBooleans(false, true, true, false);
-    }
+	/**
+	 * Construct a DvDateTime
+	 *
+	 * @param referenceRanges null if not specified
+	 * @param normalRange	null if not specified
+	 * @param normalStatus	null if not specified
+	 * @param accuracy        0 if not specified
+	 * @param magnitudeStatus null if not specified
+	 * @param value
+	 * @throws IllegalArgumentException
+	 */
+	@FullConstructor
+	public DvDateTime(@Attribute(name = "referenceRanges")
+	List<ReferenceRange<DvDateTime>> referenceRanges,
+			@Attribute(name = "normalRange")
+			DvInterval<DvDateTime> normalRange,
+			@Attribute(name = "normalStatus")
+			CodePhrase normalStatus, @Attribute(name = "accuracy")
+			double accuracy, @Attribute(name = "magnitudeStatus")
+			String magnitudeStatus, @Attribute(name = "value", required = true)
+			String value) {
+		super(referenceRanges, normalRange, normalStatus, accuracy,
+				magnitudeStatus, value);
+	}
 
-    public DvDateTime(int year, int month, int day, int hour, int minute, TimeZone timezone) {
-        super(null, null, 0.0, false, 
-                DvDateTimeParser.convertDateTime(year, month, day, hour, minute, 0, 0.0, timezone));
-        String format = timezone == null ? "yyyyMMdd'T'HH:mm" : "yyyyMMdd'T'HH:mmZZ";
-        setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
-        setBooleans(true, true, false, false);
-    }
-    
-    public DvDateTime(int year, int month, int day, int hour, TimeZone timezone) {
-        super(null, null, 0.0, false, 
-                DvDateTimeParser.convertDateTime(year, month, day, hour, 0, 0, 0.0, timezone));
-        String format = timezone == null ? "yyyyMMdd'T'HH" : "yyyyMMdd'T'HHZZ";
-        setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
-        setBooleans(true, false, false, false);
-    }    
-    
-    /* (non-Javadoc)
-     * @see org.openehr.rm.datatypes.quantity.datetime.NDvWorldTime#parseValue(java.lang.String)
-     */
-    @Override DateTime parseValue(String value) {
-            return DvDateTimeParser.parseDateTime(value);
-    }
-    
-    public static boolean isValidISO8601DateTime(String value) {
-        DateTime dt = null;
-        try {
-            dt = DvDateTimeParser.parseDateTime(value);
-        } catch (Exception e) {
-            return false;
-        }
-        return dt != null;
-    }
- 
-    /**
-     * Year
-     *
-     * @return year
-     */
-    public int getYear() {
-        return getDateTime().getYear();
-    }
+	protected DvDateTime(List<ReferenceRange<DvDateTime>> referenceRanges,
+			DvInterval<DvDateTime> normalRange, CodePhrase normalStatus,
+			double accuracy, String magnitudeStatus, DateTime datetime,
+			String pattern) {
+		super(referenceRanges, normalRange, normalStatus, accuracy,
+				magnitudeStatus, datetime);
+		setValue(DvDateTimeParser.toDateTimeString(getDateTime(), pattern));
+		setBooleans(pattern);
+	}
 
-    /**
-     * Month in year
-     *
-     * @return month in year
-     */
-    public int getMonth() {
-        return getDateTime().getMonthOfYear();
-    }
+	/**
+	 * Construct a DvDateTime by current date and time
+	 * 
+	 * @param referenceRanges
+	 * @param normalRange
+	 * @param accuracy
+	 * @param accuracyPercent
+	 */
+	public DvDateTime() {
+		super(null, null, null, 0.0, null, DvDateTimeParser.defaultDateTime());
+		setValue(DvDateTimeParser.toDateTimeString(getDateTime(),
+				"yyyy-MM-dd'T'HH:mm:ss,SSS"));
+		setBooleans(false, true, true, true);
+	}
 
-    /**
-     * Day in month
-     *
-     * @return day in month
-     */
-    public int getDay() {
-        return getDateTime().getDayOfMonth();
-    }
+	/**
+	 * Construct a DvDateTime by value
+	 * 
+	 * @param value
+	 */
+	public DvDateTime(String value) {
+		this(null, null, null, 0.0, null, value);
+	}
 
-    /**
-     * Hour in day
-     *
-     * @return hour
-     */
-    public int getHour() {
-        return getDateTime().getHourOfDay();
-    }
+	/**
+	 * Constructs a complete DvDateTime
+	 *
+	 * @param year
+	 * @param month    starts with 0
+	 * @param day   day of month
+	 * @param hour  hour of day
+	 * @param minute
+	 * @param second
+	 * @param timezone null if use default timezone
+	 */
+	public DvDateTime(int year, int month, int day, int hour, int minute,
+			int second, double fractionalSec, TimeZone timezone) {
+		super(null, null, null, 0.0, null, DvDateTimeParser
+				.convertDateTime(year, month, day, hour, minute, second,
+						fractionalSec, timezone));
+		String format = timezone == null ? "yyyyMMdd'T'HH:mm:ss,SSS"
+				: "yyyyMMdd'T'HH:mm:ss,SSSZZ";
+		setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
+		setBooleans(false, true, true, true);
+	}
 
-    /**
-     * Minute in hour
-     *
-     * @return minute in hour
-     */
-    public int getMinute() {
-        return minuteKnown()? getDateTime().getMinuteOfHour(): -1;
-    }
+	public DvDateTime(int year, int month, int day, int hour, int minute,
+			int second, TimeZone timezone) {
+		super(null, null, null, 0.0, null, DvDateTimeParser.convertDateTime(
+				year, month, day, hour, minute, second, 0.0, timezone));
+		String format = timezone == null ? "yyyyMMdd'T'HH:mm:ss"
+				: "yyyyMMdd'T'HH:mm:ssZZ";
+		setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
+		setBooleans(false, true, true, false);
+	}
 
-    /**
-     * Second in minute
-     *
-     * @return second in minute
-     */
-    public int getSecond() {
-        return secondKnown? getDateTime().getSecondOfMinute(): -1;
-    }
+	public DvDateTime(int year, int month, int day, int hour, int minute,
+			TimeZone timezone) {
+		super(null, null, null, 0.0, null, DvDateTimeParser.convertDateTime(
+				year, month, day, hour, minute, 0, 0.0, timezone));
+		String format = timezone == null ? "yyyyMMdd'T'HH:mm"
+				: "yyyyMMdd'T'HH:mmZZ";
+		setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
+		setBooleans(true, true, false, false);
+	}
 
-    /**
-     * fractional seconds
-     *
-     * @return fractional seconds
-     */
-    public double getFractionalSecond() {
-        return fractionalSecKnown? getDateTime().getMillisOfSecond() / 10E2: -0.1;
-    }
-    
-    public boolean minuteKnown() {
-        return minuteKnown;
-    }
-    
-    public boolean secondKnown() {
-        return secondKnown;
-    }
-    
-    public boolean fractionalSecKnown() {
-        return fractionalSecKnown;
-    }
+	public DvDateTime(int year, int month, int day, int hour, TimeZone timezone) {
+		super(null, null, null, 0.0, null, DvDateTimeParser.convertDateTime(
+				year, month, day, hour, 0, 0, 0.0, timezone));
+		String format = timezone == null ? "yyyyMMdd'T'HH" : "yyyyMMdd'T'HHZZ";
+		setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
+		setBooleans(true, false, false, false);
+	}
 
-    public boolean isPartial() {
-        return isPartial;
-    }
-    @Override
-    public DvQuantity toQuantity() {
-            // TODO Auto-generated method stub
-            return null;
-    }
+	/* (non-Javadoc)
+	 * @see org.openehr.rm.datatypes.quantity.datetime.NDvWorldTime#parseValue(java.lang.String)
+	 */
+	@Override
+	DateTime parseValue(String value) {
+		return DvDateTimeParser.parseDateTime(value);
+	}
 
-    @Override
-    public Number getMagnitude() {
-            // TODO Auto-generated method stub
-            return null;
-    }
+	public static boolean isValidISO8601DateTime(String value) {
+		DateTime dt = null;
+		try {
+			dt = DvDateTimeParser.parseDateTime(value);
+		} catch (Exception e) {
+			return false;
+		}
+		return dt != null;
+	}
 
-    @Override
-    public DvQuantified<DvDateTime> add(DvQuantified q) {
-            if (!getDiffType().isInstance(q)) {
-                    throw new IllegalArgumentException("invalid difference type");
-            }
-            DvDuration d = (DvDuration) q;
-            MutableDateTime mdate = getDateTime().toMutableDateTimeISO();
-            mdate.add(d.getPeriod());
-            return new DvDateTime(getReferenceRanges(), getNormalRange(), 
-                            getAccuracy(), isAccuracyPercent() ,mdate.toDateTimeISO(), this.toString());		
-    }
+	/**
+	 * Year
+	 *
+	 * @return year
+	 */
+	public int getYear() {
+		return getDateTime().getYear();
+	}
 
-    @Override
-    public DvQuantified<DvDateTime> subtract(DvQuantified q) {
-        // TODO Auto-generated method stub
-        if (!getDiffType().isInstance(q)) {
-                throw new IllegalArgumentException("invalid difference type");
-        }
-        DvDuration d = (DvDuration) q;
-        return add(d.negate());
-        //return null;
-    }
-    
-    public DvDuration differenceOf(DvDateTime dt) {
-        return DvDuration.getDifference(this,dt);
-    }
-    
-    @Override
-    public boolean isStrictlyComparableTo(DvOrdered ordered) {
-            // TODO Auto-generated method stub
-            return false;
-    }
+	/**
+	 * Month in year
+	 *
+	 * @return month in year
+	 */
+	public int getMonth() {
+		return getDateTime().getMonthOfYear();
+	}
 
-    /**
-     * If date is valid ISO8601 format
-     *
-     * @param year
-     * @param month
-     * @param day
-     * @return true if valid
-     */
-    public static boolean isValidISO8601Time(String value) {
-        DateTime dt = null;
-        try {
-            dt = DvDateTimeParser.parseDateTime(value);
-        } catch (Exception e) {
-            return false;
-        }
-        return dt != null;
-    }
-    
-    /**
-     * Two DvDateTime equal if both have same year, month, day and timezone
-     *
-     * @param o
-     * @return true if equals
-     */
-    public boolean equals(Object o) {
-        if (!super.equals(o)) return false;
-        
-        final DvDateTime dt = (DvDateTime) o;
+	/**
+	 * Day in month
+	 *
+	 * @return day in month
+	 */
+	public int getDay() {
+		return getDateTime().getDayOfMonth();
+	}
 
-        return new EqualsBuilder()
-            .append(this.getDateTime().getZone().hashCode(), this.getDateTime().getZone().hashCode())
-            .append(isPartial, dt.isPartial)
-            .append(minuteKnown, dt.minuteKnown)
-            .append(secondKnown, dt.secondKnown)
-            .append(fractionalSecKnown, dt.fractionalSecKnown)
-            .isEquals();       
-    }
-    
-    public String toString(boolean isExtended) {
-        String dt = super.toString();
-        if(dt == null) {
-            //TODO
-            dt = "";
-        } else {
-            if(isExtended) {
-                dt = DvDateTimeParser.basicToExtendedDateTime(dt);
-            } else {
-                dt = dt.replace(":", "").replace("-", "");
-            }            
-        }
-        return dt;
-    }
-    
-    void setBooleans(boolean isPartial, boolean minuteKnown, boolean secondKnown, 
-                        boolean fractionalSecKnown) {
-        this.isPartial = isPartial;
-        this.minuteKnown = minuteKnown;
-        this.secondKnown = secondKnown;
-        this.fractionalSecKnown = fractionalSecKnown;
-    }
-    
-    void setBooleans(String value) {
-        int ele = DvDateTimeParser.analyseTimeString(value.substring(value.indexOf("T")+1));
-        //isPartial, monthKnown, dayKnown
-        if(ele > 3) {
-            setMinuteKnown(true);
-            setSecondKnown(true);
-            setFractionalSecKnown(true);
-        } else if (ele == 3) {
-            setSecondKnown(true);
-            setMinuteKnown(true);
-        } else if (ele == 2) {
-            setMinuteKnown(true);
-            setIsPartial(true);
-        } else if (ele == 1) {
-            setIsPartial(true);
-        }  
-    }
-    
-    void setMinuteKnown(boolean minuteKnown) {
-        this.minuteKnown = minuteKnown;
-    }
-    
-    void setSecondKnown(boolean secondKnown) {
-        this.secondKnown = secondKnown;
-    }
-    
-    void setFractionalSecKnown(boolean fractionalSecKnown) {
-        this.fractionalSecKnown = fractionalSecKnown;
-    }
-    
-    void setIsPartial (boolean isPartial) {
-        this.isPartial = isPartial;
-    }
-    /* fields */
-    private boolean isPartial, minuteKnown, secondKnown, fractionalSecKnown; 
+	/**
+	 * Hour in day
+	 *
+	 * @return hour
+	 */
+	public int getHour() {
+		return getDateTime().getHourOfDay();
+	}
+
+	/**
+	 * Minute in hour
+	 *
+	 * @return minute in hour
+	 */
+	public int getMinute() {
+		return minuteKnown() ? getDateTime().getMinuteOfHour() : -1;
+	}
+
+	/**
+	 * Second in minute
+	 *
+	 * @return second in minute
+	 */
+	public int getSecond() {
+		return secondKnown ? getDateTime().getSecondOfMinute() : -1;
+	}
+
+	/**
+	 * fractional seconds
+	 *
+	 * @return fractional seconds
+	 */
+	public double getFractionalSecond() {
+		return fractionalSecKnown ? getDateTime().getMillisOfSecond() / 10E2
+				: -0.1;
+	}
+
+	public boolean minuteKnown() {
+		return minuteKnown;
+	}
+
+	public boolean secondKnown() {
+		return secondKnown;
+	}
+
+	public boolean fractionalSecKnown() {
+		return fractionalSecKnown;
+	}
+
+	public boolean isPartial() {
+		return isPartial;
+	}
+
+	@Override
+	public Number getMagnitude() {
+		//TODO
+		return null;
+	}
+
+	public DvDuration differenceOf(DvDateTime dt) {
+		return DvDuration.getDifference(this, dt);
+	}
+
+	@Override
+	public boolean isStrictlyComparableTo(DvOrdered ordered) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * If date is valid ISO8601 format
+	 *
+	 * @param year
+	 * @param month
+	 * @param day
+	 * @return true if valid
+	 */
+	public static boolean isValidISO8601Time(String value) {
+		DateTime dt = null;
+		try {
+			dt = DvDateTimeParser.parseDateTime(value);
+		} catch (Exception e) {
+			return false;
+		}
+		return dt != null;
+	}
+
+	/**
+	 * Two DvDateTime equal if both have same year, month, day and timezone
+	 *
+	 * @param o
+	 * @return true if equals
+	 */
+	public boolean equals(Object o) {
+		if (!super.equals(o))
+			return false;
+
+		final DvDateTime dt = (DvDateTime) o;
+
+		return new EqualsBuilder().append(
+				this.getDateTime().getZone().hashCode(),
+				this.getDateTime().getZone().hashCode()).append(isPartial,
+				dt.isPartial).append(minuteKnown, dt.minuteKnown).append(
+				secondKnown, dt.secondKnown).append(fractionalSecKnown,
+				dt.fractionalSecKnown).isEquals();
+	}
+
+	public String toString(boolean isExtended) {
+		String dt = super.toString();
+		if (dt == null) {
+			dt = "";
+		} else {
+			if (isExtended) {
+				dt = DvDateTimeParser.basicToExtendedDateTime(dt);
+			} else {
+				dt = dt.replace(":", "").replace("-", "");
+			}
+		}
+		return dt;
+	}
+
+	void setBooleans(boolean isPartial, boolean minuteKnown,
+			boolean secondKnown, boolean fractionalSecKnown) {
+		this.isPartial = isPartial;
+		this.minuteKnown = minuteKnown;
+		this.secondKnown = secondKnown;
+		this.fractionalSecKnown = fractionalSecKnown;
+	}
+
+	void setBooleans(String value) {
+		int ele = DvDateTimeParser.analyseTimeString(value.substring(value
+				.indexOf("T") + 1));
+		//isPartial, monthKnown, dayKnown
+		if (ele > 3) {
+			setMinuteKnown(true);
+			setSecondKnown(true);
+			setFractionalSecKnown(true);
+		} else if (ele == 3) {
+			setSecondKnown(true);
+			setMinuteKnown(true);
+		} else if (ele == 2) {
+			setMinuteKnown(true);
+			setIsPartial(true);
+		} else if (ele == 1) {
+			setIsPartial(true);
+		}
+	}
+
+	void setMinuteKnown(boolean minuteKnown) {
+		this.minuteKnown = minuteKnown;
+	}
+
+	void setSecondKnown(boolean secondKnown) {
+		this.secondKnown = secondKnown;
+	}
+
+	void setFractionalSecKnown(boolean fractionalSecKnown) {
+		this.fractionalSecKnown = fractionalSecKnown;
+	}
+
+	void setIsPartial(boolean isPartial) {
+		this.isPartial = isPartial;
+	}
+
+	@Override
+	public DvDuration diff(DvDateTime other) {
+		return DvDuration.getDifference(this, other);
+	}
+
+	@Override
+	public DvDateTime add(DvDuration q) {
+		if (!getDiffType().isInstance(q)) {
+			throw new IllegalArgumentException("invalid difference type");
+		}
+		DvDuration d = (DvDuration) q;
+		MutableDateTime mdate = getDateTime().toMutableDateTimeISO();
+		mdate.add(d.getPeriod());
+
+		return new DvDateTime(getOtherReferenceRanges(), getNormalRange(),
+				getNormalStatus(), getAccuracy(), getMagnitudeStatus(), mdate
+						.toDateTimeISO(), this.toString());
+	}
+
+	@Override
+	public DvDateTime subtract(DvDuration q) {
+		if (!getDiffType().isInstance(q)) {
+			throw new IllegalArgumentException("invalid difference type");
+		}		
+		return add(q.negate());
+	}
+
+	/* fields */
+	private boolean isPartial;
+	private boolean minuteKnown;
+	private boolean secondKnown;
+	private boolean fractionalSecKnown;
 }
 
 /*
@@ -397,7 +418,7 @@ public class DvDateTime extends DvWorldDateTime<DvDateTime> {
  *  Portions created by the Initial Developer are Copyright (C) 2003-2004
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Yin Su Lim
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

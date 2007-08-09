@@ -17,6 +17,7 @@ package org.openehr.rm.datatypes.quantity;
 import java.util.List;
 
 import org.openehr.rm.Attribute;
+import org.openehr.rm.datatypes.text.CodePhrase;
 
 /**
  * Abstract class defining the concept of true quantified values,
@@ -33,36 +34,18 @@ public abstract class DvQuantified<T extends DvQuantified> extends DvOrdered<T> 
      * Constructs a Quantified with referenceRanges and accuracy
      *
      * @param referenceRanges   null if not specified
-     * @param accuracy          0 means not recorded
-     * @param accuracyPercent
+     * @param normalRange null if no specified
+     * @param normalStatus null if not specified
+     * @param magnitudeStatus null if not specified
      */
     protected DvQuantified(
     		@Attribute (name = "referenceRanges") List<ReferenceRange<T>> referenceRanges,
     		@Attribute (name = "normalRange") DvInterval<T> normalRange,
-    		@Attribute (name = "accuracy") double accuracy, 
-    		@Attribute (name = "accuracyPercent") boolean accuracyPercent) {
-        super(referenceRanges, normalRange);
-        this.accuracy = accuracy;
-        this.accuracyPercent = accuracyPercent;
-    }
-
-    /**
-     * Constructs a Quantified without referenceRanges
-     *
-     * @param accuracy          0 if not recorded
-     * @param accuracyIsPercent
-     */
-    protected DvQuantified(double accuracy,
-                           boolean accuracyIsPercent) {
-        this(null, null, accuracy, accuracyIsPercent);
-    }
-
-    /**
-     * Constructs a Quantified without accuracy and referenceRanges
-     */
-    protected DvQuantified() {
-        this(0, false);
-    }
+    		@Attribute (name= "normalStatus") CodePhrase normalStatus,
+    		@Attribute (name= "magnitudeStatus") String magnitudeStatus) {
+        super(referenceRanges, normalRange, normalStatus);
+        this.magnitudeStatus = magnitudeStatus;
+    }  
 
     /**
      * Test whether a number is a valid percentage
@@ -83,55 +66,20 @@ public abstract class DvQuantified<T extends DvQuantified> extends DvOrdered<T> 
     public abstract Number getMagnitude();
 
     /**
-     * Sum of this quantity and another whose formal type must be the
-     * difference type of this quantity.
-     *
-     * @param q
-     * @return product of addition
+     * Optional status of magnitude with values:
+     * <ul>
+     * <li> "=" : magnitude is a point value</li>
+     * <li> "<" : value is < magnitude</li>
+     * <li> ">" : value is > magnitude</li>
+     * <li> "<=" : value is <= magnitude</li>
+     * <li> ">=" : value is >= magnitude</li>
+     * <li> "~" : value is approximately magnitude</li>
+     * <li> If not present, meaning is "="</li>
+	 * </ul> 
+     * @return null if unspecified
      */
-    public abstract DvQuantified<T> add(DvQuantified<T> q);
-
-    /**
-     * Difference of this quantity and another whose formal type must
-     * be the difference type of this quantity type.
-     *
-     * @param q
-     * @return product of substration
-     */
-    public abstract DvQuantified<T> subtract(DvQuantified<T> q);
-
-    /**
-     * Type of quantity which can be added or subtracted to this
-     * quantity. Usually the same type, but may be different as in
-     * the case of dates and times.
-     *
-     * @return diff type
-     */
-    public abstract Class getDiffType();
-
-    /**
-     * Accuracy of measurement instrument or method which applies
-     * to this specific instance of Quantified, expressed either
-     * as a half-range percent value (accuracy_is_percent = True)
-     * or a half-range quantity.
-     * <p/>
-     * A value of 0 means that accuracy was not recorded.
-     *
-     * @return accuracy
-     */
-    public double getAccuracy() {
-        return accuracy;
-    }
-
-    /**
-     * If True, indicates that when this object was created,
-     * accuracy was recorded as a percent value; if False, as an
-     * absolute quantity value.
-     *
-     * @return true if accuracy percent value
-     */
-    public boolean isAccuracyPercent() {
-        return accuracyPercent;
+    public String getMagnitudeStatus() {
+    	return magnitudeStatus;
     }
 
     /**
@@ -159,8 +107,10 @@ public abstract class DvQuantified<T extends DvQuantified> extends DvOrdered<T> 
     }
 
     /* fields */
-    private final double accuracy;
-    private final boolean accuracyPercent;
+    private final String magnitudeStatus;
+    
+    
+    
 }
 
 /*

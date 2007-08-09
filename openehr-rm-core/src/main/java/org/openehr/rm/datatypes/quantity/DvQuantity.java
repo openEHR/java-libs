@@ -19,6 +19,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
+import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.measurement.MeasurementService;
 
 import java.text.NumberFormat;
@@ -32,18 +33,20 @@ import java.util.List;
  * @author Rong Chen
  * @version 1.0
  */
-public class DvQuantity extends DvMeasurable<DvQuantity> {
+public class DvQuantity extends DvAmount<DvQuantity> {
 
     /**
      * Constructs a Quantity by all components
      *
      * @param referenceRanges
      * @param normalRange
+     * @param normalStatus
      * @param accuracy
      * @param accuracyPercent
      * @param units
      * @param magnitude
      * @param precision          >= -1
+     * @magnitudeStatus
      * @param measurementService null if not specified only if units
      *                           not specified as well
      * @throws IllegalArgumentException
@@ -51,14 +54,17 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
     @FullConstructor
             public DvQuantity(@Attribute (name = "referenceRanges") List<ReferenceRange<DvQuantity>> referenceRanges,
                               @Attribute (name = "normalRange") DvInterval<DvQuantity> normalRange,
+                              @Attribute (name= "normalStatus") CodePhrase normalStatus,
                               @Attribute (name = "accuracy") double accuracy,
                               @Attribute (name = "accuracyPercent") boolean accuracyPercent,
+                              @Attribute (name= "magnitudeStatus") String magnitudeStatus,
                               @Attribute (name = "units", required = true) String units,
                               @Attribute (name = "magnitude", required = true) double magnitude,
                               @Attribute (name = "precision") int precision,
                               @Attribute (name = "measurementService", system = true) MeasurementService measurementService) {
         
-        super(referenceRanges, normalRange, accuracy, accuracyPercent, units);
+        super(referenceRanges, normalRange, normalStatus, accuracy, 
+        		accuracyPercent, magnitudeStatus);
 
         if (precision < -1) {
             throw new IllegalArgumentException("negative precision");
@@ -70,6 +76,7 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
         this.magnitude = magnitude;
         this.precision = precision;
         this.measurementService = measurementService;
+        this.units = units;
     }
 
     /**
@@ -82,7 +89,7 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
      */
     public DvQuantity(String units, double magnitude, int precision,
                       MeasurementService measurementService) {
-        this(null, null, 0, false, units, magnitude, precision,
+        this(null, null, null, 0, false, null, units, magnitude, precision,
                 measurementService);
     }
 
@@ -138,6 +145,15 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
     }
 
     /**
+     * Units of this quantity
+     * 
+     * @return units
+     */
+    public String getUnits() {
+    	return units;
+    }
+    
+    /**
      * Sum of this quantity and another whose formal type must be the
      * difference type of this quantity.
      *
@@ -148,10 +164,10 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
      */
     public DvQuantified<DvQuantity> add(DvQuantified<DvQuantity> q) {
         DvQuantity qt = (DvQuantity) q;
-        return new DvQuantity(getReferenceRanges(), getNormalRange(),
-        		getAccuracy(), isAccuracyPercent(), getUnits(),
-                magnitude + qt.magnitude, precision,
-                measurementService);
+        return new DvQuantity(getOtherReferenceRanges(), getNormalRange(),
+        		getNormalStatus(), 	getAccuracy(), isAccuracyPercent(), 
+        		getMagnitudeStatus(), getUnits(), magnitude + qt.magnitude, 
+        		precision, measurementService);
     }
 
     /**
@@ -165,10 +181,10 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
      */
     public DvQuantified<DvQuantity> subtract(DvQuantified<DvQuantity> q) {
         DvQuantity qt = (DvQuantity) q;
-        return new DvQuantity(getReferenceRanges(), getNormalRange(),
-        		   getAccuracy(), isAccuracyPercent(), getUnits(),
-                magnitude - qt.magnitude, precision,
-                measurementService);
+        return new DvQuantity(getOtherReferenceRanges(), getNormalRange(),
+        		getNormalStatus(), getAccuracy(), isAccuracyPercent(), 
+        		getMagnitudeStatus(), getUnits(), magnitude - qt.magnitude, 
+        		precision, measurementService);
     }
 
     /**
@@ -189,8 +205,9 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
      * @return negated version
      */
     public DvQuantity negate() {
-        return new DvQuantity(getReferenceRanges(), getNormalRange(), 
-        		   getAccuracy(), isAccuracyPercent(), getUnits(), -magnitude,
+        return new DvQuantity(getOtherReferenceRanges(), getNormalRange(), 
+        		getNormalStatus(), getAccuracy(), isAccuracyPercent(), 
+        		getMagnitudeStatus(), getUnits(), -magnitude,
                 precision, measurementService);
     }
 
@@ -267,6 +284,7 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
         return new EqualsBuilder()
                 .appendSuper(super.equals(o))
                 .append(precision, dvQuantity.precision)
+                .append(units, dvQuantity.units)
                 .isEquals();
     }
 
@@ -283,9 +301,6 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
     }
 
     // POJO start
-    DvQuantity() {
-    }
-
     void setMagnitude(double magnitude) {
         this.magnitude = magnitude;
     }
@@ -298,6 +313,7 @@ public class DvQuantity extends DvMeasurable<DvQuantity> {
     /* fields */
     private double magnitude; // add final
     private int precision;    // add final
+    private final String units;
     private MeasurementService measurementService; // add final
 }
 

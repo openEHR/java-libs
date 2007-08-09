@@ -16,7 +16,7 @@ package org.openehr.rm.datatypes.quantity;
 
 import org.openehr.rm.Attribute;
 import org.openehr.rm.datatypes.basic.DataValue;
-import org.openehr.rm.datatypes.text.DvCodedText;
+import org.openehr.rm.datatypes.text.CodePhrase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,36 +40,46 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
     }
 
     /**
-     * Constructs a Ordered by referenceRanges and normalRange
+     * Constructs a Ordered by otherReferenceRanges, normalRange and 
+     * normalStatus
      *
-     * @param referenceRanges null if not specified
+     * @param otherReferenceRanges null if not specified
      * @param normalRange null if not specified
-     * @throws IllegalArgumentException if referenceRanges not null
+     * @param normalStatus null if not specified
+     * @throws IllegalArgumentException if otherReferenceRanges not null
      *                                  and empty
      */
     protected DvOrdered (
     		@Attribute (name = "otherReferenceRanges")
             List<ReferenceRange<T>> otherReferenceRanges,
-        @Attribute (name = "normalRange") DvInterval<T> normalRange) {
+            @Attribute (name = "normalRange") DvInterval<T> normalRange,
+            @Attribute (name= "normalStatus") CodePhrase normalStatus) {
 
         if (otherReferenceRanges != null) {
             if (otherReferenceRanges.isEmpty()) {
-                throw new IllegalArgumentException("empty referenceRanges");
+                throw new IllegalArgumentException("empty otherReferenceRanges");
             }
-            this.referenceRanges =
-                    new ArrayList<ReferenceRange<T>>(otherReferenceRanges);
- /*           for (int i = 0, j = otherReferenceRanges.size(); i < j; i++) {
-                ReferenceRange range = (ReferenceRange)
-                        otherReferenceRanges.get(i);
-                if (ReferenceRange.NORMAL.equals(range.getMeaning().getValue())) {
-                    this.normalRangeIndex = i;
-                    return;
-                }
-            }*/
+            this.otherReferenceRanges =
+                    new ArrayList<ReferenceRange<T>>(otherReferenceRanges); 
         } else {
-            this.referenceRanges = null;
+            this.otherReferenceRanges = null;
         }
         this.normalRange = normalRange;
+        this.normalStatus = normalStatus;
+    }
+    
+    /**
+     * Constructs a Ordered by otherReferenceRanges and normalRange
+     *
+     * @param otherReferenceRanges null if not specified
+     * @param normalRange null if not specified
+     * @throws IllegalArgumentException if otherReferenceRanges not null
+     *                                  and empty
+     */
+    protected DvOrdered (List<ReferenceRange<T>> otherReferenceRanges,
+            DvInterval<T> normalRange) {
+
+        this(otherReferenceRanges, normalRange, null);
     }
 
     /**
@@ -79,13 +89,13 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
      * @return unmodifiable list of ReferenceRange
      *         null if not specified
      */
-    public List<ReferenceRange<T>> getReferenceRanges() {
-        return referenceRanges == null ?
-                null : Collections.unmodifiableList(referenceRanges);
+    public List<ReferenceRange<T>> getOtherReferenceRanges() {
+        return otherReferenceRanges == null ?
+                null : Collections.unmodifiableList(otherReferenceRanges);
     }
 
     /**
-     * Optimal normal range
+     * Optional normal range
      *
      * @return null if not specified
      */
@@ -93,6 +103,15 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
         return normalRange;
     }
 
+    /**
+     * Optional normal status
+     * 
+     * @return null if not specified
+     */
+    public CodePhrase getNormalStatus() {
+    	return normalStatus;
+    }
+    
     /**
      * Value is in the normal range if there is one, otherwise True
      *
@@ -108,7 +127,7 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
      * @return true if has no reference range
      */
     public boolean isSimple() {
-        return referenceRanges == null;
+        return otherReferenceRanges == null;
     }
 
     /**
@@ -128,16 +147,24 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
 	}
 
 	/**
-	 * @param referenceRanges The referenceRanges to set.
+	 * @param otherReferenceRanges The otherReferenceRanges to set.
 	 */
-	public void setReferenceRanges(List<ReferenceRange<T>> referenceRanges) {
-		this.referenceRanges = referenceRanges;
+	public void setOtherReferenceRanges(List<ReferenceRange<T>> referenceRanges) {
+		this.otherReferenceRanges = referenceRanges;
+	}
+	
+	/**
+	 * @param normalStatus The normalStatus to set.
+	 */
+	public void setNormalStatus(CodePhrase normalStatus) {
+		this.normalStatus = normalStatus;
 	}
     // POJO end
 
     /* fields */
-    private List<ReferenceRange<T>> referenceRanges;
+    private List<ReferenceRange<T>> otherReferenceRanges;
     private DvInterval<T> normalRange;	
+    private CodePhrase normalStatus;
 }
 
 /*
@@ -157,7 +184,7 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
  *  The Original Code is DvOrdered.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2006
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2007
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s): Bert Verhees

@@ -90,9 +90,9 @@ public final class ReferenceRange <T extends DvOrdered> extends DataValue {
      * @param value
      * @return true if has the value
      */
-    public boolean has(DvOrdered<T> value) {
+    public boolean isInRange(DvOrdered<T> value) {
         return range.has(value);
-    }
+    }   
 
     /**
      * Two ReferenceRanges equal if both has same value for meaning

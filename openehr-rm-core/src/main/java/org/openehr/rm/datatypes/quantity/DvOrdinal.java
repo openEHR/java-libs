@@ -135,7 +135,7 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
      * @return reference range
      */
     public ReferenceRange<DvOrdinal> limits() {
-        return getReferenceRanges().get(limitsIndex);
+        return getOtherReferenceRanges().get(limitsIndex);
     }
 
     /**

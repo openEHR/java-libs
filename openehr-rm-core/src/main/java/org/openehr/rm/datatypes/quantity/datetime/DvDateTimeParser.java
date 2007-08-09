@@ -15,7 +15,6 @@
 package org.openehr.rm.datatypes.quantity.datetime;
 
 import java.lang.IllegalArgumentException;
-import java.util.StringTokenizer;
 import java.util.TimeZone;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;

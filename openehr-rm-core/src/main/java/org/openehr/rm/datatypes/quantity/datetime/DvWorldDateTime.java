@@ -15,13 +15,14 @@
 package org.openehr.rm.datatypes.quantity.datetime;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.FormatUtils;
-import org.openehr.rm.datatypes.quantity.DvCustomaryQuantity;
+import org.openehr.rm.datatypes.quantity.DvAbsoluteQuantity;
+import org.openehr.rm.datatypes.quantity.DvAmount;
 import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.datatypes.quantity.DvOrdered;
 import org.openehr.rm.datatypes.quantity.ReferenceRange;
+import org.openehr.rm.datatypes.text.CodePhrase;
+
 import java.util.List;
-import org.joda.time.DateTimeZone;
 
 /**
  * Abstract concept of time on the real world timeline.
@@ -31,12 +32,14 @@ import org.joda.time.DateTimeZone;
  * @version 1.0
  */
 public abstract class DvWorldDateTime <T extends DvWorldDateTime>
-        extends DvCustomaryQuantity<T> {
+        extends DvAbsoluteQuantity<T, DvDuration> {
 
     protected DvWorldDateTime(List<ReferenceRange<T>> referenceRanges,
-			DvInterval<T> normalRange, double accuracy, 
-			boolean accuracyPercent, DateTime datetime) {
-        super(referenceRanges, normalRange, accuracy, accuracyPercent);
+			DvInterval<T> normalRange, CodePhrase normalStatus,
+			double accuracy, String magnitudeStatus, DateTime datetime) {
+    	
+        super(referenceRanges, normalRange, normalStatus, accuracy, 
+        		magnitudeStatus);
         this.dateTime = datetime;
     }
     
@@ -52,9 +55,10 @@ public abstract class DvWorldDateTime <T extends DvWorldDateTime>
      * @throws IllegalArgumentException
      */
     public DvWorldDateTime(List<ReferenceRange<T>> referenceRanges,
-    				DvInterval<T> normalRange,double accuracy, 
-    				boolean accuracyPercent, String value) {
-        super(referenceRanges, normalRange, accuracy, accuracyPercent);
+    				DvInterval<T> normalRange, CodePhrase normalStatus,
+    				double accuracy, String magnitudeStatus, String value) {
+        super(referenceRanges, normalRange, normalStatus, accuracy, 
+        		magnitudeStatus);
         this.dateTime = parseValue(value);
         this.value = value;
         setBooleans(value);
@@ -198,12 +202,6 @@ public abstract class DvWorldDateTime <T extends DvWorldDateTime>
         this.value = value;
     }
     
-    DvWorldDateTime(){}
-//    protected static boolean isExtended(String value) {
-//        return value.indexOf("-") > 0 || value.indexOf(":") > 0;
-//    }
-	
-	
     // POJO end
 
     /* fields */

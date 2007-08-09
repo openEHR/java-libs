@@ -17,6 +17,7 @@ package org.openehr.rm.datatypes.quantity;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
+import org.openehr.rm.datatypes.text.CodePhrase;
 
 import java.util.List;
 
@@ -26,155 +27,163 @@ import java.util.List;
  * @author Rong Chen
  * @version 1.0
  */
-public final class DvCount extends DvQuantified<DvCount> {
+public final class DvCount extends DvAmount<DvCount> {
 
-    /**
-     * Constructs a Countalbe by all components
-     *
-     * @param referenceRanges
-     * @param normalRange 
-     * @param accuracy
-     * @param accuracyPercent
-     * @param magnitude
+	/**
+	 * Constructs a Countalbe by all components
+	 *
+	 * @param referenceRanges
+	 * @param normalRange 
+	 * @param normalStatus
+	 * @param accuracy
+	 * @param accuracyPercent
+	 * @param magnitudeStatus
+	 * @param magnitude
 
-     */
-    @FullConstructor
-            public DvCount(@Attribute (name = "referenceRanges")
-            List<ReferenceRange<DvCount>> referenceRanges,
-            @Attribute (name = "normalRange") DvInterval<DvCount> normalRange,
-                           @Attribute (name = "accuracy")
-            double accuracy,
-                           @Attribute (name = "accuracyPercent")
-            boolean accuracyPercent,
-                           @Attribute (name = "magnitude", required = true)
-            int magnitude) {
-        super(referenceRanges, normalRange, accuracy, accuracyPercent);
-        this.magnitude = magnitude;
-    }
+	 */
+	@FullConstructor
+	public DvCount(
+			@Attribute(name = "referenceRanges") List<ReferenceRange<DvCount>> referenceRanges,
+			@Attribute(name = "normalRange") DvInterval<DvCount> normalRange, 
+			@Attribute (name= "normalStatus") CodePhrase normalStatus,
+			@Attribute(name = "accuracy") double accuracy, 
+			@Attribute(name = "accuracyPercent") boolean accuracyPercent,
+			@Attribute (name= "magnitudeStatus") String magnitudeStatus,
+			@Attribute(name = "magnitude", required = true)	int magnitude) {
+		super(referenceRanges, normalRange, normalStatus, accuracy, 
+				accuracyPercent, magnitudeStatus);
+		this.magnitude = magnitude;
+	}
 
-    /**
-     * Constructs a Countalbe by magnitude
-     *
-     * @param magnitude
-     */
-    public DvCount(int magnitude) {
-        this.magnitude = magnitude;
-    }
+	/**
+	 * Constructs a Countalbe by magnitude
+	 *
+	 * @param magnitude
+	 */
+	public DvCount(int magnitude) {
+		this.magnitude = magnitude;
+	}
 
-    /**
-     * Numeric value of the quantity in canonical (single value) form
-     *
-     * @return getMagnitude
-     */
-    public Integer getMagnitude() {
-        return new Integer(this.magnitude);
-    }
+	/**
+	 * Numeric value of the quantity in canonical (single value) form
+	 *
+	 * @return getMagnitude
+	 */
+	public Integer getMagnitude() {
+		return new Integer(this.magnitude);
+	}
 
-    /**
-     * Sum of this quantity and another whose formal type must be the
-     * difference type of this quantity.
-     *
-     * @param q
-     * @return product of addition
-     * @throws ClassCastException if q not type of Countable
-     */
-    public DvQuantified<DvCount> add(DvQuantified q) {
-        final DvCount c = (DvCount) q;
-        return new DvCount(getReferenceRanges(), getNormalRange(),
-        		getAccuracy(), isAccuracyPercent(), magnitude + c.magnitude);
-    }
+	/**
+	 * Sum of this quantity and another whose formal type must be the
+	 * difference type of this quantity.
+	 *
+	 * @param q
+	 * @return product of addition
+	 * @throws ClassCastException if q not type of Countable
+	 */
+	public DvQuantified<DvCount> add(DvQuantified q) {
+		final DvCount c = (DvCount) q;
+		return new DvCount(getOtherReferenceRanges(), getNormalRange(),
+				getNormalStatus(), getAccuracy(), isAccuracyPercent(), 
+				getMagnitudeStatus(), magnitude + c.magnitude);
+	}
 
-    /**
-     * Difference of this quantity and another whose formal type must
-     * be the difference type of this quantity type.
-     *
-     * @param q
-     * @return product of substration
-     */
-    public DvQuantified<DvCount> subtract(DvQuantified q) {
-        final DvCount c = (DvCount) q;
-        return new DvCount(getReferenceRanges(), getNormalRange(),
-        		getAccuracy(), isAccuracyPercent(), magnitude - c.magnitude);
-    }
+	/**
+	 * Difference of this quantity and another whose formal type must
+	 * be the difference type of this quantity type.
+	 *
+	 * @param q
+	 * @return product of substration
+	 */
+	public DvQuantified<DvCount> subtract(DvQuantified q) {
+		final DvCount c = (DvCount) q;
+		return new DvCount(getOtherReferenceRanges(), getNormalRange(),
+				getNormalStatus(), getAccuracy(), isAccuracyPercent(), 
+				getMagnitudeStatus(), magnitude - c.magnitude);
+	}
 
-    /**
-     * Type of quantity which can be added or subtracted to this
-     * quantity. Usually the same type, but may be different as in
-     * the case of dates and times.
-     *
-     * @return diff type
-     */
-    public Class<DvCount> getDiffType() {
-        return DvCount.class;
-    }
+	/**
+	 * Type of quantity which can be added or subtracted to this
+	 * quantity. Usually the same type, but may be different as in
+	 * the case of dates and times.
+	 *
+	 * @return diff type
+	 */
+	public Class<DvCount> getDiffType() {
+		return DvCount.class;
+	}
 
-    /**
-     * Compares this object with the specified object for order.  Returns a
-     * negative integer, zero, or a positive integer as this object is less
-     * than, equal to, or greater than the specified object.
-     *
-     * @param o the Object to be compared.
-     * @return a negative integer, zero, or a positive integer as this object
-     *         is less than, equal to, or greater than the specified object.
-     * @throws ClassCastException if the specified object's type prevents it
-     *                            from being compared to this Object.
-     */
-    public int compareTo(DvOrdered o) {
-        final DvCount c = (DvCount) o;
-        if (magnitude < c.magnitude) return -1;
-        if (magnitude > c.magnitude) return 1;
-        return 0;
-    }
+	/**
+	 * Compares this object with the specified object for order.  Returns a
+	 * negative integer, zero, or a positive integer as this object is less
+	 * than, equal to, or greater than the specified object.
+	 *
+	 * @param o the Object to be compared.
+	 * @return a negative integer, zero, or a positive integer as this object
+	 *         is less than, equal to, or greater than the specified object.
+	 * @throws ClassCastException if the specified object's type prevents it
+	 *                            from being compared to this Object.
+	 */
+	public int compareTo(DvOrdered o) {
+		final DvCount c = (DvCount) o;
+		if (magnitude < c.magnitude)
+			return -1;
+		if (magnitude > c.magnitude)
+			return 1;
+		return 0;
+	}
 
-    /**
-     * Tests if two instances are strictly comparable.
-     *
-     * @param ordered
-     * @return true if two instances are strictly comparable
-     */
-    public boolean isStrictlyComparableTo(DvOrdered ordered) {
-        return ordered instanceof DvCount;
-    }
+	/**
+	 * Tests if two instances are strictly comparable.
+	 *
+	 * @param ordered
+	 * @return true if two instances are strictly comparable
+	 */
+	public boolean isStrictlyComparableTo(DvOrdered ordered) {
+		return ordered instanceof DvCount;
+	}
 
-    /**
-     * Two Counts equal if has same magnitude
-     *
-     * @param o
-     * @return true if equals
-     */
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof DvCount )) return false;
+	/**
+	 * Two Counts equal if has same magnitude
+	 *
+	 * @param o
+	 * @return true if equals
+	 */
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof DvCount))
+			return false;
 
-        final DvCount dvCount = (DvCount) o;
+		final DvCount dvCount = (DvCount) o;
 
-        if (magnitude != dvCount.magnitude) return false;
+		if (magnitude != dvCount.magnitude)
+			return false;
 
-        return true;
-    }
+		return true;
+	}
 
-    /**
-     * Return hash code of this Count
-     *
-     * @return hash code
-     */
-    public int hashCode() {
-        return new HashCodeBuilder(13, 37)
-                .append(magnitude)
-                .toHashCode();
-    }
+	/**
+	 * Return hash code of this Count
+	 *
+	 * @return hash code
+	 */
+	public int hashCode() {
+		return new HashCodeBuilder(13, 37).append(magnitude).toHashCode();
+	}
 
-    // POJO start
-    DvCount() {
-    }
+	// POJO start
+	DvCount() {
+	}
 
-    void setMagnitude(int magnitude) {
-        this.magnitude = magnitude;
-    }
-    // POJO end
+	void setMagnitude(int magnitude) {
+		this.magnitude = magnitude;
+	}
 
-    /* fields */
-    private int magnitude;
+	// POJO end
+
+	/* fields */
+	private int magnitude;
 }
 
 /*
@@ -194,7 +203,7 @@ public final class DvCount extends DvQuantified<DvCount> {
  *  The Original Code is DvCount.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2007
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):
