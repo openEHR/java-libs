@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class AccessGroupRef"
+ * description: "Class TemplateID"
  * keywords:    "support"
  *
  * author:      "Rong Chen <rong@acode.se>"
@@ -14,21 +14,14 @@
 package org.openehr.rm.support.identification;
 
 /**
- * Reference to access group in an access control service
+ * Identifier for templates. Lexical form to be determined.
  * 
  * @author Rong Chen
  */
-public class AccessGroupRef extends ObjectRef {
-	/**
-     * Construt an AccessGroupRef
-     *
-     * @param id
-     * @throws IllegalArgumentException if id or type null
-     */
-    public AccessGroupRef(ObjectID id) {
-        super(id, ObjectRef.Namespace.ACCESS_CONTROL, 
-        		ObjectRef.Type.ACCESS_GROUP);
-    }    
+public class TemplateID extends ObjectID {
+	public TemplateID(String value) {
+		super(value);
+	}
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
@@ -44,7 +37,7 @@ public class AccessGroupRef extends ObjectRef {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is AccessGroupRef.java
+ *  The Original Code is TemplateID.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2007
