@@ -154,7 +154,7 @@ public class ADLSerializer {
 		indent(1, out);
 		out.write("original_language = <");
 		out.write("[");
-		out.write(authored.getOriginalLanguage().getTerminologyID().getValue());
+		out.write(authored.getOriginalLanguage().getTerminologyId().getValue());
 		out.write("::");
 		out.write(authored.getOriginalLanguage().getCodeString());
 		out.write("]");
@@ -178,7 +178,7 @@ public class ADLSerializer {
 				indent(3, out);
 				out.write("language = <");
 				out.write("[");
-				out.write(td.getLanguage().getTerminologyID().getValue());
+				out.write(td.getLanguage().getTerminologyId().getValue());
 				out.write("::");
 				out.write(td.getLanguage().getCodeString());
 				out.write("]");
@@ -288,7 +288,7 @@ public class ADLSerializer {
 		indent(indent + 1, out);
 		out.write("language = <");
 		out.write("[");
-		out.write(item.getLanguage().getTerminologyID().getValue());
+		out.write(item.getLanguage().getTerminologyId().getValue());
 		out.write("::");
 		out.write(item.getLanguage().getCodeString());
 		out.write("]>");
@@ -670,7 +670,7 @@ public class ADLSerializer {
 		CodePhrase symbol = ordinal.getSymbol();
 		out.write(Integer.toString(ordinal.getValue()));
 		out.write("|[");
-		out.write(symbol.getTerminologyID().getValue());
+		out.write(symbol.getTerminologyId().getValue());
 		out.write("::");
 		out.write(symbol.getCodeString());
 		out.write("]");		
@@ -685,7 +685,7 @@ public class ADLSerializer {
 		CodePhrase property = cquantity.getProperty();
 		if (property != null) {
 			out.write("property = <[");
-			out.write(property.getTerminologyID().getValue());
+			out.write(property.getTerminologyId().getValue());
 			out.write("::");
 			out.write(property.getCodeString());
 			out.write("]>");
@@ -1084,8 +1084,8 @@ public class ADLSerializer {
 		out.write("|");
 		if (interval.getLower() != null && interval.getUpper() != null) {
 			if(interval.getLower().equals(interval.getUpper())
-					&& interval.isLowerInclusive() 
-					&& interval.isUpperInclusive()) {
+					&& interval.isLowerIncluded() 
+					&& interval.isUpperIncluded()) {
 				out.write(interval.getLower().toString());
 			} else {
 				out.write(interval.getLower().toString());
@@ -1094,13 +1094,13 @@ public class ADLSerializer {
 			}
 		} else if (interval.getLower() == null) {
 			out.write("<");
-			if (interval.isUpperInclusive()) {
+			if (interval.isUpperIncluded()) {
 				out.write("=");
 			}
 			out.write(interval.getUpper().toString());
 		} else {
 			out.write(">");
-			if (interval.isLowerInclusive()) {
+			if (interval.isLowerIncluded()) {
 				out.write("=");
 			}
 			out.write(interval.getLower().toString());
