@@ -21,7 +21,7 @@ import org.openehr.rm.composition.CompositionTestBase;
 import org.openehr.rm.datatypes.encapsulated.DvParsable;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 
 /**
  * InstructionTest

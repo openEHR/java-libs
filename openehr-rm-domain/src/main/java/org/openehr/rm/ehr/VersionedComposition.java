@@ -19,7 +19,7 @@ import java.util.Set;
 import org.openehr.rm.common.changecontrol.OriginalVersion;
 import org.openehr.rm.common.changecontrol.VersionedObject;
 import org.openehr.rm.common.generic.AuditDetails;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.composition.Composition;
@@ -39,7 +39,7 @@ public class VersionedComposition extends VersionedObject<Composition> {
     /**
      * Constructs a VersionComposition with first Composition created locally
      */
-    public VersionedComposition(HierarchicalObjectID uid, ObjectRef ownerID,
+    public VersionedComposition(HierObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, ObjectVersionID versionID, Composition composition,
             DvCodedText lifecycleState, AuditDetails commitAudit,
             ObjectRef contribution, String signature,
@@ -52,7 +52,7 @@ public class VersionedComposition extends VersionedObject<Composition> {
     /**
      * Constructs a VersionComposition with first imported Composition
      */
-    public VersionedComposition(HierarchicalObjectID uid, ObjectRef ownerID,
+    public VersionedComposition(HierObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, OriginalVersion<Composition> item,
             AuditDetails commitAudit, ObjectRef contribution, String signature) {
         super(uid, ownerIDCheck(ownerID), timeCreated, item, commitAudit, contribution, signature);
@@ -62,7 +62,7 @@ public class VersionedComposition extends VersionedObject<Composition> {
     /**
      * Constructs a VersionComposition with first merged Composition
      */
-    public VersionedComposition(HierarchicalObjectID uid, ObjectRef ownerID,
+    public VersionedComposition(HierObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, ObjectVersionID versionID,
             ObjectVersionID precedingVersionID, Composition composition,
             DvCodedText lifecycleState, AuditDetails commitAudit,

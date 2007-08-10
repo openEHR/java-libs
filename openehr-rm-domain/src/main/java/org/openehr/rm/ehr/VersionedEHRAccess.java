@@ -20,7 +20,7 @@ import org.openehr.rm.common.changecontrol.VersionedObject;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -41,7 +41,7 @@ public class VersionedEHRAccess extends VersionedObject<EHRAccess> {
     /**
      * Constructs a VersionEHRAccess with first EHRAccess created locally
      */
-    public VersionedEHRAccess(HierarchicalObjectID uid, ObjectRef ownerID,
+    public VersionedEHRAccess(HierObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, ObjectVersionID versionID, EHRAccess ehrAccess,
             DvCodedText lifecycleState, AuditDetails commitAudit,
             ObjectRef contribution, String signature,
@@ -54,7 +54,7 @@ public class VersionedEHRAccess extends VersionedObject<EHRAccess> {
     /**
      * Constructs a VersionEHRAccess with first imported EHRAccess
      */
-    public VersionedEHRAccess(HierarchicalObjectID uid, ObjectRef ownerID,
+    public VersionedEHRAccess(HierObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, OriginalVersion<EHRAccess> item,
             AuditDetails commitAudit, ObjectRef contribution, String signature) {
         super(uid, ownerID, timeCreated, item, commitAudit, contribution, signature);
@@ -64,7 +64,7 @@ public class VersionedEHRAccess extends VersionedObject<EHRAccess> {
     /**
      * Constructs a VersionEHRAccess with first merged EHRAccess
      */
-    public VersionedEHRAccess(HierarchicalObjectID uid, ObjectRef ownerID,
+    public VersionedEHRAccess(HierObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, ObjectVersionID versionID,
             ObjectVersionID precedingVersionID, EHRAccess ehrAccess,
             DvCodedText lifecycleState, AuditDetails commitAudit,

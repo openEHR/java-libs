@@ -28,7 +28,7 @@ import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.PartyRef;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.terminology.TestTerminologyService;
@@ -146,14 +146,14 @@ public class CompositionTestBase extends DataStructureTestBase {
     // test subject
     protected PartySelf subject() throws Exception {
         PartyRef party = new PartyRef(
-                new HierarchicalObjectID("1.2.4.5.6.12.1"), ObjectRef.Type.PARTY);
+                new HierObjectID("1.2.4.5.6.12.1"), ObjectRef.Type.PARTY);
         return new PartySelf(party);
     }
 
     // test provider
     protected PartyIdentified provider() throws Exception {
         PartyRef performer = new PartyRef(
-                new HierarchicalObjectID("1.3.3.1.2.42.1"), ObjectRef.Type.ORGANISATION);
+                new HierObjectID("1.3.3.1.2.42.1"), ObjectRef.Type.ORGANISATION);
         //DvCodedText function = new DvCodedText("doctor", lang, charset,
           //      new CodePhrase("test", "doctor_code"), ts);
         //DvCodedText mode = new DvCodedText("present", lang, charset,

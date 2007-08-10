@@ -23,7 +23,7 @@ import org.openehr.rm.common.changecontrol.Version;
 import org.openehr.rm.common.changecontrol.VersionedObject;
 import org.openehr.rm.common.directory.Folder;
 import org.openehr.rm.common.generic.AuditDetails;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
@@ -43,7 +43,7 @@ public class VersionedParty extends VersionedObject<Party> {
 	/**
 	 * Constructs a VersionParty with first Party created locally
 	 */
-	public VersionedParty(HierarchicalObjectID uid, ObjectRef ownerID, 
+	public VersionedParty(HierObjectID uid, ObjectRef ownerID, 
 			DvDateTime timeCreated, ObjectVersionID versionID, Party party, 
 			DvCodedText lifecycleState, AuditDetails commitAudit, 
                         ObjectRef contribution, String signature,
@@ -56,7 +56,7 @@ public class VersionedParty extends VersionedObject<Party> {
 	/**
 	 * Constructs a VersionParty with first imported Party
 	 */
-	public VersionedParty(HierarchicalObjectID uid, ObjectRef ownerID, 
+	public VersionedParty(HierObjectID uid, ObjectRef ownerID, 
 			DvDateTime timeCreated, OriginalVersion<Party> item,
                         AuditDetails commitAudit, ObjectRef contribution,
 			String signature) {
@@ -68,7 +68,7 @@ public class VersionedParty extends VersionedObject<Party> {
 	/**
 	 * Constructs a VersionParty with first merged Party
 	 */
-	public VersionedParty(HierarchicalObjectID uid, ObjectRef ownerID, 
+	public VersionedParty(HierObjectID uid, ObjectRef ownerID, 
 			DvDateTime timeCreated, ObjectVersionID versionID,   
 			ObjectVersionID precedingVersionID, Party party, DvCodedText lifecycleState,
                         AuditDetails commitAudit, ObjectRef contribution,  

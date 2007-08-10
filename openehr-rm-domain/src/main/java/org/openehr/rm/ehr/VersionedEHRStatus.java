@@ -35,7 +35,7 @@ import org.openehr.rm.datatypes.basic.DvState;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
@@ -52,7 +52,7 @@ public class VersionedEHRStatus extends VersionedObject<EHRStatus> {
 	/**
 	 * Constructs a VersionEHRStatus with first EHRStatus created locally
 	 */
-	public VersionedEHRStatus(HierarchicalObjectID uid, ObjectRef ownerID, 
+	public VersionedEHRStatus(HierObjectID uid, ObjectRef ownerID, 
 			DvDateTime timeCreated, ObjectVersionID versionID, EHRStatus ehrStatus, 
 			DvCodedText lifecycleState, AuditDetails commitAudit, 
                         ObjectRef contribution, String signature,
@@ -65,7 +65,7 @@ public class VersionedEHRStatus extends VersionedObject<EHRStatus> {
 	/**
 	 * Constructs a VersionEHRStatus with first imported EHRStatus
 	 */
-	public VersionedEHRStatus(HierarchicalObjectID uid, ObjectRef ownerID, 
+	public VersionedEHRStatus(HierObjectID uid, ObjectRef ownerID, 
 			DvDateTime timeCreated, OriginalVersion<EHRStatus> item,
                         AuditDetails commitAudit, ObjectRef contribution, 
                         String signature) {
@@ -76,7 +76,7 @@ public class VersionedEHRStatus extends VersionedObject<EHRStatus> {
 	/**
 	 * Constructs a VersionEHRStatus with first merged EHRStatus
 	 */
-	public VersionedEHRStatus(HierarchicalObjectID uid, ObjectRef ownerID, 
+	public VersionedEHRStatus(HierObjectID uid, ObjectRef ownerID, 
 			DvDateTime timeCreated, ObjectVersionID versionID,   
 			ObjectVersionID precedingVersionID, EHRStatus ehrStatus, DvCodedText lifecycleState, 
                         AuditDetails commitAudit, ObjectRef contribution,   			  

@@ -27,7 +27,7 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.PartyRef;
@@ -84,9 +84,9 @@ public class VersionedPartyTest extends DemographicTestBase {
 
     // test versioned party
     private VersionedParty versionedParty(String details) throws Exception {
-        HierarchicalObjectID id = new HierarchicalObjectID("1.23.24.23");
+        HierObjectID id = new HierObjectID("1.23.24.23");
         ObjectRef owner = new ObjectRef(
-                new HierarchicalObjectID("1.20.0.1"),
+                new HierObjectID("1.20.0.1"),
                 ObjectRef.Namespace.LOCAL,
                 ObjectRef.Type.FOLDER);
         Person person = person(details);
@@ -115,7 +115,7 @@ public class VersionedPartyTest extends DemographicTestBase {
 
     // test audit
     private AuditDetails audit(DvCodedText changeType) throws Exception {
-        PartyRef pr = new PartyRef(new HierarchicalObjectID("1-2-3-4-5"), 
+        PartyRef pr = new PartyRef(new HierObjectID("1-2-3-4-5"), 
                 ObjectRef.Type.PARTY);
         PartyIdentified pi = new PartyIdentified(pr, "party name", null);
         CodePhrase codePhrase =
@@ -129,7 +129,7 @@ public class VersionedPartyTest extends DemographicTestBase {
 
     // test contribution
     private ObjectRef contribution(String id) throws Exception {
-        return new ObjectRef(new HierarchicalObjectID(id),
+        return new ObjectRef(new HierObjectID(id),
                 ObjectRef.Namespace.LOCAL,
                 ObjectRef.Type.CONTRIBUTION);
     }

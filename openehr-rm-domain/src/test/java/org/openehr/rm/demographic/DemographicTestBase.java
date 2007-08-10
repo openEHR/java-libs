@@ -147,7 +147,7 @@ public class DemographicTestBase extends TestCase {
     }
 
     protected ObjectID oid(String value) {
-        return new HierarchicalObjectID(value);
+        return new HierObjectID(value);
     }
 
     protected ObjectVersionID ovid(String value) {
@@ -180,7 +180,7 @@ public class DemographicTestBase extends TestCase {
     protected EventContext eventContext() throws Exception {
         List<Participation> participations = new ArrayList<Participation>();
                 PartyRef performer = new PartyRef(
-                new HierarchicalObjectID("1.3.3.1.2.42.1"), ObjectRef.Type.ORGANISATION);
+                new HierObjectID("1.3.3.1.2.42.1"), ObjectRef.Type.ORGANISATION);
         Participation part1 = new Participation(provider("1.3.24.2.3.4.2", 
                 ObjectRef.Type.ORGANISATION),
                 coded("participation function", "23432423"),
@@ -291,7 +291,7 @@ public class DemographicTestBase extends TestCase {
     
     protected PartyIdentified provider(String id, ObjectRef.Type type) throws Exception {
         PartyRef performer = new PartyRef(
-                new HierarchicalObjectID(id), type);
+                new HierObjectID(id), type);
         return new PartyIdentified(performer, "provider's name", null);
     }
 

@@ -19,7 +19,7 @@ import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.composition.CompositionTestBase;
 import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 
 /**

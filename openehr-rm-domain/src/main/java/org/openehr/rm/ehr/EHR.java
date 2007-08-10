@@ -17,7 +17,7 @@ package org.openehr.rm.ehr;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 
@@ -44,8 +44,8 @@ public class EHR extends RMObject {
      * @param compositions	required
      * @throws IllegalArgumentException 
      */
-    @FullConstructor public EHR (@Attribute(name = "systemID", required = true) HierarchicalObjectID systemID,
-                                @Attribute(name = "ehrID", required=true) HierarchicalObjectID ehrID,
+    @FullConstructor public EHR (@Attribute(name = "systemID", required = true) HierObjectID systemID,
+                                @Attribute(name = "ehrID", required=true) HierObjectID ehrID,
                                 @Attribute(name = "timeCreated", required=true) DvDateTime timeCreated,
                                 @Attribute(name = "contributions", required=true) List<ObjectRef> contributions,
                                 @Attribute(name = "ehrStatus", required = true) ObjectRef ehrStatus,
@@ -100,7 +100,7 @@ public class EHR extends RMObject {
      * 
      * @return ehrID
      */
-    public HierarchicalObjectID getEhrID() {
+    public HierObjectID getEhrID() {
 		return ehrID;
 	}
 
@@ -118,7 +118,7 @@ public class EHR extends RMObject {
 	 * 
 	 * @return systemID
 	 */
-	public HierarchicalObjectID getSystemID() {
+	public HierObjectID getSystemID() {
 		return systemID;
 	}
 
@@ -175,7 +175,7 @@ public class EHR extends RMObject {
         this.id = id;
     }
 
-    void setEhrID(HierarchicalObjectID ehrID) {
+    void setEhrID(HierObjectID ehrID) {
 		this.ehrID = ehrID;
 	}
 
@@ -183,7 +183,7 @@ public class EHR extends RMObject {
 		this.ehrStatus = ehrStatus;
 	}
 
-	void setSystemID(HierarchicalObjectID systemID) {
+	void setSystemID(HierObjectID systemID) {
 		this.systemID = systemID;
 	}
 
@@ -205,8 +205,8 @@ public class EHR extends RMObject {
     // POJO end
 
     /* fields */
-    HierarchicalObjectID systemID;
-    HierarchicalObjectID ehrID;
+    HierObjectID systemID;
+    HierObjectID ehrID;
     DvDateTime timeCreated;
     List<ObjectRef> contributions;
     ObjectRef ehrStatus;

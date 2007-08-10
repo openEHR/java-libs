@@ -103,10 +103,10 @@ public class VersionedCompositionTest extends CompositionTestBase {
     // test versioned composition
     private VersionedComposition versionedComposition(String node, String text)
             throws Exception {
-        HierarchicalObjectID id = new HierarchicalObjectID("1.2.4.7");
+        HierObjectID id = new HierObjectID("1.2.4.7");
         Composition firstData = composition(node, text);
         ObjectRef ehrRef = new ObjectRef(
-                new HierarchicalObjectID("1.2.0.0.0.1.2"),
+                new HierObjectID("1.2.0.0.0.1.2"),
                 ObjectRef.Namespace.LOCAL,
                 ObjectRef.Type.EHR);
   
@@ -126,7 +126,7 @@ public class VersionedCompositionTest extends CompositionTestBase {
 
     // test contribution
     private ObjectRef contribution(String id) throws Exception {
-        return new ObjectRef(new HierarchicalObjectID(id),
+        return new ObjectRef(new HierObjectID(id),
                 ObjectRef.Namespace.LOCAL,
                 ObjectRef.Type.CONTRIBUTION);
     }
@@ -135,7 +135,7 @@ public class VersionedCompositionTest extends CompositionTestBase {
     private Composition composition(String node, String text)
             throws Exception {
         DvText name = new DvText(text, lang, charset, ts);
-        ObjectID id = new HierarchicalObjectID("1.11.2.5.1.66.3");
+        ObjectID id = new HierObjectID("1.11.2.5.1.66.3");
         List<ContentItem> content = new ArrayList<ContentItem>();
         content.add(section());
         DvCodedText category = TestCodeSetAccess.EVENT;
@@ -149,7 +149,7 @@ public class VersionedCompositionTest extends CompositionTestBase {
     private Composition compositionPersistent(String node, String text)
             throws Exception {
         DvText name = new DvText(text, lang, charset, ts);
-        ObjectID id = new HierarchicalObjectID("1.11.2.5.1.66.3");
+        ObjectID id = new HierObjectID("1.11.2.5.1.66.3");
         List<ContentItem> content = new ArrayList<ContentItem>();
         content.add(section());
         DvCodedText category = TestCodeSetAccess.PERSISTENT;
