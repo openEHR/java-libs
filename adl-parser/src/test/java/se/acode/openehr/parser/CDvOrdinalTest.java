@@ -96,7 +96,7 @@ public class CDvOrdinalTest extends ParserTestBase {
         assertEquals("codes.size", codes.length, list.size());
         for(Ordinal ordinal : list) {
             assertEquals("terminology", "local", 
-            		ordinal.getSymbol().getTerminologyID().getValue());
+            		ordinal.getSymbol().getTerminologyId().getValue());
             assertTrue("code missing", 
             		codeList.contains(ordinal.getSymbol().getCodeString()));
         }

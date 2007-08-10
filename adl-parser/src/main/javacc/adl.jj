@@ -2128,7 +2128,7 @@ String term_code() :
 }
 {
   code = code_phrase()
-  { return "[" + code.getTerminologyID() + "::" + code.getCodeString() + "]"; }
+  { return "[" + code.getTerminologyId() + "::" + code.getCodeString() + "]"; }
 }
 
 List term_code_list_value() :
@@ -2824,7 +2824,7 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
     { 
       codeList = new ArrayList();
       codeList.add(singleValue.getCodeString());
-      terminologyId = singleValue.getTerminologyID();
+      terminologyId = singleValue.getTerminologyId();
     }
   )
   {   	

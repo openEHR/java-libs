@@ -81,7 +81,7 @@ public class CDvQuantityTest extends ParserTestBase {
         // verify property 
         CodePhrase property = cdvquantity.getProperty();
         assertNotNull("property is null", property);
-        assertEquals("openehr", property.getTerminologyID().name());
+        assertEquals("openehr", property.getTerminologyId().name());
         assertEquals("128", property.getCodeString());
         
         // verify item list
