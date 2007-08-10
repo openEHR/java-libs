@@ -111,7 +111,7 @@ public class CCodePhrase extends CDomainType<CodePhrase> {
 			return false;
 		}
 		if(terminologyId != null 
-				&& !terminologyId.equals(value.getTerminologyID())) {
+				&& !terminologyId.equals(value.getTerminologyId())) {
 			return false;
 		}
 		if(codeList != null && !codeList.contains(value.getCodeString())) {

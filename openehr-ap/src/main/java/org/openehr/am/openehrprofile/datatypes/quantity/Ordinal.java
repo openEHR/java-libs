@@ -66,7 +66,7 @@ public final class Ordinal {
      * @return string form
      */
     public String toString() {
-        return "[" + symbol.getTerminologyID() + "] " + value 
+        return "[" + symbol.getTerminologyId() + "] " + value 
         + "|" + symbol.getCodeString();    
     }
     
