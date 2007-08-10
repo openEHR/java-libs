@@ -81,6 +81,24 @@ public final class DvInterval <T extends DvOrdered> extends DataValue {
     public boolean isUpperUnbounded() {
         return interval.getUpper() == null;
     }
+    
+    /**
+     * Checks if lower boundary valude included in range
+     * 
+     * @return true if included
+     */    
+    public boolean isLowerIncluded() {
+    	return interval.isLowerIncluded();
+    }
+    
+    /**
+     * Checks if upper boundary valude included in range
+     * 
+     * @return true if included
+     */
+    public boolean isUpperIncluded() {
+    	return interval.isUpperIncluded();
+    }
 
     /**
      * Returns true if lower >= value and value <= upper

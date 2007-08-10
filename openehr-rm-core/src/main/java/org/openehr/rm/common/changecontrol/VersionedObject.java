@@ -114,7 +114,7 @@ public class VersionedObject<T> extends RMObject {
     public synchronized void commitImportedVersion(OriginalVersion<T> item, AuditDetails commitAudit, 
             ObjectRef contribution, String signature) {
 
-        commitVersionCheck(item.getUid(), item.getPrecedingVersionID());
+        commitVersionCheck(item.getUid(), item.getPrecedingVersionUid());
         Version<T> version = new ImportedVersion<T>(item, commitAudit, contribution, signature);
         addVersion(version);
     }

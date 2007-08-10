@@ -102,7 +102,7 @@ public final class ItemList extends ItemStructure {
      *
      * @return List of Element
      */
-    public List<Element> items() {
+    public List<Element> getItems() {
         return items;
     }
 
@@ -147,7 +147,7 @@ public final class ItemList extends ItemStructure {
      *                                   (index < 0 || index >= size()).
      */
     public Element ithItem(int index) {
-        return items().get(index);
+        return getItems().get(index);
     }
 
     /**

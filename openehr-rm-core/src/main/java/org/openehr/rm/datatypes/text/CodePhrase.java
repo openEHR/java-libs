@@ -22,8 +22,8 @@ import org.openehr.rm.datatypes.basic.DataValue;
 
 /**
  * A fully coordinated (all coordination  has been performed)
- * term from a terminologyID service (as distinct from a particular
- * terminologyID). Instances of this class are immutable.
+ * term from a terminologyId service (as distinct from a particular
+ * terminologyId). Instances of this class are immutable.
  * 
  * @author Rong Chen
  * @version 1.0
@@ -31,40 +31,40 @@ import org.openehr.rm.datatypes.basic.DataValue;
 public final class CodePhrase extends DataValue {
 
     /**
-     * Constructs a CodePhrase by terminologyID and codeString
+     * Constructs a CodePhrase by terminologyId and codeString
      *
-     * @param terminologyID
+     * @param terminologyId
      * @param codeString
      * @throws IllegalArgumentException if terminolgy null
      *          or codeString null or empty
      */
     public CodePhrase(TerminologyID terminologyID, String codeString) {
         if(terminologyID == null) {
-            throw new IllegalArgumentException("null terminologyID");
+            throw new IllegalArgumentException("null terminologyId");
         }
         if(StringUtils.isEmpty(codeString)) {
             throw new IllegalArgumentException("empty codeString");
         }
-        this.terminologyID = terminologyID;
+        this.terminologyId = terminologyID;
         this.codeString = codeString;
     }
 
     /**
-     * Constructs a CodePhrase by terminologyID and codeString
+     * Constructs a CodePhrase by terminologyId and codeString
      *
-     * @param terminologyID
+     * @param terminologyId
      * @param codeString
      * @throws IllegalArgumentException if terminolgy null
      *          or codeString null or empty
      */
     public CodePhrase(String terminologyID, String codeString) {
         if(terminologyID == null) {
-            throw new IllegalArgumentException("null terminologyID");
+            throw new IllegalArgumentException("null terminologyId");
         }
         if(StringUtils.isEmpty(codeString)) {
             throw new IllegalArgumentException("empty codeString");
         }
-        this.terminologyID =  new TerminologyID(terminologyID);
+        this.terminologyId =  new TerminologyID(terminologyID);
         this.codeString = codeString;
     }
 
@@ -74,23 +74,23 @@ public final class CodePhrase extends DataValue {
      * @return <code>String</code>
      */
     public String toString() {
-        return terminologyID + ", " + codeString;
+        return terminologyId + ", " + codeString;
     }
 
     /**
-     * Identifier of the distinct terminologyID from which the
+     * Identifier of the distinct terminologyId from which the
      * code_string (or its elements) was extracted.
      *
      * @return <code>TerminologyID</code>
      */
-    public TerminologyID getTerminologyID() {
-        return terminologyID;
+    public TerminologyID getTerminologyId() {
+        return terminologyId;
     }
 
     /**
-     * The key used by the terminologyID service to identify a concept
+     * The key used by the terminologyId service to identify a concept
      * or coordination of concepts. This string is most likely
-     * parsable inside the terminologyID service, but nothing can be
+     * parsable inside the terminologyId service, but nothing can be
      * assumed about its syntax outside that context.
      *
      * @return <code>String</code>
@@ -101,7 +101,7 @@ public final class CodePhrase extends DataValue {
 
     /**
      * Two CodePhrases equal if both has same value for
-     * terminologyID and codeString
+     * terminologyId and codeString
      *
      * @param o
      * @return true if equals
@@ -113,7 +113,7 @@ public final class CodePhrase extends DataValue {
         final CodePhrase codePhrase = (CodePhrase) o;
 
         return new EqualsBuilder()
-        .append(terminologyID, codePhrase.terminologyID)
+        .append(terminologyId, codePhrase.terminologyId)
         .append(codeString, codePhrase.codeString)
         .isEquals();
     }
@@ -125,7 +125,7 @@ public final class CodePhrase extends DataValue {
      */
     public int hashCode() {
         return new HashCodeBuilder(13, 47)
-        .append(terminologyID)
+        .append(terminologyId)
         .append(codeString)
         .toHashCode();
     }
@@ -134,8 +134,8 @@ public final class CodePhrase extends DataValue {
     CodePhrase() {
     }
 
-    void setTerminologyID(TerminologyID terminologyID) {
-        this.terminologyID = terminologyID;
+    void setTerminologyId(TerminologyID terminologyID) {
+        this.terminologyId = terminologyID;
     }
 
     void setCodeString(String codeString) {
@@ -144,7 +144,7 @@ public final class CodePhrase extends DataValue {
     // POJO end
 
     /* fields */
-    private TerminologyID terminologyID;
+    private TerminologyID terminologyId;
     private String codeString;
 }
 

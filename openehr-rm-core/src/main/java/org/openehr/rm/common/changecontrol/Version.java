@@ -41,7 +41,7 @@ public abstract class Version <T> extends RMObject {
      * Constructs a Version
      *
      * @param versionID           not null or empty
-     * @param precedingVersionID  not null or empty
+     * @param precedingVersionUid  not null or empty
      * @throws IllegalArgumentException
      */
     public Version(ObjectVersionID uid, ObjectVersionID precedingVersionID,
@@ -100,7 +100,7 @@ public abstract class Version <T> extends RMObject {
      * serialising all attributes except signature
      */
     public String canonicalForm() {
-        //return uid.toString() + "," + precedingVersionID.toString() + 
+        //return uid.toString() + "," + precedingVersionUid.toString() + 
           //      "," + data.toString() + "," + lifeCycleState.toString() + 
             //    "," + commitAudit.toString() + "," + contribution.toString(); 
             //TODO:implement
@@ -131,8 +131,8 @@ public abstract class Version <T> extends RMObject {
      *
      * @return preceding versionID
      */
-    public ObjectVersionID getPrecedingVersionID() {
-        return precedingVersionID;
+    public ObjectVersionID getPrecedingVersionUid() {
+        return precedingVersionUid;
     }
 
     /**
@@ -190,8 +190,8 @@ public abstract class Version <T> extends RMObject {
         this.uid = uid;
     }
 
-    void setPrecedingVersionID(ObjectVersionID precedingVersionID) {
-        this.precedingVersionID = precedingVersionID;
+    void setPrecedingVersionUid(ObjectVersionID precedingVersionID) {
+        this.precedingVersionUid = precedingVersionID;
     }
 
     void setContribution(ObjectRef contribution) {
@@ -207,7 +207,7 @@ public abstract class Version <T> extends RMObject {
                AuditDetails commitAudit, ObjectRef contribution, 
                String signature) {
         this.uid = uid;
-        this.precedingVersionID = precedingVersionID;
+        this.precedingVersionUid = precedingVersionID;
         this.data = data;
         this.lifeCycleState = lifeCycleState;
         this.commitAudit = commitAudit;      
@@ -220,7 +220,7 @@ public abstract class Version <T> extends RMObject {
     /* fields */
     private AuditDetails commitAudit;
     private ObjectVersionID uid; 
-    private ObjectVersionID precedingVersionID;
+    private ObjectVersionID precedingVersionUid;
     private ObjectRef contribution;
     private T data;
     private DvCodedText lifeCycleState;

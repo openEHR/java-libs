@@ -117,8 +117,8 @@ public class Attestation extends AuditDetails {
      *
      * @return isPending
      */
-    public boolean getIsPending() {
-    		return isPending;
+    public boolean isPending() {
+    	return isPending;
     }
     
     // POJO start

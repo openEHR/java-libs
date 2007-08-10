@@ -33,8 +33,8 @@ public final class Interval<T extends Comparable> extends RMObject {
      *
      * @param lower          null if unbounded
      * @param upper          null if unbounded
-     * @param lowerInclusive if lower boundary inclusive
-     * @param upperInclusive if upper boundary inclusive
+     * @param lowerIncluded if lower boundary inclusive
+     * @param upperIncluded if upper boundary inclusive
      * @throws IllegalArgumentException if lower > upper
      */
     public Interval(T lower, T upper,
@@ -45,8 +45,8 @@ public final class Interval<T extends Comparable> extends RMObject {
         }
         this.lower = lower;
         this.upper = upper;
-        this.lowerInclusive = (lower == null ? false : lowerInclusive);
-        this.upperInclusive = (upper == null ? false : upperInclusive);
+        this.lowerIncluded = (lower == null ? false : lowerInclusive);
+        this.upperIncluded = (upper == null ? false : upperInclusive);
     }
 
     /**
@@ -101,8 +101,8 @@ public final class Interval<T extends Comparable> extends RMObject {
      *
      * @return true if inclusive
      */
-    public boolean isLowerInclusive() {
-        return lowerInclusive;
+    public boolean isLowerIncluded() {
+        return lowerIncluded;
     }
 
     /**
@@ -110,8 +110,8 @@ public final class Interval<T extends Comparable> extends RMObject {
      *
      * @return true if inclusive
      */
-    public boolean isUpperInclusive() {
-        return upperInclusive;
+    public boolean isUpperIncluded() {
+        return upperIncluded;
     }
 
     /**
@@ -127,10 +127,10 @@ public final class Interval<T extends Comparable> extends RMObject {
         }
         return ( lower == null
                 || value.compareTo(lower) > 0
-                || ( lowerInclusive && value.compareTo(lower) == 0 ) )
+                || ( lowerIncluded && value.compareTo(lower) == 0 ) )
                 && ( upper == null
                 || value.compareTo(upper) < 0
-                || ( upperInclusive && value.compareTo(upper) == 0 ) );
+                || ( upperIncluded && value.compareTo(upper) == 0 ) );
     }
 
     /**
@@ -149,8 +149,8 @@ public final class Interval<T extends Comparable> extends RMObject {
         return new EqualsBuilder()
                 .append(lower, interval.lower)
                 .append(upper, interval.upper)
-                .append(lowerInclusive, interval.lowerInclusive)
-                .append(upperInclusive, interval.upperInclusive)
+                .append(lowerIncluded, interval.lowerIncluded)
+                .append(upperIncluded, interval.upperIncluded)
                 .isEquals();
     }
 
@@ -163,8 +163,8 @@ public final class Interval<T extends Comparable> extends RMObject {
         return new HashCodeBuilder()
                 .append(lower)
                 .append(upper)
-                .append(lowerInclusive)
-                .append(upperInclusive)
+                .append(lowerIncluded)
+                .append(upperIncluded)
                 .toHashCode();
     }
 
@@ -178,9 +178,9 @@ public final class Interval<T extends Comparable> extends RMObject {
     public String toString() {
         return new ToStringBuilder(this)
                 .append("lower", lower)
-                .append("lowerInclusive", lowerInclusive)
+                .append("lowerIncluded", lowerIncluded)
                 .append("upper", upper)
-                .append("upperInclusive", upperInclusive)
+                .append("upperIncluded", upperIncluded)
                 .toString();
     }
 
@@ -196,20 +196,20 @@ public final class Interval<T extends Comparable> extends RMObject {
         this.upper = upper;
     }
 
-    private void setLowerInclusive(boolean lowerInclusive) {
-        this.lowerInclusive = lowerInclusive;
+    private void setLowerIncluded(boolean lowerInclusive) {
+        this.lowerIncluded = lowerInclusive;
     }
 
-    private void setUpperInclusive(boolean upperInclusive) {
-        this.upperInclusive = upperInclusive;
+    private void setUpperIncluded(boolean upperInclusive) {
+        this.upperIncluded = upperInclusive;
     }
     // POJO end
 
     /* fields */
     private T lower;
     private T upper;
-    private boolean lowerInclusive;
-    private boolean upperInclusive;
+    private boolean lowerIncluded;
+    private boolean upperIncluded;
 }
 
 /*

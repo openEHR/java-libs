@@ -50,7 +50,7 @@ public final class DvBoolean extends DataValue {
      *
      * @return boolean value
      */
-    public boolean value() {
+    public boolean getValue() {
         return value;
     }
 
@@ -107,10 +107,6 @@ public final class DvBoolean extends DataValue {
 
     // POJO start
     private DvBoolean() {
-    }
-
-    boolean getValue() {
-        return value;
     }
 
     private void setValue(boolean value) {

@@ -20,6 +20,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.datatypes.basic.DvIdentifier;
+import org.openehr.rm.datatypes.encapsulated.DvEncapsulated;
 
 /**
  * Audit and other meta-data for systems in the feeder chain. Instances of this class are
@@ -34,29 +35,33 @@ public final class FeederAudit extends RMObject {
      * Constrcuts a FeederAuditDetails
      *
      * @param originatingSystemAudit		not null
-     * @param originatingSystemItemIDs 	null if not specified
+     * @param originatingSystemItemIds 	null if not specified
      * @param feederSystemAudit			null if not specified
-     * @param feederSystemItemIDs			null if not specified
+     * @param feederSystemItemIds		null if not specified
+     * @param originalContent			null if not specified
+     * 
      * @throws IllegalArgumentException if originatingSystemAudit null,
-     * 	originatingSystemItemIDs or feederSystemItemIDs empty
+     * 	originatingSystemItemIds or feederSystemItemIds empty
      */
     public FeederAudit(FeederAuditDetails originatingSystemAudit,
     		List<DvIdentifier> originatingSystemItemIDs,
     		FeederAuditDetails feederSystemAudit,
-    		List<DvIdentifier> feederSystemItemIDs) {
+    		List<DvIdentifier> feederSystemItemIDs,
+    		DvEncapsulated originalContent) {
         if (originatingSystemAudit == null) {
             throw new IllegalArgumentException("null originatingSystemAudit");
         }
         if (originatingSystemItemIDs != null && originatingSystemItemIDs.size() == 0) {
-            throw new IllegalArgumentException("empty originatingSystemItemIDs");
+            throw new IllegalArgumentException("empty originatingSystemItemIds");
         }
         if (feederSystemItemIDs != null && feederSystemItemIDs.size() == 0) {
-            throw new IllegalArgumentException("empty feederSystemItemIDs");
+            throw new IllegalArgumentException("empty feederSystemItemIds");
         }
         this.originatingSystemAudit = originatingSystemAudit;
-        this.originatingSystemItemIDs = originatingSystemItemIDs;
+        this.originatingSystemItemIds = originatingSystemItemIDs;
         this.feederSystemAudit = feederSystemAudit;
-        this.feederSystemItemIDs = feederSystemItemIDs;
+        this.feederSystemItemIds = feederSystemItemIDs;
+        this.originalContent = originalContent;
     }
 
     /**
@@ -71,17 +76,17 @@ public final class FeederAudit extends RMObject {
 	/**
 	 * Identifiers used for the item in the originating system
 	 * 
-	 * @return originatingSystemItemIDs
+	 * @return originatingSystemItemIds or null if not specified
 	 */
-	public List<DvIdentifier> getOriginatingSystemItemIDs() {
-		return originatingSystemItemIDs;
+	public List<DvIdentifier> getOriginatingSystemItemIds() {
+		return originatingSystemItemIds;
 	}
 	
 	/**
 	 * Audit information for the information item from the feeder system,
 	 * if different from the originating system
 	 * 
-	 * @return feederSystemAudit
+	 * @return feederSystemAudit or null if not specified
 	 */
     public FeederAuditDetails getFeederSystemAudit() {
 		return feederSystemAudit;
@@ -91,10 +96,22 @@ public final class FeederAudit extends RMObject {
      * Identifiers used for the item in the feeder system, where the feeder
      * system is distinct from the originating system
      * 
-     * @return feederSystemItemIDs
+     * @return feederSystemItemIds or null if not specified
      */
-	public List<DvIdentifier> getFeederSystemItemIDs() {
-		return feederSystemItemIDs;
+	public List<DvIdentifier> getFeederSystemItemIds() {
+		return feederSystemItemIds;
+	}
+	
+	/**
+	 * Optional inline inclusion of or reference to original content 
+	 * corresponding to the openEHR content at this node. Typically a URI 
+	 * reference to a document or message in a persistent store associated 
+	 * with the EHR.
+	 * 
+	 * @return originalContent or null if not specified
+	 */
+	public DvEncapsulated getOriginalContent() {
+		return originalContent;
 	}
 
     /**
@@ -111,9 +128,10 @@ public final class FeederAudit extends RMObject {
 
         return new EqualsBuilder()
                 .append(originatingSystemAudit, fa.originatingSystemAudit)
-                .append(originatingSystemItemIDs, fa.originatingSystemItemIDs)
+                .append(originatingSystemItemIds, fa.originatingSystemItemIds)
                 .append(feederSystemAudit, fa.feederSystemAudit)
-                .append(feederSystemItemIDs, fa.feederSystemItemIDs)
+                .append(feederSystemItemIds, fa.feederSystemItemIds)
+                .append(originalContent, fa.originalContent)
                 .isEquals();
     }
 
@@ -125,9 +143,10 @@ public final class FeederAudit extends RMObject {
     public int hashCode() {
         return new HashCodeBuilder(7,19)
                 .append(originatingSystemAudit)
-                .append(originatingSystemItemIDs)
+                .append(originatingSystemItemIds)
                 .append(feederSystemAudit)
-                .append(feederSystemItemIDs)
+                .append(feederSystemItemIds)
+                .append(originalContent)
                 .toHashCode();
     }
     
@@ -139,28 +158,27 @@ public final class FeederAudit extends RMObject {
         this.originatingSystemAudit = originatingSystemAudit;
     }
 
-    void setOriginatingSystemItemIDs(List<DvIdentifier> originatingSystemItemIDs) {
-        this.originatingSystemItemIDs = originatingSystemItemIDs;
+    void setOriginatingSystemItemIds(List<DvIdentifier> originatingSystemItemIDs) {
+        this.originatingSystemItemIds = originatingSystemItemIDs;
     }
 
     void setFeederSystemAudit(FeederAuditDetails feederSystemAudit) {
         this.feederSystemAudit = feederSystemAudit;
     }
 
-    void setFeederSystemItemIDs(List<DvIdentifier> feederSystemItemIDs) {
-        this.feederSystemItemIDs = feederSystemItemIDs;
+    void setFeederSystemItemIds(List<DvIdentifier> feederSystemItemIDs) {
+        this.feederSystemItemIds = feederSystemItemIDs;
     }
 
     // POJO end
 
     /* fields */
     private FeederAuditDetails originatingSystemAudit;
-    private List<DvIdentifier> originatingSystemItemIDs;
+    private List<DvIdentifier> originatingSystemItemIds;
     private FeederAuditDetails feederSystemAudit;
-    private List<DvIdentifier> feederSystemItemIDs;
-
+    private List<DvIdentifier> feederSystemItemIds;
+    private DvEncapsulated originalContent;
 }
-
 /*
  *  ***** BEGIN LICENSE BLOCK *****
  *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -178,7 +196,7 @@ public final class FeederAudit extends RMObject {
  *  The Original Code is FeederAudit.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2007
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

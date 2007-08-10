@@ -22,7 +22,6 @@ package org.openehr.rm.common.archetyped;
 
 import junit.framework.TestCase;
 import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.identification.HierObjectID;
 
 public class ArchetypedTest extends TestCase {
 
@@ -48,10 +47,10 @@ public class ArchetypedTest extends TestCase {
         new Archetyped(aid("openehr-ehr_rm-section.physical_examination.v2"),
                 "1.1");
 
-        assertExceptionThrown(null, "1.1", "archetypeID");
+        assertExceptionThrown(null, "1.1", "archetypeId");
         assertExceptionThrown(aid(
                 "openehr-ehr_rm-section.physical_examination.v2"),
-                null, "referenceModelVersion");
+                null, "rmVersion");
     }
 
     public void testEquals() {
@@ -82,10 +81,10 @@ public class ArchetypedTest extends TestCase {
     }
 
     private void assertExceptionThrown(ArchetypeID archetypeID,
-                                       String referenceModelVersion,
+                                       String rmVersion,
                                        String cause) {
         try {
-            new Archetyped(archetypeID, referenceModelVersion);
+            new Archetyped(archetypeID, rmVersion);
             fail("exception should be thrown here");
         } catch (Exception e) {
             assertTrue(e instanceof IllegalArgumentException);

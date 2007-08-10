@@ -86,11 +86,12 @@ public final class ItemTable extends ItemStructure {
         this(null, archetypeNodeId, name, null, null, null, null, representation);
     }
 
-    // list of columns
-    //private List<Item> columns() {  
-    //}
-
-    private List<Item> rows() {
+    /**
+     * Gets rows
+     * 
+     * @return rows
+     */
+    public List<Item> getRows() {
         return ((Cluster) getRepresentation() ).getItems();
     }
     
@@ -102,7 +103,7 @@ public final class ItemTable extends ItemStructure {
     public int rowCount() {
         //Cluster firstCol = (Cluster) columns().get(0);
         //return firstCol.getItems().size();
-        return rows().size();
+        return getRows().size();
     }
 
     /**
@@ -111,7 +112,7 @@ public final class ItemTable extends ItemStructure {
      * @return column count
      */
     public int columnCount() {
-        Cluster firstCol = (Cluster) rows().get(0);
+        Cluster firstCol = (Cluster) getRows().get(0);
         return firstCol.getItems().size();
     }
 
@@ -123,7 +124,7 @@ public final class ItemTable extends ItemStructure {
     public List<DvText> rowNames() {
         //Cluster firstCol = (Cluster) columns().get(0);
         //return fetchNames(( firstCol.getItems() ));
-        return fetchNames(rows());
+        return fetchNames(getRows());
     }
 
     /**
@@ -133,7 +134,7 @@ public final class ItemTable extends ItemStructure {
      */
     public List<DvText> columnNames() {
         //return fetchNames(columns());
-        Cluster firstCol = (Cluster) rows().get(0);
+        Cluster firstCol = (Cluster) getRows().get(0);
         return fetchNames(( firstCol.getItems() ));
     }
 
@@ -156,7 +157,7 @@ public final class ItemTable extends ItemStructure {
         if (index < 0 || index >= rowCount()) {
             throw new IndexOutOfBoundsException("invalid index");
         }
-        return (Cluster)rows().get(index);
+        return (Cluster)getRows().get(index);
         /*List<Element> rows = new ArrayList<Element>();
         for (Item item : columns()) {
             Cluster column = (Cluster) item;
@@ -174,7 +175,7 @@ public final class ItemTable extends ItemStructure {
      */
     public boolean hasRowWithName(String name) {
         checkName(name);
-        return hasItemWithName(rows(), name);
+        return hasItemWithName(getRows(), name);
     }
 
     /**
@@ -186,7 +187,7 @@ public final class ItemTable extends ItemStructure {
      */
     public boolean hasColumnWithName(String name) {
         checkName(name);        
-        Cluster firstRow = (Cluster) rows().get(0);
+        Cluster firstRow = (Cluster) getRows().get(0);
         return hasItemWithName(firstRow.getItems(), name);
     }
 
@@ -232,11 +233,11 @@ public final class ItemTable extends ItemStructure {
             rows.add((Element) column.getItems().get(index));
         }
         return rows;*/
-        int index = indexOf(rows(), name);
+        int index = indexOf(getRows(), name);
         if (index < 0) {
             throw new IllegalArgumentException("unknow row name: " + name);
         }
-        return (Cluster)rows().get(index);
+        return (Cluster)getRows().get(index);
         
     }
 
@@ -279,7 +280,7 @@ public final class ItemTable extends ItemStructure {
         if (row < 0 || row >= rowCount()) {
             throw new IllegalArgumentException("invalid row index: " + row);
         }
-        Cluster targetRow = (Cluster) rows().get(row);
+        Cluster targetRow = (Cluster) getRows().get(row);
         if (col < 0 || col >= targetRow.getItems().size()) {
             throw new IllegalArgumentException("invalid column index: " + col);
         }
@@ -358,7 +359,7 @@ public final class ItemTable extends ItemStructure {
                 throw new IllegalArgumentException("invalid path: " + path);
             }
             String colname = subpart.substring(0, index);
-            Item item = itemWithName(rows(), colname, path);
+            Item item = itemWithName(getRows(), colname, path);
             if(item == null) {
                 throw new IllegalArgumentException("invalid path: " + path);
             }
@@ -371,7 +372,7 @@ public final class ItemTable extends ItemStructure {
             String rowname = subpart.substring(ROW_IS.length());
             return itemWithName(column.getItems(), rowname, path);
         } else { // fetch a column
-            return itemWithName(rows(), subpart, path);
+            return itemWithName(getRows(), subpart, path);
         }
     }
 

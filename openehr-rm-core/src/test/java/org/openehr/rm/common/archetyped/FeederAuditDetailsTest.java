@@ -46,19 +46,19 @@ public class FeederAuditDetailsTest extends TestCase {
         // test with null or empty systemID
         assertExceptionThrown(null, null, null,
                 new DvDateTime("2004-10-12T09:00:00"),
-                null, "versionid12.1", "null or empty systemID");
+                null, "versionid12.1", "null or empty systemId");
 
         assertExceptionThrown("", null, null,
                 new DvDateTime("2004-10-12T09:00:00"),
-                null, "versionid12.1", "null or empty systemID");
+                null, "versionid12.1", "null or empty systemId");
     }
  
     public void testEquals() throws Exception {
-        FeederAuditDetails fad1 = new FeederAuditDetails("systemID", null, null,
+        FeederAuditDetails fad1 = new FeederAuditDetails("systemId", null, null,
                 new DvDateTime("2004-10-12T09:00:00"),
                 null, "versionid12.1");
 
-        FeederAuditDetails fad2 = new FeederAuditDetails("systemID", null, null,
+        FeederAuditDetails fad2 = new FeederAuditDetails("systemId", null, null,
                 new DvDateTime("2004-10-12T09:00:00"),
                 null, "versionid12.1");
 

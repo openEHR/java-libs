@@ -77,7 +77,7 @@ public final class ItemSingle extends ItemStructure {
      *
      * @return item
      */
-    public Element item() {
+    public Element getItem() {
         return (Element) getRepresentation();
     }
 
@@ -101,7 +101,7 @@ public final class ItemSingle extends ItemStructure {
      */
     public Locatable itemAtPath(String path) {
         if(validPath(path)) {
-            return item();
+            return getItem();
         }
         throw new IllegalArgumentException("invalid path: " + path);
     }

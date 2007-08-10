@@ -42,7 +42,7 @@ public final class ImportedVersion<T> extends Version<T> {
     public ImportedVersion(OriginalVersion<T> original, AuditDetails commitAudit,
             ObjectRef contribution, String signature) {
         if (original == null) {
-            throw new IllegalArgumentException("null original version");
+            throw new IllegalArgumentException("null item version");
         }
         if (commitAudit == null) {
             throw new IllegalArgumentException("null audit");
@@ -50,37 +50,37 @@ public final class ImportedVersion<T> extends Version<T> {
         if (contribution == null) {
             throw new IllegalArgumentException("null contribution");
         }
-        this.original = original;
-        setAttributes(original.getUid(), original.getPrecedingVersionID(),
+        this.item = original;
+        setAttributes(original.getUid(), original.getPrecedingVersionUid(),
             original.getData(), original.getLifeCycleState(), commitAudit, 
             contribution, signature);
     }
     
     /**
-     * The original Version object that was imported.
+     * The item Version object that was imported.
      *
      * @return item
      */
-    public OriginalVersion<T> getOriginalVersion() {
-        return original;
+    public OriginalVersion<T> getItem() {
+        return item;
     }
         
     //POJO start
     ImportedVersion() {
     }
     
-    void setOriginalVersion(OriginalVersion<T> original) {
+    void setItem(OriginalVersion<T> original) {
         if(original != null) {
-            this.original = original;
+            this.item = original;
         } else {
-            throw new IllegalArgumentException("null original version");
+            throw new IllegalArgumentException("null item version");
         }
     }
     
     //POJO end
     
     /* fields */
-    private OriginalVersion<T> original;
+    private OriginalVersion<T> item;
 
 }
 

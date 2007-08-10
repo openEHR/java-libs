@@ -140,8 +140,13 @@ public final class ItemTree extends ItemStructure {
         return (Cluster) getRepresentation();
     }
 
-    private List<Item> items() {
-    		return ( (Cluster) getRepresentation() ).getItems();
+    /**
+     * Gets the items
+     * 
+     * @return items
+     */
+    public List<Item> getItems() {
+    	return ( (Cluster) getRepresentation() ).getItems();
     }
     
     private List<String> checkAndParsePath(String path) {

@@ -19,6 +19,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.support.identification.ArchetypeID;
+import org.openehr.rm.support.identification.TemplateID;
 
 /**
  * Archetypes act as the configuration basis for the particular
@@ -38,43 +39,66 @@ import org.openehr.rm.support.identification.ArchetypeID;
 public final class Archetyped extends RMObject {
 
     /**
-     * Construcst an Archetyped
+     * Creates an Archetyped
      *
-     * @param archetypeID
-     * @param accessControl
-     * @param referenceModelVersion
-     * @throws IllegalArgumentException if archetypeID null
-     *                                  or referenceModelVersion empty
+     * @param archetypeId	not null
+     * @param templateId    null if unspecified
+     * @param rmVersion     not null or empty
+     * 
+     * @throws IllegalArgumentException if archetypeId null
+     *                                  or rmVersion empty
      */
-    public Archetyped(ArchetypeID archetypeID,
-                      String referenceModelVersion) {
-        if (archetypeID == null) {
-            throw new IllegalArgumentException("null archetypeID");
+    public Archetyped(ArchetypeID archetypeId, TemplateID templateId,    		
+                      String rmVersion) {
+        if (archetypeId == null) {
+            throw new IllegalArgumentException("null archetypeId");
         }
-        if (StringUtils.isEmpty(referenceModelVersion)) {
-            throw new IllegalArgumentException("empty referenceModelVersion");
+        if (StringUtils.isEmpty(rmVersion)) {
+            throw new IllegalArgumentException("empty rmVersion");
         }
-        this.archetypeID = archetypeID;
-        this.referenceModelVersion = referenceModelVersion;
+        this.archetypeId = archetypeId;
+        this.templateId = templateId;
+        this.rmVersion = rmVersion;
+    }
+    
+    /**
+     * Creates an Archetyped without a templateId
+     *
+     * @param archetypeId
+     * @param rmVersion
+     * @throws IllegalArgumentException if archetypeId null
+     *                                  or rmVersion empty
+     */
+    public Archetyped(ArchetypeID archetypeId, String rmVersion) {
+        this(archetypeId, null, rmVersion);
     }
 
     /**
      * Globally unique archetype identifier
      *
-     * @return archetypeID
+     * @return archetypeId
      */
-    public ArchetypeID getArchetypeID() {
-        return archetypeID;
+    public ArchetypeID getArchetypeId() {
+        return archetypeId;
+    }
+    
+    /**
+     * Globally unique template identifier
+     *
+     * @return templateId or null if not specified
+     */
+    public TemplateID getTemplateId() {
+        return templateId;
     }
 
     /**
      * Version of the openEHR reference model used to create this
      * object
      *
-     * @return referenceModelVersion
+     * @return rmVersion
      */
-    public String getReferenceModelVersion() {
-        return referenceModelVersion;
+    public String getRmVersion() {
+        return rmVersion;
     }
 
     /**
@@ -90,9 +114,9 @@ public final class Archetyped extends RMObject {
         final Archetyped archetyped = (Archetyped) o;
 
         return new EqualsBuilder()
-                .append(archetypeID, archetyped.archetypeID)
-                .append(referenceModelVersion,
-                        archetyped.referenceModelVersion)
+                .append(archetypeId, archetyped.archetypeId)
+                .append(templateId, archetyped.templateId)
+                .append(rmVersion, archetyped.rmVersion)
                 .isEquals();
     }
 
@@ -103,8 +127,9 @@ public final class Archetyped extends RMObject {
      */
     public int hashCode() {
         return new HashCodeBuilder(7,19)
-                .append(archetypeID)
-                .append(referenceModelVersion)
+                .append(archetypeId)
+                .append(templateId)                
+                .append(rmVersion)
                 .toHashCode();
     }
 
@@ -112,18 +137,19 @@ public final class Archetyped extends RMObject {
     Archetyped() {
     }
 
-    void setArchetypeID(ArchetypeID archetypeID) {
-        this.archetypeID = archetypeID;
+    void setArchetypeId(ArchetypeID archetypeID) {
+        this.archetypeId = archetypeID;
     }
 
-    void setReferenceModelVersion(String referenceModelVersion) {
-        this.referenceModelVersion = referenceModelVersion;
+    void setRmVersion(String rmVersion) {
+        this.rmVersion = rmVersion;
     }
     // POJO end
 
     /* fields */
-    private ArchetypeID archetypeID;
-    private String referenceModelVersion;
+    private ArchetypeID archetypeId;
+    private TemplateID templateId;
+    private String rmVersion;
 }
 
 /*
@@ -143,7 +169,7 @@ public final class Archetyped extends RMObject {
  *  The Original Code is Archetyped.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2007
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

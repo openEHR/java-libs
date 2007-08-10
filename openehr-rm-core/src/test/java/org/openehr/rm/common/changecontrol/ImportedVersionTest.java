@@ -61,10 +61,10 @@ public class ImportedVersionTest extends ChangeControlTestBase {
             contribution("1.4.4.15::1.2.840.114.1.2.2::1", "path/morePath"), 
             null);
         assertEquals("1.4.4.5::1.2.840.114.1.2.2::1", iv.getUid().toString());
-        assertEquals(null, iv.getPrecedingVersionID());
+        assertEquals(null, iv.getPrecedingVersionUid());
         assertEquals(lifeCycleState("complete"), iv.getLifeCycleState());
         assertEquals("a name", iv.getData());
-        assertEquals(ov, iv.getOriginalVersion());
+        assertEquals(ov, iv.getItem());
         
     }
     

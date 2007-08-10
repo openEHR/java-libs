@@ -57,7 +57,7 @@ public class ItemListTest extends DataStructureTestBase {
 
     public void testItems() throws Exception {
         assertEquals("items", Arrays.asList(elementArray),
-                itemList.items());
+                itemList.getItems());
     }
 
     public void testNames() throws Exception {

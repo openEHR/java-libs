@@ -153,6 +153,15 @@ public abstract class DvTemporal<T extends DvTemporal> extends
 	public String toString() {
 		return value;
 	}
+	
+	/**
+	 * Gets the string value
+	 * 
+	 * @return value
+	 */
+	public String getValue() {
+		return value;
+	}
 
 	protected String timeZoneString() {
 		int offset = dateTime.getZone().getOffset(dateTime.getMillis()) / 60000; // timezone

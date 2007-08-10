@@ -150,8 +150,8 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
         }
         final DvOrdinal dvOrdinal = (DvOrdinal) ordered;
 
-        if (!symbol.getDefiningCode().getTerminologyID().equals(
-                dvOrdinal.symbol.getDefiningCode().getTerminologyID())) {
+        if (!symbol.getDefiningCode().getTerminologyId().equals(
+                dvOrdinal.symbol.getDefiningCode().getTerminologyId())) {
             return false;
         }
         // todo: chevk if symbols are from same subset or value range in the same vocabulary

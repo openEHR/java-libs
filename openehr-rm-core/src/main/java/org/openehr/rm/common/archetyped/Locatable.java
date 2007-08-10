@@ -298,7 +298,7 @@ public abstract class Locatable extends RMObject {
         if (!isArchetypeRoot()) {
             throw new UnsupportedOperationException("not root node");
         }
-        return new DvText(archetypeDetails.getArchetypeID().conceptName());
+        return new DvText(archetypeDetails.getArchetypeId().conceptName());
     }
 
     /**

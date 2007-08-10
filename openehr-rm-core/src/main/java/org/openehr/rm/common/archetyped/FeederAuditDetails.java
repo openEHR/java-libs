@@ -34,36 +34,36 @@ public final class FeederAuditDetails extends RMObject {
     /**
      * Constrcuts a FeederAuditDetails
      *
-     * @param systemID           not null
+     * @param systemId           not null
      * @param provider		   null if not present
      * @param timeCommitted      null if not present
      * @param location		   null if not present
      * @param time			   null if not present
      * @param subject			   null if not present
-     * @param versionID		   null if not present
-     * @throws IllegalArgumentException if systemID is null or empty
+     * @param versionId		   null if not present
+     * @throws IllegalArgumentException if systemId is null or empty
      */
     public FeederAuditDetails(String systemID, PartyIdentified provider,
     		PartyIdentified location, DvDateTime time, PartyProxy subject,
     		String versionID) {
         if (StringUtils.isEmpty(systemID)) {
-            throw new IllegalArgumentException("null or empty systemID");
+            throw new IllegalArgumentException("null or empty systemId");
         }
-        this.systemID = systemID;
+        this.systemId = systemID;
         this.provider = provider;
         this.location = location;
         this.time = time;
         this.subject = subject;
-        this.versionID = versionID;
+        this.versionId = versionID;
     }
 
     /**
      * Identity of the system which handled the information item
      *
-     * @return systemID
+     * @return systemId
      */
-    public String getSystemID() {
-        return systemID;
+    public String getSystemId() {
+        return systemId;
     }
 
     /**
@@ -105,10 +105,10 @@ public final class FeederAuditDetails extends RMObject {
     /**
      * Any identifier used in the system if available
      *
-     * @return versionID
+     * @return versionId
      */
-    public String getVersionID() {
-        return versionID;
+    public String getVersionId() {
+        return versionId;
     }
 
     /**
@@ -124,12 +124,12 @@ public final class FeederAuditDetails extends RMObject {
         final FeederAuditDetails fad = (FeederAuditDetails) o;
 
         return new EqualsBuilder()
-                .append(systemID, fad.systemID)
+                .append(systemId, fad.systemId)
                 .append(provider, fad.provider)
                 .append(location, fad.location)
                 .append(time, fad.time)
                 .append(subject, fad.subject)
-                .append(versionID, fad.versionID)
+                .append(versionId, fad.versionId)
                 .isEquals();
     }
 
@@ -140,12 +140,12 @@ public final class FeederAuditDetails extends RMObject {
      */
     public int hashCode() {
         return new HashCodeBuilder(7, 23)
-                .append(systemID)
+                .append(systemId)
                 .append(provider)
                 .append(location)
                 .append(time)
                 .append(subject)
-                .append(versionID)
+                .append(versionId)
                 .toHashCode();
     }
 
@@ -160,16 +160,16 @@ public final class FeederAuditDetails extends RMObject {
 		this.subject = subject;
 	}
 
-	void setSystemID(String systemID) {
-		this.systemID = systemID;
+	void setSystemId(String systemID) {
+		this.systemId = systemID;
 	}
 
 	void setTime(DvDateTime time) {
 		this.time = time;
 	}
 
-	void setVersionID(String versionID) {
-		this.versionID = versionID;
+	void setVersionId(String versionID) {
+		this.versionId = versionID;
 	}
 	
 	void setLocation(PartyIdentified location) {
@@ -178,12 +178,12 @@ public final class FeederAuditDetails extends RMObject {
     //POJO end
 	
     /* fields */
-    private String systemID;
+    private String systemId;
     private PartyIdentified provider;
     private PartyIdentified location;
     private DvDateTime time;
     private PartyProxy subject;
-    private String versionID;
+    private String versionId;
     
 }
 

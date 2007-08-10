@@ -59,7 +59,7 @@ public final class RevisionHistory extends RMObject {
      * @return versionID
      */
     public String mostRecentVersionId() {
-    		return items.get(items.size()-1).getVersionID().getValue();
+    		return items.get(items.size()-1).getVersionId().getValue();
     }
     
     /**

@@ -33,18 +33,18 @@ public final class RevisionHistoryItem extends RMObject {
 	 * Constructs a RevisionHistoryItem
 	 * 
 	 * @param audits		not null
-	 * @param versionID	not null
-	 * @throws IllegalArgumentException if audits null or empty, versionID null
+	 * @param versionId	not null
+	 * @throws IllegalArgumentException if audits null or empty, versionId null
 	 */
 	public RevisionHistoryItem(List<AuditDetails> audits, ObjectVersionID versionID) {
 	       if (audits == null || audits.size() == 0) {
 	            throw new IllegalArgumentException("empty audits");
 	        }
 	       if (versionID == null) {
-	    	   	throw new IllegalArgumentException("null versionID");
+	    	   	throw new IllegalArgumentException("null versionId");
 	       }
 	       this.audits = audits;
-	       this.versionID = versionID;
+	       this.versionId = versionID;
 	}
 	
 	/**
@@ -59,10 +59,10 @@ public final class RevisionHistoryItem extends RMObject {
 	/**
 	 * Version identifier for this revision
 	 * 
-	 * @return versionID
+	 * @return versionId
 	 */
-	public ObjectVersionID getVersionID() {
-		return versionID;
+	public ObjectVersionID getVersionId() {
+		return versionId;
 	}	
 
     /**
@@ -79,7 +79,7 @@ public final class RevisionHistoryItem extends RMObject {
 
         return new EqualsBuilder()
                 .append(audits, rhi.audits)
-                .append(versionID, rhi.versionID)
+                .append(versionId, rhi.versionId)
                 .isEquals();
     }
 
@@ -91,7 +91,7 @@ public final class RevisionHistoryItem extends RMObject {
     public int hashCode() {
         return new HashCodeBuilder(3, 97)
                 .append(audits)
-                .append(versionID)
+                .append(versionId)
                 .toHashCode();
     }
     //POJO start
@@ -102,14 +102,14 @@ public final class RevisionHistoryItem extends RMObject {
             this.audits = audits;
     }
 
-    void setVersionID(ObjectVersionID versionID) {
-            this.versionID = versionID;
+    void setVersionId(ObjectVersionID versionID) {
+            this.versionId = versionID;
     }
     //POJO end
 
     /* fields */
     private List<AuditDetails> audits;
-    private ObjectVersionID versionID;
+    private ObjectVersionID versionId;
 }
 
 /*

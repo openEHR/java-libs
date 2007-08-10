@@ -44,7 +44,7 @@ public class DvText extends DataValue {
      * @param formatting         null if unspecified
      * @param hyperlink          null if unspecifed
      * @param language           not null and valid language code
-     * @param charset            not null and valid charset code
+     * @param encoding            not null and valid encoding code
      * @param terminologyService not null
      * @throws IllegalArgumentException if any of the components
      *                                  is invalid
@@ -55,7 +55,7 @@ public class DvText extends DataValue {
             @Attribute(name = "formatting") String formatting,
             @Attribute(name = "hyperlink") DvURI hyperlink,
             @Attribute(name = "language") CodePhrase language,
-            @Attribute(name = "charset") CodePhrase charset,
+            @Attribute(name = "encoding") CodePhrase charset,
             @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
         if (!validValue(value)) {
             throw new IllegalArgumentException("invalid value: " + value);
@@ -86,17 +86,17 @@ public class DvText extends DataValue {
         this.formatting = formatting;
         this.hyperlink = hyperlink;
         this.language = language;
-        this.charset = charset;
+        this.encoding = charset;
     }
 
     /**
-     * Constructs a DvText by string value, language and charset
+     * Constructs a DvText by string value, language and encoding
      *
      * @param value
      * @param language
-     * @param charset
+     * @param encoding
      * @param terminologyService
-     * @throws IllegalArgumentException if value, language or charset
+     * @throws IllegalArgumentException if value, language or encoding
      *                                  are empty or invalid
      */
     public DvText(String value, CodePhrase language,
@@ -183,13 +183,13 @@ public class DvText extends DataValue {
      *
      * @return character set or null if not specified
      */
-    public CodePhrase getCharset() {
-        return charset;
+    public CodePhrase getEncoding() {
+        return encoding;
     }
 
     /**
      * Returns true if both has the same values for string
-     * value, language and charset, all optional attributes are not
+     * value, language and encoding, all optional attributes are not
      * included in comparision
      *
      * @param o
@@ -204,7 +204,7 @@ public class DvText extends DataValue {
         return new EqualsBuilder()
                 .append(value, dvText.value)
                 .append(language, dvText.language)
-                .append(charset, dvText.charset)
+                .append(encoding, dvText.encoding)
                 .isEquals();
     }
 
@@ -217,7 +217,7 @@ public class DvText extends DataValue {
         return new HashCodeBuilder(17, 47)
                 .append(value)
                 .append(language)
-                .append(charset)
+                .append(encoding)
                 .toHashCode();
     }
 
@@ -245,8 +245,8 @@ public class DvText extends DataValue {
         this.language = language;
     }
 
-    protected void setCharset(CodePhrase charset) {
-        this.charset = charset;
+    protected void setEncoding(CodePhrase charset) {
+        this.encoding = charset;
     }
     // POJO end
 
@@ -256,7 +256,7 @@ public class DvText extends DataValue {
     private String formatting;
     private DvURI hyperlink;
     private CodePhrase language;
-    private CodePhrase charset;
+    private CodePhrase encoding;
 }
 
 /*
