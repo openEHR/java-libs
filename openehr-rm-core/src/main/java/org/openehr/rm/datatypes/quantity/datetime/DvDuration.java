@@ -147,8 +147,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	 * @param start
 	 * @param end
 	 */
-	public static DvDuration getDifference(DvWorldDateTime start,
-			DvWorldDateTime end) {
+	public static DvDuration getDifference(DvTemporal start, DvTemporal end) {
 		Duration d = new Duration(start.getDateTime(), end.getDateTime());
 		DvDateTime dt = (DvDateTime) end;
 		return new DvDuration(null, null, null, end.getAccuracy(), false, null,

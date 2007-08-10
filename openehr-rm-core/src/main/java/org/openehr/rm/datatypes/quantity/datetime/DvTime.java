@@ -41,7 +41,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
  * does not take 24 for hour!
  *
  */
-public class DvTime extends DvWorldDateTime<DvTime> {
+public class DvTime extends DvTemporal<DvTime> {
 
 	/**
 	 * Construct a DvTime
@@ -256,11 +256,6 @@ public class DvTime extends DvWorldDateTime<DvTime> {
 		return add(q.negate());
 	}
 	
-	@Override
-	public DvAmount diff(DvTime other) {
-		return DvDuration.getDifference(this, other);
-	}
-
 	@Override
 	public boolean isStrictlyComparableTo(DvOrdered ordered) {
 		// TODO Auto-generated method stub

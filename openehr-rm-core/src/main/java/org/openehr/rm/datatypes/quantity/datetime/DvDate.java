@@ -34,7 +34,7 @@ import org.joda.time.MutableDateTime;
  * @author Rong Chen
  * @version 1.0
  */
-public class DvDate extends DvWorldDateTime<DvDate> {
+public class DvDate extends DvTemporal<DvDate> {
 
 	/**
 	 * Construct a DvDate
@@ -296,11 +296,6 @@ public class DvDate extends DvWorldDateTime<DvDate> {
 			throw new IllegalArgumentException("invalid difference type");
 		}		
 		return add(q.negate());
-	}
-
-	@Override
-	public DvDuration diff(DvDate other) {
-		return DvDuration.getDifference(this, other);
 	}
 
 	/* private fields */

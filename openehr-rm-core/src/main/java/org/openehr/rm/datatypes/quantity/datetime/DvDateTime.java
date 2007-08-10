@@ -37,7 +37,7 @@ import org.openehr.rm.datatypes.text.CodePhrase;
  * @author Yin Su Lim
  * @version 1.0
  */
-public class DvDateTime extends DvWorldDateTime<DvDateTime> {
+public class DvDateTime extends DvTemporal<DvDateTime> {
 
 	/* static fields */
 	static final DateTimeFormatter eDTimeFormatter = ISODateTimeFormat
@@ -362,11 +362,6 @@ public class DvDateTime extends DvWorldDateTime<DvDateTime> {
 
 	void setIsPartial(boolean isPartial) {
 		this.isPartial = isPartial;
-	}
-
-	@Override
-	public DvDuration diff(DvDateTime other) {
-		return DvDuration.getDifference(this, other);
 	}
 
 	@Override
