@@ -31,7 +31,7 @@ import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.TestCodePhrase;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.LocatableRef;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
@@ -62,7 +62,7 @@ public class ChangeControlTestBase extends TestCase {
     
     protected AuditDetails audit(String id, String name, String changeType, String dt) {
         PartyIdentified pi = new PartyIdentified(new PartyRef(
-                new HierarchicalObjectID(id), 
+                new HierObjectID(id), 
                 ObjectRef.Type.PARTY), name, null);
         CodePhrase codePhrase =
                 new CodePhrase(TestTerminologyID.SNOMEDCT, "revisionCode");
@@ -89,7 +89,7 @@ public class ChangeControlTestBase extends TestCase {
                 TestCodePhrase.LATIN_1, codePhrase,
                 TestTerminologyService.getInstance());
         PartyIdentified pi = new PartyIdentified(new PartyRef(
-                new HierarchicalObjectID("1-2-3-4-5"), 
+                new HierObjectID("1-2-3-4-5"), 
                 ObjectRef.Type.PARTY), "committer name", null);
         AuditDetails audit1 = new AuditDetails("12.3.4.5", pi, 
                 new DvDateTime(time), codedText, null,
@@ -118,7 +118,7 @@ public class ChangeControlTestBase extends TestCase {
                 "1.20.51.60::1.2.840.114.1.2.2::1"), ObjectRef.Namespace.LOCAL,
                 ObjectRef.Type.CONTRIBUTION, "");
         PartyIdentified pi = new PartyIdentified(new PartyRef(
-                new HierarchicalObjectID("1-2-5-4-1"), 
+                new HierObjectID("1-2-5-4-1"), 
                 ObjectRef.Type.PARTY), "committer name", null);
         DvCodedText codedText = new DvCodedText("complete", TestCodePhrase.ENGLISH,
                 TestCodePhrase.LATIN_1, new CodePhrase(TestTerminologyID.SNOMEDCT, "revisionCode"),

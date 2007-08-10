@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class HierarchicalObjectID"
+ * description: "Class HierObjectID"
  * keywords:    "common"
  *
  * author:      "Rong Chen <rong@acode.se>"
@@ -8,7 +8,7 @@
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/support/identification/HierarchicalObjectID.java $"
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/support/identification/HierObjectID.java $"
  * revision:    "$LastChangedRevision: 2 $"
  * last_change: "$LastChangedDate: 2005-10-12 22:20:08 +0100 (Wed, 12 Oct 2005) $"
  */
@@ -28,50 +28,49 @@ import org.apache.commons.lang.StringUtils;
  * @author Yin Su Lim
  * @version 1.0
  */
-public class HierarchicalObjectID extends ObjectID {
+public class HierObjectID extends UIDBasedID {
 
     /**
-     * Create HierarchicalObjectID by string value
+     * Create HierObjectID by string value
      *
      * @param value
      * @throws IllegalArgumentException if value is null
      *                                  
      */
-    public HierarchicalObjectID(String value) {
+    public HierObjectID(String value) {
         super(value);
         loadValue(value);
     }
 
 	/**
-     * Constructs a HierarchicalObjectID by root and extension
+     * Constructs a HierObjectID by root and extension
      *
      * @param root
      * @param extension
      * @throws IllegalArgumentException if root is null
      */
-    public HierarchicalObjectID(String root, String extension) {
+    public HierObjectID(String root, String extension) {
     	this(extension == null ? root : root + "::" + extension);
     }
  
 	/**
-     * Constructs a HierarchicalObjectID by root (UID) and extension
+     * Constructs a HierObjectID by root (UID) and extension
      *
      * @param root
      * @param extension
      * @throws IllegalArgumentException if root is null 
      */
-    public HierarchicalObjectID(UID root, String extension) {
-        if (root != null) { // must catch null root, or will get nullpointerexception
-            if(StringUtils.isEmpty(extension)) {
-                    super.setValue(root.getValue());
-            } else {
-                    super.setValue(root.getValue() + "::" + extension);
-            }
-            this.root = root;
-            this.extension = extension;
+    public HierObjectID(UID root, String extension) {
+        if(root == null) {
+        	throw new IllegalArgumentException("null root");
+        }    	
+        if(StringUtils.isEmpty(extension)) {
+        	super.setValue(root.getValue());
         } else {
-                throw new IllegalArgumentException("null root");
+            super.setValue(root.getValue() + "::" + extension);
         }
+        this.root = root;
+        this.extension = extension;        
     }
  
     /** 
@@ -119,14 +118,6 @@ public class HierarchicalObjectID extends ObjectID {
     }
     
     /**
-     * True if there is an extension part
-     * 
-     */
-    public boolean hasExtension() {
-    		return extension != null;
-    }
-    
-    /**
      * A local identifier of the object within the context of the 
      * root identifier
      * 
@@ -137,9 +128,6 @@ public class HierarchicalObjectID extends ObjectID {
     }
     
     // POJO start
-    HierarchicalObjectID() {
-    }
-
     protected void setValue(String value) {
         loadValue(value);
         super.setValue(value);
@@ -150,7 +138,6 @@ public class HierarchicalObjectID extends ObjectID {
     private UID root;   // mandatory
     private String extension;
 }
-
 /*
  *  ***** BEGIN LICENSE BLOCK *****
  *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -165,7 +152,7 @@ public class HierarchicalObjectID extends ObjectID {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is HierarchicalObjectID.java
+ *  The Original Code is HierObjectID.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2004

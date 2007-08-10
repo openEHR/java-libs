@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class AccessGroupRef"
+ * description: "Class GenericID"
  * keywords:    "support"
  *
  * author:      "Rong Chen <rong@acode.se>"
@@ -13,22 +13,68 @@
  */
 package org.openehr.rm.support.identification;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
- * Reference to access group in an access control service
+ * Generic identifier type for identifiers whose format is othterwise unknown 
+ * to openEHR. Includes an attribute for naming the identification scheme 
+ * (which may well be local).
  * 
  * @author Rong Chen
  */
-public class AccessGroupRef extends ObjectRef {
+public class GenericID extends ObjectID {
+	
+	public GenericID(String value, String scheme) {
+		super(value);
+		if(StringUtils.isEmpty(scheme)) {
+			throw new IllegalArgumentException("empty scheme");
+		}
+		this.scheme = scheme;
+	}
+	
 	/**
-     * Construt an AccessGroupRef
+	 * Gets scheme of this id
+	 * 
+	 * @return scheme
+	 */
+	public String getScheme() {
+		return this.scheme;
+	}
+	
+    /**
+     * Equals if value and scheme equals
      *
-     * @param id
-     * @throws IllegalArgumentException if id or type null
+     * @param o
+     * @return true if equals
      */
-    public AccessGroupRef(ObjectID id) {
-        super(id, ObjectRef.Namespace.ACCESS_CONTROL, 
-        		ObjectRef.Type.ACCESS_GROUP);
-    }    
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof GenericID )) return false;
+
+        final GenericID gid = (GenericID) o;
+
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o))
+                .append(scheme, gid.scheme)
+                .isEquals();
+    }
+    
+    /**
+     * Return hash code of this id
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                .append(scheme)
+                .toHashCode();
+    }
+	
+	/* fields */
+	private final String scheme;
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
@@ -44,7 +90,7 @@ public class AccessGroupRef extends ObjectRef {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is AccessGroupRef.java
+ *  The Original Code is GenericID.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2007

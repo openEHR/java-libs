@@ -28,7 +28,7 @@ import org.apache.commons.lang.StringUtils;
  * @version 1.0
  */
 
-public class ObjectVersionID extends ObjectID {
+public class ObjectVersionID extends UIDBasedID {
 
     /**
      * Create ObjectVersionID by string value
@@ -45,7 +45,7 @@ public class ObjectVersionID extends ObjectID {
         this(objectId + "::" + creatingSystemId + "::" + versionTreeId);
     }
  
-    public ObjectVersionID(UID objectID, HierarchicalObjectID creatingSystemID, 
+    public ObjectVersionID(UID objectID, HierObjectID creatingSystemID, 
     		VersionTreeID versionTreeID) {
         this(objectID.toString() + "::" + creatingSystemID.toString() + "::"
                         + versionTreeID.toString());
@@ -83,10 +83,10 @@ public class ObjectVersionID extends ObjectID {
         		throw new IllegalArgumentException("wrong format");
         }
         if(segments == 4) {
-                creatingSystemID = new HierarchicalObjectID(splits[1] + "::" + splits[2]);
+                creatingSystemID = new HierObjectID(splits[1] + "::" + splits[2]);
                 versionTreeID = new VersionTreeID(splits[3]);
         } else {
-                creatingSystemID = new HierarchicalObjectID (splits[1]);
+                creatingSystemID = new HierObjectID (splits[1]);
                 versionTreeID = new VersionTreeID(splits[2]);
         }
     }
@@ -120,8 +120,18 @@ public class ObjectVersionID extends ObjectID {
 	 * 
 	 * @return creatingSystemID
 	 */
-	public HierarchicalObjectID creatingSystemID() {
+	public HierObjectID creatingSystemID() {
 		return creatingSystemID;
+	}
+	
+	@Override
+	public UID root() {
+		return objectID();
+	}
+
+	@Override
+	public String extension() {
+		return creatingSystemID.getValue() + "::" + versionTreeID.getValue();
 	}
 
 	//POJO start
@@ -137,6 +147,34 @@ public class ObjectVersionID extends ObjectID {
 	/* fields */
 	private UID objectID;
 	private VersionTreeID versionTreeID;
-	private HierarchicalObjectID creatingSystemID;
-	
+	private HierObjectID creatingSystemID;
 }
+/*
+ *  ***** BEGIN LICENSE BLOCK *****
+ *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ *  The contents of this file are subject to the Mozilla Public License Version
+ *  1.1 (the 'License'); you may not use this file except in compliance with
+ *  the License. You may obtain a copy of the License at
+ *  http://www.mozilla.org/MPL/
+ *
+ *  Software distributed under the License is distributed on an 'AS IS' basis,
+ *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing rights and limitations under the
+ *  License.
+ *
+ *  The Original Code is ObjectVersionID.java
+ *
+ *  The Initial Developer of the Original Code is Rong Chen.
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  the Initial Developer. All Rights Reserved.
+ *
+ *  Contributor(s):
+ *
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ *  ***** END LICENSE BLOCK *****
+ */

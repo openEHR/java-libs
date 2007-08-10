@@ -18,7 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.common.generic.Attestation;
 import org.openehr.rm.common.generic.AuditDetails;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
@@ -82,9 +82,9 @@ public abstract class Version <T> extends RMObject {
      *
      * @return uid of owning version container
      */
-    public HierarchicalObjectID ownerID() {
+    public HierObjectID ownerID() {
         //TODO check if correct, the extension bit at the back?
-        return new HierarchicalObjectID(uid.objectID(), null);
+        return new HierObjectID(uid.objectID(), null);
     }
 
     /**

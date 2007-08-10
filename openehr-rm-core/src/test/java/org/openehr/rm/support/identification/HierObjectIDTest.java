@@ -22,9 +22,9 @@ package org.openehr.rm.support.identification;
 
 import junit.framework.TestCase;
 
-public class HierarchicalObjectIDTest extends TestCase {
+public class HierObjectIDTest extends TestCase {
 
-    public HierarchicalObjectIDTest(String test) {
+    public HierObjectIDTest(String test) {
         super(test);
     }
 
@@ -43,19 +43,19 @@ public class HierarchicalObjectIDTest extends TestCase {
     public void testConstructorTakesStringValue() throws Exception {
 
         for (int i = 0; i < STRING_VALUES.length; i++) {
-            assertHOID(new HierarchicalObjectID(STRING_VALUES[i]), i);
+            assertHOID(new HierObjectID(STRING_VALUES[i]), i);
         }
     }
 
     public void testConstructorTakesSections() throws Exception {
 
         for (int i = 0; i < STRING_VALUES.length; i++) {
-            assertHOID(new HierarchicalObjectID(SECTIONS[i][0],
+            assertHOID(new HierObjectID(SECTIONS[i][0],
             SECTIONS[i][1]), i);
         }
     }
 
-    private void assertHOID(HierarchicalObjectID hoid, int i) throws Exception {
+    private void assertHOID(HierObjectID hoid, int i) throws Exception {
         //System.out.println("matches? " + SECTIONS[i][0].matches("(\\d)+(\\.(\\d)+)*"));
         assertEquals("value", STRING_VALUES[i], hoid.getValue());
         //System.out.println("root uid? " + hoid.root());

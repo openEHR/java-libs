@@ -22,7 +22,7 @@ package org.openehr.rm.common.archetyped;
 
 import junit.framework.TestCase;
 import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 
 public class ArchetypedTest extends TestCase {
 

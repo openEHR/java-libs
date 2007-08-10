@@ -31,7 +31,7 @@ import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.TestCodePhrase;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.identification.PartyRef;
@@ -45,7 +45,7 @@ public class RevisionHistoryTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        PartyRef pr = new PartyRef(new HierarchicalObjectID("1-2-3-4-5"), 
+        PartyRef pr = new PartyRef(new HierObjectID("1-2-3-4-5"), 
                 ObjectRef.Type.PARTY);
         PartyIdentified pi = new PartyIdentified(pr, "party name", null);
         CodePhrase codePhrase =

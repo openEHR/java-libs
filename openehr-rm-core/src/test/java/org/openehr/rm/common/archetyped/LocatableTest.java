@@ -22,7 +22,7 @@
 package org.openehr.rm.common.archetyped;
 
 import junit.framework.TestCase;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.common.directory.Folder;
@@ -48,7 +48,7 @@ public class LocatableTest extends TestCase {
     }
 
     public void testGetLinks() throws Exception {
-        ObjectID uid = new HierarchicalObjectID("1-0-23-47-23");
+        ObjectID uid = new HierObjectID("1-0-23-47-23");
 
         Folder folder = new Folder(uid, "at0001",
                 text("folder name"), null, null, null, null, null, null);

@@ -41,7 +41,7 @@ public class ObjectVersionIDTest extends TestCase {
         for(int i = 0; i < ids.length; i++) {
             ObjectVersionID ov = new ObjectVersionID(ids[i][0], ids[i][1], ids[i][2]);
             assertEquals((UID)new ISO_OID(ids[i][0]), ov.objectID());
-            assertEquals(new HierarchicalObjectID(ids[i][1]), ov.creatingSystemID());
+            assertEquals(new HierObjectID(ids[i][1]), ov.creatingSystemID());
             assertEquals(new VersionTreeID(ids[i][2]), ov.versionTreeID());            
         }
         String[][] ids2 = {
@@ -52,7 +52,7 @@ public class ObjectVersionIDTest extends TestCase {
         for(int i = 0; i < ids2.length; i++) {
             ObjectVersionID ov = new ObjectVersionID(ids2[i][0], ids2[i][1], ids2[i][2]);
             assertEquals((UID)new UUID(ids2[i][0]), ov.objectID());
-            assertEquals(new HierarchicalObjectID(ids2[i][1]), ov.creatingSystemID());
+            assertEquals(new HierObjectID(ids2[i][1]), ov.creatingSystemID());
             assertEquals(new VersionTreeID(ids2[i][2]), ov.versionTreeID());            
         }
         String[][] ids3 = {
@@ -63,7 +63,7 @@ public class ObjectVersionIDTest extends TestCase {
         for(int i = 0; i < ids3.length; i++) {
             ObjectVersionID ov = new ObjectVersionID(ids3[i][0], ids3[i][1], ids3[i][2]);
             assertEquals((UID)new InternetID(ids3[i][0]), ov.objectID());
-            assertEquals(new HierarchicalObjectID(ids3[i][1]), ov.creatingSystemID());
+            assertEquals(new HierObjectID(ids3[i][1]), ov.creatingSystemID());
             assertEquals(new VersionTreeID(ids3[i][2]), ov.versionTreeID());            
         }
     }

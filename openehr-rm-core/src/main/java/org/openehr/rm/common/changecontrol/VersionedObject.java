@@ -29,7 +29,7 @@ import org.openehr.rm.common.generic.RevisionHistory;
 import org.openehr.rm.common.generic.RevisionHistoryItem;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
@@ -50,7 +50,7 @@ public class VersionedObject<T> extends RMObject {
     /**
      * Constructs a VersionObject with first originalVersion
      */
-    public VersionedObject(HierarchicalObjectID uid, ObjectRef ownerID,
+    public VersionedObject(HierObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, ObjectVersionID versionID, T data,
             DvCodedText lifecycleState, AuditDetails commitAudit,
             ObjectRef contribution, String signature,
@@ -64,7 +64,7 @@ public class VersionedObject<T> extends RMObject {
     /**
      * Constructs a VersionObject with first importedVersion
      */
-    public VersionedObject(HierarchicalObjectID uid, ObjectRef ownerID,
+    public VersionedObject(HierObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, OriginalVersion<T> item, AuditDetails commitAudit,
             ObjectRef contribution, String signature) {
         this(uid, ownerID, timeCreated);
@@ -74,7 +74,7 @@ public class VersionedObject<T> extends RMObject {
     /**
      * Constructs a VersionObject with first merged Version
      */
-    public VersionedObject(HierarchicalObjectID uid, ObjectRef ownerID,
+    public VersionedObject(HierObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated, ObjectVersionID versionID,
             ObjectVersionID precedingVersionID, T data, DvCodedText lifecycleState,
             AuditDetails commitAudit, ObjectRef contribution, 
@@ -86,7 +86,7 @@ public class VersionedObject<T> extends RMObject {
                 terminologyService);
     }
     
-    private VersionedObject(HierarchicalObjectID uid, ObjectRef ownerID,
+    private VersionedObject(HierObjectID uid, ObjectRef ownerID,
             DvDateTime timeCreated) {
         if (uid == null) {
             throw new IllegalArgumentException("null uid");
@@ -200,13 +200,13 @@ public class VersionedObject<T> extends RMObject {
     //TODO: delete this
 /*	private ObjectVersionID nextUid(ObjectVersionID precedingVersionID, String systemID) {
                 VersionTreeID vTreeId = null;
-                HierarchicalObjectID creatingSystemID = null;
+                HierObjectID creatingSystemID = null;
                 if (precedingVersionID != null) {
                         vTreeId = precedingVersionID.versionTreeID().next();
                         creatingSystemID = precedingVersionID.creatingSystemID();
                 } else {
                         vTreeId = new VersionTreeID(Integer.toString(1));
-                        creatingSystemID = new HierarchicalObjectID(systemID);
+                        creatingSystemID = new HierObjectID(systemID);
                 }
         return new ObjectVersionID(uid.root(), creatingSystemID, vTreeId);
         }*/
@@ -216,7 +216,7 @@ public class VersionedObject<T> extends RMObject {
      *
      * @return UID
      */
-    public HierarchicalObjectID getUid() {
+    public HierObjectID getUid() {
         return uid;
     }
     
@@ -423,7 +423,7 @@ public class VersionedObject<T> extends RMObject {
         this.id = id;
     }
     
-    void setUid(HierarchicalObjectID uid) {
+    void setUid(HierObjectID uid) {
         this.uid = uid;
     }
     
@@ -456,7 +456,7 @@ public class VersionedObject<T> extends RMObject {
     //public static final String FIRST = "1";
     
     /* fields */
-    private HierarchicalObjectID uid;
+    private HierObjectID uid;
     private ObjectRef ownerID;
     private DvDateTime timeCreated;
     

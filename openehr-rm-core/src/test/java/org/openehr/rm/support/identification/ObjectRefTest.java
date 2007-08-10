@@ -56,7 +56,7 @@ public class ObjectRefTest extends TestCase {
     }
 
     private ObjectID hid(String value) {
-        return new HierarchicalObjectID(value);
+        return new HierObjectID(value);
     }
 
     public void testEquals() throws Exception {

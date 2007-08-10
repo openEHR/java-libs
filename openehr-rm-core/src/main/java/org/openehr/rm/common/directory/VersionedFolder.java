@@ -22,7 +22,7 @@ import org.openehr.rm.common.changecontrol.VersionedObject;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -32,7 +32,7 @@ public class VersionedFolder extends VersionedObject<Folder> {
     /**
      * Constructs a VersionFolder with first Folder created locally
      */
-    public VersionedFolder(HierarchicalObjectID uid, ObjectRef ownerID, 
+    public VersionedFolder(HierObjectID uid, ObjectRef ownerID, 
                     DvDateTime timeCreated, ObjectVersionID versionID, Folder folder, 
                     DvCodedText lifecycleState, AuditDetails commitAudit,  
                     ObjectRef contribution, String signature, 
@@ -45,7 +45,7 @@ public class VersionedFolder extends VersionedObject<Folder> {
     /**
      * Constructs a VersionFolder with first imported Folder
      */
-    public VersionedFolder(HierarchicalObjectID uid, ObjectRef ownerID, 
+    public VersionedFolder(HierObjectID uid, ObjectRef ownerID, 
                     DvDateTime timeCreated, OriginalVersion<Folder> item, 
                     AuditDetails commitAudit, ObjectRef contribution, 
                     String signature) {
@@ -57,7 +57,7 @@ public class VersionedFolder extends VersionedObject<Folder> {
     /**
      * Constructs a VersionFolder with first merged Folder
      */
-    public VersionedFolder(HierarchicalObjectID uid, ObjectRef ownerID, 
+    public VersionedFolder(HierObjectID uid, ObjectRef ownerID, 
             DvDateTime timeCreated, ObjectVersionID versionID,   
             ObjectVersionID precedingVersionID, Folder folder, DvCodedText lifecycleState,    
             AuditDetails commitAudit, ObjectRef contribution,    
