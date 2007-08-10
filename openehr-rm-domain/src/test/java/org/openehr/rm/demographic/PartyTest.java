@@ -88,7 +88,7 @@ public class PartyTest extends DemographicTestBase {
         assertEquals("wrong details", person.getDetails(),
                 person.itemAtPath("/details"));
         assertEquals("wrong details element",
-                ( (ItemSingle) person.getDetails() ).item(),
+                ( (ItemSingle) person.getDetails() ).getItem(),
                 person.itemAtPath("/details/item single"));
 
         PartyIdentity identity =

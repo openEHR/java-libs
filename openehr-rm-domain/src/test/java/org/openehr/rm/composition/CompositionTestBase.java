@@ -60,7 +60,7 @@ public class CompositionTestBase extends DataStructureTestBase {
 
     // test context
     protected EventContext context() throws Exception {
-        DvCodedText setting = new DvCodedText("setting", lang, charset,
+        DvCodedText setting = new DvCodedText("setting", lang, encoding,
                 new CodePhrase("test", "setting_code"), ts);
         return new EventContext(null, time("2006-02-01T12:00:09"), null, null, null,
                 setting, null, ts);        
@@ -154,9 +154,9 @@ public class CompositionTestBase extends DataStructureTestBase {
     protected PartyIdentified provider() throws Exception {
         PartyRef performer = new PartyRef(
                 new HierObjectID("1.3.3.1.2.42.1"), ObjectRef.Type.ORGANISATION);
-        //DvCodedText function = new DvCodedText("doctor", lang, charset,
+        //DvCodedText function = new DvCodedText("doctor", lang, encoding,
           //      new CodePhrase("test", "doctor_code"), ts);
-        //DvCodedText mode = new DvCodedText("present", lang, charset,
+        //DvCodedText mode = new DvCodedText("present", lang, encoding,
           //      new CodePhrase("test", "present_code"), ts);
         return new PartyIdentified(performer, "provider's name", null);
     }
@@ -171,7 +171,7 @@ public class CompositionTestBase extends DataStructureTestBase {
 
     /* field */
     protected static CodePhrase lang = TestCodeSetAccess.ENGLISH;
-    protected static CodePhrase charset = TestCodeSetAccess.LATIN_1;
+    protected static CodePhrase encoding = TestCodeSetAccess.LATIN_1;
     protected static TerminologyService ts = TestTerminologyService.getInstance();
 
 }

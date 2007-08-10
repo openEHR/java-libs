@@ -54,13 +54,13 @@ public final class Action extends CareEntry {
      * @param links
      * @param parent
      * @param language
-     * @param charset
+     * @param encoding
      * @param subject
      * @param provider
-     * @param workflowID
+     * @param workflowId
      * @param otherParticipations
      * @param protocol
-     * @param guidelineID
+     * @param guidelineId
      * @param terminologyService
      */
     @FullConstructor
@@ -72,13 +72,13 @@ public final class Action extends CareEntry {
             @Attribute(name = "links") Set<Link> links,
             @Attribute(name = "parent") Locatable parent,
             @Attribute(name = "language", required = true) CodePhrase language,
-            @Attribute(name = "charset", required = true) CodePhrase charset,
+            @Attribute(name = "encoding", required = true) CodePhrase encoding,
             @Attribute(name = "subject", system = true) PartyProxy subject,
             @Attribute(name = "provider", system = true) PartyProxy provider,
-            @Attribute(name = "workflowID") ObjectRef workflowID,
+            @Attribute(name = "workflowId") ObjectRef workflowId,
             @Attribute(name = "otherParticipation") List<Participation> otherParticipations,
             @Attribute(name = "protocol") ItemStructure protocol,
-            @Attribute(name = "guidelineID") ObjectRef guidelineID,
+            @Attribute(name = "guidelineId") ObjectRef guidelineId,
             @Attribute(name = "time", required = true) DvDateTime time,
             @Attribute(name = "description", required = true) ItemStructure description,
             @Attribute(name = "ismTransition", required = true) ISMTransition ismTransition,
@@ -86,8 +86,8 @@ public final class Action extends CareEntry {
             @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService
             ){
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent,
-                language, charset, subject, provider, workflowID, otherParticipations,
-                protocol, guidelineID, terminologyService);
+                language, encoding, subject, provider, workflowId, otherParticipations,
+                protocol, guidelineId, terminologyService);
         if (time == null) {
             throw new IllegalArgumentException("null time");
         }

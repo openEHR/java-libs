@@ -54,17 +54,17 @@ public class InstructionDetails extends RMObject {
 	 * @param parent
 	 */
 	public InstructionDetails(
-            @Attribute(name = "instructionID", required = true) LocatableRef instructionID,
-            @Attribute(name = "activityID", required = true) String activityID,
+            @Attribute(name = "instructionId", required = true) LocatableRef instructionId,
+            @Attribute(name = "activityId", required = true) String activityId,
             @Attribute(name = "wfDetails") ItemStructure wfDetails) {
-		if (instructionID == null) {
-			throw new IllegalArgumentException("null instructionID");
+		if (instructionId == null) {
+			throw new IllegalArgumentException("null instructionId");
 		}
-		if (StringUtils.isEmpty(activityID)) {
-			throw new IllegalArgumentException("null or empty activityID");
+		if (StringUtils.isEmpty(activityId)) {
+			throw new IllegalArgumentException("null or empty activityId");
 		}
-		this.instructionID =instructionID;
-		this.activityID = activityID;
+		this.instructionId =instructionId;
+		this.activityId = activityId;
 		this.wfDetails = wfDetails;
 	}
 
@@ -72,19 +72,19 @@ public class InstructionDetails extends RMObject {
 	 * Identifier of Activity within Instruction, in the form of its archetype 
 	 * path.
 	 * 
-	 * @return activityID
+	 * @return activityId
 	 */
-	public String getActivityID() {
-		return activityID;
+	public String getActivityId() {
+		return activityId;
 	}
 
 	/**
 	 * Id of causing Instruction
 	 * 
-	 * @return instructionID
+	 * @return instructionId
 	 */
-	public LocatableRef getInstructionID() {
-		return instructionID;
+	public LocatableRef getInstructionId() {
+		return instructionId;
 	}
 
 	/**
@@ -103,12 +103,12 @@ public class InstructionDetails extends RMObject {
 	InstructionDetails() {
 	}
 
-	void setActivityID(String activityID) {
-		this.activityID = activityID;
+	void setActivityID(String activityId) {
+		this.activityId = activityId;
 	}
 
-	void setInstructionID(LocatableRef instructionID) {
-		this.instructionID = instructionID;
+	void setInstructionId(LocatableRef instructionId) {
+		this.instructionId = instructionId;
 	}
 
 	void setWfDetails(ItemStructure wfDetails) {
@@ -117,8 +117,8 @@ public class InstructionDetails extends RMObject {
 	//POJO end
 	
 	/* fields */
-	private LocatableRef instructionID;
-	private String activityID;
+	private LocatableRef instructionId;
+	private String activityId;
 	private ItemStructure wfDetails;
 
 }

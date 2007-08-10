@@ -51,7 +51,7 @@ public final class Evaluation extends CareEntry {
      * @param provider
      * @param protocol           null if unspecified
      * @param actID              null if unspecified
-     * @param guidelineID        null if unspecified
+     * @param guidelineId        null if unspecified
      * @param otherParticipation null if unspecified
      * @param data
      * @throws IllegalArgumentException if data null
@@ -65,18 +65,18 @@ public final class Evaluation extends CareEntry {
                               @Attribute(name = "links") Set<Link> links,
                               @Attribute(name = "parent") Locatable parent, 
                               @Attribute(name = "language", system = true) CodePhrase language,
-                              @Attribute(name = "charset", system = true) CodePhrase charset, 
+                              @Attribute(name = "encoding", system = true) CodePhrase encoding, 
                               @Attribute(name = "subject", system = true) PartyProxy subject,
                               @Attribute(name = "provider", system = true) PartyProxy provider,
-                              @Attribute(name = "workflowID") ObjectRef workflowID,
+                              @Attribute(name = "workflowId") ObjectRef workflowId,
                               @Attribute(name = "otherParticipation") List<Participation> otherParticipation,
                               @Attribute(name = "protocol") ItemStructure protocol,
-                              @Attribute(name = "guidelineID") ObjectRef guidelineID,
+                              @Attribute(name = "guidelineId") ObjectRef guidelineId,
                               @Attribute(name = "data", required = true) ItemStructure data,
                               @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
-                parent, language, charset, subject, provider, workflowID, 
-                otherParticipation, protocol, guidelineID, terminologyService);
+                parent, language, encoding, subject, provider, workflowId, 
+                otherParticipation, protocol, guidelineId, terminologyService);
 
         if (data == null) {
             throw new IllegalArgumentException("null data");

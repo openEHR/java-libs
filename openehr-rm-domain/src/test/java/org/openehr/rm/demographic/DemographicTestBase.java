@@ -100,12 +100,12 @@ public class DemographicTestBase extends TestCase {
     }
 
     protected DvCodedText coded(String value, String code) {
-        return new DvCodedText(value, lang(), charset(),
+        return new DvCodedText(value, lang(), encoding(),
                 new CodePhrase(SNOMED_CT, code), ts);
     }
 
     protected DvText text(String value) {
-        return new DvText(value, lang(), charset(), ts);
+        return new DvText(value, lang(), encoding(), ts);
     }
 
     protected Element element(String meaning, DataValue value) {
@@ -116,7 +116,7 @@ public class DemographicTestBase extends TestCase {
         return new CodePhrase(LANGUAGE, "english");
     }
 
-    protected CodePhrase charset() {
+    protected CodePhrase encoding() {
         return new CodePhrase(CHARSET, "ISO-8859-1");
     }
 
@@ -310,7 +310,7 @@ public class DemographicTestBase extends TestCase {
 
     static {
         LANGUAGE = new TerminologyID("language-test");
-        CHARSET = new TerminologyID("charset-test");
+        CHARSET = new TerminologyID("encoding-test");
         SNOMED_CT = new TerminologyID("snomedct-test");
     }
 

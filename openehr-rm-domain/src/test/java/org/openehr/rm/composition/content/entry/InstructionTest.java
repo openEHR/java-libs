@@ -50,7 +50,9 @@ public class InstructionTest extends CompositionTestBase {
                 "1.1");
         DvParsable timing = new DvParsable(new CodePhrase("test", "en"), new CodePhrase("test", "en"),
                  1, "timing value", "fomalism", ts);
-        Activity activity = new Activity("at0004", text("activity 1"), list("list activity"), timing);
+        Activity activity = new Activity("at0004", text("activity 1"), 
+        		list("list activity"), timing,
+        		"openEHR-EHR-ITEM_TREE.intravenous_fluids.v1draft");
         List<Activity> activities = new ArrayList<Activity>();
         activities.add(activity);
         instruction = new Instruction(null, "at0001", text("instruction"),

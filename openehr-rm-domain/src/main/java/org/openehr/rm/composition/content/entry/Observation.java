@@ -57,7 +57,7 @@ public final class Observation extends CareEntry {
      * @param provider
      * @param protocol
      * @param actID
-     * @param guidelineID
+     * @param guidelineId
      * @param otherParticipation
      * @param data
      * @param state              null if unspecified
@@ -72,21 +72,21 @@ public final class Observation extends CareEntry {
                                @Attribute(name = "links") Set<Link> links,
                                @Attribute(name = "parent") Locatable parent,
                                @Attribute(name = "language", required = true) CodePhrase language,
-                               @Attribute(name = "charset", required = true) CodePhrase charset, 
+                               @Attribute(name = "encoding", required = true) CodePhrase encoding, 
                                @Attribute(name = "subject", system = true) PartyProxy subject,
                                @Attribute(name = "provider", system = true) PartyProxy provider,
-                               @Attribute(name = "workflowID") ObjectRef workflowID,
+                               @Attribute(name = "workflowId") ObjectRef workflowId,
                                @Attribute(name = "otherParticipation") List<Participation> otherParticipation,
                                @Attribute(name = "protocol") ItemStructure protocol,
-                               @Attribute(name = "guidelineID") ObjectRef guidelineID,                              
+                               @Attribute(name = "guidelineId") ObjectRef guidelineId,                              
                                @Attribute(name = "data", required = true) History<ItemStructure> data,
                                @Attribute(name = "state") History<ItemStructure> state,
                                @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService
                                ) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent,
-                language, charset, subject, provider, workflowID, otherParticipation, 
-                protocol, guidelineID, terminologyService);
+                language, encoding, subject, provider, workflowId, otherParticipation, 
+                protocol, guidelineId, terminologyService);
 
         if (data == null) {
             throw new IllegalArgumentException("null data");
@@ -106,10 +106,10 @@ public final class Observation extends CareEntry {
      * @throws IllegalArgumentException if date null
      */
     public Observation(String archetypeNodeId, DvText name, Archetyped archetypeDetails,
-                CodePhrase language, CodePhrase charset,
+                CodePhrase language, CodePhrase encoding,
                  PartyProxy subject, PartyProxy provider,
                  History<ItemStructure> data, TerminologyService terminologyService) {
-        this(null, archetypeNodeId, name, archetypeDetails, null, null, null, language, charset, 
+        this(null, archetypeNodeId, name, archetypeDetails, null, null, null, language, encoding, 
                 subject, provider, null, null, null, null, data, null, terminologyService);
     }
 

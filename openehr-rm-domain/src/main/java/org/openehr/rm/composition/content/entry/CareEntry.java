@@ -48,7 +48,7 @@ public abstract class CareEntry extends Entry {
      * @param provider
      * @param protocol            null if unspecified
      * @param actID               null if unspecified
-     * @param guidelineID         null if unspecified
+     * @param guidelineId         null if unspecified
      * @param otherParticipations null if unspecified
      * @throws IllegalArgumentException if archetypeNodeId or name null,
      *                                  or subject or provider null or invalid
@@ -56,17 +56,17 @@ public abstract class CareEntry extends Entry {
     protected CareEntry(ObjectID uid, String archetypeNodeId, DvText name,
                  Archetyped archetypeDetails, FeederAudit feederAudit,
                  Set<Link> links, Locatable parent, CodePhrase language,
-                 CodePhrase charset, PartyProxy subject, 
-                 PartyProxy provider, ObjectRef workflowID,
+                 CodePhrase encoding, PartyProxy subject, 
+                 PartyProxy provider, ObjectRef workflowId,
                  List<Participation> otherParticipations,
-                 ItemStructure protocol, ObjectRef guidelineID, 
+                 ItemStructure protocol, ObjectRef guidelineId, 
                  TerminologyService terminologyService) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent, 
-        		language, charset, subject, provider, workflowID, otherParticipations,
+        		language, encoding, subject, provider, workflowId, otherParticipations,
         		terminologyService);
         this.protocol = protocol;
-        this.guidelineID = guidelineID;
+        this.guidelineId = guidelineId;
     }
 
     public Object itemAtPath(String path) {
@@ -89,10 +89,10 @@ public abstract class CareEntry extends Entry {
      * Optional external identifier of guideline creating this action 
      * if relevant
      * 
-     * @return guidelineID
+     * @return guidelineId
      */
-    public ObjectRef getGuidelineID() {
-    		return guidelineID;
+    public ObjectRef getGuidelineId() {
+    		return guidelineId;
     }
     
     /**
@@ -108,23 +108,20 @@ public abstract class CareEntry extends Entry {
     CareEntry() {
     }
     
-	void setGuidelineID(ObjectRef guidelineID) {
-		this.guidelineID = guidelineID;
+	void setGuidelineId(ObjectRef guidelineId) {
+		this.guidelineId = guidelineId;
 	}
 	void setProtocol(ItemStructure protocol) {
 		this.protocol = protocol;
 	}
 	//POJO end
 	
-    /* fields */
-        
+    /* fields */        
    private ItemStructure protocol;
-   private ObjectRef guidelineID;
+   private ObjectRef guidelineId;
 
    /* static fields */
    public static final String PROTOCOL = "protocol";
-   //public static final String ACTION = "action";
-   //public static final String PROFILE = "profile";
 }
 
 /*

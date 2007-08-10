@@ -134,7 +134,7 @@ public class VersionedCompositionTest extends CompositionTestBase {
     // test composition
     private Composition composition(String node, String text)
             throws Exception {
-        DvText name = new DvText(text, lang, charset, ts);
+        DvText name = new DvText(text, lang, encoding, ts);
         ObjectID id = new HierObjectID("1.11.2.5.1.66.3");
         List<ContentItem> content = new ArrayList<ContentItem>();
         content.add(section());
@@ -148,7 +148,7 @@ public class VersionedCompositionTest extends CompositionTestBase {
 
     private Composition compositionPersistent(String node, String text)
             throws Exception {
-        DvText name = new DvText(text, lang, charset, ts);
+        DvText name = new DvText(text, lang, encoding, ts);
         ObjectID id = new HierObjectID("1.11.2.5.1.66.3");
         List<ContentItem> content = new ArrayList<ContentItem>();
         content.add(section());
@@ -161,7 +161,7 @@ public class VersionedCompositionTest extends CompositionTestBase {
     }
     
     private Section section() throws Exception {
-        DvText name = new DvText("test section", lang, charset, ts);
+        DvText name = new DvText("test section", lang, encoding, ts);
         List<ContentItem> items = new ArrayList<ContentItem>();
         items.add(observation());
         return new Section("at0000", name, items);
@@ -169,18 +169,18 @@ public class VersionedCompositionTest extends CompositionTestBase {
 
     // test element
     private Element element() throws Exception {
-        DvText name = new DvText("test element", lang, charset, ts);
-        DvText value = new DvText("test value", lang, charset, ts);
+        DvText name = new DvText("test element", lang, encoding, ts);
+        DvText value = new DvText("test value", lang, encoding, ts);
         return new Element("at0000", name, value);
     }
 
     private ItemSingle itemSingle() throws Exception {
-        DvText name = new DvText("test item single", lang, charset, ts);
+        DvText name = new DvText("test item single", lang, encoding, ts);
         return new ItemSingle("at0000", name, element());
     }
 
     private CodePhrase lang = TestCodeSetAccess.ENGLISH;
-    private CodePhrase charset = TestCodeSetAccess.LATIN_1;
+    private CodePhrase encoding = TestCodeSetAccess.LATIN_1;
     private TerminologyService ts = TestTerminologyService.getInstance();
 }
 /*

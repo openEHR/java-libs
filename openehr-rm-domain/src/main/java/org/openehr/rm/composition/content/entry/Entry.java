@@ -56,7 +56,7 @@ public abstract class Entry extends ContentItem {
      * @param provider
      * @param protocol            null if unspecified
      * @param actID               null if unspecified
-     * @param guidelineID         null if unspecified
+     * @param guidelineId         null if unspecified
      * @param otherParticipations null if unspecified
      * @throws IllegalArgumentException if archetypeNodeId or name null,
      *                                  or subject or provider null or invalid
@@ -64,8 +64,8 @@ public abstract class Entry extends ContentItem {
     protected Entry(ObjectID uid, String archetypeNodeId, DvText name,
                  Archetyped archetypeDetails, FeederAudit feederAudit,
                  Set<Link> links, Locatable parent, CodePhrase language,
-                 CodePhrase charset, PartyProxy subject, 
-                 PartyProxy provider, ObjectRef workflowID,
+                 CodePhrase encoding, PartyProxy subject, 
+                 PartyProxy provider, ObjectRef workflowId,
                  List<Participation> otherParticipations,
                  TerminologyService terminologyService) {
 
@@ -74,8 +74,8 @@ public abstract class Entry extends ContentItem {
         if (language == null) {
         		throw new IllegalArgumentException("null language");
         }
-        if (charset == null) {
-    			throw new IllegalArgumentException("null charset");
+        if (encoding == null) {
+    			throw new IllegalArgumentException("null encoding");
         }
         if (subject == null) {
             throw new IllegalArgumentException("null subject");
@@ -93,10 +93,10 @@ public abstract class Entry extends ContentItem {
         		throw new IllegalArgumentException("unknown language:" + language);
         }
         this.language = language;
-        this.charset = charset;
+        this.encoding = encoding;
         this.subject = subject;
         this.provider = provider;
-        this.workflowID = workflowID;
+        this.workflowId = workflowId;
         this.otherParticipations = ( otherParticipations == null ? null :
                 new ArrayList<Participation>(otherParticipations) );
     }
@@ -123,10 +123,10 @@ public abstract class Entry extends ContentItem {
      * Name of charater set in which text values in this Entry 
      * are encoded. Coded from openEHR code set "character sets".
      * 
-     * @return charset
+     * @return encoding
      */
-    public CodePhrase getCharset() {
-		return charset;
+    public CodePhrase getEncoding() {
+		return encoding;
 	}
 
     /**
@@ -144,8 +144,8 @@ public abstract class Entry extends ContentItem {
      *
      * @return workflow ID or null if unspecified
      */
-    public ObjectRef getWorkflowID() {
-        return workflowID;
+    public ObjectRef getWorkflowId() {
+        return workflowId;
     }
 
     /**
@@ -225,16 +225,16 @@ public abstract class Entry extends ContentItem {
         this.provider = provider;
     }
 
-    void setCharset(CodePhrase charset) {
-		this.charset = charset;
+    void setEncoding(CodePhrase encoding) {
+		this.encoding = encoding;
 	}
 
 	void setLanguage(CodePhrase language) {
 		this.language = language;
 	}
 
-	void setWorkflowID(ObjectRef guidelineID) {
-        this.workflowID = guidelineID;
+	void setWorkflowId(ObjectRef guidelineId) {
+        this.workflowId = guidelineId;
     }
 
     void setOtherParticipations(List<Participation> otherParticipations) {
@@ -244,10 +244,10 @@ public abstract class Entry extends ContentItem {
 
     /* fields */
     private CodePhrase language;
-    private CodePhrase charset;
+    private CodePhrase encoding;
     private PartyProxy subject;
     private PartyProxy provider;
-    private ObjectRef workflowID;
+    private ObjectRef workflowId;
     private List<Participation> otherParticipations;
 
     /* static fields */

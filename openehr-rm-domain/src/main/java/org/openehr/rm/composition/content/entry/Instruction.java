@@ -55,7 +55,7 @@ public final class Instruction extends CareEntry {
      * @param provider
      * @param protocol
      * @param actID
-     * @param guidelineID
+     * @param guidelineId
      * @param otherParticipations
      * @param state
      * @param action
@@ -72,21 +72,21 @@ public final class Instruction extends CareEntry {
                     @Attribute(name = "links") Set<Link> links,
                     @Attribute(name = "parent") Locatable parent, 
                     @Attribute(name = "language", required = true) CodePhrase language,
-                    @Attribute(name = "charset", required = true) CodePhrase charset, 
+                    @Attribute(name = "encoding", required = true) CodePhrase encoding, 
                     @Attribute(name = "subject", system = true) PartyProxy subject,
                     @Attribute(name = "provider", system = true) PartyProxy provider,
-                    @Attribute(name = "workflowID") ObjectRef workflowID,
+                    @Attribute(name = "workflowId") ObjectRef workflowId,
                     @Attribute(name = "otherParticipation") List<Participation> otherParticipations,
                     @Attribute(name = "protocol") ItemStructure protocol,
-                    @Attribute(name = "guidelineID") ObjectRef guidelineID,
+                    @Attribute(name = "guidelineId") ObjectRef guidelineId,
                     @Attribute(name = "narrative", required = true) DvText narrative,
                     @Attribute(name = "activities") List<Activity> activities,
                     @Attribute(name = "expiryTime") DvDateTime expiryTime,
                     @Attribute(name = "wfDefinition") DvParsable wfDeinition,
                     @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
     		super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
-                parent, language, charset, subject, provider, workflowID, 
-                otherParticipations, protocol, guidelineID, terminologyService);
+                parent, language, encoding, subject, provider, workflowId, 
+                otherParticipations, protocol, guidelineId, terminologyService);
         if (narrative == null) {
         		throw new IllegalArgumentException("null narrative");
         }

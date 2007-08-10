@@ -16,6 +16,7 @@ package org.openehr.rm.composition.content.entry;
 
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.common.archetyped.*;
 import org.openehr.rm.datatypes.text.DvText;
@@ -32,34 +33,57 @@ import org.openehr.rm.support.identification.ObjectID;
 public class Activity extends Locatable {
 
 	/**
+	 * Creates an Activity
 	 * 
+	 * @param uit
+	 * @param archetypeNodeId
+	 * @param name
+	 * @param archetypeDetails
+	 * @param feederAudit
+	 * @param links
+	 * @param parent
+	 * @param description		required
+	 * @param timing
+	 * @param actionArchetypeId
+	 * 
+	 * @throws IllegalArgumentExeption if required parameters missing
 	 */
 	public Activity(
-		    @Attribute(name = "uid") ObjectID uid,
-            @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
-            @Attribute(name = "name", required = true) DvText name,
-            @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
-            @Attribute(name = "feederAudit") FeederAudit feederAudit,
-            @Attribute(name = "links") Set<Link> links,
-            @Attribute(name = "parent") Locatable parent,
-            @Attribute(name = "description", required = true) ItemStructure description,
-            @Attribute(name = "timing", required = true) DvParsable timing) {
-		super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);
+			@Attribute(name = "uid") ObjectID uid, 
+			@Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId, 
+			@Attribute(name = "name", required = true) DvText name, 
+			@Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
+			@Attribute(name = "feederAudit") FeederAudit feederAudit, 
+			@Attribute(name = "links") Set<Link> links, 
+			@Attribute(name = "parent")	Locatable parent, 
+			@Attribute(name = "description", required = true) ItemStructure description, 
+			@Attribute(name = "timing", required = true) DvParsable timing,
+			@Attribute(name = "actionArchetypeId", required = true) String actionArchetypeId) {
+		
+		super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
+				parent);
 		if (description == null) {
 			throw new IllegalArgumentException("null description");
 		}
 		if (timing == null) {
 			throw new IllegalArgumentException("null timing");
 		}
+		if(StringUtils.isEmpty(actionArchetypeId)) {
+			throw new IllegalArgumentException("empty actionArchetypeId");
+		}
+		
 		this.description = description;
 		this.timing = timing;
+		this.actionArchetypeId = actionArchetypeId;
 	}
 
-	public Activity(String archetypeNodeId, DvText name, ItemStructure description,
-                DvParsable timing) {
-            this(null, archetypeNodeId, name, null, null, null, null, description, timing);
-        }
-        
+	public Activity(String archetypeNodeId, DvText name,
+			ItemStructure description, DvParsable timing, 
+			String actionArchetypeId) {
+		this(null, archetypeNodeId, name, null, null, null, null, description,
+				timing, actionArchetypeId);
+	}
+
 	/**
 	 * Description of the activity, in the form of an archetyped structure.
 	 * 
@@ -78,53 +102,62 @@ public class Activity extends Locatable {
 	public DvParsable getTiming() {
 		return timing;
 	}
+	
+	public String getActionArchetypeId() {
+		return actionArchetypeId;
+	}
 
 	@Override
 	public String pathOfItem(Locatable item) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-        
-    public Object itemAtPath(String path) {
-        Object item = super.itemAtPath(path);
-        if (item != null) {
-            return item;
-        }
-        Object ret = checkAttribute(path, "description", description);
-        if( ret != null) {
-            return ret;
-        } else {
-            throw new IllegalArgumentException("invalid path: " + path);
-        }
-    }
 
-    public boolean validPath(String path) {
-        try {
-            itemAtPath(path);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
-    
+	@Override
+	public Object itemAtPath(String path) {
+		Object item = super.itemAtPath(path);
+		if (item != null) {
+			return item;
+		}
+		Object ret = checkAttribute(path, "description", description);
+		if (ret != null) {
+			return ret;
+		} else {
+			throw new IllegalArgumentException("invalid path: " + path);
+		}
+	}
+
+	@Override
+	public boolean validPath(String path) {
+		try {
+			itemAtPath(path);
+			return true;
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
+
 	//POJO start
-	Activity() {};
-	
+	Activity() {
+	};
+
 	void setDescription(ItemStructure description) {
 		this.description = description;
 	}
 
 	void setTiming(DvParsable timing) {
 		this.timing = timing;
-	}	
+	}
+
 	//POJO end	
-	
+
 	/* fields */
 	private ItemStructure description;
 	private DvParsable timing;
-        
-        /* static fields */
-        public static final String DESCRIPTION = "description";
+	private String actionArchetypeId; 
+
+	/* static fields */
+	public static final String DESCRIPTION = "description";
 }
 
 /*
@@ -144,10 +177,10 @@ public class Activity extends Locatable {
  *  The Original Code is Activity.java
  *
  *  The Initial Developer of the Original Code is Yin Su Lim.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2007
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Rong Chen
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

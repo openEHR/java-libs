@@ -52,10 +52,10 @@ public class AdminEntry extends Entry {
 	 * @param links
 	 * @param parent
 	 * @param language
-	 * @param charset
+	 * @param encoding
 	 * @param subject
 	 * @param provider
-	 * @param workflowID
+	 * @param workflowId
 	 * @param otherParticipations
 	 * @param terminologyService
 	 */
@@ -68,15 +68,15 @@ public class AdminEntry extends Entry {
                        @Attribute(name = "links") Set<Link> links,
                        @Attribute(name = "parent") Locatable parent,
                        @Attribute(name = "language", required = true) CodePhrase language,
-                       @Attribute(name = "charset", required = true) CodePhrase charset, 
+                       @Attribute(name = "encoding", required = true) CodePhrase encoding, 
                        @Attribute(name = "subject", system = true) PartyProxy subject,
                        @Attribute(name = "provider", system = true) PartyProxy provider,
-                       @Attribute(name = "workflowID") ObjectRef workflowID, 
+                       @Attribute(name = "workflowId") ObjectRef workflowId, 
                        @Attribute(name = "otherParticipations") List<Participation> otherParticipations, 
                        @Attribute(name = "data", required = true) ItemStructure data,
                        @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
 		super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent,
-				language, charset, subject, provider, workflowID, otherParticipations,
+				language, encoding, subject, provider, workflowId, otherParticipations,
 				terminologyService);
 		if (data == null) {
 			throw new IllegalArgumentException("null data");
