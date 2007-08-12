@@ -22,7 +22,7 @@ package org.openehr.rm.common.directory;
 
 import junit.framework.TestCase;
 import org.openehr.rm.support.identification.HierObjectID;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.terminology.TestTerminologyService;
@@ -46,7 +46,7 @@ public class FolderTest extends TestCase {
     }
 
     public void testConstructor() throws Exception {
-        ObjectID uid = new HierObjectID("1.4.7.23.4.7.23");
+    	UIDBasedID uid = new HierObjectID("1.4.7.23.4.7.23");
 
         // verify a bug fix in constructor
         new Folder(uid, "at0000", text("folder name"), null,

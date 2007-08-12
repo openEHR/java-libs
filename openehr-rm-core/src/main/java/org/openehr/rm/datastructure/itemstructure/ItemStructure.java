@@ -19,7 +19,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datastructure.DataStructure;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.text.DvText;
@@ -46,7 +46,7 @@ public abstract class ItemStructure extends DataStructure {
      * @param representation
      * @throws IllegalArgumentException if representation null
      */
-    protected ItemStructure(ObjectID uid, String archetypeNodeId, DvText name,
+    protected ItemStructure(UIDBasedID uid, String archetypeNodeId, DvText name,
                             Archetyped archetypeDetails, FeederAudit feederAudit,
                             Set<Link> links, Locatable parent,
                             Item representation) {

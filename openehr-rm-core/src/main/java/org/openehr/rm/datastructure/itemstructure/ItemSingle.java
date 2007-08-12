@@ -21,7 +21,7 @@ import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datatypes.text.DvText;
 
@@ -48,7 +48,7 @@ public final class ItemSingle extends ItemStructure {
      * @param representation
      */
     @FullConstructor
-            public ItemSingle(@Attribute(name = "uid") ObjectID uid,
+            public ItemSingle(@Attribute(name = "uid") UIDBasedID uid,
                               @Attribute(name = "archetypeNodeId", required=true) String archetypeNodeId,
                               @Attribute(name = "name", required=true) DvText name,
                               @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,

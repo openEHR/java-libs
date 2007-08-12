@@ -25,7 +25,7 @@ import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.ObjectRef;
 
 public class Folder extends Locatable {
@@ -44,7 +44,7 @@ public class Folder extends Locatable {
      * @throws IllegalArgumentException if name null or archetypeNodeId null
      *                                  or links not null and empty
      */
-    public Folder(ObjectID uid, String archetypeNodeId, DvText name,
+    public Folder(UIDBasedID uid, String archetypeNodeId, DvText name,
             Archetyped archetypeDetails, FeederAudit feederAudit, Set<Link> links,
             Locatable parent, List<Folder> folders, List<ObjectRef> items) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);

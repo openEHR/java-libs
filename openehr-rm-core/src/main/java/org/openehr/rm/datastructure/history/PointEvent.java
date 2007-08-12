@@ -25,7 +25,7 @@ import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 
 /**
  * Defines a single point event in a series
@@ -50,7 +50,7 @@ public final class PointEvent<T extends ItemStructure> extends Event<T> {
      */
     @FullConstructor
             public PointEvent(
-            @Attribute(name = "uid") ObjectID uid,
+            @Attribute(name = "uid") UIDBasedID uid,
             @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
             @Attribute(name = "name", required = true) DvText name,
             @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,

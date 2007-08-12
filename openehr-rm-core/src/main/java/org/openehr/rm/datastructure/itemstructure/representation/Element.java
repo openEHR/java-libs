@@ -21,7 +21,7 @@ import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datatypes.basic.DataValue;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
@@ -54,7 +54,7 @@ public final class Element extends Item {
      *                                  are null
      */
     @FullConstructor
-            public Element(@Attribute(name = "uid") ObjectID uid,
+            public Element(@Attribute(name = "uid") UIDBasedID uid,
                            @Attribute(name = "archetypeNodeId", required=true) String archetypeNodeId,
                            @Attribute(name = "name", required=true) DvText name,
                            @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,

@@ -18,7 +18,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datatypes.text.DvText;
 
 import java.util.Set;
@@ -41,7 +41,7 @@ public abstract class DataStructure extends Locatable {
      * @param feederAudit
      * @param links
      */
-    protected DataStructure(ObjectID uid, String archetypeNodeId, DvText name,
+    protected DataStructure(UIDBasedID uid, String archetypeNodeId, DvText name,
                             Archetyped archetypeDetails, FeederAudit feederAudit, 
                             Set<Link> links, Locatable parent) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,

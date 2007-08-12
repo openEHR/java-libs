@@ -16,7 +16,7 @@ package org.openehr.rm.common.archetyped;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datatypes.text.DvText;
 
 import java.util.Set;
@@ -44,7 +44,7 @@ public abstract class Locatable extends Pathable {
      * @throws IllegalArgumentException if name null or archetypeNodeId null
      *                                  or links not null and empty
      */
-    protected Locatable(ObjectID uid, String archetypeNodeId, DvText name,
+    protected Locatable(UIDBasedID uid, String archetypeNodeId, DvText name,
                         Archetyped archetypeDetails,FeederAudit feederAudit, 
                         Set<Link> links, Pathable parent) {    	
     	super(parent);
@@ -82,9 +82,9 @@ public abstract class Locatable extends Pathable {
      * Optional globally unique object identifier for root object of
      * archetyped data structure.
      *
-     * @return objectID nu
+     * @return uid
      */
-    public ObjectID getUid() {
+    public UIDBasedID getUid() {
         return uid;
     }
 
@@ -362,7 +362,7 @@ public abstract class Locatable extends Pathable {
     protected Locatable() {    	
     }
 
-    protected void setUid(ObjectID uid) {
+    protected void setUid(UIDBasedID uid) {
         this.uid = uid;
     }
 
@@ -395,7 +395,7 @@ public abstract class Locatable extends Pathable {
     public static final String ROOT = PATH_SEPARATOR;
 
     /* fields */
-    private ObjectID uid;
+    private UIDBasedID uid;
     private String archetypeNodeId;
     private DvText name;
     private Archetyped archetypeDetails;

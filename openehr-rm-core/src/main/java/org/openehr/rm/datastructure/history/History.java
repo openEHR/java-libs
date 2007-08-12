@@ -31,7 +31,7 @@ import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 
 /**
  * The abstract parent class of various concrete historical
@@ -55,7 +55,7 @@ public class History <T extends ItemStructure> extends DataStructure {
      * @throws IllegalArgumentException if origin null
      */
     @FullConstructor
-    public History(@Attribute(name = "uid") ObjectID uid,
+    public History(@Attribute(name = "uid") UIDBasedID uid,
                   @Attribute(name = "archetypeNodeId", required=true) String archetypeNodeId,
                   @Attribute(name = "name", required=true) DvText name,
                   @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,

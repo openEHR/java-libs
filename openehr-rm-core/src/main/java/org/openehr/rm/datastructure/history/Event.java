@@ -28,7 +28,7 @@ import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 
 /**
  * Defines the abstract notion of a single event in a series. This class is
@@ -52,7 +52,7 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
      * @throws IllegalArgumentException if offset null
      */
     @FullConstructor protected Event(
-            		   @Attribute(name = "uid") ObjectID uid,
+            		   @Attribute(name = "uid") UIDBasedID uid,
                     @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
                     @Attribute(name = "name", required = true) DvText name,
                     @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
