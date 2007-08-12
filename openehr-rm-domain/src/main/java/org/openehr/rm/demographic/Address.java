@@ -18,6 +18,7 @@ import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.text.DvText;
@@ -26,6 +27,7 @@ import org.openehr.rm.Attribute;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -179,8 +181,32 @@ public class Address extends Locatable {
             .append(details)
             .toHashCode();
     }
+    
+	@Override
+	public String pathOfItem(Pathable arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    /* fields */
+	@Override
+	public List<Object> itemsAtPath(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}	
+
+	/* fields */
     private ItemStructure details;
 }
 

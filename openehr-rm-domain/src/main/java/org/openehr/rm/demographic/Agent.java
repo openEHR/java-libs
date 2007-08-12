@@ -19,11 +19,13 @@ import org.openehr.rm.support.identification.LocatableRef;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -80,7 +82,7 @@ public class Agent extends Actor {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
                 identities, contacts, relationships, reverseRelationships,
                 details, roles, languages);
-    }
+    }	
 }
 
 /*

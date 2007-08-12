@@ -19,7 +19,6 @@ import org.openehr.rm.support.identification.LocatableRef;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
-import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.FullConstructor;

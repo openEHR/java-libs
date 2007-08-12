@@ -20,6 +20,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.datatypes.text.DvText;
@@ -157,6 +158,30 @@ public final class Section extends ContentItem {
     public List<ContentItem> getItems() {
         return items == null ? null : Collections.unmodifiableList(items);
     }
+    
+    @Override
+	public String pathOfItem(Pathable arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Object> itemsAtPath(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
     // POJO start
     Section() {
@@ -169,6 +194,7 @@ public final class Section extends ContentItem {
 
     /* fields */
     private List<ContentItem> items;
+	
 }
 
 /*

@@ -20,6 +20,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.datastructure.itemstructure.ItemSingle;
@@ -166,6 +167,30 @@ public final class Observation extends CareEntry {
         return locateAttribute(path, attributeNames, attributes);
     }
 
+    @Override
+	public String pathOfItem(Pathable arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Object> itemsAtPath(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
     // POJO start
     Observation() {
     }
@@ -185,7 +210,7 @@ public final class Observation extends CareEntry {
     
     /* static fields */
     public static final String DATA = "data";
-    public static final String STATE = "state";
+    public static final String STATE = "state";	
 }
 
 /*

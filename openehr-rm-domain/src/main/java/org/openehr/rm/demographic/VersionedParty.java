@@ -16,18 +16,13 @@
 package org.openehr.rm.demographic;
 
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.openehr.rm.common.changecontrol.OriginalVersion;
-import org.openehr.rm.common.changecontrol.Version;
 import org.openehr.rm.common.changecontrol.VersionedObject;
-import org.openehr.rm.common.directory.Folder;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.support.identification.HierObjectID;
-import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
-import org.openehr.rm.datatypes.basic.DvState;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.support.terminology.TerminologyService;

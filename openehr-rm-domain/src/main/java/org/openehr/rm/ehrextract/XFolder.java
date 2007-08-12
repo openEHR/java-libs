@@ -18,6 +18,7 @@ import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datatypes.text.DvText;
 
@@ -115,9 +116,33 @@ public class XFolder extends Locatable {
         return compositions;
     }
 
+    @Override
+	public String pathOfItem(Pathable arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Object> itemsAtPath(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
     /* fields */
     private List<XFolder> folders;
-    private List<XComposition> compositions;
+    private List<XComposition> compositions;	
 }
 
 /*

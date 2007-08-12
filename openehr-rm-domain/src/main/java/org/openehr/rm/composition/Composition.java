@@ -255,6 +255,30 @@ public final class Composition extends Locatable {
         }
     }
 
+    @Override
+	public String pathOfItem(Pathable arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Object> itemsAtPath(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
     // POJO start
     Composition() {
     }
@@ -290,8 +314,7 @@ public final class Composition extends Locatable {
     private PartyProxy composer;
     private DvCodedText category;
     private CodePhrase territory;
-    private CodePhrase language;
-
+    private CodePhrase language;	
 }
 
 /*

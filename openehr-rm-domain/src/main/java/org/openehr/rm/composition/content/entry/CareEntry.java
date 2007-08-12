@@ -92,7 +92,7 @@ public abstract class CareEntry extends Entry {
      * @return guidelineId
      */
     public ObjectRef getGuidelineId() {
-    		return guidelineId;
+    	return guidelineId;
     }
     
     /**
@@ -101,7 +101,7 @@ public abstract class CareEntry extends Entry {
      * @return protocol
      */
     public ItemStructure getProtocol() {
-    		return protocol;
+    	return protocol;
     }
     
     //POJO start

@@ -14,17 +14,9 @@
  */
 package org.openehr.rm.composition.content.entry;
 
-import java.util.Set;
-
 import org.openehr.rm.Attribute;
 import org.openehr.rm.RMObject;
-import org.openehr.rm.common.archetyped.Archetyped;
-import org.openehr.rm.common.archetyped.FeederAudit;
-import org.openehr.rm.common.archetyped.Link;
-import org.openehr.rm.common.archetyped.Locatable;
-import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.text.DvCodedText;
-import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 /**

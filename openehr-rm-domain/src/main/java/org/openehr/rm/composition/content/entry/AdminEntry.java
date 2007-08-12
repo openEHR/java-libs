@@ -22,6 +22,7 @@ import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
@@ -88,12 +89,7 @@ public class AdminEntry extends Entry {
 		return data;
 	}
 
-	@Override
-	public String pathOfItem(Locatable item) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-    /**
+	/**
      * The item at a path that is relative to this item.
      *
      * @param path
@@ -110,6 +106,30 @@ public class AdminEntry extends Entry {
         }
         return ret;
     }
+    
+    @Override
+	public String pathOfItem(Pathable arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Object> itemsAtPath(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	//POJO start
 	AdminEntry() {

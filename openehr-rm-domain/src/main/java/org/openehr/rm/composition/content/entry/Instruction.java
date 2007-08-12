@@ -216,6 +216,30 @@ public final class Instruction extends CareEntry {
         }
     }
     
+    @Override
+	public String pathOfItem(Pathable arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Object> itemsAtPath(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
     // POJO start
     Instruction() {
     }
@@ -242,7 +266,6 @@ public final class Instruction extends CareEntry {
     private List<Activity> activities;
     private DvDateTime expiryTime;
     private DvParsable wfDefinition;
-
 }
 
 /*

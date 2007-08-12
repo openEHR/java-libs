@@ -20,6 +20,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.common.generic.PartyRelated;
@@ -131,6 +132,30 @@ public final class Evaluation extends CareEntry {
             throw new IllegalArgumentException("invalid path: " + path);
         }
     }
+    
+    @Override
+	public String pathOfItem(Pathable arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Object> itemsAtPath(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
     // POJO start
     Evaluation() {
@@ -145,7 +170,7 @@ public final class Evaluation extends CareEntry {
     private ItemStructure data;
     
     /* static fields */
-    public static final String DATA = "data";
+    public static final String DATA = "data";	
 }
 
 /*

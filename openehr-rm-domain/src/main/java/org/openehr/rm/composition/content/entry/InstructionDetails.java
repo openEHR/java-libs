@@ -14,27 +14,11 @@
  */
 package org.openehr.rm.composition.content.entry;
 
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.RMObject;
-import org.openehr.rm.common.archetyped.Archetyped;
-import org.openehr.rm.common.archetyped.FeederAudit;
-import org.openehr.rm.common.archetyped.Link;
-import org.openehr.rm.common.archetyped.Locatable;
-import org.openehr.rm.common.generic.Participation;
-import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
-import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
-import org.openehr.rm.datatypes.text.CodePhrase;
-import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.LocatableRef;
-import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ObjectVersionID;
-import org.openehr.rm.support.identification.ObjectRef;
-import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
  * Used to record details of the Instruction causing an Action.

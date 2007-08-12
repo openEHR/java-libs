@@ -14,6 +14,7 @@
  */
 package org.openehr.rm.composition.content.entry;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -108,7 +109,7 @@ public class Activity extends Locatable {
 	}
 
 	@Override
-	public String pathOfItem(Locatable item) {
+	public String pathOfItem(Pathable item) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -136,6 +137,24 @@ public class Activity extends Locatable {
 			return false;
 		}
 	}
+	
+	@Override
+	public List<Object> itemsAtPath(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 	//POJO start
 	Activity() {
@@ -157,7 +176,7 @@ public class Activity extends Locatable {
 	private String actionArchetypeId; 
 
 	/* static fields */
-	public static final String DESCRIPTION = "description";
+	public static final String DESCRIPTION = "description";	
 }
 
 /*
