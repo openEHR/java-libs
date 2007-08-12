@@ -20,10 +20,12 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datatypes.text.DvText;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -88,7 +90,7 @@ public final class ItemSingle extends ItemStructure {
      * @param item
      * @return path
      */
-    public String pathOfItem(Locatable item) {
+    public String pathOfItem(Pathable item) {
         return null;  // todo: implement this method
     }
 
@@ -116,11 +118,29 @@ public final class ItemSingle extends ItemStructure {
     public boolean validPath(String path) {
         return whole().equals(path);
     }
+    
+    @Override
+	public List<Object> itemsAtPath(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
     // POJO start
     ItemSingle() {
     }
-    // POJO end
+    // POJO end	
 }
 
 /*

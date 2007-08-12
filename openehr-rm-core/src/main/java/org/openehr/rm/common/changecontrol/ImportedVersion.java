@@ -52,7 +52,7 @@ public final class ImportedVersion<T> extends Version<T> {
         }
         this.item = original;
         setAttributes(original.getUid(), original.getPrecedingVersionUid(),
-            original.getData(), original.getLifeCycleState(), commitAudit, 
+            original.getData(), original.getLifecycleState(), commitAudit, 
             contribution, signature);
     }
     

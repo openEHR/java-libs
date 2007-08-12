@@ -25,6 +25,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.datastructure.DataStructure;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
@@ -40,8 +41,7 @@ import org.openehr.rm.support.identification.ObjectID;
  * @author Rong Chen
  * @version 1.0
  */
-public class History <T extends ItemStructure>
-        extends DataStructure {
+public class History <T extends ItemStructure> extends DataStructure {
 
     /**
      * Construct a DataStructure
@@ -143,7 +143,7 @@ public class History <T extends ItemStructure>
 		return period != null;
 	}
         
-    public String pathOfItem(Locatable item) {
+    public String pathOfItem(Pathable item) {
         return null; //TODO: implement
     }
 	
@@ -226,11 +226,26 @@ public class History <T extends ItemStructure>
 
 	void setSummary(ItemStructure summary) {
 		this.summary = summary;
-	}
-	
+	}	
     // POJO end
 
+	@Override
+	public List<Object> itemsAtPath(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public boolean pathExists(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
 
 /*

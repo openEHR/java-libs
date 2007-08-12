@@ -365,7 +365,7 @@ public class VersionedObject<T> extends RMObject {
      */
     public DvCodedText latestTrunkLifeCycleSate() {
         Version<T> trunk = latestTrunkVersion();
-        return latestTrunkVersion().getLifeCycleState();
+        return latestTrunkVersion().getLifecycleState();
     }
     
     /**

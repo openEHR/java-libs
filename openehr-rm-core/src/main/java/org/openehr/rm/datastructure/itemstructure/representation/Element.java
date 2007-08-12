@@ -20,12 +20,14 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datatypes.basic.DataValue;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.terminology.TerminologyService;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -132,7 +134,7 @@ public final class Element extends Item {
      * @param item
      * @return path of given item
      */
-    public String pathOfItem(Locatable item) {
+    public String pathOfItem(Pathable item) {
         return null;  // todo: implement this method
     }
 
@@ -181,11 +183,7 @@ public final class Element extends Item {
     public int hashCode() {
         return value.hashCode();
     }
-
-    /* fields */
-    private DataValue value;
-    private DvCodedText nullFlavor;
-
+    
     // POJO start
     Element() {
     }
@@ -198,6 +196,28 @@ public final class Element extends Item {
         this.nullFlavor = nullFlavor;
     }
     // POJO end
+
+	@Override
+	public List<Object> itemsAtPath(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	/* fields */
+    private DataValue value;
+    private DvCodedText nullFlavor;
 }
 
 /*

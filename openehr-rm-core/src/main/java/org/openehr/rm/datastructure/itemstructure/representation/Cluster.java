@@ -20,6 +20,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datatypes.text.DvText;
 
@@ -98,7 +99,7 @@ public final class Cluster extends Item {
      * @param item
      * @return path of given item
      */
-    public String pathOfItem(Locatable item) {
+    public String pathOfItem(Pathable item) {
         return null;  // todo: implement this method
     }
 
@@ -123,10 +124,7 @@ public final class Cluster extends Item {
     public boolean validPath(String path) {
         return false;  // todo: implement this method
     }
-
-    /* fields */
-    private List<Item> items;
-
+    
     // POJO start
     protected Cluster() {
     }
@@ -135,6 +133,27 @@ public final class Cluster extends Item {
         this.items = items;
     }
     // POJO end
+
+	@Override
+	public List<Object> itemsAtPath(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/* fields */
+    private List<Item> items;
 }
 
 /*

@@ -16,7 +16,6 @@ package org.openehr.rm.common.archetyped;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.rm.RMObject;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datatypes.text.DvText;
 
@@ -30,7 +29,7 @@ import java.util.Collection;
  * @author Rong Chen
  * @version 1.0
  */
-public abstract class Locatable extends RMObject {
+public abstract class Locatable extends Pathable {
 
     /**
      * Constructs a Locatable
@@ -47,7 +46,9 @@ public abstract class Locatable extends RMObject {
      */
     protected Locatable(ObjectID uid, String archetypeNodeId, DvText name,
                         Archetyped archetypeDetails,FeederAudit feederAudit, 
-                        Set<Link> links, Locatable parent) {
+                        Set<Link> links, Pathable parent) {    	
+    	super(parent);
+    	
         if (archetypeNodeId == null) {
             throw new IllegalArgumentException("null archetypeNodeId");
         }
@@ -63,7 +64,6 @@ public abstract class Locatable extends RMObject {
         this.archetypeDetails = archetypeDetails;
         this.feederAudit = feederAudit;
         this.links = links;
-        this.parent = parent;
     }
 
     /**
@@ -143,16 +143,7 @@ public abstract class Locatable extends RMObject {
      */
     public Set<Link> getLinks() {
         return links;
-    }
-
-    /**
-     * Parent of this node in compositional hierarchy
-     * 
-     * @return parent null if not specified
-     */
-	public Locatable getParent() {
-		return parent;
-	}
+    }    
 	
     /**
      * True if this node is the root of an archetyped structure
@@ -170,24 +161,9 @@ public abstract class Locatable extends RMObject {
      * @param item
      * @return string path
      */
-    public abstract String pathOfItem(Locatable item);
+    public abstract String pathOfItem(Pathable item);
 
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return the item
-     * @throws IllegalArgumentException if path invalid
-     */
-    public Object itemAtPath(String path) {
-        if (path == null) {
-            throw new IllegalArgumentException("invalid path: " + path);
-        }
-        if (Locatable.ROOT.equals(path) || path.equals(whole())) {
-            return this;
-        }
-        return null; // can be further processed by sub-class
-    }
+    
 
     /**
      * Locate an attribute of given path
@@ -288,6 +264,23 @@ public abstract class Locatable extends RMObject {
     }
 
     /**
+     * The item at a path that is relative to this item.
+     *
+     * @param path
+     * @return the item
+     * @throws IllegalArgumentException if path invalid
+     */
+    public Object itemAtPath(String path) {
+        if (path == null) {
+            throw new IllegalArgumentException("invalid path: " + path);
+        }
+        if (Locatable.ROOT.equals(path) || path.equals(whole())) {
+            return this;
+        }
+        return null; // can be further processed by sub-class
+    }
+    
+    /**
      * Clinical concept of the archetype as a whole, derived from the
      * archetypeNodeId  of the root node
      *
@@ -311,7 +304,7 @@ public abstract class Locatable extends RMObject {
                 archetypeNodeId.toString() : archetypeNodeId + ", " + name;
     }
 
-        /**
+    /**
      * Equals if two actors has same values
      *
      * @param o
@@ -323,15 +316,14 @@ public abstract class Locatable extends RMObject {
         
         final Locatable loc = (Locatable) o;
         return new EqualsBuilder()
+        		.appendSuper(super.equals(o))
                 .append(uid, loc.uid)
                 .append(archetypeNodeId, loc.archetypeNodeId)
                 .append(name, loc.name)
                 .append(archetypeDetails, loc.archetypeDetails)
                 .append(feederAudit, loc.feederAudit)
                 .append(links, loc.links)
-                .append(parent, loc.parent)
                 .isEquals();
-
     }
 
     /**
@@ -348,7 +340,6 @@ public abstract class Locatable extends RMObject {
                 .append(archetypeDetails)
                 .append(feederAudit)
                 .append(links)
-                .append(parent)
                 .toHashCode();
     }
 
@@ -368,7 +359,7 @@ public abstract class Locatable extends RMObject {
     }
     
     // POJO start
-    protected Locatable() {
+    protected Locatable() {    	
     }
 
     protected void setUid(ObjectID uid) {
@@ -395,9 +386,6 @@ public abstract class Locatable extends RMObject {
         this.links = links;
     }
     
-	protected void setParent(Locatable parent) {
-		this.parent = parent;
-	}
     // POJO end
 
     /**
@@ -413,7 +401,7 @@ public abstract class Locatable extends RMObject {
     private Archetyped archetypeDetails;
     private FeederAudit feederAudit;
     private Set<Link> links;
-    private Locatable parent;
+   
 }
 
 /*

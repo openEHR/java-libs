@@ -14,6 +14,7 @@
  */
 package org.openehr.rm.datastructure.history;
 
+import java.util.List;
 import java.util.Set;
 
 import org.openehr.rm.Attribute;
@@ -146,11 +147,28 @@ public final class IntervalEvent<T extends ItemStructure> extends Event<T> {
 	}
 	// POJO end
 	
+	@Override
+	public List<Object> itemsAtPath(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 	/* fields */
 	private DvDuration width;
 	private DvCodedText mathFunction;
-	private int sampleCount;
-	
+	private int sampleCount;	
 }
 
 /*

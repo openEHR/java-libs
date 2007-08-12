@@ -22,6 +22,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
@@ -167,7 +168,7 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
      * @param item
      * @return string path
      */
-    public String pathOfItem(Locatable item) {
+    public String pathOfItem(Pathable item) {
         return null;  // todo: implement this method
 
     }

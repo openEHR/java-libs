@@ -53,7 +53,7 @@ public abstract class Version <T> extends RMObject {
             throw new IllegalArgumentException("null uid");
         }
         if(lifeCycleState == null) {
-            throw new IllegalArgumentException("null lifeCycleState");
+            throw new IllegalArgumentException("null lifecycleState");
         }
         if (commitAudit == null) {
             throw new IllegalArgumentException("null audit");
@@ -70,7 +70,7 @@ public abstract class Version <T> extends RMObject {
         if(!terminologyService.terminology(TerminologyService.OPENEHR)
             .codesForGroupName("version lifecycle state", "en")
             .contains(lifeCycleState.getDefiningCode())) {
-            throw new IllegalArgumentException("unknown lifeCycleState");
+            throw new IllegalArgumentException("unknown lifecycleState");
         }
         setAttributes(uid, precedingVersionID, data, lifeCycleState, commitAudit, 
                    contribution, signature);
@@ -101,7 +101,7 @@ public abstract class Version <T> extends RMObject {
      */
     public String canonicalForm() {
         //return uid.toString() + "," + precedingVersionUid.toString() + 
-          //      "," + data.toString() + "," + lifeCycleState.toString() + 
+          //      "," + data.toString() + "," + lifecycleState.toString() + 
             //    "," + commitAudit.toString() + "," + contribution.toString(); 
             //TODO:implement
         return "";
@@ -139,8 +139,8 @@ public abstract class Version <T> extends RMObject {
      * Lifecycle state of this version; coded by openEHR
      * vocabulary "version lifecycle state"
      */
-    public DvCodedText getLifeCycleState() {
-        return lifeCycleState;
+    public DvCodedText getLifecycleState() {
+        return lifecycleState;
     }
     
     
@@ -178,8 +178,8 @@ public abstract class Version <T> extends RMObject {
         this.signature = signature;
     }
     
-    void setLifeCycleState(DvCodedText lifeCycleState) {
-        this.lifeCycleState = lifeCycleState;
+    void setLifecycleState(DvCodedText lifeCycleState) {
+        this.lifecycleState = lifeCycleState;
     }
     
     void setCommitAudit(AuditDetails audit) {
@@ -209,7 +209,7 @@ public abstract class Version <T> extends RMObject {
         this.uid = uid;
         this.precedingVersionUid = precedingVersionID;
         this.data = data;
-        this.lifeCycleState = lifeCycleState;
+        this.lifecycleState = lifeCycleState;
         this.commitAudit = commitAudit;      
         this.contribution = contribution;
         this.signature = signature;
@@ -223,7 +223,7 @@ public abstract class Version <T> extends RMObject {
     private ObjectVersionID precedingVersionUid;
     private ObjectRef contribution;
     private T data;
-    private DvCodedText lifeCycleState;
+    private DvCodedText lifecycleState;
     private String signature;
 
 }

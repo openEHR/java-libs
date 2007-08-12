@@ -21,6 +21,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
@@ -157,7 +158,7 @@ public final class ItemList extends ItemStructure {
      * @param item
      * @return path of given item
      */
-    public String pathOfItem(Locatable item) {
+    public String pathOfItem(Pathable item) {
         return null;  // todo: implement this method
     }
 
@@ -218,6 +219,24 @@ public final class ItemList extends ItemStructure {
         }
     }
 
+    @Override
+	public List<Object> itemsAtPath(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
     /* token used in query path */
     public final static String ITEM_IS = "item=";
 
@@ -232,7 +251,7 @@ public final class ItemList extends ItemStructure {
         super.setRepresentation(item);
         this.items = convert((Cluster) item);
     }
-    // POJO end
+    // POJO end	
 }
 
 /*

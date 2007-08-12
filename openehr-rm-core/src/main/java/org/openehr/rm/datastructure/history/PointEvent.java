@@ -14,6 +14,7 @@
  */
 package org.openehr.rm.datastructure.history;
 
+import java.util.List;
 import java.util.Set;
 
 import org.openehr.rm.Attribute;
@@ -66,6 +67,24 @@ public final class PointEvent<T extends ItemStructure> extends Event<T> {
     //POJO
     PointEvent() {
     }
+
+	@Override
+	public List<Object> itemsAtPath(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }
 

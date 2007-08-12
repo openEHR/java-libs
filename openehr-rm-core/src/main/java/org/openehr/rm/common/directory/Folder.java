@@ -23,6 +23,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
@@ -105,7 +106,7 @@ public class Folder extends Locatable {
         .toHashCode();
     }
     @Override
-            public String pathOfItem(Locatable item) {
+            public String pathOfItem(Pathable item) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -123,9 +124,27 @@ public class Folder extends Locatable {
     }
     //POJO ends
     
+    @Override
+	public List<Object> itemsAtPath(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean pathExists(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pathUnique(String path) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
     /* fields */
     private List<Folder> folders;
-    private List<ObjectRef> items;
+    private List<ObjectRef> items;	
 }
 
 /*

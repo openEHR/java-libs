@@ -308,6 +308,13 @@ public final class DvDuration extends DvAmount<DvDuration> {
 
 		return toPrefixFormat(str);
 	}
+	
+	/**
+	 * Gets the String value of this duration
+	 */
+	public String getValue() {
+		return toString();
+	}
 
 	/**
 	 * Compares this object with the specified object for order. Returns a
