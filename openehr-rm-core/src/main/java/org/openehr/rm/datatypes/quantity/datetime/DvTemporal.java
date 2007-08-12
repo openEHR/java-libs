@@ -46,7 +46,7 @@ public abstract class DvTemporal<T extends DvTemporal> extends
 	 */
 	public DvTemporal(List<ReferenceRange<T>> referenceRanges,
 			DvInterval<T> normalRange, CodePhrase normalStatus,
-			double accuracy, String magnitudeStatus, String value) {
+			DvDuration accuracy, String magnitudeStatus, String value) {
 
 		super(referenceRanges, normalRange, normalStatus, accuracy,
 				magnitudeStatus);
@@ -58,12 +58,21 @@ public abstract class DvTemporal<T extends DvTemporal> extends
 	
 	protected DvTemporal(List<ReferenceRange<T>> referenceRanges,
             DvInterval<T> normalRange, CodePhrase normalStatus,
-            double accuracy, String magnitudeStatus, DateTime datetime) {
+            DvDuration accuracy, String magnitudeStatus, DateTime datetime) {
         
         super(referenceRanges, normalRange, normalStatus, accuracy, 
                 magnitudeStatus);
         this.dateTime = datetime;
     }
+	
+	/**
+	 * Creates a DvTemporal only with datetime
+	 * 
+	 * @param datetime not null
+	 */
+	protected DvTemporal(DateTime datetime) {
+		this(null, null, null, null, null, datetime);
+	}
 
 	@Override
 	public DvDuration diff(T other) {

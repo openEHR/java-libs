@@ -21,10 +21,8 @@ import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
-import org.openehr.rm.datatypes.quantity.DvAmount;
 import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.datatypes.quantity.DvOrdered;
-import org.openehr.rm.datatypes.quantity.DvQuantified;
 import org.openehr.rm.datatypes.quantity.ReferenceRange;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -55,20 +53,24 @@ public class DvTime extends DvTemporal<DvTime> {
 	 * @throws IllegalArgumentException
 	 */
 	@FullConstructor
-	public DvTime(@Attribute(name = "referenceRanges")
-	List<ReferenceRange<DvTime>> referenceRanges,
-			@Attribute(name = "normalRange")
-			DvInterval<DvTime> normalRange, @Attribute(name = "normalStatus")
-			CodePhrase normalStatus, @Attribute(name = "accuracy")
-			double accuracy, @Attribute(name = "magnitudeStatus")
-			String magnitudeStatus, @Attribute(name = "value", required = true)
-			String value) {
+	public DvTime(
+			@Attribute(name = "referenceRanges") List<ReferenceRange<DvTime>> referenceRanges,
+			@Attribute(name = "normalRange") DvInterval<DvTime> normalRange, 
+			@Attribute(name = "normalStatus") CodePhrase normalStatus, 
+			@Attribute(name = "accuracy") DvDuration accuracy, 
+			@Attribute(name = "magnitudeStatus") String magnitudeStatus, 
+			@Attribute(name = "value", required = true)	String value) {
 		super(referenceRanges, normalRange, normalStatus, accuracy,
 				magnitudeStatus, value);
 	}
 
+	/**
+	 * Creates a DvTime with string value
+	 * 
+	 * @param value
+	 */
 	public DvTime(String value) {
-		super(null, null, null, 0.0, null, value);
+		this(null, null, null, null, null, value);
 	}
 
 	/**
@@ -81,8 +83,7 @@ public class DvTime extends DvTemporal<DvTime> {
 	 * @param timezone null if use default timezone
 	 */
 	public DvTime(int hour, int minute, int second, double fs, TimeZone timezone) {
-		super(null, null, null, 0.0, null, DvDateTimeParser.convertTime(hour,
-				minute, second, fs, timezone));
+		super(DvDateTimeParser.convertTime(hour, minute, second, fs, timezone));
 		String format = timezone == null ? "HH:mm:ss,SSS" : "HH:mm:ss,SSSZZ";
 		setValue(DvDateTimeParser.toTimeString(getDateTime(), format));
 		setBooleans(false, true, true, true);
@@ -97,8 +98,7 @@ public class DvTime extends DvTemporal<DvTime> {
 	 * @param timezone null if use default timezone
 	 */
 	public DvTime(int hour, int minute, int second, TimeZone timezone) {
-		super(null, null, null, 0.0, null, DvDateTimeParser.convertTime(hour,
-				minute, second, 0, timezone));
+		super(DvDateTimeParser.convertTime(hour, minute, second, 0, timezone));
 		String format = timezone == null ? "HH:mm:ss" : "HH:mm:ssZZ";
 		setValue(DvDateTimeParser.toTimeString(getDateTime(), format));
 		setBooleans(false, true, true, false);
@@ -112,8 +112,7 @@ public class DvTime extends DvTemporal<DvTime> {
 	 * @param timezone null if use default timezone
 	 */
 	public DvTime(int hour, int minute, TimeZone timezone) {
-		super(null, null, null, 0.0, null, DvDateTimeParser.convertTime(hour,
-				minute, 0, 0, timezone));
+		super(DvDateTimeParser.convertTime(hour, minute, 0, 0, timezone));
 		String format = timezone == null ? "HH:mm" : "HH:mmZZ";
 		setValue(DvDateTimeParser.toTimeString(getDateTime(), format));
 		setBooleans(true, true, false, false);
@@ -126,8 +125,7 @@ public class DvTime extends DvTemporal<DvTime> {
 	 * @param timezone null if use default timezone
 	 */
 	public DvTime(int hour, TimeZone timezone) {
-		super(null, null, null, 0.0, null, DvDateTimeParser.convertTime(hour,
-				0, 0, 0, timezone));
+		super(DvDateTimeParser.convertTime(hour, 0, 0, 0, timezone));
 		String format = timezone == null ? "HH" : "HHZZ";
 		setValue(DvDateTimeParser.toTimeString(getDateTime(), format));
 		setBooleans(true, false, false, false);
@@ -140,7 +138,7 @@ public class DvTime extends DvTemporal<DvTime> {
 	 *
 	 */
 	public DvTime() {
-		super(null, null, null, 0.0, null, DvDateTimeParser.defaultTime());
+		super(DvDateTimeParser.defaultTime());
 		setValue(DvDateTimeParser.toTimeString(getDateTime(), "HH:mm:ss,SSSZZ"));
 		setBooleans(false, true, true, true);
 	}
@@ -150,7 +148,7 @@ public class DvTime extends DvTemporal<DvTime> {
 	 */
 	protected DvTime(List<ReferenceRange<DvTime>> referenceRanges,
 			DvInterval<DvTime> normalRange, CodePhrase normalStatus,
-			double accuracy, String magnitudeStatus, DateTime datetime,
+			DvDuration accuracy, String magnitudeStatus, DateTime datetime,
 			String pattern) {
 		super(referenceRanges, normalRange, normalStatus, accuracy,
 				magnitudeStatus, datetime);

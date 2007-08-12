@@ -60,20 +60,18 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 	@FullConstructor
 	public DvDateTime(@Attribute(name = "referenceRanges")
 	List<ReferenceRange<DvDateTime>> referenceRanges,
-			@Attribute(name = "normalRange")
-			DvInterval<DvDateTime> normalRange,
-			@Attribute(name = "normalStatus")
-			CodePhrase normalStatus, @Attribute(name = "accuracy")
-			double accuracy, @Attribute(name = "magnitudeStatus")
-			String magnitudeStatus, @Attribute(name = "value", required = true)
-			String value) {
+			@Attribute(name = "normalRange") DvInterval<DvDateTime> normalRange,
+			@Attribute(name = "normalStatus") CodePhrase normalStatus, 
+			@Attribute(name = "accuracy") DvDuration accuracy, 
+			@Attribute(name = "magnitudeStatus") String magnitudeStatus, 
+			@Attribute(name = "value", required = true)	String value) {
 		super(referenceRanges, normalRange, normalStatus, accuracy,
 				magnitudeStatus, value);
 	}
 
 	protected DvDateTime(List<ReferenceRange<DvDateTime>> referenceRanges,
 			DvInterval<DvDateTime> normalRange, CodePhrase normalStatus,
-			double accuracy, String magnitudeStatus, DateTime datetime,
+			DvDuration accuracy, String magnitudeStatus, DateTime datetime,
 			String pattern) {
 		super(referenceRanges, normalRange, normalStatus, accuracy,
 				magnitudeStatus, datetime);
@@ -90,7 +88,7 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 	 * @param accuracyPercent
 	 */
 	public DvDateTime() {
-		super(null, null, null, 0.0, null, DvDateTimeParser.defaultDateTime());
+		super(DvDateTimeParser.defaultDateTime());
 		setValue(DvDateTimeParser.toDateTimeString(getDateTime(),
 				"yyyy-MM-dd'T'HH:mm:ss,SSS"));
 		setBooleans(false, true, true, true);
@@ -102,7 +100,7 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 	 * @param value
 	 */
 	public DvDateTime(String value) {
-		this(null, null, null, 0.0, null, value);
+		this(null, null, null, null, null, value);
 	}
 
 	/**
@@ -118,9 +116,8 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 	 */
 	public DvDateTime(int year, int month, int day, int hour, int minute,
 			int second, double fractionalSec, TimeZone timezone) {
-		super(null, null, null, 0.0, null, DvDateTimeParser
-				.convertDateTime(year, month, day, hour, minute, second,
-						fractionalSec, timezone));
+		super(DvDateTimeParser.convertDateTime(year, month, day, hour, minute, 
+				second,	fractionalSec, timezone));
 		String format = timezone == null ? "yyyyMMdd'T'HH:mm:ss,SSS"
 				: "yyyyMMdd'T'HH:mm:ss,SSSZZ";
 		setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
@@ -129,7 +126,7 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 
 	public DvDateTime(int year, int month, int day, int hour, int minute,
 			int second, TimeZone timezone) {
-		super(null, null, null, 0.0, null, DvDateTimeParser.convertDateTime(
+		super(DvDateTimeParser.convertDateTime(
 				year, month, day, hour, minute, second, 0.0, timezone));
 		String format = timezone == null ? "yyyyMMdd'T'HH:mm:ss"
 				: "yyyyMMdd'T'HH:mm:ssZZ";
@@ -139,7 +136,7 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 
 	public DvDateTime(int year, int month, int day, int hour, int minute,
 			TimeZone timezone) {
-		super(null, null, null, 0.0, null, DvDateTimeParser.convertDateTime(
+		super(DvDateTimeParser.convertDateTime(
 				year, month, day, hour, minute, 0, 0.0, timezone));
 		String format = timezone == null ? "yyyyMMdd'T'HH:mm"
 				: "yyyyMMdd'T'HH:mmZZ";
@@ -148,7 +145,7 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 	}
 
 	public DvDateTime(int year, int month, int day, int hour, TimeZone timezone) {
-		super(null, null, null, 0.0, null, DvDateTimeParser.convertDateTime(
+		super(DvDateTimeParser.convertDateTime(
 				year, month, day, hour, 0, 0, 0.0, timezone));
 		String format = timezone == null ? "yyyyMMdd'T'HH" : "yyyyMMdd'T'HHZZ";
 		setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));

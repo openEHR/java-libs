@@ -37,7 +37,7 @@ public abstract class DvAbsoluteQuantity<T extends DvAbsoluteQuantity,
 	 */
 	protected DvAbsoluteQuantity(List<ReferenceRange<T>> referenceRanges, 
 			DvInterval<T> normalRange, CodePhrase normalStatus, 
-			double accuracy, String magnitudeStatus) {
+			S accuracy, String magnitudeStatus) {
 		
 		super(referenceRanges, normalRange, normalStatus, magnitudeStatus);
 
@@ -76,13 +76,13 @@ public abstract class DvAbsoluteQuantity<T extends DvAbsoluteQuantity,
      *
      * @return accuracy
      */
-    public double getAccuracy() {
+    public S getAccuracy() {
     	return accuracy;
     }
     
     
     /* fields */
-    private final double accuracy;    
+    private final S accuracy;    
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

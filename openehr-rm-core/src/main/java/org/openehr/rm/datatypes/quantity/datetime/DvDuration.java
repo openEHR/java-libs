@@ -150,7 +150,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	public static DvDuration getDifference(DvTemporal start, DvTemporal end) {
 		Duration d = new Duration(start.getDateTime(), end.getDateTime());
 		DvDateTime dt = (DvDateTime) end;
-		return new DvDuration(null, null, null, end.getAccuracy(), false, null,
+		return new DvDuration(null, null, null, 0.0, false, null,
 				d.toPeriodFrom(start.getDateTime()));
 	}
 

@@ -54,7 +54,7 @@ public class DvDate extends DvTemporal<DvDate> {
 			@Attribute(name = "normalRange")
 			DvInterval<DvDate> normalRange, @Attribute(name = "normalStatus")
 			CodePhrase normalStatus, @Attribute(name = "accuracy")
-			double accuracy, @Attribute(name = "magnitudeStatus")
+			DvDuration accuracy, @Attribute(name = "magnitudeStatus")
 			String magnitudeStatus, @Attribute(name = "value", required = true)
 			String value) {
 		super(referenceRanges, normalRange, normalStatus, accuracy,
@@ -63,7 +63,7 @@ public class DvDate extends DvTemporal<DvDate> {
 
 	protected DvDate(List<ReferenceRange<DvDate>> referenceRanges,
 			DvInterval<DvDate> normalRange, CodePhrase normalStatus,
-			double accuracy, String magnitudeStatus, DateTime datetime,
+			DvDuration accuracy, String magnitudeStatus, DateTime datetime,
 			String pattern) {
 		super(referenceRanges, normalRange, normalStatus, accuracy,
 				magnitudeStatus, datetime);
@@ -80,7 +80,7 @@ public class DvDate extends DvTemporal<DvDate> {
 	 * @param accuracyPercent
 	 */
 	public DvDate() {
-		super(null, null, null, 0.0, null, DvDateTimeParser.defaultDate());
+		super(DvDateTimeParser.defaultDate());
 		setValue(DvDateTimeParser.toDateString(getDateTime(), "yyyy-MM-dd"));
 		setBooleans(false, true, true);
 	}
@@ -94,8 +94,7 @@ public class DvDate extends DvTemporal<DvDate> {
 	 * @param timezone null if use default timezone
 	 */
 	public DvDate(int year, int month, int day) {
-		super(null, null, null, 0.0, null, DvDateTimeParser.convertDate(year,
-				month, day));
+		super(DvDateTimeParser.convertDate(year, month, day));
 		setValue(year + "-" + month + "-" + day);
 		setBooleans(false, true, true);
 	}
@@ -111,21 +110,19 @@ public class DvDate extends DvTemporal<DvDate> {
 	 * @param timezone
 	 */
 	public DvDate(int year, int month) {
-		super(null, null, null, 0.0, null, DvDateTimeParser.convertDate(year,
-				month, 1));
+		super(DvDateTimeParser.convertDate(year, month, 1));
 		setValue(year + "-" + month);
 		setBooleans(true, true, false);
 	}
 
 	public DvDate(int year) {
-		super(null, null, null, 0.0, null, DvDateTimeParser.convertDate(year,
-				1, 1));
+		super(DvDateTimeParser.convertDate(year, 1, 1));
 		setValue(Integer.toString(year));
 		setBooleans(true, false, false);
 	}
 
 	public DvDate(String value) {
-		this(null, null, null, 0.0, null, value);
+		this(null, null, null, null, null, value);
 	}
 
 	/**
@@ -222,9 +219,11 @@ public class DvDate extends DvTemporal<DvDate> {
 
 		final DvDate dDate = (DvDate) o;
 
-		return new EqualsBuilder().append(isPartial, dDate.isPartial).append(
-				monthKnown, dDate.monthKnown).append(dayKnown, dDate.dayKnown)
-				.isEquals();
+		return new EqualsBuilder()
+					.append(isPartial, dDate.isPartial)
+					.append(monthKnown, dDate.monthKnown)
+					.append(dayKnown, dDate.dayKnown)
+					.isEquals();
 	}
 
 	/**
