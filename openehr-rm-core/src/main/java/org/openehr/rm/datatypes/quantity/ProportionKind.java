@@ -23,30 +23,82 @@ public enum ProportionKind {
 	/**
 	 * Ratio type. Numerator and denominator may be any value
 	 */
-	RATIO,
+	RATIO(0),
 	
 	/**
 	 * Denominator must be 1
 	 */
-	UNITARY,
+	UNITARY(1),
 	
 	/**
 	 * Denominator is 100, numerator is understood as a percentage value
 	 */
-	PERCENT,
+	PERCENT(2),
 	
 	/**
 	 * Numerator and denominator are integral, and the presentation
 	 * method uses a slash, e.g. "1/2".
 	 */
-	FRACTION,
+	FRACTION(3),
 	
 	/**
 	 * Numerator and denominator are integral, and the presentation
 	 * method uses a slash, e.g. "1/2"; if the numerator is greater than the
 	 * denominator, e.g. n=3, d=2, the presentation is "1 1/2"
 	 */
-	INTEGER_FRACTION
+	INTEGER_FRACTION(4);
+	
+	/* 
+	 * Constructor
+	 * 
+	 * @param value
+	 */
+	private ProportionKind(int value) {
+		this.value = value;
+	}
+	
+	/**
+	 * Gets the integer value of this proportion kind
+	 * 
+	 * @return int value
+	 */
+	public int getValue() {
+		return value;
+	}
+	
+	/**
+	 * Gets string presentation of this proportion kind
+	 */
+	public String toString() {
+		return Integer.toString(value);
+	}
+	
+	/**
+	 * Gets proportion kind from integer value
+	 * 
+	 * @param value
+	 * @return proportionKind of given value 
+	 * @throws IllegalArgument if value is unknown
+	 */
+	public static ProportionKind fromValue(int value) {
+		switch (value) {
+		case 0:
+			return RATIO;
+		case 1:
+			return UNITARY;
+		case 2:
+			return PERCENT;
+		case 3:
+			return FRACTION;
+		case 4:
+			return INTEGER_FRACTION;
+		default:
+			throw new IllegalArgumentException("unknown value");
+		}
+	}
+	
+	/* field */
+	private int value;
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
