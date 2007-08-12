@@ -1,6 +1,6 @@
 <project name="EhrBank Integration" default="dist" basedir=".">
 	
-	<description>DK MedModule Client Adaptations</description>
+	<description>EhrBank Integration</description>
 	
 	<!-- set global properties for this build -->
 	<property name="src" location="src/main/java"/>
