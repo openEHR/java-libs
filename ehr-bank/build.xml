@@ -1,0 +1,100 @@
+<project name="EhrBank Integration" default="dist" basedir=".">
+	
+	<description>DK MedModule Client Adaptations</description>
+	
+	<!-- set global properties for this build -->
+	<property name="src" location="src/main/java"/>
+	<property name="build" location="build"/>
+	<property name="lib" location="lib"/>
+	<property name="build.classes" location="build/classes"/>
+	<property name="build.generated" location="build/generated"/>
+	<property name="dist" location="dist"/>
+	<property name="axis.home" location="/opt/axis-1_4"/>
+	<property name="local.wsdl" value="src/main/wsdl/EhrService.asmx"/>
+	
+	<path id="project.classpath">
+		<fileset dir="${lib}">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathelement path="${java.class.path}/"/>
+		<pathelement path="${additional.path}"/>
+	</path>
+	
+	<path id="axis.classpath">
+		<fileset dir="${axis.home}/lib">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+	
+	<taskdef resource="axis-tasks.properties" classpathref="axis.classpath"/>
+	
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}"/>
+		<mkdir dir="${build.classes}"/>
+		<mkdir dir="${build.generated}"/>
+		<mkdir dir="${dist}"/>
+		<!-- makre dir to generate binding converter -->
+		<mkdir dir="${build.generated}/org/openehr/binding"/>
+	</target>
+	
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+	
+	<target name="generate" depends="init" description="generate the source">
+		<axis-wsdl2java output="${build.generated}" verbose="true"
+			url="${local.wsdl}">
+		</axis-wsdl2java>
+	</target>
+	
+	<target name="compile-generated" depends="init,generate"
+		description="compile the source ">
+		<!-- compile generated source -->
+		<javac srcdir="${build.generated}" destdir="${build.classes}" source="1.5"
+			target="1.5" debug="on">
+			<classpath refid="project.classpath"/>
+			<classpath refid="axis.classpath"/>
+		</javac>		
+	</target>
+	
+	<target name="compile-src">
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac srcdir="${src}" destdir="${build.classes}" source="1.5" target="1.5"
+			debug="on">
+			<classpath refid="project.classpath"/>
+			<classpath refid="axis.classpath"/>
+		</javac>
+	</target>
+	
+	<target name="compile" depends="compile-generated,compile-src"
+		description="compile all the source ">		
+	</target>
+	
+	<target name="run" description="run tester">
+		<java classname="org.openehr.ehrdemo.EhrServiceTester"
+			fork="true">
+			<classpath>				
+				<pathelement location="${build.classes}"/>				
+			</classpath>
+			<classpath refid="project.classpath"/>
+			<classpath refid="axis.classpath"/>
+		</java>
+	</target>
+	
+	<target name="convert-gen" description="run converter generator">
+		<java classname="org.openehr.ehrdemo.ConverterGen"
+			fork="true">
+			<classpath>				
+				<pathelement location="${build.classes}"/>				
+			</classpath>
+			<classpath refid="project.classpath"/>
+			<classpath refid="axis.classpath"/>
+		</java>
+	</target>
+	
+</project>
