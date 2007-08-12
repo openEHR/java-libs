@@ -88,12 +88,17 @@ public final class ItemTable extends ItemStructure {
     }
 
     /**
-     * Gets rows
+     * Gets rows of this table
      * 
      * @return rows
      */
-    public List<Item> getRows() {
-        return ((Cluster) getRepresentation() ).getItems();
+    public List<Cluster> getRows() {
+    	List<Item> items = ((Cluster) getRepresentation() ).getItems();
+    	List<Cluster> rows = new ArrayList<Cluster>(items.size());
+    	for(int i = 0, j = items.size(); i < j; i++) {
+    		rows.add((Cluster) items.get(i));
+    	}
+    	return rows;
     }
     
     /**
@@ -102,8 +107,6 @@ public final class ItemTable extends ItemStructure {
      * @return row count
      */
     public int rowCount() {
-        //Cluster firstCol = (Cluster) columns().get(0);
-        //return firstCol.getItems().size();
         return getRows().size();
     }
 
@@ -123,8 +126,6 @@ public final class ItemTable extends ItemStructure {
      * @return List of Text
      */
     public List<DvText> rowNames() {
-        //Cluster firstCol = (Cluster) columns().get(0);
-        //return fetchNames(( firstCol.getItems() ));
         return fetchNames(getRows());
     }
 
@@ -134,12 +135,11 @@ public final class ItemTable extends ItemStructure {
      * @return List of Text
      */
     public List<DvText> columnNames() {
-        //return fetchNames(columns());
         Cluster firstCol = (Cluster) getRows().get(0);
         return fetchNames(( firstCol.getItems() ));
     }
 
-    private List<DvText> fetchNames(List<Item> items) {
+    private List<DvText> fetchNames(List<? extends Item> items) {
         List<DvText> names = new ArrayList<DvText>();
         for (Item item : items) {
             names.add(item.getName());
@@ -310,15 +310,7 @@ public final class ItemTable extends ItemStructure {
             throw new IllegalArgumentException(
                     "unknown keys: " + colKey + ", " + rowKey);
         }
-        return (Element)firstRow.getItems().get(col);
-        /*Cluster firstCol = (Cluster) columns().get(0);
-        int col = indexOf(columns(), colKey);
-        int row = indexOf(firstCol.getItems(), rowKey);
-        if (col < 0 || row < 0) {
-            throw new IllegalArgumentException(
-                    "unknown keys: " + colKey + ", " + rowKey);
-        }
-        return elementAtCell(col, row);*/
+        return (Element)firstRow.getItems().get(col);        
     }
 
     /**
@@ -394,7 +386,8 @@ public final class ItemTable extends ItemStructure {
     }
     
     // return row with given name or null
-    private Item itemWithName(List<Item> items, String name, String path) {
+    private Item itemWithName(List<? extends Item> items, String name, 
+    		String path) {
         for (Item item : items) {
             if (item.getName().getValue().equals(name)) {
                 return item;
