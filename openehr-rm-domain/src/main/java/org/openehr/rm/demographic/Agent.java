@@ -14,18 +14,16 @@
  */
 package org.openehr.rm.demographic;
 
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.LocatableRef;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
-import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -65,7 +63,7 @@ public class Agent extends Actor {
      */
     @FullConstructor
             public Agent(
-            @Attribute(name = "uid", required = true) ObjectID uid,
+            @Attribute(name = "uid", required = true) UIDBasedID uid,
             @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
             @Attribute(name = "name", required = true) DvText name,
             @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,

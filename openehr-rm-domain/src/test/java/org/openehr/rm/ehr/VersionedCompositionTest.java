@@ -135,7 +135,7 @@ public class VersionedCompositionTest extends CompositionTestBase {
     private Composition composition(String node, String text)
             throws Exception {
         DvText name = new DvText(text, lang, encoding, ts);
-        ObjectID id = new HierObjectID("1.11.2.5.1.66.3");
+        UIDBasedID id = new HierObjectID("1.11.2.5.1.66.3");
         List<ContentItem> content = new ArrayList<ContentItem>();
         content.add(section());
         DvCodedText category = TestCodeSetAccess.EVENT;
@@ -149,7 +149,7 @@ public class VersionedCompositionTest extends CompositionTestBase {
     private Composition compositionPersistent(String node, String text)
             throws Exception {
         DvText name = new DvText(text, lang, encoding, ts);
-        ObjectID id = new HierObjectID("1.11.2.5.1.66.3");
+        UIDBasedID id = new HierObjectID("1.11.2.5.1.66.3");
         List<ContentItem> content = new ArrayList<ContentItem>();
         content.add(section());
         DvCodedText category = TestCodeSetAccess.PERSISTENT;

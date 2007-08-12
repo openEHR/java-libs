@@ -17,7 +17,7 @@ import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.CodePhrase;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.terminology.TestCodeSetAccess;
@@ -47,7 +47,7 @@ public class CompositionTest extends CompositionTestBase {
 
     public void setUp() throws Exception {
         DvText name = new DvText("composition");
-        ObjectID id = new HierObjectID("1.11.2.3.4.5.0");
+        UIDBasedID id = new HierObjectID("1.11.2.3.4.5.0");
         List<ContentItem> content = new ArrayList<ContentItem>();
         content.add(section("section one"));
         content.add(section("section two", "observation"));
@@ -183,7 +183,7 @@ public class CompositionTest extends CompositionTestBase {
             }
         };
         DvText name = new DvText("composition");
-        ObjectID id = new HierObjectID("1.11.2.4.22.5.2");
+        UIDBasedID id = new HierObjectID("1.11.2.4.22.5.2");
         List<ContentItem> content = new ArrayList<ContentItem>();
         content.add(section("section one"));
         content.add(section("section two", "observation"));

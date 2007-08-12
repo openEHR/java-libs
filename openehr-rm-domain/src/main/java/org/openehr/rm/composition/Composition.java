@@ -18,7 +18,7 @@ import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.*;
 import org.openehr.rm.common.generic.PartyProxy;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
@@ -57,7 +57,7 @@ public final class Composition extends Locatable {
      *                                  or links not null and empty
      */
     @FullConstructor
-            public Composition(@Attribute(name = "uid") ObjectID uid,
+            public Composition(@Attribute(name = "uid") UIDBasedID uid,
                                @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
                                @Attribute(name = "name", required = true) DvText name,
                                @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,

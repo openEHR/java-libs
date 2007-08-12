@@ -21,7 +21,7 @@ import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.datatypes.text.DvText;
 
@@ -52,7 +52,7 @@ public final class Section extends ContentItem {
      * @throws IllegalArgumentException if items not null and empty
      */
     @FullConstructor
-            public Section(@Attribute(name = "uid") ObjectID uid,
+            public Section(@Attribute(name = "uid") UIDBasedID uid,
                            @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
                            @Attribute(name = "name", required = true) DvText name,
                            @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,

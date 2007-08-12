@@ -19,7 +19,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Pathable;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.DvInterval;
@@ -61,7 +61,7 @@ public class PartyRelationship extends Locatable {
      */
     @FullConstructor
             public PartyRelationship(
-            @Attribute(name = "uid", required = true) ObjectID uid,
+            @Attribute(name = "uid", required = true) UIDBasedID uid,
             @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
             @Attribute(name = "name", required = true) DvText name,
             @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,

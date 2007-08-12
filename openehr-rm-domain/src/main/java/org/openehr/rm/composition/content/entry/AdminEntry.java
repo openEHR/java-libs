@@ -28,7 +28,7 @@ import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
 
@@ -61,7 +61,7 @@ public class AdminEntry extends Entry {
 	 * @param terminologyService
 	 */
     @FullConstructor
-	public AdminEntry(@Attribute(name = "uid") ObjectID uid,
+	public AdminEntry(@Attribute(name = "uid") UIDBasedID uid,
                        @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
                        @Attribute(name = "name", required = true) DvText name,
                        @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,

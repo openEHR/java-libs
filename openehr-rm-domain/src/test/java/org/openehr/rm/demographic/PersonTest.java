@@ -15,7 +15,7 @@
 package org.openehr.rm.demographic;
 
 import org.openehr.rm.support.identification.LocatableRef;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.common.archetyped.Archetyped;
@@ -23,12 +23,8 @@ import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
-import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 
-import java.util.Set;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * PersonTest
@@ -43,7 +39,7 @@ public class PersonTest extends DemographicTestBase {
     }
 
     public void testConstructor() throws Exception {
-        ObjectID uid = oid("1.7.8.4");
+    	UIDBasedID uid = oid("1.7.8.4");
         DvText name = text("person name");
         String meaning = "at0001";
         ItemStructure details = itemSingle("person details");
@@ -120,7 +116,7 @@ public class PersonTest extends DemographicTestBase {
                 languages);
     }    
 
-    private void assertExceptionThrow(ObjectID uid, String meaning,
+    private void assertExceptionThrow(UIDBasedID uid, String meaning,
                                       DvText name, Archetyped archetypeDetails,
                                       Set<PartyIdentity> identities,
                                       Set<Contact> contacts,

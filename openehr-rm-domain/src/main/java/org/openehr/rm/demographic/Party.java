@@ -21,8 +21,7 @@ import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.LocatableRef;
-import org.openehr.rm.support.identification.ObjectRef;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -64,7 +63,7 @@ public abstract class Party extends Locatable {
      *                                  or uid is null, or identities is null
      *                                  or empty, or contacts is empty
      */
-    protected Party(ObjectID uid, String archetypeNodeId, DvText name,
+    protected Party(UIDBasedID uid, String archetypeNodeId, DvText name,
                     Archetyped archetypeDetails, FeederAudit feederAudit,
                     Set<Link> links, Set<PartyIdentity> identities, 
                     Set<Contact> contacts, Set<PartyRelationship> relationships,

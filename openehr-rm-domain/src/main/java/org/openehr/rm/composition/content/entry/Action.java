@@ -26,11 +26,10 @@ import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
-import org.openehr.rm.datatypes.encapsulated.DvParsable;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
 
@@ -65,7 +64,7 @@ public final class Action extends CareEntry {
      * @param terminologyService
      */
     @FullConstructor
-            public Action(@Attribute(name = "uid") ObjectID uid,
+            public Action(@Attribute(name = "uid") UIDBasedID uid,
             @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
             @Attribute(name = "name", required = true) DvText name,
             @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,

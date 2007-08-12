@@ -19,7 +19,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Pathable;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.FullConstructor;
@@ -57,7 +57,7 @@ public class PartyIdentity extends Locatable {
      *                                  or details null
      */
     @FullConstructor
-            public PartyIdentity(@Attribute(name = "uid") ObjectID uid,
+            public PartyIdentity(@Attribute(name = "uid") UIDBasedID uid,
                                  @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
                                  @Attribute(name = "name", required = true) DvText name,
                                  @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,

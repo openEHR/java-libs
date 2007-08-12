@@ -19,7 +19,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Pathable;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datatypes.text.DvText;
 
 import java.util.List;
@@ -48,7 +48,7 @@ public class XFolder extends Locatable {
      *                                  or links not null and empty
      *                                  or empty folders or empty compositions
      */
-    public XFolder(ObjectID uid, String archetypeNodeId, DvText name,
+    public XFolder(UIDBasedID uid, String archetypeNodeId, DvText name,
                    Archetyped archetypeDetails, FeederAudit feederAudit,
                    Set<Link> links, Locatable parent, List<XFolder> folders,
                    List<XComposition> compositions) {

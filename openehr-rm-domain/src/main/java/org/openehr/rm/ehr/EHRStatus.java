@@ -29,7 +29,7 @@ import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.common.generic.PartySelf;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 
 /**
  * Single object per EHR giving various EHR-wide information.
@@ -40,7 +40,7 @@ import org.openehr.rm.support.identification.ObjectID;
 public class EHRStatus extends Locatable {
 
     @FullConstructor public EHRStatus(
-            @Attribute(name = "uid", required = true) ObjectID uid,
+            @Attribute(name = "uid", required = true) UIDBasedID uid,
             @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
             @Attribute(name = "name", required = true) DvText name,
             @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,

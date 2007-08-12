@@ -19,7 +19,7 @@ import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.ObjectRef;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 
 /**
@@ -35,7 +35,7 @@ public class PartyRelationshipTest extends DemographicTestBase {
     }
 
     public void testConstructor() throws Exception {
-        ObjectID oid = oid("1.5.2.34.0.4.3");
+    	UIDBasedID oid = oid("1.5.2.34.0.4.3");
         String meaning = "at0000";
         DvText name = text("father");
         DvInterval<DvDate> time = new DvInterval<DvDate>(
@@ -62,7 +62,7 @@ public class PartyRelationshipTest extends DemographicTestBase {
         assertException(oid, meaning, name, details, time, null, null);
     }
 
-    private void assertException(ObjectID oid, String meaning,
+    private void assertException(UIDBasedID oid, String meaning,
                                  DvText name, ItemStructure details,
                                  DvInterval<DvDate> timeValidity,
                                  ObjectRef source,

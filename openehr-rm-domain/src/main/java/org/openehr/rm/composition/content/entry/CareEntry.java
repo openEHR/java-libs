@@ -26,7 +26,7 @@ import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
 
@@ -53,7 +53,7 @@ public abstract class CareEntry extends Entry {
      * @throws IllegalArgumentException if archetypeNodeId or name null,
      *                                  or subject or provider null or invalid
      */
-    protected CareEntry(ObjectID uid, String archetypeNodeId, DvText name,
+    protected CareEntry(UIDBasedID uid, String archetypeNodeId, DvText name,
                  Archetyped archetypeDetails, FeederAudit feederAudit,
                  Set<Link> links, Locatable parent, CodePhrase language,
                  CodePhrase encoding, PartyProxy subject, 

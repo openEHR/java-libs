@@ -23,7 +23,7 @@ import org.openehr.rm.common.archetyped.*;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.encapsulated.DvParsable;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 
 /**
  * Defines a single activity within an Instruction, such as a medication administration.
@@ -50,7 +50,7 @@ public class Activity extends Locatable {
 	 * @throws IllegalArgumentExeption if required parameters missing
 	 */
 	public Activity(
-			@Attribute(name = "uid") ObjectID uid, 
+			@Attribute(name = "uid") UIDBasedID uid, 
 			@Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId, 
 			@Attribute(name = "name", required = true) DvText name, 
 			@Attribute(name = "archetypeDetails") Archetyped archetypeDetails,

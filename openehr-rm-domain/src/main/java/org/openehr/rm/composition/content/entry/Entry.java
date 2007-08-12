@@ -20,13 +20,11 @@ import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyProxy;
-import org.openehr.rm.common.generic.PartyRelated;
 import org.openehr.rm.common.generic.PartySelf;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.composition.content.ContentItem;
-import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
 
@@ -61,7 +59,7 @@ public abstract class Entry extends ContentItem {
      * @throws IllegalArgumentException if archetypeNodeId or name null,
      *                                  or subject or provider null or invalid
      */
-    protected Entry(ObjectID uid, String archetypeNodeId, DvText name,
+    protected Entry(UIDBasedID uid, String archetypeNodeId, DvText name,
                  Archetyped archetypeDetails, FeederAudit feederAudit,
                  Set<Link> links, Locatable parent, CodePhrase language,
                  CodePhrase encoding, PartyProxy subject, 

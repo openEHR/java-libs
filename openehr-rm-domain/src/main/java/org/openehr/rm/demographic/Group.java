@@ -14,7 +14,7 @@
  */
 package org.openehr.rm.demographic;
 
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.LocatableRef;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
@@ -58,7 +58,7 @@ public class Group extends Actor {
      */
     @FullConstructor
             public Group(
-            @Attribute(name = "uid", required = true) ObjectID uid,
+            @Attribute(name = "uid", required = true) UIDBasedID uid,
             @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
             @Attribute(name = "name", required = true) DvText name,
             @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,

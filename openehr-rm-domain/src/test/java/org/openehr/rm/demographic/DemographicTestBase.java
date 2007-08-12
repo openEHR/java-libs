@@ -146,7 +146,7 @@ public class DemographicTestBase extends TestCase {
                 ObjectRef.Type.CONTRIBUTION);
     }
 
-    protected ObjectID oid(String value) {
+    protected UIDBasedID oid(String value) {
         return new HierObjectID(value);
     }
 
@@ -154,20 +154,6 @@ public class DemographicTestBase extends TestCase {
         return new ObjectVersionID(value);
     }
     
-/*    protected Composition composition(String id) throws Exception {
-            ObjectID uid = oid(id);
-            String meaning = "at0000";
-            DvText name = text("section name");
-            List<Section> content = new ArrayList<Section>();
-            content.add(section());
-            Archetyped archetypeDetails = new Archetyped(new ArchetypeID(
-                "openehr-ehr_rm-Composition.physical_examination.v2"), "1.0");
-            return new Composition(uid, meaning, name, archetypeDetails, null, 
-                    links(3), null, content, eventContext(), provider("1.4.5.1.12.4.2", 
-                    ObjectRef.Type.COMPOSITION), TestCodeSetAccess.EVENT,
-                    new CodePhrase("test", "present_code"), ts);
-    }*/
-
     protected Set<Link> links(int num) {
         Set<Link> links = new HashSet<Link>();
         for (int i = 0; i < num; i++) {
@@ -195,19 +181,8 @@ public class DemographicTestBase extends TestCase {
                 itemSingle("other context"), ts);
     }
 
-/*    protected Section section() throws Exception {
-        ObjectID uid = oid("4.23.4.12.44.1.2");
-        String meaning = "at0000";
-        DvText name = text("section2 name");
-        List<ContentItem> items = new ArrayList<ContentItem>();
-        items.add(instruction());
-        items.add(observation("observation in section"));
-        new Section("at0000", new DvText("section"), items);
-        return new Section(uid, meaning, name, null, null, null, null, items);
-    }*/
-
     protected Instruction instruction() throws Exception {
-        ObjectID uid = oid("1.34.8.2.3.1.4");
+    	UIDBasedID uid = oid("1.34.8.2.3.1.4");
         String meaning = "at0000";
         DvText name = text("instruction 2 name");
         Archetyped archetypeDetails = new Archetyped(

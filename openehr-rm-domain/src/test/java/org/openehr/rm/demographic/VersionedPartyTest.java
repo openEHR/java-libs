@@ -28,7 +28,7 @@ import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.identification.HierObjectID;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.support.identification.TerminologyID;
@@ -97,7 +97,7 @@ public class VersionedPartyTest extends DemographicTestBase {
     }
 
     private Person person(String detailsText) throws Exception {
-        ObjectID uid = oid("1.9.3.42::creating.system::1");
+    	UIDBasedID uid = oid("1.9.3.42::creating.system::1");
         DvText name = text("name");
         String meaning = "at0000";
         ItemStructure details = itemSingle(detailsText);
