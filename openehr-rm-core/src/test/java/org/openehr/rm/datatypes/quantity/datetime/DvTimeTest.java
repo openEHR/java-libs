@@ -186,7 +186,7 @@ public class DvTimeTest extends TestCase {
         assertEquals(19, dTime.getHour());
         assertEquals(55, dTime.getMinute());
         assertEquals(45, dTime.getSecond());
-        assertEquals(0.829, dTime.getFractionalSecond());
+        assertEquals(0.829, dTime.getFractionalSecond(), 0.000001);
         dTime = dvTime("17:49:08,679-02");
         assertEquals(17, dTime.getHour());
         assertEquals(49, dTime.getMinute());
