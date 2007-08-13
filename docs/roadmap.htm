@@ -36,12 +36,12 @@
 			system. As convention, these components are categorized into three principal
 			layers - Domain, Persistence and Presentation. Since openEHR systems are based
 			on two-level model approach, the Domain Layer gets more complicated than that of
-			any conventional Enterprise Applications. Instead of hard-coded into
+			any conventional Enterprise Applications. Instead of being hard-coded into
 			software artifacts, domain models are expressed in the form of the Archetype
 			Model.</p>
 		
-		<p>Tools are listed separately since they don't belong to any specific layer since
-			they can be used as stand-alone applications or as part of the larger system.</p>
+		<p>Tools are listed separately since they don't belong to any specific layer.
+			They can be used as stand-alone applications or as part of the larger system.</p>
 		
 		<h2>Domain Layer</h2>
 		
@@ -67,7 +67,7 @@
 			<li><b>Archetype Service</b> minimal feature includes storage, retrieval
 				and versioning of archetypes</li>
 			<li><b>Terminology Service</b> * a minimal openEHR terminology service
-				necessary for the kernel work properly - the initial coding was done as part
+				necessary for the kernel to work properly - the initial coding was done as part
 				of the parser component and it should be extracted as standard alone
 				component. * a generic terminology service that can serve different
 				international terminologies will be required in full-blown systems</li>
@@ -109,14 +109,7 @@
 			<li><b>Form Validator</b> this components provides user data entry
 				validation based on constraints defined by the Archetypes. It is required
 				to work closely with the Kernel component for validation and provide
-				meaningful error message for the end user. </li>
-			<li><b>Archetype Service</b> minimal feature includes storage, retrieval
-				and versioning of archetypes</li>
-			<li><b>Terminology Service</b> * a minimal openEHR terminology service
-				necessary for the kernel work properly - the initial coding was done as part
-				of the parser component and it should be extracted as standard alone
-				component. * a generic terminology service that can serve different
-				international terminologies will be required in full-blown systems</li>
+				meaningful error message for the end user. </li>			
 		</ol>
 		
 		<h2>Tools</h2>
