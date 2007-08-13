@@ -1,303 +1,326 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en">
-<head>
-
+	<head>
 		
-		
-  <title>The openEHR Java Reference Implementation Project</title>
-  <link rel="stylesheet" href="http://www.openehr.org/styles/oe.css" type="text/css" />
-</head>
-
-
+		<title>The openEHR Java Reference Implementation Project</title>
+		<link rel="stylesheet" href="http://www.openehr.org/styles/oe.css"
+			type="text/css"/>
+	</head>
+	
 	<body>
-
 		
-<h1> The
+		<h1> The
 			<span style="font-style: italic;">open</span>EHR Java Reference
 			Implementation Project </h1>
-
 		
-<hr style="width: 100%; height: 2px;" />
+		<hr style="width: 100%; height: 2px;"/>
 		
-		
-		
-<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
-
+		<table style="text-align: left; width: 100%;" border="0" cellpadding="2"
+			cellspacing="2">
+			
 			<tbody>
-
+				
 				<tr>
-
-					<td style="background-color: rgb(204, 204, 255);" colspan="2" rowspan="1">
+					
+					<td style="background-color: rgb(204, 204, 255);" colspan="2"
+						rowspan="1">
 						
-      <p class="table_cell_top_heading"></p>
-      <h2>Vital Statistics</h2>
-
+						<p class="table_cell_top_heading"></p>
+						<h2>Vital Statistics</h2>
+						
 					</td>
-
+					
 				</tr>
-
+				
 				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
-						<span style="font-weight: bold;">Project Leader</span><br />
-
+					
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">Project Leader</span>
+						<br/>
+						
 					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">
+					
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
 						Rong Chen; (ACODE, <a href="mailto:rXXong@acXXode.sXXe">
 						email</a>; remove XXs from email address)
-						<br />
- </td>
+						<br/> </td>
 				</tr>
-
+				
 				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
-						Development team<br />
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">Yin Su Lim,
-						
+					
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						Development team
+						<br/>
+						</td>
+					
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						Yin Su Lim,
 						Rodrigo Filgueira, Erik Sundvall, Mattias Forss, Johan
 						Hjalmarsson, Jonas Andersson, Joakim Fredriksson, Routis
 						Haralampos </td>
-
+					
 				</tr>
-
+				
 				<tr>
-      <td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
-						<span style="font-weight: bold;">Project Mailing List</span><br />
-
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">Project Mailing
+							List</span>
+						<br/>
+						
 					</td>
-      <td style="vertical-align: top; background-color: rgb(255, 255, 230);">
-						ref_impl_java@openehr.org - <a href="http://www.chime.ucl.ac.uk/mailman/listinfo/ref_impl_java">http://www.chime.ucl.ac.uk/mailman/listinfo/ref_impl_java</a>.<br />
- </td>
-    </tr>
-
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						ref_impl_java@openehr.org - <a
+							href="http://www.chime.ucl.ac.uk/mailman/listinfo/ref_impl_java">
+						http://www.chime.ucl.ac.uk/mailman/listinfo/ref_impl_java</a>
+						.
+						<br/> </td>
+				</tr>
+				
 				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+					
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
 						<span style="font-weight: bold;"> Developer
 							Guidelines</span>
-						<br />
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">
-						The <a href="docs/QA_guidelines.htm">guidelines</a> are used by the
-						team in managing this repository, and govern quality assurance
-						measures designed to guarantee that the repository moves from one
-						consistent state to another consistent state with every
-						change-set.
-						<br />
- </td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
-						<span style="font-weight: bold;">ARB change managed</span>
-						<br />
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">
-						No
-						<br />
- </td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
-						<span style="font-weight: bold;"> Language(s) &amp;  Technologies</span>
-						<br />
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">
-						<span style="font-weight: bold;">Java 1.5</span> 
-						<br />
- </td>
-
-				</tr>
-
-				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 204);">
-						<span style="font-weight: bold;">
-							<br />
-
-							<br />
-Source Repository </span>
-						<br />
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						<br/>
 						
-      <ul>
-
+					</td>
+					
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						The <a href="docs/QA_guidelines.htm">guidelines</a> are used
+						by the team in managing this repository, and govern quality
+						assurance measures designed to guarantee that the repository
+						moves from one consistent state to another consistent state with
+						every change-set.
+						<br/> </td>
+					
+				</tr>
+				
+				<tr>
+					
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">ARB change managed</span>
+						<br/>
+						
+					</td>
+					
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						No
+						<br/> </td>
+					
+				</tr>
+				
+				<tr>
+					
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;"> Language(s) &amp;
+							Technologies</span>
+						<br/>
+						
+					</td>
+					
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						<span style="font-weight: bold;">Java 1.5</span>
+						<br/>
+					</td>
+					
+				</tr>
+				
+				<tr>
+					
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 204);">
+						<span style="font-weight: bold;">
+							<br/>
+							
+							<br/> Source Repository </span>
+						<br/>
+						
+					</td>
+					
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						
+						<ul>
+							
 							<li>Subversion repository name =
-								<span style="font-weight: bold; color: rgb(204, 0, 0);">
+								<span
+									style="font-weight: bold; color: rgb(204, 0, 0);">
 									ref_impl_java</span>; URLs:
 								
-          <ul>
-
-									<li> repository top: <a href="http://svn.openehr.org/ref_impl_java">
+								<ul>
+									
+									<li> repository top: <a
+											href="http://svn.openehr.org/ref_impl_java">
 										http://svn.openehr.org/ref_impl_java</a>
 										</li>
-
-									<li> <a href="http://www.openehr.org/wsvn/ref_impl_java/?sc=0">
+									
+									<li> <a
+											href="http://www.openehr.org/wsvn/ref_impl_java/?sc=0">
 										web-view</a>
 									</li>
-
-								
-          </ul>
- </li>
-
+									
+								</ul> </li>
 							
+						</ul>
 						
-      </ul>
-
 					</td>
-
+					
 				</tr>
-
+				
 				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 204);">
+					
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 204);">
 						<span style="font-weight: bold;">
-							<br />
-
-							<br />
-Builder Server </span>
-						<br />
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">
+							<br/>
+							
+							<br/> Builder Server </span>
+						<br/>
 						
-      <ul>
-
-							<li>Continous Integration Server: 
-								<a href="http://openehr.cambiosys.org/continuum">Continuum</a></li>
-      </ul>
 					</td>
-
+					
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						
+						<ul>
+							
+							<li>Continous Integration Server: <a
+									href="http://openehr.cambiosys.org/continuum">
+								Continuum</a></li>
+						</ul>
+					</td>
+					
 				</tr>
 				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 204);">
+					
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 204);">
 						<span style="font-weight: bold;">
-							<br />
-
-							<br />
-Downloads</span>
-						<br />
-
-					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">
+							<br/>
+							
+							<br/> Downloads</span>
+						<br/>
 						
-      <ul>
-
-							<li><a href="readme.txt">release notes</a>
+					</td>
+					
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
+						
+						<ul>
+							
+							<li><a href="readme.txt">Release notes</a>
 							</li>
-
-							<li><a href="docs/install.txt">detailed installation
+							
+							<li><a href="docs/quick-start.htm">A quick start
+								guide</a>
+							</li>
+							
+							<li><a href="docs/install.txt">Detailed installation
 								instructions</a>
 							</li>
-
-							<li> <a href="docs/download.htm">
-								jar files downlad and online javadoc</a>
-							</li>
-
-							<li> <a href="docs/design.html">design document</a>
+							
+							<li> <a href="docs/download.htm"> Download page and online
+								javadocs</a>
 							</li>
 							
+							<li> <a href="docs/design.html">Design document</a>
+							</li>
+							
+						</ul>
 						
-      </ul>
-
 					</td>
-
+					
 				</tr>
-
+				
 				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; background-color: rgb(255, 255, 204);">
+					
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; background-color: rgb(255, 255, 204);">
 						<span style="font-weight: bold;">
-							<br />
- Problem Reports (PRs)
-							<br />
- Change Requests (CRs) </span>
+							<br/> Problem Reports (PRs)
+							<br/> Change Requests (CRs) </span>
 					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">
+					
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
 						
-      <ul>
-
-							<li><a href="http://coruscant.chime.ucl.ac.uk:8200/openEHR_Collector/projects/reference_implementations/javakernel/PR/folder_contents">
+						<ul>
+							
+							<li><a
+									href="http://coruscant.chime.ucl.ac.uk:8200/openEHR_Collector/projects/reference_implementations/javakernel/PR/folder_contents">
 								PRs</a>
 							</li>
-
-							<li><a href="http://coruscant.chime.ucl.ac.uk:8200/openEHR_Collector/projects/reference_implementations/javakernel/CR/folder_contents">
+							
+							<li><a
+									href="http://coruscant.chime.ucl.ac.uk:8200/openEHR_Collector/projects/reference_implementations/javakernel/CR/folder_contents">
 								CRs</a>
 							</li>
-
+							
+						</ul>
 						
-      </ul>
-
 					</td>
-
+					
 				</tr>
-
+				
 				<tr>
-
-					<td class="table_cell_left_heading" style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
+					
+					<td class="table_cell_left_heading"
+						style="vertical-align: top; width: 200px; background-color: rgb(255, 255, 204);">
 						<span style="font-weight: bold;">Status</span>
-						<br />
-
+						<br/>
+						
 					</td>
-
-					<td style="vertical-align: top; background-color: rgb(255, 255, 230);">
+					
+					<td
+						style="vertical-align: top; background-color: rgb(255, 255, 230);">
 						Release 1.0.1 RC
-						<br />
- </td>
-
+						<br/> </td>
+					
 				</tr>
-
+				
+			</tbody>
 			
-  </tbody>
+		</table>
 		
-</table>
 
+		<h2>News</h2>
+		<ul>
+			<li><a href="docs/medinfo-workshop.htm"><span style="font-weight: bold;">
+				Instructions for attendees to the openEHR Implementation Workshop at Medinfo
+			</span></a></li>
+			<li>12 Aug 2007 - Documents updated; quick start, download page added</li>
+			<li>08 Aug 2007 - The Java project build server launched</li>
+			<li>27 Oct 2006 - Release-1.0.1 RC1 announced</li>
+		</ul>
 		
-		
-<h2>Description</h2>
- This repository contains components comprising a reference
+		<h2>Description</h2> This repository contains components comprising a reference
 		implementation of
 		<span style="font-style: italic;">open</span>EHR in the Java language.
 		Eventually the components will include:
-		<br />
-
+		<br/>
 		
-		
-<ul>
-
+		<ul>
 			
 			<li>back-end services, such as EHR service, demographic service, archetype
 				service</li>
-
 			
 			<li>a client component, which is built in to user applications to "
 				<span style="font-style: italic;">open</span>EHR-enable" them, i.e.
 				to add the capability of an archetyping/templating kernel, security,
 				client side communication with back-end services, and so on</li>
-
 			
 			<li>as part of the client component, a "kernel". The idea of a&nbsp;kernel in
 				<span style="font-style: italic;">open</span>EHR is a small but
@@ -307,88 +330,65 @@ Downloads</span>
 				central to the archetype method. We are aiming for this implementation to
 				become the openEHR reference implementation of the kernel for the Java
 				language.</li>
-
-			<li>ADL parser and serializer</li>
-
 			
+			<li>ADL parser and serializer</li>
+			
+		</ul>
 		
-</ul>
-
+		<h3>Implemented openEHR Specifications&nbsp;</h3>
 		
-		
-<h3>Implemented openEHR Specifications&nbsp;</h3>
-
-		
-<ul>
-
+		<ul>
 			
 			<li>
 				<span style="font-style: italic; font-weight: bold;">open</span>
 				<span style="font-weight: bold;">EHR Reference Model</span>:
 				EHR,&nbsp;EHR Extract,&nbsp;Demographic,&nbsp;Data
 				Types,&nbsp;Data Structures,&nbsp;Common,&nbsp;Support</li>
-
 			
 			<li>
 				<span style="font-style: italic; font-weight: bold;">open</span>
 				<span style="font-weight: bold;">EHR Archetype Model</span>:
-				Archetype Object Model, openEHR Archetype Profile, Archetype Definition Language </li>
-
+				Archetype Object Model, openEHR Archetype Profile, Archetype Definition
+				Language </li>
 			
+		</ul>
 		
-</ul>
-
-		
-		
-<ul>
-
+		<ul>
 			
+		</ul>
 		
-</ul>
-
+		<h3>Component Descriptions
+			<br/> </h3>
 		
-		
-<h3>Component Descriptions
-			<br />
- </h3>
-
-		
-<ul>
-
+		<ul>
+			
 			<li><b>openehr-rm</b> Java implementation of the Reference Models (RM)</li>
 			
-			<li><b>openehr-aom</b> Java implementation of the Archetype Object Model (AOM)</li>
-
-			<li><b>openehr-ap</b> Java implementation of the openEHR Archetype Profile (AP)</li>
+			<li><b>openehr-aom</b> Java implementation of the Archetype Object Model
+				(AOM)</li>
+			
+			<li><b>openehr-ap</b> Java implementation of the openEHR Archetype Profile
+				(AP)</li>
 			
 			<li><b>adl-serializer</b> ADL serialization from AOM, AP objects</li>
 			
 			<li><b>adl-parser</b> Archetypes in ADL format to AOM, AP objects</li>
-
-			<li><b>openehr-dao</b> Data Access Object interfaces for RM</li>	
+			
+			<li><b>openehr-dao</b> Data Access Object interfaces for RM</li>
+			
+		</ul>
 		
-</ul>
-
+		<br/>
 		
-
+		<br/>
 		
-		<br />
-
-		
-		<br />
-
-		
-		
-<hr style="width: 100%; height: 2px;" />
+		<hr style="width: 100%; height: 2px;"/>
 		<span class="footer">Last changed: $Date: 2006-03-23 00:56:54 +0100 (Thu, 23 Mar
 			2006) $ $Revision$</span>
-		<br />
-
+		<br/>
 		
-		<br />
-
+		<br/>
 		
-		<br />
- 
-</body>
+		<br/>
+		</body>
 </html>
