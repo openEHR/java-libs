@@ -235,7 +235,7 @@ public class XMLSerializer {
         }
         
         printEmptyString("code_string", cp.getCodeString(), indent, out);
-        printEmptyString("terminology_id", cp.getTerminologyID().getValue(), indent, out);
+        printEmptyString("terminology_id", cp.getTerminologyId().getValue(), indent, out);
     }
     
     private void printDefinitionItem(ArchetypeTerm term, int indent,
@@ -1165,10 +1165,10 @@ public class XMLSerializer {
         }
                 
         printNoneEmptyString("includes_maximum",
-                interval.isUpperInclusive() == true ? "true" : "false",
+                interval.isUpperIncluded() == true ? "true" : "false",
                 indent, out);
         printNoneEmptyString("includes_minimum",
-                interval.isLowerInclusive() == true ? "true" : "false",
+                interval.isLowerIncluded() == true ? "true" : "false",
                 indent, out);
         
         if(type != null && type.equals("real")) {
