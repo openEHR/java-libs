@@ -1,18 +1,19 @@
-openEHR REFERENCE JAVA KERNEL VERSION 1.2 INSTALL INSTRUCTIONS
+openEHR REFERENCE JAVA IMPLEMENTATION INSTALL INSTRUCTIONS
+-- updated on 2007/08/13
 
 INTRODUCTION:
 -----------------
 
-This document describes how to install the java source files for the openEHR
-reference java kernel.
+This document describes how to install the java source files from the openEHR
+reference java implementation project.
 
 -----------------
 STATUS:
 -----------------
 
-As at 23rd February 2005, the compilation and running of this code has been
-successfully performed on Redhat 8, Redhat 9 and Debian 3.0 Linux distributions
-and Windows 2000, Windows XP
+As at 13rd August 2007, the compilation and running of this code has been
+successfully performed on Redhat 9 and Debian 3.0 Linux distributions
+and Windows 2003, Windows XP
 
 -----------------
 REQUIREMENTS:
@@ -24,7 +25,7 @@ Java Development Kit 1.5 / 5.0 installed *and running* on your operating system,
 with the JAVA_HOME variable defined (see your operating system instructions on
 how to accomplish path variables)
 
-Maven 1.0.2 from http://maven.apache.org/ installed and runnable
+Maven 2.0.4 or above from http://maven.apache.org/ installed and runnable
 
 Familiarize yourself with the documentation for the software outlined above
 
@@ -36,21 +37,21 @@ To compile the source files:
 
 1. open up your shell / terminal or MS-DOS command line screen
 
-2. 'cd' to your project directory where the project.xml is placed (usually under
+2. 'cd' to your project directory where the pom.xml is placed (usually under
    the project root directory 'kernel_java-dev' in your openEHR download
-   directory (see http://www.openehr.org/developer/t_bk_um_top.htm )
+   directory (see http://www.openehr.org/developer/t_svn_um_top.htm )
 
 3. Run the following commands from the shell / terminal or MS-DOS command line
    screen:
 
-  -to run unit tests, type the command "maven test"
+  -to run unit tests, type the command "mvn test"
 
-  -to build a jar file, type the command "maven jar"
+  -to build a jar file, type the command "mvn package"
 
   -to install a jar file into the local maven repository, type the command
-   "maven jar:install"
+   "mvn clean install"
 
-  -to build the javadoc api, type the command "maven javadoc" 
+  -to build the javadoc api, type the command "mvn javadoc:javadoc" 
 
 7. jar files and the javadoc api should appear under the target subdirectory
 
@@ -68,7 +69,7 @@ PROBLEM REPORTING:
 
 Please report any problems, issues or bugs to
 
-http://coruscant.chime.ucl.ac.uk:8200/openEHR_Collector/projects/reference_implementations/javakernel/PR/folder_contents
+ref_impl_java@openehr.org - you need to subscribe yourself through 
+http://www.chime.ucl.ac.uk/mailman/listinfo/ref_impl_java.
 
 THE openEHR FOUNDATION
-Acode, Sweden
