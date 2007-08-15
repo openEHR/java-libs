@@ -75,7 +75,7 @@
 		description="compile all the source ">		
 	</target>
 	
-	<target name="run" description="run tester">
+	<target name="run" depends="compile" description="run tester">
 		<java classname="org.openehr.ehrdemo.EhrServiceTester"
 			fork="true">
 			<classpath>				

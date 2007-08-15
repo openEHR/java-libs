@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<version xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:type="ORIGINAL_VERSION" xmlns="http://schemas.openehr.org/v1">
+	<contribution>
+		<id xsi:type="GENERIC_ID">
+			<value>10aec661-5458-4ff6-8e63-c2265537196d::000000001573</value>
+			<scheme/>
+		</id>
+		<namespace/>
+		<type/>
+	</contribution>
+	<commit_audit>
+		<system_id>10aec661-5458-4ff6-8e63-c2265537196d</system_id>
+		<committer xsi:type="PARTY_IDENTIFIED">
+			<name>Peri Yankemout</name>
+		</committer>
+		<time_committed>
+			<value>2006-11-22T18:57:05</value>
+		</time_committed>
+		<change_type>
+			<value>creation</value>
+			<defining_code>
+				<terminology_id>
+					<value>openehr</value>
+				</terminology_id>
+				<code_string>249</code_string>
+			</defining_code>
+		</change_type>
+	</commit_audit>
+	<uid>
+		<value>
+			7baa7cb1-1e89-4c36-991b-66218e70a6a6::10aec661-5458-4ff6-8e63-c2265537196d::1</value>
+	</uid>
+	<data xsi:type="COMPOSITION"
+		archetype_node_id="openEHR-EHR-COMPOSITION.discharge.v1">
+		<name>
+			<value>Discharge Summary</value>
+		</name>
+		<language>
+			<terminology_id>
+				<value>openehr</value>
+			</terminology_id>
+			<code_string>en</code_string>
+		</language>
+		<territory>
+			<terminology_id>
+				<value>ISO 1366</value>
+			</terminology_id>
+			<code_string>036</code_string>
+		</territory>
+		<category>
+			<value>event</value>
+			<defining_code>
+				<terminology_id>
+					<value>openehr</value>
+				</terminology_id>
+				<code_string>433</code_string>
+			</defining_code>
+		</category>
+		<composer xsi:type="PARTY_IDENTIFIED">
+			<name>Peri Yankemout</name>
+		</composer>
+		<context>
+			<start_time>
+				<value>2006-11-22T18:57:06</value>
+			</start_time>
+			<setting>
+				<value>unknown</value>
+				<defining_code>
+					<terminology_id>
+						<value>openehr</value>
+					</terminology_id>
+					<code_string>251</code_string>
+				</defining_code>
+			</setting>
+			<other_context xsi:type="ITEM_TREE" archetype_node_id="at0001">
+				<name>
+					<value>Tree</value>
+				</name>
+				<items xsi:type="ELEMENT" archetype_node_id="at0002">
+					<name>
+						<value>Episode identifier</value>
+					</name>
+					<value xsi:type="DV_TEXT">
+						<value>2c4a06c2-e3bd-4cd3-a6bb-1fd83df66107</value>
+					</value>
+				</items>
+			</other_context>
+			<health_care_facility>
+				<name>HappyBubs Hospital</name>
+			</health_care_facility>
+		</context>
+		<content xsi:type="SECTION"
+			archetype_node_id="openEHR-EHR-SECTION.interventions.v1">
+			<name>
+				<value>Interventions</value>
+			</name>
+			<items xsi:type="ACTION"
+				archetype_node_id="openEHR-EHR-ACTION.medication.v1">
+				<name>
+					<value>Vitamin K</value>
+				</name>
+				<language>
+					<terminology_id>
+						<value>openehr</value>
+					</terminology_id>
+					<code_string>en</code_string>
+				</language>
+				<encoding>
+					<terminology_id>
+						<value>IANA</value>
+					</terminology_id>
+					<code_string>utf-8</code_string>
+				</encoding>
+				<subject xsi:type="PARTY_SELF"/>
+				<time>
+					<value>2006-11-22T18:57:06</value>
+				</time>
+				<description xsi:type="ITEM_TREE"
+					archetype_node_id="openEHR-EHR-ITEM_TREE.medication.v1">
+					<name>
+						<value>Medication description</value>
+					</name>
+					<items xsi:type="ELEMENT" archetype_node_id="at0001">
+						<name>
+							<value>Name of medication</value>
+						</name>
+						<value xsi:type="DV_TEXT">
+							<value>Vitamin K</value>
+						</value>
+					</items>
+				</description>
+				<ism_transition>
+					<current_state>
+						<value>self</value>
+						<defining_code>
+							<terminology_id>
+								<value>openehr</value>
+							</terminology_id>
+							<code_string>0</code_string>
+						</defining_code>
+					</current_state>
+					<transition>
+						<value/>
+						<defining_code>
+							<terminology_id>
+								<value/>
+							</terminology_id>
+							<code_string/>
+						</defining_code>
+					</transition>
+				</ism_transition>
+			</items>
+			<items xsi:type="ACTION"
+				archetype_node_id="openEHR-EHR-ACTION.medication.v1">
+				<name>
+					<value>Hepatitis B</value>
+				</name>
+				<language>
+					<terminology_id>
+						<value>openehr</value>
+					</terminology_id>
+					<code_string>en</code_string>
+				</language>
+				<encoding>
+					<terminology_id>
+						<value>IANA</value>
+					</terminology_id>
+					<code_string>utf-8</code_string>
+				</encoding>
+				<subject xsi:type="PARTY_SELF"/>
+				<time>
+					<value>2006-11-22T18:57:06</value>
+				</time>
+				<description xsi:type="ITEM_TREE"
+					archetype_node_id="openEHR-EHR-ITEM_TREE.medication-vaccine.v1">
+					<name>
+						<value>Vaccine description</value>
+					</name>
+					<items xsi:type="ELEMENT" archetype_node_id="at0001.1">
+						<name>
+							<value>Vaccine</value>
+						</name>
+						<value xsi:type="DV_TEXT">
+							<value>Hepatitis B</value>
+						</value>
+					</items>
+					<items xsi:type="CLUSTER" archetype_node_id="at0018">
+						<name>
+							<value>Administration information</value>
+						</name>
+						<items xsi:type="ELEMENT" archetype_node_id="at0022">
+							<name>
+								<value>Sequence number</value>
+							</name>
+							<value xsi:type="DV_COUNT">
+								<magnitude>1</magnitude>
+							</value>
+						</items>
+					</items>
+				</description>
+				<ism_transition>
+					<current_state>
+						<value>self</value>
+						<defining_code>
+							<terminology_id>
+								<value>openehr</value>
+							</terminology_id>
+							<code_string>0</code_string>
+						</defining_code>
+					</current_state>
+					<transition>
+						<value/>
+						<defining_code>
+							<terminology_id>
+								<value/>
+							</terminology_id>
+							<code_string/>
+						</defining_code>
+					</transition>
+				</ism_transition>
+			</items>
+		</content>
+	</data>
+	<lifecycle_state>
+		<value>completed</value>
+		<defining_code>
+			<terminology_id>
+				<value>openehr</value>
+			</terminology_id>
+			<code_string>532</code_string>
+		</defining_code>
+	</lifecycle_state>
+</version>
