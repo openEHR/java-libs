@@ -52,6 +52,15 @@ public enum TerminologyGroupIdentifier {
 	public String toString() {
 		return value;
 	}
+	
+	/**
+	 * Gets the string value
+	 * 
+	 * @return value
+	 */
+	public String getValue() {
+		return value;
+	}
 
 	/* String value of the identifier */
 	private final String value;

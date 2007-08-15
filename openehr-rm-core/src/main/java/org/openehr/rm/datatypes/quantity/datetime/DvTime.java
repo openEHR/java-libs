@@ -184,9 +184,9 @@ public class DvTime extends DvTemporal<DvTime> {
 	}
 
 	/**
-	 * fractional seconds
+	 * Fractional seconds
 	 *
-	 * @return fractional seconds, -0.1 if fractional seoncd unknown
+	 * @return fractional seconds, -0.1 if fractional second unknown
 	 */
 	public double getFractionalSecond() {
 		return fractionalSecKnown ? getDateTime().getMillisOfSecond() / 10E2
