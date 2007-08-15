@@ -91,7 +91,7 @@ public class HierObjectID extends UIDBasedID {
         } else {
             rootStr = value;
         }
-        if (rootStr.matches("(\\d)+(-(\\d)+)*")) { //pattern for UUID
+        if (rootStr.matches(UUID.SIMPLE_UUID_PATTERN)) {
             root = new UUID(rootStr);
         } else if (rootStr.matches("(\\d)+(\\.(\\d)+)*")) { //for ISO_OID
             //System.out.println("in ISO");

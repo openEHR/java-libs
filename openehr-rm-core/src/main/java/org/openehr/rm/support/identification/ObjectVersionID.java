@@ -73,14 +73,14 @@ public class ObjectVersionID extends UIDBasedID {
 		// 3. Construct objects for each segment
         //the patterns below are for sorting only, the correct syntax
         //checking is handled by the UID sublcasses.
-        if (splits[0].matches("(\\d)+(-(\\d)+)*")) { //pattern for UUID
+        if (splits[0].matches(UUID.SIMPLE_UUID_PATTERN)) { //pattern for UUID
         		objectID = new UUID(value.substring(0, doubleColons));
         } else if (splits[0].matches("(\\d)+(\\.(\\d)+)*")) { //for ISO_OID
         		objectID = new ISO_OID(value.substring(0, doubleColons));
         } else if (splits[0].matches("(\\w|-)+(\\.(\\w|-)+)*")){ //for InternetID, 
         		objectID = new InternetID(value.substring(0, doubleColons));
         } else {
-        		throw new IllegalArgumentException("wrong format");
+        		throw new IllegalArgumentException("wrong format: " + splits[0]);
         }
         if(segments == 4) {
                 creatingSystemID = new HierObjectID(splits[1] + "::" + splits[2]);

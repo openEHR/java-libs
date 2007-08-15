@@ -24,7 +24,12 @@ package org.openehr.rm.support.identification;
  * @version 1.0
  */
 public class UUID extends UID {
-
+	
+	/**
+	 * Simple UUID pattern
+	 */
+	public static final String SIMPLE_UUID_PATTERN = "([0-9a-fA-F])+(-([0-9a-fA-F])+)*";
+	
     /**
      * Constructs an UUID
      *
@@ -34,7 +39,7 @@ public class UUID extends UID {
         super(value);
         // kind of validation
         java.util.UUID.fromString(value);
-    }
+    }    
 }
 
 /*

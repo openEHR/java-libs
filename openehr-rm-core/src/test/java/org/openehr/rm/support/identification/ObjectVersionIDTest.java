@@ -68,4 +68,14 @@ public class ObjectVersionIDTest extends TestCase {
         }
     }
     
+    public void testCreateWithValidUIDInHexFormat() {
+    	String value = "939cec48-d629-4a3f-89f1-28c573387680::" +
+    			"10aec661-5458-4ff6-8e63-c2265537196d::1";
+    	try {
+    		new ObjectVersionID(value);
+    	} catch(Exception e) {
+    		fail("exception raised by constructor: " + e.getMessage());
+    	}
+    }
+    
 }
