@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.oceaninformatics.biz/OceanEhr/EhrBank/EhrService" xmlns:s1="http://schemas.openehr.org/v1" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.oceaninformatics.biz/OceanEhr/EhrBank/EhrService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions 
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" 
+  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+  xmlns:tns="http://www.oceaninformatics.biz/OceanEhr/EhrBank/EhrService" 
+  xmlns:s1="http://schemas.openehr.org/v1" 
+  xmlns:s="http://www.w3.org/2001/XMLSchema" 
+  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
+  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+  targetNamespace="http://www.oceaninformatics.biz/OceanEhr/EhrBank/EhrService" 
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  
   <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">The web services provided by EhrBank Server</wsdl:documentation>
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://www.oceaninformatics.biz/OceanEhr/EhrBank/EhrService">
@@ -809,9 +821,9 @@
           <s:element minOccurs="0" maxOccurs="unbounded" name="links" type="s1:LINK" />
           <s:element minOccurs="0" maxOccurs="1" name="archetype_details" type="s1:ARCHETYPED" />
           <s:element minOccurs="0" maxOccurs="1" name="feeder_audit" type="s1:FEEDER_AUDIT" />
-          <s:element minOccurs="0" maxOccurs="1" name="archetype_node_id" type="s:string"/>
+          
         </s:sequence>
-        <!-- s:attribute name="archetype_node_id" type="s:string"/ -->
+        <s:attribute name="archetype_node_id" type="s:string"/>
       </s:complexType>
       <s:complexType name="LINK">
         <s:sequence>

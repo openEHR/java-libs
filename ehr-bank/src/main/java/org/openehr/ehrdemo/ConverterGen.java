@@ -180,6 +180,13 @@ public class ConverterGen {
 		buf.append(" ");
 		buf.append(kernelInstance);
 		buf.append(") throws Exception {\n");
+		
+		buf.append("        if(");
+		buf.append(kernelInstance);
+		buf.append(" == null) {\n");
+		buf.append("            return null;\n");
+	    buf.append("        }\n");
+		
 		for(int i = 0, j = concreteClasses.size(); i < j; i++) {
 			String concrete = concreteClasses.get(i);
 			if(i != 0) {
@@ -372,6 +379,15 @@ public class ConverterGen {
 		buf.append(" ");
 		buf.append(lowerFirst(kernelClassName));
 		buf.append(") throws Exception {\n");
+		
+		// check null
+		buf.append("        ");
+		buf.append("if(");
+		buf.append(lowerFirst(kernelClassName));
+		buf.append(" == null) {\n");
+		buf.append("            return null;\n");
+		buf.append("        }\n");		
+		
 		buf.append("        ");
 		buf.append(bindingClassName);
 		buf.append(" ret = new ");
@@ -392,12 +408,15 @@ public class ConverterGen {
 			String fieldClassName = f.getType().getSimpleName();
 			String fieldName = f.getName();
 			
+			Class getterReturnType = getReturnTypeOfKernelGetter(f, 
+					kernelInstance, currentBindingClass);
+			String getterReturnTypeName = getterReturnType.getSimpleName();
+			
 			// array type field
 			if(fieldClassName.endsWith("[]") 
 					&& isBindingClass(fieldClassName.substring(0, 
 						fieldClassName.length() - 2))) {
-				String getterReturnType = getReturnTypeOfKernelGetter(f, 
-						kernelInstance, currentBindingClass).getSimpleName(); 
+				 
 				
 				String fieldClassNameSingle = fieldClassName.substring(0, 
 						fieldClassName.length() - 2);
@@ -410,7 +429,7 @@ public class ConverterGen {
 					fieldClassName.substring(0, 1).toLowerCase();
 				
 				buf.append("        ");
-				buf.append(getterReturnType);
+				buf.append(getterReturnTypeName);
 				if(paramTypeOfReturnType != null) {
 					buf.append("<");
 					buf.append(paramTypeOfReturnType);
@@ -422,52 +441,66 @@ public class ConverterGen {
 						kernelInstance, currentBindingClass));
 				buf.append(";\n");
 				
-				buf.append("        ");
+				// check null value
+				buf.append("        if(");
+				buf.append(lowerFirst(toCamelPattern(fieldName)));
+				buf.append(" != null) {\n");				
+				
+				buf.append("            ");
 				buf.append(fieldClassName);
+				buf.append(" ");
 				buf.append(arrayName);
 				buf.append(" = new ");
 				buf.append(fieldClassNameSingle);
 				buf.append("[");
 				buf.append(lowerFirst(toCamelPattern(fieldName)));
-				if(getterReturnType.endsWith("[]")) {
+				if(getterReturnType.isArray()) {
 					buf.append(".length");
 				} else {
 					buf.append(".size()");
 				}
 				buf.append("];\n");
-				buf.append("        int ");
+				buf.append("            int ");
 				buf.append(arrayIndexName);
 				buf.append(" = 0;\n");
-				buf.append("        for(");
+				buf.append("            for(");
 				buf.append(paramTypeOfReturnType);
 				buf.append(" ");
 				buf.append(memberInstance);
 				buf.append(" : ");
 				buf.append(lowerFirst(toCamelPattern(fieldName)));
 				buf.append(") {\n");
-				buf.append("            ");
+				buf.append("                ");
 				buf.append(arrayName);
 				buf.append("[");
 				buf.append(arrayIndexName);
 				buf.append("++] = convert(");
 				buf.append(memberInstance);
 				buf.append(");\n");
-				buf.append("        }\n");
-				buf.append("        ret.set");
+				buf.append("            }\n");
+				buf.append("            ret.set");
 				buf.append(upperFirst(fieldName));
 				buf.append("(");
 				buf.append(arrayName);
-				buf.append(");\n");				
+				buf.append(");\n");
+				buf.append("        }\n");
 				
-			} else { // non-array type field			
+			} else { // non-array type field	
+				if( ! getterReturnType.isPrimitive()) {
+					buf.append("        if(");
+					buf.append(buildGettingValueFromKernelInstanceSegment(f, 
+							kernelInstance, currentBindingClass));
+					buf.append(" != null) {\n    ");
+				}
 				buf.append("        ret.set");
 				buf.append(upperFirst(fieldName));
-				buf.append("(");
-				
+				buf.append("(");				
 				buf.append(buildGettingValueFromKernelInstanceSegment(f, 
-						kernelInstance, currentBindingClass));
-				
+						kernelInstance, currentBindingClass));				
 				buf.append(");\n");
+				if( ! getterReturnType.isPrimitive()) {					
+					buf.append("        }\n");
+				}
 			}
 		}
 		Class superClass = currentBindingClass.getSuperclass();
@@ -481,6 +514,8 @@ public class ConverterGen {
 		}		
 		setAttributeValues(buf, kernelInstance, superClass, containingKernelClass);
 	}
+	
+	
 	
 	private String buildGettingValueFromKernelInstanceSegment(Field field, 
 			String kernelInstance, Class bindingClass) throws Exception {
