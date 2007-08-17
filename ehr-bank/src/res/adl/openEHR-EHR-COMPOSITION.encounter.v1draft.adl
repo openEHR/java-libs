@@ -1,0 +1,44 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-COMPOSITION.encounter.v1draft
+
+concept
+	[at0000]	-- Encounter
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+		["organisation"] = <"Ocean Informatics">
+		["date"] = <"2005-10-10">
+	>
+	details = <
+		["en"] = <
+			language = <"en">
+			purpose = <"Record of encounter as a progress note.">
+			use = <"">
+			keywords = <"progress", "note", "encounter">
+			misuse = <"">
+		>
+	>
+	lifecycle_state = <"AuthorDraft">
+
+definition
+	COMPOSITION[at0000] matches {	-- Encounter
+		category matches {
+			CODED_TEXT matches {
+				code matches {[openehr::433]}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"Generic encounter or progress note composition">
+					text = <"Encounter">
+				>
+			>
+		>
+	>

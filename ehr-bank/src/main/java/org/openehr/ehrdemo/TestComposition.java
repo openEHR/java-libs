@@ -13,6 +13,7 @@
  */
 package org.openehr.ehrdemo;
 
+import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.common.generic.PartyIdentified;
 import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.datastructure.history.Event;
@@ -27,7 +28,9 @@ import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
+import org.openehr.rm.support.identification.LocatableRef;
 import org.openehr.rm.support.identification.ObjectRef;
+import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.UIDBasedID;
@@ -41,6 +44,7 @@ import org.openehr.rm.composition.content.navigation.Section;
 import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.composition.content.entry.Observation;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
@@ -49,19 +53,98 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.changecontrol.OriginalVersion;
 import org.openehr.rm.common.generic.PartySelf;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.measurement.MeasurementService;
 import org.openehr.rm.support.terminology.TerminologyService;
+import org.openehr.schemas.v1.AUDIT_DETAILS;
+import org.openehr.schemas.v1.COMPOSITION;
+import org.openehr.schemas.v1.ORIGINAL_VERSION;
 
 /**
- * EntryTestBase
+ * Utility class that can create test instances of composition and related 
+ * objects 
  *
  * @author Rong Chen
  * @version 1.0
  */
 public class TestComposition extends TestDataStructure {
 
+	/**
+	 * Create an audit details
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public static AUDIT_DETAILS createAuditDetails() throws Exception {
+		String systemId = "1-2-3-4-5";
+		PartyRef pr = new PartyRef(new HierObjectID("1-2-3-4-5"),
+				ObjectRef.Type.PARTY);
+
+		PartyProxy committer = new PartyIdentified(pr, "party name", null);
+
+		DvCodedText changeType = new DvCodedText("creation", 
+				TestCodeSetAccess.ENGLISH, TestCodeSetAccess.LATIN_1,
+				TestTerminologyAccess.CREATION, TestTerminologyService
+						.getInstance());
+
+		DvDateTime timeCommitted = new DvDateTime(2007, 8, 14, 2, 3, 5, null);
+
+		DvText description = new DvText("audit description");
+		TerminologyService terminologyService = TestTerminologyService
+				.getInstance();
+
+		AuditDetails audit = new AuditDetails(systemId, committer,
+				timeCommitted, changeType, description, terminologyService);
+		return XMLBinding.convert(audit);
+	}
+	
+	/**
+	 * Create versions with given versionUid and composition
+	 * 
+	 * @param compositionVersionUid
+	 * @param kernelComposition
+	 * @return
+	 * @throws Exception
+	 */
+	public static ORIGINAL_VERSION[] createVersionsWithComposition(
+			String compositionVersionUid, Composition kernelComposition) 
+			throws Exception {
+
+		ObjectVersionID uid = new ObjectVersionID(compositionVersionUid);
+
+		CodePhrase codePhrase = TestTerminologyAccess.CREATION;
+		DvCodedText codedText = new DvCodedText("creation", 
+				TestCodeSetAccess.ENGLISH, TestCodeSetAccess.LATIN_1,
+				codePhrase, TestTerminologyService.getInstance());
+		PartyIdentified pi = new PartyIdentified(new PartyRef(new HierObjectID(
+				"1-2-3-4-5"), ObjectRef.Type.PARTY), "committer name", null);
+
+		AuditDetails audit1 = new AuditDetails("12.3.4.5", pi, new DvDateTime(
+				"2007-08-14T10:10:00"), codedText, null, TestTerminologyService
+				.getInstance());
+		ObjectRef lr = new LocatableRef(new ObjectVersionID(
+				"1.23.51.66::1.2.840.114.1.2.2::2"), ObjectRef.Namespace.LOCAL,
+				ObjectRef.Type.CONTRIBUTION, null);
+
+		Set<ObjectVersionID> otherUids = new HashSet<ObjectVersionID>();
+		otherUids
+				.add(new ObjectVersionID("1.4.14.5::1.2.840.114.1.2.2::4.2.2"));
+
+		// chose test composition to be included in versions
+		COMPOSITION composition = XMLBinding.convert(kernelComposition);
+
+		OriginalVersion<COMPOSITION> version = new OriginalVersion<COMPOSITION>(
+				uid, null, composition, codedText, audit1, lr, null, otherUids,
+				null, true, TestTerminologyService.getInstance());
+
+		ORIGINAL_VERSION[] versions = new ORIGINAL_VERSION[1];
+		versions[0] = XMLBinding.convert(version);
+
+		return versions;
+	}
+	
 	public static Composition compositionWithTwoEntries() throws Exception {
 		String archetypeId = "openEHR-EHR-COMPOSITION.encounter.v1";
         DvText name = new DvText("Physical Examination (2)");
@@ -121,7 +204,7 @@ public class TestComposition extends TestDataStructure {
         return composition; 
     }
 	
-	public static Composition encounterGlucose() throws Exception {
+	public static Composition glucoseComposition() throws Exception {
 		UIDBasedID id = new HierObjectID("1.11.2.3.4.5.0");
 		String archetypeId = "openEHR-EHR-COMPOSITION.encounter.v1";
         String archetypeNodeId = archetypeId;
@@ -188,7 +271,7 @@ public class TestComposition extends TestDataStructure {
         Archetyped arch = new Archetyped(new ArchetypeID(archetypeId), "1.1");
         return new Observation(archetypeId, meaning, arch, 
         		TestTerminologyAccess.ENGLISH, TestTerminologyAccess.LATIN_1, 
-        		subject(), provider(), glucoseData(), termServ);
+        		subject(), provider(), glucoseHistory(), termServ);
     }
     
     /*
@@ -210,7 +293,7 @@ public class TestComposition extends TestDataStructure {
 				</events>
 			</data>
      */
-    public static History<ItemStructure> glucoseData() {
+    public static History<ItemStructure> glucoseHistory() {
     	UIDBasedID uid = null;
     	String archetypeNodeId = "at0001";
         DvText name = new DvText("data");
@@ -220,7 +303,7 @@ public class TestComposition extends TestDataStructure {
         Locatable parent = null; 
         DvDateTime origin = new DvDateTime("2007-07-25T23:11:11");
         List<Event<ItemStructure>> events = new ArrayList<Event<ItemStructure>>();
-        PointEvent<ItemStructure> point = eventGlucose(origin);
+        PointEvent<ItemStructure> point = glucoseEvent(origin);
         events.add(point);
         
         DvDuration period = null;
@@ -249,7 +332,7 @@ public class TestComposition extends TestDataStructure {
 						</items>
 					</data>
      */    
-    private static PointEvent<ItemStructure> eventGlucose(DvDateTime time) {
+    private static PointEvent<ItemStructure> glucoseEvent(DvDateTime time) {
     	DvQuantity quantity = new DvQuantity("mmol/l", 100.0, 0, measServ);
     	Element element = new Element("at0013.1", new DvText("Blood glucose"),
     			quantity);

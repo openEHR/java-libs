@@ -90,14 +90,14 @@ public class ConverterGen {
 	}
 	
 	private void loadAndCheckPackages() throws Exception {
-		this.bindingClassMap = getClasses(BINDING_PACKAGE, BINDING_PACKAGE);
+		this.bindingClassMap = loadClasses(BINDING_PACKAGE, BINDING_PACKAGE);
 
 		this.abstractBindingClassMap = new TreeMap<String, List<String>>();
 		
 		log.info("total binding classes loaded: " + bindingClassMap.size());
 		
-		this.kernelClassMap = getClasses(KERNEL_CORE, KERNEL_PACKAGE);
-		kernelClassMap.putAll(getClasses(KERNEL_DOMAIN, KERNEL_PACKAGE));
+		this.kernelClassMap = loadClasses(KERNEL_CORE, KERNEL_PACKAGE);
+		kernelClassMap.putAll(loadClasses(KERNEL_DOMAIN, KERNEL_PACKAGE));
 		
 		for (String c : kernelClassMap.keySet()) {
 			// log.info("class: " + c);
@@ -230,7 +230,7 @@ public class ConverterGen {
 		} 
 	}
 
-	private static SortedMap<String, Class> getClasses(String pckgname, 
+	private static SortedMap<String, Class> loadClasses(String pckgname, 
 			String jarRootPackageName) throws ClassNotFoundException {
 		
 		List<Class> classes = new ArrayList<Class>();
