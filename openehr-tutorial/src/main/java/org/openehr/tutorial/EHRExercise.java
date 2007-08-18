@@ -8,7 +8,7 @@ import org.openehr.rm.composition.content.entry.Observation;
  * 
  * @author rong.chen
  */
-public class EHRExercise {
+public class EHRExercise extends ExerciseBase {
 	
 	public Composition createComposition() {
 		return null;

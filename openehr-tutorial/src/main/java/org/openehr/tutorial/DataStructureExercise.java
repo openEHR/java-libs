@@ -11,21 +11,21 @@ import org.openehr.rm.datastructure.itemstructure.representation.Element;
  * 
  * @author rong.chen
  */
-public class DataStructureExercise {
+public class DataStructureExercise extends ExerciseBase {
 
-	History<ItemStructure> createHistory() {
+	public Element createElement() {
 		return null;
 	}
 	
-	PointEvent<ItemStructure> createPointEvent() {
+	public ItemTree createItemTree() {
+		return null;
+	}	
+	
+	public PointEvent<ItemStructure> createPointEvent() {
 		return null;
 	}
 	
-	Element createElement() {
+	public History<ItemStructure> createHistory() {
 		return null;
-	}
-	
-	ItemTree createItemTree() {
-		return null;
-	}
+	}	
 }

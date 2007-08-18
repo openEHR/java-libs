@@ -10,21 +10,60 @@ import org.openehr.rm.datatypes.text.DvText;
  * 
  * @author Rong Chen
  */
-public class DataTypesExercise {
+public class DataTypesExercise extends ExerciseBase {
 
-	DvDateTime createDvDateTime() {
+	/**
+	 * Creates a DvDateTime with ISO datetime string
+	 * 
+	 * @return
+	 */
+	public DvDateTime createDvDateTimeWithISOString() {
+		return null;
+	}
+
+	/**
+	 * Creates a DvDateTime with specified fields
+	 * 
+	 * @return
+	 */
+	public DvDateTime createDvDateTimeWithIntValues() {
 		return null;
 	}
 	
-	DvText createDvText() {
+	/**
+	 * Creates a DvText
+	 * 
+	 * @return
+	 */
+	public DvText createDvText() {
 		return null;
 	}
 	
-	DvCodedText createDvCodedText() {
+	/**
+	 * Creates a DvText with specified language and encoding
+	 * 
+	 * @return
+	 */
+	public DvText createDvTextWithLanguageAndEncoding() {
 		return null;
 	}
 	
-	DvQuantity createDvQuantity() {
+	/**
+	 * Creates a DvCodedText
+	 * 
+	 * @return
+	 */
+	public DvCodedText createDvCodedText() {
 		return null;
 	}
+	
+	/**
+	 * Create a DvQuantity with magnitude, precision and units
+	 * 
+	 * @return
+	 */
+	public DvQuantity createDvQuantity() {
+		return null;
+	}	
+	
 }

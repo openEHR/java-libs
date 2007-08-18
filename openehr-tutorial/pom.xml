@@ -62,6 +62,11 @@
 			<groupId>acode</groupId>
 			<artifactId>adl-parser</artifactId>
 			<version>1.0.5-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>adl-serializer</artifactId>
+			<version>0.1-SNAPSHOT</version>
 		</dependency>	
 		<dependency>
 			<groupId>openehr</groupId>

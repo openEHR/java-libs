@@ -1,5 +1,6 @@
 package org.openehr.tutorial;
 
+import org.openehr.tutorial.answer.EHRAnswer;
 import org.openehr.rm.composition.Composition;
 import org.openehr.rm.composition.content.entry.Observation;
 
@@ -17,5 +18,5 @@ public class EHRExerciseTest extends TestCase {
 		assertNotNull("observation is null", value);
 	}
 	
-	private EHRExercise instance = new EHRExercise();
+	private EHRExercise instance = new EHRAnswer();
 }

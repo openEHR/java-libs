@@ -1,6 +1,7 @@
 package org.openehr.tutorial;
 
 import org.openehr.am.archetype.Archetype;
+import org.openehr.tutorial.answer.ADLAnswer;
 
 import junit.framework.TestCase;
 
@@ -16,5 +17,5 @@ public class ADLExerciseTest extends TestCase {
 		assertNotNull("adl string is null", value);
 	}
 	
-	private ADLExercise instance = new ADLExercise();
+	private ADLExercise instance = new ADLAnswer();
 }
