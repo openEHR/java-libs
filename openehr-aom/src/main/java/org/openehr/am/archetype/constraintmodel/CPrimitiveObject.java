@@ -23,7 +23,7 @@ import org.openehr.rm.support.basic.Interval;
  * @author Rong Chen
  * @version 1.0
  */
-public class CPrimitiveObject extends CObject {
+public class CPrimitiveObject extends CDefinedObject {
 
 	/**
 	 * Constructs a PrimitiveObjectConstraint
@@ -38,7 +38,8 @@ public class CPrimitiveObject extends CObject {
 			String nodeId, CAttribute parent, CPrimitive item) {
 
 		super(item == null, path, item == null ? null : item.getType(),
-				occurrences, nodeId, parent);
+				occurrences, nodeId, parent, 
+				item == null ? null : item.assumedValue());
 		this.item = item;
 	}
 

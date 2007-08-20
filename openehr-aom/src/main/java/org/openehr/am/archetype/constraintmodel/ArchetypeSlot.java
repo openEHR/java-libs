@@ -25,7 +25,7 @@ import java.util.Set;
  * @author Rong Chen
  * @version 1.0
  */
-public class ArchetypeSlot extends CObject {
+public class ArchetypeSlot extends CReferenceObject {
 
     /**
      * Constructs an ArchetyepSlot

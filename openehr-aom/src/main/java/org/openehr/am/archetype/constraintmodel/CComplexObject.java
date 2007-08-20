@@ -27,7 +27,7 @@ import java.util.*;
  * @author Rong Chen
  * @version 1.0
  */
-public final class CComplexObject extends CObject {
+public final class CComplexObject extends CDefinedObject {
 
     /**
      * Constructs a complexObjectConstraint
@@ -43,8 +43,9 @@ public final class CComplexObject extends CObject {
                           Interval<Integer> occurrences, String nodeID, 
                           List<CAttribute> attributes, CAttribute parent) {
 
+    	// TODO probably need to inherit from CObject directly
         super(attributes == null, path, rmTypeName, occurrences, nodeID, 
-        		parent);
+        		parent, null);
 
         if (attributes != null && attributes.isEmpty()) {
             throw new IllegalArgumentException("empty attributes");
