@@ -35,10 +35,11 @@ public abstract class CObject extends ArchetypeConstraint {
      * @param anyAllowed
      * @param path
      * @param rmTypeName
-     * @param occurrences null indicates {1..1}
+     * @param occurrences not null
      * @param nodeID
      * @param parent	null if no parent
      * @throws IllegalArgumentException if rmTypeName null or empty,
+     *                                  or occurrences null, 
      *                                  or nodeID null or empty
      */
     protected CObject(boolean anyAllowed, String path, String rmTypeName,
@@ -52,6 +53,9 @@ public abstract class CObject extends ArchetypeConstraint {
         }
         if (nodeID != null && StringUtils.isEmpty(nodeID)) {
             throw new IllegalArgumentException("empty nodeID");
+        }
+        if(occurrences == null) {
+        	throw new IllegalArgumentException("null occurrences");
         }
         this.rmTypeName = rmTypeName;
         this.occurrences = occurrences;

@@ -15,8 +15,9 @@ import java.util.*;
 public class ArchetypeSlotTest extends TestCase {
 	
 	public void testCreateEmptyArchetypeSlot() {
-		ArchetypeSlot slot = new ArchetypeSlot("/path", "Entry", null, "at001",
-				null, null, null);
+		Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+		ArchetypeSlot slot = new ArchetypeSlot("/path", "Entry", occurrences, 
+				"at001", null, null, null);
 		assertTrue("anyAllowed expected for empty slot", slot.isAnyAllowed());
 	}
 	
