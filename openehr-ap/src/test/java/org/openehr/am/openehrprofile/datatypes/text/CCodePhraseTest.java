@@ -18,7 +18,7 @@ public class CCodePhraseTest extends TestCase {
 	
 	public void testCreateEmptyCCodePhrase() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		Interval<Integer> occurrences = null;
+		Interval<Integer> occurrences = new Interval<Integer>(1,1);
 		String nodeId = "at0010";
 		CAttribute parent = null;
 		TerminologyID terminologyId = null;

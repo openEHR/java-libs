@@ -14,7 +14,7 @@ public class CDvQuantityTest extends TestCase {
 	
 	public void testCreateEmptyCDvQuantity() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		Interval<Integer> occurrences = null;
+		Interval<Integer> occurrences = new Interval<Integer>(1,1);
 		String nodeId = "at0010";
 		CAttribute parent = null;
 		List<CDvQuantityItem> list = null;
@@ -27,7 +27,7 @@ public class CDvQuantityTest extends TestCase {
 	
 	public void testCreateWithAssumedValue() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		Interval<Integer> occurrences = null;
+		Interval<Integer> occurrences = new Interval<Integer>(1,1);
 		String nodeId = "at0010";
 		CAttribute parent = null;
 		List<CDvQuantityItem> list = null;
@@ -42,7 +42,7 @@ public class CDvQuantityTest extends TestCase {
 	
 	public void testCreateWithDefaultValue() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		Interval<Integer> occurrences = null;
+		Interval<Integer> occurrences = new Interval<Integer>(1,1);
 		String nodeId = "at0010";
 		CAttribute parent = null;
 		List<CDvQuantityItem> list = null;

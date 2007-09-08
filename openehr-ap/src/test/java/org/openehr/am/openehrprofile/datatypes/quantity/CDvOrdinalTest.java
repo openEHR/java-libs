@@ -10,7 +10,7 @@ public class CDvOrdinalTest extends TestCase {
 	
 	public void testCreateEmptyCDvOrdinal() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		Interval<Integer> occurrences = null;
+		Interval<Integer> occurrences = new Interval<Integer>(1,1);
 		String nodeId = "at0010";
 		CAttribute parent = null;
 		
@@ -21,7 +21,7 @@ public class CDvOrdinalTest extends TestCase {
 	
 	public void testCreateCDvOrdinalWithAssumedValue() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		Interval<Integer> occurrences = null;
+		Interval<Integer> occurrences = new Interval<Integer>(1,1);
 		String nodeId = "at0010";
 		CAttribute parent = null;
 		Ordinal assumed = new Ordinal(1, new CodePhrase("local", "at0001"));
