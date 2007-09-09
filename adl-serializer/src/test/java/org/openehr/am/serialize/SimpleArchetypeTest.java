@@ -16,6 +16,7 @@ import org.openehr.rm.common.generic.RevisionHistory;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.TranslationDetails;
 import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
@@ -41,8 +42,9 @@ public class SimpleArchetypeTest extends SerializerTestBase {
 		ResourceDescription description = null;
 		RevisionHistory revisionHistory = null;
 		boolean isControlled = false;
-		CComplexObject definition = new CComplexObject("/", "ENTRY", null,
-				"at0000", null, null);
+		Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+		CComplexObject definition = new CComplexObject("/", "ENTRY", 
+				occurrences, "at0000", null, null);
 
 		ArchetypeTerm item = new ArchetypeTerm("at0000", "most minimal",
 				"most minimal");

@@ -32,7 +32,8 @@ public class CDvQuantityTest extends SerializerTestBase {
 		list.add(item1);
 		list.add(item2);
 		CodePhrase property = new CodePhrase("openehr", "128");
-		CDvQuantity cquantity = new CDvQuantity("/path", null, null, null, 
+		Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+		CDvQuantity cquantity = new CDvQuantity("/path", occurrences, null, null, 
 				list, property, null, null);
 
 		clean();

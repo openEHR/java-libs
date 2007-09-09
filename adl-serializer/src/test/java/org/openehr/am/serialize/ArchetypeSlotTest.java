@@ -30,7 +30,8 @@ public class ArchetypeSlotTest extends SerializerTestBase {
 		final LinkedHashSet<Assertion> includes = new LinkedHashSet<Assertion>();
 		final LinkedHashSet<Assertion> excludes = new LinkedHashSet<Assertion>();
 		ExpressionLeaf aid = new ExpressionLeaf(ExpressionItem.ARCHETYPE,
-				new CString("/blood_pressure.v1/", null), ExpressionLeaf.ReferenceType.CONSTANT);
+				new CString("/blood_pressure.v1/", null), 
+				ExpressionLeaf.ReferenceType.CONSTANT);
 		ExpressionItem expression = new ExpressionBinaryOperator(
 				ExpressionItem.BOOLEAN, OperatorKind.OP_MATCHES, false,
 				concept, aid);
@@ -38,7 +39,8 @@ public class ArchetypeSlotTest extends SerializerTestBase {
 		Assertion assertion = new Assertion(expression, stringExpression);
 		includes.add(assertion);
 		aid = new ExpressionLeaf(ExpressionItem.ARCHETYPE,
-				new CString("/blood_pressure.v2/", null), ExpressionLeaf.ReferenceType.CONSTANT);
+				new CString("/blood_pressure.v2/", null), 
+				ExpressionLeaf.ReferenceType.CONSTANT);
 		expression = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN,
 				OperatorKind.OP_MATCHES, false, concept, aid);
 		stringExpression = "domain_concept matches {/blood_pressure.v2/}";
@@ -131,8 +133,9 @@ public class ArchetypeSlotTest extends SerializerTestBase {
 	public void testPrintAnyAllowedSlot() throws Exception {
 		LinkedHashSet<Assertion> includes = null;
 		LinkedHashSet<Assertion> excludes = null;
+		Interval<Integer> occurrences = new Interval<Integer>(1, 1);
 		ArchetypeSlot slot = new ArchetypeSlot("/path", "OBSERVATION",
-			null, "at0001", null, includes, excludes);
+			occurrences, "at0001", null, includes, excludes);
 		
 		clean();
 		outputter.printArchetypeSlot(slot, 0, out);		

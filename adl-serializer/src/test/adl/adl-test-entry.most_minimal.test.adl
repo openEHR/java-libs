@@ -5,7 +5,7 @@ concept
 language
     original_language = <[ISO_639-1::en]>
 definition
-    ENTRY[at0000] matches {*}
+    ENTRY[at0000] occurrences matches {1..1} matches {*} 
 ontology
     term_definitions = <
         ["en"] = <
