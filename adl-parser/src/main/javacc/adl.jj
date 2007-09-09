@@ -2165,7 +2165,7 @@ CComplexObject c_complex_object(String path, CAttribute parent) :
 {
   String type;
   String nodeID = null;
-  Interval occurrences = null;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
   List attributes;
 }
 {
@@ -2242,7 +2242,7 @@ ConstraintRef constraint_ref_obj(String path, CAttribute parent) :
 {
   String reference;
   String rmTypeName = "CodePhrase";
-  Interval<Integer> occurrences = null;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
   String nodeId = null;  
 }
 {
@@ -2256,7 +2256,7 @@ ConstraintRef constraint_ref_obj(String path, CAttribute parent) :
 ArchetypeInternalRef archetype_internal_ref(String path, CAttribute parent) :
 {
   String type;
-  Interval occurrences = null;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
   String target;
 }
 {
@@ -2273,7 +2273,7 @@ ArchetypeSlot archetype_slot(String path, CAttribute parent) :
 {
   String type;
   String nodeID = null;
-  Interval occurrences = null;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
   Set includes = null;
   Set excludes = null;
 }
@@ -2297,10 +2297,11 @@ ArchetypeSlot archetype_slot(String path, CAttribute parent) :
 CPrimitiveObject c_primitive_object(String path, CAttribute parent) :
 {
   CPrimitive c;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
 }
 {
   c = c_primitive()
-  { return new CPrimitiveObject(path, null, null, parent, c); }
+  { return new CPrimitiveObject(path, occurrences, null, parent, c); }
 }
 
 CPrimitive c_primitive() :
@@ -2731,6 +2732,7 @@ CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
   DvOrdinal defaultValue = null;
   int assumed = -1;
   Ordinal assumedValue = null;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
 }
 {
   	
@@ -2752,14 +2754,14 @@ CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
 	  	}  	
 	  ]
 	  { 
-	  	return new CDvOrdinal(path, null, null, parent, list, defaultValue,
+	  	return new CDvOrdinal(path, occurrences, null, parent, list, defaultValue,
 	  		assumedValue); 
 	  }
   |
       <SYM_C_DV_ORDINAL> <SYM_LT> <SYM_GT>    
   	  {
   	  	// any allowed
-  	    return new CDvOrdinal(path, null, null, parent, null, null, null);
+  	    return new CDvOrdinal(path, occurrences, null, parent, null, null, null);
   	  }
 }
 
@@ -2787,6 +2789,7 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
   CodePhrase assumedValue = null;
   CodePhrase defaultValue = null; // not used 
   CodePhrase singleValue = null;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
 }
 {
   (	
@@ -2828,8 +2831,8 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
     }
   )
   {   	
-  	return new CCodePhrase(path, null, null, parent, terminologyId, codeList,
-  		defaultValue, assumedValue); 
+  	return new CCodePhrase(path, occurrences, null, parent, terminologyId, 
+  		codeList, defaultValue, assumedValue); 
   }
   
   
@@ -2845,6 +2848,7 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
   Token t = null;
   DvQuantity defaultValue = null;
   DvQuantity assumedValue = null;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
 }
 {
   <SYM_C_DV_QUANTITY> "<"
@@ -2873,7 +2877,7 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
   { 
   	{ token_source.SwitchTo(CADL); }
   	
-  	return new CDvQuantity(path, null, null, parent, list, property, 
+  	return new CDvQuantity(path, occurrences, null, parent, list, property, 
   		defaultValue, assumedValue);  		  	
   } 
 }
