@@ -30,6 +30,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 import org.openehr.rm.support.terminology.TestTerminologyAccess;
 
@@ -124,6 +125,11 @@ public class CompositionTest extends CompositionTestBase {
                     public boolean has(CodePhrase code) {
                         return false;  // todo: implement this method
                     }
+
+					public Set<CodePhrase> codesForGroupId(String arg0) {
+						// TODO Auto-generated method stub
+						return null;
+					}
                 };
             }
 
@@ -181,6 +187,26 @@ public class CompositionTest extends CompositionTestBase {
             public boolean hasCodeSet(String name) {
                 return false;
             }
+
+			public CodeSetAccess codeSetForId(String arg0) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			public List<String> terminologyIdentifiers() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			public List<String> codeSetIdentifiers() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			public Map<String, String> openehrCodeSets() {
+				// TODO Auto-generated method stub
+				return null;
+			}
         };
         DvText name = new DvText("composition");
         UIDBasedID id = new HierObjectID("1.11.2.4.22.5.2");

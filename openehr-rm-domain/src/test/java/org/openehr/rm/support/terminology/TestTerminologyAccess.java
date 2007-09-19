@@ -28,7 +28,6 @@ import java.util.Set;
  */
 public class TestTerminologyAccess implements TerminologyAccess {
 
-	/* fields */
 	/**
 	 * Returns all codes under grouper groupID of this terminology
 	 *
@@ -169,6 +168,10 @@ public class TestTerminologyAccess implements TerminologyAccess {
 		CODES.add(ACTIVE);
 		CODES.add(SOME_STATE);
 		CODES.add(SOME_TRANSITION);
+	}
+	public Set<CodePhrase> codesForGroupId(String arg0) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
