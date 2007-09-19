@@ -180,18 +180,6 @@ public class DvDateTimeParser {
                 return splitStr[0].length();
             }
             return -1;
-            /*if(value.indexOf("Z") > 0 || value.indexOf("+") > 0) {
-                String zonePatt = "(Z|\\+)";
-                String[] splitStr = value.split(zonePatt);
-                return splitStr[0].length();
-            } else if(value.indexOf("-") > 0) {
-                String[] splitStr = value.split("-");
-                if(splitStr.length > 3 || //i.e 1999-01-01-01
-                   splitStr[splitStr.length - 1].length() > 2 ||
-                   isTime) {
-                   return value.lastIndexOf("-"); 
-                }
-            }*/
         }
     }
     
@@ -233,7 +221,7 @@ public class DvDateTimeParser {
     
     static String convertTimeZone(int tzMillis, boolean isExtended) {
         if(tzMillis == 0) return "Z";
-        int offset = tzMillis/60000; //timezone in minutes
+        int offset = Math.abs(tzMillis)/60000; //timezone in minutes
         int hour = offset/60;
         int minute = Math.abs(offset % 60);
         StringBuffer sb = new StringBuffer();
@@ -387,30 +375,7 @@ public class DvDateTimeParser {
         return pattern.replace("yM", "y-M").replace("Md", "M-d")
                 .replace("Hm", "H:m").replace("ms", "m:s");
     }
-    
-    
-  /*  public static String timeElemsToString(int[] timeElems, TimeZone timezone, boolean isExtended) {
         
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < timeElems.length; i++) {   
-            if(isExtended) {
-                if(i > 0 && i < 3) {
-                    sb.append(":");
-                }
-            }
-            if(i == 3) {
-                sb.append(".");
-            }
-            if(i != 3) {
-                FormatUtils.appendPaddedInteger(sb, timeElems[i], 2);
-            } else {
-                FormatUtils.appendPaddedInteger(sb, timeElems[i], 3);
-            }  
-        }
-        
-        return sb.toString();
-    }*/
-    
     /**
      * Return an integer value to indicate the level of completeness of 
      * a String value that represents a valid point of time.

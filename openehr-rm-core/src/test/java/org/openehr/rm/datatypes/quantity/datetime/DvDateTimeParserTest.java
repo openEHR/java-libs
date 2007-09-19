@@ -23,14 +23,16 @@
 package org.openehr.rm.datatypes.quantity.datetime;
 
 import junit.framework.*;
+
+import java.util.Locale;
 import java.util.TimeZone;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.ISODateTimeFormat;
 
 public class DvDateTimeParserTest extends TestCase {
-    
-    public DvDateTimeParserTest(String testName) {
+	
+	public DvDateTimeParserTest(String testName) {
         super(testName);
     }
 
@@ -57,6 +59,18 @@ public class DvDateTimeParserTest extends TestCase {
         	assertNotNull(result);
         }
     }
+    
+    public void testParseTimeWithPtBrLocale() {
+    	Locale defaultLocale = Locale.getDefault();
+    	Locale.setDefault(new Locale("pt", "BR"));
+    	
+    	try {
+    		DvDateTimeParser.parseTime("010000");
+    	} catch(Exception e) {
+    		fail("failed to parse 010000 in 'pt-BR' locale");
+    	} 
+    	Locale.setDefault(defaultLocale);
+    }    
     
     /**
      * Test of parseDate method, of class org.openehr.rm.datatypes.quantity.datetime.DvDateTimeParser.

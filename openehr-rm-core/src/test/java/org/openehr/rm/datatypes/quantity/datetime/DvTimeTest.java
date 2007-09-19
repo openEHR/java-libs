@@ -66,8 +66,8 @@ public class DvTimeTest extends TestCase {
         assertTrue(dvTime("00:30:00Z").compareTo(dvTime("00:00:00-00:30")) == 0);
         assertTrue(dvTime("01:30:00.001Z").compareTo(dvTime("00:30:00.001-01:00")) == 0);
         
-        assertTrue(new DvTime(19, 55, 45, 0.899, TimeZone.getTimeZone("GMT-02")).compareTo(dvTime("195545")) > 0);
-        assertTrue(new DvTime(19, 55, 45, TimeZone.getTimeZone("GMT-02")).compareTo(dvTime("195545")) > 0);
+        assertTrue(new DvTime(19, 55, 45, 0.899, TimeZone.getTimeZone("GMT-02")).compareTo(dvTime("195545-02")) > 0);
+        assertTrue(new DvTime(19, 55, 45, TimeZone.getTimeZone("GMT-02")).compareTo(dvTime("195545-02")) == 0);
         assertTrue(new DvTime(19, 55, 45, TimeZone.getTimeZone("GMT-02")).compareTo(dvTime("195545-03")) < 0);
         assertTrue(new DvTime(19, 55, TimeZone.getTimeZone("GMT-02")).compareTo(dvTime("195545-02")) < 0);
         assertTrue(new DvTime(19, TimeZone.getTimeZone("GMT-02")).compareTo(dvTime("195545-02")) < 0);
