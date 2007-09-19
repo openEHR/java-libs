@@ -14,11 +14,12 @@
  */
 package org.openehr.rm.support.terminology;
 
+import java.util.*;
 
 /**
- * Defines interface to access a terminology service
+ * Defines an object providing proxy access to a terminology service
  *
- * @author Rong Chen
+ * @author Rong Chen 
  * @version 1.0
  */
 public interface TerminologyService {
@@ -34,7 +35,8 @@ public interface TerminologyService {
     public TerminologyAccess terminology(String name);
 
     /**
-     * Returns a CodeSetAccess of given name
+     * Return an interface to the code_set identified by the 
+     * external identifier name
      * 
      * @param name not empty and known to this service
      * @return codeSet
@@ -42,6 +44,17 @@ public interface TerminologyService {
      *  or unknown to this terminology service
      */
     public CodeSetAccess codeSet(String name);
+    
+    /**
+     * Return an interface to the code_set identified internally 
+     * in openEHR by id.
+     * 
+     * @param id not empty and known to this service
+     * @return codeSet
+     * @throws IllegalArgumentException if id is null, empty
+     *  or unknown to this terminology service
+     */
+    public CodeSetAccess codeSetForId(String id);
 
     /**
      * Returns true if terminology of given name known by this service
@@ -60,7 +73,29 @@ public interface TerminologyService {
      * @throws IllegalArgumentException if name is null or empty
      */
     public boolean hasCodeSet(String name);
+    
+    /**
+     * Gets all terminology identifiers known in the terminology service.
+     * 
+     * @return all terminology identifiers
+     */
+    public List<String> terminologyIdentifiers();
 
+    /**
+     * Gets all code set identifiers known in the terminology service
+     * 
+     * @return all code identifiers
+     */
+    public List<String> codeSetIdentifiers();
+    
+    /**
+     * Gets all code sets identifiers for which there is an internal 
+     * openEHR name
+     * 
+     * @return as a Hash of ids keyed by internal name
+     */
+    public Map<String, String> openehrCodeSets();
+    
     /* static fields */
     public static final String OPENEHR = "openehr";
 }

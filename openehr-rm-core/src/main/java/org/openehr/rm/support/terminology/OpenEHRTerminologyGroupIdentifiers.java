@@ -1,6 +1,6 @@
 /*
  * component:   "openEHR Reference Implementation"
- * description: "Class TerminologyCodeSetIdentifier"
+ * description: "Class TerminologyGroupIdentifiers"
  * keywords:    "support"
  *
  * author:      "Rong Chen <rong.acode@gmail.com>"
@@ -15,28 +15,52 @@
 package org.openehr.rm.support.terminology;
 
 /**
- * List of identifiers for code sets in the openEHR terminology.
+ * List of identifiers for groups in the openEHR terminology.
  * 
  * @author Rong Chen
  */
-public enum TerminologyCodeSetIdentifier {
-	
-	CHARACTER_SETS ("character sets"),
-	COMPRESSION_ALGORITHMS ("compression algorithms"),
-	COUNTRIES ("countries"),
-	INTEGRITY_CHECK_ALGORITHMS ("integrity check algorithm"),
-	LANGUAGES ("languages"),
-	MEDIA_TYPES ("media types");
-	
+public enum OpenEHRTerminologyGroupIdentifiers {
+
+	AUDIT_CHANGE_TYPE("audit change type"),
+	ATTESTATION_REASON("attestation reason"),
+	COMPOSITION_CATEGORY("composition category"),
+	EVENT_MATH_FUNCTION("event math function"),
+	INSTRUCTION_STATES("instruction states"),
+	INSTRUCTION_TRANSITIONS("instruction transitions"),
+	NULL_FLAVOURS("null flavours"),
+	PROPERTY("property"),
+	PARTICIPATION_FUNCTION("participation function"),
+	PARTICIPATION_MODE("participation mode"),
+	SUBJECT_RELATIONSHIP("subject relationship"),
+	SETTING("setting"),
+	TERM_MAPPING_PURPOSE("term mapping purpose"),
+	VERSION_LIFECYCLE_STATE("version lifecycle state");
+
 	/**
 	 * Private constructor
 	 * 
 	 * @param value
 	 */
-	private TerminologyCodeSetIdentifier(String value) {
+	private OpenEHRTerminologyGroupIdentifiers(String value) {
 		this.value = value;
 	}
 	
+	/**
+	 * Validity function to test if an identifier is in the set 
+	 * defined by this class.
+	 * 
+	 * @param value
+	 * @return true if id valid
+	 */
+	public static boolean validTerminologyGroupId(String value) {
+		for(OpenEHRTerminologyGroupIdentifiers id : values()) {
+			if(id.value.equals(value)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Gets String representation of this identifier
 	 * 
@@ -46,6 +70,15 @@ public enum TerminologyCodeSetIdentifier {
 		return value;
 	}
 	
+	/**
+	 * Gets the string value
+	 * 
+	 * @return value
+	 */
+	public String getValue() {
+		return value;
+	}
+
 	/* String value of the identifier */
 	private final String value;
 }
@@ -64,7 +97,7 @@ public enum TerminologyCodeSetIdentifier {
  *  for the specific language governing rights and limitations under the
  *  License.
  *
- *  The Original Code is TerminologyCodeSetIdentifier.java
+ *  The Original Code is OpenEHRTerminologyGroupIdentifiers.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
  *  Portions created by the Initial Developer are Copyright (C) 2003-2006

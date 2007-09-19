@@ -14,6 +14,9 @@
  */
 package org.openehr.rm.support.terminology;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * TestTerminologyService
  *
@@ -77,6 +80,30 @@ public class TestTerminologyService implements TerminologyService {
     public boolean hasCodeSet(String name) {
         return false;  // todo: implement this method
     }
+
+
+	public CodeSetAccess codeSetForId(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public List<String> terminologyIdentifiers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public List<String> codeSetIdentifiers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public Map<String, String> openehrCodeSets() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 /*

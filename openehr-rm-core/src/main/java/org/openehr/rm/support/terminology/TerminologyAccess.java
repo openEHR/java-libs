@@ -48,7 +48,7 @@ public interface TerminologyAccess {
      *         returned if not found
      * @throws IllegalArgumentException if groupID null or empty
      */
-    public Set<CodePhrase> codesForGroupID(String groupID);
+    public Set<CodePhrase> codesForGroupId(String groupID);
 
     /**
      * Return all codes under grouper whose name of given
