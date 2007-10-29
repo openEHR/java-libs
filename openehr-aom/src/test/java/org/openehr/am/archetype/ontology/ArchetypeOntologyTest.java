@@ -37,10 +37,14 @@ public class ArchetypeOntologyTest extends TestCase {
 		ArchetypeOntology ontology = new ArchetypeOntology(primaryLanguage, languages,
 				terminologies, termDefinitionsList, constDefinitionsList, null, null);
 		
-		// check term defnition
+		// check term definition
 		ArchetypeTerm item = ontology.termDefinition("en", "at0001");
 		assertNotNull("definition of [at0001] not found", item);
 		assertEquals("item wrong", item0001, item);
+		
+		// test convenience methods getText and getDescription
+		assertEquals("item text wrong", item0001.getText(), "blood pressure");
+		assertEquals("item text wrong", item0001.getDescription(), "description of BP");
 		
 		assertNull(ontology.termDefinition("en", "at0002"));
 		

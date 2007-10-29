@@ -25,6 +25,7 @@ import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CObject;
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
+import org.openehr.am.archetype.ontology.ArchetypeTerm;
 import org.openehr.rm.common.generic.RevisionHistory;
 import org.openehr.rm.common.resource.AuthoredResource;
 import org.openehr.rm.common.resource.ResourceDescription;
@@ -250,6 +251,27 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 	 */
 	public String getConcept() {
 		return concept;
+	}
+
+	/**
+	 * The concept name of the archetype in language
+	 * language; corresponds to the term definition of
+	 * the concept attribute in the archetype ontology.
+	 * 
+	 * @param language the language of the concept name
+	 * @return concept name in the requested language or 
+	 * null if the language as a whole or the concept 
+	 * in that language does not exist.
+	 */
+	public String getConceptName(String language) {
+		ArchetypeTerm term = null;
+	
+		String conceptCode = this.getConcept();
+		term = this.getOntology().termDefinition(language, conceptCode);
+		if (term == null) {
+			return null;
+		} 
+		return term.getItem(ArchetypeTerm.TEXT);
 	}
 
 	/**

@@ -102,6 +102,23 @@ public class ArchetypeTerm {
 		return items.get(key);
 	}
 
+	/** 
+	 * Convenience method to fetch the text of the archetype term.
+	 *  
+	 * @return the text of the archetype term
+	 */ 
+	public String getText() {
+	   return this.getItem(ArchetypeTerm.TEXT);
+	}
+	 
+	/** Convenience method to fetch the description of the archetype term.
+	 *  
+	 *  @return the description of the archetype term
+	 */ 
+	public String getDescription() {
+	   return this.getItem(ArchetypeTerm.DESCRIPTION);
+	}
+	
 	private String code;
 
 	private Map<String, String> items;
