@@ -49,6 +49,15 @@ public interface TerminologyAccess {
      * @throws IllegalArgumentException if groupID null or empty
      */
     public Set<CodePhrase> codesForGroupId(String groupID);
+    
+    /**
+     * Returns true if the given code is known in the specified group
+     * 
+     * @param groupId
+     * @param code
+     * @return true if code exists
+     */
+    public boolean hasCodeForGroupId(String groupId, CodePhrase code);
 
     /**
      * Return all codes under grouper whose name of given

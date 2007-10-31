@@ -97,9 +97,8 @@ public class IntervalTest extends TestCase {
     }
 
     private String testString(int[] row) {
-        return "(" + row[ 0 ] + ", " + row[ 1 ] + ") has " +
-                row[ 2 ]
-                + ": " + ( row[ 3 ] == 1 );
+        return "(" + row[ 0 ] + ", " + row[ 1 ] + ") has " 
+        		+ row[ 4 ] + ": " + ( row[ 5 ] == 1 );
     }
 
     public void testEquals() throws Exception {
