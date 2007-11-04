@@ -112,6 +112,10 @@ public class TestTerminologyAccess implements TerminologyAccess {
         return true;
     }
     
+    public boolean hasCodeForGroupId(String groupId, CodePhrase code) {
+		return true;
+	}
+    
     public static final CodePhrase RELATIONS = new CodePhrase("test", "family_code");
     public static final CodePhrase SETTING = new CodePhrase("test", "setting_code");
     public static final CodePhrase FUNCTION = new CodePhrase(TestTerminologyID.SNOMEDCT, "meanCode");
@@ -141,8 +145,7 @@ public class TestTerminologyAccess implements TerminologyAccess {
         CODES.add(CREATION);
         CODES.add(ENGLISH); 
         CODES.add(ACTIVE);
-    }
-        
+    }       
     
 }
 
