@@ -32,7 +32,7 @@ import org.openehr.rm.support.basic.Interval;
  * @version 1.0
  */
 public class CDvOrdinal extends CDomainType<Ordinal> {
-	
+
 	/**
 	 * Creates a CDvOrdinal
 	 * 
@@ -42,14 +42,14 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 	 * @param list
 	 * @throws IllegalArgument if list null or empty
 	 */
-	public CDvOrdinal(String path, Interval<Integer> occurrences, 
+	public CDvOrdinal(String path, Interval<Integer> occurrences,
 			String nodeID, CAttribute parent, Set<Ordinal> list,
 			DvOrdinal defaultValue, Ordinal assumedValue) {
-		
-		super(list == null, path, "DvOrdinal", occurrences, nodeID, 
-				null, assumedValue, parent);
-		
-		if(list != null && list.isEmpty()) {
+
+		super(list == null, path, "DvOrdinal", occurrences, nodeID, null,
+				assumedValue, parent);
+
+		if (list != null && list.isEmpty()) {
 			throw new IllegalArgumentException("list is empty");
 		}
 		this.list = list;
@@ -72,17 +72,18 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	/**
 	 * List of allowed DV_ORDINAL values.
 	 * 
 	 * @return unmodifiable set of Ordinal
 	 */
 	public Set<Ordinal> getList() {
-		if (list != null) {	
-			return Collections.unmodifiableSet(list);
-		} else return null;	
-}
+		if (list == null) {
+			return null;
+		}
+		return Collections.unmodifiableSet(list);
+	}
 
 	@Override
 	public boolean validValue(Ordinal arg0) {
@@ -95,7 +96,7 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	private Set<Ordinal> list;
 }
 
@@ -116,10 +117,10 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
  *  The Original Code is CDvOrdinal.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2006
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2007
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Sebastian Garde
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

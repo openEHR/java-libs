@@ -1,5 +1,7 @@
 package org.openehr.am.openehrprofile.datatypes.quantity;
 
+import java.util.Set;
+
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
@@ -13,10 +15,12 @@ public class CDvOrdinalTest extends TestCase {
 		Interval<Integer> occurrences = new Interval<Integer>(1,1);
 		String nodeId = "at0010";
 		CAttribute parent = null;
+		Set<Ordinal> list = null;
 		
-		CDvOrdinal c = new CDvOrdinal(path, occurrences, nodeId, parent, null,
+		CDvOrdinal c = new CDvOrdinal(path, occurrences, nodeId, parent, list,
 				null, null);
-		assertTrue("anyAllowed expected", c.isAnyAllowed());		
+		assertTrue("anyAllowed expected", c.isAnyAllowed());	
+		assertNull("null list expected", c.getList());
 	}
 	
 	public void testCreateCDvOrdinalWithAssumedValue() {

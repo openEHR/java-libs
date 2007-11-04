@@ -72,7 +72,7 @@ public class CCodePhrase extends CDomainType<CodePhrase> {
 	/**
 	 * List of codes
 	 * 
-	 * @return null if unspecifed
+	 * @return null if unspecified
 	 */
 	public List<String> getCodeList() {
 		return codeList;
