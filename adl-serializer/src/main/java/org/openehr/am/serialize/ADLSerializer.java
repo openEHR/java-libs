@@ -52,6 +52,7 @@ import java.util.Set;
  * 
  * @author Rong Chen
  * @author Mattias Forss, Johan Hjalmarsson
+ * @author Sebastian Garde
  * 
  * @version 1.0
  */
@@ -782,22 +783,6 @@ public class ADLSerializer {
 		out.write("ontology");
 		newline(out);
 
-//		indent(1, out);
-//		out.write("primary_language = <\"");
-//		out.write(ontology.getPrimaryLanguage());
-//		out.write("\">");
-//		newline(out);
-//
-//		indent(1, out);
-//		out.write("languages_available = <");
-//		for (String lang : ontology.getLanguages()) {
-//			out.write("\"");
-//			out.write(lang);
-//			out.write("\", ");
-//		}
-//		out.write("...>");
-//		newline(out);
-
 		if (ontology.getTerminologies() != null) {
 			indent(1, out);
 			out.write("terminologies_available = <");
@@ -920,7 +905,8 @@ public class ADLSerializer {
 		}
 	}
 
-	private void printDefinitionList(Writer out, List<OntologyDefinitions> termDefinitionsList) throws IOException {
+	private void printDefinitionList(Writer out, 
+			List<OntologyDefinitions> termDefinitionsList) throws IOException {
 		for (OntologyDefinitions defs : termDefinitionsList) {
 			indent(2, out);
 			out.write("[\"");
@@ -1157,14 +1143,11 @@ public class ADLSerializer {
 
 	/* charset encodings */
 	public static final Charset UTF8 = Charset.forName("UTF-8");
-
 	public static final Charset LATIN1 = Charset.forName("ISO-8859-1");
 
 	/* fields */
 	private Charset encoding;
-
 	private String lineSeparator;
-
 	private String indent;
 }
 /*
@@ -1181,10 +1164,11 @@ public class ADLSerializer {
  * The Original Code is ADLSerializer.java
  * 
  * The Initial Developer of the Original Code is Rong Chen. Portions created by
- * the Initial Developer are Copyright (C) 2004-2005 the Initial Developer. All
+ * the Initial Developer are Copyright (C) 2004-2007 the Initial Developer. All
  * Rights Reserved.
  * 
- * Contributor(s): Mattias Forss, Johan Hjalmarsson, Erik Sundvall
+ * Contributor(s): Mattias Forss, Johan Hjalmarsson, Erik Sundvall, 
+ *                 Sebastian Garde
  * 
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
