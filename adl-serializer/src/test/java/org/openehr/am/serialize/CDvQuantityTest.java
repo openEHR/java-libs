@@ -40,6 +40,17 @@ public class CDvQuantityTest extends SerializerTestBase {
 		outputter.printCDvQuantity(cquantity, 0, out);
 		verifyByFile("c-dv-quantity-test.adl");
 	}
+	
+	public void testPrintEmptyCDvQuantity() throws Exception {
+		Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+		List<CDvQuantityItem> list = null;
+		CodePhrase property = null;
+		CDvQuantity cquantity = new CDvQuantity("/path", occurrences, null, null, 
+				list, property, null, null);
+		clean();
+		outputter.printCDvQuantity(cquantity, 0, out);
+		verifyByFile("c-dv-quantity-test-empty.adl");
+	}
 
 }
 /*

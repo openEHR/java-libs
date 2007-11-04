@@ -618,6 +618,15 @@ public class ADLSerializer {
 			throws IOException {
 
 		indent(indent, out);
+		
+		if(ccoded.isAnyAllowed()) {
+			out.write("C_CODE_PHRASE <");
+			newline(out);
+			indent(indent, out);
+			out.write(">");
+			newline(out);
+			return;
+		}
 
 		if (ccoded.getTerminologyId() != null) {
 			out.write("[" + ccoded.getTerminologyId().getValue() + "::");
@@ -664,7 +673,7 @@ public class ADLSerializer {
 
 		// if the list is null, the CDvOrdinal is not further constrained
 		// (other than that it is a CDvOrdinal)
-		if (cordinal.getList()== null) {
+		if (cordinal.isAnyAllowed()) {
 			indent(indent, out);
 			out.write("C_DV_ORDINAL <");
 			newline(out);
@@ -718,9 +727,9 @@ public class ADLSerializer {
 			out.write(property.getCodeString());
 			out.write("]>");
 		}
-		newline(out);
 		List<CDvQuantityItem> list = cquantity.getList();
 		if (list != null) {
+			newline(out);			
 			indent(indent + 1, out);
 			out.write("list = <");
 			newline(out);

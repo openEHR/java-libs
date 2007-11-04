@@ -1,6 +1,7 @@
 package org.openehr.am.serialize;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.rm.datatypes.text.CodePhrase;
@@ -74,5 +75,18 @@ public class CCodePhraseTest extends SerializerTestBase {
 		clean();
 		outputter.printCCodePhrase(ccoded, 0, out);
 		verify("[local::]\r\n");
+	}
+	
+	public void testPrintEmptyCCodePhrase() throws Exception {
+		List<String> codeList = null;
+		TerminologyID terminology = null;
+		CodePhrase defaultValue = null;
+		CodePhrase assumedValue = null;
+		Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+		CCodePhrase ccoded = new CCodePhrase("/path", occurrences, null, null, 
+				terminology, codeList, defaultValue, assumedValue);
+		clean();
+		outputter.printCCodePhrase(ccoded, 0, out);
+		verifyByFile("c-code-phrase-test-empty.adl");		
 	}
 }
