@@ -79,6 +79,21 @@ public class ADLSerializer {
 		return writer.toString();
 	}
 
+		/**
+	 * Output  archetype DEFINITION as string in ADL format
+	 * 
+	 * @param archetype
+	 * @return a string in ADL format
+	 * @throws IOException
+	 */
+	public String outputDefinitionOnly(Archetype archetype) throws IOException {
+		StringWriter writer = new StringWriter();
+
+		printDefinition(archetype.getDefinition(), writer);
+				
+		return writer.toString();
+	}
+	
 	/**
 	 * Output given archetype to outputStream
 	 * 
@@ -647,24 +662,37 @@ public class ADLSerializer {
 	protected void printCDvOrdinal(CDvOrdinal cordinal, int indent, Writer out)
 			throws IOException {
 
-		for (Iterator<Ordinal> it = cordinal.getList().iterator(); 
-				it.hasNext();) {
-			Ordinal ordinal = it.next();			
+		// if the list is null, the CDvOrdinal is not further constrained
+		// (other than that it is a CDvOrdinal)
+		if (cordinal.getList()== null) {
 			indent(indent, out);
-			printOrdinal(ordinal, out);
-			if (it.hasNext()) {
-				out.write(",");
-			} else if(cordinal.hasAssumedValue()) {
-				out.write(";");
-			}
-			newline(out);			
-		}
-		if(cordinal.hasAssumedValue()) {
-			printOrdinal(cordinal.getAssumedValue(), out);
+			out.write("C_DV_ORDINAL <");
+			newline(out);
+			indent(indent, out);
+			out.write(">");
 			newline(out);
 		}
+		else {
+			for (Iterator<Ordinal> it = cordinal.getList().iterator(); 
+			it.hasNext();) {
+				Ordinal ordinal = it.next();			
+				indent(indent, out);
+				printOrdinal(ordinal, out);
+				if (it.hasNext()) {
+					out.write(",");
+				} else if(cordinal.hasAssumedValue()) {
+					out.write(";");
+				}
+				newline(out);			
+			}
+			if(cordinal.hasAssumedValue()) {
+				printOrdinal(cordinal.getAssumedValue(), out);
+				newline(out);
+
+			}
+		}	
 	}
-	
+
 	protected void printOrdinal(Ordinal ordinal, Writer out) 
 			throws IOException {
 		CodePhrase symbol = ordinal.getSymbol();

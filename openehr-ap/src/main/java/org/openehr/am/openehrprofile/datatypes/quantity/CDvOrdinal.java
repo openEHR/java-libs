@@ -79,8 +79,10 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 	 * @return unmodifiable set of Ordinal
 	 */
 	public Set<Ordinal> getList() {
-		return Collections.unmodifiableSet(list);
-	}
+		if (list != null) {	
+			return Collections.unmodifiableSet(list);
+		} else return null;	
+}
 
 	@Override
 	public boolean validValue(Ordinal arg0) {

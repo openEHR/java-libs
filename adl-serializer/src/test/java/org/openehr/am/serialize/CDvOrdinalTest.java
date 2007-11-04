@@ -36,8 +36,18 @@ public class CDvOrdinalTest extends SerializerTestBase {
 		outputter.printCDvOrdinal(cordinal, 0, out);
 		verifyByFile("c-dv-ordinal-test2.adl");
 	}
+
+	public void testPrintEmptyCDvOrdinal() throws Exception {
+		Set<Ordinal> list = null;
+		
+		Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+		cordinal = new CDvOrdinal("/path", occurrences, null, null, list, 
+				null, null);
+		clean();
+		outputter.printCDvOrdinal(cordinal, 0, out);
+		verifyByFile("c-dv-ordinal-test-empty.adl");
+	}
 	
 	private CDvOrdinal cordinal;
-	private Set<Ordinal> list;
 }
 
