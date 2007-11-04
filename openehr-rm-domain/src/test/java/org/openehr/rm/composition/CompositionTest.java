@@ -127,8 +127,12 @@ public class CompositionTest extends CompositionTestBase {
                     }
 
 					public Set<CodePhrase> codesForGroupId(String arg0) {
-						// TODO Auto-generated method stub
 						return null;
+					}
+
+					public boolean hasCodeForGroupId(String arg0,
+							CodePhrase arg1) {
+						return true;
 					}
                 };
             }

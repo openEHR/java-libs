@@ -174,6 +174,11 @@ public class TestTerminologyAccess implements TerminologyAccess {
 		return null;
 	}
 
+	public boolean hasCodeForGroupId(String arg0, CodePhrase arg1) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }
 
 /*
