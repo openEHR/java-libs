@@ -145,14 +145,14 @@ definition
                 time_attr6 matches {00:00:59}
 
                 time_attr7  matches {12:35}
-                time_attr8  matches {12:35:45.666}
+                time_attr8  matches {12:35:45,666}
                 time_attr9  matches {12:35:45-0700}
                 time_attr10 matches {12:35:45+0800}
-                time_attr11 matches {12:35:45.999-0700}
-                time_attr12 matches {12:35:45.000+0800}
-                time_attr13 matches {12:35:45.000Z}
-                time_attr14 matches {12:35:45.995-0700}
-                time_attr15 matches {12:35:45.001+0800}
+                time_attr11 matches {12:35:45,999-0700}
+                time_attr12 matches {12:35:45,000+0800}
+                time_attr13 matches {12:35:45,000Z}
+                time_attr14 matches {12:35:45,995-0700}
+                time_attr15 matches {12:35:45,001+0800}
 
                 time_attr16  matches {|12:35..16:35|}
                 time_attr17  matches {|< 12:35|}
@@ -169,14 +169,14 @@ definition
                 time_attr26 matches {00:00:59; 10:00:00}
 
                 time_attr27  matches {12:35; 10:00:00}
-                time_attr28  matches {12:35:45.666; 10:00:00}
+                time_attr28  matches {12:35:45,666; 10:00:00}
                 time_attr29  matches {12:35:45-0700; 10:00:00}
                 time_attr30 matches {12:35:45+0800; 10:00:00}
-                time_attr31 matches {12:35:45.999-0700; 10:00:00}
-                time_attr32 matches {12:35:45.000+0800; 10:00:00}
-                time_attr33 matches {12:35:45.000Z; 10:00:00}
-                time_attr34 matches {12:35:45.995-0700; 10:00:00}
-                time_attr35 matches {12:35:45.001+0800; 10:00:00}
+                time_attr31 matches {12:35:45,999-0700; 10:00:00}
+                time_attr32 matches {12:35:45,000+0800; 10:00:00}
+                time_attr33 matches {12:35:45,000Z; 10:00:00}
+                time_attr34 matches {12:35:45,995-0700; 10:00:00}
+                time_attr35 matches {12:35:45,001+0800; 10:00:00}
 
                 time_attr36  matches {|12:35..16:35|; 10:00:00}
                 time_attr37  matches {|< 12:35|; 10:00:00}
@@ -188,6 +188,8 @@ definition
 				time_attr41  matches {|12:35|}
 				
                 -- time_attr7 matches {64:02:25, ...} -- Not currently in ADL syntax
+                
+                time_attr6 matches {00:00:59,0}
             }
         }
         date_time_attributes matches {
@@ -201,13 +203,13 @@ definition
                 date_time_attr7 matches {2000-01-01T00:00:59}
 
                 date_time_attr8 matches {2000-01-01T00:00:59}
-                date_time_attr9 matches {2000-01-01T00:00:59.105}
+                date_time_attr9 matches {2000-01-01T00:00:59,105}
                 date_time_attr10 matches {2000-01-01T00:00:59Z}
                 date_time_attr11 matches {2000-01-01T00:00:59+1200}
-                date_time_attr12 matches {2000-01-01T00:00:59.500Z}
-                date_time_attr13 matches {2000-01-01T00:00:59.500+1200}
-                date_time_attr14 matches {2000-01-01T00:00:59.000Z}
-                date_time_attr15 matches {2000-01-01T00:00:59.000+1200}
+                date_time_attr12 matches {2000-01-01T00:00:59,500Z}
+                date_time_attr13 matches {2000-01-01T00:00:59,500+1200}
+                date_time_attr14 matches {2000-01-01T00:00:59,000Z}
+                date_time_attr15 matches {2000-01-01T00:00:59,000+1200}
 
                 date_time_attr16 matches {|2000-01-01T00:00:00..2000-01-02T00:00:00|}
                 date_time_attr17 matches {|< 2000-01-01T00:00:00|}
@@ -226,14 +228,14 @@ definition
                 date_time_attr6 matches {1983-12-25T22:00:05; 2006-03-31T01:12:00}
                 date_time_attr7 matches {2000-01-01T00:00:59; 2006-03-31T01:12:00}
 
-                date_time_attr8 matches {2000-01-01T00:00:59.000; 2006-03-31T01:12:00}
-                date_time_attr9 matches {2000-01-01T00:00:59.105; 2006-03-31T01:12:00}
+                date_time_attr8 matches {2000-01-01T00:00:59,000; 2006-03-31T01:12:00}
+                date_time_attr9 matches {2000-01-01T00:00:59,105; 2006-03-31T01:12:00}
                 date_time_attr10 matches {2000-01-01T00:00:59Z; 2006-03-31T01:12:00}
                 date_time_attr11 matches {2000-01-01T00:00:59+1200; 2006-03-31T01:12:00}
-                date_time_attr12 matches {2000-01-01T00:00:59.500Z; 2006-03-31T01:12:00}
-                date_time_attr13 matches {2000-01-01T00:00:59.500+1200; 2006-03-31T01:12:00}
-                date_time_attr14 matches {2000-01-01T00:00:59.000Z; 2006-03-31T01:12:00}
-                date_time_attr15 matches {2000-01-01T00:00:59.000+1200; 2006-03-31T01:12:00}
+                date_time_attr12 matches {2000-01-01T00:00:59,500Z; 2006-03-31T01:12:00}
+                date_time_attr13 matches {2000-01-01T00:00:59,500+1200; 2006-03-31T01:12:00}
+                date_time_attr14 matches {2000-01-01T00:00:59,000Z; 2006-03-31T01:12:00}
+                date_time_attr15 matches {2000-01-01T00:00:59,000+1200; 2006-03-31T01:12:00}
 
                 date_time_attr16 matches {|2000-01-01T00:00:00..2000-01-02T00:00:00|; 2006-03-31T01:12:00}
                 date_time_attr17 matches {|< 2000-01-01T00:00:00|; 2006-03-31T01:12:00}
@@ -246,6 +248,8 @@ definition
                 
                 -- single value as interval
                 date_time_attr22 matches {|2000-01-01T00:00:00|}
+                
+                --time_attr6 matches {|00:00:59,0|}
             }
         }        
     }
