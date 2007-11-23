@@ -50,7 +50,7 @@ public class DvDateTimeParserTest extends TestCase {
     public void testParseTime() {        
         String[] values = {
         		"23", "23:30", "23:30Z", "23+11", "2330", "1000Z", "11Z", "153722", 
-                //"225523.9", "102030.01", "191817.289", "102030.001-01, 102030,001-10",
+                "225523.9", "102030.01", "191817.289",
                 "23:59:59", "12:35:45.666", "12:35:45-0700"
                             
         };//strings that should pass
