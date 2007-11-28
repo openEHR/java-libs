@@ -20,6 +20,7 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ArchetypeID;
+import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
 import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.terminology.TerminologyAccess;
@@ -192,11 +193,6 @@ public class CompositionTest extends CompositionTestBase {
                 return false;
             }
 
-			public CodeSetAccess codeSetForId(String arg0) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
 			public List<String> terminologyIdentifiers() {
 				// TODO Auto-generated method stub
 				return null;
@@ -210,6 +206,10 @@ public class CompositionTest extends CompositionTestBase {
 			public Map<String, String> openehrCodeSets() {
 				// TODO Auto-generated method stub
 				return null;
+			}
+
+			public CodeSetAccess codeSetForId(OpenEHRCodeSetIdentifiers arg0) {
+				return new TestCodeSetAccess();
 			}
         };
         DvText name = new DvText("composition");
