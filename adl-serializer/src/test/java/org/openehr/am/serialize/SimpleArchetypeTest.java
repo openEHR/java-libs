@@ -18,6 +18,7 @@ import org.openehr.rm.common.resource.TranslationDetails;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.terminology.TerminologyService;
+import org.openehr.terminology.SimpleTerminologyService;
 
 /**
  * Testcase that verifies print out of a simple archetype
@@ -67,7 +68,8 @@ public class SimpleArchetypeTest extends SerializerTestBase {
 				termBindingList, constraintBindingList);
 
 		Set<Assertion> invariants = null;
-		TerminologyService terminologyService = null;
+		TerminologyService terminologyService = 
+				SimpleTerminologyService.getInstance();
 
 		Archetype archetype = new Archetype(adlVersion, id, parentId, concept,
 				originalLanguage, translations, description, revisionHistory,

@@ -23,6 +23,7 @@ import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.terminology.TerminologyService;
+import org.openehr.terminology.SimpleTerminologyService;
 
 public class DescriptionTest extends SerializerTestBase {
 
@@ -41,9 +42,11 @@ public class DescriptionTest extends SerializerTestBase {
 		Map<String, String> urls = new HashMap<String, String>();
 		urls.put("key", "value");
 		Map<String, String> others = new HashMap<String, String>();
-
+		TerminologyService service = SimpleTerminologyService.getInstance();
+		
 		ResourceDescriptionItem item = new ResourceDescriptionItem(ENGLISH,
-				purpose, keywords, use, misuse, copyright, urls, others, this);		
+				purpose, keywords, use, misuse, copyright, urls, others, 
+				service);		
 		
 		clean();
 		outputter.printDescriptionItem(item, 0, out);
@@ -65,15 +68,17 @@ public class DescriptionTest extends SerializerTestBase {
 		Map<String, String> authorMap = new HashMap<String, String>();
 		authorMap.put("name", author);
 
-		List<ResourceDescriptionItem> items = new ArrayList<ResourceDescriptionItem>();
+		List<ResourceDescriptionItem> items =
+			new ArrayList<ResourceDescriptionItem>();
 		String[][] others = { { "revision", "1.1" }, { "adl_version", "1.4" },
 				{ "rights", "all rights reserved" } };
 		Map<String, String> otherDetails = new HashMap<String, String>();
 		for (String[] pair : others) {
 			otherDetails.put(pair[0], pair[1]);
 		}
+		TerminologyService service = SimpleTerminologyService.getInstance();
 		ResourceDescriptionItem item = new ResourceDescriptionItem(ENGLISH,
-				"purpose of this archetype", this);
+				"purpose of this archetype", service);
 		items.add(item);
 		ResourceDescription description = new ResourceDescription(authorMap,
 				null, status, items, null, null, null);
@@ -88,7 +93,7 @@ public class DescriptionTest extends SerializerTestBase {
 				+ "            language = <[ISO_639-1::en]>\r\n"
 				+ "            purpose = <\"purpose of this archetype\">\r\n"
 				+ "        >\r\n" + "    >\r\n");
-	}
+	}		
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

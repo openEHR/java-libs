@@ -8,6 +8,7 @@ import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.TranslationDetails;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.terminology.TerminologyService;
+import org.openehr.terminology.SimpleTerminologyService;
 
 public class ArchetypeLanguageTest extends SerializerTestBase {
 
@@ -34,7 +35,7 @@ public class ArchetypeLanguageTest extends SerializerTestBase {
 		ResourceDescription description = null;
 		RevisionHistory revisionHistory = null;
 		boolean isControlled = false;
-		TerminologyService service = null;
+		TerminologyService service = SimpleTerminologyService.getInstance();
 		
 		AuthoredResource authored = new AuthoredResource(originalLanguage,
 				translations, description, revisionHistory, isControlled, 

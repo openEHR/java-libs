@@ -19,6 +19,7 @@ import java.util.*;
 
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.terminology.CodeSetAccess;
+import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
 import org.openehr.rm.support.terminology.TerminologyAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
 
@@ -171,11 +172,6 @@ public class SerializerTestBase extends TestCase
 		return null;
 	}
 
-	public CodeSetAccess codeSetForId(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public List<String> terminologyIdentifiers() {
 		// TODO Auto-generated method stub
 		return null;
@@ -187,6 +183,11 @@ public class SerializerTestBase extends TestCase
 	}
 
 	public Map<String, String> openehrCodeSets() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public CodeSetAccess codeSetForId(OpenEHRCodeSetIdentifiers arg0) {
 		// TODO Auto-generated method stub
 		return null;
 	}
