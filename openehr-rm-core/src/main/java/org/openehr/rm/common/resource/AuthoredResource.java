@@ -21,6 +21,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.common.generic.RevisionHistory;
 import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
@@ -56,13 +57,15 @@ public abstract class AuthoredResource extends RMObject {
 						"original language in translations");
 			}
 		}
-		// TODO disabled to help parsing
-		//            if (terminologyService == null) {
-		//                    throw new IllegalArgumentException("null terminology service");
-		//            }
-		//            if (!terminologyService.codeSet("languages").hasLang(originalLanguage)) {
-		//                throw new IllegalArgumentException("unknown original language " + originalLanguage);
-		//            }
+		 
+		if (terminologyService == null) {
+			throw new IllegalArgumentException("null terminology service");
+		}
+		if (!terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(originalLanguage)) {
+			throw new IllegalArgumentException("unknown original language " + 
+					originalLanguage);
+		}
 		if (isControlled == (revisionHistory == null)) {
 			throw new IllegalArgumentException(
 					"breach of revision history validity");

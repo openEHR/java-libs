@@ -45,8 +45,9 @@ public final class TermMapping extends DataValue {
             if (terminologyService == null) {
                 throw new IllegalArgumentException("null terminologyService");
             }
-            if (!terminologyService.terminology(TerminologyService.OPENEHR).codesForGroupName(
-                    "term mapping purpose", "en").contains(purpose.getDefiningCode())) {
+            if (!terminologyService.terminology(TerminologyService.OPENEHR)
+            		.codesForGroupName("term mapping purpose", "en")
+            		.contains(purpose.getDefiningCode())) {
                 throw new IllegalArgumentException(
                         "unknown term mapping purpose: " + purpose);
             }

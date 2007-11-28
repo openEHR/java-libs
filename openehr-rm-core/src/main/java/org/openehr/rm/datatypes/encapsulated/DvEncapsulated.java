@@ -16,6 +16,7 @@ package org.openehr.rm.datatypes.encapsulated;
 
 import org.openehr.rm.datatypes.basic.DataValue;
 import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
 import org.openehr.rm.support.terminology.TerminologyAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
 
@@ -48,15 +49,13 @@ public abstract class DvEncapsulated extends DataValue {
         if (terminologyService == null) {
             throw new IllegalArgumentException("null terminologyService");
         }
-        TerminologyAccess terminogy = terminologyService.terminology(
-                TerminologyService.OPENEHR);
-        //if (!terminogy.codesForGroupName("languages", "en").contains(language)) {
-            if (!terminologyService.codeSet("languages").hasLang(language)) {
+        if (!terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(language)) {
             throw new IllegalArgumentException("unknown language: " + language);
             
         }
-        //if (!terminogy.codesForGroupName("character sets", "en").contains(charset)) {
-            if (!terminologyService.codeSet("character sets").hasCode(charset)) {
+        if (!terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.CHARACTER_SETS).hasCode(charset)) {
             throw new IllegalArgumentException(
                     "unknown character set: " + charset);
         }

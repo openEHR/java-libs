@@ -76,9 +76,6 @@ public final class IntervalEvent<T extends ItemStructure> extends Event<T> {
 		if (terminologyService == null) {
             throw new IllegalArgumentException("null terminologyService");
         }
-        //System.out.println("get Terminology.." + terminologyService.terminology(TerminologyService.OPENEHR));
-        //System.out.println("get codes...." + terminologyService.terminology(TerminologyService.OPENEHR)
-        //.codesForGroupName("event math function", "en"));        
         if (!terminologyService.terminology(TerminologyService.OPENEHR)
                 .codesForGroupName("event math function", "en")
                 .contains(mathFunction.getDefiningCode())) {
@@ -127,7 +124,6 @@ public final class IntervalEvent<T extends ItemStructure> extends Event<T> {
 	 */
 	public DvDateTime intervalStartTime() {
 		return (DvDateTime) getTime().subtract(width);
-		//TODO: check this is correct!
 	}
 	
 	// POJO start

@@ -18,7 +18,6 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.rm.RMObject;
 import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.datatypes.basic.DvIdentifier;
 import org.openehr.rm.datatypes.text.DvCodedText;

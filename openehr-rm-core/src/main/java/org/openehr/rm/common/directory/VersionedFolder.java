@@ -17,7 +17,6 @@ package org.openehr.rm.common.directory;
 import java.util.Set;
 
 import org.openehr.rm.common.changecontrol.OriginalVersion;
-import org.openehr.rm.common.changecontrol.Version;
 import org.openehr.rm.common.changecontrol.VersionedObject;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;

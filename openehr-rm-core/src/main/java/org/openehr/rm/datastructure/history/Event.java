@@ -44,11 +44,16 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
     /**
      * Constructs an Event
      *
-     * @param item
-     * @param width
-     * @param mathFunction
-     * @param terminologyService
-     * @param offset
+     * @param uid
+     * @param archetypeNodeId
+     * @param name
+     * @param archetypeDetails
+     * @param feederAudit
+     * @param links
+     * @param parent
+     * @param time
+     * @param data
+     * @param state
      * @throws IllegalArgumentException if offset null
      */
     @FullConstructor protected Event(

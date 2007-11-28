@@ -14,8 +14,6 @@
  */
 package org.openehr.rm.common.generic;
 
-import org.openehr.rm.RMObject;
-import org.openehr.rm.datatypes.encapsulated.DvEncapsulated;
 import org.openehr.rm.datatypes.encapsulated.DvMultimedia;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;

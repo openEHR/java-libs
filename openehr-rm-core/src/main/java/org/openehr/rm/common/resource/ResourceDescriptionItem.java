@@ -18,9 +18,9 @@ import java.util.Map;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.openehr.rm.Attribute;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
@@ -56,12 +56,11 @@ public class ResourceDescriptionItem extends RMObject {
 		if (copyright != null && StringUtils.isEmpty(copyright)) {
 			throw new IllegalArgumentException("empty copyright");
 		}
-//		 TODO: by-pass terminologyService for the parser 
-		// if (terminologyService == null) {
-		//	throw new IllegalArgumentException("null terminologyService");
-		//}
-		if (terminologyService != null 
-				&& !terminologyService.codeSet("languages").hasLang(language)) {
+		if (terminologyService == null) {
+			throw new IllegalArgumentException("null terminologyService");
+		}
+		if (!terminologyService.codeSetForId(
+						OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(language)) {
 			throw new IllegalArgumentException("unknown language:" + language);
 		}
 		this.language = language;

@@ -14,13 +14,7 @@
  */
 package org.openehr.rm.common.changecontrol;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 import org.openehr.rm.RMObject;
 import org.openehr.rm.common.generic.Attestation;
@@ -30,10 +24,8 @@ import org.openehr.rm.common.generic.RevisionHistoryItem;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.support.identification.HierObjectID;
-import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
-import org.openehr.rm.support.identification.VersionTreeID;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
@@ -180,36 +172,12 @@ public class VersionedObject<T> extends RMObject {
             Set<ObjectVersionID> otherInputVersionUids, String signature,
             TerminologyService terminologyService) {
         
-        //if (versionCount() > 0 && !hasVersionID(precedingVersionID)) {
-          //  throw new IllegalArgumentException("precedingVersionID not found");
-        //}
         commitVersionCheck(versionID, precedingVersionID);
         Version<T> version = new OriginalVersion<T>(versionID, precedingVersionID,
                 data, lifecycleState, commitAudit, contribution, signature, otherInputVersionUids, 
                 null, true, terminologyService);
         addVersion(version);
     }
-    
-    /**
-     * Create a next logical uid for a Version based on precedingVersionID
-     *
-     * @param precedingVersionID
-     * @param systemID
-     * @return
-     */
-    //TODO: delete this
-/*	private ObjectVersionID nextUid(ObjectVersionID precedingVersionID, String systemID) {
-                VersionTreeID vTreeId = null;
-                HierObjectID creatingSystemID = null;
-                if (precedingVersionID != null) {
-                        vTreeId = precedingVersionID.versionTreeID().next();
-                        creatingSystemID = precedingVersionID.creatingSystemID();
-                } else {
-                        vTreeId = new VersionTreeID(Integer.toString(1));
-                        creatingSystemID = new HierObjectID(systemID);
-                }
-        return new ObjectVersionID(uid.root(), creatingSystemID, vTreeId);
-        }*/
     
     /**
      * Unique identifier of this version repository.
@@ -308,9 +276,7 @@ public class VersionedObject<T> extends RMObject {
         }
         Version<T> version = idVersionMap.get(uid);
         return version instanceof OriginalVersion;
-    }
-    
-    
+    }   
     
     /**
      * Return the version with given id
@@ -449,19 +415,12 @@ public class VersionedObject<T> extends RMObject {
         return new HashSet<Version<T>>(timeVersionMap.values());
     }
     
-    /**
-     * version id for the version before the first version
-     */
-    //public static final String NONE = "0";
-    //public static final String FIRST = "1";
-    
     /* fields */
     private HierObjectID uid;
     private ObjectRef ownerID;
     private DvDateTime timeCreated;
     
     private SortedMap<DvDateTime, Version<T>> timeVersionMap;
-    //change to hashmap because ObjectVersionID doesn't implement Comparable
     private HashMap<ObjectVersionID, Version<T>> idVersionMap; 
     private int trunkCounter;
     private ObjectVersionID latestTrunkUid;

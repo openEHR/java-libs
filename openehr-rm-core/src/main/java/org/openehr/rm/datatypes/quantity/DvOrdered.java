@@ -5,7 +5,7 @@
  *
  * author:      "Rong Chen <rong@acode.se>"
  * support:     "Acode HB <support@acode.se>"
- * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
+ * copyright:   "Copyright (c) 2004,2007 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
  * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/datatypes/quantity/DvOrdered.java $"
@@ -17,6 +17,8 @@ package org.openehr.rm.datatypes.quantity;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.datatypes.basic.DataValue;
 import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
+import org.openehr.rm.support.terminology.TerminologyService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,7 +55,52 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
     		@Attribute (name = "otherReferenceRanges")
             List<ReferenceRange<T>> otherReferenceRanges,
             @Attribute (name = "normalRange") DvInterval<T> normalRange,
-            @Attribute (name= "normalStatus") CodePhrase normalStatus) {
+            @Attribute (name= "normalStatus") CodePhrase normalStatus,
+            @Attribute(name = "terminologyService", system = true) 
+            	TerminologyService terminologyService) {     
+
+        if (otherReferenceRanges != null) {
+            if (otherReferenceRanges.isEmpty()) {
+                throw new IllegalArgumentException("empty otherReferenceRanges");
+            }
+            this.otherReferenceRanges =
+                    new ArrayList<ReferenceRange<T>>(otherReferenceRanges); 
+        } else {
+            this.otherReferenceRanges = null;
+        }
+        
+        if(normalStatus != null) {
+        	if(terminologyService == null) {
+        		throw new IllegalArgumentException("null terminologyService");
+        	}
+        	if (!terminologyService.codeSetForId(
+        			OpenEHRCodeSetIdentifiers.NORMAL_STATUSES).hasCode(
+        					normalStatus)) {
+                throw new IllegalArgumentException(
+                        "unknown normal status: " + normalStatus);
+            }            
+        }
+        if(normalStatus != null && normalRange != null) {
+        	
+        }
+        
+        this.normalRange = normalRange;
+        this.normalStatus = normalStatus;
+    }
+    
+    /**
+     * Constructs a Ordered by otherReferenceRanges, normalRange and 
+     * normalStatus
+     *
+     * @param otherReferenceRanges null if not specified
+     * @param normalRange null if not specified
+     * @param normalStatus null if not specified
+     * @throws IllegalArgumentException if otherReferenceRanges not null
+     *                                  and empty
+     */
+    protected DvOrdered (
+    		List<ReferenceRange<T>> otherReferenceRanges,
+            DvInterval<T> normalRange, CodePhrase normalStatus) {
 
         if (otherReferenceRanges != null) {
             if (otherReferenceRanges.isEmpty()) {
@@ -116,9 +163,18 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
      * Value is in the normal range if there is one, otherwise True
      *
      * @return true if normal
+     * @throws IllegalStateException if both normalRange and normalStatus null
      */
-    public boolean isNormal() {
-        return (normalRange == null) || getNormalRange().has(this);
+    public boolean isNormal() throws IllegalStateException {
+    	if(normalRange == null && normalStatus == null) {
+    		throw new IllegalStateException(
+    				"both normalRange and normalStatus null");
+    	}
+    	if(normalRange != null) {
+    		return getNormalRange().has(this);
+    	} else {
+    		return normalStatus.getCodeString().equals("N");
+    	}
     }
 
     /**
@@ -187,7 +243,7 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
  *  Portions created by the Initial Developer are Copyright (C) 2003-2007
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s): Bert Verhees
+ *  Contributor(s): Bert Verhees, Sergio Miranda Freire
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

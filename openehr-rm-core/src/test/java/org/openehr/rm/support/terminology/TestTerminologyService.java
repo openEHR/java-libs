@@ -82,9 +82,8 @@ public class TestTerminologyService implements TerminologyService {
     }
 
 
-	public CodeSetAccess codeSetForId(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public CodeSetAccess codeSetForId(OpenEHRCodeSetIdentifiers name) {
+		return new TestCodeSetAccess();
 	}
 
 

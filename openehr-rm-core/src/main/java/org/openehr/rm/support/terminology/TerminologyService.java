@@ -54,7 +54,7 @@ public interface TerminologyService {
      * @throws IllegalArgumentException if id is null, empty
      *  or unknown to this terminology service
      */
-    public CodeSetAccess codeSetForId(String id);
+    public CodeSetAccess codeSetForId(OpenEHRCodeSetIdentifiers id);
 
     /**
      * Returns true if terminology of given name known by this service

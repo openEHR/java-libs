@@ -16,6 +16,7 @@ package org.openehr.rm.datatypes.encapsulated;
 
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.uri.DvURI;
+import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
 import org.openehr.rm.support.terminology.TerminologyAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
 
@@ -69,29 +70,24 @@ public final class DvMultimedia extends DvEncapsulated {
                     "null integrity check algorithm");
         }
 
-        TerminologyAccess terminogy = terminologyService.terminology(
-                TerminologyService.OPENEHR);
-
-        //if (!terminogy.hasCodeForGroupName(mediaType,
-        if (!terminogy.codesForGroupName("media types", "en").contains(mediaType)) {
+        if (!terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.MEDIA_TYPES).hasCode(mediaType)) {
             throw new IllegalArgumentException(
                     "unknown media types: " + mediaType);
         }
-        if (!terminogy.codesForGroupName("compression algorithm", "en").contains(compressionAlgorithm)) {
-        //if (compressionAlgorithm != null &&
-          //      !terminogy.hasCodeForGroupName(compressionAlgorithm,
-            //            "compression algorithm", "en")) {
-            throw new IllegalArgumentException("unknown compression algorithm: "
+        if (!terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.COMPRESSION_ALGORITHMS).hasCode(
+        				compressionAlgorithm)) {
+        	throw new IllegalArgumentException("unknown compression algorithm: "
                     + compressionAlgorithm);
         }
-        if (!terminogy.codesForGroupName("integrity check algorithm", "en").contains(integrityCheckAlgorithm)) {
-        //if (integrityCheckAlgorithm != null
-          //      && !terminogy.hasCodeForGroupName(integrityCheckAlgorithm,
-            //            "integrity check algorithm", "en")) {
-            throw new IllegalArgumentException("unknown integrity check algorithm: "
-                    + integrityCheckAlgorithm);
+        if (!terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.INTEGRITY_CHECK_ALGORITHMS).hasCode(
+        				integrityCheckAlgorithm)) {
+        	throw new IllegalArgumentException(
+        			"unknown integrity check algorithm: "
+        			+ integrityCheckAlgorithm);
         }
-
         if (uri == null && data == null) {
             throw new IllegalArgumentException("both uri and ata are null");
         }

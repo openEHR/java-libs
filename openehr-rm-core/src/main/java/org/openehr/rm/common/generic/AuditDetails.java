@@ -63,8 +63,8 @@ public class AuditDetails extends RMObject {
         if (terminologyService == null) {
             throw new IllegalArgumentException("null terminologyService");
         }
-        if (!terminologyService.terminology("openehr").codesForGroupName(
-                "audit change type", "en")
+        if (!terminologyService.terminology(TerminologyService.OPENEHR)
+        		.codesForGroupName("audit change type", "en")
                 .contains(changeType.getDefiningCode())) {
             throw new IllegalArgumentException("unknown change type: "
                     + changeType.getDefiningCode());
