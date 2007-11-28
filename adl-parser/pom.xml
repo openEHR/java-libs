@@ -116,6 +116,11 @@
 			<groupId>openehr</groupId>
 			<artifactId>measure-serv</artifactId>
 			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>mini-termserv</artifactId>
+			<version>0.1-SNAPSHOT</version>
 		</dependency>		
 		<dependency>
 			<groupId>junit</groupId>

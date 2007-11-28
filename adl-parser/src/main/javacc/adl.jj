@@ -52,6 +52,7 @@ import org.openehr.am.archetype.constraintmodel.primitive.*;
 import org.openehr.am.archetype.ontology.*;
 import org.openehr.am.openehrprofile.datatypes.quantity.*;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
+import org.openehr.terminology.SimpleTerminologyService;
 
 /**
  * JavaCC grammer file for Archteype Definition Language (ADL)
@@ -125,7 +126,7 @@ public class ADLParser {
   /* =========================  public interface ======================== */
 
   /* execute the parsing */
-  public Archetype parse() throws ParseException {
+  public Archetype parse() throws ParseException, Exception {
       return archetype();
   }
 
@@ -623,7 +624,7 @@ TOKEN : /* IDENTIFIERS - ADL */
  * THE ADL LANGUAGE GRAMMAR STARTS HERE *
  *****************************************/
 
-Archetype archetype() :
+Archetype archetype() throws Exception :
 {
   Token t;	
   String id;
@@ -642,7 +643,8 @@ Archetype archetype() :
   CComplexObject definition;
   ArchetypeOntology ontology;
   Set<Assertion> invariants = null; // TODO
-  TerminologyService terminologyService = null; // TODO
+  TerminologyService terminologyService = 
+  		SimpleTerminologyService.getInstance();
 }
 {
   <SYM_ARCHETYPE>	
@@ -808,7 +810,7 @@ String arch_concept() :
   { return value; }
 }
 
-ResourceDescription arch_description() :
+ResourceDescription arch_description() throws Exception :
 {
   Map originalAuthor = new HashMap();
   String key = null;
@@ -868,7 +870,7 @@ ResourceDescription arch_description() :
    }
 }
 
-ResourceDescriptionItem arch_description_item() :
+ResourceDescriptionItem arch_description_item() throws Exception :
 {
   String langAsKey = null;	
   CodePhrase lang = null;	
@@ -880,7 +882,8 @@ ResourceDescriptionItem arch_description_item() :
   String keyword = null;
   Map originalResourceURI = new HashMap();
   Map otherDetails = null; // not used  
-  TerminologyService terminologyService = null; // not used
+  TerminologyService terminologyService = 
+  		SimpleTerminologyService.getInstance();
 }
 {
   "[" langAsKey = string_value() "]" <SYM_EQ> "<"
