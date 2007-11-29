@@ -473,7 +473,7 @@ TOKEN : /* IDENTIFIERS - ADL */
 |
   < V_HHMMSSssZ_TIME: < HOUR_MINUTE> <SECOND> <MILLI_SECOND> <TIME_ZONE> >
 |
-  < V_DATE_TIME: <V_DATE>"T"<HOUR_MINUTE> <SECOND> >
+  < V_DATE_TIME: <V_DATE>"T"<HOUR> (":"<MINUTE>(<SECOND>)?)? >
 |
   < V_DATE_TIME_MS: <V_DATE_TIME> <MILLI_SECOND> >
 |
@@ -487,7 +487,11 @@ TOKEN : /* IDENTIFIERS - ADL */
 |
   < #MILLI_SECOND: ","(["0"-"9"]){1, 3} >
 |
-  < #HOUR_MINUTE: ["0"-"9"]["0"-"9"] ":" ["0"-"5"]["0"-"9"] >
+  < #HOUR_MINUTE: <HOUR> ":" <MINUTE> >
+|
+  < #HOUR: ["0"-"2"]["0"-"9"] >
+|
+  < #MINUTE: ["0"-"6"]["0"-"9"] >
 |
   <V_LOCAL_TERM_CODE_REF: "["<LET_DIG>(<LET_DIG_DD>)*"]">
 |
