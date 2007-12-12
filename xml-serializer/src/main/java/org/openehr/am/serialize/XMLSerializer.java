@@ -24,10 +24,6 @@ import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
-import org.openehr.rm.datatypes.quantity.datetime.DvDate;
-import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
-import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
-import org.openehr.rm.datatypes.quantity.datetime.DvTime;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.basic.Interval;
@@ -163,22 +159,32 @@ public class XMLSerializer {
 
     protected void printHeader(Archetype archetype, CustomWriter out) throws IOException {
         out.writeln("<?xml version=\"1.0\" encoding=\"" + encoding.name() + "\"?>");
-        out.writeln("<archetype xmlns:at=\"openEHR/v1/Archetype\"\n" +
+        out.writeln("<archetype xmlns=\"http://schemas.openehr.org/v1\"\n" +
                 "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">");
         indent(1, out);
-        out.writeln("<archetype_id>" + archetype.getArchetypeId().toString() + "</archetype_id>");
+        out.writeln("<archetype_id>");
+        printNoneEmptyString("value", archetype.getArchetypeId().toString(), 2, out);
         indent(1, out);
-        out.writeln("<concept_code>" + archetype.getConcept() + "</concept_code>");
+        out.writeln("</archetype_id>");
+
+        indent(1, out);
+        out.writeln("<concept>" + archetype.getConcept() + "</concept>");
         
         final ArchetypeID parentID = archetype.getParentArchetypeId();
         if(parentID != null) {
             indent(1, out);
-            out.writeln("<parent_archetype_id>" + parentID.toString() + "</parent_archetype_id>");
+            out.writeln("<parent_archetype_id>");
+            printNoneEmptyString("value", archetype.getArchetypeId().toString(), 2, out);
+            indent(1, out);
+            out.writeln("</parent_archetype_id>");
         }
-        
-        // TODO: Output original_language and is_controlled
-        // <original_language> CODE_PHRASE </original_language> [1]
-        // <is_controlled> xs:boolean </is_controlled> [0..1]
+        indent(1, out);
+        out.writeln("<original_language>");
+        printCodePhrase(archetype.getOriginalLanguage(), 2, out);
+        indent(1, out);
+        out.writeln("</original_language>");
+        indent(1, out);
+        out.writeln("<is_controlled>" + (archetype.isControlled() ? "true" : "false") + "</is_controlled>");
     }
 
     protected void printDescription(ResourceDescription description, CustomWriter out)
@@ -235,91 +241,38 @@ public class XMLSerializer {
         }
         
         printEmptyString("code_string", cp.getCodeString(), indent, out);
-        printEmptyString("terminology_id", cp.getTerminologyId().getValue(), indent, out);
+        indent(indent, out);
+        out.writeln("<terminology_id>");
+        printEmptyString("value", cp.getTerminologyId().getValue(), indent + 1, out);
+        indent(indent, out);
+        out.writeln("</terminology_id>");
     }
     
-    private void printDefinitionItem(ArchetypeTerm term, int indent,
-            CustomWriter out) throws IOException {
-        if(term == null) {
-            return;
-        }
-        
-//        // Text
-//        indent(indent, out);
-//        out.writeln("<item>");
-//        indent(indent + 1, out);
-//        out.writeln("<key>text</key>");
-//        indent(indent + 1, out);
-//        out.writeln("<value>" + term.getItem(ArchetypeTerm.TEXT) + "</value>");
-//        indent(indent, out);
-//        out.writeln("</item>");
-//        
-//        // Description
-//        indent(indent, out);
-//        out.writeln("<item>");
-//        indent(indent + 1, out);
-//        out.writeln("<key>description</key>");
-//        indent(indent + 1, out);
-//        out.writeln("<value>" + term.getItem(ArchetypeTerm.DESCRIPTION) + "</value>");
-//        indent(indent, out);
-//        out.writeln("</item>");
-
-        // General iteration over all items (replacing commented out code above)
-        // due to change of spec and ref_impl
-        for (Map.Entry<String, String> entry : term.getItems().entrySet()) {
-        indent(indent, out);
-        out.writeln("<item>");
-        indent(indent + 1, out);
-        out.writeln("<key>"+entry.getKey()+"</key>");
-        indent(indent + 1, out);
-        out.writeln("<value>" + entry.getValue() + "</value>");
-        indent(indent, out);
-        out.writeln("</item>");
-		}
-        
-        
-    }
     
     private void printEmptyStringMap(String label, Map<String, String> map, int indent,
             CustomWriter out) throws IOException {
-        
-        indent(indent, out);
-        out.writeln("<" + label + ">");
-        
+                
         if(map != null && !map.isEmpty()) {
             for(String key : map.keySet()) {
-                indent(indent + 1, out);
-                out.writeln("<item>");
-                printEmptyString("key", key, indent + 2, out);
-                printEmptyString("value", map.get(key), indent + 2, out);
-                indent(indent + 1, out);
-                out.writeln("</item>");
+                indent(indent, out);
+                out.write("<" + label + " id=\"" + key + "\">");
+                if (map.get(key) != null)
+                    out.write(map.get(key));
+                out.writeln("</" + label + ">");
             }
         }
-        
-        indent(indent, out);
-        out.writeln("</" + label + ">");
     }
     
     private void printNoneEmptyStringMap(String label, Map<String, String> map, int indent,
             CustomWriter out) throws IOException {
-        if(map == null || map.isEmpty())
-            return;
-        
-        indent(indent, out);
-        out.writeln("<" + label + ">");
-        
-        for(String key : map.keySet()) {
-            indent(indent + 1, out);
-            out.writeln("<item>");
-            printEmptyString("key", key, indent + 2, out);
-            printEmptyString("value", map.get(key), indent + 2, out);
-            indent(indent + 1, out);
-            out.writeln("</item>");
+        if(map != null && !map.isEmpty()) {
+            for(String key : map.keySet()) {
+                indent(indent, out);
+                out.write("<" + label + " id=\"" + key + "\">");
+                out.write(map.get(key));
+                out.writeln("</" + label + ">");
+            }
         }
-        
-        indent(indent, out);
-        out.writeln("</" + label + ">");
     }
     
     
@@ -328,7 +281,8 @@ public class XMLSerializer {
 
         indent(indent, out);
         out.write("<" + label + ">");
-        out.write(value);
+        if (value != null)
+            out.write(value);
         out.writeln("</" + label + ">");
     }
     
@@ -350,18 +304,13 @@ public class XMLSerializer {
             return;
         }
         
-        indent(indent, out);
-        out.writeln("<" + label + ">");
         
         for(int i = 0, j = list.size(); i < j; i++) {
-            indent(indent + 1, out);
-            out.write("<item>");
+            indent(indent, out);
+            out.write("<" + label + ">");
             out.write(list.get(i));
-            out.writeln("</item>");
-        } 
-        
-        indent(indent, out);
-        out.writeln("</" + label + ">");
+            out.writeln("</" + label + ">");
+        }         
     }
 
     protected void printDefinition(CComplexObject definition, CustomWriter out)
@@ -395,7 +344,7 @@ public class XMLSerializer {
             CustomWriter out) throws IOException {
 
         indent(indent, out);
-        out.writeln("<children xsi:type=\"at:C_COMPLEX_OBJECT\">");
+        out.writeln("<children xsi:type=\"C_COMPLEX_OBJECT\">");
         printCObjectElements(ccobj, indent + 1, out);
 
         // print all attributes
@@ -413,7 +362,7 @@ public class XMLSerializer {
             int indent, CustomWriter out) throws IOException {
         
         indent(indent, out);
-        out.writeln("<children xsi:type=\"at:CONSTRAINT_REF\">");
+        out.writeln("<children xsi:type=\"CONSTRAINT_REF\">");
         printCObjectElements(ref, indent + 1, out);
         printEmptyString("reference", ref.getReference(), indent + 1, out);
         indent(indent, out);
@@ -424,7 +373,7 @@ public class XMLSerializer {
             int indent, CustomWriter out) throws IOException {
 
         indent(indent, out);
-        out.writeln("<children xsi:type=\"at:ARCHETYPE_INTERNAL_REF\">");
+        out.writeln("<children xsi:type=\"ARCHETYPE_INTERNAL_REF\">");
         printCObjectElements(ref, indent + 1, out);
         printEmptyString("target_path", ref.getTargetPath(), indent + 1, out);
         indent(indent, out);
@@ -435,7 +384,7 @@ public class XMLSerializer {
             throws IOException {
 
         indent(indent, out);
-        out.writeln("<children xsi:type=\"at:ARCHETYPE_SLOT\">");
+        out.writeln("<children xsi:type=\"ARCHETYPE_SLOT\">");
         printCObjectElements(slot, indent + 1, out);
 
         // print all attributes
@@ -496,7 +445,7 @@ public class XMLSerializer {
         } else {
             // unknown ExpressionItem
             indent(indent, out);
-            out.writeln("<" + label + " xsi:type=\"at:EXPR_ITEM\">");
+            out.writeln("<" + label + " xsi:type=\"EXPR_ITEM\">");
             printEmptyString("type", expItem.getType(), indent + 1, out);
             indent(indent, out);
             out.writeln("</" + label + ">");
@@ -507,7 +456,7 @@ public class XMLSerializer {
             throws IOException {
         
         indent(indent, out);
-        out.writeln("<" + label + " xsi:type=\"at:EXPR_LEAF\">");
+        out.writeln("<" + label + " xsi:type=\"EXPR_LEAF\">");
         printEmptyString("type", expLeaf.getType(), indent + 1, out);
         printEmptyString("item", expLeaf.getItem().toString(), indent + 1, out);
         printEmptyString("reference_type", expLeaf.getReferenceType().name(), indent + 1, out);
@@ -520,7 +469,7 @@ public class XMLSerializer {
         
         if(expOperator instanceof ExpressionUnaryOperator) {
             indent(indent, out);
-            out.writeln("<" + label + " xsi:type=\"at:EXPR_UNARY_OPERATOR\">");
+            out.writeln("<" + label + " xsi:type=\"EXPR_UNARY_OPERATOR\">");
             printExpressionOperatorElements(expOperator, indent + 1, out);
             printExpressionItem("operand", ((ExpressionUnaryOperator)expOperator).getOperand(), indent + 1, out);
             indent(indent, out);
@@ -528,7 +477,7 @@ public class XMLSerializer {
         } else if(expOperator instanceof ExpressionBinaryOperator) {
             final ExpressionBinaryOperator expBinaryOperator = (ExpressionBinaryOperator)expOperator;
             indent(indent, out);
-            out.writeln("<" + label + " xsi:type=\"at:EXPR_BINARY_OPERATOR\">");
+            out.writeln("<" + label + " xsi:type=\"EXPR_BINARY_OPERATOR\">");
             printExpressionOperatorElements(expOperator, indent + 1, out);
             printExpressionItem("left_operand", expBinaryOperator.getLeftOperand(), indent + 1, out);
             printExpressionItem("right_operand", expBinaryOperator.getRightOperand(), indent + 1, out);
@@ -537,7 +486,7 @@ public class XMLSerializer {
         } else {
             // unknown ExpressionOperator
             indent(indent, out);
-            out.writeln("<" + label + " xsi:type=\"at:EXPR_OPERATOR\">");
+            out.writeln("<" + label + " xsi:type=\"EXPR_OPERATOR\">");
             printExpressionOperatorElements(expOperator, indent + 1, out);
             indent(indent, out);
             out.writeln("</" + label + ">");
@@ -566,22 +515,33 @@ public class XMLSerializer {
         
         indent(indent, out);
         if(isMultipleAttribute) {
-            out.write("<attributes xsi:type=\"at:C_MULTIPLE_ATTRIBUTE\"");
+            out.writeln("<attributes xsi:type=\"C_MULTIPLE_ATTRIBUTE\">");
         } else {
-            out.write("<attributes xsi:type=\"at:C_SINGLE_ATTRIBUTE\"");
+            out.writeln("<attributes xsi:type=\"C_SINGLE_ATTRIBUTE\">");
         }
-                    
+
+        indent(indent + 1, out);
+        out.writeln("<existence>");
+        indent(indent + 2, out);
+        out.writeln("<lower_unbounded>false</lower_unbounded>");
+        indent(indent + 2, out);
+        out.writeln("<upper_unbounded>false</upper_unbounded>");
+        int lower = 0, upper = 0;
+        
         if(cattribute.getExistence().equals(CAttribute.Existence.REQUIRED)) {
-            out.write(" minOccurs=\"1\"");
-            out.write(" maxOccurs=\"1\"");
+            lower = 1;
+            upper = 1;
         } else if(cattribute.getExistence().equals(CAttribute.Existence.OPTIONAL)) {
-            out.write(" minOccurs=\"0\"");
-            out.write(" maxOccurs=\"1\"");
-        } else {
-            out.write(" minOccurs=\"0\"");
-            out.write(" maxOccurs=\"0\"");
+            lower = 0;
+            upper = 1;
         }
-        out.writeln(">");
+        indent(indent + 2, out);
+        out.writeln("<lower>" + Integer.toString(lower) + "</lower>");
+        indent(indent + 2, out);
+        out.writeln("<upper>" + Integer.toString(upper) + "</upper>");
+        
+        indent(indent + 1, out);
+        out.writeln("</existence>");
         
         if(cattribute.isAnyAllowed()) {
             indent(indent + 1, out);
@@ -648,7 +608,7 @@ public class XMLSerializer {
         
         printEmptyString("rm_type_name", cobj.getRmTypeName(), indent, out);
         printOccurrences(cobj.getOccurrences(), indent, out);
-        printNoneEmptyString("node_id", cobj.getNodeID(), indent, out);
+        printEmptyString("node_id", cobj.getNodeID(), indent, out);
     }
     
     protected void printOccurrences(Interval occurrences, int indent, CustomWriter out) 
@@ -706,7 +666,7 @@ public class XMLSerializer {
             throws IOException {
 
         indent(indent, out);
-        out.writeln("<children xsi:type=\"at:C_CODED_TEXT\">"); // TODO: Says C_CODED_TERM in specifications....       
+        out.writeln("<children xsi:type=\"C_CODE_PHRASE\">"); // TODO: Says C_CODED_TERM in specifications....       
         printCObjectElements(ccp, indent + 1, out);
         
         if(ccp.getTerminologyId() != null) {
@@ -729,7 +689,7 @@ public class XMLSerializer {
             throws IOException {
         
         indent(indent, out);
-        out.writeln("<children xsi:type=\"at:C_ORDINAL\">");  
+        out.writeln("<children xsi:type=\"C_DV_ORDINAL\">");  
         printCObjectElements(cordinal, indent + 1, out);
 
         if(cordinal.getList() != null) {
@@ -743,7 +703,11 @@ public class XMLSerializer {
                 printEmptyString("value", String.valueOf(ordinal.getValue()), indent + 2, out);
                 indent(indent + 2, out);
                 out.writeln("<symbol>");
-                printCodePhrase(ordinal.getSymbol(), indent + 3, out);
+                indent(indent + 3, out);
+                out.writeln("<defining_code>");
+                printCodePhrase(ordinal.getSymbol(), indent + 4, out);
+                indent(indent + 3, out);
+                out.writeln("</defining_code>");
                 indent(indent + 2, out);
                 out.writeln("</symbol>");
                 indent(indent + 1, out);
@@ -759,7 +723,7 @@ public class XMLSerializer {
             CustomWriter out) throws IOException {
         
         indent(indent, out);
-        out.writeln("<children xsi:type=\"at:C_QUANTITY\">");  
+        out.writeln("<children xsi:type=\"C_DV_QUANTITY\">");  
         printCObjectElements(cquantity, indent + 1, out);
 
         
@@ -811,30 +775,24 @@ public class XMLSerializer {
         //printNoneEmptyString("primary_language", ontology.getPrimaryLanguage(), 2, out);
         // TODO: Check why this is not in the XML schema specification of the AOM.
         //printNoneEmptyStringList("languages_available", ontology.getLanguages(), 2, out);
-        printNoneEmptyStringList("terminologies_available", ontology.getTerminologies(), 2, out);
-        final int specDepth = StringUtils.countMatches(".", concept);
-        printNoneEmptyString("specialisation_depth", String.valueOf(specDepth), 2, out);
+        //printNoneEmptyStringList("terminologies_available", ontology.getTerminologies(), 2, out);
+        //final int specDepth = StringUtils.countMatches(".", concept);
+        //printNoneEmptyString("specialisation_depth", String.valueOf(specDepth), 2, out);
         
         
         if(ontology.getTermDefinitionsList() != null) {
             final List<OntologyDefinitions> termDefinitions = ontology.getTermDefinitionsList();
-                
+            
             for (OntologyDefinitions defs : termDefinitions) {
                 indent(2, out);
-                out.writeln("<term_definitions>");
-                printEmptyString("language", defs.getLanguage(), 3, out);
+                out.writeln("<term_definitions language=\"" + defs.getLanguage() + "\">");
                 
                 for (ArchetypeTerm term : defs.getDefinitions()) {
                     indent(3, out);
-                    out.writeln("<terms>");
-                    printEmptyString("code", term.getCode(), 4, out);
-                    indent(4, out);
-                    out.writeln("<items>");
-                    printDefinitionItem(term, 5, out);
-                    indent(4, out);
-                    out.writeln("</items>");
+                    out.writeln("<items code=\"" + term.getCode() + "\">");
+                    printNoneEmptyStringMap("items", term.getItems(), 4, out);
                     indent(3, out);
-                    out.writeln("</terms>");
+                    out.writeln("</items>");
                 }
                 
                 indent(2, out);
@@ -847,21 +805,16 @@ public class XMLSerializer {
                 
             for (OntologyDefinitions defs : constraintDefinitions) {
                 indent(2, out);
-                out.writeln("<constraint_definitions>");
-                printEmptyString("language", defs.getLanguage(), 3, out);
+                out.writeln("<constraint_definitions language=\"" + defs.getLanguage() + "\">");
                 
                 for (ArchetypeTerm term : defs.getDefinitions()) {
                     indent(3, out);
-                    out.writeln("<terms>");
-                    printEmptyString("code", term.getCode(), 4, out);
-                    indent(4, out);
-                    out.writeln("<items>");
-                    printDefinitionItem(term, 5, out);
-                    indent(4, out);
-                    out.writeln("</items>");
+                    out.writeln("<items code=\"" + term.getCode() + "\">");
+                    printNoneEmptyStringMap("items", term.getItems(), 4, out);
                     indent(3, out);
-                    out.writeln("</terms>");
+                    out.writeln("</items>");
                 }
+                
                 
                 indent(2, out);
                 out.writeln("</constraint_definitions>");
@@ -874,19 +827,28 @@ public class XMLSerializer {
             TermBindingItem item;
             for (OntologyBinding bind : termBindings) {
                 indent(2, out);
-                out.writeln("<term_bindings>");
-                printEmptyString("terminology", bind.getTerminology(), 3, out);
+                out.writeln("<term_bindings terminology=\"" + bind.getTerminology() + "\">");
 
                 for (OntologyBindingItem bindItem : bind.getBindingList()) {
                     item = (TermBindingItem) bindItem;
 
                     for(String value : item.getTerms()) {
                         indent(3, out);
-                        out.writeln("<bindings>");
-                        printEmptyString("code", item.getCode(), 4, out);
-                        printEmptyString("value", value, 4, out);
+                        out.writeln("<items code=\"" + item.getCode() + "\">");
+                        indent(4, out);
+                        out.writeln("<value>");
+                        String terminologyId = value.substring(1, value.lastIndexOf("::"));
+                        String codeString = value.substring(value.lastIndexOf("::") + 2, value.length() - 1);
+                        indent(5, out);
+                        out.writeln("<terminology_id>");
+                        printEmptyString("value", terminologyId, 6, out);
+                        indent(5, out);
+                        out.writeln("</terminology_id>");
+                        printEmptyString("code_string", codeString, 5, out);
+                        indent(4, out);
+                        out.writeln("</value>");
                         indent(3, out);
-                        out.writeln("</bindings>");
+                        out.writeln("</items>");
                     }
                 }
                 
@@ -901,17 +863,15 @@ public class XMLSerializer {
             QueryBindingItem item;
             for (OntologyBinding bind : constraintBindings) {
                 indent(2, out);
-                out.writeln("<constraint_bindings>");
-                printEmptyString("terminology", bind.getTerminology(), 3, out);
+                out.writeln("<constraint_bindings  terminology=\"" + bind.getTerminology() + "\">");
 
                 for (OntologyBindingItem bindItem : bind.getBindingList()) {
                     item = (QueryBindingItem) bindItem;
                     indent(3, out);
-                    out.writeln("<bindings>");
-                    printEmptyString("code", item.getCode(), 4, out);
+                    out.writeln("<items code=\"" + item.getCode() + "\">");
                     printEmptyString("value", item.getQuery().getUrl(), 4, out);
                     indent(3, out);
-                    out.writeln("</bindings>");
+                    out.writeln("</items>");
                 }
                 
                 indent(2, out);
@@ -933,37 +893,37 @@ public class XMLSerializer {
         }
         
         indent(indent, out);
-        out.writeln("<children xsi:type=\"at:C_PRIMITIVE_OBJECT\">");
+        out.writeln("<children xsi:type=\"C_PRIMITIVE_OBJECT\">");
         printCObjectElements(cpo, indent + 1, out);
         
         indent(indent + 1, out);
         final int primIndent = indent + 2;        
         if (cp instanceof CBoolean) {
-            out.writeln("<item xsi:type=\"at:C_BOOLEAN\">");
+            out.writeln("<item xsi:type=\"C_BOOLEAN\">");
             printCBoolean((CBoolean) cp, primIndent, out);
         } else if (cp instanceof CDate) {
-            out.writeln("<item xsi:type=\"at:C_DATE\">");
+            out.writeln("<item xsi:type=\"C_DATE\">");
             printCDate((CDate) cp, primIndent, out);
         } else if (cp instanceof CDateTime) {
-            out.writeln("<item xsi:type=\"at:C_DATE_TIME\">");
+            out.writeln("<item xsi:type=\"C_DATE_TIME\">");
             printCDateTime((CDateTime) cp, primIndent, out);
         } else if (cp instanceof CTime) {
-            out.writeln("<item xsi:type=\"at:C_TIME\">");
+            out.writeln("<item xsi:type=\"C_TIME\">");
             printCTime((CTime) cp, primIndent, out);
         } else if (cp instanceof CDuration) {
-            out.writeln("<item xsi:type=\"at:C_DURATION\">");
+            out.writeln("<item xsi:type=\"C_DURATION\">");
             printCDuration((CDuration) cp, primIndent, out);
         } else if (cp instanceof CInteger) {
-            out.writeln("<item xsi:type=\"at:C_INTEGER\">");
+            out.writeln("<item xsi:type=\"C_INTEGER\">");
             printCInteger((CInteger) cp, primIndent, out);
         } else if (cp instanceof CReal) {
-            out.writeln("<item xsi:type=\"at:C_REAL\">");
+            out.writeln("<item xsi:type=\"C_REAL\">");
             printCReal((CReal) cp, primIndent, out);
         } else if (cp instanceof CString) {
-            out.writeln("<item xsi:type=\"at:C_STRING\">");
+            out.writeln("<item xsi:type=\"C_STRING\">");
             printCString((CString) cp, primIndent, out);
         } else {
-            out.writeln("<item xsi:type=\"at:C_PRIMITIVE\">");
+            out.writeln("<item xsi:type=\"C_PRIMITIVE\">");
             System.err.println("Cannot serialize CPrimitive of type '" + cp.getClass().getName() + "'!");
         }
         
@@ -1146,55 +1106,30 @@ public class XMLSerializer {
             return;
         }
         
-        String type = null;
         final Comparable lower = interval.getLower();
         final Comparable upper = interval.getUpper();
-        
-        if(lower instanceof Integer || upper instanceof Integer) {
-            type = "integer";
-        } else if(lower instanceof Double || upper instanceof Double) {
-            type = "real";
-        } else if(lower instanceof DvDateTime || upper instanceof DvDateTime) {
-            type = "date_time";
-        } else if(lower instanceof DvDate || upper instanceof DvDate) {
-            type = "date";
-        } else if(lower instanceof DvTime || upper instanceof DvTime) {
-            type = "time";
-        } else if(lower instanceof DvDuration || upper instanceof DvDuration) {
-            type = "duration";
-        }
-                
-        printNoneEmptyString("includes_maximum",
+
+        printNoneEmptyString("upper_included",
                 interval.isUpperIncluded() == true ? "true" : "false",
                 indent, out);
-        printNoneEmptyString("includes_minimum",
+        printNoneEmptyString("lower_included",
                 interval.isLowerIncluded() == true ? "true" : "false",
                 indent, out);
+  
         
-        if(type != null && type.equals("real")) {
-            if(upper != null) {
-                printNoneEmptyString("has_maximum",
-                        interval.has(upper) == true ? "true" : "false",
+        printNoneEmptyString("upper_unbounded",
+                       interval.isUpperUnbounded() ? "true" : "false",
                                 indent + 1, out);
-            } else {
-                printNoneEmptyString("has_maximum", "false", indent, out);
-            }
-            
-            if(lower != null) {
-                printNoneEmptyString("has_minimum",
-                        interval.has(lower) == true ? "true" : "false",
+        printNoneEmptyString("lower_unbounded",
+                       interval.isLowerUnbounded() ? "true" : "false",
                                 indent + 1, out);
-            } else {
-                printNoneEmptyString("has_minimum", "false", indent, out);
-            }
-        }
         
         if(upper != null) {
-            printNoneEmptyString("maximum", upper.toString(), indent, out);
+            printNoneEmptyString("upper", upper.toString(), indent, out);
         }
         
         if(lower != null) {
-            printNoneEmptyString("minimum", lower.toString(), indent, out);
+            printNoneEmptyString("lower", lower.toString(), indent, out);
         }
     }
 
@@ -1233,13 +1168,14 @@ public class XMLSerializer {
  * The Original Code is XMLSerializer.
  *
  * The Initial Developer of the Original Code is
- * Linköpings universitet, Sweden.
+ * Linkï¿½pings universitet, Sweden.
  * Portions created by the Initial Developer are Copyright (C) 2005-2006
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):  Mattias Forss <mattias.forss@gmail.com>
  *                  Rong Chen
  *                  Erik Sundvall
+ *                  Humberto Naves
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or

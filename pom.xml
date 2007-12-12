@@ -15,6 +15,7 @@
     <module>adl-serializer</module>
     <module>xml-serializer</module>
     <module>measure-serv</module>
+    <module>mini-termserv</module>
     <module>adl-parser</module>
   </modules>
   <build>
