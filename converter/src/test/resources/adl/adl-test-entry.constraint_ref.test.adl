@@ -1,0 +1,43 @@
+archetype
+	adl-test-ENTRY.c_code_phrase.test
+
+concept
+	[at0000]
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	ENTRY[at0000] matches {	
+        content matches {
+            LIST[at0001] matches {
+                items cardinality matches {0..*} matches {
+                    ELEMENT[at0002] matches {
+                        value matches {
+                            DV_CODED_TEXT matches {
+                                defining_code matches {[ac0001]}
+                            } 
+                        }
+                    }	
+                }
+            }
+        }
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions = < 
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test">
+					description = <"desc">
+				>
+				["at0001"] = <
+					text = <"text">
+					description = <"desc">
+				>
+			>
+		>
+	>

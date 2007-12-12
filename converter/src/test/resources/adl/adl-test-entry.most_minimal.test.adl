@@ -1,0 +1,23 @@
+archetype
+	adl-test-ENTRY.most_minimal.draft
+
+concept 
+	[at0000]	--  empty definition test
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
+	>

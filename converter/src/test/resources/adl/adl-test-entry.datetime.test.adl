@@ -1,0 +1,183 @@
+archetype 	
+	adl-test-ENTRY.test.draft
+
+concept 
+	[at0000]	--  basic data types test 1
+
+language
+	original_language = <[ISO_639-1::en]> 
+	
+definition
+	ENTRY[at0000] matches {
+	    date_attributes matches {
+            LIST matches {
+                date_attr1 matches {yyyy-mm-dd}
+                date_attr2 matches {yyyy-??-??}
+                date_attr3 matches {yyyy-mm-??}
+                date_attr4 matches {yyyy-??-XX}
+                date_attr5 matches {1983-12-25}
+                date_attr6 matches {2000-01-01}
+
+                date_attr7 matches {|2004-09-20..2004-10-20|}
+                date_attr8 matches {|< 2004-09-20|}
+                date_attr9 matches {|<= 2004-09-20|}
+                date_attr10 matches {|> 2004-09-20|}
+                date_attr11 matches {|>= 2004-09-20|}
+
+                -- date_attr12 matches {2001-12-25, ...} -- Not currently in ADL syntax
+                
+                -- with assumed values
+                date_attr13 matches {yyyy-mm-dd; 2000-01-01}
+                date_attr14 matches {yyyy-??-??; 2001-01-01}
+                date_attr15 matches {yyyy-mm-??; 2002-01-01}
+                date_attr16 matches {yyyy-??-XX; 2003-01-01}
+                date_attr17 matches {1983-12-25; 2004-01-01}
+                date_attr18 matches {2000-01-01; 2005-01-01}
+
+                date_attr19 matches {|2004-09-20..2004-10-20|; 2004-09-30}
+                date_attr20 matches {|< 2004-09-20|; 2004-09-01}
+                date_attr21 matches {|<= 2004-09-20|; 2003-09-20}
+                date_attr22 matches {|> 2004-09-20|; 2005-01-02}
+                date_attr23 matches {|>= 2004-09-20|; 2005-10-30}
+                
+                 -- single value as interval
+                 date_attr24 matches {|2004-09-20|}
+            }
+        }
+        time_attributes matches {
+            LIST matches {
+                time_attr1 matches {hh:mm:ss}
+                time_attr2 matches {hh:mm:XX}
+                time_attr3 matches {hh:??:XX}
+                time_attr4 matches {hh:??:??}
+                time_attr5 matches {22:00:05}
+                time_attr6 matches {00:00:59}
+
+                time_attr7  matches {12:35}
+                time_attr8  matches {12:35:45,666}
+                time_attr9  matches {12:35:45-0700}
+                time_attr10 matches {12:35:45+0800}
+                time_attr11 matches {12:35:45,999-0700}
+                time_attr12 matches {12:35:45,000+0800}
+                time_attr13 matches {12:35:45,000Z}
+                time_attr14 matches {12:35:45,995-0700}
+                time_attr15 matches {12:35:45,001+0800}
+
+                time_attr16  matches {|12:35..16:35|}
+                time_attr17  matches {|< 12:35|}
+                time_attr18  matches {|<= 12:35|}
+                time_attr19  matches {|> 12:35|}
+                time_attr20  matches {|>= 12:35|}
+                
+                -- with assumed values
+                time_attr21 matches {hh:mm:ss; 10:00:00}
+                time_attr22 matches {hh:mm:XX; 10:00:00}
+                time_attr23 matches {hh:??:XX; 10:00:00}
+                time_attr24 matches {hh:??:??; 10:00:00}
+                time_attr25 matches {22:00:05; 10:00:00}
+                time_attr26 matches {00:00:59; 10:00:00}
+
+                time_attr27  matches {12:35; 10:00:00}
+                time_attr28  matches {12:35:45,666; 10:00:00}
+                time_attr29  matches {12:35:45-0700; 10:00:00}
+                time_attr30 matches {12:35:45+0800; 10:00:00}
+                time_attr31 matches {12:35:45,999-0700; 10:00:00}
+                time_attr32 matches {12:35:45,000+0800; 10:00:00}
+                time_attr33 matches {12:35:45,000Z; 10:00:00}
+                time_attr34 matches {12:35:45,995-0700; 10:00:00}
+                time_attr35 matches {12:35:45,001+0800; 10:00:00}
+
+                time_attr36  matches {|12:35..16:35|; 10:00:00}
+                time_attr37  matches {|< 12:35|; 10:00:00}
+                time_attr38  matches {|<= 12:35|; 10:00:00}
+                time_attr39  matches {|> 12:35|; 10:00:00}
+                time_attr40  matches {|>= 12:35|; 10:00:00}
+
+				-- single value as interval
+				time_attr41  matches {|12:35|}
+				
+                -- time_attr7 matches {64:02:25, ...} -- Not currently in ADL syntax
+                
+                time_attr6 matches {00:00:59,0}
+            }
+        }
+        date_time_attributes matches {
+            LIST matches {
+                date_time_attr1 matches {yyyy-mm-dd hh:mm:ss}
+                date_time_attr2 matches {yyyy-mm-dd hh:mm:??}
+                date_time_attr3 matches {yyyy-mm-dd hh:mm:XX}
+                date_time_attr4 matches {yyyy-mm-dd hh:??:XX}
+                date_time_attr5 matches {yyyy-??-?? ??:??:??}
+                date_time_attr6 matches {1983-12-25T22:00:05}
+                date_time_attr7 matches {2000-01-01T00:00:59}
+
+                date_time_attr8 matches {2000-01-01T00:00:59}
+                date_time_attr9 matches {2000-01-01T00:00:59,105}
+                date_time_attr10 matches {2000-01-01T00:00:59Z}
+                date_time_attr11 matches {2000-01-01T00:00:59+1200}
+                date_time_attr12 matches {2000-01-01T00:00:59,500Z}
+                date_time_attr13 matches {2000-01-01T00:00:59,500+1200}
+                date_time_attr14 matches {2000-01-01T00:00:59,000Z}
+                date_time_attr15 matches {2000-01-01T00:00:59,000+1200}
+
+                date_time_attr16 matches {|2000-01-01T00:00:00..2000-01-02T00:00:00|}
+                date_time_attr17 matches {|< 2000-01-01T00:00:00|}
+                date_time_attr18 matches {|<= 2000-01-01T00:00:00|}
+                date_time_attr19 matches {|> 2000-01-01T00:00:00|}
+                date_time_attr20 matches {|>= 2000-01-01T00:00:00|}
+
+                -- date_time_attr8 matches {2000-12-25T00:00:59, ...} -- Not currently in ADL syntax
+                
+                -- with assumed values
+                date_time_attr1 matches {yyyy-mm-dd hh:mm:ss; 2006-03-31T01:12:00}
+                date_time_attr2 matches {yyyy-mm-dd hh:mm:??; 2006-03-31T01:12:00}
+                date_time_attr3 matches {yyyy-mm-dd hh:mm:XX; 2006-03-31T01:12:00}
+                date_time_attr4 matches {yyyy-mm-dd hh:??:XX; 2006-03-31T01:12:00}
+                date_time_attr5 matches {yyyy-??-?? ??:??:??; 2006-03-31T01:12:00}
+                date_time_attr6 matches {1983-12-25T22:00:05; 2006-03-31T01:12:00}
+                date_time_attr7 matches {2000-01-01T00:00:59; 2006-03-31T01:12:00}
+
+                date_time_attr8 matches {2000-01-01T00:00:59,000; 2006-03-31T01:12:00}
+                date_time_attr9 matches {2000-01-01T00:00:59,105; 2006-03-31T01:12:00}
+                date_time_attr10 matches {2000-01-01T00:00:59Z; 2006-03-31T01:12:00}
+                date_time_attr11 matches {2000-01-01T00:00:59+1200; 2006-03-31T01:12:00}
+                date_time_attr12 matches {2000-01-01T00:00:59,500Z; 2006-03-31T01:12:00}
+                date_time_attr13 matches {2000-01-01T00:00:59,500+1200; 2006-03-31T01:12:00}
+                date_time_attr14 matches {2000-01-01T00:00:59,000Z; 2006-03-31T01:12:00}
+                date_time_attr15 matches {2000-01-01T00:00:59,000+1200; 2006-03-31T01:12:00}
+
+                date_time_attr16 matches {|2000-01-01T00:00:00..2000-01-02T00:00:00|; 2006-03-31T01:12:00}
+                date_time_attr17 matches {|< 2000-01-01T00:00:00|; 2006-03-31T01:12:00}
+                date_time_attr18 matches {|<= 2000-01-01T00:00:00|; 2006-03-31T01:12:00}
+                date_time_attr19 matches {|> 2000-01-01T00:00:00|; 2006-03-31T01:12:00}
+                date_time_attr20 matches {|>= 2000-01-01T00:00:00|; 2006-03-31T01:12:00}
+                
+                -- newly supported pattern with "T" in the middle
+                date_time_attr21 matches {yyyy-??-??T??:??:??}
+                
+                -- single value as interval
+                date_time_attr22 matches {|2000-01-01T00:00:00|}
+                
+                -- datetime without specified seconds
+                date_time_attr23 matches {1995-03-17T12:01}
+                
+                -- datetime without specified minute or seconds
+                date_time_attr23 matches {1995-03-17T12}
+            }
+        }        
+    }
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	terminologies_available = <"adl_test", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test entry">; 
+					description = <"test entry">
+				>
+			>
+		>
+	>

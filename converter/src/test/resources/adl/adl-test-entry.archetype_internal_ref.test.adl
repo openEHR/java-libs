@@ -1,0 +1,36 @@
+archetype
+	adl-test-entry.archetype_internal_ref.test
+
+concept
+	[at0000]
+
+language
+	original_language = <[ISO_639-1::en]> 	
+
+definition
+	Entry[at0000] matches {	-- Encounter
+		attribute1 matches {
+			SECTION[at0001] occurrences matches {0..1} matches {*}
+		}
+		attribute2 matches {
+			use_node SECTION occurrences matches {1..2} /attribute1
+		}
+		attribute3 matches {
+			use_node COMPLEX_OBJECT /items[at0001]
+			use_node COMPLEX_OBJECT /items[at0002]			
+		}
+	}	
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test composition">; 
+					description = <"test composition">
+				>
+			>
+		>
+	>

@@ -1,0 +1,59 @@
+archetype
+	adl-test-ENTRY.c_dv_quantity.test
+
+concept
+	[at0000]
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	ENTRY[at0000] matches {	
+        types matches {
+            LIST[at0001] matches {
+                items cardinality matches {0..*} matches {
+                    ELEMENT[at10005] matches {	-- c_quantity     
+	                    value matches {
+							C_DV_QUANTITY <
+								list = <									
+									["1"] = <
+										units = <"yr">
+										magnitude = <|0.0..200.0|>
+										precision = <|2|>
+									>
+									["2"] = <
+										units = <"mth">
+										magnitude = <|1.0..36.0|>
+										precision = <|2|>
+									>									
+								>
+								property = <[openehr::128]>								
+							>
+						}
+                    }		
+                }
+            }
+        }
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions = < 
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"domain types test">
+					description = <"domain types test">
+				>
+				["at0001"] = <
+					text = <"items">
+					description = <"items">
+				>
+				["at10005"] = <
+					text = <"c_quantity">
+					description = <"c_quantity node">
+				>				
+			>
+		>
+	>

@@ -1,0 +1,87 @@
+archetype
+	adl-test-CAR.paths.draft
+concept
+	[at0000] 	   									-- car
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	CAR [at0000] matches {
+		wheels matches {
+			WHEEL[at0001] matches {
+				description matches {"front left hand wheel"}
+				parts matches {
+					WHEEL_PART[at0002] matches {
+						something matches {"etc"}
+						something_else matches {"etc"}
+					}
+				}
+			}
+			WHEEL[at0003] matches {
+				description matches {"front right hand wheel"}
+				parts matches {
+					use_node WHEEL_PART /wheels[at0001]/parts[at0002] -- will pass
+				}
+			}
+			WHEEL[at0004] matches {
+				description matches {"rear left hand wheel"}
+				parts matches {
+					use_node WHEEL_PART /wheels[at0001]/parts[at0002]	-- will pass
+				}
+			}
+			WHEEL[at0005] matches {
+				description matches {"rear right hand wheel"}
+				parts matches {
+					use_node WHEEL_PART /engine[at0001]/parts[at0002] -- will fail, wrong target path
+				}
+			}
+			WHEEL[at0006] matches {
+				description matches {"rear right hand wheel"}
+				parts matches {
+					use_node WHEEL /wheels[at0001]/parts[at0002] -- will fail, wrong type
+				}
+			}			
+		}
+	}
+
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	terminologies_available = <"en", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"car">; 				
+					description = <"car">
+				>
+				["at0001"] = <
+					text = <"front left hand wheel">;
+					description = <"front left hand wheel">
+				>
+				["at0002"] = <
+					text = <"wheel part">; 			
+					description = <"wheel part">
+				>
+				["at0003"] = <
+					text = <"front right hand wheel">; 	
+					description = <"front right hand wheel">
+				>
+				["at0004"] = <
+					text = <"rear left hand wheel">; 	
+					description = <"rear left hand wheel">
+				>
+				["at0005"] = <
+					text = <"rear right hand wheel">; 	
+					description = <"rear right hand wheel">
+				>
+				["at0006"] = <
+					text = <"rear right hand wheel">; 	
+					description = <"rear right hand wheel">
+				>
+			>
+		>
+	>

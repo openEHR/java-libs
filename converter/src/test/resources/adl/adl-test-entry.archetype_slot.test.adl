@@ -1,0 +1,40 @@
+archetype
+	adl-test-entry.archetype_slot.test
+
+concept
+	[at0000]
+
+language
+	original_language = <[ISO_639-1::en]> 	
+
+definition
+	Entry[at0000] matches {	-- Encounter
+		content matches {
+			allow_archetype SECTION [at0001] occurrences matches {0..1} matches {
+				include
+					domain_concept matches {/blood_pressure.v1/}					
+				exclude
+					domain_concept matches {/blood_pressure.v2/}
+				    domain_concept matches {/.*/}
+			}
+		}
+	}
+
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test composition">; 
+					description = <"test composition">
+				>
+				["at0001"] = <
+					text = <"slot">; 
+					description = <"slot">
+				>
+			>
+		>
+	>
