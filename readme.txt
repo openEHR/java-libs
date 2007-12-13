@@ -55,4 +55,4 @@ BUILD
         J2SDK 1.5.0 and Maven 2.0.4 on both Linux and Windows. It should work
         on other platforms with Java support as well.
 
-        See install.txt for detailed installation instruction.
+        See install.txt for detailed installation instructions.
