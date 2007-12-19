@@ -27,7 +27,6 @@ import org.openehr.rm.common.resource.ResourceDescriptionItem;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.basic.Interval;
-import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -35,6 +34,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.Namespace;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 /**
  * XML serializer of the openEHR Archetype Object Model.
@@ -48,81 +52,21 @@ public class XMLSerializer {
      */
     public XMLSerializer() {
         this.encoding = UTF8;
-        this.indent = "    "; // 4 white space characters
-        this.lineSeparator = System.getProperty("line.separator");
+        outputter = new XMLOutputter();
+        outputter.setFormat(Format.getPrettyFormat().setEncoding(encoding.name()));
     }
     
-    interface CustomWriter {
-        public void writeln(String arg) throws IOException;
-        
-        public void write(String arg) throws IOException;
-        
-        public void flush() throws IOException;
-        
-        public void close() throws IOException;
-        
-        // Add more methods if needed.
-    }
-    
-    class CustomStringWriter extends StringWriter implements CustomWriter {
-        
-        public CustomStringWriter() {
-            super();
-        }
-        
-        public void writeln(String arg) {
-            super.write(arg);
-            super.write(lineSeparator);
-        }
-        
-        public void write(String arg) {
-            super.write(arg);
-        }
-        
-        public void flush() {
-            super.flush();
-        }
-        
-        public void close() throws IOException {
-            super.close();
-        }
-    }
-    
-    class CustomBufferedWriter extends BufferedWriter implements CustomWriter {
-        
-        public CustomBufferedWriter(Writer writer) {
-            super(writer);
-        }
-        
-        public void writeln(String arg) throws IOException {
-            super.write(arg);
-            newLine();
-        }
-        
-        public void write(String arg) throws IOException {
-            super.write(arg);
-        }
-        
-        public void flush() throws IOException {
-            super.flush();
-        }
-        
-        public void close() throws IOException {
-            super.close();
-        }
-    }
-
     /**
-     * Output given archetype as string in ADL format
+     * Output given archetype as string in XML format
      * 
      * @param archetype
-     * @return a string in ADL format
+     * @return a string in XML format
      * @throws IOException
      */
     public String output(Archetype archetype) throws IOException {
-        CustomStringWriter writer = new CustomStringWriter();
-        output(archetype, writer);
-        return writer.toString();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        output(archetype, baos);
+        return baos.toString(encoding.name());
     }
 
     /**
@@ -132,11 +76,25 @@ public class XMLSerializer {
      * @param out
      * @throws IOException
      */
-    public void output(Archetype archetype, OutputStream out)
-            throws IOException {
-        CustomWriter writer = new CustomBufferedWriter(new OutputStreamWriter(
-                new BufferedOutputStream(out), encoding));
-        output(archetype, writer);
+    public void output(Archetype archetype, OutputStream out) throws IOException {
+        Document document = new Document();
+        output(archetype, document);
+        outputter.output(document, out);
+    }
+
+    /**
+     * Output given archetype to Document
+     * 
+     * @param archetype
+     * @param out
+     * @throws IOException
+     */
+    public void output(Archetype archetype, Document out) {
+        Element rootElement = new Element("archetype", defaultNamespace);
+        rootElement.addNamespaceDeclaration(xsiNamespace);
+
+        out.setRootElement(rootElement);
+        output(archetype, rootElement);
     }
 
     /**
@@ -146,365 +104,271 @@ public class XMLSerializer {
      * @param out
      * @throws IOException
      */
-    public void output(Archetype archetype, CustomWriter out) throws IOException {
+    public void output(Archetype archetype, Element out) {
         printHeader(archetype, out);
         printDescription(archetype.getDescription(), out);
         // TODO: Print translations
         printDefinition(archetype.getDefinition(), out);
         printOntology(archetype.getOntology(), archetype.getConcept(), out);
-        out.writeln("</archetype>");
-        out.flush();
-        out.close();
     }
 
-    protected void printHeader(Archetype archetype, CustomWriter out) throws IOException {
-        out.writeln("<?xml version=\"1.0\" encoding=\"" + encoding.name() + "\"?>");
-        out.writeln("<archetype xmlns=\"http://schemas.openehr.org/v1\"\n" +
-                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">");
-        indent(1, out);
-        out.writeln("<archetype_id>");
-        printNoneEmptyString("value", archetype.getArchetypeId().toString(), 2, out);
-        indent(1, out);
-        out.writeln("</archetype_id>");
+    protected void printHeader(Archetype archetype, Element out) {
+        Element archetypeId = new Element("archetype_id", defaultNamespace);
+        out.getChildren().add(archetypeId);
+        printString("value", archetype.getArchetypeId().toString(), archetypeId);
 
-        indent(1, out);
-        out.writeln("<concept>" + archetype.getConcept() + "</concept>");
+        printString("concept", archetype.getConcept(), out);
         
         final ArchetypeID parentID = archetype.getParentArchetypeId();
         if(parentID != null) {
-            indent(1, out);
-            out.writeln("<parent_archetype_id>");
-            printNoneEmptyString("value", archetype.getArchetypeId().toString(), 2, out);
-            indent(1, out);
-            out.writeln("</parent_archetype_id>");
+            Element parentArchetypeId = new Element("parent_archetype_id", defaultNamespace);
+            out.getChildren().add(parentArchetypeId);
+            printString("value", archetype.getArchetypeId().toString(), parentArchetypeId);
         }
-        indent(1, out);
-        out.writeln("<original_language>");
-        printCodePhrase(archetype.getOriginalLanguage(), 2, out);
-        indent(1, out);
-        out.writeln("</original_language>");
-        indent(1, out);
-        out.writeln("<is_controlled>" + (archetype.isControlled() ? "true" : "false") + "</is_controlled>");
+        Element originalLanguage = new Element("original_language", defaultNamespace);
+        out.getChildren().add(originalLanguage);
+        printCodePhrase(archetype.getOriginalLanguage(), originalLanguage);
+        printString("is_controlled", archetype.isControlled() ? "true" : "false", out);
     }
 
-    protected void printDescription(ResourceDescription description, CustomWriter out)
-            throws IOException {
+    protected void printDescription(ResourceDescription description, Element out) {
 
-        if (description == null) {
+        if (description == null)
             return;
-        }
 
-        indent(1, out);
-        out.writeln("<description>");
-        printEmptyStringMap("original_author", description.getOriginalAuthor(), 2, out);
-        printNoneEmptyStringList("other_contributors", description.getOtherContributors(), 2, out);     
-        printEmptyString("lifecycle_state", description.getLifecycleState(), 2, out); 
+        Element des = new Element("description", defaultNamespace);
+        out.getChildren().add(des);
+        printStringMap("original_author", description.getOriginalAuthor(), des);
+        printStringList("other_contributors", description.getOtherContributors(), des);
+        printString("lifecycle_state", description.getLifecycleState(), des); 
          
         for (ResourceDescriptionItem item : description.getDetails()) {
-            indent(2, out);
-            out.writeln("<details>");
-            printDescriptionItem(item, 3, out);
-            indent(2, out);
-            out.writeln("</details>");     
+            Element details = new Element("details", defaultNamespace);
+            des.getChildren().add(details);
+            printDescriptionItem(item, details);
         }
         
-        printNoneEmptyString("resource_package_uri", description.getResourcePackageUri(), 2, out);
-        printNoneEmptyStringMap("other_details", description.getOtherDetails(), 2, out);
-        indent(1, out);
-        out.writeln("</description>");
+        printString("resource_package_uri", description.getResourcePackageUri(), des);
+        printStringMap("other_details", description.getOtherDetails(), des);
     }
 
-    protected void printDescriptionItem(ResourceDescriptionItem item,
-                                        int indent, CustomWriter out)
-            throws IOException {
+    protected void printDescriptionItem(ResourceDescriptionItem item, Element out) {
+        Element language = new Element("language", defaultNamespace);
+        out.getChildren().add(language);
+        printCodePhrase(item.getLanguage(), language);
         
-        indent(indent, out);
-        out.writeln("<language>"); // Mandatory
-        printCodePhrase(item.getLanguage(), indent + 1, out);
-        indent(indent, out);
-        out.writeln("</language>");
+        printString("purpose", item.getPurpose(), out); // Mandatory     
+        printStringList("keywords", item.getKeywords(), out);
+        printString("use", item.getUse(), out); // Mandatory 
+        printString("misuse", item.getMisuse(), out); // Mandatory 
+        printString("copyright", item.getCopyright(), out);
+        printStringMap("original_resource_uri", 
+                item.getOriginalResourceUri(), out);
         
-        printEmptyString("purpose", item.getPurpose(), indent, out); // Mandatory     
-        printNoneEmptyStringList("keywords", item.getKeywords(), indent, out);
-        printEmptyString("use", item.getUse(), indent, out); // Mandatory 
-        printEmptyString("misuse", item.getMisuse(), indent, out); // Mandatory 
-        printNoneEmptyString("copyright", item.getCopyright(), indent, out);
-        printNoneEmptyStringMap("original_resource_uri", 
-                item.getOriginalResourceUri(), indent, out);
-        
-        printNoneEmptyStringMap("other_details", item.getOtherDetails(), indent, out);
+        printStringMap("other_details", item.getOtherDetails(), out);
     }
     
-    private void printCodePhrase(CodePhrase cp, int indent, CustomWriter out) throws IOException {
-        if(cp == null) {
-            return;
-        }
+    private void printCodePhrase(CodePhrase cp, Element out) {
+        if (cp == null) return;
         
-        printEmptyString("code_string", cp.getCodeString(), indent, out);
-        indent(indent, out);
-        out.writeln("<terminology_id>");
-        printEmptyString("value", cp.getTerminologyId().getValue(), indent + 1, out);
-        indent(indent, out);
-        out.writeln("</terminology_id>");
+        printString("code_string", cp.getCodeString(), out);
+        Element terminologyId = new Element("terminology_id", defaultNamespace);
+        out.getChildren().add(terminologyId);
+        printString("value", cp.getTerminologyId().getValue(), terminologyId);
     }
     
     
-    private void printEmptyStringMap(String label, Map<String, String> map, int indent,
-            CustomWriter out) throws IOException {
+    private void printStringMap(String label, Map<String, String> map, Element out) {
                 
         if(map != null && !map.isEmpty()) {
             for(String key : map.keySet()) {
-                indent(indent, out);
-                out.write("<" + label + " id=\"" + key + "\">");
+                Element elm = new Element(label, defaultNamespace);
+                out.getChildren().add(elm);
+                elm.setAttribute("id", key);
                 if (map.get(key) != null)
-                    out.write(map.get(key));
-                out.writeln("</" + label + ">");
-            }
-        }
-    }
-    
-    private void printNoneEmptyStringMap(String label, Map<String, String> map, int indent,
-            CustomWriter out) throws IOException {
-        if(map != null && !map.isEmpty()) {
-            for(String key : map.keySet()) {
-                indent(indent, out);
-                out.write("<" + label + " id=\"" + key + "\">");
-                out.write(map.get(key));
-                out.writeln("</" + label + ">");
+                    elm.setText(map.get(key));
             }
         }
     }
     
     
-    private void printEmptyString(String label, String value, int indent,
-            CustomWriter out) throws IOException {
-
-        indent(indent, out);
-        out.write("<" + label + ">");
+    private void printString(String label, String value, Element out) {        
+        Element elm = new Element(label, defaultNamespace);
+        out.getChildren().add(elm);
         if (value != null)
-            out.write(value);
-        out.writeln("</" + label + ">");
+            elm.setText(value);
     }
     
-    private void printNoneEmptyString(String label, String value, int indent,
-            CustomWriter out) throws IOException {
+    private void printStringList(String label, List<String> list, Element out) {
 
-        if (StringUtils.isNotEmpty(value)) {
-            indent(indent, out);
-            out.write("<" + label + ">");
-            out.write(value);
-            out.writeln("</" + label + ">");
-        }
-    }
-
-    private void printNoneEmptyStringList(String label, List<String> list,
-            int indent, CustomWriter out) throws IOException {
-
-        if (list == null || list.isEmpty()) {
+        if (list == null || list.isEmpty())
             return;
-        }
-        
         
         for(int i = 0, j = list.size(); i < j; i++) {
-            indent(indent, out);
-            out.write("<" + label + ">");
-            out.write(list.get(i));
-            out.writeln("</" + label + ">");
+            Element elm = new Element(label, defaultNamespace);
+            out.getChildren().add(elm);
+            elm.setText(list.get(i));
         }         
     }
 
-    protected void printDefinition(CComplexObject definition, CustomWriter out)
-            throws IOException {
+    protected void printDefinition(CComplexObject definition, Element out) {
         
-        if(definition == null) {
-            return;
-        }
+        if (definition == null) return;
 
-        indent(1, out);
-        out.writeln("<definition>");
-        printCComplexObjectTop(definition, 2, out);
-        indent(1, out);
-        out.writeln("</definition>");
+        Element def = new Element("definition", defaultNamespace);
+        out.getChildren().add(def);
+        printCComplexObjectTop(definition, def);
     }
     
-    protected void printCComplexObjectTop(CComplexObject ccobj, int indent,
-            CustomWriter out) throws IOException {
+    protected void printCComplexObjectTop(CComplexObject ccobj, Element out) {
 
-        printCObjectElements(ccobj, indent, out);
+        printCObjectElements(ccobj, out);
 
         // print all attributes
         if(!ccobj.isAnyAllowed()) {
             for (CAttribute cattribute : ccobj.getAttributes()) {
-                printCAttribute(cattribute, indent, out);
+                printCAttribute(cattribute, out);
             }
         }
     }
 
-    protected void printCComplexObject(CComplexObject ccobj, int indent,
-            CustomWriter out) throws IOException {
+    protected void printCComplexObject(CComplexObject ccobj, Element out) {
 
-        indent(indent, out);
-        out.writeln("<children xsi:type=\"C_COMPLEX_OBJECT\">");
-        printCObjectElements(ccobj, indent + 1, out);
+        Element children = new Element("children", defaultNamespace);
+        out.getChildren().add(children);
+        children.setAttribute("type", "C_COMPLEX_OBJECT", xsiNamespace);
+        printCObjectElements(ccobj, children);
 
         // print all attributes
         if(!ccobj.isAnyAllowed()) {
             for (CAttribute cattribute : ccobj.getAttributes()) {
-                printCAttribute(cattribute, indent + 1, out);
+                printCAttribute(cattribute, children);
             }
         }
         
-        indent(indent, out);
-        out.writeln("</children>");
     }
     
-    protected void printConstraintRef(ConstraintRef ref,
-            int indent, CustomWriter out) throws IOException {
-        
-        indent(indent, out);
-        out.writeln("<children xsi:type=\"CONSTRAINT_REF\">");
-        printCObjectElements(ref, indent + 1, out);
-        printEmptyString("reference", ref.getReference(), indent + 1, out);
-        indent(indent, out);
-        out.writeln("</children>");
+    protected void printConstraintRef(ConstraintRef ref, Element out) {
+        Element children = new Element("children", defaultNamespace);
+        out.getChildren().add(children);
+        children.setAttribute("type", "CONSTRAINT_REF", xsiNamespace);
+        printCObjectElements(ref, children);
+        printString("reference", ref.getReference(), children);
     }
 
-    protected void printArchetypeInternalRef(ArchetypeInternalRef ref,
-            int indent, CustomWriter out) throws IOException {
+    protected void printArchetypeInternalRef(ArchetypeInternalRef ref, Element out) {
 
-        indent(indent, out);
-        out.writeln("<children xsi:type=\"ARCHETYPE_INTERNAL_REF\">");
-        printCObjectElements(ref, indent + 1, out);
-        printEmptyString("target_path", ref.getTargetPath(), indent + 1, out);
-        indent(indent, out);
-        out.writeln("</children>");
+        Element children = new Element("children", defaultNamespace);
+        out.getChildren().add(children);
+        children.setAttribute("type", "ARCHETYPE_INTERNAL_REF", xsiNamespace);
+
+        printCObjectElements(ref, children);
+        printString("target_path", ref.getTargetPath(), children);
     }
 
-    protected void printArchetypeSlot(ArchetypeSlot slot, int indent, CustomWriter out)
-            throws IOException {
+    protected void printArchetypeSlot(ArchetypeSlot slot, Element out) {
 
-        indent(indent, out);
-        out.writeln("<children xsi:type=\"ARCHETYPE_SLOT\">");
-        printCObjectElements(slot, indent + 1, out);
+        Element children = new Element("children", defaultNamespace);
+        out.getChildren().add(children);
+        children.setAttribute("type", "ARCHETYPE_SLOT", xsiNamespace);
+
+        printCObjectElements(slot, children);
 
         // print all attributes
         if (!slot.isAnyAllowed()) {
             if (slot.getIncludes() != null) {
                 for (Assertion include : slot.getIncludes()) {
-                    indent(indent + 1, out);
-                    out.writeln("<includes>");
-                    printAssertion(include, indent + 2, out);
-                    indent(indent + 1, out);
-                    out.writeln("</includes>");
+                    Element includes = new Element("includes", defaultNamespace);
+                    out.getChildren().add(includes);
+                    printAssertion(include, includes);
                 }
             }
             
             if (slot.getExcludes() != null) {
                 for (Assertion exclude : slot.getExcludes()) {
-                    indent(indent + 1, out);
-                    out.writeln("<excludes>");
-                    printAssertion(exclude, indent + 2, out);
-                    indent(indent + 1, out);
-                    out.writeln("</excludes>");
+                    Element excludes = new Element("excludes", defaultNamespace);
+                    out.getChildren().add(excludes);
+                    printAssertion(exclude, excludes);
                 }
             }
         }
-
-        indent(indent, out);
-        out.writeln("</children>");
     }
     
-    protected void printAssertion(Assertion assertion, int indent, CustomWriter out) 
-            throws IOException {
+    protected void printAssertion(Assertion assertion, Element out) {
         
-        printEmptyString("tag", assertion.getTag(), indent, out);
-        printEmptyString("string_expression", assertion.getStringExpression(), indent, out);
-        printExpressionItem("expression", assertion.getExpression(), indent, out);
+        printString("tag", assertion.getTag(), out);
+        printString("string_expression", assertion.getStringExpression(), out);
+        printExpressionItem("expression", assertion.getExpression(), out);
         
         if(assertion.getVariables() != null) {
             List<AssertionVariable> variables = assertion.getVariables();
 
             for(AssertionVariable var : variables) {
-                indent(indent, out);
-                out.writeln("<variables>");
-                printEmptyString("name", var.getName(), indent + 1, out);
-                printEmptyString("definition", var.getDefinition(), indent + 1, out);
-                indent(indent, out);
-                out.writeln("</variables>");
+                Element vars = new Element("variables", defaultNamespace);
+                out.getChildren().add(vars);
+                printString("name", var.getName(), vars);
+                printString("definition", var.getDefinition(), vars);
             }
         }
     }
     
-    protected void printExpressionItem(String label, ExpressionItem expItem, int indent, CustomWriter out)
-            throws IOException {
+    protected void printExpressionItem(String label, ExpressionItem expItem, Element out) {
         
         if(expItem instanceof ExpressionLeaf) {
-            printExpressionLeaf(label, (ExpressionLeaf)expItem, indent, out);
+            printExpressionLeaf(label, (ExpressionLeaf) expItem, out);
         } else if(expItem instanceof ExpressionOperator) {
-            printExpressionOperator(label, (ExpressionOperator)expItem, indent, out);
+            printExpressionOperator(label, (ExpressionOperator) expItem, out);
         } else {
             // unknown ExpressionItem
-            indent(indent, out);
-            out.writeln("<" + label + " xsi:type=\"EXPR_ITEM\">");
-            printEmptyString("type", expItem.getType(), indent + 1, out);
-            indent(indent, out);
-            out.writeln("</" + label + ">");
+            Element elm = new Element(label, defaultNamespace);
+            out.getChildren().add(elm);
+            elm.setAttribute("type", "EXPR_ITEM", xsiNamespace);
+            
+            printString("type", expItem.getType(), elm);
         }
     }
     
-    protected void printExpressionLeaf(String label, ExpressionLeaf expLeaf, int indent, CustomWriter out)
-            throws IOException {
+    protected void printExpressionLeaf(String label, ExpressionLeaf expLeaf, Element out) {
         
-        indent(indent, out);
-        out.writeln("<" + label + " xsi:type=\"EXPR_LEAF\">");
-        printEmptyString("type", expLeaf.getType(), indent + 1, out);
-        printEmptyString("item", expLeaf.getItem().toString(), indent + 1, out);
-        printEmptyString("reference_type", expLeaf.getReferenceType().name(), indent + 1, out);
-        indent(indent, out);
-        out.writeln("</" + label + ">");
+        Element elm = new Element(label, defaultNamespace);
+        out.getChildren().add(elm);
+        elm.setAttribute("type", "EXPR_LEAF", xsiNamespace);
+        
+        printString("type", expLeaf.getType(), elm);
+        printString("item", expLeaf.getItem().toString(), elm);
+        printString("reference_type", expLeaf.getReferenceType().name(), elm);
     }
     
-    protected void printExpressionOperator(String label, ExpressionOperator expOperator, int indent, CustomWriter out)
-            throws IOException {
-        
+    protected void printExpressionOperator(String label, ExpressionOperator expOperator, Element out) {
+        Element elm = new Element(label, defaultNamespace);
+        out.getChildren().add(elm);
         if(expOperator instanceof ExpressionUnaryOperator) {
-            indent(indent, out);
-            out.writeln("<" + label + " xsi:type=\"EXPR_UNARY_OPERATOR\">");
-            printExpressionOperatorElements(expOperator, indent + 1, out);
-            printExpressionItem("operand", ((ExpressionUnaryOperator)expOperator).getOperand(), indent + 1, out);
-            indent(indent, out);
-            out.writeln("</" + label + ">");
+            elm.setAttribute("type", "EXPR_UNARY_OPERATOR", xsiNamespace);
+            printExpressionOperatorElements(expOperator, elm);
+            printExpressionItem("operand", ((ExpressionUnaryOperator)expOperator).getOperand(), elm);
         } else if(expOperator instanceof ExpressionBinaryOperator) {
             final ExpressionBinaryOperator expBinaryOperator = (ExpressionBinaryOperator)expOperator;
-            indent(indent, out);
-            out.writeln("<" + label + " xsi:type=\"EXPR_BINARY_OPERATOR\">");
-            printExpressionOperatorElements(expOperator, indent + 1, out);
-            printExpressionItem("left_operand", expBinaryOperator.getLeftOperand(), indent + 1, out);
-            printExpressionItem("right_operand", expBinaryOperator.getRightOperand(), indent + 1, out);
-            indent(indent, out);
-            out.writeln("</" + label + ">");
+            elm.setAttribute("type", "EXPR_BINARY_OPERATOR", xsiNamespace);
+            printExpressionOperatorElements(expOperator, elm);
+            printExpressionItem("left_operand", expBinaryOperator.getLeftOperand(), elm);
+            printExpressionItem("right_operand", expBinaryOperator.getRightOperand(), elm);
         } else {
             // unknown ExpressionOperator
-            indent(indent, out);
-            out.writeln("<" + label + " xsi:type=\"EXPR_OPERATOR\">");
-            printExpressionOperatorElements(expOperator, indent + 1, out);
-            indent(indent, out);
-            out.writeln("</" + label + ">");
+            elm.setAttribute("type", "EXPR_OPERATOR", xsiNamespace);
+            printExpressionOperatorElements(expOperator, elm);
         }
     }
     
-    protected void printExpressionOperatorElements(ExpressionOperator expOperator, int indent, CustomWriter out)
-            throws IOException {
+    protected void printExpressionOperatorElements(ExpressionOperator expOperator, Element out) {
         
-        printEmptyString("type", expOperator.getType(), indent, out);
-        printEmptyString("operator", String.valueOf(expOperator.getOperator().ordinal()), indent, out);
+        printString("type", expOperator.getType(), out);
+        printString("operator", String.valueOf(expOperator.getOperator().ordinal()), out);
         // FIXME: Typo in specs, 'precedence_overriden'
-        printEmptyString("precedence_overridden", 
-                expOperator.isPrecedenceOverridden() == true ? "true" : "false", indent, out);   
+        printString("precedence_overridden", 
+                expOperator.isPrecedenceOverridden() == true ? "true" : "false", out);   
     }
 
-    protected void printCAttribute(CAttribute cattribute, int indent, CustomWriter out)
-            throws IOException {
+    protected void printCAttribute(CAttribute cattribute, Element out) {
         
         final boolean isMultipleAttribute;
         
@@ -513,19 +377,19 @@ public class XMLSerializer {
         else
             isMultipleAttribute = false;
         
-        indent(indent, out);
+        Element attributes = new Element("attributes", defaultNamespace);
+        out.getChildren().add(attributes);
         if(isMultipleAttribute) {
-            out.writeln("<attributes xsi:type=\"C_MULTIPLE_ATTRIBUTE\">");
+            attributes.setAttribute("type", "C_MULTIPLE_ATTRIBUTE", xsiNamespace);
         } else {
-            out.writeln("<attributes xsi:type=\"C_SINGLE_ATTRIBUTE\">");
+            attributes.setAttribute("type", "C_SINGLE_ATTRIBUTE", xsiNamespace);
         }
 
-        indent(indent + 1, out);
-        out.writeln("<existence>");
-        indent(indent + 2, out);
-        out.writeln("<lower_unbounded>false</lower_unbounded>");
-        indent(indent + 2, out);
-        out.writeln("<upper_unbounded>false</upper_unbounded>");
+        Element existence = new Element("existence", defaultNamespace);
+        attributes.getChildren().add(existence);
+        printString("lower_unbounded", "false", existence);
+        printString("upper_unbounded", "false", existence);
+
         int lower = 0, upper = 0;
         
         if(cattribute.getExistence().equals(CAttribute.Existence.REQUIRED)) {
@@ -535,24 +399,16 @@ public class XMLSerializer {
             lower = 0;
             upper = 1;
         }
-        indent(indent + 2, out);
-        out.writeln("<lower>" + Integer.toString(lower) + "</lower>");
-        indent(indent + 2, out);
-        out.writeln("<upper>" + Integer.toString(upper) + "</upper>");
-        
-        indent(indent + 1, out);
-        out.writeln("</existence>");
+        printString("lower", Integer.toString(lower), existence);
+        printString("upper", Integer.toString(upper), existence);
         
         if(cattribute.isAnyAllowed()) {
-            indent(indent + 1, out);
-            out.write("<any_allowed>");
-            out.write("true");
-            out.writeln("</any_allowed>");
+            printString("any_allowed", "true", attributes);
         }
         
         // FIXME: AOM XML schema spec is wrong. Has 'unbounded' attribute for C_ATTRIBUTE and element with name
         // 'rm_type_name' instead of 'rm_attribute_name'.
-        printEmptyString("rm_attribute_name", cattribute.getRmAttributeName(), indent + 1, out);
+        printString("rm_attribute_name", cattribute.getRmAttributeName(), attributes);
         
         if(!cattribute.isAnyAllowed()) { 
             List<CObject> children = cattribute.getChildren();
@@ -560,137 +416,124 @@ public class XMLSerializer {
             if (children.size() > 1
                     || !(children.get(0) instanceof CPrimitiveObject)) {
                 for (CObject cobject : cattribute.getChildren()) {
-                    printCObject(cobject, indent + 1, out);
+                    printCObject(cobject, attributes);
                 }
             } else {
                 CObject child = children.get(0);
-                printCPrimitiveObject((CPrimitiveObject) child, indent + 1, out);
+                printCPrimitiveObject((CPrimitiveObject) child, attributes);
             }
         }
         
         if(isMultipleAttribute) {
-            indent(indent + 1, out);
-            out.writeln("<cardinality>");
+            Element cardinality = new Element("cardinality", defaultNamespace);
+            attributes.getChildren().add(cardinality);
             printCardinality(
-                    ((CMultipleAttribute) cattribute).getCardinality(), indent + 2, out);
-            indent(indent + 1, out);
-            out.writeln("</cardinality>");
+                    ((CMultipleAttribute) cattribute).getCardinality(), cardinality);
         }     
         
-        indent(indent, out);
-        out.writeln("</attributes>");
     }
 
-    protected void printCObject(CObject cobj, int indent, CustomWriter out)
-            throws IOException {
+    protected void printCObject(CObject cobj, Element out) {
 
         // print specialised types
         if (cobj instanceof CDomainType) {
-            printCDomainType((CDomainType) cobj, indent, out);
+            printCDomainType((CDomainType) cobj, out);
         } else if (cobj instanceof CPrimitiveObject) {
-            printCPrimitiveObject((CPrimitiveObject) cobj, indent, out);
+            printCPrimitiveObject((CPrimitiveObject) cobj, out);
         } else if (cobj instanceof CComplexObject) {
-            printCComplexObject((CComplexObject) cobj, indent, out);
+            printCComplexObject((CComplexObject) cobj, out);
         } else if (cobj instanceof ArchetypeInternalRef) {
-            printArchetypeInternalRef((ArchetypeInternalRef) cobj, indent, out);
+            printArchetypeInternalRef((ArchetypeInternalRef) cobj, out);
         } else if (cobj instanceof ConstraintRef) { // FIXME: Add in ADLSerializer as well
-            printConstraintRef((ConstraintRef) cobj, indent, out); 
+            printConstraintRef((ConstraintRef) cobj, out); 
         } else if (cobj instanceof ArchetypeSlot) {
-            printArchetypeSlot((ArchetypeSlot) cobj, indent, out);
+            printArchetypeSlot((ArchetypeSlot) cobj, out);
         }
     }
     
-    protected void printCObjectElements(CObject cobj, int indent, CustomWriter out)
-            throws IOException {
+    protected void printCObjectElements(CObject cobj, Element out) {
         if(cobj.isAnyAllowed()) { // Not sure if needed.
-            printNoneEmptyString("any_allowed", "true", indent, out);
+            printString("any_allowed", "true", out);
         }
         
-        printEmptyString("rm_type_name", cobj.getRmTypeName(), indent, out);
-        printOccurrences(cobj.getOccurrences(), indent, out);
-        printEmptyString("node_id", cobj.getNodeID(), indent, out);
+        printString("rm_type_name", cobj.getRmTypeName(), out);
+        printOccurrences(cobj.getOccurrences(), out);
+        printString("node_id", cobj.getNodeID(), out);
     }
     
-    protected void printOccurrences(Interval occurrences, int indent, CustomWriter out) 
-            throws IOException {
+    protected void printOccurrences(Interval occurrences, Element out) {
         
-        if(occurrences == null) {
-            return;
-        }
+        if (occurrences == null) return;
         
-        indent(indent, out);
-        out.writeln("<occurrences>");
-        printInterval(occurrences, indent + 2, out);
-        indent(indent, out);
-        out.writeln("</occurrences>");
+        Element occurs = new Element("occurrences", defaultNamespace);
+        out.getChildren().add(occurs);
+        printInterval(occurrences, occurs);
     }
 
-    protected void printCardinality(Cardinality cardinality, int indent, CustomWriter out)
-            throws IOException {
+    protected void printCardinality(Cardinality cardinality, Element out) {
                
         if (cardinality.isOrdered()) {
-            printNoneEmptyString("is_ordered", "true", indent, out);
+            printString("is_ordered", "true", out);
         } else {
-            printNoneEmptyString("is_ordered", "false", indent, out);
+            printString("is_ordered", "false", out);
         }
         
         if (cardinality.isUnique()) {
-            printNoneEmptyString("is_unique", "true", indent, out);
+            printString("is_unique", "true", out);
         } else {
-            printNoneEmptyString("is_unique", "false", indent, out);
+            printString("is_unique", "false", out);
         }
         
-        indent(indent, out);
-        out.writeln("<interval>");
-        printInterval(cardinality.getInterval(), indent + 1, out);
-        indent(indent, out);
-        out.writeln("</interval>");
+        Element interval = new Element("interval", defaultNamespace);
+        out.getChildren().add(interval);
+        printInterval(cardinality.getInterval(), interval);
     }
 
-    protected void printCDomainType(CDomainType cdomain, int indent, CustomWriter out)
-            throws IOException {
+    protected void printCDomainType(CDomainType cdomain, Element out) {
         
         if (cdomain instanceof CCodePhrase) {
-            printCCodePhrase((CCodePhrase) cdomain, indent, out);
+            printCCodePhrase((CCodePhrase) cdomain, out);
         } else if (cdomain instanceof CDvOrdinal) {
-            printCDvOrdinal((CDvOrdinal) cdomain, indent, out);
+            printCDvOrdinal((CDvOrdinal) cdomain, out);
         } else if (cdomain instanceof CDvQuantity) {
-            printCDvQuantity((CDvQuantity) cdomain, indent, out);
+            printCDvQuantity((CDvQuantity) cdomain, out);
         } else {
             // unknown CDomainType
             System.err.println("Cannot serialize CDomainType of type '" + cdomain.getClass().getName() + "'!");
         }
     }
 
-    protected void printCCodePhrase(CCodePhrase ccp, int indent, CustomWriter out)
-            throws IOException {
+    protected void printCCodePhrase(CCodePhrase ccp, Element out) {
 
-        indent(indent, out);
-        out.writeln("<children xsi:type=\"C_CODE_PHRASE\">"); // TODO: Says C_CODED_TERM in specifications....       
-        printCObjectElements(ccp, indent + 1, out);
+        Element children = new Element("children", defaultNamespace);
+        out.getChildren().add(children);
+        children.setAttribute("type", "C_CODE_PHRASE", xsiNamespace);
+        
+        printCObjectElements(ccp, children);
         
         if(ccp.getTerminologyId() != null) {
-            printNoneEmptyString("terminology", ccp.getTerminologyId().getValue(), indent + 1, out);
+            Element terminologyId = new Element("terminology_id", defaultNamespace);
+            children.getChildren().add(terminologyId);            
+            printString("value", ccp.getTerminologyId().getValue(), terminologyId);
         }
         
         if (ccp.getCodeList() != null) {
             final List<String> codeList = ccp.getCodeList();
             
             for (int i = 0, j = codeList.size(); i < j; i++) {
-                printNoneEmptyString("code_list", codeList.get(i), indent + 1, out);
+                printString("code_list", codeList.get(i), children);
             }
         }
         
-        indent(indent, out);
-        out.writeln("</children>");
     }
 
-    protected void printCDvOrdinal(CDvOrdinal cordinal, int indent, CustomWriter out)
-            throws IOException {
+    protected void printCDvOrdinal(CDvOrdinal cordinal, Element out) {
         
-        indent(indent, out);
-        out.writeln("<children xsi:type=\"C_DV_ORDINAL\">");  
-        printCObjectElements(cordinal, indent + 1, out);
+        Element children = new Element("children", defaultNamespace);
+        out.getChildren().add(children);
+        children.setAttribute("type", "C_DV_ORDINAL", xsiNamespace);
+
+        printCObjectElements(cordinal, children);
 
         if(cordinal.getList() != null) {
             final Set<Ordinal> ordinals = cordinal.getList();
@@ -698,105 +541,85 @@ public class XMLSerializer {
             Ordinal ordinal;
             for (Iterator<Ordinal> it = ordinals.iterator(); it.hasNext();) {
                 ordinal = it.next();
-                indent(indent + 1, out);
-                out.writeln("<list>");
-                printEmptyString("value", String.valueOf(ordinal.getValue()), indent + 2, out);
-                indent(indent + 2, out);
-                out.writeln("<symbol>");
-                indent(indent + 3, out);
-                out.writeln("<defining_code>");
-                printCodePhrase(ordinal.getSymbol(), indent + 4, out);
-                indent(indent + 3, out);
-                out.writeln("</defining_code>");
-                indent(indent + 2, out);
-                out.writeln("</symbol>");
-                indent(indent + 1, out);
-                out.writeln("</list>");
+                Element list = new Element("list", defaultNamespace);
+                children.getChildren().add(list);
+                printString("value", String.valueOf(ordinal.getValue()), list);
+                Element symbol = new Element("symbol", defaultNamespace);
+                list.getChildren().add(symbol);
+                Element definingCode = new Element("defining_code", defaultNamespace);
+                symbol.getChildren().add(definingCode);
+                printCodePhrase(ordinal.getSymbol(), definingCode);
             }
-        }
-        
-        indent(indent, out);
-        out.writeln("</children>");
+        }        
     }
 
-    protected void printCDvQuantity(CDvQuantity cquantity, int indent,
-            CustomWriter out) throws IOException {
+    protected void printCDvQuantity(CDvQuantity cquantity, Element out) {
         
-        indent(indent, out);
-        out.writeln("<children xsi:type=\"C_DV_QUANTITY\">");  
-        printCObjectElements(cquantity, indent + 1, out);
+        Element children = new Element("children", defaultNamespace);
+        out.getChildren().add(children);
+        children.setAttribute("type", "C_DV_QUANTITY", xsiNamespace);
+
+        printCObjectElements(cquantity, children);
 
         
         CodePhrase property = cquantity.getProperty();
         if (property != null) {
-            indent(indent + 1, out);
-            out.writeln("<property>");
-            printCodePhrase(property, indent + 2, out);
-            indent(indent + 1, out);
-            out.writeln("</property>");
+            Element prop = new Element("property", defaultNamespace);
+            children.getChildren().add(prop);
+            printCodePhrase(property, prop);
         }
 
         if (cquantity.getList() != null) {
             final List<CDvQuantityItem> list = cquantity.getList();
 
             for (CDvQuantityItem item : list) {
-                indent(indent + 1, out);
-                out.writeln("<list>");
+                Element lst = new Element("list", defaultNamespace);
+                children.getChildren().add(lst);
                 
                 if(item.getValue() != null) {
-                    indent(indent + 2, out);
-                    out.writeln("<magnitude>");
-                    printInterval(item.getValue(), indent + 3, out);
-                    indent(indent + 2, out);
-                    out.writeln("</magnitude>"); 
+                    Element magnitude = new Element("magnitude", defaultNamespace);
+                    lst.getChildren().add(magnitude);
+                    printInterval(item.getValue(), magnitude);
                 }
                 
-                printEmptyString("units", item.getUnits(), indent + 2, out);
-                indent(indent + 1, out);
-                out.writeln("</list>");
+                printString("units", item.getUnits(), lst);
             }
         }
-
-        indent(indent, out);
-        out.writeln("</children>"); 
     }
 
-    protected void printOntology(ArchetypeOntology ontology, String concept, CustomWriter out)
-            throws IOException {
+    protected void printOntology(ArchetypeOntology ontology, String concept, Element out) {
         
-        if(ontology == null) {
-            return;
-        }
-
-        indent(1, out);
-        out.writeln("<ontology>");
+        if(ontology == null) return;
+        
+        Element onto = new Element("ontology", defaultNamespace);
+        out.getChildren().add(onto);
+        
 
         // TODO: Check why this is not in the XML schema specification of the AOM.
-        //printNoneEmptyString("primary_language", ontology.getPrimaryLanguage(), 2, out);
+        //printString("primary_language", ontology.getPrimaryLanguage(), 2, out);
         // TODO: Check why this is not in the XML schema specification of the AOM.
-        //printNoneEmptyStringList("languages_available", ontology.getLanguages(), 2, out);
-        //printNoneEmptyStringList("terminologies_available", ontology.getTerminologies(), 2, out);
+        //printStringList("languages_available", ontology.getLanguages(), 2, out);
+        //printStringList("terminologies_available", ontology.getTerminologies(), 2, out);
         //final int specDepth = StringUtils.countMatches(".", concept);
-        //printNoneEmptyString("specialisation_depth", String.valueOf(specDepth), 2, out);
+        //printString("specialisation_depth", String.valueOf(specDepth), 2, out);
         
         
         if(ontology.getTermDefinitionsList() != null) {
             final List<OntologyDefinitions> termDefinitions = ontology.getTermDefinitionsList();
             
             for (OntologyDefinitions defs : termDefinitions) {
-                indent(2, out);
-                out.writeln("<term_definitions language=\"" + defs.getLanguage() + "\">");
+                Element trmDefinitions = new Element("term_definitions", defaultNamespace);
+                onto.getChildren().add(trmDefinitions);
+                trmDefinitions.setAttribute("language", defs.getLanguage());
                 
                 for (ArchetypeTerm term : defs.getDefinitions()) {
-                    indent(3, out);
-                    out.writeln("<items code=\"" + term.getCode() + "\">");
-                    printNoneEmptyStringMap("items", term.getItems(), 4, out);
-                    indent(3, out);
-                    out.writeln("</items>");
+                    Element items = new Element("items", defaultNamespace);
+                    trmDefinitions.getChildren().add(items);
+                    items.setAttribute("code", term.getCode());
+                   
+                    printStringMap("items", term.getItems(), items);
                 }
                 
-                indent(2, out);
-                out.writeln("</term_definitions>");
             }
         }
         
@@ -804,20 +627,17 @@ public class XMLSerializer {
             final List<OntologyDefinitions> constraintDefinitions = ontology.getConstraintDefinitionsList();
                 
             for (OntologyDefinitions defs : constraintDefinitions) {
-                indent(2, out);
-                out.writeln("<constraint_definitions language=\"" + defs.getLanguage() + "\">");
+                Element consDefinitions = new Element("constraint_definitions", defaultNamespace);
+                onto.getChildren().add(consDefinitions);
+                consDefinitions.setAttribute("language", defs.getLanguage());
                 
                 for (ArchetypeTerm term : defs.getDefinitions()) {
-                    indent(3, out);
-                    out.writeln("<items code=\"" + term.getCode() + "\">");
-                    printNoneEmptyStringMap("items", term.getItems(), 4, out);
-                    indent(3, out);
-                    out.writeln("</items>");
-                }
-                
-                
-                indent(2, out);
-                out.writeln("</constraint_definitions>");
+                    Element items = new Element("items", defaultNamespace);
+                    consDefinitions.getChildren().add(items);
+                    items.setAttribute("code", term.getCode());
+                   
+                    printStringMap("items", term.getItems(), items);
+                }                
             }
         }
 
@@ -826,34 +646,28 @@ public class XMLSerializer {
       
             TermBindingItem item;
             for (OntologyBinding bind : termBindings) {
-                indent(2, out);
-                out.writeln("<term_bindings terminology=\"" + bind.getTerminology() + "\">");
+                Element trmBindings = new Element("term_bindings", defaultNamespace);
+                onto.getChildren().add(trmBindings);
+                trmBindings.setAttribute("terminology", bind.getTerminology());
 
                 for (OntologyBindingItem bindItem : bind.getBindingList()) {
                     item = (TermBindingItem) bindItem;
 
                     for(String value : item.getTerms()) {
-                        indent(3, out);
-                        out.writeln("<items code=\"" + item.getCode() + "\">");
-                        indent(4, out);
-                        out.writeln("<value>");
+                        Element items = new Element("items", defaultNamespace);
+                        trmBindings.getChildren().add(items);
+                        items.setAttribute("code", item.getCode());
+                        Element vl = new Element("value", defaultNamespace);
+                        items.getChildren().add(vl);
+
                         String terminologyId = value.substring(1, value.lastIndexOf("::"));
                         String codeString = value.substring(value.lastIndexOf("::") + 2, value.length() - 1);
-                        indent(5, out);
-                        out.writeln("<terminology_id>");
-                        printEmptyString("value", terminologyId, 6, out);
-                        indent(5, out);
-                        out.writeln("</terminology_id>");
-                        printEmptyString("code_string", codeString, 5, out);
-                        indent(4, out);
-                        out.writeln("</value>");
-                        indent(3, out);
-                        out.writeln("</items>");
+                        Element termId = new Element("terminology_id", defaultNamespace);
+                        vl.getChildren().add(termId);
+                        printString("value", terminologyId, termId);
+                        printString("code_string", codeString, vl);
                     }
-                }
-                
-                indent(2, out);
-                out.writeln("</term_bindings>");
+                }                
             }
         }
         
@@ -862,246 +676,217 @@ public class XMLSerializer {
             
             QueryBindingItem item;
             for (OntologyBinding bind : constraintBindings) {
-                indent(2, out);
-                out.writeln("<constraint_bindings  terminology=\"" + bind.getTerminology() + "\">");
-
+                Element consBindings = new Element("constraint_bindings", defaultNamespace);
+                onto.getChildren().add(consBindings);
+                consBindings.setAttribute("terminology", bind.getTerminology());
+                
                 for (OntologyBindingItem bindItem : bind.getBindingList()) {
                     item = (QueryBindingItem) bindItem;
-                    indent(3, out);
-                    out.writeln("<items code=\"" + item.getCode() + "\">");
-                    printEmptyString("value", item.getQuery().getUrl(), 4, out);
-                    indent(3, out);
-                    out.writeln("</items>");
+                    Element items = new Element("items", defaultNamespace);
+                    consBindings.getChildren().add(items);
+                    items.setAttribute("code", item.getCode());
+                    printString("value", item.getQuery().getUrl(), items);
                 }
                 
-                indent(2, out);
-                out.writeln("</constraint_bindings>");
             }
-        }
-        
-        indent(1, out);
-        out.writeln("</ontology>");
+        }        
     }
 
-    protected void printCPrimitiveObject(CPrimitiveObject cpo, int indent, CustomWriter out)
-            throws IOException {
-        
+    protected void printCPrimitiveObject(CPrimitiveObject cpo, Element out) {
         CPrimitive cp = cpo.getItem();
+        if (cp == null) return;
         
-        if(cp == null) {
-            return;
-        }
+        Element children = new Element("children", defaultNamespace);
+        out.getChildren().add(children);
+        children.setAttribute("type", "C_PRIMITIVE_OBJECT", xsiNamespace);
+
+        printCObjectElements(cpo, children);
+
+        Element item = new Element("item", defaultNamespace);
+        children.getChildren().add(item);
         
-        indent(indent, out);
-        out.writeln("<children xsi:type=\"C_PRIMITIVE_OBJECT\">");
-        printCObjectElements(cpo, indent + 1, out);
-        
-        indent(indent + 1, out);
-        final int primIndent = indent + 2;        
         if (cp instanceof CBoolean) {
-            out.writeln("<item xsi:type=\"C_BOOLEAN\">");
-            printCBoolean((CBoolean) cp, primIndent, out);
+            item.setAttribute("type", "C_BOOLEAN", xsiNamespace);
+            printCBoolean((CBoolean) cp, item);
         } else if (cp instanceof CDate) {
-            out.writeln("<item xsi:type=\"C_DATE\">");
-            printCDate((CDate) cp, primIndent, out);
+            item.setAttribute("type", "C_DATE", xsiNamespace);
+            printCDate((CDate) cp, item);
         } else if (cp instanceof CDateTime) {
-            out.writeln("<item xsi:type=\"C_DATE_TIME\">");
-            printCDateTime((CDateTime) cp, primIndent, out);
+            item.setAttribute("type", "C_DATE_TIME", xsiNamespace);
+            printCDateTime((CDateTime) cp, item);
         } else if (cp instanceof CTime) {
-            out.writeln("<item xsi:type=\"C_TIME\">");
-            printCTime((CTime) cp, primIndent, out);
+            item.setAttribute("type", "C_TIME", xsiNamespace);
+            printCTime((CTime) cp, item);
         } else if (cp instanceof CDuration) {
-            out.writeln("<item xsi:type=\"C_DURATION\">");
-            printCDuration((CDuration) cp, primIndent, out);
+            item.setAttribute("type", "C_DURATION", xsiNamespace);
+            printCDuration((CDuration) cp, item);
         } else if (cp instanceof CInteger) {
-            out.writeln("<item xsi:type=\"C_INTEGER\">");
-            printCInteger((CInteger) cp, primIndent, out);
+            item.setAttribute("type", "C_INTEGER", xsiNamespace);
+            printCInteger((CInteger) cp, item);
         } else if (cp instanceof CReal) {
-            out.writeln("<item xsi:type=\"C_REAL\">");
-            printCReal((CReal) cp, primIndent, out);
+            item.setAttribute("type", "C_REAL", xsiNamespace);
+            printCReal((CReal) cp, item);
         } else if (cp instanceof CString) {
-            out.writeln("<item xsi:type=\"C_STRING\">");
-            printCString((CString) cp, primIndent, out);
+            item.setAttribute("type", "C_STRING", xsiNamespace);
+            printCString((CString) cp, item);
         } else {
-            out.writeln("<item xsi:type=\"C_PRIMITIVE\">");
+            item.setAttribute("type", "C_PRIMITIVE", xsiNamespace);
             System.err.println("Cannot serialize CPrimitive of type '" + cp.getClass().getName() + "'!");
         }
         
-        indent(indent + 1, out);
-        out.writeln("</item>");
-        indent(indent, out);
-        out.writeln("</children>");
     }
 
-    protected void printCBoolean(CBoolean cboolean, int indent, CustomWriter out)
-            throws IOException {
+    protected void printCBoolean(CBoolean cboolean, Element out) {
         
-        printNoneEmptyString("true_valid", cboolean.isTrueValid() == true ?
-                "true" : "false", indent, out);
-        printNoneEmptyString("false_valid", cboolean.isFalseValid() == true ?
-                "true" : "false", indent, out);
+        printString("true_valid", cboolean.isTrueValid() == true ?
+                "true" : "false", out);
+        printString("false_valid", cboolean.isFalseValid() == true ?
+                "true" : "false", out);
         
         if(cboolean.hasAssumedValue()) {
-            printNoneEmptyString("assumed_value", cboolean.assumedValue().booleanValue() == true ?
-                    "true" : "false", indent, out);
+            printString("assumed_value", cboolean.assumedValue().booleanValue() == true ?
+                    "true" : "false", out);
         }
     }
 
-    protected void printCDate(CDate cdate, int indent, CustomWriter out) throws IOException {
+    protected void printCDate(CDate cdate, Element out) {
         
         if (cdate.getPattern() != null) {
-            printNoneEmptyString("pattern", cdate.getPattern(), indent, out);
+            printString("pattern", cdate.getPattern(), out);
         } 
         
         if(cdate.getInterval() != null) {
-            indent(indent, out);
-            out.writeln("<range>");
-            printInterval(cdate.getInterval(), indent + 1, out);
-            indent(indent, out);
-            out.writeln("</range>");
+            Element range = new Element("range", defaultNamespace);
+            out.getChildren().add(range);
+            printInterval(cdate.getInterval(), range);
         }
         
         if(cdate.hasAssumedValue()) {
-            printNoneEmptyString("assumed_value", cdate.assumedValue().toString(), indent, out); // FIXME: Specs has typo 'assummed_value'.
+            printString("assumed_value", cdate.assumedValue().toString(), out); // FIXME: Specs has typo 'assummed_value'.
         }
     }
 
-    protected void printCDateTime(CDateTime cdatetime, int indent, CustomWriter out)
-            throws IOException {
+    protected void printCDateTime(CDateTime cdatetime, Element out) {
         
         if (cdatetime.getPattern() != null) {
-            printNoneEmptyString("pattern", cdatetime.getPattern(), indent, out);
+            printString("pattern", cdatetime.getPattern(), out);
         }
         
         // FIXME: Output timezone_validity. CDateTime seem to be missing this function.
         
         if(cdatetime.getInterval() != null) {
-            indent(indent, out);
-            out.writeln("<range>");
-            printInterval(cdatetime.getInterval(), indent + 1, out);
-            indent(indent, out);
-            out.writeln("</range>");
+            Element range = new Element("range", defaultNamespace);
+            out.getChildren().add(range);            
+            printInterval(cdatetime.getInterval(), range);
         }
         
         if(cdatetime.hasAssumedValue()) {
-            printNoneEmptyString("assumed_value", cdatetime.assumedValue().toString(), indent, out);
+            printString("assumed_value", cdatetime.assumedValue().toString(), out);
         }
     }
 
-    protected void printCTime(CTime ctime, int indent, CustomWriter out) throws IOException {
+    protected void printCTime(CTime ctime, Element out) {
         
         if (ctime.getPattern() != null) {
-            printNoneEmptyString("pattern", ctime.getPattern(), indent, out);
+            printString("pattern", ctime.getPattern(), out);
         }
         
         // FIXME: Output timezone_validity. CTime seem to be missing this function.
         
         if(ctime.getInterval() != null) {
-            indent(indent, out);
-            out.writeln("<range>");
-            printInterval(ctime.getInterval(), indent + 1, out);
-            indent(indent, out);
-            out.writeln("</range>");
+            Element range = new Element("range", defaultNamespace);
+            out.getChildren().add(range);
+            printInterval(ctime.getInterval(), range);
         }
         
         if(ctime.hasAssumedValue()) {
-            printNoneEmptyString("assumed_value", ctime.assumedValue().toString(), indent, out); // FIXME: Specs has typo 'assummed_value'.
+            printString("assumed_value", ctime.assumedValue().toString(), out); // FIXME: Specs has typo 'assummed_value'.
         }
     }
 
-    protected void printCDuration(CDuration cduration, int indent, CustomWriter out)
-            throws IOException {
+    protected void printCDuration(CDuration cduration, Element out) {
                 
         if (cduration.getValue() != null) {
-            printNoneEmptyString("pattern", cduration.getValue().toString(), indent, out);
+            printString("pattern", cduration.getValue().toString(), out);
         } 
 
         if(cduration.getInterval() != null) {
-            indent(indent, out);
-            out.writeln("<range>");
-            printInterval(cduration.getInterval(), indent + 1, out);
-            indent(indent, out);
-            out.writeln("</range>");
+            Element range = new Element("range", defaultNamespace);
+            out.getChildren().add(range);
+            printInterval(cduration.getInterval(), range);
         }
         
         if(cduration.hasAssumedValue()) {
-            printNoneEmptyString("assumed_value", cduration.assumedValue().toString(), indent, out); // FIXME: Specs has typo 'assummed_value'.
+            printString("assumed_value", cduration.assumedValue().toString(), out); // FIXME: Specs has typo 'assummed_value'.
         }
     }
 
-    protected void printCInteger(CInteger cinteger, int indent, CustomWriter out)
-            throws IOException {
+    protected void printCInteger(CInteger cinteger, Element out) {
                        
         if(cinteger.getList() != null) {
-            printList(cinteger.getList(), indent, out);
+            printList(cinteger.getList(), out);
         } 
         
         if(cinteger.getInterval() != null) {
-            indent(indent, out);
-            out.writeln("<range>");
-            printInterval(cinteger.getInterval(), indent + 1, out);
-            indent(indent, out);
-            out.writeln("</range>");
+            Element range = new Element("range", defaultNamespace);
+            out.getChildren().add(range);
+            printInterval(cinteger.getInterval(), range);
         }
         
         // TODO: Write 'list_open' element... <list_open> xs:boolean </list_open> [0..1]
         
         if(cinteger.hasAssumedValue()) {
-            printNoneEmptyString("assumed_value", cinteger.assumedValue().toString(), indent, out); // FIXME: Specs has typo 'assummed_value'.
+            printString("assumed_value", cinteger.assumedValue().toString(), out); // FIXME: Specs has typo 'assummed_value'.
         }
     }
 
-    protected void printCReal(CReal creal, int indent, CustomWriter out) throws IOException {
+    protected void printCReal(CReal creal, Element out) {
                        
         if (creal.getList() != null) {
-            printList(creal.getList(), indent, out);
+            printList(creal.getList(), out);
         } 
         
         if(creal.getInterval() != null) {
-            indent(indent, out);
-            out.writeln("<range>");
-            printInterval(creal.getInterval(), indent + 1, out);
-            indent(indent, out);
-            out.writeln("</range>");
+            Element range = new Element("range", defaultNamespace);
+            out.getChildren().add(range);
+            printInterval(creal.getInterval(), range);
         }
         
         if(creal.hasAssumedValue()) {
-            printNoneEmptyString("assumed_value", creal.assumedValue().toString(), indent, out); // FIXME: Specs has typo 'assummed_value'.
+            printString("assumed_value", creal.assumedValue().toString(), out); // FIXME: Specs has typo 'assummed_value'.
         }
     }
 
-    protected void printCString(CString cstring, int indent, CustomWriter out) throws IOException {
+    protected void printCString(CString cstring, Element out) {
         
         if(cstring.getPattern() != null) {
-            printNoneEmptyString("pattern", cstring.getPattern(), indent, out);
+            printString("pattern", cstring.getPattern(), out);
         }
         
         if(cstring.getList() != null){
-            printList(cstring.getList(), indent, out);
+            printList(cstring.getList(), out);
         }
         
         // TODO: Write 'list_open' element... <list_open> xs:boolean </list_open> [0..1]
         
         if(cstring.hasAssumedValue()) {
-            printNoneEmptyString("assumed_value", cstring.assumedValue().toString(), indent, out); // FIXME: Specs has typo 'assummed_value'.
+            printString("assumed_value", cstring.assumedValue().toString(), out); // FIXME: Specs has typo 'assummed_value'.
         }
     }
 
-    protected void printList(List list, int indent, CustomWriter out)
-            throws IOException {
+    protected void printList(List list, Element out) {
         
         if(list == null) {
             return;
         }
 
         for(int i = 0, j = list.size(); i < j; i++) {
-            printNoneEmptyString("list", list.get(i).toString(), indent, out);
+            printString("list", list.get(i).toString(), out);
         }
     }
 
     @SuppressWarnings("unchecked")
-    protected void printInterval(Interval interval, int indent, CustomWriter out)
-            throws IOException {
+    protected void printInterval(Interval interval, Element out) {
         if(interval == null) {
             return;
         }
@@ -1109,33 +894,25 @@ public class XMLSerializer {
         final Comparable lower = interval.getLower();
         final Comparable upper = interval.getUpper();
 
-        printNoneEmptyString("upper_included",
+        printString("upper_included",
                 interval.isUpperIncluded() == true ? "true" : "false",
-                indent, out);
-        printNoneEmptyString("lower_included",
+                out);
+        printString("lower_included",
                 interval.isLowerIncluded() == true ? "true" : "false",
-                indent, out);
+                out);
   
         
-        printNoneEmptyString("upper_unbounded",
-                       interval.isUpperUnbounded() ? "true" : "false",
-                                indent + 1, out);
-        printNoneEmptyString("lower_unbounded",
-                       interval.isLowerUnbounded() ? "true" : "false",
-                                indent + 1, out);
+        printString("upper_unbounded",
+                       interval.isUpperUnbounded() ? "true" : "false", out);
+        printString("lower_unbounded",
+                       interval.isLowerUnbounded() ? "true" : "false", out);
         
         if(upper != null) {
-            printNoneEmptyString("upper", upper.toString(), indent, out);
+            printString("upper", upper.toString(), out);
         }
         
         if(lower != null) {
-            printNoneEmptyString("lower", lower.toString(), indent, out);
-        }
-    }
-
-    private void indent(int level, CustomWriter out) throws IOException {
-        for (int i = 0; i < level; i++) {
-            out.write(indent);
+            printString("lower", lower.toString(), out);
         }
     }
 
@@ -1143,13 +920,15 @@ public class XMLSerializer {
     public static final Charset UTF8 = Charset.forName("UTF-8");
 
     public static final Charset LATIN1 = Charset.forName("ISO-8859-1");
+    
+    public static final Namespace defaultNamespace = Namespace.getNamespace("http://schemas.openehr.org/v1");
+    
+    public static final Namespace xsiNamespace = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
     /* fields */  
     private Charset encoding;
 
-    private String lineSeparator;
-
-    private String indent;
+    private XMLOutputter outputter;
 }
 
 /* ***** BEGIN LICENSE BLOCK *****
