@@ -19,7 +19,7 @@ import se.acode.openehr.parser.ADLParser;
  */
 public final class Converter {
     public static void convertAdlToXml(InputStream adlStream, OutputStream xmlStream) throws Exception {
-        ADLParser parser = new ADLParser(adlStream);        
+        ADLParser parser = new ADLParser(adlStream, true, true);        
         XMLSerializer serializer = new XMLSerializer();
         Archetype archetype = parser.parse();
         serializer.output(archetype, xmlStream);
