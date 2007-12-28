@@ -20,9 +20,11 @@
     </codeset>
     <codeset issuer="ISO" openehr_id="languages" external_id="ISO_639-1" >
         <code value="en" />
+        <code value="de" />
         <code value="fr" />
         <code value="sv" />
         <code value="zh" />
+        <code value="pt-br" />
     </codeset>
     <codeset issuer="IANA" openehr_id="media types" external_id="IANA_media-types" >
         <code value="text/plain" />
