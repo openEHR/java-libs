@@ -279,7 +279,7 @@ public class XMLSerializer {
             if (slot.getIncludes() != null) {
                 for (Assertion include : slot.getIncludes()) {
                     Element includes = new Element("includes", defaultNamespace);
-                    out.getChildren().add(includes);
+                    children.getChildren().add(includes);
                     printAssertion(include, includes);
                 }
             }
@@ -287,7 +287,7 @@ public class XMLSerializer {
             if (slot.getExcludes() != null) {
                 for (Assertion exclude : slot.getExcludes()) {
                     Element excludes = new Element("excludes", defaultNamespace);
-                    out.getChildren().add(excludes);
+                    children.getChildren().add(excludes);
                     printAssertion(exclude, excludes);
                 }
             }
