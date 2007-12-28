@@ -335,7 +335,12 @@ public class XMLSerializer {
         elm.setAttribute("type", "EXPR_LEAF", xsiNamespace);
         
         printString("type", expLeaf.getType(), elm);
-        printString("item", expLeaf.getItem().toString(), elm);
+        if (expLeaf.getItem() instanceof CPrimitive) {
+            Element item = new Element("item", defaultNamespace);
+            elm.getChildren().add(item);
+            printCPrimitive((CPrimitive) expLeaf.getItem(), item);
+        } else
+            printString("item", expLeaf.getItem().toString(), elm);
         printString("reference_type", expLeaf.getReferenceType().name(), elm);
     }
     
@@ -362,7 +367,7 @@ public class XMLSerializer {
     protected void printExpressionOperatorElements(ExpressionOperator expOperator, Element out) {
         
         printString("type", expOperator.getType(), out);
-        printString("operator", String.valueOf(expOperator.getOperator().ordinal()), out);
+        printString("operator", String.valueOf(expOperator.getOperator().getValue()), out);
         // FIXME: Typo in specs, 'precedence_overriden'
         printString("precedence_overridden", 
                 expOperator.isPrecedenceOverridden() == true ? "true" : "false", out);   
@@ -704,33 +709,37 @@ public class XMLSerializer {
 
         Element item = new Element("item", defaultNamespace);
         children.getChildren().add(item);
+        printCPrimitive(cp, item);
+    }
+    
+    protected void printCPrimitive(CPrimitive cp, Element out) {
         
         if (cp instanceof CBoolean) {
-            item.setAttribute("type", "C_BOOLEAN", xsiNamespace);
-            printCBoolean((CBoolean) cp, item);
+            out.setAttribute("type", "C_BOOLEAN", xsiNamespace);
+            printCBoolean((CBoolean) cp, out);
         } else if (cp instanceof CDate) {
-            item.setAttribute("type", "C_DATE", xsiNamespace);
-            printCDate((CDate) cp, item);
+            out.setAttribute("type", "C_DATE", xsiNamespace);
+            printCDate((CDate) cp, out);
         } else if (cp instanceof CDateTime) {
-            item.setAttribute("type", "C_DATE_TIME", xsiNamespace);
-            printCDateTime((CDateTime) cp, item);
+            out.setAttribute("type", "C_DATE_TIME", xsiNamespace);
+            printCDateTime((CDateTime) cp, out);
         } else if (cp instanceof CTime) {
-            item.setAttribute("type", "C_TIME", xsiNamespace);
-            printCTime((CTime) cp, item);
+            out.setAttribute("type", "C_TIME", xsiNamespace);
+            printCTime((CTime) cp, out);
         } else if (cp instanceof CDuration) {
-            item.setAttribute("type", "C_DURATION", xsiNamespace);
-            printCDuration((CDuration) cp, item);
+            out.setAttribute("type", "C_DURATION", xsiNamespace);
+            printCDuration((CDuration) cp, out);
         } else if (cp instanceof CInteger) {
-            item.setAttribute("type", "C_INTEGER", xsiNamespace);
-            printCInteger((CInteger) cp, item);
+            out.setAttribute("type", "C_INTEGER", xsiNamespace);
+            printCInteger((CInteger) cp, out);
         } else if (cp instanceof CReal) {
-            item.setAttribute("type", "C_REAL", xsiNamespace);
-            printCReal((CReal) cp, item);
+            out.setAttribute("type", "C_REAL", xsiNamespace);
+            printCReal((CReal) cp, out);
         } else if (cp instanceof CString) {
-            item.setAttribute("type", "C_STRING", xsiNamespace);
-            printCString((CString) cp, item);
+            out.setAttribute("type", "C_STRING", xsiNamespace);
+            printCString((CString) cp, out);
         } else {
-            item.setAttribute("type", "C_PRIMITIVE", xsiNamespace);
+            out.setAttribute("type", "C_PRIMITIVE", xsiNamespace);
             System.err.println("Cannot serialize CPrimitive of type '" + cp.getClass().getName() + "'!");
         }
         

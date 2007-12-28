@@ -16,10 +16,110 @@
 package org.openehr.am.archetype.assertion;
 
 public enum OperatorKind {
-	
-	OP_EQ, OP_NE, OP_LE, OP_LT, OP_GT, OP_GE, OP_MATCHES, OP_NOT, OP_AND, OP_OR,
-	OP_XOR, OP_IMPLIES, OP_FOR_ALL, OP_EXISTS, OP_PLUS, OP_MINUS, OP_MULTIPLY,
-	OP_DIVIDE, OP_EXP
+    /**
+     * Equals operator ("=" or "==")
+     */
+    OP_EQ(2001),
+    
+    /**
+     * Not equals operator ("!=" or "/=" or "<>")
+     */
+    OP_NE(2002),
+    
+    /**
+     * Less-than or equals operator ("<=")
+     */
+    OP_LE(2003),
+    
+    /**
+     * Less-than operator ("<")
+     */
+    OP_LT(2004),
+    
+    /**
+     * Grater-than or equals operator (">=")
+     */
+    OP_GE(2005),
+    
+    /**
+     * Grater-than operator (">")
+     */
+    OP_GT(2006),
+    
+    /**
+     * Matches operator ("matches" or "is_in")
+     */
+    OP_MATCHES(2007),
+    
+    /**
+     * Not logical operator
+     */
+    OP_NOT(2010),
+    
+    /**
+     * And logical operator
+     */
+    OP_AND(2011),
+    
+    /**
+     * Or logical operator
+     */
+    OP_OR(2012),
+    
+    /**
+     * Xor logical operator
+     */
+    OP_XOR(2013),
+    
+    /**
+     * Implies logical operator
+     */
+    OP_IMPLIES(2014),
+    
+    /**
+     * For-all quantifier operator
+     */
+    OP_FOR_ALL(2015),
+    
+    /**
+     * Exists quantifier operator
+     */
+    OP_EXISTS(2016),
+    
+    /**
+     * Plus operator ("+")
+     */
+    OP_PLUS(2020),
+    
+    /**
+     * Minus operator ("-")
+     */
+    OP_MINUS(2021),
+    
+    /**
+     * Multiply operator ("*")
+     */
+    OP_MULTIPLY(2022),
+    
+    /**
+     * Divide operator ("/")
+     */
+    OP_DIVIDE(2023),
+    
+    /**
+     * Exponent operator ("^")
+     */
+    OP_EXP(2024);
+    
+    private int value;
+    
+    OperatorKind(int value) {
+        this.value = value;
+    }
+    
+    public int getValue() {
+        return value;
+    }
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
