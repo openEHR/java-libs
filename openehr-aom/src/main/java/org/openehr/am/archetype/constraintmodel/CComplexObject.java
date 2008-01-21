@@ -66,9 +66,25 @@ public final class CComplexObject extends CDefinedObject {
     }
 
     /**
+     * Get a specific attribute constraint identified by its rmAttributeName.
+     * @param rmAttributeName the attribute name of the attribute to be retrieved
+     * @return the attribute or null if no specific constraint with that rmAttributeName exists
+     */
+    public CAttribute getAttribute(String rmAttributeName) {
+        if (attributes == null) return null;
+        for (CAttribute attribute : attributes) {
+        	if (attribute.getRmAttributeName().equals(rmAttributeName)) {
+        		return attribute;
+        	}
+        }
+        return null;
+    }
+    
+    
+    /**
      * True if this node is a valid archetype node.
      *
-     * @return ture if valid
+     * @return true if valid
      */
     public boolean isValid() {
         if (attributes == null) {
