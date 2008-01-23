@@ -77,12 +77,17 @@ public final class Converter {
             return;
         }
         
+        System.out.printf("Input: %s\n", inputDirectoryName);
+        System.out.printf("Output: %s\n", outputDirectoryName);
+
         if (archetypeIds.size() == 0) {
             for(String fileName : inputDirectory.list()) {
                 if (fileName.endsWith(".adl"))
                     archetypeIds.add(fileName.substring(0, fileName.length() - 4));
             }
         }
+
+        System.out.printf("Files: %s\n", String.valueOf(archetypeIds));
         
         for(String archetypeId : archetypeIds) {
             System.out.printf("converting %s\n", archetypeId);
