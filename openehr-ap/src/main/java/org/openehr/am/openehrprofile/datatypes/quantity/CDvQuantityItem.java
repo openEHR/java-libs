@@ -16,6 +16,8 @@
 package org.openehr.am.openehrprofile.datatypes.quantity;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.support.basic.Interval;
 
 /**
@@ -80,6 +82,33 @@ public class CDvQuantityItem {
 	public Interval<Integer> getPrecision() {
 		return precision;
 	}
+	
+	/**
+     * Returns true if fields are the same
+     */
+    public boolean equals(Object o) {
+    	if (this == o) return true;
+        if (!( o instanceof CDvQuantityItem )) return false;
+
+        final CDvQuantityItem item = (CDvQuantityItem) o;
+
+        return new EqualsBuilder()
+                .append(value, item.value)
+                .append(precision, item.precision)
+                .append(units, item.units)
+                .isEquals();
+    }
+    
+    /**
+     * Returns hashcode
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(7, 23)
+                .append(value)
+                .append(precision)
+                .append(units)
+                .toHashCode();
+    }
 	
 	/* fields */
 	private Interval<Double> value;

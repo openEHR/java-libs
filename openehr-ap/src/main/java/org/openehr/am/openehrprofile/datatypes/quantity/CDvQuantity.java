@@ -17,6 +17,8 @@ package org.openehr.am.openehrprofile.datatypes.quantity;
 
 import java.util.*;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
@@ -59,6 +61,19 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 				: new ArrayList<CDvQuantityItem>(list);
 		this.property = property;
 	}
+	
+	/**
+	 * Convenience constructor
+	 * 
+	 * @param path
+	 * @param occurrences
+	 * @param list
+	 * @param property
+	 */
+	public CDvQuantity(String path, Interval<Integer> occurrences,
+			List<CDvQuantityItem> list, CodePhrase property) {
+		this(path, occurrences, null, null, list, property, null, null);
+	}
 
 	/**
 	 * List of value/units pairs.
@@ -77,7 +92,36 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 	 */
 	public CodePhrase getProperty() {
 		return property;
-	}	
+	}
+	
+	/**
+     * Returns true if fields are the same
+     */
+    public boolean equals(Object o) {
+    	if (this == o) return true;
+        if (!( o instanceof CDvQuantity )) return false;
+
+        final CDvQuantity cq = (CDvQuantity) o;
+
+        return new EqualsBuilder()
+        		.appendSuper(super.equals(o))
+                .append(list, cq.list)
+                .append(property, cq.property)
+                .isEquals();
+    }
+    
+    /**
+     * Returns the hashcode of this object
+     * 
+     * @return hashcode
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(11, 37)
+        		.appendSuper(super.hashCode())
+                .append(list)
+                .append(property)
+                .toHashCode();
+    }
 
 	@Override
 	public boolean hasPath(String path) {

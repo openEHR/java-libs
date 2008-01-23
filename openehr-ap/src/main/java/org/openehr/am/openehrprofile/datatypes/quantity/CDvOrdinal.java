@@ -17,6 +17,8 @@ package org.openehr.am.openehrprofile.datatypes.quantity;
 
 import java.util.*;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
@@ -54,6 +56,20 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 		}
 		this.list = list;
 	}
+	
+	/**
+	 * Convenience constructor
+	 * 
+	 * @param path
+	 * @param occurrences
+	 * @param nodeID
+	 * @param list
+	 * @throws IllegalArgument if list null or empty
+	 */
+	public CDvOrdinal(String path, Interval<Integer> occurrences, 
+			Set<Ordinal> list) {
+		this(path, occurrences, null, null, list, null, null);
+	}
 
 	@Override
 	public boolean isValid() {
@@ -84,6 +100,33 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 		}
 		return Collections.unmodifiableSet(list);
 	}
+	
+	/**
+     * Returns true if fields are the same
+     */
+    public boolean equals(Object o) {
+    	if (this == o) return true;
+        if (!( o instanceof CDvOrdinal )) return false;
+
+        final CDvOrdinal ordinal = (CDvOrdinal) o;
+
+        return new EqualsBuilder()
+        		.appendSuper(super.equals(o))
+                .append(list, ordinal.list)
+                .isEquals();
+    }
+    
+    /**
+     * Returns the hashcode of this object
+     * 
+     * @return hashcode
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(3, 19)
+        		.appendSuper(super.hashCode())
+                .append(list)
+                .toHashCode();
+    }
 
 	@Override
 	public boolean validValue(Ordinal arg0) {

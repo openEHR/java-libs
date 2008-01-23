@@ -86,7 +86,7 @@ public final class Ordinal {
     }
     
     public int hashCode() {
-        return new HashCodeBuilder()
+        return new HashCodeBuilder(7, 17)
                 .append(value)
                 .append(symbol)
                 .toHashCode();

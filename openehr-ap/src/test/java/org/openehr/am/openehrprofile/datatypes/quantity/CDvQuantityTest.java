@@ -54,4 +54,48 @@ public class CDvQuantityTest extends TestCase {
 				parent, list, property, defaultValue, null);
 		assertEquals("default wrong", defaultValue, constraint.getDefaultValue());
 	}
+	
+	public void testEqualsWithDifferentQuantityItems() {
+		Interval<Integer> required = new Interval<Integer>(1,1);
+		CDvQuantityItem item1 = new CDvQuantityItem(
+				new Interval<Double>(0.0, 1.0), 
+				new Interval<Integer>(2, 2), "mg");
+		List<CDvQuantityItem> list1 = new ArrayList<CDvQuantityItem>();
+		list1.add(item1);
+		CDvQuantity cq1 = new CDvQuantity("/path", required, list1, null);
+		
+		CDvQuantityItem item2 = new CDvQuantityItem(
+				new Interval<Double>(0.0, 2.0), 
+				new Interval<Integer>(2, 2), "mg");
+		List<CDvQuantityItem> list2 = new ArrayList<CDvQuantityItem>();
+		list2.add(item2);
+		CDvQuantity cq2 = new CDvQuantity("/path", required, list2, null);
+		
+		assertFalse("CDvQuantity with different items should not equal",
+				cq1.equals(cq2));
+		assertFalse("CDvQuantity with different items should not equal",
+				cq2.equals(cq1));
+	}
+	
+	public void testEqualsWithSameQuantityItems() {
+		Interval<Integer> required = new Interval<Integer>(1,1);
+		CDvQuantityItem item1 = new CDvQuantityItem(
+				new Interval<Double>(0.0, 1.0), 
+				new Interval<Integer>(2, 2), "mg");
+		List<CDvQuantityItem> list1 = new ArrayList<CDvQuantityItem>();
+		list1.add(item1);
+		CDvQuantity cq1 = new CDvQuantity("/path", required, list1, null);
+		
+		CDvQuantityItem item2 = new CDvQuantityItem(
+				new Interval<Double>(0.0, 1.0), 
+				new Interval<Integer>(2, 2), "mg");
+		List<CDvQuantityItem> list2 = new ArrayList<CDvQuantityItem>();
+		list2.add(item2);
+		CDvQuantity cq2 = new CDvQuantity("/path", required, list2, null);
+		
+		assertTrue("CDvQuantity with the same quantity items should equal",
+				cq1.equals(cq2));
+		assertTrue("CDvQuantity with the same quantity items should equal",
+				cq2.equals(cq1));
+	}
 }
