@@ -15,8 +15,11 @@
 
 package org.openehr.am.openehrprofile.datatypes.text;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
@@ -53,7 +56,7 @@ public class CCodePhrase extends CDomainType<CodePhrase> {
 			CodePhrase assumedValue) {
 
 		super(terminologyId == null && codeList == null,
-				path, "CodePhrase", occurrences, nodeID, defaultValue, 
+				path, CODE_PHRASE, occurrences, nodeID, defaultValue, 
 				assumedValue, parent);
 
 		if (codeList != null) {
@@ -68,6 +71,26 @@ public class CCodePhrase extends CDomainType<CodePhrase> {
 		this.terminologyId = terminologyId;
 		this.codeList = codeList;		
 	}	
+	
+	/**
+	 * Convenience constructor to create CCodePhrase with only terminologyId
+	 * and single code
+	 * 
+	 * @param path
+	 * @param terminologyId
+	 * @param code
+	 */
+	public CCodePhrase(String path, String terminologyId, String code) {
+		
+		super(false, path, CODE_PHRASE, new Interval<Integer>(0, 1), null, null, 
+				null, null);
+		
+		ArrayList<String> codeList = new ArrayList<String>();
+		codeList.add(code);
+		
+		this.codeList = codeList;
+		this.terminologyId = new TerminologyID(terminologyId);
+	}
 
 	/**
 	 * List of codes
@@ -86,6 +109,38 @@ public class CCodePhrase extends CDomainType<CodePhrase> {
 	public TerminologyID getTerminologyId() {
 		return terminologyId;
 	}
+	
+	/**
+     * Two CCodePhrase equal if have same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof CCodePhrase )) return false;
+
+        final CCodePhrase ccp = (CCodePhrase) o;
+
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o))
+                .append(terminologyId, ccp.terminologyId)
+                .append(codeList, ccp.codeList)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(7, 37)
+                .appendSuper(super.hashCode())
+                .append(terminologyId)
+                .append(codeList)
+                .toHashCode();
+    }
 
 	@Override
 	public boolean isValid() {
@@ -126,6 +181,8 @@ public class CCodePhrase extends CDomainType<CodePhrase> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	private static final String CODE_PHRASE = "CodePhrase";
 	
 	private TerminologyID terminologyId;
 	private List<String> codeList;

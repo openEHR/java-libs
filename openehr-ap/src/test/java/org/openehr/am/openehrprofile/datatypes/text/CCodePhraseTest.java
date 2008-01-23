@@ -71,4 +71,44 @@ public class CCodePhraseTest extends TestCase {
 		assertTrue("expected valid", 
 				constraint.validValue(new CodePhrase("test", "101")));		
 	}
+	
+	
+	public void testEqualsWithDifferentCode() {
+		CCodePhrase planned = new CCodePhrase("/defining_code", "openehr", 
+				"524");
+		CCodePhrase postponed = new CCodePhrase("/defining_code", "openehr", 
+				"527");
+		
+		assertFalse("two CCodePhrase with different code should not be equal",
+				planned.equals(postponed));
+		
+		assertFalse("two CCodePhrase with different code should not be equal",
+				postponed.equals(planned));		
+	}
+	
+	public void testEqualsWithDifferentTerminology() {
+		CCodePhrase planned = new CCodePhrase("/defining_code", "openehr", 
+				"524");
+		CCodePhrase postponed = new CCodePhrase("/defining_code", "another", 
+				"524");
+		
+		assertFalse("two CCodePhrase with different terminology should not be equal",
+				planned.equals(postponed));
+		
+		assertFalse("two CCodePhrase with different terminology should not be equal",
+				postponed.equals(planned));		
+	}
+	
+	public void testEqualsWithSameCodeAndTerminology() {
+		CCodePhrase planned = new CCodePhrase("/defining_code", "openehr", 
+				"527");
+		CCodePhrase postponed = new CCodePhrase("/defining_code", "openehr", 
+				"527");
+		
+		assertTrue("two CCodePhrase with same terminology and code should be equal",
+				planned.equals(postponed));
+		
+		assertTrue("two CCodePhrase with same terminology and code should be equal",
+				postponed.equals(planned));		
+	}
 }
