@@ -48,7 +48,7 @@ public abstract class Pathable extends RMObject {
 	 * 
 	 * @return parent or null if not specified
 	 */
-	public Pathable getParnent() {
+	public Pathable getParent() {
 		return this.parent;
 	}
 	
