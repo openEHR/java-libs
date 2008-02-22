@@ -82,7 +82,7 @@ public final class Instruction extends CareEntry {
                     @Attribute(name = "narrative", required = true) DvText narrative,
                     @Attribute(name = "activities") List<Activity> activities,
                     @Attribute(name = "expiryTime") DvDateTime expiryTime,
-                    @Attribute(name = "wfDefinition") DvParsable wfDeinition,
+                    @Attribute(name = "wfDefinition") DvParsable wfDefinition,
                     @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
     		super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
                 parent, language, encoding, subject, provider, workflowId, 
