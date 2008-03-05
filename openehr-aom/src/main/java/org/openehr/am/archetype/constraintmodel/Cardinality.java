@@ -72,7 +72,31 @@ public final class Cardinality {
     public Interval<Integer> getInterval() {
         return interval;
     }
-
+    
+    /**
+     * Returns true if the semantics of this cardinality represents 
+     * a bag, i.e. unordered, non-unique membership.
+     */
+    public boolean isBag() {
+    	return !ordered && !unique;
+    }
+    
+    /**
+     * Returns true if the semantics of this cardinality represents
+	 * a list, i.e. ordered, non-unique membership.
+     */
+    public boolean isList() {
+        return ordered && !unique;
+    }
+   
+    /**
+     * Returns return if the semantics of this cardinality represents
+     * a set, i.e. unordered, unique membership.
+     */
+    public boolean isSet() {
+    	return !ordered && unique;
+    }
+    
     /**
      * Return ture if two Cardinality has same value
      *
