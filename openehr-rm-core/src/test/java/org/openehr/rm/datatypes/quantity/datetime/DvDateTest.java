@@ -160,6 +160,19 @@ public class DvDateTest extends TestCase {
         assertEquals("month known", false, date.monthKnown());
         assertEquals("day known", false, date.dayKnown());       
     }
+    
+    public void testSetValueInConstructor() throws Exception {
+    	assertEquals(new DvDate(2).getValue(), "0002");    	
+    	assertEquals(new DvDate(20).getValue(), "0020");
+    	assertEquals(new DvDate(200).getValue(), "0200");
+    	assertEquals(new DvDate(2000).getValue(), "2000");
+    	
+    	assertEquals(new DvDate(2000, 9).getValue(), "2000-09");
+    	assertEquals(new DvDate(2000, 10).getValue(), "2000-10");    	
+    	
+    	assertEquals(new DvDate(2000, 10, 1).getValue(), "2000-10-01");
+    	assertEquals(new DvDate(2000, 10, 10).getValue(), "2000-10-10");
+    }
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

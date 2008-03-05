@@ -26,6 +26,8 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  * Represents a point in time, as measured on the Gregorian calendar,
@@ -95,7 +97,7 @@ public class DvDate extends DvTemporal<DvDate> {
 	 */
 	public DvDate(int year, int month, int day) {
 		super(DvDateTimeParser.convertDate(year, month, day));
-		setValue(year + "-" + month + "-" + day);
+		setValueByPattern("yyyy-MM-dd");
 		setBooleans(false, true, true);
 	}
 
@@ -111,13 +113,13 @@ public class DvDate extends DvTemporal<DvDate> {
 	 */
 	public DvDate(int year, int month) {
 		super(DvDateTimeParser.convertDate(year, month, 1));
-		setValue(year + "-" + month);
+		setValueByPattern("yyyy-MM");
 		setBooleans(true, true, false);
 	}
 
 	public DvDate(int year) {
 		super(DvDateTimeParser.convertDate(year, 1, 1));
-		setValue(Integer.toString(year));
+		setValueByPattern("yyyy");
 		setBooleans(true, false, false);
 	}
 
@@ -295,6 +297,13 @@ public class DvDate extends DvTemporal<DvDate> {
 			throw new IllegalArgumentException("invalid difference type");
 		}		
 		return add(q.negate());
+	}
+	
+	/* set the string value by given pattern using datetime value */
+	private void setValueByPattern(String pattern) {
+		DateTimeFormatter fmt = DateTimeFormat.forPattern(pattern);
+		String value = fmt.print(getDateTime());
+		setValue(value);		
 	}
 
 	/* private fields */
