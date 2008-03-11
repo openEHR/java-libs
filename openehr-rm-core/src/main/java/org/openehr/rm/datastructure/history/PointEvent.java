@@ -64,6 +64,15 @@ public final class PointEvent<T extends ItemStructure> extends Event<T> {
                 parent, time, data, state);
     }
     
+    /**
+     * Convenient constructor that only takes required values
+     */
+    public PointEvent(String archetypeNodeId, DvText name, DvDateTime time,
+    		T data) {
+    	this(null, archetypeNodeId, name, null, null, null, null, time, data,
+    			null);
+    }
+    
     //POJO
     PointEvent() {
     }

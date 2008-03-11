@@ -78,6 +78,19 @@ public class PointEventTest extends DataStructureTestBase {
         assertEquals(h, pointEvent.getParent());
     }
     
+    public void testCreatePointEventWithConvenientConstructor() {
+    	String nodeId = "at0002";
+    	DvText name = new DvText("point event"); 
+    	DvDateTime time = new DvDateTime(TIME);
+    	ItemSingle data = item;
+    	pointEvent = new PointEvent<ItemSingle>(nodeId, name, time, data);    	
+    	
+    	assertEquals(nodeId, pointEvent.getArchetypeNodeId());
+    	assertEquals(name, pointEvent.getName());
+    	assertEquals(time, pointEvent.getTime());
+    	assertEquals(data, pointEvent.getData());
+    }
+    
     private History<ItemSingle> h;
     private static final String TIME = "2004-12-06T13:10:00";
     private PointEvent<ItemSingle> pointEvent;
