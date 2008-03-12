@@ -84,6 +84,20 @@ public class History <T extends ItemStructure> extends DataStructure {
         this.duration = duration;
         this.summary = summary;
     }
+    
+    /**
+     * Convenient constructor 
+     * 
+     * @param archetypeNodeId
+     * @param name
+     * @param origin
+     * @param events
+     */
+    public History(String archetypeNodeId, DvText name, DvDateTime origin,
+    		List<Event<T>> events) {
+    	this(null, archetypeNodeId, name, null, null, null, null, origin,
+    			events, null, null, null);
+    }
 
     /**
      * Time origin of this event history. The first event is not

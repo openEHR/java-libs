@@ -66,7 +66,7 @@ public class HistoryTest extends DataStructureTestBase {
 						.getInstance("PT1h"), DvDuration.getInstance("PT3h"),
 				summary);
 	}
-
+	
 	public void testGetParent() {
 		History<ItemSingle> h1 = initWithItemSingle();
 		for (Event<ItemSingle> event : h1.getEvents()) {
