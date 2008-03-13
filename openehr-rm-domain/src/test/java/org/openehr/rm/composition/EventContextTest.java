@@ -54,6 +54,15 @@ public class EventContextTest extends CompositionTestBase {
                     e.getMessage().contains("setting"));
         }
     }
+    
+    public void testCreateSimpleEventContext() {
+    	DvDateTime startTime = new DvDateTime("2006-11-22T18:57:01");	
+		DvCodedText setting = TestCodeSetAccess.SETTING;
+    	EventContext context = new EventContext(startTime, setting, ts);
+    	
+    	assertEquals(startTime, context.getStartTime());
+    	assertEquals(setting, context.getSetting());    	
+    }
 
     /**
      * Tests null participations doesn't cause getParticipations throws

@@ -49,13 +49,13 @@ public final class EventContext extends RMObject {
     /**
      * Constructs an EventContext
      *
-     * @param healthCareFacility
-     * @param time
-     * @param composer
+     * @param healthCareFacility null if not specified
+     * @param startTime          required
+     * @param endTime            null if not specified
      * @param participations     null if not specified
      * @param location           null if not specified
-     * @param setting
-     * @param otherContext
+     * @param setting            required
+     * @param otherContext       null if not specified
      * @param terminologyService
      * @throws IllegalArgumentException
      */
@@ -96,6 +96,14 @@ public final class EventContext extends RMObject {
         this.location = location;
         this.setting = setting;
         this.otherContext = otherContext;
+    }
+    
+    /**
+     * Create an eventText with required values
+     */
+    public EventContext(DvDateTime startTime, DvCodedText setting, 
+    		TerminologyService termServ) {
+    	this(null, startTime, null, null, null, setting, null, termServ);
     }
 
     /**
