@@ -39,10 +39,7 @@ public class SimpleTerminologyService implements TerminologyService {
 	}
 	
 	public TerminologyAccess terminology(String name) {
-		if(TerminologyService.OPENEHR.equals(name)) {
-			return SimpleTerminologyAccess.getInstance(name);
-		}
-		return null;
+		return terminologies.get(name);
 	}
 
 	public CodeSetAccess codeSet(String name) {

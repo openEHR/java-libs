@@ -68,7 +68,7 @@ public class XMLTerminologySource implements TerminologySource {
 			}
 			
 			List groups = root.getChildren("group");
-			for(Iterator it = codesets.iterator(); it.hasNext();) {
+			for(Iterator it = groups.iterator(); it.hasNext();) {
 				Element element = (Element) it.next();
 				groupList.add(loadGroup(element));
 			}
@@ -101,6 +101,7 @@ public class XMLTerminologySource implements TerminologySource {
 	private Group loadGroup(Element element) {
 		Group group = new Group();
 		group.name = element.getAttributeValue("name");
+		
 		List children = element.getChildren("concept");
 		for(Iterator it = children.iterator(); it.hasNext();) {
 			Concept concept = new Concept();

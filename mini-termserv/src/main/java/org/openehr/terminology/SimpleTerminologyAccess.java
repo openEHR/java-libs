@@ -63,6 +63,7 @@ public class SimpleTerminologyAccess implements TerminologyAccess {
 				nameToId = new HashMap<String, String>();
 			}
 			String name = names.get(lang);
+			
 			nameToId.put(name, groupId);
 			groupLangNameToId.put(lang, nameToId);
 		}	
