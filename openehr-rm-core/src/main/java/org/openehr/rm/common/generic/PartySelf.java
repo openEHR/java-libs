@@ -21,19 +21,18 @@ public final class PartySelf extends PartyProxy {
     /**
      * Constructs a PartySelf
      *
-     *@param externalRef
-     *@param name
-     *@param identifiers
-     *@throws IllegalArgumentException if identifiers is empty
+     *@param externalRef null if unspecified
      */
     public PartySelf(PartyRef externalRef) {
         super(externalRef);
     }
     
-    
-    PartySelf() {
+    /**
+     * Creates a partySelf without an externalRef
+     */
+    public PartySelf() {
+    	this(null);
     }
-
 }
 
 /*
@@ -53,10 +52,10 @@ public final class PartySelf extends PartyProxy {
  *  The Original Code is PartySelf.java
  *
  *  The Initial Developer of the Original Code is Yin Su Lim.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2007
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Rong Chen
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
