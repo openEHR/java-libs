@@ -15,6 +15,7 @@
 
 package org.openehr.am.openehrprofile.datatypes.quantity;
 
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.datatypes.text.CodePhrase;
@@ -25,7 +26,7 @@ import org.openehr.rm.datatypes.text.CodePhrase;
  * @author Rong Chen
  * @version 1.0
  */
-public final class Ordinal {
+public final class Ordinal implements Comparable {
 
     /**
      * Constructs an ordinal
@@ -83,6 +84,21 @@ public final class Ordinal {
                 .append(value, ordinal.value)
                 .append(symbol, ordinal.symbol)
                 .isEquals();
+    }
+    
+    
+    /**
+     * @param o the Object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object
+     *         is less than, equal to, or greater than the specified object.
+     * @throws ClassCastException if the specified object's type prevents it
+     *                            from being compared to this Object.
+     */
+    public int compareTo(Object o) {
+        final Ordinal ordinal = (Ordinal) o;
+        if (value > ordinal.value) return 1;
+        if (value < ordinal.value) return -1;
+        return 0;
     }
     
     public int hashCode() {
