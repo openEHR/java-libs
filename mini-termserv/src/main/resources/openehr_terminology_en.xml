@@ -6,6 +6,15 @@
     <codeset issuer="IANA" openehr_id="character sets" external_id="IANA_character-sets" >
         <code value="ISO-10646-UTF-1" />
         <code value="ISO_8859-3:1988" />
+        <code value="UTF-8" />
+        <code value="UTF-7" />
+        <code value="UTF-16BE" />
+        <code value="UTF-16LE" />
+        <code value="UTF-16" />
+        <code value="UTF-32" />
+        <code value="UTF-32BE" />
+        <code value="UTF-32LE" />
+        <code value="ISO_8859-1:1987" />        
     </codeset>
     <codeset issuer="openehr" openehr_id="compression algorithms" external_id="openehr_compression_algorithms" >
         <code value="compress" />
