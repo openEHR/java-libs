@@ -38,7 +38,7 @@ public class TestTerminologyAccess implements TerminologyAccess {
 	 *         returned if not found
 	 * @throws IllegalArgumentException if groupID null or empty
 	 */
-	public Set<CodePhrase> codesForGroupID(String groupID) {
+	public Set<CodePhrase> codesForGroupId(String groupID) {
 		return null; // todo: implement this method
 	}
 
