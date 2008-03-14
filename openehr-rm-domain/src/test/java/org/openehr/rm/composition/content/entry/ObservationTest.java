@@ -17,10 +17,13 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.datastructure.history.History;
 import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
+import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.composition.CompositionTestBase;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.identification.HierObjectID;
+import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.terminology.TestTerminologyService;
+import org.openehr.terminology.SimpleTerminologyService;
 
 /**
  * ObservationTest
@@ -33,8 +36,8 @@ public class ObservationTest extends CompositionTestBase {
     public ObservationTest(String test) {
         super(test);
     }
-
-    /**
+    
+   /**
      * The fixture clean up called after every test method.
      */
     protected void tearDown() throws Exception {
@@ -55,6 +58,26 @@ public class ObservationTest extends CompositionTestBase {
                 arch, null, null, null, language("en"), language("en"), subject(), 
                 provider(), null, null, protocol, null, data, state, 
                 TestTerminologyService.getInstance());
+    }
+    
+    public void testCreateObservationWithSimpleTerminologyService() 
+    		throws Exception {
+    	
+    	ItemStructure protocol = list("list protocol");
+        History<ItemStructure> data = event("data");
+        History<ItemStructure> state = event("state");
+        Archetyped arch = new Archetyped(
+                new ArchetypeID("openehr-ehr_rm-observation.physical_examination.v3"),
+                "1.1");
+        TerminologyService termServ = SimpleTerminologyService.getInstance();    	
+    	
+        CodePhrase language = new CodePhrase("ISO_639-1", "en");
+		CodePhrase encoding = new CodePhrase("IANA_character-sets", "UTF-8");
+		
+    	observation = new Observation(null, "at000", text("observation"),
+                arch, null, null, null, language, encoding, subject(), 
+                provider(), null, null, protocol, null, data, state, termServ);
+        
     }
 
     public void testValidPath() throws Exception {

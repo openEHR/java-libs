@@ -23,6 +23,7 @@ import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.common.generic.PartySelf;
 import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.ObjectRef;
+import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.datatypes.text.CodePhrase;
@@ -85,11 +86,32 @@ public abstract class Entry extends ContentItem {
             throw new IllegalArgumentException("empty otherParticipations");
         }
         if (terminologyService == null) {
-        		throw new IllegalArgumentException("null terminologyService");
+        	throw new IllegalArgumentException("null terminologyService");
         }
-        if (!terminologyService.codeSet("languages").hasLang(language)) {
-        		throw new IllegalArgumentException("unknown language:" + language);
+        
+        if(terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.LANGUAGES) == null) {
+        	throw new IllegalArgumentException(
+        		"missing codeset " + OpenEHRCodeSetIdentifiers.LANGUAGES);
         }
+        
+        if(terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.CHARACTER_SETS) == null) {
+        	throw new IllegalArgumentException(
+    			"missing codeset " + OpenEHRCodeSetIdentifiers.CHARACTER_SETS);
+        }
+        
+        if (!terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(language)) {
+            throw new IllegalArgumentException(
+                    "unknown language: " + language);
+        }
+        if (!terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.CHARACTER_SETS).hasCode(encoding)) {
+            throw new IllegalArgumentException(
+                    "unknown encoding: " + encoding);
+        }
+        
         this.language = language;
         this.encoding = encoding;
         this.subject = subject;
