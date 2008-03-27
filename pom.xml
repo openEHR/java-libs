@@ -4,6 +4,7 @@
   <artifactId>ref_impl_java</artifactId>
   <packaging>pom</packaging>
   <version>1</version>
+  <name>The openEHR Reference Java Implementation</name>
   <organization>
     <name>The openEHR Foundataion</name>
   </organization>
