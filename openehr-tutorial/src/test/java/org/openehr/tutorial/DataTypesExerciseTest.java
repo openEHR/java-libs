@@ -71,5 +71,5 @@ public class DataTypesExerciseTest extends TestCase {
 		assertEquals("units wrong", "mmol/l", value.getUnits());
 	}
 	
-	private DataTypesExercise instance = new DataTypesAnswer(); 
+	private DataTypesExercise instance = new DataTypesExercise(); 
 }

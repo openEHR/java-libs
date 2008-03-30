@@ -18,5 +18,5 @@ public class EHRExerciseTest extends TestCase {
 		assertNotNull("observation is null", value);
 	}
 	
-	private EHRExercise instance = new EHRAnswer();
+	private EHRExercise instance = new EHRExercise();
 }

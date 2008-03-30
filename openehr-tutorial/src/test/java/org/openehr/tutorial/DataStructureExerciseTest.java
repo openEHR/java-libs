@@ -41,5 +41,5 @@ public class DataStructureExerciseTest extends TestCase {
 		assertTrue("item type wrong", item instanceof Element);		
 	}
 	
-	private DataStructureExercise instance =  new DataStructureAnswer();
+	private DataStructureExercise instance =  new DataStructureExercise();
 }

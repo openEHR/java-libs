@@ -17,5 +17,5 @@ public class ADLExerciseTest extends TestCase {
 		assertNotNull("adl string is null", value);
 	}
 	
-	private ADLExercise instance = new ADLAnswer();
+	private ADLExercise instance = new ADLExercise();
 }
