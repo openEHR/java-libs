@@ -20,9 +20,6 @@ public class EhrServiceTester {
 	public static void main(String[] args) throws Exception {
 		EhrServiceTester tester = new EhrServiceTester();
 
-		// locally create a composition
-		// tester.createVersions(); 
-
 		// commit a composition to EhrService
 		tester.commitContribution();
 
@@ -61,7 +58,7 @@ public class EhrServiceTester {
 		log.info("session opened with id: " + sessionId);
 	}
 
-	private void createEHR(String externalId, String namespace)
+	private String createEHR(String externalId, String namespace)
 			throws Exception {
 
 		initService();
@@ -77,7 +74,10 @@ public class EhrServiceTester {
 		String subjectId = servicePort
 				.getSubjectId(sessionId, ehrId, namespace);
 
-		log.info("subjectId of the ehr: " + subjectId);
+		log.info("subjectId of the ehr: " + subjectId 
+				+ ", ehrId: " + ehrId);
+		
+		return ehrId;
 	}
 
 	private void commitContribution() throws Exception {
@@ -88,7 +88,7 @@ public class EhrServiceTester {
 		String namespace = NAMESPACE;
 		String ehrId = servicePort.findEhrId(sessionId, externalId, namespace);
 		if (ehrId == null) {
-			createEHR(externalId, namespace);
+			ehrId = createEHR(externalId, namespace);
 		} else {
 			log.info("ehr found with id: " + ehrId);
 		}
@@ -101,6 +101,8 @@ public class EhrServiceTester {
 		logToFile((COMPOSITION) versions[0].getData(), "sent");
 
 		AUDIT_DETAILS audit = TestComposition.createAuditDetails();
+		
+		log.info("committing composition..");
 
 		CommitStatus status = servicePort.commitContribution(sessionId, ehrId,
 				audit, versions);

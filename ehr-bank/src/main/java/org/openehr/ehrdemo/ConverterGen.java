@@ -16,6 +16,8 @@ package org.openehr.ehrdemo;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.jar.*;
 
@@ -49,6 +51,13 @@ public class ConverterGen {
 		buf.append("package org.openehr.binding;\n\n");
 		
 		generateImportStatements(buf);
+		
+		// insert time-stamp  etc
+		buf.append("/**\n");
+		buf.append(" * DO NOT MODIFY!! Generated on ");
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		buf.append(format.format(new Date()));
+		buf.append("\n */\n\n");
 		
 		buf.append("public class XMLBinding {\n");
 		
@@ -594,7 +603,8 @@ public class ConverterGen {
 		try {
 			method = kernelClass.getMethod(getterName, null);
 		} catch(Exception e) {
-			log.error("failed to get method: " + getterName);
+			log.error("failed to get method: " + getterName + " on class "
+					+ kernelClass);
 			Method[] methods = kernelClass.getMethods();
 			for(Method m : methods) {
 				log.info("method: " + m.toString());
@@ -644,7 +654,8 @@ public class ConverterGen {
 		
 		for(Field f : fields) {
 			String fieldName = f.getName();
-			if(fieldName.startsWith("__") || "typeDesc".equals(fieldName)) {
+			if(fieldName.startsWith("__") || "typeDesc".equals(fieldName)
+					|| "class$0".equals(fieldName)) {
 				continue; // skip
 			}
 			list.add(f);
