@@ -41,7 +41,7 @@ public class DvDate extends DvTemporal<DvDate> {
 	/**
 	 * Construct a DvDate
 	 *
-	 * @param referenceRanges null if not specified
+	 * @param otherReferenceRanges null if not specified
 	 * @param normalRange null if not specified
 	 * @param normalStatus null if not specified
 	 * @param mangnitudeStatus null if not specified
@@ -51,15 +51,15 @@ public class DvDate extends DvTemporal<DvDate> {
 	 * @throws IllegalArgumentException
 	 */
 	@FullConstructor
-	public DvDate(@Attribute(name = "referenceRanges")
-	List<ReferenceRange<DvDate>> referenceRanges,
+	public DvDate(@Attribute(name = "otherReferenceRanges")
+	List<ReferenceRange<DvDate>> otherReferenceRanges,
 			@Attribute(name = "normalRange")
 			DvInterval<DvDate> normalRange, @Attribute(name = "normalStatus")
 			CodePhrase normalStatus, @Attribute(name = "accuracy")
 			DvDuration accuracy, @Attribute(name = "magnitudeStatus")
 			String magnitudeStatus, @Attribute(name = "value", required = true)
 			String value) {
-		super(referenceRanges, normalRange, normalStatus, accuracy,
+		super(otherReferenceRanges, normalRange, normalStatus, accuracy,
 				magnitudeStatus, value);
 	}
 

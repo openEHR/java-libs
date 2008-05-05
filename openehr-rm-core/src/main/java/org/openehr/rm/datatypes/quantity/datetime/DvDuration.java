@@ -41,7 +41,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	/**
 	 * Constructs a Duration with referenceRange and accuracy
 	 * 
-	 * @param referenceRanges
+	 * @param otherReferenceRanges
 	 * @param normalRange
 	 * @param normalStatus
 	 * @param accuracy
@@ -52,8 +52,8 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	 *             if value has wrong format
 	 */
 	@FullConstructor
-	public DvDuration(@Attribute(name = "referenceRanges")
-	List<ReferenceRange<DvDuration>> referenceRanges,
+	public DvDuration(@Attribute(name = "otherReferenceRanges")
+	List<ReferenceRange<DvDuration>> otherReferenceRanges,
 			@Attribute(name = "normalRange")
 			DvInterval<DvDuration> normalRange,
 			@Attribute(name = "normalStatus")
@@ -63,7 +63,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 			String magnitudeStatus, @Attribute(name = "value")
 			String value) {
 
-		super(referenceRanges, normalRange, normalStatus, accuracy,
+		super(otherReferenceRanges, normalRange, normalStatus, accuracy,
 				accuracyPercent, magnitudeStatus);
 
 		DvDuration d = DvDuration.getInstance(value);

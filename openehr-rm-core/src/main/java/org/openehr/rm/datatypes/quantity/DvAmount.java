@@ -30,7 +30,7 @@ public abstract class DvAmount<T extends DvAmount> extends DvQuantified<T> {
 	/**
      * Constructs a DvAmount with referenceRanges and accuracy
      *
-     * @param referenceRanges   null if not specified
+     * @param otherReferenceRanges   null if not specified
      * @param normalRange null if not specified
      * @param normalStatus null if not specified
      * @param accuracy          0 means not recorded      
@@ -38,14 +38,14 @@ public abstract class DvAmount<T extends DvAmount> extends DvQuantified<T> {
      * @param magnitudeStatus null if not specified
      */
     protected DvAmount(
-    		@Attribute (name = "referenceRanges") List<ReferenceRange<T>> referenceRanges,
+    		@Attribute (name = "otherReferenceRanges") List<ReferenceRange<T>> otherReferenceRanges,
     		@Attribute (name = "normalRange") DvInterval<T> normalRange,
     		@Attribute (name= "normalStatus") CodePhrase normalStatus,
     		@Attribute (name = "accuracy") double accuracy, 
     		@Attribute (name = "accuracyPercent") boolean accuracyPercent,
     		@Attribute (name= "magnitudeStatus") String magnitudeStatus) {
     	
-        super(referenceRanges, normalRange, normalStatus , magnitudeStatus);
+        super(otherReferenceRanges, normalRange, normalStatus , magnitudeStatus);
         
         this.accuracy = accuracy;
         this.accuracyPercent = accuracyPercent;

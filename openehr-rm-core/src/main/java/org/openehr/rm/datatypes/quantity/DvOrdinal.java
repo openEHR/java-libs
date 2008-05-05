@@ -34,7 +34,7 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
     /**
      * Constructs an Ordinal by referenceRanges, value and symbol
      *
-     * @param referenceRanges
+     * @param otherReferenceRanges
      * @param normalRange
      * @param value
      * @param symbol

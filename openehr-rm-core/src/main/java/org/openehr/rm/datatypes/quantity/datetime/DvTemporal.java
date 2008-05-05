@@ -34,7 +34,7 @@ public abstract class DvTemporal<T extends DvTemporal> extends
 	/**
 	 * Construct a WorldTime string value
 	 * 
-	 * @param referenceRanges
+	 * @param otherReferenceRanges
 	 *            null if not specified
 	 * @param normalReference
 	 * @param accuracy
@@ -44,11 +44,11 @@ public abstract class DvTemporal<T extends DvTemporal> extends
 	 * @param pattern
 	 * @throws IllegalArgumentException
 	 */
-	public DvTemporal(List<ReferenceRange<T>> referenceRanges,
+	public DvTemporal(List<ReferenceRange<T>> otherReferenceRanges,
 			DvInterval<T> normalRange, CodePhrase normalStatus,
 			DvDuration accuracy, String magnitudeStatus, String value) {
 
-		super(referenceRanges, normalRange, normalStatus, accuracy,
+		super(otherReferenceRanges, normalRange, normalStatus, accuracy,
 				magnitudeStatus);
 
 		this.dateTime = parseValue(value);

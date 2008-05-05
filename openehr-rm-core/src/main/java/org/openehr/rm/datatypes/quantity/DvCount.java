@@ -32,7 +32,7 @@ public final class DvCount extends DvAmount<DvCount> {
 	/**
 	 * Constructs a Countalbe by all components
 	 *
-	 * @param referenceRanges
+	 * @param otherReferenceRanges
 	 * @param normalRange 
 	 * @param normalStatus
 	 * @param accuracy
@@ -43,14 +43,14 @@ public final class DvCount extends DvAmount<DvCount> {
 	 */
 	@FullConstructor
 	public DvCount(
-			@Attribute(name = "referenceRanges") List<ReferenceRange<DvCount>> referenceRanges,
+			@Attribute(name = "otherReferenceRanges") List<ReferenceRange<DvCount>> otherReferenceRanges,
 			@Attribute(name = "normalRange") DvInterval<DvCount> normalRange, 
 			@Attribute (name= "normalStatus") CodePhrase normalStatus,
 			@Attribute(name = "accuracy") double accuracy, 
 			@Attribute(name = "accuracyPercent") boolean accuracyPercent,
 			@Attribute (name= "magnitudeStatus") String magnitudeStatus,
 			@Attribute(name = "magnitude", required = true)	int magnitude) {
-		super(referenceRanges, normalRange, normalStatus, accuracy, 
+		super(otherReferenceRanges, normalRange, normalStatus, accuracy, 
 				accuracyPercent, magnitudeStatus);
 		this.magnitude = magnitude;
 	}

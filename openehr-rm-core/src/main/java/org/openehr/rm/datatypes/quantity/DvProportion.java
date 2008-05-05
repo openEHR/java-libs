@@ -30,7 +30,7 @@ public class DvProportion extends DvAmount<DvProportion> {
 	/**
      * Constructs a DvAmount with referenceRanges and accuracy
      *
-     * @param referenceRanges   null if not specified
+     * @param otherReferenceRanges   null if not specified
      * @param normalRange null if not specified
      * @param normalStatus null if not specified
      * @param accuracy          0 means not recorded      
@@ -43,7 +43,7 @@ public class DvProportion extends DvAmount<DvProportion> {
      */
 	@FullConstructor
     public DvProportion(
-    		@Attribute (name = "referenceRanges") List<ReferenceRange<DvProportion>> referenceRanges,
+    		@Attribute (name = "otherReferenceRanges") List<ReferenceRange<DvProportion>> otherReferenceRanges,
     		@Attribute (name = "normalRange") DvInterval<DvProportion> normalRange,
     		@Attribute (name= "normalStatus") CodePhrase normalStatus,
     		@Attribute (name = "accuracy") double accuracy, 
@@ -54,7 +54,7 @@ public class DvProportion extends DvAmount<DvProportion> {
     		@Attribute (name = "type") ProportionKind type,
     		@Attribute (name = "precision") Integer precision) {
     	
-        super(referenceRanges, normalRange, normalStatus , accuracy,
+        super(otherReferenceRanges, normalRange, normalStatus , accuracy,
         		accuracyPercent, magnitudeStatus);
         
         if(type == null) {

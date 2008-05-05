@@ -33,17 +33,17 @@ public abstract class DvQuantified<T extends DvQuantified> extends DvOrdered<T> 
     /**
      * Constructs a Quantified with referenceRanges and accuracy
      *
-     * @param referenceRanges   null if not specified
+     * @param otherReferenceRanges   null if not specified
      * @param normalRange null if no specified
      * @param normalStatus null if not specified
      * @param magnitudeStatus null if not specified
      */
     protected DvQuantified(
-    		@Attribute (name = "referenceRanges") List<ReferenceRange<T>> referenceRanges,
+    		@Attribute (name = "otherReferenceRanges") List<ReferenceRange<T>> otherReferenceRanges,
     		@Attribute (name = "normalRange") DvInterval<T> normalRange,
     		@Attribute (name= "normalStatus") CodePhrase normalStatus,
     		@Attribute (name= "magnitudeStatus") String magnitudeStatus) {
-        super(referenceRanges, normalRange, normalStatus);
+        super(otherReferenceRanges, normalRange, normalStatus);
         this.magnitudeStatus = magnitudeStatus;
     }  
 

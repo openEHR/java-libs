@@ -44,7 +44,7 @@ public class DvTime extends DvTemporal<DvTime> {
 	/**
 	 * Construct a DvTime
 	 *
-	 * @param referenceRanges null if not specified
+	 * @param otherReferenceRanges null if not specified
 	 * @param normalRange null if not specified
 	 * @param normalStatus null if not specified
 	 * @param accuracy        0 if not specified
@@ -54,13 +54,13 @@ public class DvTime extends DvTemporal<DvTime> {
 	 */
 	@FullConstructor
 	public DvTime(
-			@Attribute(name = "referenceRanges") List<ReferenceRange<DvTime>> referenceRanges,
+			@Attribute(name = "otherReferenceRanges") List<ReferenceRange<DvTime>> otherReferenceRanges,
 			@Attribute(name = "normalRange") DvInterval<DvTime> normalRange, 
 			@Attribute(name = "normalStatus") CodePhrase normalStatus, 
 			@Attribute(name = "accuracy") DvDuration accuracy, 
 			@Attribute(name = "magnitudeStatus") String magnitudeStatus, 
 			@Attribute(name = "value", required = true)	String value) {
-		super(referenceRanges, normalRange, normalStatus, accuracy,
+		super(otherReferenceRanges, normalRange, normalStatus, accuracy,
 				magnitudeStatus, value);
 	}
 

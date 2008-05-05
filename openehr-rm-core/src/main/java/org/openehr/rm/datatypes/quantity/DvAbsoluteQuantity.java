@@ -29,17 +29,17 @@ public abstract class DvAbsoluteQuantity<T extends DvAbsoluteQuantity,
 	/**
 	 * Creates a DvAbsoluteQuantity
 	 * 
-	 * @param referenceRanges
+	 * @param otherReferenceRanges
 	 * @param normalRange
 	 * @param normalStatus
 	 * @param magnitudeStatus
 	 * @param accuracy
 	 */
-	protected DvAbsoluteQuantity(List<ReferenceRange<T>> referenceRanges, 
+	protected DvAbsoluteQuantity(List<ReferenceRange<T>> otherReferenceRanges, 
 			DvInterval<T> normalRange, CodePhrase normalStatus, 
 			S accuracy, String magnitudeStatus) {
 		
-		super(referenceRanges, normalRange, normalStatus, magnitudeStatus);
+		super(otherReferenceRanges, normalRange, normalStatus, magnitudeStatus);
 
 		this.accuracy = accuracy;
 	}
