@@ -16,6 +16,7 @@ package org.openehr.rm.datatypes.quantity;
 import java.util.List;
 
 import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.datatypes.text.CodePhrase;
 
 /**
@@ -40,6 +41,7 @@ public class DvProportion extends DvAmount<DvProportion> {
      * @param type			not null
      * @param precision		null if not specified
      */
+	@FullConstructor
     public DvProportion(
     		@Attribute (name = "referenceRanges") List<ReferenceRange<DvProportion>> referenceRanges,
     		@Attribute (name = "normalRange") DvInterval<DvProportion> normalRange,
