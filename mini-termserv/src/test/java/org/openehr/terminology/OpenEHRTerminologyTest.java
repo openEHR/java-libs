@@ -3,8 +3,7 @@ package org.openehr.terminology;
 import java.util.Set;
 
 import org.openehr.rm.datatypes.text.CodePhrase;
-import org.openehr.rm.support.terminology.TerminologyAccess;
-import org.openehr.rm.support.terminology.TerminologyService;
+import org.openehr.rm.support.terminology.*;
 
 import junit.framework.TestCase;
 
@@ -14,7 +13,7 @@ public class OpenEHRTerminologyTest extends TestCase {
 		service = SimpleTerminologyService.getInstance();
 	}
 	
-	public void testHasSettingCode() {
+	public void testHasOpenEHRSettingCode() {
 		
 		TerminologyAccess terminology = service.terminology(
 				TerminologyService.OPENEHR);
@@ -28,6 +27,24 @@ public class OpenEHRTerminologyTest extends TestCase {
 		CodePhrase home = new CodePhrase("openehr", "225");
 		
 		assertTrue("code 225 (home) doesn't exist..", codes.contains(home));
+	}
+	
+	public void testHasCountryCodes() throws Exception {
+		CodeSetAccess codeSet = service.codeSetForId(
+				OpenEHRCodeSetIdentifiers.COUNTRIES);
+	
+		assertNotNull("countries codeSet missing", codeSet);
+		
+		assertTrue("China missing", 
+				codeSet.hasCode(new CodePhrase("ISO_3166-1", "CN")));
+		assertTrue("Sweden missing", 
+				codeSet.hasCode(new CodePhrase("ISO_3166-1", "SE")));
+		assertTrue("United Kingdom missing", 
+				codeSet.hasCode(new CodePhrase("ISO_3166-1", "GB")));
+		assertTrue("Denmark missing", 
+				codeSet.hasCode(new CodePhrase("ISO_3166-1", "DK")));
+		assertTrue("France missing", 
+				codeSet.hasCode(new CodePhrase("ISO_3166-1", "FR")));
 	}
 	
 	TerminologyService service;
