@@ -16,9 +16,7 @@
 package org.openehr.build;
 
 import org.openehr.rm.RMObject;
-import org.openehr.rm.support.identification.ObjectID;
-import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.identification.ObjectReference;
+import org.openehr.rm.support.identification.*;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.datastructure.DataStructure;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
@@ -26,8 +24,6 @@ import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.demographic.*;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
-import org.openehr.rm.support.identification.PartyReference;
 
 import java.util.*;
 
@@ -119,10 +115,10 @@ public class DemographicBuildTest extends BuildTestBase {
         DataStructure details = itemSingle("party relationship details");
         DvInterval<DvDate> timeValidity = new DvInterval<DvDate>(
                 new DvDate("2001-10-30"), null);
-        ObjectReference source = new ObjectReference(hid("1.8.3.4.3.6.1"),
-                ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY);
-        ObjectReference target = new ObjectReference(hid("1.2.13.3.7.31.1"),
-                ObjectReference.Namespace.LOCAL, ObjectReference.Type.PARTY);
+        ObjectRef source = new ObjectRef(hid("1.8.3.4.3.6.1"),
+                ObjectRef.Namespace.LOCAL, ObjectRef.Type.PARTY);
+        ObjectRef target = new ObjectRef(hid("1.2.13.3.7.31.1"),
+                ObjectRef.Namespace.LOCAL, ObjectRef.Type.PARTY);
 
         values.put("uid", uid);
         values.put("name", text);
@@ -181,9 +177,9 @@ public class DemographicBuildTest extends BuildTestBase {
                 null, null, null, null, itemSingle("legal name")));
         Archetyped archetypeDetails = new Archetyped(
                 new ArchetypeID("openehr-dm_rm-Role.doctor.v2"), "v1.0");
-        PartyReference performer = new PartyReference(
-                new HierarchicalObjectID("1.2.4.5.6.12.1"), 
-                ObjectReference.Type.PERSON);
+        PartyRef performer = new PartyRef(
+                new HierObjectID("1.2.4.5.6.12.1"), 
+                ObjectRef.Type.PERSON);
         //Actor performer = new Person(hid("9807425345"), "at0002",
           //      text("doctor"), archetypeDetails, null, null, identities,
             //    null, null, null, details, null, null);

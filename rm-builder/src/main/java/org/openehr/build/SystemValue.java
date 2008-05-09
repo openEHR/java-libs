@@ -26,6 +26,7 @@ public enum SystemValue {
 
     LANGUAGE ("language"),
     CHARSET ("charset"),
+    ENCODING ("encoding"),
     TERMINOLOGY_SERVICE ("terminologyService"),
     MEASUREMENT_SERVICE ("measurementService"),
     SUBJECT ("subject"),

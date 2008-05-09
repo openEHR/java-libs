@@ -30,6 +30,7 @@ import org.openehr.rm.composition.content.navigation.Section;
 import org.openehr.rm.datastructure.history.History;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
+import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 
@@ -49,6 +50,8 @@ import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
  */
 
 public class EHRBuildTest extends BuildTestBase {
+	
+	private static CodePhrase EVENT = new CodePhrase("openehr", "433");
 
     /**
      * The fixture set up called before every test method.
@@ -56,14 +59,19 @@ public class EHRBuildTest extends BuildTestBase {
     protected void setUp() throws Exception {
         Map<SystemValue,Object> values = new HashMap<SystemValue,Object>();
         values.put(SystemValue.LANGUAGE, lang);
-        values.put(SystemValue.CHARSET, charset);
+        values.put(SystemValue.ENCODING, charset);
         values.put(SystemValue.TERMINOLOGY_SERVICE, ts);
         values.put(SystemValue.SUBJECT, subject());
         values.put(SystemValue.PROVIDER, provider());
         values.put(SystemValue.COMPOSER, provider());
-        values.put(SystemValue.TERRITORY, territory());
+        
+        CodePhrase territory = new CodePhrase("ISO_3166-1", "SE");
+        values.put(SystemValue.TERRITORY, territory);
         values.put(SystemValue.CONTEXT, context());
-        values.put(SystemValue.CATEGORY, TestCodeSetAccess.EVENT);
+        
+        DvCodedText category = new DvCodedText("event", lang, charset, EVENT, 
+        		ts);
+        values.put(SystemValue.CATEGORY, category);
 
         builder = new RMObjectBuilder(values);
     }
@@ -79,8 +87,8 @@ public class EHRBuildTest extends BuildTestBase {
         values.put("archetypeNodeId", node);
         values.put("archetypeDetails", archetypeDetails);
         values.put("name", name);
-        values.put("language", TestCodeSetAccess.ENGLISH);
-        values.put("charset", TestCodeSetAccess.LATIN_1);
+        values.put("language", lang);
+        values.put("encoding", charset);
         values.put("subject", subject());
         values.put("provider", provider());
         values.put("data", data);
@@ -91,14 +99,14 @@ public class EHRBuildTest extends BuildTestBase {
         assertEquals("archetypeNodeId", node, observation.getArchetypeNodeId());
         assertEquals("archetypeDetails", archetypeDetails, observation.getArchetypeDetails());
         assertEquals("name", name, observation.getName());
-        assertEquals("language", TestCodeSetAccess.ENGLISH, observation.getLanguage());
-        assertEquals("charset", TestCodeSetAccess.LATIN_1, observation.getCharset());
+        assertEquals("language", lang, observation.getLanguage());
+        assertEquals("encoding", charset, observation.getEncoding());
         assertEquals("subject", subject(), observation.getSubject());
         assertEquals("provider", provider(), observation.getProvider());
         assertEquals("data", event(), observation.getData());
         assertEquals("state", null, observation.getState());
         assertEquals("protocol", null, observation.getProtocol());
-        assertEquals("guidelineID", null, observation.getGuidelineID());
+        assertEquals("guidelineId", null, observation.getGuidelineId());
     }
 
     public void testBuildEvaluation() throws Exception {
@@ -111,8 +119,8 @@ public class EHRBuildTest extends BuildTestBase {
         values.put("archetypeNodeId", node);
         values.put("archetypeDetails", archetypeDetails);
         values.put("name", name);
-        values.put("language", TestCodeSetAccess.ENGLISH);
-        values.put("charset", TestCodeSetAccess.LATIN_1);
+        values.put("language", lang);
+        values.put("encoding", charset);
         values.put("subject", subject());
         values.put("provider", provider());
         values.put("data", data);
@@ -123,13 +131,13 @@ public class EHRBuildTest extends BuildTestBase {
         assertEquals("archetypeNodeId", node, evaluation.getArchetypeNodeId());
         assertEquals("archetypeDetails", archetypeDetails, evaluation.getArchetypeDetails());
         assertEquals("name", name, evaluation.getName());
-        assertEquals("language", TestCodeSetAccess.ENGLISH, evaluation.getLanguage());
-        assertEquals("charset", TestCodeSetAccess.LATIN_1, evaluation.getCharset());
+        assertEquals("language", lang, evaluation.getLanguage());
+        assertEquals("encoding", charset, evaluation.getEncoding());
         assertEquals("subject", subject(), evaluation.getSubject());
         assertEquals("provider", provider(), evaluation.getProvider());
         assertEquals("data", data, evaluation.getData());
         assertEquals("protocol", null, evaluation.getProtocol());
-        assertEquals("guidelineID", null, evaluation.getGuidelineID());
+        assertEquals("guidelineID", null, evaluation.getGuidelineId());
     }
 
     public void testBuildInstruction() throws Exception {
@@ -143,8 +151,8 @@ public class EHRBuildTest extends BuildTestBase {
         values.put("archetypeNodeId", node);
         values.put("archetypeDetails", archetypeDetails);
         values.put("name", name);
-        values.put("language", TestCodeSetAccess.ENGLISH);
-        values.put("charset", TestCodeSetAccess.LATIN_1);
+        values.put("language", lang);
+        values.put("encoding", charset);
         values.put("subject", subject());
         values.put("provider", provider());
         values.put("narrative", narrative);
@@ -155,13 +163,13 @@ public class EHRBuildTest extends BuildTestBase {
         assertEquals("archetypeNodeId", node, instruction.getArchetypeNodeId());
         assertEquals("archetypeDetails", archetypeDetails, instruction.getArchetypeDetails());
         assertEquals("name", name, instruction.getName());
-        assertEquals("language", TestCodeSetAccess.ENGLISH, instruction.getLanguage());
-        assertEquals("charset", TestCodeSetAccess.LATIN_1, instruction.getCharset());
+        assertEquals("language", lang, instruction.getLanguage());
+        assertEquals("encoding", charset, instruction.getEncoding());
         assertEquals("subject", subject(), instruction.getSubject());
         assertEquals("provider", provider(), instruction.getProvider());
         assertEquals("narrative", narrative, instruction.getNarrative());
         assertEquals("protocol", null, instruction.getProtocol());
-        assertEquals("guidelineID", null, instruction.getGuidelineID());
+        assertEquals("guidelineID", null, instruction.getGuidelineId());
         assertEquals("expiryTime", null, instruction.getExpiryTime());
         
         // test with class name in upper case
@@ -181,8 +189,8 @@ public class EHRBuildTest extends BuildTestBase {
         values.put("archetypeNodeId", node);
         values.put("archetypeDetails", archetypeDetails);
         values.put("name", name);
-        values.put("language", TestCodeSetAccess.ENGLISH);
-        values.put("charset", TestCodeSetAccess.LATIN_1);
+        values.put("language", lang);
+        values.put("encoding", charset);
         values.put("subject", subject());
         values.put("provider", provider());
         values.put("time", time);
@@ -195,12 +203,12 @@ public class EHRBuildTest extends BuildTestBase {
         assertEquals("archetypeNodeId", node, action.getArchetypeNodeId());
         assertEquals("archetypeDetails", archetypeDetails, action.getArchetypeDetails());
         assertEquals("name", name, action.getName());
-        assertEquals("language", TestCodeSetAccess.ENGLISH, action.getLanguage());
-        assertEquals("charset", TestCodeSetAccess.LATIN_1, action.getCharset());
+        assertEquals("language", lang, action.getLanguage());
+        assertEquals("encoding", charset, action.getEncoding());
         assertEquals("subject", subject(), action.getSubject());
         assertEquals("provider", provider(), action.getProvider());
         assertEquals("protocol", null, action.getProtocol());
-        assertEquals("guidelineID", null, action.getGuidelineID());
+        assertEquals("guidelineID", null, action.getGuidelineId());
         assertEquals("time", time, action.getTime());
         assertEquals("description", description, action.getDescription());
         assertEquals("ismTransition", ismTransition, action.getIsmTransition());
@@ -237,7 +245,10 @@ public class EHRBuildTest extends BuildTestBase {
         PartyProxy composer = provider();
         Archetyped archetypeDetails = new Archetyped(new ArchetypeID(
                 "openehr-ehr_rm-Composition.physical_exam.v2"), "1.0");
-        DvCodedText category = TestCodeSetAccess.EVENT;
+        DvCodedText category = new DvCodedText("event", lang, charset, EVENT, 
+        		ts);
+        CodePhrase territory = new CodePhrase("ISO_3166-1", "SE");
+        
         values.put("archetypeNodeId", node);
         values.put("archetypeDetails", archetypeDetails);
         values.put("name", name);
@@ -245,10 +256,10 @@ public class EHRBuildTest extends BuildTestBase {
         values.put("context", context());
         values.put("composer", composer);
         values.put("category", category);
-        values.put("territory", territory());
+        values.put("territory", territory);
         RMObject obj = builder.construct("Composition", values);
-
         assertTrue(obj instanceof Composition);
+
         Composition composition = (Composition) obj;
         assertEquals("archetypeNodeId", node, composition.getArchetypeNodeId());
         assertEquals("archetypeDetails", archetypeDetails, composition.getArchetypeDetails());
@@ -257,14 +268,15 @@ public class EHRBuildTest extends BuildTestBase {
         assertEquals("context", context(), composition.getContext());
         assertEquals("composer", composer, composition.getComposer());
         assertEquals("category", category, composition.getCategory());
-        assertEquals("territory", territory(), composition.getTerritory());
+        assertEquals("territory", territory, composition.getTerritory());
     }
 
     private EventContext context() throws Exception {
-        DvCodedText setting = new DvCodedText("setting", lang, charset,
-                TestTerminologyAccess.SETTING, ts);
+    	CodePhrase home = new CodePhrase("openehr", "225");
+        DvCodedText homeSetting = new DvCodedText("home setting", lang, charset,
+                home, ts);
         return new EventContext(null, new DvDateTime("2006-02-01T12:00:09"), null, null, 
-                null, setting, null, ts);
+                null, homeSetting, null, ts);
     }
 
     private Section section() throws Exception {
@@ -278,12 +290,14 @@ public class EHRBuildTest extends BuildTestBase {
         DvText name = new DvText("test observation", lang, charset, ts);
         Archetyped archetypeDetails = new Archetyped(
             new ArchetypeID("openehr-ehr_rm-observation.physical_examination.v3"), "v1.0");
-        return new Observation("at0001", name, archetypeDetails, TestCodeSetAccess.ENGLISH,
-                TestCodeSetAccess.LATIN_1, subject(), provider(), event(), ts);
+        return new Observation("at0001", name, archetypeDetails, lang,
+                charset, subject(), provider(), event(), ts);
     }
 
     private ISMTransition ismTransition() throws Exception {
-        return new ISMTransition(TestCodeSetAccess.ISM_ACTIVE, null, null, ts);       
+    	DvCodedText planned = new DvCodedText("planned e state", lang, charset, 
+    			new CodePhrase("openehr", "526"), ts);
+        return new ISMTransition(planned, null, null, ts);       
     }
     
     private History<ItemStructure> event() throws Exception { 
@@ -318,7 +332,7 @@ public class EHRBuildTest extends BuildTestBase {
  *  The Original Code is EHRBuildTest.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2006
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

@@ -29,11 +29,11 @@
 	</developers>
 	<scm>
 		<connection>
-			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/rm-builder/</connection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/rm-builder/</connection>
 		<developerConnection>
-			scm:svn:http://svn.openehr.org/ref_impl_java/BRANCHES/rm-builder/</developerConnection>
+			scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/rm-builder/</developerConnection>
 		<url>
-			http://my.openehr.org/wsvn/ref_impl_java/BRANCHES/rm-builder/</url>
+			http://my.openehr.org/wsvn/ref_impl_java/TRUNK/rm-builder/</url>
 	</scm>
 	<organization>
 		<name>openEHR</name>
@@ -59,7 +59,12 @@
 	<dependencies>		
 		<dependency>
 			<groupId>openehr</groupId>
-			<artifactId>openehr-rm</artifactId>
+			<artifactId>openehr-rm-core</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>openehr-rm-domain</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -70,6 +75,16 @@
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-ap</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>mini-termserv</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>measure-serv</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>		
 		<dependency>

@@ -21,12 +21,8 @@ import org.openehr.rm.RMObject;
 import org.openehr.rm.datatypes.basic.DvBoolean;
 import org.openehr.rm.datatypes.basic.DvState;
 import org.openehr.rm.datatypes.encapsulated.DvParsable;
-import org.openehr.rm.datatypes.quantity.DvCount;
-import org.openehr.rm.datatypes.quantity.DvInterval;
-import org.openehr.rm.datatypes.quantity.DvOrdered;
 import org.openehr.rm.datatypes.quantity.DvOrdinal;
 import org.openehr.rm.datatypes.quantity.DvQuantity;
-import org.openehr.rm.datatypes.quantity.ReferenceRange;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
@@ -48,7 +44,7 @@ public class DataTypesBuildTest extends BuildTestBase {
         RMObject obj = builder.construct(type, values);
         assertTrue(obj instanceof DvBoolean);
         DvBoolean booleanObj = (DvBoolean) obj;
-        assertEquals("value", true, booleanObj.value());
+        assertEquals("value", true, booleanObj.getValue());
 
         // false value
         values.clear();
@@ -56,7 +52,7 @@ public class DataTypesBuildTest extends BuildTestBase {
         obj = builder.construct(type, values);
         assertTrue(obj instanceof DvBoolean);
         booleanObj = (DvBoolean) obj;
-        assertEquals("value", false, booleanObj.value());
+        assertEquals("value", false, booleanObj.getValue());
     }
 
     public void testBuildDvState() throws Exception {
@@ -130,61 +126,6 @@ public class DataTypesBuildTest extends BuildTestBase {
         DvParagraph paragraph = (DvParagraph) obj;
         assertEquals("items.size", items.size(), paragraph.getItems().size());
         assertEquals("items", items, paragraph.getItems());
-    }
-
-    // test datatypes.quantity classes
-    public void testBuildDvCount() throws Exception {
-        String type = "DvCount";
-
-        // with referenceRanges
-        Map<String, Object> values = new HashMap<String, Object>();
-        DvText normal = new DvText(ReferenceRange.NORMAL, lang,
-                charset, ts);
-        DvCount lower = new DvCount(1);
-        DvCount upper = new DvCount(10);
-        ReferenceRange<DvCount> normalRange = new ReferenceRange<DvCount>(
-                normal, new DvInterval<DvCount>(lower, upper));
-        List<ReferenceRange<? extends DvOrdered>> referenceRanges =
-                new ArrayList<ReferenceRange<? extends DvOrdered>>();
-        referenceRanges.add(normalRange);
-        values.put("referenceRanges", referenceRanges);
-        values.put("magnitude", new Integer(5));
-
-        RMObject obj = builder.construct(type, values);
-        assertTrue(obj instanceof DvCount);
-        DvCount count = (DvCount) obj;
-        assertEquals("magnitude", 5, count.getMagnitude().intValue());
-        assertEquals("referenceRanges", referenceRanges,
-                count.getReferenceRanges());
-        assertEquals("accuracy", 0.0, count.getAccuracy());
-        assertEquals("accuracyPercent", false, count.isAccuracyPercent());
-
-        // without referenceRanges
-        values.clear();
-        values.put("magnitude", 3);
-        obj = builder.construct(type, values);
-        assertTrue(obj instanceof DvCount);
-        count = (DvCount) obj;
-        assertEquals("magnitude", 3, count.getMagnitude().intValue());
-        assertEquals("referenceRanges", null, count.getReferenceRanges());
-        assertEquals("accuracy", 0.0, count.getAccuracy());
-        assertEquals("accuracyPercent", false, count.isAccuracyPercent());
-
-        // with good string value
-        values.clear();
-        values.put("magnitude", "3");
-        obj = builder.construct(type, values);
-        assertTrue(obj instanceof DvCount);
-
-        // with bad string value
-        values.clear();
-        values.put("magnitude", "wrong type");
-        try {
-            obj = builder.construct(type, values);
-            fail("attribute format exception should be thrown here");
-        } catch (Exception e) {
-            assertTrue(e instanceof AttributeFormatException);
-        }
     }
 
     public void testBuildOrdinal() throws Exception {
@@ -348,7 +289,7 @@ public class DataTypesBuildTest extends BuildTestBase {
  *  The Original Code is DataTypesBuildTest.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2006
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

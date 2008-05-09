@@ -31,6 +31,7 @@ import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
+import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 
@@ -181,8 +182,9 @@ public class DataStructuresBuildTest extends BuildTestBase {
         ItemStructure data = itemList();
         DvDateTime time = new DvDateTime("2004-10-30T14:22:00");
         DvDuration width = DvDuration.getInstance("P1d");
-        DvCodedText mathFunction = new DvCodedText("mean",
-        		lang, charset, TestTerminologyAccess.EVENT_MATH_MEAN, ts);
+        CodePhrase mathMean = new CodePhrase("openehr", "146");
+        DvCodedText mathFunction = new DvCodedText("mean", lang, charset, 
+        		mathMean, ts);
         values.put("archetypeNodeId", archetypeNodeId);
         values.put("name", name);
         values.put("time", time);

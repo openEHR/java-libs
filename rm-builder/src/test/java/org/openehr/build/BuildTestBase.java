@@ -17,9 +17,8 @@ package org.openehr.build;
 import junit.framework.TestCase;
 import org.openehr.rm.common.generic.PartyIdentified;
 import org.openehr.rm.datastructure.itemstructure.ItemList;
-import org.openehr.rm.support.identification.HierarchicalObjectID;
-import org.openehr.rm.support.identification.ObjectReference;
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.support.identification.*;
+import org.openehr.rm.support.measurement.*;
 import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
@@ -31,6 +30,7 @@ import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.common.generic.PartySelf;
+import org.openehr.terminology.SimpleTerminologyService;
 
 import java.util.*;
 
@@ -41,17 +41,17 @@ import java.util.*;
  * @author Rong Chen
  */
 public class BuildTestBase extends TestCase {
-
-    /**
+	
+	/**
      * The fixture set up called before every test method.
      */
     protected void setUp() throws Exception {
         Map<SystemValue,Object> values = new HashMap<SystemValue,Object>();
         values.put(SystemValue.LANGUAGE, lang);
         values.put(SystemValue.CHARSET, charset);
+        values.put(SystemValue.ENCODING, charset);
         values.put(SystemValue.TERMINOLOGY_SERVICE, ts);
-        values.put(SystemValue.MEASUREMENT_SERVICE,
-                TestMeasurementService.getInstance());
+        values.put(SystemValue.MEASUREMENT_SERVICE, ms);
         builder = new RMObjectBuilder(values);
     }
 
@@ -105,20 +105,20 @@ public class BuildTestBase extends TestCase {
     
     // test subject
     protected PartySelf subject() throws Exception {
-        PartyReference party = new PartyReference(
-                new HierarchicalObjectID("1.2.4.5.6.12.1"), ObjectReference.Type.PARTY);
+        PartyRef party = new PartyRef(new HierObjectID("1.2.4.5.6.12.1"), 
+        		ObjectRef.Type.PARTY);
         return new PartySelf(party);
     }
     
     // test provider
     protected PartyIdentified provider() throws Exception {
-        PartyReference performer = new PartyReference(
-                new HierarchicalObjectID("1.3.3.1"), ObjectReference.Type.ORGANISATION);
+        PartyRef performer = new PartyRef(new HierObjectID("1.3.3.1"), 
+        		ObjectRef.Type.ORGANISATION);
         return new PartyIdentified(performer, "provider's name", null);
     }
     
-    protected HierarchicalObjectID hid(String value) throws Exception {
-        return new HierarchicalObjectID(value);
+    protected HierObjectID hid(String value) throws Exception {
+        return new HierObjectID(value);
     }
 
     // test  territory
@@ -140,15 +140,24 @@ public class BuildTestBase extends TestCase {
         CodePhrase codePhrase =
                 new CodePhrase(TerminologyService.OPENEHR, code);
         
-        return new DvCodedText(value, lang, charset, codePhrase,
-                TestTerminologyService.getInstance());        
+        return new DvCodedText(value, lang, charset, codePhrase, ts);
     }
     
     /* field */
     protected RMObjectBuilder builder;
-    protected static CodePhrase lang = TestCodeSetAccess.ENGLISH;
-    protected static CodePhrase charset = TestCodeSetAccess.LATIN_1;
-    protected static TerminologyService ts = TestTerminologyService.getInstance();
+    protected static CodePhrase lang = new CodePhrase("ISO_639-1", "en");
+    protected static CodePhrase charset = new CodePhrase("IANA_character-sets", "UTF-8");
+    protected static TerminologyService ts;
+    protected static MeasurementService ms;
+    
+    static {
+    	try {
+    		ts = SimpleTerminologyService.getInstance();
+    		ms = SimpleMeasurementService.getInstance();
+    	} catch (Exception e) {
+    		throw new RuntimeException("failed to start terminology or measure service");
+    	}
+    }
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
