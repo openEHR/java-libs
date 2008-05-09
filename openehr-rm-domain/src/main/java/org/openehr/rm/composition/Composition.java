@@ -23,6 +23,7 @@ import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.text.DvCodedText;
+import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 import java.util.*;
@@ -118,11 +119,13 @@ public final class Composition extends Locatable {
             throw new IllegalArgumentException(
                     "unknown category: " + category.getDefiningCode());
         }
-        if (!terminologyService.codeSet("countries").hasCode(territory)) {
+        if (!terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.COUNTRIES).hasCode(territory)) {
             throw new IllegalArgumentException(
                     "unknown territory: " + territory);
         }
-        if (!terminologyService.codeSet("languages").hasLang(language)) {
+        if (!terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(language)) {
             throw new IllegalArgumentException("unknown language:" + language);
         }
 

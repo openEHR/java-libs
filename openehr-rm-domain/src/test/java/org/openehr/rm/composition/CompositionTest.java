@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import org.openehr.rm.support.terminology.TestTerminologyAccess;
+import org.openehr.terminology.SimpleTerminologyService;
 
 /**
  * CompositionTest
@@ -223,6 +224,27 @@ public class CompositionTest extends CompositionTestBase {
         composition = new Composition(id, "at0001", name, archetypeDetails,
                 null, null, null, content, TestTerminologyAccess.ENGLISH, context(), 
                 provider(), category, territory(), ts);
+    }
+    
+    public void testBuildCompositionWithOpenEHRTerminology() throws Exception {
+    	DvText name = new DvText("composition2");
+        UIDBasedID id = new HierObjectID("1.11.2.4.22.5.3");
+        List<ContentItem> content = new ArrayList<ContentItem>();
+        content.add(section("section one"));
+        
+        TerminologyService ts = SimpleTerminologyService.getInstance();
+        CodePhrase lang = new CodePhrase("ISO_639-1", "en");
+        CodePhrase charset = new CodePhrase("IANA_character-sets", "UTF-8");
+        CodePhrase event = new CodePhrase("openehr", "433");
+        DvCodedText category = new DvCodedText("event", lang, charset, event, 
+        		ts);
+        CodePhrase territory = new CodePhrase("ISO_3166-1", "SE");
+        
+        Archetyped archetypeDetails = new Archetyped(new ArchetypeID(
+                "openehr-ehr_rm-Composition.physical_examination.v2"), "1.0");
+        composition = new Composition(id, "at0001", name, archetypeDetails,
+                null, null, null, content, lang, context(), 
+                provider(), category, territory, ts);
     }
 
     public void testValidPath() throws Exception {
