@@ -20,6 +20,13 @@
  */
 package org.openehr.rm.datatypes.quantity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.openehr.rm.datatypes.text.DvText;
+
 import junit.framework.TestCase;
 
 public class DvCountTest extends TestCase {
@@ -64,6 +71,24 @@ public class DvCountTest extends TestCase {
         assertTrue("c2 > c1", c2.compareTo(c1) > 0);
         assertTrue("c3 == c1", c3.compareTo(c1) == 0);
         assertTrue("c1 == c3", c1.compareTo(c3) == 0);
+    }
+    
+    public void testGetOtherReferenceRanges() throws Exception {
+    	Map<String, Object> values = new HashMap<String, Object>();
+        DvText normal = new DvText(ReferenceRange.NORMAL);
+        DvCount lower = new DvCount(1);
+        DvCount upper = new DvCount(10);
+        ReferenceRange<DvCount> normalRange = new ReferenceRange<DvCount>(
+                normal, new DvInterval<DvCount>(lower, upper));
+        List<ReferenceRange<DvCount>> otherReferenceRanges =
+                new ArrayList<ReferenceRange<DvCount>>();
+        otherReferenceRanges.add(normalRange);
+        
+        DvCount count = new DvCount(otherReferenceRanges, null, null, 0.0, 
+        		false, null, 5);
+        
+        assertEquals("otherReferenceRanges wrong", otherReferenceRanges,
+        				count.getOtherReferenceRanges());
     }
 }
 /*
