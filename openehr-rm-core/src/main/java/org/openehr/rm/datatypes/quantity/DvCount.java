@@ -30,7 +30,7 @@ import java.util.List;
 public final class DvCount extends DvAmount<DvCount> {
 
 	/**
-	 * Constructs a Countalbe by all components
+	 * Constructs a Countable by all components
 	 *
 	 * @param otherReferenceRanges
 	 * @param normalRange 
@@ -56,7 +56,7 @@ public final class DvCount extends DvAmount<DvCount> {
 	}
 
 	/**
-	 * Constructs a Countalbe by magnitude
+	 * Constructs a Countable by magnitude
 	 *
 	 * @param magnitude
 	 */
@@ -93,7 +93,7 @@ public final class DvCount extends DvAmount<DvCount> {
 	 * be the difference type of this quantity type.
 	 *
 	 * @param q
-	 * @return product of substration
+	 * @return product of subtraction
 	 */
 	public DvQuantified<DvCount> subtract(DvQuantified q) {
 		final DvCount c = (DvCount) q;
