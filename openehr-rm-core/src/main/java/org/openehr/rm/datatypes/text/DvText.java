@@ -43,7 +43,7 @@ public class DvText extends DataValue {
      * @param value              not null or empty or contains
      * @param mappings           null if unspecified
      * @param formatting         null if unspecified
-     * @param hyperlink          null if unspecifed
+     * @param hyperlink          null if unspecified
      * @param language           not null and valid language code
      * @param encoding            not null and valid encoding code
      * @param terminologyService not null
