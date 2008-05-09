@@ -18,7 +18,7 @@ import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.datatypes.text.DvCodedText;
-import org.openehr.rm.support.terminology.TerminologyService;
+import org.openehr.rm.support.terminology.*;
 
 /**
  * Model of a transition in the Instruction State machine, caused by a careflow step.
@@ -51,12 +51,14 @@ public final class ISMTransition extends RMObject {
 			throw new IllegalArgumentException("null terminologyService");
 		}
 		if (!terminologyService.terminology(TerminologyService.OPENEHR)
-                        .codesForGroupName("ISM states", "en")
+                        .codesForGroupName(OpenEHRTerminologyGroupIdentifiers
+                        		.INSTRUCTION_STATES.getValue(), "en")
                         .contains(currentState.getDefiningCode())) {
 			throw new IllegalArgumentException("unknown currentState:" + currentState);
 		}
 		if (transition != null && !terminologyService.terminology(TerminologyService.OPENEHR)
-                        .codesForGroupName("ISM transitions", "en")
+                        .codesForGroupName(OpenEHRTerminologyGroupIdentifiers
+                        		.INSTRUCTION_TRANSITIONS.getValue(), "en")
                         .contains(transition.getDefiningCode())) {
 			throw new IllegalArgumentException("unknown transition:" + transition);
 		}

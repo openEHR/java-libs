@@ -5,6 +5,7 @@ import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.terminology.TestTerminologyAccess;
 import org.openehr.rm.support.terminology.TestTerminologyService;
+import org.openehr.terminology.SimpleTerminologyService;
 
 import junit.framework.TestCase;
 
@@ -34,5 +35,15 @@ public class ISMTransitionTest extends TestCase {
         assertEquals("currentState wrong", currentState, ismt.getCurrentState());
         assertEquals("transition wrong", transition, ismt.getTransition());
         assertEquals("careflowStep wrong", careflowStep, ismt.getCareflowStep());
+	}
+	
+	public void testWithOpenEHRTerminology() throws Exception {
+		TerminologyService ts = SimpleTerminologyService.getInstance();
+		CodePhrase lang = new CodePhrase("ISO_639-1", "en");
+		CodePhrase encoding = new CodePhrase("IANA_character-sets", "UTF-8");
+		DvCodedText planned = new DvCodedText("planned", lang, encoding, 
+    			new CodePhrase("openehr", "526"), ts);
+        
+		new ISMTransition(planned, null, null, ts);        
 	}
 }
