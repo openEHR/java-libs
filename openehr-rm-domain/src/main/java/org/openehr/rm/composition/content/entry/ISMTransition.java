@@ -15,6 +15,7 @@
 package org.openehr.rm.composition.content.entry;
 
 import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -37,6 +38,7 @@ public final class ISMTransition extends RMObject {
 	 * @param links
 	 * @param parent
 	 */
+	@FullConstructor
 	public ISMTransition(
             @Attribute(name = "currentState", required = true) DvCodedText currentState,
             @Attribute(name = "transition") DvCodedText transition,
