@@ -82,11 +82,11 @@ public class DataStructuresBuildTest extends BuildTestBase {
         Map<String, Object> values = new HashMap<String, Object>();
         String archetypeNodeId = "at0001";
         DvText name = new DvText("test item list", lang, charset, ts);
-        Cluster cluster = cluster();
+        List<Element> items = new ArrayList<Element>();
 
         values.put("archetypeNodeId", archetypeNodeId);
         values.put("name", name);
-        values.put("representation", cluster);
+        values.put("items", items);
         RMObject obj = builder.construct("ItemList", values);
 
         assertTrue(obj instanceof ItemList);
@@ -94,7 +94,7 @@ public class DataStructuresBuildTest extends BuildTestBase {
         assertEquals("archetypeNodeId", archetypeNodeId,
                 itemList.getArchetypeNodeId());
         assertEquals("name", name, itemList.getName());
-        assertEquals("representation", cluster, itemList.getRepresentation());
+        assertEquals("items", items, itemList.getItems());
     }
 
     public void testBuildItemSingle() throws Exception {

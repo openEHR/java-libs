@@ -24,7 +24,7 @@ import java.util.*;
 
 /**
  * Reference model class instances builder
- *
+ * 
  * @author Rong Chen
  * @version 1.0
  */
@@ -32,17 +32,23 @@ public class RMObjectBuilder {
 
 	/**
 	 * Create a RMObjectBuilder
-	 *
+	 * 
 	 * @param systemValues
 	 */
 	public RMObjectBuilder(Map<SystemValue, Object> systemValues) {
+
+		this();
+
 		if (systemValues == null) {
 			throw new IllegalArgumentException("systemValues null");
 		}
 		this.systemValues = systemValues;
+	}
+
+	// for testing purpose
+	RMObjectBuilder() {
 		this.typeMap = new HashMap<String, Class>();
 		this.upperCaseMap = new HashMap<String, Class>();
-
 		try {
 			loadTypeMap();
 		} catch (ClassNotFoundException e) {
@@ -60,7 +66,8 @@ public class RMObjectBuilder {
 		names = new String[] { "DvBoolean", "DvState", "DvIdentifier" };
 		loadPackage("datatypes.basic", names);
 
-		names = new String[] { "DvText", "DvCodedText", "DvParagraph" };
+		names = new String[] { "DvText", "DvCodedText", "DvParagraph", 
+				"CodePhrase" };
 		loadPackage("datatypes.text", names);
 
 		names = new String[] { "DvCount", "DvOrdinal", "DvQuantity",
@@ -68,10 +75,11 @@ public class RMObjectBuilder {
 		loadPackage("datatypes.quantity", names);
 
 		names = new String[] { "DvDate", "DvDateTime", "DvTime", "DvDuration" };
-		//"DvPartialDate", "DvPartialTime"};
+		// "DvPartialDate", "DvPartialTime"};
 		loadPackage("datatypes.quantity.datetime", names);
 
-		names = new String[] { "DvParsable", "DvMultimedia" };
+		// TODO "DvMultimedia" excluded for now
+		names = new String[] { "DvParsable" };
 		loadPackage("datatypes.encapsulated", names);
 
 		// load datastructure classes
@@ -86,8 +94,8 @@ public class RMObjectBuilder {
 		loadPackage("datastructure.history", names);
 
 		// load ehr classes
-		names = new String[] { "Action", "Activity", "Evaluation", "Instruction",
-				"Observation", "AdminEntry" };
+		names = new String[] { "Action", "Activity", "Evaluation",
+				"Instruction", "Observation", "AdminEntry" };
 		loadPackage("composition.content.entry", names);
 		loadPackage("composition.content.navigation",
 				new String[] { "Section" });
@@ -113,11 +121,10 @@ public class RMObjectBuilder {
 	}
 
 	/*
-	 * Return a map with name as the key and index of position as the value
-	 * for required parameters of the full constructor in the RMObject
-	 *
-	 * @param rmClass
-	 * @return
+	 * Return a map with name as the key and index of position as the value for
+	 * required parameters of the full constructor in the RMObject
+	 * 
+	 * @param rmClass @return
 	 */
 
 	private Map<String, Class> attributeType(Class rmClass) {
@@ -146,9 +153,9 @@ public class RMObjectBuilder {
 	}
 
 	/**
-	 * Return a map with name as the key and index of position as the value
-	 * for all parameters of the full constructor in the RMObject
-	 *
+	 * Return a map with name as the key and index of position as the value for
+	 * all parameters of the full constructor in the RMObject
+	 * 
 	 * @param rmClass
 	 * @return
 	 */
@@ -169,9 +176,9 @@ public class RMObjectBuilder {
 	}
 
 	/**
-	 * Return a map with name as the key and index of position as the value
-	 * for all parameters of the full constructor in the RMObject
-	 *
+	 * Return a map with name as the key and index of position as the value for
+	 * all parameters of the full constructor in the RMObject
+	 * 
 	 * @param rmClass
 	 * @return
 	 */
@@ -203,7 +210,7 @@ public class RMObjectBuilder {
 
 	/**
 	 * Return system value for given id
-	 *
+	 * 
 	 * @param id
 	 * @return null if not there
 	 */
@@ -212,13 +219,11 @@ public class RMObjectBuilder {
 	}
 
 	/**
-	 * Construct an instance of RM class of given name and values.
-	 * <p/>
-	 * If the input is a string, and the required attribute is some other
-	 * types (integer, double etc), it will be converted into right type. if
-	 * there is any error during conversion, AttributeFormatException will be
-	 * thrown.
-	 *
+	 * Construct an instance of RM class of given name and values. <p/> If the
+	 * input is a string, and the required attribute is some other types
+	 * (integer, double etc), it will be converted into right type. if there is
+	 * any error during conversion, AttributeFormatException will be thrown.
+	 * 
 	 * @param rmClassName
 	 * @param valueMap
 	 * @return created instance
@@ -330,6 +335,82 @@ public class RMObjectBuilder {
 		return (RMObject) ret;
 	}
 
+	/**
+	 * Finds the matching RM class that can be used to create RM object for
+	 * given value map
+	 * 
+	 * @param valueMap
+	 * @return null if no match RM class is found
+	 */
+	public String findMatchingRMClass(Map<String, Object> valueMap) {
+		List simpleTypes = Arrays.asList(SIMPLE_VALUE_TYPES);
+		
+		for (Class rmClass : typeMap.values()) {
+
+			log.debug("matching rmClass: " + rmClass.getName());
+			
+			if(simpleTypes.contains(rmClass.getSimpleName())) {
+				continue; // skip simple value types
+			}
+
+			Constructor constructor = fullConstructor(rmClass);
+			Annotation[][] annotations = constructor.getParameterAnnotations();
+			Class[] types = constructor.getParameterTypes();
+			boolean matched = true;
+			Set<String> attributes = new HashSet<String>();
+
+			for (int i = 0; i < types.length; i++) {
+				Attribute attribute = (Attribute) annotations[i][0];
+				attributes.add(attribute.name());
+
+				log.debug("checking attribute: " + attribute.name());
+
+				String attrName = attribute.name();
+				Object attrValue = valueMap.get(attrName);
+				if (attribute.required() && attrValue == null) {
+
+					log.debug("missing required attribute..");
+
+					matched = false;
+					break;
+
+				} else if (attrValue != null) {
+					if (((attrValue instanceof Boolean) && types[i] != boolean.class)
+							|| ((attrValue instanceof Integer) && types[i] != Integer.class)
+							|| ((attrValue instanceof Double) && types[i] != double.class)) {
+
+						log.debug("wrong primitive value type for attribute..");
+						matched = false;
+						break;
+
+					} else if (!types[i].isPrimitive()
+							&& !types[i].isInstance(attrValue)) {
+						log.debug("wrong value type for attribute..");
+						matched = false;
+						break;
+
+					}
+				}
+			}
+
+			for (String attr : valueMap.keySet()) {
+				if (!attributes.contains(attr)) {
+
+					log.debug("unknown attribute: " + attr);
+
+					matched = false;
+				}
+			}
+
+			// matching found
+			if (matched) {
+				String className = rmClass.getSimpleName();
+				return className;
+			}
+		}
+		return null;
+	}
+
 	// todo: isn't there any support from java api on this?
 	private Object defaultValue(Class type) {
 		if (type == boolean.class) {
@@ -351,16 +432,21 @@ public class RMObjectBuilder {
 		}
 		return null;
 	}
+	
+	/* skipped simple value types in DADL during rm class matching */
+	private static final String[] SIMPLE_VALUE_TYPES = {
+		"DvDateTime", "DvDate", "DvTime", "DvDuration"
+	};
 
 	/* logger */
 	private static final Logger log = Logger.getLogger(RMObjectBuilder.class);
 
 	/* fields */
-	private final Map<SystemValue, Object> systemValues;
+	private Map<SystemValue, Object> systemValues;
 
 	// loaded rm type map
-	private final Map<String, Class> typeMap;
-	private final Map<String, Class> upperCaseMap;
+	private Map<String, Class> typeMap;
+	private Map<String, Class> upperCaseMap;
 	private static final Set<String> stringParsingTypes;
 
 	static {
@@ -373,31 +459,27 @@ public class RMObjectBuilder {
 }
 
 /*
- *  ***** BEGIN LICENSE BLOCK *****
- *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
- *
- *  The contents of this file are subject to the Mozilla Public License Version
- *  1.1 (the 'License'); you may not use this file except in compliance with
- *  the License. You may obtain a copy of the License at
- *  http://www.mozilla.org/MPL/
- *
- *  Software distributed under the License is distributed on an 'AS IS' basis,
- *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- *  for the specific language governing rights and limitations under the
- *  License.
- *
- *  The Original Code is RMObjectBuilder.java
- *
- *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2006
- *  the Initial Developer. All Rights Reserved.
- *
- *  Contributor(s):
- *
+ * ***** BEGIN LICENSE BLOCK ***** Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ * 
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the 'License'); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.mozilla.org/MPL/
+ * 
  * Software distributed under the License is distributed on an 'AS IS' basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
- *
- *  ***** END LICENSE BLOCK *****
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * 
+ * The Original Code is RMObjectBuilder.java
+ * 
+ * The Initial Developer of the Original Code is Rong Chen. Portions created by
+ * the Initial Developer are Copyright (C) 2003-2006 the Initial Developer. All
+ * Rights Reserved.
+ * 
+ * Contributor(s):
+ * 
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * 
+ * ***** END LICENSE BLOCK *****
  */
