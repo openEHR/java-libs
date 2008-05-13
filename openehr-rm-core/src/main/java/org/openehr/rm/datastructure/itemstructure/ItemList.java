@@ -29,6 +29,7 @@ import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.text.DvText;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -61,7 +62,32 @@ public final class ItemList extends ItemStructure {
                             @Attribute(name = "feederAudit") FeederAudit feederAudit,
                             @Attribute(name = "links") Set<Link> links,
                             @Attribute(name = "parent") Locatable parent, 
-                            @Attribute(name = "representation", required = true) Cluster representation) {
+                            @Attribute(name = "items") List<Element> items) {
+
+        super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
+                links, parent, null);
+        this.items = Collections.unmodifiableList(items);
+    }
+    
+    /**
+     * Constructs an ItemList
+     *
+     * @param uid
+     * @param archetypeNodeId
+     * @param name
+     * @param archetypeDetails
+     * @param feederAudit
+     * @param links
+     * @param representation
+     */
+    public ItemList(UIDBasedID uid,
+                    String archetypeNodeId,
+                    DvText name,
+                    Archetyped archetypeDetails,
+                    FeederAudit feederAudit,
+                    Set<Link> links,
+                    Locatable parent, 
+                    Cluster representation) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
                 links, parent, representation);

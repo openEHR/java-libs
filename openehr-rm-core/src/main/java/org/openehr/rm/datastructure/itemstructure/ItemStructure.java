@@ -43,8 +43,7 @@ public abstract class ItemStructure extends DataStructure {
      * @param archetypeDetails
      * @param feederAudit
      * @param links
-     * @param representation
-     * @throws IllegalArgumentException if representation null
+     * @param representation null if unspecified
      */
     protected ItemStructure(UIDBasedID uid, String archetypeNodeId, DvText name,
                             Archetyped archetypeDetails, FeederAudit feederAudit,
@@ -52,9 +51,6 @@ public abstract class ItemStructure extends DataStructure {
                             Item representation) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
                 links, parent);
-        if (representation == null) {
-            throw new IllegalArgumentException("null representation");
-        }
         this.representation = representation;
     }
 
