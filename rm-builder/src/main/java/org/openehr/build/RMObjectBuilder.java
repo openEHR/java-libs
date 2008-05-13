@@ -13,6 +13,7 @@
  */
 package org.openehr.build;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
@@ -246,7 +247,7 @@ public class RMObjectBuilder {
 		Map<String, Integer> indexMap = attributeIndex(rmClass);
 		Map<String, Attribute> attributeMap = attributeMap(rmClass);
 		Object[] valueArray = new Object[indexMap.size()];
-
+		
 		for (String name : typeMap.keySet()) {
 			Object value = valueMap.get(name);
 			if (!typeMap.containsKey(name) || !attributeMap.containsKey(name)) {
@@ -334,6 +335,35 @@ public class RMObjectBuilder {
 		}
 		return (RMObject) ret;
 	}
+	
+	private String toCamelCase(String underscoreSeparated) {
+		StringTokenizer tokens = new StringTokenizer(underscoreSeparated, "_");
+		StringBuffer buf = new StringBuffer();
+		while(tokens.hasMoreTokens()) {
+			String word = tokens.nextToken();
+			if(buf.length() == 0) {
+				buf.append(word);
+			} else {
+				buf.append(word.substring(0, 1).toUpperCase());
+				buf.append(word.substring(1));
+			}
+		}
+		return buf.toString();
+	}
+	
+	private String toUnderscoreSeparated(String camelCase) {
+		String[] array = StringUtils.splitByCharacterTypeCamelCase(camelCase);
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < array.length; i++) {
+			String s = array[i];
+			buf.append(s.substring(0, 1).toLowerCase());
+			buf.append(s.substring(1));
+			if(i != array.length -1 ) {
+				buf.append("_");
+			}
+		}
+		return buf.toString();
+	}
 
 	/**
 	 * Finds the matching RM class that can be used to create RM object for
@@ -352,6 +382,12 @@ public class RMObjectBuilder {
 			if(simpleTypes.contains(rmClass.getSimpleName())) {
 				continue; // skip simple value types
 			}
+			
+			// replace underscore separated names with camel case
+			Map<String, Object> filteredMap = new HashMap<String, Object>();
+			for(String name : valueMap.keySet()) {
+				filteredMap.put(toCamelCase(name), valueMap.get(name));
+			}
 
 			Constructor constructor = fullConstructor(rmClass);
 			Annotation[][] annotations = constructor.getParameterAnnotations();
@@ -366,7 +402,8 @@ public class RMObjectBuilder {
 				log.debug("checking attribute: " + attribute.name());
 
 				String attrName = attribute.name();
-				Object attrValue = valueMap.get(attrName);
+				Object attrValue = filteredMap.get(attrName);
+				
 				if (attribute.required() && attrValue == null) {
 
 					log.debug("missing required attribute..");
@@ -393,7 +430,7 @@ public class RMObjectBuilder {
 				}
 			}
 
-			for (String attr : valueMap.keySet()) {
+			for (String attr : filteredMap.keySet()) {
 				if (!attributes.contains(attr)) {
 
 					log.debug("unknown attribute: " + attr);

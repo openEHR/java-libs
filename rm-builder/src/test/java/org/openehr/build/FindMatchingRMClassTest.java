@@ -55,10 +55,19 @@ public class FindMatchingRMClassTest extends TestCase {
 		assertMatch("CodePhrase");
 	}
 	
-	public void testElement() {
+	public void testMatchElement() {
 		DvText name = new DvText("name");
 		DvQuantity value = new DvQuantity("mmHg", 120.0, ms);
 		valueMap.put("archetypeNodeId", "at0001");
+		valueMap.put("name", name);
+		valueMap.put("value", value);
+		assertMatch("Element");
+	}
+	
+	public void testWithUnderscoreSeparatedAttributeName() {
+		DvText name = new DvText("name");
+		DvQuantity value = new DvQuantity("mmHg", 120.0, ms);
+		valueMap.put("archetype_node_id", "at0001");
 		valueMap.put("name", name);
 		valueMap.put("value", value);
 		assertMatch("Element");
