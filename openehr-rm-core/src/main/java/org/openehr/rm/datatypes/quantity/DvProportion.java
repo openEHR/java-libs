@@ -49,9 +49,9 @@ public class DvProportion extends DvAmount<DvProportion> {
     		@Attribute (name = "accuracy") double accuracy, 
     		@Attribute (name = "accuracyPercent") boolean accuracyPercent,
     		@Attribute (name= "magnitudeStatus") String magnitudeStatus,
-    		@Attribute (name = "numerator") double numerator,
-    		@Attribute (name = "denominator") double denominator,
-    		@Attribute (name = "type") ProportionKind type,
+    		@Attribute (name = "numerator", required = true) double numerator,
+    		@Attribute (name = "denominator", required = true) double denominator,
+    		@Attribute (name = "type", required = true) ProportionKind type,
     		@Attribute (name = "precision") Integer precision) {
     	
         super(otherReferenceRanges, normalRange, normalStatus , accuracy,
