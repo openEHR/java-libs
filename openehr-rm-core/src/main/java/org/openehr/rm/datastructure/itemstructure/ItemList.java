@@ -106,6 +106,19 @@ public final class ItemList extends ItemStructure {
                     Cluster representation) {
         this(null, archetypeNodeId, name, null, null, null, null, representation);
     }
+    
+    /**
+     * Construct a ItemStructure with list of elements
+     *
+     * @param archetypeNodeId
+     * @param name
+     * @param items
+     * @throws IllegalArgumentException if representation null
+     */
+    public ItemList(String archetypeNodeId, DvText name,
+                    List<Element> items) {
+        this(null, archetypeNodeId, name, null, null, null, null, items);
+    }
 
     private List<Element> convert(Cluster cluster) {
         List<Element> items = new ArrayList<Element>();
