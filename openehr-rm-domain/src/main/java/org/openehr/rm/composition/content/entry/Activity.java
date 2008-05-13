@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.*;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.encapsulated.DvParsable;
@@ -49,6 +50,7 @@ public class Activity extends Locatable {
 	 * 
 	 * @throws IllegalArgumentExeption if required parameters missing
 	 */
+	@FullConstructor
 	public Activity(
 			@Attribute(name = "uid") UIDBasedID uid, 
 			@Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId, 
