@@ -17,6 +17,8 @@ package org.openehr.rm.datatypes.text;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.support.identification.TerminologyID;
 import org.openehr.rm.datatypes.basic.DataValue;
 
@@ -38,14 +40,18 @@ public final class CodePhrase extends DataValue {
      * @throws IllegalArgumentException if terminolgy null
      *          or codeString null or empty
      */
-    public CodePhrase(TerminologyID terminologyID, String codeString) {
-        if(terminologyID == null) {
+	@FullConstructor
+    		public CodePhrase(
+    		@Attribute(name = "terminologyId", required = true) TerminologyID terminologyId, 
+    		@Attribute(name = "codeString", required = true) String codeString) {
+        
+		if(terminologyId == null) {
             throw new IllegalArgumentException("null terminologyId");
         }
         if(StringUtils.isEmpty(codeString)) {
             throw new IllegalArgumentException("empty codeString");
         }
-        this.terminologyId = terminologyID;
+        this.terminologyId = terminologyId;
         this.codeString = codeString;
     }
 
