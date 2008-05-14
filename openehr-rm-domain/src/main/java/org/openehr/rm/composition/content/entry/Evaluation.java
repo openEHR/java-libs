@@ -53,7 +53,7 @@ public final class Evaluation extends CareEntry {
      * @param protocol           null if unspecified
      * @param actID              null if unspecified
      * @param guidelineId        null if unspecified
-     * @param otherParticipation null if unspecified
+     * @param otherParticipations null if unspecified
      * @param data
      * @throws IllegalArgumentException if data null
      */
@@ -70,14 +70,14 @@ public final class Evaluation extends CareEntry {
                               @Attribute(name = "subject", system = true) PartyProxy subject,
                               @Attribute(name = "provider", system = true) PartyProxy provider,
                               @Attribute(name = "workflowId") ObjectRef workflowId,
-                              @Attribute(name = "otherParticipation") List<Participation> otherParticipation,
+                              @Attribute(name = "otherParticipations") List<Participation> otherParticipations,
                               @Attribute(name = "protocol") ItemStructure protocol,
                               @Attribute(name = "guidelineId") ObjectRef guidelineId,
                               @Attribute(name = "data", required = true) ItemStructure data,
                               @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
                 parent, language, encoding, subject, provider, workflowId, 
-                otherParticipation, protocol, guidelineId, terminologyService);
+                otherParticipations, protocol, guidelineId, terminologyService);
 
         if (data == null) {
             throw new IllegalArgumentException("null data");

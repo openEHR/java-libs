@@ -76,7 +76,7 @@ public final class Instruction extends CareEntry {
                     @Attribute(name = "subject", system = true) PartyProxy subject,
                     @Attribute(name = "provider", system = true) PartyProxy provider,
                     @Attribute(name = "workflowId") ObjectRef workflowId,
-                    @Attribute(name = "otherParticipation") List<Participation> otherParticipations,
+                    @Attribute(name = "otherParticipations") List<Participation> otherParticipations,
                     @Attribute(name = "protocol") ItemStructure protocol,
                     @Attribute(name = "guidelineId") ObjectRef guidelineId,
                     @Attribute(name = "narrative", required = true) DvText narrative,

@@ -59,7 +59,7 @@ public final class Observation extends CareEntry {
      * @param protocol
      * @param actID
      * @param guidelineId
-     * @param otherParticipation
+     * @param otherParticipations
      * @param data
      * @param state              null if unspecified
      * @throws IllegalArgumentException if date null
@@ -74,10 +74,10 @@ public final class Observation extends CareEntry {
                                @Attribute(name = "parent") Locatable parent,
                                @Attribute(name = "language", required = true) CodePhrase language,
                                @Attribute(name = "encoding", required = true) CodePhrase encoding, 
-                               @Attribute(name = "subject", system = true) PartyProxy subject,
-                               @Attribute(name = "provider", system = true) PartyProxy provider,
+                               @Attribute(name = "subject", required = true) PartyProxy subject,
+                               @Attribute(name = "provider") PartyProxy provider,
                                @Attribute(name = "workflowId") ObjectRef workflowId,
-                               @Attribute(name = "otherParticipation") List<Participation> otherParticipation,
+                               @Attribute(name = "otherParticipations") List<Participation> otherParticipations,
                                @Attribute(name = "protocol") ItemStructure protocol,
                                @Attribute(name = "guidelineId") ObjectRef guidelineId,                              
                                @Attribute(name = "data", required = true) History<ItemStructure> data,
@@ -86,7 +86,7 @@ public final class Observation extends CareEntry {
                                ) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent,
-                language, encoding, subject, provider, workflowId, otherParticipation, 
+                language, encoding, subject, provider, workflowId, otherParticipations, 
                 protocol, guidelineId, terminologyService);
 
         if (data == null) {
