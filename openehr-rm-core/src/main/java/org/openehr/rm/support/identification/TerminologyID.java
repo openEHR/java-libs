@@ -15,6 +15,8 @@
 package org.openehr.rm.support.identification;
 
 import org.apache.commons.lang.StringUtils;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 
 /**
  * Terminology identifier. Instances of this class are immutable.
@@ -31,7 +33,7 @@ public final class TerminologyID extends ObjectID {
      * @param version null if not present
      * @throws IllegalArgumentException if name is empty
      */
-    public TerminologyID(String name, String version) {
+	public TerminologyID(String name, String version) {
 
         super(toValue(name, version));
 
@@ -45,7 +47,9 @@ public final class TerminologyID extends ObjectID {
      * @param value
      * @throws IllegalArgumentException if value empty or wrong format
      */
-    public TerminologyID(String value) {
+	@FullConstructor
+    public TerminologyID(
+    		@Attribute(name = "value", required = true)String value) {
         super(value);
         loadValue(value);
     }

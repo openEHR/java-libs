@@ -15,6 +15,8 @@
 package org.openehr.rm.support.identification;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
@@ -33,10 +35,10 @@ public final class ArchetypeID extends ObjectID {
      * @param value
      * @throws IllegalArgumentException if value wrong format
      */
-    public ArchetypeID(String value) {
-
+	@FullConstructor
+    public ArchetypeID(
+    		@Attribute(name = "value", required = true) String value) {
         super(value);
-
         loadValue(value);
     }
 

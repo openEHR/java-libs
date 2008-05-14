@@ -17,6 +17,8 @@ package org.openehr.rm.common.archetyped;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.identification.TemplateID;
@@ -48,8 +50,11 @@ public final class Archetyped extends RMObject {
      * @throws IllegalArgumentException if archetypeId null
      *                                  or rmVersion empty
      */
-    public Archetyped(ArchetypeID archetypeId, TemplateID templateId,    		
-                      String rmVersion) {
+	@FullConstructor
+    public Archetyped(
+    		@Attribute(name = "archetypeId", required = true) ArchetypeID archetypeId,
+    		@Attribute(name = "templateId") TemplateID templateId,
+    		@Attribute(name = "rmVersion", required = true) String rmVersion) {
         if (archetypeId == null) {
             throw new IllegalArgumentException("null archetypeId");
         }

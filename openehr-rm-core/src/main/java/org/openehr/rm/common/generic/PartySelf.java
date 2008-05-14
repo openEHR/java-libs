@@ -14,6 +14,8 @@
  */
 package org.openehr.rm.common.generic;
 
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.support.identification.PartyRef;
 
 public final class PartySelf extends PartyProxy {
@@ -23,7 +25,9 @@ public final class PartySelf extends PartyProxy {
      *
      *@param externalRef null if unspecified
      */
-    public PartySelf(PartyRef externalRef) {
+	@FullConstructor
+    public PartySelf(
+    		@Attribute(name = "externalRef") PartyRef externalRef) {
         super(externalRef);
     }
     
