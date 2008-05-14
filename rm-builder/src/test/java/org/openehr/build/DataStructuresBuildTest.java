@@ -29,6 +29,7 @@ import org.openehr.rm.datastructure.itemstructure.*;
 import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
+import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 import org.openehr.rm.datatypes.text.CodePhrase;
@@ -55,7 +56,19 @@ public class DataStructuresBuildTest extends BuildTestBase {
         assertEquals("name", name, element.getName());
         assertEquals("value", value, element.getValue());
     }
-
+    
+    public void testBuildElementWithUnderscoreSeparatedAttrName() throws Exception {
+        Map<String, Object> values = new HashMap<String, Object>();
+        String node = "at0001";
+        DvText name = new DvText("test element");
+        DvText value = new DvText("test value");
+        values.put("archetype_node_id", node);
+        values.put("name", name);
+        values.put("value", value);
+        RMObject obj = builder.construct("Element", values);
+        assertTrue(obj instanceof Element);
+    }
+    
     public void testBuildCluster() throws Exception {
         Map<String, Object> values = new HashMap<String, Object>();
         String archetypeNodeId = "at0001";
@@ -83,6 +96,9 @@ public class DataStructuresBuildTest extends BuildTestBase {
         String archetypeNodeId = "at0001";
         DvText name = new DvText("test item list", lang, charset, ts);
         List<Element> items = new ArrayList<Element>();
+        Element element = new Element("at0002", new DvText("element"),
+        		new DvQuantity("mmHg", 120.0, ms));
+        items.add(element);
 
         values.put("archetypeNodeId", archetypeNodeId);
         values.put("name", name);

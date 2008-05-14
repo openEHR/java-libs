@@ -4,7 +4,7 @@
  * keywords:    "builder"
  *
  * author:      "Rong Chen <rong.acode@gmail.com>"
- * copyright:   "Copyright (c) 2006 ACODE HB, Sweden"
+ * copyright:   "Copyright (c) 2003-2008 ACODE HB, Sweden"
  * license:     "See notice at bottom of class"
  *
  * file:        "$URL$"
@@ -15,9 +15,22 @@ package org.openehr.build;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.openehr.rm.Attribute;
-import org.openehr.rm.FullConstructor;
-import org.openehr.rm.RMObject;
+import org.openehr.rm.*;
+import org.openehr.rm.common.archetyped.*;
+import org.openehr.rm.common.generic.*;
+import org.openehr.rm.composition.Composition;
+import org.openehr.rm.composition.content.entry.*;
+import org.openehr.rm.composition.content.navigation.*;
+import org.openehr.rm.datastructure.history.*;
+import org.openehr.rm.datastructure.itemstructure.*;
+import org.openehr.rm.datastructure.itemstructure.representation.*;
+import org.openehr.rm.datatypes.basic.*;
+import org.openehr.rm.datatypes.encapsulated.*;
+import org.openehr.rm.datatypes.quantity.*;
+import org.openehr.rm.datatypes.quantity.datetime.*;
+import org.openehr.rm.datatypes.text.*;
+import org.openehr.rm.demographic.*;
+import org.openehr.rm.support.identification.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -48,8 +61,6 @@ public class RMObjectBuilder {
 
 	// for testing purpose
 	RMObjectBuilder() {
-		this.typeMap = new HashMap<String, Class>();
-		this.upperCaseMap = new HashMap<String, Class>();
 		try {
 			loadTypeMap();
 		} catch (ClassNotFoundException e) {
@@ -59,66 +70,49 @@ public class RMObjectBuilder {
 	}
 
 	// load all reference types that are possible to instantiate
-	// todo: possible to do this by reflection?
+	// using FullConstructor annotation
 	private Map<String, Class> loadTypeMap() throws ClassNotFoundException {
-		String[] names;
+		Class[] classes = {
+		
+			// common classes
+			PartySelf.class, Archetyped.class,
+			
+			// support classes
+			TerminologyID.class, ArchetypeID.class,
+			
+			// datatypes classes
+			DvBoolean.class, DvState.class, DvIdentifier.class,
+			DvText.class, DvCodedText.class, DvParagraph.class, 
+			CodePhrase.class,
+			DvCount.class, DvOrdinal.class, DvQuantity.class,
+			DvInterval.class, DvProportion.class,
+			DvDate.class, DvDateTime.class, DvTime.class, DvDuration.class,
+			DvParsable.class, // TODO "DvMultimedia" excluded for now			
 
-		// load datatypes classes
-		names = new String[] { "DvBoolean", "DvState", "DvIdentifier" };
-		loadPackage("datatypes.basic", names);
+			// datastructure classes
+			Element.class, Cluster.class, ItemSingle.class, 
+			ItemList.class, ItemTable.class, ItemTree.class,
+			History.class, IntervalEvent.class, PointEvent.class,
 
-		names = new String[] { "DvText", "DvCodedText", "DvParagraph", 
-				"CodePhrase" };
-		loadPackage("datatypes.text", names);
+			// ehr classes
+			Action.class, Activity.class, Evaluation.class,
+			Instruction.class, Observation.class, AdminEntry.class, 
+			Section.class, Composition.class,
 
-		names = new String[] { "DvCount", "DvOrdinal", "DvQuantity",
-				"DvInterval", "DvProportion" };
-		loadPackage("datatypes.quantity", names);
-
-		names = new String[] { "DvDate", "DvDateTime", "DvTime", "DvDuration" };
-		// "DvPartialDate", "DvPartialTime"};
-		loadPackage("datatypes.quantity.datetime", names);
-
-		// TODO "DvMultimedia" excluded for now
-		names = new String[] { "DvParsable" };
-		loadPackage("datatypes.encapsulated", names);
-
-		// load datastructure classes
-		names = new String[] { "Element", "Cluster" };
-		loadPackage("datastructure.itemstructure.representation", names);
-
-		names = new String[] { "ItemSingle", "ItemList", "ItemTable",
-				"ItemTree" };
-		loadPackage("datastructure.itemstructure", names);
-
-		names = new String[] { "History", "IntervalEvent", "PointEvent" };
-		loadPackage("datastructure.history", names);
-
-		// load ehr classes
-		names = new String[] { "Action", "Activity", "Evaluation",
-				"Instruction", "Observation", "AdminEntry" };
-		loadPackage("composition.content.entry", names);
-		loadPackage("composition.content.navigation",
-				new String[] { "Section" });
-		loadPackage("composition", new String[] { "Composition" });
-
-		// load demographic classes
-		names = new String[] { "Address", "PartyIdentity", "Agent", "Group",
-				"Organisation", "Person", "Contact", "PartyRelationship",
-				"Role", "Capability" };
-		loadPackage("demographic", names);
-
-		return typeMap;
-	}
-
-	private void loadPackage(String packageName, String[] typeNames)
-			throws ClassNotFoundException {
-		for (String name : typeNames) {
-			Class type = Class.forName("org.openehr.rm." + packageName + "."
-					+ name);
-			typeMap.put(name, type);
-			upperCaseMap.put(name.toUpperCase(), type);
+			// demographic classes
+			Address.class, PartyIdentity.class, Agent.class, Group.class,
+			Organisation.class, Person.class, Contact.class, 
+			PartyRelationship.class, Role.class, Capability.class 
+		};
+		
+		typeMap = new HashMap<String, Class>();
+		upperCaseMap = new HashMap<String, Class>();
+		for(Class klass : classes) {
+			String name = klass.getSimpleName();
+			typeMap.put(name, klass);
+			upperCaseMap.put(name.toUpperCase(), klass);
 		}
+		return typeMap;
 	}
 
 	/*
@@ -127,7 +121,6 @@ public class RMObjectBuilder {
 	 * 
 	 * @param rmClass @return
 	 */
-
 	private Map<String, Class> attributeType(Class rmClass) {
 
 		Map<String, Class> map = new HashMap<String, Class>();
@@ -241,6 +234,12 @@ public class RMObjectBuilder {
 			throw new RMObjectBuildingException("RM type unknown: \""
 					+ rmClassName + "\"");
 		}
+		
+		// replace underscore separated names with camel case
+		Map<String, Object> filteredMap = new HashMap<String, Object>();
+		for(String name : valueMap.keySet()) {
+			filteredMap.put(toCamelCase(name), valueMap.get(name));
+		}
 
 		Constructor constructor = fullConstructor(rmClass);
 		Map<String, Class> typeMap = attributeType(rmClass);
@@ -249,7 +248,7 @@ public class RMObjectBuilder {
 		Object[] valueArray = new Object[indexMap.size()];
 		
 		for (String name : typeMap.keySet()) {
-			Object value = valueMap.get(name);
+			Object value = filteredMap.get(name);
 			if (!typeMap.containsKey(name) || !attributeMap.containsKey(name)) {
 				throw new RMObjectBuildingException("unknown attribute " + name);
 			}
@@ -373,7 +372,7 @@ public class RMObjectBuilder {
 	 * @return null if no match RM class is found
 	 */
 	public String findMatchingRMClass(Map<String, Object> valueMap) {
-		List simpleTypes = Arrays.asList(SIMPLE_VALUE_TYPES);
+		List simpleTypes = Arrays.asList(SKIPPED_TYPES_IN_MATCHING);
 		
 		for (Class rmClass : typeMap.values()) {
 
@@ -390,6 +389,10 @@ public class RMObjectBuilder {
 			}
 
 			Constructor constructor = fullConstructor(rmClass);
+			if(constructor == null) {
+				throw new RuntimeException("annotated constructor missing for " 
+						+ rmClass);
+			}
 			Annotation[][] annotations = constructor.getParameterAnnotations();
 			Class[] types = constructor.getParameterTypes();
 			boolean matched = true;
@@ -470,11 +473,17 @@ public class RMObjectBuilder {
 		return null;
 	}
 	
-	/* skipped simple value types in DADL during rm class matching */
-	private static final String[] SIMPLE_VALUE_TYPES = {
-		"DvDateTime", "DvDate", "DvTime", "DvDuration"
+	/* 
+	 * Skipped types during matching:
+	 * 1. Simple value types in DADL
+	 * 2. Cluster due to clash with ItemList
+	 */
+	private static final String[] SKIPPED_TYPES_IN_MATCHING = {
+		"DvDateTime", "DvDate", "DvTime", "DvDuration", "Cluster",
+		// due to clash with DvText
+		"TerminologyID", "ArchetypeID"		
 	};
-
+	
 	/* logger */
 	private static final Logger log = Logger.getLogger(RMObjectBuilder.class);
 
@@ -509,7 +518,7 @@ public class RMObjectBuilder {
  * The Original Code is RMObjectBuilder.java
  * 
  * The Initial Developer of the Original Code is Rong Chen. Portions created by
- * the Initial Developer are Copyright (C) 2003-2006 the Initial Developer. All
+ * the Initial Developer are Copyright (C) 2003-2008 the Initial Developer. All
  * Rights Reserved.
  * 
  * Contributor(s):

@@ -31,6 +31,7 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvParagraph;
 import org.openehr.rm.datatypes.text.DvText;
+import org.openehr.rm.support.identification.TerminologyID;
 
 public class DataTypesBuildTest extends BuildTestBase {
 	
@@ -89,6 +90,21 @@ public class DataTypesBuildTest extends BuildTestBase {
         assertTrue(obj instanceof DvText);
         DvText text = (DvText) obj;
         assertEquals("value", value, text.getValue());
+    }
+    
+    public void testBuildCodePhrase() throws Exception {
+        String type = "CodePhrase";
+        Map<String, Object> values = new HashMap<String, Object>();
+        TerminologyID id = new TerminologyID("openehr");
+        values.put("terminologyId", id);
+        values.put("codeString", "1234");
+        RMObject obj = builder.construct(type, values);
+
+        assertTrue(obj instanceof CodePhrase);
+        CodePhrase cp = (CodePhrase) obj;
+        assertEquals("terminologyId wrong", "openehr", 
+        		cp.getTerminologyId().getValue());
+        assertEquals("codeString wrong", "1234", cp.getCodeString());
     }
 
     public void testBuildDvCodeText() throws Exception {
@@ -271,6 +287,8 @@ public class DataTypesBuildTest extends BuildTestBase {
         assertEquals("formalism", "GLIF3", parsable.getFormalism());
         assertEquals("value", "guideline text", parsable.getValue());
     }
+    
+    
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
