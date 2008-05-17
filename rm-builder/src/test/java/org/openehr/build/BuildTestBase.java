@@ -73,14 +73,33 @@ public class BuildTestBase extends TestCase {
         name = new DvText("test cluster", lang, charset, ts);
         return new Cluster("at0002", name, items);
     }
-
-    protected Cluster clusterTable() throws Exception {
-        List<Item> items = new ArrayList<Item>();
-        DvText name = new DvText("test clusterTable", lang, charset, ts);
-        for (int i = 0; i < 3; i++) {
-            items.add(cluster());
+    
+    private List<Element> elements() {
+    	DvText name = new DvText("test element", lang, charset, ts);
+        List<Element> items = new ArrayList<Element>();
+        for (int i = 0; i < 6; i++) {
+            DvText value = new DvText("test value" + i, lang, charset, ts);
+            items.add(new Element("at0001", name, value));
         }
-        return new Cluster("at0004", name, items);
+        return items;
+    }
+    
+    List<Item> items() {
+    	DvText name = new DvText("test element", lang, charset, ts);
+        List<Item> items = new ArrayList<Item>();
+        for (int i = 0; i < 6; i++) {
+            DvText value = new DvText("test value" + i, lang, charset, ts);
+            items.add(new Element("at0001", name, value));
+        }
+        return items;
+    }
+
+    protected List<Cluster> tableRows() throws Exception {
+        List<Cluster> rows = new ArrayList<Cluster>();
+        for (int i = 0; i < 3; i++) {
+            rows.add(cluster());
+        }
+        return rows;
     }
     // test element
     protected Element element() throws Exception {
@@ -99,8 +118,7 @@ public class BuildTestBase extends TestCase {
     }
 
     protected ItemList itemList() throws Exception {
-        return new ItemList(null, "at001", text("test itemList"), null, null, null, 
-                null, cluster());
+        return new ItemList("at001", "test itemList", elements());
     }
     
     // test subject

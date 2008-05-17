@@ -18,6 +18,7 @@
     <module>measure-serv</module>
     <module>mini-termserv</module>
     <module>adl-parser</module>
+    <module>rm-builder</module>
   </modules>
   <build>
     <plugins>

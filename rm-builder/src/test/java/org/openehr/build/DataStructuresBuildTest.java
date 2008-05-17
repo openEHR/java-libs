@@ -121,7 +121,7 @@ public class DataStructuresBuildTest extends BuildTestBase {
         DvText name = new DvText("test item single", lang, charset, ts);
         values.put("archetypeNodeId", archetypeNodeId);
         values.put("name", name);
-        values.put("representation", element);
+        values.put("item", element);
         RMObject obj = builder.construct("ItemSingle", values);
 
         assertTrue(obj instanceof ItemSingle);
@@ -129,7 +129,7 @@ public class DataStructuresBuildTest extends BuildTestBase {
         assertEquals("archetypeNodeId", archetypeNodeId,
                 itemSingle.getArchetypeNodeId());
         assertEquals("name", name, itemSingle.getName());
-        assertEquals("representation", element, itemSingle.getRepresentation());
+        assertEquals("item", element, itemSingle.getItem());
 
         // test with clas
         builder.construct("ITEM_SINGLE", values);
@@ -139,29 +139,29 @@ public class DataStructuresBuildTest extends BuildTestBase {
         Map<String, Object> values = new HashMap<String, Object>();
         String archetypeNodeId = "at0001";
         DvText name = new DvText("test item talbe", lang, charset, ts);
-        Cluster cluster = clusterTable();
+        List<Cluster> rows = tableRows();
 
         values.put("archetypeNodeId", archetypeNodeId);
         values.put("name", name);
-        values.put("representation", cluster);
+        values.put("rows", rows);
         RMObject obj = builder.construct("ItemTable", values);
 
         assertTrue(obj instanceof ItemTable);
         ItemTable itemTable = (ItemTable) obj;
         assertEquals("archetypeNodeId", archetypeNodeId, itemTable.getArchetypeNodeId());
         assertEquals("name", name, itemTable.getName());
-        assertEquals("representation", cluster, itemTable.getRepresentation());
+        assertEquals("rows", rows, itemTable.getRows());
     }
 
     public void testBuildItemTree() throws Exception {
         Map<String, Object> values = new HashMap<String, Object>();
         String archetypeNodeId = "at0001";
         DvText name = new DvText("test item tree", lang, charset, ts);
-        Cluster cluster = cluster();
+        List<Item> items = items();
 
         values.put("archetypeNodeId", archetypeNodeId);
         values.put("name", name);
-        values.put("representation", cluster);
+        values.put("items", items);
         RMObject obj = builder.construct("ItemTree", values);
 
         assertTrue(obj instanceof ItemTree);
@@ -169,7 +169,7 @@ public class DataStructuresBuildTest extends BuildTestBase {
         assertEquals("archetypeNodeId", archetypeNodeId,
                 itemTree.getArchetypeNodeId());
         assertEquals("name", name, itemTree.getName());
-        assertEquals("representation", cluster, itemTree.getRepresentation());
+        assertEquals("items", items, itemTree.getItems());
     }
 
     public void testBuildPointEvent() throws Exception {
