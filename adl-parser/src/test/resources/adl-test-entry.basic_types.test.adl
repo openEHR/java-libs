@@ -133,6 +133,8 @@ definition
                 
                  -- single value as interval
                  date_attr24 matches {|2004-09-20|}
+                 
+                 date_attr25 matches {1995-03}
             }
         }
         time_attributes matches {
