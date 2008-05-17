@@ -242,14 +242,14 @@ public class HistoryTest extends DataStructureTestBase {
 		expression = "/events[at0004, 'interval event']/data/items[at0014, 'element 1']";
 		ret = history.itemAtPath(expression);
 		
-		assertNotNull(expression + " should return Element", ret);
+		assertNotNull(expression + " expected Element, but got null", ret);
 		assertTrue(expression +  " should return Element, but got: " + ret.getClass(),	
 				ret instanceof Element);
 		Element e = (Element) ret;
 		assertEquals("element name wrong", "element 1", e.getName().getValue());
 	}
 	
-	public void testItemAtPathWithPredicatesAndTailingPartMore() throws Exception {
+	public void testItemAtPathWithPredicatesAndTailingPartValue() throws Exception {
 		expression = "/events[at0004, 'interval event']/data/items[at0014, 'element 1']/value";
 		ret = history.itemAtPath(expression);
 		
@@ -258,6 +258,16 @@ public class HistoryTest extends DataStructureTestBase {
 				ret instanceof DvText);
 		DvText dt = (DvText) ret;
 		assertEquals("dvText value wrong", "text 1", dt.getValue());
+	}
+	
+	public void testItemAtPathWithPredicatesAndTailingPartValueValue() throws Exception {
+		expression = "/events[at0004, 'interval event']/data/items[at0014, 'element 1']/value/value";
+		ret = history.itemAtPath(expression);
+		
+		assertNotNull(expression + " return a null", ret);
+		assertTrue("expected a string, but got: " + ret.getClass(), 
+				ret instanceof String);
+		assertEquals("dvText value wrong", "text 1", ret);
 	}
 
 	/* test fixtures */

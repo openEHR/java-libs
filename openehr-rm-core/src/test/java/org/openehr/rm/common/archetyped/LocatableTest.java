@@ -130,29 +130,23 @@ public class LocatableTest extends TestCase {
     	assertNull("match on name predicate unexpected", actual);
     }
     
-    public void testRetrieveAttributeNames() throws Exception {
-    	String[] expected = {
-    			"archetypeNodeId", "name", "origin", "summary"
-    	};
-    	List expectedNames = Arrays.asList(expected);
-    	List<String> actualValues = instance.retrieveAttributeNames();
-    	assertEquals("unexpected list from retrieveAttributeNames",
-    			expectedNames, actualValues);
+    public void testItemAtPathFirstLevelAttribute() {
+    	path = "/name";
+    	value = instance.itemAtPath(path);
+    	assertEquals(instance.getName(), value);
     }
     
-    public void testRetrieveAttributeValues() throws Exception {
-    	Object[] expected = {
-    			"at0000", new DvText("test instance"), 
-    			new DvDateTime("2005-12-03T09:22:00"), null
-    	};
-    	List expectedValues = Arrays.asList(expected);
-    	List<Object> actualValues = instance.retrieveAttributeValues();
-    	assertEquals("unexpected list from retrieveAttributeValues()",
-    			expectedValues, actualValues);
+    public void testItemAtPathAttributesAttribute() {
+    	path = "/name/value";
+    	value = instance.itemAtPath(path);
+    	assertTrue(value instanceof String);
+    	assertEquals(instance.getName().getValue(), value);
     }
     
     private List<Locatable> list;
     private Locatable instance;
+    private String path;
+    private Object value;
     
     /* Locatable subclass for testing use */
     private static class TestLocatable extends Locatable {

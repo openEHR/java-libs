@@ -16,13 +16,9 @@ package org.openehr.rm.common.archetyped;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.rm.Attribute;
-import org.openehr.rm.FullConstructor;
 import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datatypes.text.DvText;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -169,83 +165,80 @@ public abstract class Locatable extends Pathable {
 
     
 
-    /**
-     * Locate an attribute without further evaluation of the path
-     *
-     * @param path
-     * @param attributeNames
-     * @param attributes
-     * @return the attribute found
-     * @throws IllegalArgumentException if path invalid
+    /*
+     * Simple fix doesn't take care of "/" inside predicates
+     * e.g. data/events[at0006 and name/value='any event']
+     */ 
+    private List<String> dividePathIntoSegments(String path) {
+    	List<String> segments = new ArrayList<String>();
+    	StringTokenizer tokens = new StringTokenizer(path, "/");
+    	while(tokens.hasMoreTokens()) {
+    		segments.add(tokens.nextToken());
+    	}
+    	return segments;
+    }
+    
+    /*
+     * generic path evaluation covers all rmClass
+     */ 
+    private Object genericPathEvaluator(String path, Object object) {
+    	if(path == null || object == null) {
+    		return null;
+    	}
+    	List<String> segments = dividePathIntoSegments(path);
+    	return evaluatePathSegment(segments, object);
+    }
+    
+    /*
+     * Evaluate recursively the path segments 
      */
-    Object locateAttribute(String path, List<String> attributeNames,
-                                     List<Object> attributeValues) {
-    	assert(path != null);
-    	assert(attributeNames != null && attributeValues != null
-    			&& attributeNames.size() == attributeValues.size());    	
+    private Object evaluatePathSegment(List<String> pathSegments, 
+    		Object object) {
+    	if(pathSegments.isEmpty()) {
+    		return object;
+    	}
+    	String pathSegment = pathSegments.remove(0);
+    	Object value =  null;
     	
-        for (int i = 0, j = attributeNames.size(); i < j; i++) {
-        	String name = attributeNames.get(i);
-        	Object value = attributeValues.get(i);
-        	if(path.equals(name)) {
-        		// the whole attribute value
-        		return value;
-        	} else if(path.startsWith(name)) {
-        		// need further evaluation of the path
-        		String remainingPath = path.substring(name.length());            	
-            	if(remainingPath.startsWith(PREDICATE_START)) {
-            		Iterable iterable = null;
-            		if(value instanceof Iterable) {
-            			iterable = (Iterable) value;
-            		} else {
-            			List list = new ArrayList();
-            			list.add(value);
-            			iterable = list;            			
-            		}
-            		int predicateEnd = remainingPath.indexOf(PREDICATE_END);
-            		String expression = remainingPath.substring(
-            				PREDICATE_START.length(), predicateEnd);
-            		Object selected = processPredicate(expression, iterable);
-            		
-            		if(selected == null) {
-            			return null; // nothing selected
-            		}
-            		if(predicateEnd == remainingPath.length() - 1) {
-            			return selected;
-            		} 
-            		
-            		// further processing required
-            		assert(selected instanceof Locatable);
-            		Locatable selectedLocatable = (Locatable) selected;
-            		remainingPath = remainingPath.substring(predicateEnd + 1);
-            		
-            		return selectedLocatable.itemAtPath(remainingPath);
-            	
-            	} else { // no predicate
-            		
-            		if(value instanceof Locatable) {
-            			Locatable l = (Locatable) value;
-            			return l.itemAtPath(remainingPath);
-            		}
-            		
-            	}
-        	}
-        }
-        return null; // instead of IllegalPathException?
+    	int index = pathSegment.indexOf("[");
+    	String expression = null;
+    	String attributeName = null;
+    	
+    	// has [....] predicate expression
+    	if(index > 0) {
+    		
+    		assert(pathSegment.indexOf("]") > index);
+    		
+    		attributeName = pathSegment.substring(0, index);    			
+    		expression = pathSegment.substring(index + 1, 
+    				pathSegment.indexOf("]"));    		 
+    	} else {
+    		attributeName = pathSegment;
+    	}
+    		
+    	value = retrieveAttributeValue(object, attributeName);
+    	if(expression != null && value != null ) {
+    		value = processPredicate(expression, value);
+    	}    	
+    	if(value != null) {
+    		return evaluatePathSegment(pathSegments, value);
+    	}
+    	return null;
     }
     
     /**
-     * Processes the predicate expression on given list of objects
-     * and select the _first_ matching one
+     * Processes the predicate expression on given object
+     * 1. if the object is a container, select the _first_ matching one
+     * 2. only return the object if itself meets the predicate
      * 
-     * TODO rudimentary implementation of process predicates in path
+     * only shortcut expressions for at0000 and name are supported
+     * for example: [at0001, 'node name']
      * 
      * @param expression
      * @param value
      * @return null if there is no match
      */
-    Locatable processPredicate(String expression, 
-    		Iterable<Locatable> collection) {
+    Object processPredicate(String expression, Object object) {
     	String name = null;
     	String archetypeNodeId = null;
     	expression = expression.trim();
@@ -272,18 +265,31 @@ public abstract class Locatable extends Pathable {
     	// ['standing']	
     	} else if (expression.startsWith("'") && expression.endsWith("'")) {
     		name = expression.substring(1, expression.length() - 1);
-    	} 
+    	}
     	
-    	for(Locatable node : collection) {
-    		
-    		if(archetypeNodeId != null 
-    				&& !node.archetypeNodeId.equals(archetypeNodeId)) {
-    			continue;
+    	Iterable collection = null;
+    	if(object instanceof Iterable) {
+    		collection = (Iterable) object;
+    	} else {
+    		List list = new ArrayList();
+    		list.add(object);
+    		collection = list;
+    	}
+    	
+    	for(Object item : collection) {
+    		if(item instanceof Locatable) {
+    			Locatable locatable = (Locatable) item;
+        		if(archetypeNodeId != null 
+        				&& !locatable.archetypeNodeId.equals(archetypeNodeId)) {
+        			continue;
+        		}
+        		if(name != null && !locatable.name.getValue().equals(name)) {
+        			continue;
+        		}        		
     		}
-    		if(name != null && !node.name.getValue().equals(name)) {
-    			continue;
-    		}
-    		return node; // found a match!
+    		// TODO other non-locatable predicates!!
+    		// e.g. time > 10:20:15
+    		return item; // found a match!
     	}
     	return null;
     }    
@@ -302,78 +308,33 @@ public abstract class Locatable extends Pathable {
         if (Locatable.ROOT.equals(path) || path.equals(whole())) {
             return this;
         }
-        List<String> attributeNames = retrieveAttributeNames();
-        List<Object> attributeValues = retrieveAttributeValues();
-        String remainingPath = path.substring(ROOT.length());
-        return locateAttribute(remainingPath, attributeNames, attributeValues); 
+        return genericPathEvaluator(path, this);
     }
     
-    /**
-     * Retrieves list of attribute names of current class
-     * 
-     * @return empty list if no annotation
+    /*
+     * Retrieves the value of named attribute of given object
      */
-    protected List<String> retrieveAttributeNames() {
-    	Constructor constructor = fullConstructor(this.getClass());
-    	if(constructor == null) {
-    		return Collections.EMPTY_LIST;
-    	}
-    	Annotation[][] annotations = constructor.getParameterAnnotations();
-    	List<String> names = new ArrayList<String>();
-		for (int i = 0; i < annotations.length; i++) {
-			assert(annotations[i].length != 0);
-			Attribute attribute = (Attribute) annotations[i][0];
-			if( ! attribute.system()) {
-				names.add(attribute.name());
-			}
-		}
-    	return names;
-    }
-    
-    /**
-     * Retrieves list attribute values of the current object
-     * 
-     * @return empty list if no annotation
-     */
-    protected List<Object> retrieveAttributeValues() {
-    	List<Object> values = new ArrayList<Object>();
-    	List<String> names = retrieveAttributeNames();
-    	Class rmClass = this.getClass();
+    private Object retrieveAttributeValue(Object obj, String attributeName) {
+    	Class rmClass = obj.getClass();
+    	Object value = null;
     	Method getter;
-    	Object value;
     	
-    	for(String attr : names) {
-    		value = null;
-    		String getterName = "get" + attr.substring(0, 1).toUpperCase() 
-    						+ attr.substring(1);
-    		try {
-    			getter = rmClass.getMethod(getterName, null);
-    			value = getter.invoke(this, null);
-    		} catch(Exception ignore) {
-    			// TODO log as kernel warning
-    		}
-    		values.add(value);
-    	}
-    	return values;
-    }
-    
-    // find the annotated full constructor of given class
-    private static Constructor fullConstructor(Class klass) {
-		Constructor[] array = klass.getConstructors();
-		for (Constructor constructor : array) {
-			if (constructor.isAnnotationPresent(FullConstructor.class)) {
-				return constructor;
-			}
+    	String getterName = "get" + attributeName.substring(0, 1).toUpperCase() 
+						+ attributeName.substring(1);
+    	try {
+			getter = rmClass.getMethod(getterName, null);
+			value = getter.invoke(obj, null);
+		} catch(Exception ignore) {
+			// TODO log as kernel warning
 		}
-		return null;
-	}
-    
+		return value;
+    }    
     
     /**
      * Clinical concept of the archetype as a whole, derived from the
      * archetypeNodeId  of the root node
      *
-     * @return archetyep concept
+     * @return archetype concept
      * @throws UnsupportedOperationException if this node is not root
      */
     public DvText concept() {
@@ -473,8 +434,7 @@ public abstract class Locatable extends Pathable {
 
     protected void setLinks(Set<Link> links) {
         this.links = links;
-    }
-    
+    }    
     // POJO end
 
     /**
@@ -482,8 +442,6 @@ public abstract class Locatable extends Pathable {
      */
     public static final String PATH_SEPARATOR = "/";
     public static final String ROOT = PATH_SEPARATOR;
-    private static final String PREDICATE_START = "[";
-    private static final String PREDICATE_END = "]";
     
     /* fields */
     private UIDBasedID uid;
