@@ -148,7 +148,7 @@ public final class IntervalEvent<T extends ItemStructure> extends Event<T> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
 	public boolean pathExists(String path) {
 		// TODO Auto-generated method stub

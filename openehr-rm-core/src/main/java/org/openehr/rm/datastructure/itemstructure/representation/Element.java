@@ -95,11 +95,24 @@ public final class Element extends Item {
      * @throws IllegalArgumentException if name or value null
      */
     public Element(String archetypeNodeId, DvText name, DataValue value) {
-        this(null, archetypeNodeId, name, null, null, null, null, value, null, null);
+        this(null, archetypeNodeId, name, null, null, null, null, value, null,
+        		null);
+    }
+    
+    /**
+     * Constructs an Element node by archetypeNodeId, name and non-null value
+     *
+     * @param archetypeNodeId
+     * @param name
+     * @param value
+     * @throws IllegalArgumentException if name or value null
+     */
+    public Element(String archetypeNodeId, String name, DataValue value) {
+        this(archetypeNodeId, new DvText(name), value);
     }
 
     /**
-     * data value of this leaf
+     * Gets data value of this leaf
      *
      * @return value of this leaf
      */
@@ -108,7 +121,7 @@ public final class Element extends Item {
     }
 
     /**
-     * flavour of null value, like indeterminate, not asked etc
+     * Gets flavor of null value, like indeterminate, not asked etc
      *
      * @return null flavor
      */
@@ -136,28 +149,6 @@ public final class Element extends Item {
      */
     public String pathOfItem(Pathable item) {
         return null;  // todo: implement this method
-    }
-
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return item
-     * @throws IllegalArgumentException if path invalid
-     */
-    public Locatable itemAtPath(String path) {
-        return null;  // todo: implement this method
-    }
-
-    /**
-     * Return true if the path is valid with respect to the current
-     * item.
-     *
-     * @param path
-     * @return true if valid
-     */
-    public boolean validPath(String path) {
-        return false;  // todo: implement this method
     }
 
     /**
@@ -237,7 +228,7 @@ public final class Element extends Item {
  *  The Original Code is Element.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

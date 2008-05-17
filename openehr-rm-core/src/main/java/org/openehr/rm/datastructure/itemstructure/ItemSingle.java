@@ -23,10 +23,10 @@ import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
+import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.text.DvText;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Logical single value data structure. Instances of this class are immutable.
@@ -45,19 +45,24 @@ public final class ItemSingle extends ItemStructure {
      * @param archetypeDetails
      * @param feederAudit
      * @param links
-     * @param representation
+     * @param item not null
+     * @throws IllegalArgumentException if item null
      */
     @FullConstructor
-            public ItemSingle(@Attribute(name = "uid") UIDBasedID uid,
-                              @Attribute(name = "archetypeNodeId", required=true) String archetypeNodeId,
-                              @Attribute(name = "name", required=true) DvText name,
-                              @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
-                              @Attribute(name = "feederAudit") FeederAudit feederAudit,
-                              @Attribute(name = "links") Set<Link> links,
-                              @Attribute(name = "parent") Locatable parent, 
-                              @Attribute(name = "representation", required=true) Element representation) {
+    	public ItemSingle(@Attribute(name = "uid") UIDBasedID uid,
+    			@Attribute(name = "archetypeNodeId", required=true) String archetypeNodeId,
+                @Attribute(name = "name", required=true) DvText name,
+                @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
+                @Attribute(name = "feederAudit") FeederAudit feederAudit,
+                @Attribute(name = "links") Set<Link> links,
+                @Attribute(name = "parent") Locatable parent, 
+                @Attribute(name = "item", required=true) Element item) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
-                links, parent, representation);
+                links, parent);
+        if(item == null) {
+        	throw new IllegalArgumentException("item null");
+        }
+        this.item = item;
     }
 
     /**
@@ -68,19 +73,29 @@ public final class ItemSingle extends ItemStructure {
      * @param representation
      * @throws IllegalArgumentException if representation null
      */
-    public ItemSingle(String archetypeNodeId, DvText name,
-                      Element representation) {
-        this(null, archetypeNodeId, name, null, null, null, null, 
-                representation);
+    public ItemSingle(String archetypeNodeId, DvText name, Element item) {
+        this(null, archetypeNodeId, name, null, null, null, null, item);
+    }
+    
+    /**
+     * Construct a ItemSingle
+     *
+     * @param archetypeNodeId
+     * @param name
+     * @param representation
+     * @throws IllegalArgumentException if representation null
+     */
+    public ItemSingle(String archetypeNodeId, String name, Element item) {
+        this(archetypeNodeId, new DvText(name), item);
     }
 
     /**
-     * Retrieve the item.
+     * Retrieves the item.
      *
      * @return item
      */
     public Element getItem() {
-        return (Element) getRepresentation();
+        return item;
     }
 
     /**
@@ -94,31 +109,6 @@ public final class ItemSingle extends ItemStructure {
         return null;  // todo: implement this method
     }
 
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return relative item
-     * @throws IllegalArgumentException if path invalid
-     */
-    public Locatable itemAtPath(String path) {
-        if(validPath(path)) {
-            return getItem();
-        }
-        throw new IllegalArgumentException("invalid path: " + path);
-    }
-
-    /**
-     * Return true if the path is valid with respect to the current
-     * item.
-     *
-     * @param path
-     * @return true if valid
-     */
-    public boolean validPath(String path) {
-        return whole().equals(path);
-    }
-    
     @Override
 	public List<Object> itemsAtPath(String path) {
 		// TODO Auto-generated method stub
@@ -141,6 +131,14 @@ public final class ItemSingle extends ItemStructure {
     ItemSingle() {
     }
     // POJO end	
+
+	@Override
+	public Item asHierarchy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	private Element item;
 }
 
 /*
@@ -160,7 +158,7 @@ public final class ItemSingle extends ItemStructure {
  *  The Original Code is ItemSingle.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

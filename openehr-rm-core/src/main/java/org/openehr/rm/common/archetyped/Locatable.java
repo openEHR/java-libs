@@ -16,11 +16,15 @@ package org.openehr.rm.common.archetyped;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datatypes.text.DvText;
 
-import java.util.Set;
-import java.util.Collection;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Root structural class of all information models. Instances of
@@ -166,7 +170,7 @@ public abstract class Locatable extends Pathable {
     
 
     /**
-     * Locate an attribute of given path
+     * Locate an attribute without further evaluation of the path
      *
      * @param path
      * @param attributeNames
@@ -174,94 +178,115 @@ public abstract class Locatable extends Pathable {
      * @return the attribute found
      * @throws IllegalArgumentException if path invalid
      */
-    protected Object locateAttribute(String path, String[] attributeNames,
-                                        Locatable[] attributes) {
-        for (int i = 0, j = attributes.length; i < j; i++) {
-            Object ret = checkAttribute(path, attributeNames[ i ],
-                    attributes[ i ]);
-            if (ret != null) {
-                return ret;
-            }
+    Object locateAttribute(String path, List<String> attributeNames,
+                                     List<Object> attributeValues) {
+    	assert(path != null);
+    	assert(attributeNames != null && attributeValues != null
+    			&& attributeNames.size() == attributeValues.size());    	
+    	
+        for (int i = 0, j = attributeNames.size(); i < j; i++) {
+        	String name = attributeNames.get(i);
+        	Object value = attributeValues.get(i);
+        	if(path.equals(name)) {
+        		// the whole attribute value
+        		return value;
+        	} else if(path.startsWith(name)) {
+        		// need further evaluation of the path
+        		String remainingPath = path.substring(name.length());            	
+            	if(remainingPath.startsWith(PREDICATE_START)) {
+            		Iterable iterable = null;
+            		if(value instanceof Iterable) {
+            			iterable = (Iterable) value;
+            		} else {
+            			List list = new ArrayList();
+            			list.add(value);
+            			iterable = list;            			
+            		}
+            		int predicateEnd = remainingPath.indexOf(PREDICATE_END);
+            		String expression = remainingPath.substring(
+            				PREDICATE_START.length(), predicateEnd);
+            		Object selected = processPredicate(expression, iterable);
+            		
+            		if(selected == null) {
+            			return null; // nothing selected
+            		}
+            		if(predicateEnd == remainingPath.length() - 1) {
+            			return selected;
+            		} 
+            		
+            		// further processing required
+            		assert(selected instanceof Locatable);
+            		Locatable selectedLocatable = (Locatable) selected;
+            		remainingPath = remainingPath.substring(predicateEnd + 1);
+            		
+            		return selectedLocatable.itemAtPath(remainingPath);
+            	
+            	} else { // no predicate
+            		
+            		if(value instanceof Locatable) {
+            			Locatable l = (Locatable) value;
+            			return l.itemAtPath(remainingPath);
+            		}
+            		
+            	}
+        	}
         }
-        throw new IllegalArgumentException("invalid path: " + path);
+        return null; // instead of IllegalPathException?
     }
-
+    
     /**
-     * Check if given single attribute match the path
-     *
-     * @param path
-     * @param attributeName
-     * @param attribute
-     * @return null if not matching
+     * Processes the predicate expression on given list of objects
+     * and select the _first_ matching one
+     * 
+     * TODO rudimentary implementation of process predicates in path
+     * 
+     * @param expression
+     * @param value
+     * @return null if there is no match
      */
-    protected Object checkAttribute(String path, String attributeName,
-                                       Locatable attribute) {
-        if (attribute == null) {
-            return null;
-        }
-        String attrPath = ROOT + attributeName;
-        //String attrPathWithNode = attrPath + attribute.whole().substring(1);
-        
-        // Get path in form: /<attr>[<arthcetypeNodeId>]
-        String attrPathWithNode = attrPath + attribute.atNode().substring(1);
-        if (path.equals(attrPathWithNode) || path.equals(attrPath)) {
-            return attribute;
-        } else if (path.startsWith(attrPathWithNode)) {
-            return attribute.itemAtPath(path.substring(
-                    attrPathWithNode.length()));
-        } else if (path.startsWith(attrPath)) {
-            return attribute.itemAtPath(path.substring(attrPath.length()));
-        }
-        return null;
-    }
-
-    /**
-     * Check if given multiple attribute match the path
-     *
-     * @param path
-     * @param attributeName
-     * @param attribute
-     * @return null if not matching
-     */
-    protected Object checkAttribute(String path,
-                                       String attributeName,
-                                       Collection<? extends Locatable> attribute) {
-        if (attribute == null) {
-            return null;
-        }
-        String attr = ROOT + attributeName;
-        if (path.startsWith(attr)) {
-            path = path.substring(attr.length());
-            for (Locatable locatable : attribute) {
-                //String node = locatable.whole().substring(1);
-                String node = locatable.nodeName();
-                if (path.startsWith(node)) {
-                    if (path.equals(node)) {
-                        return locatable;
-                    }                    
-                    String subpath = path.substring(node.length());
-                    if (locatable.validPath(subpath)) {
-                        return locatable.itemAtPath(subpath);
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Return true if the path is valid with respect to the current
-     * item.
-     *
-     * @param path
-     * @return true if valid
-     */
-    public boolean validPath(String path) {
-        if (ROOT.equals(path) /*|| whole().equals(path)*/) {
-            return true;
-        }
-        return false;  // can be further processed by sub-class
-    }
+    Locatable processPredicate(String expression, 
+    		Iterable<Locatable> collection) {
+    	String name = null;
+    	String archetypeNodeId = null;
+    	expression = expression.trim();
+    	int index;
+    	
+    	// [at0001, 'standing']
+    	if(expression.contains(",")) {
+    		index = expression.indexOf(",");
+    		archetypeNodeId = expression.substring(0, index).trim();
+    		name = expression.substring(expression.indexOf("'") + 1,
+    				expression.lastIndexOf("'"));
+    		
+    	// [at0006 and name/value='any event']
+    	} else if(expression.contains(" AND ")) {
+    		index = expression.indexOf("AND");
+    		archetypeNodeId = expression.substring(0, index).trim();
+    		name = expression.substring(expression.indexOf("'") + 1,
+    				expression.lastIndexOf("'"));    		
+    	
+    	// [at0006]        	
+    	} else if (expression.startsWith("at")) {
+    		archetypeNodeId = expression;
+    		
+    	// ['standing']	
+    	} else if (expression.startsWith("'") && expression.endsWith("'")) {
+    		name = expression.substring(1, expression.length() - 1);
+    	} 
+    	
+    	for(Locatable node : collection) {
+    		
+    		if(archetypeNodeId != null 
+    				&& !node.archetypeNodeId.equals(archetypeNodeId)) {
+    			continue;
+    		}
+    		if(name != null && !node.name.getValue().equals(name)) {
+    			continue;
+    		}
+    		return node; // found a match!
+    	}
+    	return null;
+    }    
 
     /**
      * The item at a path that is relative to this item.
@@ -271,14 +296,78 @@ public abstract class Locatable extends Pathable {
      * @throws IllegalArgumentException if path invalid
      */
     public Object itemAtPath(String path) {
-        if (path == null) {
+    	if (path == null) {
             throw new IllegalArgumentException("invalid path: " + path);
         }
         if (Locatable.ROOT.equals(path) || path.equals(whole())) {
             return this;
         }
-        return null; // can be further processed by sub-class
+        List<String> attributeNames = retrieveAttributeNames();
+        List<Object> attributeValues = retrieveAttributeValues();
+        String remainingPath = path.substring(ROOT.length());
+        return locateAttribute(remainingPath, attributeNames, attributeValues); 
     }
+    
+    /**
+     * Retrieves list of attribute names of current class
+     * 
+     * @return empty list if no annotation
+     */
+    protected List<String> retrieveAttributeNames() {
+    	Constructor constructor = fullConstructor(this.getClass());
+    	if(constructor == null) {
+    		return Collections.EMPTY_LIST;
+    	}
+    	Annotation[][] annotations = constructor.getParameterAnnotations();
+    	List<String> names = new ArrayList<String>();
+		for (int i = 0; i < annotations.length; i++) {
+			assert(annotations[i].length != 0);
+			Attribute attribute = (Attribute) annotations[i][0];
+			if( ! attribute.system()) {
+				names.add(attribute.name());
+			}
+		}
+    	return names;
+    }
+    
+    /**
+     * Retrieves list attribute values of the current object
+     * 
+     * @return empty list if no annotation
+     */
+    protected List<Object> retrieveAttributeValues() {
+    	List<Object> values = new ArrayList<Object>();
+    	List<String> names = retrieveAttributeNames();
+    	Class rmClass = this.getClass();
+    	Method getter;
+    	Object value;
+    	
+    	for(String attr : names) {
+    		value = null;
+    		String getterName = "get" + attr.substring(0, 1).toUpperCase() 
+    						+ attr.substring(1);
+    		try {
+    			getter = rmClass.getMethod(getterName, null);
+    			value = getter.invoke(this, null);
+    		} catch(Exception ignore) {
+    			// TODO log as kernel warning
+    		}
+    		values.add(value);
+    	}
+    	return values;
+    }
+    
+    // find the annotated full constructor of given class
+    private static Constructor fullConstructor(Class klass) {
+		Constructor[] array = klass.getConstructors();
+		for (Constructor constructor : array) {
+			if (constructor.isAnnotationPresent(FullConstructor.class)) {
+				return constructor;
+			}
+		}
+		return null;
+	}
+    
     
     /**
      * Clinical concept of the archetype as a whole, derived from the
@@ -389,11 +478,13 @@ public abstract class Locatable extends Pathable {
     // POJO end
 
     /**
-     * Separator used to delimit element in the path
+     * Separator used to delimit segments in the path
      */
     public static final String PATH_SEPARATOR = "/";
     public static final String ROOT = PATH_SEPARATOR;
-
+    private static final String PREDICATE_START = "[";
+    private static final String PREDICATE_END = "]";
+    
     /* fields */
     private UIDBasedID uid;
     private String archetypeNodeId;
@@ -421,7 +512,7 @@ public abstract class Locatable extends Pathable {
  *  The Original Code is Locatable.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

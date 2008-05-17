@@ -23,15 +23,11 @@ import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.UIDBasedID;
-import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.text.DvText;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Logical list data structure, where each item has a value and can
@@ -44,7 +40,7 @@ import java.util.Set;
 public final class ItemList extends ItemStructure {
 
     /**
-     * Constructs an ItemList
+     * Constructs an ItemList with a list of items
      *
      * @param uid
      * @param archetypeNodeId
@@ -52,84 +48,46 @@ public final class ItemList extends ItemStructure {
      * @param archetypeDetails
      * @param feederAudit
      * @param links
-     * @param representation
+     * @param items	null if unspecified
      */
     @FullConstructor
-            public ItemList(@Attribute(name = "uid") UIDBasedID uid,
-                            @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
-                            @Attribute(name = "name", required = true) DvText name,
-                            @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
-                            @Attribute(name = "feederAudit") FeederAudit feederAudit,
-                            @Attribute(name = "links") Set<Link> links,
-                            @Attribute(name = "parent") Locatable parent, 
-                            @Attribute(name = "items") List<Element> items) {
-
+    	public ItemList(@Attribute(name = "uid") UIDBasedID uid,
+    			@Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
+                @Attribute(name = "name", required = true) DvText name,
+                @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
+                @Attribute(name = "feederAudit") FeederAudit feederAudit,
+                @Attribute(name = "links") Set<Link> links,
+                @Attribute(name = "parent") Locatable parent, 
+                @Attribute(name = "items") List<Element> items) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
-                links, parent, null);
-        this.items = Collections.unmodifiableList(items);
+                links, parent);
+        this.items = items == null ? null : Collections.unmodifiableList(items);
     }
     
     /**
-     * Constructs an ItemList
-     *
-     * @param uid
-     * @param archetypeNodeId
-     * @param name
-     * @param archetypeDetails
-     * @param feederAudit
-     * @param links
-     * @param representation
-     */
-    public ItemList(UIDBasedID uid,
-                    String archetypeNodeId,
-                    DvText name,
-                    Archetyped archetypeDetails,
-                    FeederAudit feederAudit,
-                    Set<Link> links,
-                    Locatable parent, 
-                    Cluster representation) {
-
-        super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
-                links, parent, representation);
-        this.items = convert(representation);
-    }
-
-    /**
-     * Construct a ItemStructure
-     *
-     * @param archetypeNodeId
-     * @param name
-     * @param representation
-     * @throws IllegalArgumentException if representation null
-     */
-    public ItemList(String archetypeNodeId, DvText name,
-                    Cluster representation) {
-        this(null, archetypeNodeId, name, null, null, null, null, representation);
-    }
-    
-    /**
-     * Construct a ItemStructure with list of elements
+     * Construct a ItemList with list of elements
      *
      * @param archetypeNodeId
      * @param name
      * @param items
-     * @throws IllegalArgumentException if representation null
      */
-    public ItemList(String archetypeNodeId, DvText name,
-                    List<Element> items) {
+    public ItemList(String archetypeNodeId, DvText name, List<Element> items) {
         this(null, archetypeNodeId, name, null, null, null, null, items);
     }
-
-    private List<Element> convert(Cluster cluster) {
-        List<Element> items = new ArrayList<Element>();
-        for (Item item : cluster.getItems()) {
-            items.add((Element) item);
-        }
-        return items;
+    
+    /**
+     * Construct a ItemList with list of elements
+     *
+     * @param archetypeNodeId
+     * @param name as string
+     * @param items
+     */
+    public ItemList(String archetypeNodeId, String name, List<Element> items) {
+        this(archetypeNodeId, new DvText(name), items);
     }
 
     /**
-     * Count of all items
+     * Returns the count of all items
      *
      * @return item count
      */
@@ -138,7 +96,7 @@ public final class ItemList extends ItemStructure {
     }
 
     /**
-     * Retrieve all items
+     * Retrieves all items
      *
      * @return List of Element
      */
@@ -147,9 +105,9 @@ public final class ItemList extends ItemStructure {
     }
 
     /**
-     * Retrieve the names of all items
+     * Retrieves the names of all items as a list
      *
-     * @return List of Text
+     * @return list of names
      */
     public List<DvText> names() {
         List<DvText> names = new ArrayList<DvText>();
@@ -160,7 +118,7 @@ public final class ItemList extends ItemStructure {
     }
 
     /**
-     * Retrieve the item with given name
+     * Retrieves the item with given name
      *
      * @param name
      * @return null if item of given name not found
@@ -201,63 +159,6 @@ public final class ItemList extends ItemStructure {
         return null;  // todo: implement this method
     }
 
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return item
-     * @throws IllegalArgumentException if path invalid
-     */
-    public Locatable itemAtPath(String path) {
-        String whole = whole();
-        if (path == null || path.indexOf(whole) < 0) {
-            throw new IllegalArgumentException("invalid path: " + path);
-        }
-        // root path
-        if (path.equals(whole)) {
-            return this;
-        }
-        String subpart = path.substring(whole.length() + 1);
-
-        // nth list item
-        if (subpart.startsWith(ITEM_IS)) {
-            String num = subpart.substring(ITEM_IS.length());
-            int index = -1;
-            try {
-                index = Integer.parseInt(num);
-            } catch (NumberFormatException ignored) {
-            }
-            if (index >= 0 && index < itemCount()) {
-                return items.get(index);
-            }
-            throw new IllegalArgumentException("invalid path: " + path);
-        }
-
-        // named list item
-        for (Element item : items) {
-            if (subpart.equals(item.getName().getValue())) {
-                return item;
-            }
-        }
-        throw new IllegalArgumentException("invalid path: " + path);
-    }
-
-    /**
-     * Return true if the path is valid with respect to the current
-     * item.
-     *
-     * @param path
-     * @return true if valid
-     */
-    public boolean validPath(String path) {
-        try {
-            itemAtPath(path);
-            return true;
-        } catch(IllegalArgumentException iae) {
-            return false;
-        }
-    }
-
     @Override
 	public List<Object> itemsAtPath(String path) {
 		// TODO Auto-generated method stub
@@ -276,21 +177,19 @@ public final class ItemList extends ItemStructure {
 		return false;
 	}
 	
-    /* token used in query path */
-    public final static String ITEM_IS = "item=";
-
+	@Override
+	public Item asHierarchy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
     /* calculated field */
     private List<Element> items;
 
     // POJO start
     ItemList() {
     }
-
-    void setRepresentation(Item item) {
-        super.setRepresentation(item);
-        this.items = convert((Cluster) item);
-    }
-    // POJO end	
+    // POJO end
 }
 
 /*
@@ -310,7 +209,7 @@ public final class ItemList extends ItemStructure {
  *  The Original Code is ItemList.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

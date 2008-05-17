@@ -21,8 +21,15 @@
 package org.openehr.rm.datastructure.itemstructure;
 
 import org.openehr.rm.datastructure.DataStructureTestBase;
+import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
+import org.openehr.rm.datatypes.quantity.DvQuantity;
+import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.datatypes.text.DvCodedText;
+import org.openehr.rm.datatypes.text.DvText;
+import org.openehr.rm.support.measurement.MeasurementService;
+import org.openehr.rm.support.measurement.TestMeasurementService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +44,7 @@ public class ItemTreeTest extends DataStructureTestBase {
      * The fixture set up called before every test method.
      */
     protected void setUp() throws Exception {
-        itemTree = init();
+        init();
     }
 
     /**
@@ -47,52 +54,142 @@ public class ItemTreeTest extends DataStructureTestBase {
         itemTree = null;
     }
 
-    public void testElementAtPath() throws Exception {
-
-        // example path taken from spec doc
-        String path = "/biochemistry/lipid studies/LDL cholesterol";
-        assertTrue(itemTree.hasElementPath(path));
-
-        Element element = itemTree.elementAtPath(path);
-        assertTrue(element != null);
-        assertEquals("element.name", "LDL cholesterol",
-                element.getName().getValue());
-
-        String[] badPaths = {
-            "/bad root/lipid studies/LDL cholesterol",
-            "/biochemistry/items/lipid studies/LDL cholesterol",
-            "/biochemistry/bad node/LDL cholesterol",
-            "/biochemistry/lipid studies/bad leaf"
-        };
-        for(int i = 0; i < badPaths.length; i++) {
-            assertFalse(badPaths[i], itemTree.hasElementPath(badPaths[i]));
-        }
+    private void init() {
+    	
+        // sample
+    	sample = new Element("at0001", new DvText("sample"), 
+    			new DvCodedText("serum", new CodePhrase("terminology", "111")));
+    	
+    	// lipid studies
+    	totalCholesterol = new Element("at0002", new DvText("total cholesterol"),
+    			new DvQuantity("mmol/L", 6.1, measureServ));
+    	
+    	ldlCholesterol = new Element("at0003", new DvText("LDL cholesterol"),
+    			new DvQuantity("mmol/L", 0.9, measureServ));
+    	
+    	hdlCholesterol = new Element("at0004", new DvText("HDL cholesterol"),
+    			new DvQuantity("mmol/L", 5.2, measureServ));
+    	
+    	List<Item> items = new ArrayList<Item>();
+    	items.add(totalCholesterol);
+    	items.add(ldlCholesterol);
+    	items.add(hdlCholesterol);
+    	lipidStudies = new Cluster("at0005", new DvText("lipid studies"), items);
+    	
+    	// comment
+    	comment = new Element("at0006", new DvText("comment"),
+    			new DvText("high cardiac risk"));
+    	
+    	items = new ArrayList<Item>();
+    	items.add(sample);
+    	items.add(lipidStudies);
+    	items.add(comment);
+    	itemTree = new ItemTree("at0007", new DvText("biochemstry result"), items);
     }
-
-    // create an itemTree similar to the example in the spec doc
-    private ItemTree init() {
-
-        // battery group
-        List<Item> batteryGroup = new ArrayList<Item>();
-        batteryGroup.add(element("battery item", "total cholesterol", 99.9));
-        batteryGroup.add(element("battery item", "LDL cholesterol", 66.6));
-        batteryGroup.add(element("battery item", "HDL cholesterol", 33.3));
-
-        // items
-        List<Item> items = new ArrayList<Item>();
-        items.add(element("sample", "sample", "serum", "12345"));
-        items.add(cluster("batter group","lipid studies", batteryGroup));
-        items.add(element("comment", "comment", "check these often"));
-
-        // itemTree
-        return new ItemTree(null, "at0001", text("biochemistry"), null,
-                null, null, null, cluster("items", "items", items));
+    
+    public void testItemAtPathWhole() {
+    	assertEquals(itemTree, itemTree.itemAtPath("/"));
     }
-
-
-
+    
+    public void testItemAtPathSample() {
+    	assertEquals(sample, itemTree.itemAtPath("/items[at0001]"));
+    }    
+    
+    public void testItemAtPathComment() {
+    	assertEquals(comment, itemTree.itemAtPath("/items[at0006]"));
+    }
+    
+    public void testItemAtPathSampleName() {
+    	assertEquals(sample, itemTree.itemAtPath("/items['sample']"));
+    }    
+    
+    public void testItemAtPathCommentName() {
+    	assertEquals(comment, itemTree.itemAtPath("/items['comment']"));
+    }
+    
+    public void testItemAtPathSampleBoth() {
+    	assertEquals(sample, itemTree.itemAtPath("/items[at0001, 'sample']"));
+    }    
+    
+    public void testItemAtPathCommentBoth() {
+    	assertEquals(comment, itemTree.itemAtPath("/items[at0006, 'comment']"));
+    }
+    
+    public void testItemAtPathTotalCholesterol() {
+    	assertEquals(totalCholesterol, 
+    			itemTree.itemAtPath("/items[at0005]/items[at0002]"));
+    }
+    
+    public void testItemAtPathLDLCholesterol() {
+    	assertEquals(ldlCholesterol, 
+    			itemTree.itemAtPath("/items[at0005]/items[at0003]"));
+    }
+    
+    public void testItemAtPathHDLCholesterol() {
+    	assertEquals(hdlCholesterol, 
+    			itemTree.itemAtPath("/items[at0005]/items[at0004]"));
+    }
+    
+    public void testItemAtPathTotalCholesterolName() {
+    	assertEquals(totalCholesterol, 
+    			itemTree.itemAtPath(
+    					"/items['lipid studies']/items['total cholesterol']"));
+    }
+    
+    public void testItemAtPathLDLCholesterolName() {
+    	assertEquals(ldlCholesterol, 
+    			itemTree.itemAtPath(
+    					"/items['lipid studies']/items['LDL cholesterol']"));
+    }
+    
+    public void testItemAtPathHDLCholesterolName() {
+    	assertEquals(hdlCholesterol, 
+    			itemTree.itemAtPath(
+    					"/items['lipid studies']/items['HDL cholesterol']"));
+    }
+    
+    public void testItemAtPathTotalCholesterolBoth() {
+    	assertEquals(totalCholesterol, 
+    			itemTree.itemAtPath(
+    					"/items[at0005, 'lipid studies']/items[at0002]"));
+    }
+    
+    public void testItemAtPathLDLCholesterolBoth() {
+    	assertEquals(ldlCholesterol, 
+    			itemTree.itemAtPath(
+    					"/items[at0005, 'lipid studies']/items[at0003]"));
+    }
+    
+    public void testItemAtPathHDLCholesterolBoth() {
+    	assertEquals(hdlCholesterol, 
+    			itemTree.itemAtPath(
+    					"/items[at0005, 'lipid studies']/items[at0004]"));
+    }
+    
+    public void testItemAtPathTotalCholesterolValue() {
+    	assertEquals(totalCholesterol.getValue(), 
+    			itemTree.itemAtPath("/items[at0005]/items[at0002]/value"));
+    }
+    
+    public void testItemAtPathLDLCholesterolValue() {
+    	assertEquals(ldlCholesterol.getValue(), 
+    			itemTree.itemAtPath("/items[at0005]/items[at0003]/value"));
+    }
+    
+    public void testItemAtPathHDLCholesterolValue() {
+    	assertEquals(hdlCholesterol.getValue(), 
+    			itemTree.itemAtPath("/items[at0005]/items[at0004]/value"));
+    }
+    
     /* fields */
     private ItemTree itemTree;
+    private Element sample;
+    private Element totalCholesterol;
+    private Element ldlCholesterol;
+    private Element hdlCholesterol;
+    private Element comment;
+    private Cluster lipidStudies;
+    private MeasurementService measureServ = TestMeasurementService.getInstance();
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
@@ -111,7 +208,7 @@ public class ItemTreeTest extends DataStructureTestBase {
  *  The Original Code is ItemTreeTest.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

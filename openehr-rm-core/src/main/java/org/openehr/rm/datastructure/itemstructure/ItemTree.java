@@ -46,32 +46,42 @@ public final class ItemTree extends ItemStructure {
      * @param archetypeDetails
      * @param feederAudit
      * @param links
-     * @param representation
+     * @param items null if unspecified
      */
     @FullConstructor
-            public ItemTree(@Attribute(name = "uid") UIDBasedID uid,
-                            @Attribute(name = "archetypeNodeId", required=true) String archetypeNodeId,
-                            @Attribute(name = "name", required=true) DvText name,
-                            @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
-                            @Attribute(name = "feederAudit") FeederAudit feederAudit,
-                            @Attribute(name = "links") Set<Link> links,
-                            @Attribute(name = "parent") Locatable parent,
-                            @Attribute(name = "representation", required=true) Cluster representation) {
+    	public ItemTree(@Attribute(name = "uid") UIDBasedID uid,
+    			@Attribute(name = "archetypeNodeId", required=true) String archetypeNodeId,
+                @Attribute(name = "name", required=true) DvText name,
+                @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
+                @Attribute(name = "feederAudit") FeederAudit feederAudit,
+                @Attribute(name = "links") Set<Link> links,
+                @Attribute(name = "parent") Locatable parent,
+                @Attribute(name = "items", required=true) List<Item> items) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
-                links, parent, representation);
+                links, parent);
+        this.items = items == null ? null : Collections.unmodifiableList(items);
     }
 
     /**
-     * Construct a ItemStructure
+     * Constructs a ItemStructure
      *
      * @param archetypeNodeId
      * @param name
-     * @param representation
-     * @throws IllegalArgumentException if representation null
+     * @param items null if unspecified
      */
-    public ItemTree(String archetypeNodeId, DvText name,
-                    Cluster representation) {
-        this(null, archetypeNodeId, name, null, null, null, null, representation);
+    public ItemTree(String archetypeNodeId, DvText name, List<Item> items) {
+        this(null, archetypeNodeId, name, null, null, null, null, items);
+    }
+    
+    /**
+     * Constructs a ItemStructure
+     *
+     * @param archetypeNodeId
+     * @param name
+     * @param items null if unspecified
+     */
+    public ItemTree(String archetypeNodeId, String name, List<Item> items) {
+        this(archetypeNodeId, new DvText(name), items);
     }
 
     /**
@@ -82,10 +92,9 @@ public final class ItemTree extends ItemStructure {
      * @throws IllegalArgumentException if path null or empty
      */
     public boolean hasElementPath(String path) {
-        List<String> pathList = checkAndParsePath(path);
-        return validRootPath(pathList)
-                && fetchElement(cluster().getItems(),
-                        pathList, 1) != null;
+    	Object value = itemAtPath(path);
+    	return value != null;
+    
     }
 
     /**
@@ -97,73 +106,22 @@ public final class ItemTree extends ItemStructure {
      *                                  or element doesn't exist at given path
      */
     public Element elementAtPath(String path) {
-        List<String> pathList = checkAndParsePath(path);
-        if (!validRootPath(pathList)) {
-            throw new IllegalArgumentException("invalid path");
+        Object node = itemAtPath(path);
+        if(node instanceof Element) {
+        	return (Element) node;
         }
-        Element element = fetchElement(cluster().getItems(),
-                pathList, 1);
-        if (element == null) {
-            throw new IllegalArgumentException("invalid path");
-        }
-        return element;
-    }
-
-    private boolean validRootPath(List<String> paths) {
-        return getName().getValue().equals(paths.get(0));
-    }
-
-    // return null if not found
-    private Element fetchElement(List items, List path,
-                                 int pathIndex) {
-        if (pathIndex >= path.size()) {
-            return null; // path exhausted
-        }
-        String name = (String) path.get(pathIndex);
-        Element ret = null;
-        for (Iterator it = items.iterator(); it.hasNext();) {
-            Item item = (Item) it.next();
-            if (item instanceof Element
-                    && pathIndex == path.size() - 1
-                    && item.getName().getValue().equals(name)) {
-                return (Element) item; // leaf found
-            } else if (item instanceof Cluster
-                    && item.getName().getValue().equals(name)) {
-                Cluster c = (Cluster) item;
-                ret = fetchElement(c.getItems(), path,
-                        pathIndex + 1);
-            }
-        }
-        return ret;
-    }
-
-    private Cluster cluster() {
-        return (Cluster) getRepresentation();
+        throw new IllegalArgumentException("Invalid path: " + path);
     }
 
     /**
      * Gets the items
      * 
-     * @return items
+     * @return null if unspecified
      */
     public List<Item> getItems() {
-    	return ( (Cluster) getRepresentation() ).getItems();
+    	return items;
     }
     
-    private List<String> checkAndParsePath(String path) {
-        checkPath(path);
-        StringTokenizer tokens = new StringTokenizer(path,
-                PATH_SEPARATOR);
-        if (tokens.countTokens() < 1) {
-            throw new IllegalArgumentException("invalid path: " + path);
-        }
-        List<String> pathList = new ArrayList<String>();
-        while (tokens.hasMoreTokens()) {
-            pathList.add(tokens.nextToken());
-        }
-        return pathList;
-    }
-
     /**
      * Return the path to an item relative to the root of this
      * archetyped structure.
@@ -175,27 +133,11 @@ public final class ItemTree extends ItemStructure {
         return null;  // todo: implement this method
     }
 
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return item
-     * @throws IllegalArgumentException if path invalid
-     */
-    public Locatable itemAtPath(String path) {
-        return null;  // todo: implement this method
-    }
-
-    /**
-     * Return true if the path is valid with respect to the current
-     * item.
-     *
-     * @param path
-     * @return true if valid
-     */
-    public boolean validPath(String path) {
-        return false;  // todo: implement this method
-    }
+    @Override
+	public Item asHierarchy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
     
 	@Override
 	public List<Object> itemsAtPath(String path) {
@@ -216,9 +158,11 @@ public final class ItemTree extends ItemStructure {
 	}
 
     // POJO start
-    ItemTree() {
+    ItemTree() { 
     }
     // POJO end
+
+	private List<Item> items;
 }
 
 /*
@@ -238,7 +182,7 @@ public final class ItemTree extends ItemStructure {
  *  The Original Code is ItemTree.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

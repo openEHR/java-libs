@@ -24,19 +24,24 @@ package org.openehr.rm.datastructure.history;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.datastructure.DataStructureTestBase;
 import org.openehr.rm.datastructure.itemstructure.ItemList;
 import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
-import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
+import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 
 public class HistoryTest extends DataStructureTestBase {
 
 	public HistoryTest(String testName) {
-		super(testName);
+		super(testName);	
+	}
+	
+	public void setUp() {
+		history = initWithItemList();
 	}
 
 	private History<ItemSingle> initWithItemSingle() {
@@ -113,17 +118,80 @@ public class HistoryTest extends DataStructureTestBase {
 		}
 	}
 
+	/*
+	 * <
+	 *   archetype_node_id = <"at0005">
+	 *   name = <
+	 *       value = <"history">
+	 *   >
+	 *   origin = <2006-07-07T10:29:00>
+	 *   events = <
+	 *       [1] = <
+	 *         archetype_node_id = <"at0004">
+	 *         name = <
+	 *           value = <"interval event">
+	 *         >
+	 *         time = <2006-07-07T10:59:00>
+	 *         width = <PT30m>
+	 *         mathFunction = <
+	 *             value = <"mean">
+	 *             defining_code = <
+	 *                 terminology_id = 
+	 *                     value = <"openehr">
+	 *                 >
+	 *                 code_string = <"123">
+	 *             >
+	 *         >
+	 *         data = <
+	 *             archetype_node_id = <"at0001">
+	 *             name = <
+	 *                 value = <"element name">
+	 *             >
+	 *             items = <
+	 *             	  1] = <
+                        name = <
+                        	value = <"element 1">
+                        >
+                        archetype_node_id = <"at0014">
+                        value = <
+                            value = <"text 1">
+                        >
+                    >
+                    [2] = <
+                        name = <
+                        	value = <"element 2">
+                        >
+                        archetype_node_id = <"at0015">
+                        value = <
+                            value = <"text 1">
+                        >
+                    >
+                    [3] = <
+                        name = <
+                        	value = <"element 3">
+                        >
+                        archetype_node_id = <"at0016">
+                        value = <
+                            value = <"text 1">
+                        >
+                    >
+	 *             
+	 *         >
+	 *       >
+	 *     >
+	 *   >
+	 * >
+	 */
 	private History<ItemList> initWithItemList() {
 		element = element("element name", "value");
 
-		List<Item> items = new ArrayList<Item>();
-		for (int i = 0; i < ITEMS.length; i++) {
-			Element element = element("element " + i, CODES[i]);
-			items.add(element);
-		}
+		List<Element> items = new ArrayList<Element>();
+		items.add(new Element("at0014", new DvText("element 1"), new DvText("text 1")));
+		items.add(new Element("at0015", new DvText("element 2"), new DvText("text 2")));
+		items.add(new Element("at0016", new DvText("element 3"), new DvText("text 3")));
+		
 		ItemList itemList = new ItemList(null, "at0001", text(ELEMENT_NAME),
-				null, null, null, null, cluster("at0003",
-						"cluster for history", items));
+				null, null, null, null, items);
 		List<Event<ItemList>> intEvent = new ArrayList<Event<ItemList>>();
 		intEvent.add(new IntervalEvent<ItemList>(null, "at0004",
 				text("interval event"), null, null, null, null, new DvDateTime(
@@ -134,9 +202,69 @@ public class HistoryTest extends DataStructureTestBase {
 				null, null, new DvDateTime(TIME), intEvent, DvDuration
 						.getInstance("PT1h"), DvDuration.getInstance("PT3h"),
 				null);
-
+	}
+	
+	public void testItemAtPathWithRoot() throws Exception {
+		assertEquals("/ return wrong", history, history.itemAtPath("/"));
+	}
+	
+	public void testItemAtPathWithArchetypePredicateWithMatch() throws Exception {
+		expression = "/events[at0004]";
+		ret = history.itemAtPath(expression);
+		assertNotNull(expression + " should return event", ret);
+		assertTrue(expression +  " should return event, but got: " + ret.getClass(),	
+				ret instanceof IntervalEvent);
+		Locatable locatable = (Locatable) ret;
+		assertEquals(expression + " return wrong", "at0004",	locatable.getArchetypeNodeId());
+	}
+	
+	public void testItemAtPathWithNamePredicateWithMatch() throws Exception {
+		expression = "/events['interval event']";
+		ret = history.itemAtPath(expression);
+		assertNotNull(expression + " should return event", ret);
+		assertTrue(expression +  " should return event, but got: " + ret.getClass(),	
+				ret instanceof IntervalEvent);
+		Locatable locatable = (Locatable) ret;
+		assertEquals(expression + " return wrong", "at0004",	locatable.getArchetypeNodeId());
+	}
+	
+	public void testItemAtPathWithArchetypeNamePredicateWithMatch() throws Exception {
+		expression = "/events[at0004, 'interval event']";
+		ret = history.itemAtPath(expression);
+		assertNotNull(expression + " should return event", ret);
+		assertTrue(expression +  " should return event, but got: " + ret.getClass(),	
+				ret instanceof IntervalEvent);
+		Locatable locatable = (Locatable) ret;
+		assertEquals(expression + " return wrong", "at0004",	locatable.getArchetypeNodeId());
+	}
+	
+	public void testItemAtPathWithPredicatesAndTailingPart() throws Exception {
+		expression = "/events[at0004, 'interval event']/data/items[at0014, 'element 1']";
+		ret = history.itemAtPath(expression);
+		
+		assertNotNull(expression + " should return Element", ret);
+		assertTrue(expression +  " should return Element, but got: " + ret.getClass(),	
+				ret instanceof Element);
+		Element e = (Element) ret;
+		assertEquals("element name wrong", "element 1", e.getName().getValue());
+	}
+	
+	public void testItemAtPathWithPredicatesAndTailingPartMore() throws Exception {
+		expression = "/events[at0004, 'interval event']/data/items[at0014, 'element 1']/value";
+		ret = history.itemAtPath(expression);
+		
+		assertNotNull(expression + " should return a DvText", ret);
+		assertTrue(expression +  " should return DvText, but got: " + ret.getClass(),	
+				ret instanceof DvText);
+		DvText dt = (DvText) ret;
+		assertEquals("dvText value wrong", "text 1", dt.getValue());
 	}
 
+	/* test fixtures */
+	private History history;
+	private String expression;
+	private Object ret;
+	
 	/* static fields */
 	private static final String NAME = "history";
 

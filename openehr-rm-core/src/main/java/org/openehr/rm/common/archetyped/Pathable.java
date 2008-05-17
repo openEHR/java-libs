@@ -3,8 +3,8 @@
  * description: "Class Pathable"
  * keywords:    "common"
  *
- * author:      "Rong Chen <rong@acode.se>"
- * copyright:   "Copyright (c) 2007 Cambio Healthcare Systems, Sweden"
+ * author:      "Rong Chen <rong.acode@gmail.com>"
+ * copyright:   "Copyright (c) 2007,2008 Cambio Healthcare Systems, Sweden"
  * license:     "See notice at bottom of class"
  *
  * file:        "$URL$"
@@ -56,7 +56,7 @@ public abstract class Pathable extends RMObject {
      * The item at a path (relative to this item); only valid for unique paths,
      * i.e. paths that resolve to a single item.
      *
-     * @param path not null 
+     * @param path not null and unique
      * @return the item
      * @throws IllegalArgumentException if path invalid
      */
@@ -65,30 +65,30 @@ public abstract class Pathable extends RMObject {
     /**
      * List of items corresponding to a nonunique path.
      * 
-     * @param path
-     * @return
+     * @param path not null and not unique
+     * @return the items
      */
     public abstract List<Object> itemsAtPath(String path);
     
     /**
      * The path to an item relative to the root of this archetyped structure.
      * 
-     * @param item
+     * @param item not null
      */
     public abstract String pathOfItem(Pathable item);
 
     /**
      * True if the path exists in the data with respect to the current item
      * 
-     * @param path
-     * @return
+     * @param path not null or empty
+     * @return true if exists
      */
     public abstract boolean pathExists(String path);
     
     /**
      * True if the path corresponds to a single item in the data.
-     * @param path
-     * @return
+     * @param path not null and exists
+     * @return true if unique
      */
     public abstract boolean pathUnique(String path);
     
@@ -140,7 +140,7 @@ public abstract class Pathable extends RMObject {
  *  The Original Code is Pathable.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2007
+ *  Portions created by the Initial Developer are Copyright (C) 2007,2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

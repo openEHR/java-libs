@@ -20,15 +20,14 @@
  */
 package org.openehr.rm.datastructure.itemstructure;
 
-import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.datastructure.DataStructureTestBase;
 import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
+import org.openehr.rm.datatypes.quantity.*;
 import org.openehr.rm.datatypes.text.DvText;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ItemTableTest extends DataStructureTestBase {
 
@@ -40,7 +39,43 @@ public class ItemTableTest extends DataStructureTestBase {
      * The fixture set up called before every test method.
      */
     protected void setUp() throws Exception {
-        itemTable = init();
+    	createTable();       
+    }
+    
+    private void createTable() throws Exception {
+    	rows = new ArrayList<Cluster>();
+    	
+    	// 1st row
+    	Element eyes = new Element("at0001", new DvText("eye(s)"),
+    			new DvText("right"));
+    	Element acuity = new Element("at0002", new DvText("visual acuity"),
+    			new DvProportion(6, 6, ProportionKind.RATIO, 0));
+    	List<Item> items = new ArrayList<Item>();
+    	items.add(eyes);
+    	items.add(acuity);
+    	rows.add(new Cluster("at0003", new DvText("1"), items));
+    	
+    	// 2nd row
+    	eyes = new Element("at0004", new DvText("eye(s)"),
+     			new DvText("left"));
+     	acuity = new Element("at0005", new DvText("visual acuity"),
+     			new DvProportion(6, 18, ProportionKind.RATIO, 0));
+     	items = new ArrayList<Item>();
+     	items.add(eyes);
+     	items.add(acuity);
+     	rows.add(new Cluster("at0006", new DvText("2"), items));
+    	
+     	// 3rd row
+     	eyes = new Element("at0007", new DvText("eye(s)"),
+     			new DvText("both"));
+     	acuity = new Element("at0008", new DvText("visual acuity"),
+     			new DvProportion(6, 6, ProportionKind.RATIO, 0));
+     	items = new ArrayList<Item>();
+     	items.add(eyes);
+     	items.add(acuity);
+     	rows.add(new Cluster("at0009", new DvText("3"), items));    	
+    	
+        itemTable = new ItemTable("at0010", new DvText("vision"), rows);       
     }
 
     /**
@@ -51,213 +86,225 @@ public class ItemTableTest extends DataStructureTestBase {
     }
 
     public void testColumnCount() throws Exception {
-        assertEquals("column count", COLM_NAMES.length,
-                itemTable.columnCount());
+        assertEquals("column count wrong", 2, itemTable.columnCount());
     }
 
     public void testRowCount() throws Exception {
-        assertEquals("row count", ROW_NAMES.length,
-                itemTable.rowCount());
+        assertEquals("row count wrong", 3, itemTable.rowCount());
     }
 
     public void testRowNames() throws Exception {
-        List<DvText> expected = new ArrayList<DvText>();
-        for (int i = 0; i < ROW_NAMES.length; i++) {
-            expected.add(text(ROW_NAMES[ i ]));
-        }
-        assertEquals("row names", expected, itemTable.rowNames());
+        List<DvText> names = new ArrayList<DvText>();
+        names.add(new DvText("1"));
+        names.add(new DvText("2"));
+        names.add(new DvText("3"));
+        assertEquals("row names wrong", names, itemTable.rowNames());
     }
 
-    public void testRowAt() throws Exception {
-        //List<Element> expected = new ArrayList<Element>();
-        //for (int i = 0; i < COLM_NAMES.length; i++) {
-         //   expected.add(elementArray[ i ][ 1 ]);
-        //}
-        Cluster expected = rowArray[1];
-        assertEquals("row at", expected, itemTable.ithRow(1));
+    public void testIthRow1() throws Exception {
+        assertEquals(rows.get(0), itemTable.ithRow(1));
+    }
+    
+    public void testIthRow2() throws Exception {
+        assertEquals(rows.get(1), itemTable.ithRow(2));
+    }
+    
+    public void testIthRow3() throws Exception {
+        assertEquals(rows.get(2), itemTable.ithRow(3));
     }
 
-    public void testHasRowWithName() throws Exception {
-        for (int i = 0; i < ROW_NAMES.length; i++) {
-            assertTrue(itemTable.hasRowWithName(ROW_NAMES[ i ]));
-        }
-        assertFalse(itemTable.hasColumnWithName("dummy"));
+    public void testHasRowWithNameOne() throws Exception {
+        assertTrue(itemTable.hasRowWithName("1"));        
+    }
+    
+    public void testHasRowWithNameTwo() throws Exception {
+        assertTrue(itemTable.hasRowWithName("2"));        
+    }
+    
+    public void testHasRowWithNameThree() throws Exception {
+        assertTrue(itemTable.hasRowWithName("3"));        
+    }
+    
+    public void testHasRowWithNameUnkown() throws Exception {
+        assertFalse(itemTable.hasRowWithName("unknown"));        
     }
 
-    public void testHasColumnWithName() throws Exception {
-        for (int i = 0; i < COLM_NAMES.length; i++) {
-            assertTrue(itemTable.hasColumnWithName(COLM_NAMES[ i ]));
-        }
-        assertFalse(itemTable.hasColumnWithName("dummy"));
+    public void testHasColumnWithNameEyes() throws Exception {
+        assertTrue(itemTable.hasColumnWithName("eye(s)"));
+    }
+    
+    public void testHasColumnWithNameAcuity() throws Exception {
+        assertTrue(itemTable.hasColumnWithName("visual acuity"));
+    }
+    
+    public void testElementAtColumn1Row1() throws Exception {
+    	Element element = itemTable.elementAtCell(1, 1);
+    	assertEquals("at0001", element.getArchetypeNodeId());
+    }
+    
+    public void testElementAtColumn2Row1() throws Exception {
+    	Element element = itemTable.elementAtCell(2, 1);
+    	assertEquals("at0002", element.getArchetypeNodeId());
+    }
+    
+    public void testElementAtColumn1Row2() throws Exception {
+    	Element element = itemTable.elementAtCell(1, 2);
+    	assertEquals("at0004", element.getArchetypeNodeId());
+    }
+    
+    public void testElementAtColumn2Row2() throws Exception {
+    	Element element = itemTable.elementAtCell(2, 2);
+    	assertEquals("at0005", element.getArchetypeNodeId());
+    }
+    
+    public void testElementAtColumn1Row3() throws Exception {
+    	Element element = itemTable.elementAtCell(1, 3);
+    	assertEquals("at0007", element.getArchetypeNodeId());
+    }
+    
+    public void testElementAtColumn2Row3() throws Exception {
+    	Element element = itemTable.elementAtCell(2, 3);
+    	assertEquals("at0008", element.getArchetypeNodeId());
     }
 
-    public void testElementAt() throws Exception {
-
-        // test the content of whole table
-        for (int i = 0; i < ROW_NAMES.length; i++) {
-            for (int j = 0; j < COLM_NAMES.length; j++) {
-                assertEquals(elementArray[ i ][ j ],
-                        itemTable.elementAtCell(i, j));
-            }
-        }
-
-        // invalid col, row index
-        int[][] badPos = {
-            {-1, -1}, {-1, 0}, {0, -1},
-            {3, 4}, {3, 1}, {1, 4}
-        };
-        for (int i = 0; i < badPos.length; i++) {
-            try {
-                itemTable.elementAtCell(badPos[ i ][ 0 ],
-                        badPos[ i ][ 1 ]);
-                fail("bad pos: " + badPos[ i ][ 0 ] + "," +
-                        badPos[ i ][ 1 ]);
-            } catch (Exception e) {
-                assertTrue(e instanceof IllegalArgumentException);
-            }
-        }
+    public void testNamedRow1() throws Exception {
+        assertEquals(rows.get(0), itemTable.namedRow("1"));
+    }
+    
+    public void testNamedRow2() throws Exception {
+        assertEquals(rows.get(1), itemTable.namedRow("2"));
+    }
+    
+    public void testNamedRow3() throws Exception {
+        assertEquals(rows.get(2), itemTable.namedRow("3"));
     }
 
-    public void testNamedRow() throws Exception {
-        /*List<Element> expected = new ArrayList<Element>();
-        for (int i = 0; i < ROW_NAMES.length; i++) {
-            expected.add(elementArray[ i ][ 1 ]);
-        }*/
-        Cluster expected = rowArray[1];
-        assertEquals(expected, itemTable.namedRow(ROW_NAMES[ 1 ]));
+    public void testElementAtNamedCellOneEyes() throws Exception {
+    	element = itemTable.elementAtNamedCell("1", "eye(s)");
+        assertEquals("at0001", element.getArchetypeNodeId());
+    }
+    
+    public void testElementAtNamedCellOneAcuity() throws Exception {
+    	element = itemTable.elementAtNamedCell("1", "visual acuity");
+        assertEquals("at0002", element.getArchetypeNodeId());
+    }
+    
+    public void testElementAtNamedCellTwoEyes() throws Exception {
+    	element = itemTable.elementAtNamedCell("2", "eye(s)");
+        assertEquals("at0004", element.getArchetypeNodeId());
+    }
+    
+    public void testElementAtNamedCellTwoAcuity() throws Exception {
+    	element = itemTable.elementAtNamedCell("2", "visual acuity");
+        assertEquals("at0005", element.getArchetypeNodeId());
+    }
+    
+    public void testElementAtNamedCellThreeEyes() throws Exception {
+    	element = itemTable.elementAtNamedCell("3", "eye(s)");
+        assertEquals("at0007", element.getArchetypeNodeId());
+    }
+    
+    public void testElementAtNamedCellThreeAcuity() throws Exception {
+    	element = itemTable.elementAtNamedCell("3", "visual acuity");
+        assertEquals("at0008", element.getArchetypeNodeId());
     }
 
-    public void testElementAtNamedCell() throws Exception {
-        // test the content of whole table
-        for (int i = 0; i < ROW_NAMES.length; i++) {
-            for (int j = 0; j < COLM_NAMES.length; j++) {
-                assertEquals(elementArray[ i ][ j ],
-                        itemTable.elementAtNamedCell(ROW_NAMES[ i ],
-                                COLM_NAMES[ j ]));
-            }
-        }
+    public void testItemAtPathWhole() throws Exception {
+        assertEquals(itemTable, itemTable.itemAtPath("/"));
     }
-
-    public void testValidPath() throws Exception {
-        // valid path
-        List<String> pathList = new ArrayList<String>();
-        pathList.add(sep + TABLE_NAME);
-        for (String col : ROW_NAMES) {
-            pathList.add(sep + TABLE_NAME + sep + col);
-        }
-        for (String col : ROW_NAMES) {
-            for (String row : COLM_NAMES) {
-                pathList.add(sep + TABLE_NAME + sep + ItemTable.COL_IS + col
-                        + sep + ItemTable.ROW_IS + row);
-            }
-        }
-        for (String path : pathList) {
-            assertTrue("expected valid path: " + path,
-                    itemTable.validPath(path));
-        }
-
-        // invalid path
-        pathList.clear();
-        pathList.add("|" + TABLE_NAME);
-        pathList.add(sep + "unknown_table_name");
-        pathList.add(sep + TABLE_NAME + sep + "unknown_column_name");
-        pathList.add(sep + TABLE_NAME + sep + ItemTable.COL_IS
-                + "unknown_column_name" + sep + ItemTable.ROW_IS
-                + "unknown_row_name");
-
-        for (String path : pathList) {
-            assertFalse("expected invalid path: " + path,
-                    itemTable.validPath(path));
-        }
+    
+    public void testItemAtPathRow1() throws Exception {
+        assertEquals(rows.get(0), itemTable.itemAtPath("/rows[at0003]"));
     }
-
-    public void testItemAtPath() throws Exception {
-        // fetch whole
-        assertEquals("fetch whole table", itemTable,
-                itemTable.itemAtPath(sep + TABLE_NAME));
-
-        // fetch column
-        for (int i = 0, ii = ROW_NAMES.length; i < ii; i++) {
-            String path = sep + TABLE_NAME + sep + ROW_NAMES[i];
-            Locatable item = itemTable.itemAtPath(path);
-            assertEquals("fetch column[" + i + "]", rowArray[i],
-                    item);
-        }
-        // fetch cell
-        for (int i = 0, ii = ROW_NAMES.length; i < ii; i++) {
-            for (int j = 0, jj = COLM_NAMES.length; j < jj; j++) {
-                String path = sep + TABLE_NAME + sep + ItemTable.COL_IS
-                        + ROW_NAMES[i] + sep + ItemTable.ROW_IS
-                        + COLM_NAMES[j];
-                Locatable item = itemTable.itemAtPath(path);
-                assertEquals("fetch cell[" + i + "][" + j + "]",
-                        elementArray[i][j], item);
-            }
-        }
+    
+    public void testItemAtPathRow1Column1() throws Exception {
+        assertEquals(rows.get(0).getItems().get(0), 
+        		itemTable.itemAtPath("/rows[at0003]/items[at0001]"));
     }
-
-    // create a itemTable as the example in the spec doc
-    private ItemTable init() {
-
-        // save element in the array for comparison
-        elementArray = new Element[ ROW_NAMES.length ][ 0 ];
-        rowArray = new Cluster[ROW_NAMES.length];
-
-        for (int i = 0; i < ROW_NAMES.length; i++) {
-            elementArray[ i ] = new Element[ COLM_NAMES.length ];
-        }
-        // key row
-        for (int i = 0; i < COLM_NAMES.length; i++) {
-            elementArray[ 0 ][ i ] = element(COLM_NAMES[ i ]);
-        }
-        // data_col left eye
-        elementArray[ 1 ][ 0 ] = element(COLM_NAMES[ 0 ], 6, 24);
-        elementArray[ 1 ][ 1 ] = element(COLM_NAMES[ 1 ], 6, 16);
-        elementArray[ 1 ][ 2 ] = element(COLM_NAMES[ 2 ], "xxxx1111");
-        elementArray[ 1 ][ 3 ] = element(COLM_NAMES[ 3 ], "yyyy1111");
-
-        // data_col right eye
-        elementArray[ 2 ][ 0 ] = element(COLM_NAMES[ 0 ], 6, 18);
-        elementArray[ 2 ][ 1 ] = element(COLM_NAMES[ 1 ], 6, 6);
-        elementArray[ 2 ][ 2 ] = element(COLM_NAMES[ 2 ], "xxxx2222");
-        elementArray[ 2 ][ 3 ] = element(COLM_NAMES[ 3 ], "yyyy2222");
-
-
-        // key row aspect
-        List<List<Item>> rows = new ArrayList<List<Item>>();
-        for (int i = 0; i < ROW_NAMES.length; i++) {
-            rows.add(new ArrayList<Item>());
-            for (int j = 0; j < COLM_NAMES.length; j++) {
-                rows.get(i).add(elementArray[ i ][ j ]);
-            }
-        }
-
-        // items
-        List<Item> items = new ArrayList<Item>();
-        for (int i = 0; i < ROW_NAMES.length; i++) {
-            rowArray[i] = cluster(i == 0 ? "key_col" : "data_col",
-                    ROW_NAMES[ i ], rows.get(i));
-            items.add(rowArray[i]);
-        }
-        Cluster itemsCluster = cluster("items", "items", items);
-        return new ItemTable(null, "at0001", text(TABLE_NAME),
-                null, null, null, null, itemsCluster);
+    
+    public void testItemAtPathRow1Column2() throws Exception {
+        assertEquals(rows.get(0).getItems().get(1), 
+        		itemTable.itemAtPath("/rows[at0003]/items[at0002]"));
     }
-
-    /* static fields */
-    private static final String TABLE_NAME = "vision";
-    private static final String[] COLM_NAMES = {
-        "acuity unaided", "acuity w/ glasses", "color", "shape"
-    };
-
-    private static final String[] ROW_NAMES = {
-        "aspect", "left eye", "right eye"
-    };
+    
+    public void testItemAtPathRow2() throws Exception {
+        assertEquals(rows.get(1), 
+        		itemTable.itemAtPath("/rows[at0006]"));
+    }
+    
+    public void testItemAtPathRow2Column1() throws Exception {
+        assertEquals(rows.get(1).getItems().get(0), 
+        		itemTable.itemAtPath("/rows[at0006]/items[at0004]"));
+    }
+    
+    public void testItemAtPathRow2Column2() throws Exception {
+        assertEquals(rows.get(1).getItems().get(1), 
+        		itemTable.itemAtPath("/rows[at0006]/items[at0005]"));
+    }
+    
+    public void testItemAtPathRow3() throws Exception {
+        assertEquals(rows.get(2), 
+        		itemTable.itemAtPath("/rows[at0009]"));
+    }
+    
+    public void testItemAtPathRow3Column1() throws Exception {
+        assertEquals(rows.get(2).getItems().get(0), 
+        		itemTable.itemAtPath("/rows[at0009]/items[at0007]"));
+    }
+    
+    public void testItemAtPathRow3Column2() throws Exception {
+        assertEquals(rows.get(2).getItems().get(1), 
+        		itemTable.itemAtPath("/rows[at0009]/items[at0008]"));
+    }
+    
+    public void testItemAtPathRow1Name() throws Exception {
+        assertEquals(rows.get(0), itemTable.itemAtPath("/rows['1']"));
+    }
+    
+    public void testItemAtPathRow1Column1Name() throws Exception {
+        assertEquals(rows.get(0).getItems().get(0), 
+        		itemTable.itemAtPath("/rows['1']/items['eye(s)']"));
+    }
+    
+    public void testItemAtPathRow1Column2Name() throws Exception {
+        assertEquals(rows.get(0).getItems().get(1), 
+        		itemTable.itemAtPath("/rows['1']/items['visual acuity']"));
+    }
+    
+    public void testItemAtPathRow2Name() throws Exception {
+        assertEquals(rows.get(1), 
+        		itemTable.itemAtPath("/rows['2']"));
+    }
+    
+    public void testItemAtPathRow2Column1Name() throws Exception {
+        assertEquals(rows.get(1).getItems().get(0), 
+        		itemTable.itemAtPath("/rows['2']/items['eye(s)']"));
+    }
+    
+    public void testItemAtPathRow2Column2Name() throws Exception {
+        assertEquals(rows.get(1).getItems().get(1), 
+        		itemTable.itemAtPath("/rows['2']/items['visual acuity']"));
+    }
+    
+    public void testItemAtPathRow3Name() throws Exception {
+        assertEquals(rows.get(2), 
+        		itemTable.itemAtPath("/rows['3']"));
+    }
+    
+    public void testItemAtPathRow3Column1Name() throws Exception {
+        assertEquals(rows.get(2).getItems().get(0), 
+        		itemTable.itemAtPath("/rows['3']/items['eye(s)']"));
+    }
+    
+    public void testItemAtPathRow3Column2Name() throws Exception {
+        assertEquals(rows.get(2).getItems().get(1), 
+        		itemTable.itemAtPath("/rows['3']/items['visual acuity']"));
+    }
 
     /* field */
+    private List<Cluster> rows;
     private ItemTable itemTable;
-    private Element[][] elementArray;
-    private Cluster[] rowArray;
+    private Element element;
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
@@ -276,7 +323,7 @@ public class ItemTableTest extends DataStructureTestBase {
  *  The Original Code is ItemTableTest.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

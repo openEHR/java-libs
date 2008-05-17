@@ -35,7 +35,7 @@ import java.util.Set;
 public abstract class ItemStructure extends DataStructure {
 
     /**
-     * Construct a ItemStructure
+     * Constructs a ItemStructure
      *
      * @param uid
      * @param archetypeNodeId
@@ -43,52 +43,19 @@ public abstract class ItemStructure extends DataStructure {
      * @param archetypeDetails
      * @param feederAudit
      * @param links
-     * @param representation null if unspecified
+     * @param parent
      */
     protected ItemStructure(UIDBasedID uid, String archetypeNodeId, DvText name,
                             Archetyped archetypeDetails, FeederAudit feederAudit,
-                            Set<Link> links, Locatable parent,
-                            Item representation) {
+                            Set<Link> links, Locatable parent) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
-                links, parent);
-        this.representation = representation;
-    }
-
-    /**
-     * Return the representation of this ItemStructrue
-     *
-     * @return representation
-     */
-    public Item getRepresentation() {
-        return representation;
-    }
-
-    /**
-     * Check if given path is valid
-     *
-     * @param path
-     * @throws IllegalArgumentException if path null or empty or
-     *                                  not contains or not starts with PATH_SEPARATOR
-     */
-    static void checkPath(String path) {
-        if (StringUtils.isEmpty(path)
-                || path.indexOf(PATH_SEPARATOR) < 0
-                || !path.startsWith(PATH_SEPARATOR)) {
-            throw new IllegalArgumentException("null or empty path");
-        }
+        		links, parent);
     }
 
     // POJO start
     protected ItemStructure() {
     }
-
-    void setRepresentation(Item representation) {
-        this.representation = representation;
-    }
-    // POJO end
-
-    /* fields */
-    private Item representation;
+    // POJO end   
 }
 
 /*
@@ -108,7 +75,7 @@ public abstract class ItemStructure extends DataStructure {
  *  The Original Code is ItemStructure.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

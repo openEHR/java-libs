@@ -175,28 +175,6 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
      */
     public String pathOfItem(Pathable item) {
         return null;  // todo: implement this method
-
-    }
-
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return relative path
-     */
-    public Locatable itemAtPath(String path) {
-        return null;  // todo: implement this method
-    }
-
-    /**
-     * Return true if the path is valid with respect to the current
-     * item.
-     *
-     * @param path
-     * @return true if valid
-     */
-    public boolean validPath(String path) {
-        return false;  // todo: implement this method
     }
 
     // POJO start

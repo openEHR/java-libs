@@ -71,15 +71,29 @@ public final class Cluster extends Item {
     }
 
     /**
-     * Constructs a Item node by archetypeNodeId and name
+     * Constructs a cluster list of items
      *
      * @param archetypeNodeId
      * @param name
+     * @param items
      * @throws IllegalArgumentException if archetypeNodeId or name null,
      *                                  or items null or empty
      */
     public Cluster(String archetypeNodeId, DvText name, List<Item> items) {
         this(null, archetypeNodeId, name, null, null, null, null, items);
+    }
+    
+    /**
+     * Constructs a cluster list of items
+     *
+     * @param archetypeNodeId
+     * @param name
+     * @param items
+     * @throws IllegalArgumentException if archetypeNodeId or name null,
+     *                                  or items null or empty
+     */
+    public Cluster(String archetypeNodeId, String name, List<Item> items) {
+        this(archetypeNodeId, new DvText(name), items);
     }
 
     /**
@@ -103,28 +117,6 @@ public final class Cluster extends Item {
         return null;  // todo: implement this method
     }
 
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return item
-     * @throws IllegalArgumentException if path invalid
-     */
-    public Locatable itemAtPath(String path) {
-        return null;  // todo: implement this method
-    }
-
-    /**
-     * Return true if the path is valid with respect to the current
-     * item.
-     *
-     * @param path
-     * @return true if valid
-     */
-    public boolean validPath(String path) {
-        return false;  // todo: implement this method
-    }
-    
     // POJO start
     protected Cluster() {
     }

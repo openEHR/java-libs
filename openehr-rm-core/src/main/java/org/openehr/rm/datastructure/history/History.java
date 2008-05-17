@@ -28,6 +28,7 @@ import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.datastructure.DataStructure;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
+import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 import org.openehr.rm.datatypes.text.DvText;
@@ -97,6 +98,19 @@ public class History <T extends ItemStructure> extends DataStructure {
     		List<Event<T>> events) {
     	this(null, archetypeNodeId, name, null, null, null, null, origin,
     			events, null, null, null);
+    }
+    
+    /**
+     * Convenient constructor 
+     * 
+     * @param archetypeNodeId
+     * @param name
+     * @param origin
+     * @param events
+     */
+    public History(String archetypeNodeId, String name, DvDateTime origin,
+    		List<Event<T>> events) {
+    	this(archetypeNodeId, new DvText(name), origin, events);
     }
 
     /**
@@ -242,7 +256,7 @@ public class History <T extends ItemStructure> extends DataStructure {
 		this.summary = summary;
 	}	
     // POJO end
-
+	
 	@Override
 	public List<Object> itemsAtPath(String path) {
 		// TODO Auto-generated method stub
@@ -259,6 +273,12 @@ public class History <T extends ItemStructure> extends DataStructure {
 	public boolean pathUnique(String path) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Item asHierarchy() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 
@@ -279,7 +299,7 @@ public class History <T extends ItemStructure> extends DataStructure {
  *  The Original Code is History.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

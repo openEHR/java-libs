@@ -19,6 +19,7 @@ import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.support.identification.UIDBasedID;
+import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.text.DvText;
 
 import java.util.Set;
@@ -58,6 +59,14 @@ public abstract class DataStructure extends Locatable {
     protected DataStructure(String archetypeNodeId, DvText name) {
         super(archetypeNodeId, name);
     }
+    
+    /**
+     * Returns a hierarchical equivalent of the physical representation 
+     * of each subtype, compatible with CEN EN 13606 structures.
+     * 
+     * @return item
+     */
+    public abstract Item asHierarchy();
 
     /**
      * Path that represents whole node

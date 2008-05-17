@@ -21,15 +21,10 @@
 package org.openehr.rm.datastructure.itemstructure;
 
 import org.openehr.rm.datastructure.DataStructureTestBase;
-import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
-import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.text.DvText;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ItemListTest extends DataStructureTestBase {
 
@@ -56,8 +51,7 @@ public class ItemListTest extends DataStructureTestBase {
     }
 
     public void testItems() throws Exception {
-        assertEquals("items", Arrays.asList(elementArray),
-                itemList.getItems());
+        assertEquals("items", elements, itemList.getItems());
     }
 
     public void testNames() throws Exception {
@@ -70,90 +64,30 @@ public class ItemListTest extends DataStructureTestBase {
 
     public void testNamedItem() throws Exception {
         for (int i = 0; i < NAMES.length; i++) {
-            assertEquals(elementArray[ i ],
-                    itemList.namedItem(NAMES[ i ]));
+            assertEquals(elements.get(i), itemList.namedItem(NAMES[ i ]));
         }
         assertTrue(itemList.namedItem("unknown name") == null);
     }
 
     public void testIthItem() throws Exception {
         for (int i = 0; i < NAMES.length; i++) {
-            assertEquals(elementArray[ i ], itemList.ithItem(i));
+            assertEquals(elements.get(i), itemList.ithItem(i));
         }
         assertTrue(itemList.namedItem("unknown name") == null);
-    }
-
-    public void testValidPath() throws Exception {
-
-        List<String> paths = new ArrayList<String>();
-
-        // good paths
-        String root = ItemStructure.PATH_SEPARATOR + NAME;
-        paths.add(root);
-        for (int i = 0; i < NAMES.length; i++) {
-            paths.add(root + ItemStructure.PATH_SEPARATOR
-                    + "item=" + i);
-            paths.add(root + ItemStructure.PATH_SEPARATOR
-                    + NAMES[ i ]);
-        }
-        for (Iterator it = paths.iterator(); it.hasNext();) {
-            String path = (String) it.next();
-            assertTrue(path, itemList.validPath(path));
-        }
-
-        // bad paths
-        paths = new ArrayList<String>();
-        paths.add(NAME);
-        paths.add(NAME + ItemStructure.PATH_SEPARATOR);
-        paths.add(ItemStructure.PATH_SEPARATOR + NAME +
-                ItemStructure.PATH_SEPARATOR);
-        paths.add(root + ItemStructure.PATH_SEPARATOR +
-                "unknown element");
-        paths.add(root + ItemStructure.PATH_SEPARATOR + "item=-1");
-        paths.add(root + ItemStructure.PATH_SEPARATOR + "item="
-                + NAMES.length);
-        for (Iterator it = paths.iterator(); it.hasNext();) {
-            String path = (String) it.next();
-            assertFalse(path, itemList.validPath(path));
-        }
-    }
-
-    public void testItemAtPath() throws Exception {
-        assertEquals("whole list", itemList, itemList.itemAtPath(
-                ItemStructure.PATH_SEPARATOR + NAME));
-
-        // item by index
-        for (int i = 0; i < NAMES.length; i++) {
-            String path = ItemStructure.PATH_SEPARATOR + NAME +
-                    ItemStructure.PATH_SEPARATOR + "item=" + i;
-            assertEquals("item at " + i, NAMES[ i ],
-                    itemList.itemAtPath(path).getName().getValue());
-        }
-
-        // item by name
-        for (int i = 0; i < NAMES.length; i++) {
-            String path = ItemStructure.PATH_SEPARATOR + NAME +
-                    ItemStructure.PATH_SEPARATOR + NAMES[ i ];
-            assertEquals("item of name " + i, NAMES[ i ],
-                    itemList.itemAtPath(path).getName().getValue());
-        }
     }
 
     // create a itemList as the example in the spec doc
     private ItemList init() {
 
         // save element in the array for comparison
-        elementArray = new Element[ NAMES.length ];
+        elements = new ArrayList<Element>();
 
         // elements
         for (int i = 0; i < NAMES.length; i++) {
-            elementArray[ i ] = element(NAMES[ i ], VALUES[ i ]);
+            elements.add(element(NAMES[ i ], VALUES[ i ]));
         }
-        Cluster itemsCluster = cluster("items", "items",
-                new ArrayList<Item>(Arrays.asList(elementArray)));
-
         return new ItemList(null, "at001", text(NAME), null, null, null, 
-                null, itemsCluster);
+                null, elements);
     }
 
     /* static fields */
@@ -167,7 +101,7 @@ public class ItemListTest extends DataStructureTestBase {
 
     /* field */
     private ItemList itemList;
-    private Element[] elementArray;
+    private List<Element> elements;
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
