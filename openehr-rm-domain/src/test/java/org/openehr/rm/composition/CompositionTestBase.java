@@ -23,8 +23,6 @@ import org.openehr.rm.datastructure.itemstructure.ItemList;
 import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
-import org.openehr.rm.datastructure.itemstructure.representation.Item;
-import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.PartyRef;
@@ -98,13 +96,11 @@ public class CompositionTestBase extends DataStructureTestBase {
         String[] values = {
             "value 1", "value 2", "value 3"
         };
-        List<Item> items = new ArrayList<Item>();
+        List<Element> items = new ArrayList<Element>();
         for (int i = 0; i < names.length; i++) {
             items.add(element(names[ i ], values[ i ]));
         }
-        Cluster itemsCluster = cluster("items", "items", items);
-        return new ItemList(null, "at0100", text(name), null, null, null,
-                null, itemsCluster);
+        return new ItemList("at0100", text(name), items);
     }
 
     public void assertItemAtPath(String path, Locatable target,
@@ -168,10 +164,11 @@ public class CompositionTestBase extends DataStructureTestBase {
     protected CodePhrase language(String language) throws Exception {
         return new CodePhrase("test", language);
     }
-
+    
     /* field */
     protected static CodePhrase lang = TestCodeSetAccess.ENGLISH;
     protected static CodePhrase encoding = TestCodeSetAccess.LATIN_1;
     protected static TerminologyService ts = TestTerminologyService.getInstance();
-
+    protected String path;
+    protected Object value;
 }

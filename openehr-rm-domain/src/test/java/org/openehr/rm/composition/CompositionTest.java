@@ -247,51 +247,14 @@ public class CompositionTest extends CompositionTestBase {
                 provider(), category, territory, ts);
     }
 
-    public void testValidPath() throws Exception {
-        String[] validPathList = {
-            "/",  // root
-            "/content[section one]", 
-            "/content[section two]", 
-            "/content[section two]/items[observation]",
-            
-        };
-
-        for (String path : validPathList) {
-            assertTrue("unexpected invalid path: " + path,
-                    composition.validPath(path));
-        }
-
-        String[] invalidPathList = {
-            "", null, "[composition]", "/composition", "/[composition]", // bad root
-            "/[composition]/content", // incomplete
-            "/[composition]/content[section three]",    // unknown section
-            "/[composition]/content[section one]",
-            "/[composition]/content[section two]",
-            "/[composition]/content[section two]/items[observation]",
-            "/[composition]/content[section two]/items[observation]/data",
-        };
-
-        for (String path : invalidPathList) {
-            assertFalse("unexpected valid path: " + path,
-                    composition.validPath(path));
-        }
-    }
-
-    public void testItemAtPath() throws Exception {
-        Section sectionOne = (Section)composition.getContent().get(0);
-        Section sectionTwo = (Section)composition.getContent().get(1);
-        Observation observation = (Observation)sectionTwo.getItems().get(0);
-
-        assertEquals("section one wrong", sectionOne,
-                composition.itemAtPath("/content[section one]"));
-
-        assertEquals("section two wrong", sectionTwo,
-                composition.itemAtPath("/content[section two]"));
-
-        assertEquals("observation wrong", observation, composition.itemAtPath(
-                "/content[section two]/items[observation]"));
+    public void testItemAtPathWhole() throws Exception {
+    	path = "/";
+    	value = composition.itemAtPath(path);    		
+        assertEquals("unexpected value at path: " + path, composition, value);
     }
 
     /* field */
     private Composition composition;
+    private String path;
+    private Object value;
 }

@@ -19,7 +19,6 @@ import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.*;
 import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyProxy;
-import org.openehr.rm.common.generic.PartyRelated;
 import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -73,8 +72,8 @@ public final class Instruction extends CareEntry {
                     @Attribute(name = "parent") Locatable parent, 
                     @Attribute(name = "language", required = true) CodePhrase language,
                     @Attribute(name = "encoding", required = true) CodePhrase encoding, 
-                    @Attribute(name = "subject", system = true) PartyProxy subject,
-                    @Attribute(name = "provider", system = true) PartyProxy provider,
+                    @Attribute(name = "subject", required = true) PartyProxy subject,
+                    @Attribute(name = "provider") PartyProxy provider,
                     @Attribute(name = "workflowId") ObjectRef workflowId,
                     @Attribute(name = "otherParticipations") List<Participation> otherParticipations,
                     @Attribute(name = "protocol") ItemStructure protocol,
@@ -179,43 +178,6 @@ public final class Instruction extends CareEntry {
         return null;  // todo: implement this method
     }
 
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return the item or null if not found
-     */
-    public Object itemAtPath(String path) {
-               
-        Object item = super.itemAtPath(path);
-        if (item != null) {
-            return item;
-        }
-        /*String attr = ROOT + "activities";
-        if(tmp.startsWith(attr)) {
-            tmp = tmp.substring(attr.length());
-            for(Activity activity : activities) {
-                //String node = activity.whole().substring(1);
-                String node = activity.nodeName();
-                if(tmp.startsWith(node)) {
-                    if(tmp.equals(node)) {
-                        return activity;
-                    }
-                    String subpath = tmp.substring(node.length());
-                    if(activity.validPath(subpath))  {
-                        return activity.itemAtPath(subpath);
-                    }
-                }
-            }
-        }*/
-        Object ret = checkAttribute(path, "activities", activities);
-        if(ret!=null) {
-            return ret;
-        } else {
-        throw new IllegalArgumentException("invalid path: " + path);
-        }
-    }
-    
     @Override
 	public String pathOfItem(Pathable arg0) {
 		// TODO Auto-generated method stub

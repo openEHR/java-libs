@@ -119,68 +119,9 @@ public abstract class Party extends Locatable {
         return this.getName();
     }
 
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return relative path
-     * @throws IllegalArgumentException if path invalid
-     */
-    public Object itemAtPath(String path) {
-        Object ret = super.itemAtPath(path);
-        if (ret != null) {
-            return ret;
-        }
-        //String whole = whole();
-        String tmp = path;
-        //if (tmp.startsWith(whole)) {
-        //if(!whole.equals("/") && tmp.startsWith(whole)) {
-          //  tmp = tmp.substring(whole.length());
-        //}
-        ret = checkAttribute(tmp, "identities", identities);
-        if (ret != null) {
-            return ret;
-        }
-        ret = checkAttribute(tmp, "contacts", contacts);
-        if(ret != null) {
-            return ret;
-        }
-        ret = checkAttribute(tmp, "relationships", relationships);
-        if(ret != null) {
-            return ret;
-        }
-        ret = checkAttribute(tmp, "details", details);
-        if(ret != null) {
-            return ret;
-        }
-        return null;
-    }
-
-    /**
-     * Return true if the path is valid with respect to the current
-     * item.
-     *
-     * @param path
-     * @return true if valid
-     */
-    public boolean validPath(String path) {
-        try {
-            itemAtPath(path);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
-
-
     public String pathOfItem(Locatable item) {
         //todo: to be implemented
         return null;
-    }
-
-    public boolean hasLegalIdentity() {
-        //todo: to be implemented
-        return false;
     }
 
     public Set<PartyIdentity> getIdentities() {

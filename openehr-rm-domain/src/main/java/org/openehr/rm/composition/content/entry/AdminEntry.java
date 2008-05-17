@@ -70,8 +70,8 @@ public class AdminEntry extends Entry {
                        @Attribute(name = "parent") Locatable parent,
                        @Attribute(name = "language", required = true) CodePhrase language,
                        @Attribute(name = "encoding", required = true) CodePhrase encoding, 
-                       @Attribute(name = "subject", system = true) PartyProxy subject,
-                       @Attribute(name = "provider", system = true) PartyProxy provider,
+                       @Attribute(name = "subject", required = true) PartyProxy subject,
+                       @Attribute(name = "provider") PartyProxy provider,
                        @Attribute(name = "workflowId") ObjectRef workflowId, 
                        @Attribute(name = "otherParticipations") List<Participation> otherParticipations, 
                        @Attribute(name = "data", required = true) ItemStructure data,
@@ -85,29 +85,16 @@ public class AdminEntry extends Entry {
 		this.data = data;
 	}
 
+    /**
+     * Gets data of this adminEntry
+     * 
+     * @return data
+     */
 	public ItemStructure getData() {
 		return data;
 	}
 
-	/**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return the item or null if not found
-     */
-    public Object itemAtPath(String path) {
-        Object item = super.itemAtPath(path);
-        if (item != null) {
-            return item;
-        }
-        Object ret = checkAttribute(path, "data", data);
-        if (ret == null) {
-            throw new IllegalArgumentException("invalid path: " + path);
-        }
-        return ret;
-    }
-    
-    @Override
+	@Override
 	public String pathOfItem(Pathable arg0) {
 		// TODO Auto-generated method stub
 		return null;

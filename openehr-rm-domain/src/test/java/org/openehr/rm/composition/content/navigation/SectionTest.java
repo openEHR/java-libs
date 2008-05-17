@@ -35,74 +35,59 @@ public class SectionTest extends CompositionTestBase {
 
     public void setUp() throws Exception {
         List<ContentItem> items = new ArrayList<ContentItem>();
-        items.add(observation("observation 2"));
-        items.add(section("section 3"));
-        Section section2 =
-                new Section("at0000", new DvText("section 2"), items);
+        observationTwo = observation("observation 2");
+        items.add(observationTwo);
+        
+        sectionThree = section("section 3");
+        items.add(sectionThree);
+        
+        sectionTwo = new Section("at0000", new DvText("section 2"), items);
         items = new ArrayList<ContentItem>();
-        items.add(section2);
-        items.add(observation("observation 1"));
+        items.add(sectionTwo);
+        
+        observationOne = observation("observation 1"); 
+        items.add(observationOne);
         section = new Section("at0000", new DvText("section"), items);
     }
 
     public void tearDown() throws Exception {
         section = null;
     }
-
-    public void testValidPath() throws Exception {
-        String[] validPathList = {
-            "/",
-            "/items[observation 1]",
-            "/items[section 2]",
-            "/items[section 2]/items[section 3]",
-            "/items[section 2]/items[observation 2]",
-        };
-
-        for (String path : validPathList) {
-            assertTrue("unexpected invalid path: " + path,
-                    section.validPath(path));
-        }
-
-        String[] invalidPathList = {
-            "", null, "[section]", "/section", // bad root
-            "/[section]/items", // incomplete
-            "/[section]/items[section 3]", // unknown section
-            "/[section]/items[observation 3]",    // unknown entry
-            "/[section]",
-            "/[section]/items[observation 1]",
-            "/[section]/items[section 2]",
-            "/[section]/items[section 2]/items[section 3]",
-            "/[section]/items[section 2]/items[observation 2]",
-        };
-
-        for (String path : invalidPathList) {
-            assertFalse("unexpected valid path: " + path,
-                    section.validPath(path));
-        }
+    
+    public void testItemAtPathWhole() {
+    	path = "/";
+    	value = section.itemAtPath(path);
+    	assertEquals(section, value);
     }
-
-    public void testItemAtPath() throws Exception {
-        Observation observationOne = (Observation) section.getItems().get(1);
-        Section sectionTwo = (Section) section.getItems().get(0);
-        Observation observationTwo = (Observation)
-                ( (Section) section.getItems().get(0) ).getItems().get(0);
-        Section sectionThree = (Section) ( (Section) section.getItems().get(0) )
-                .getItems().get(1);
-
-        assertEquals("section two wrong", sectionTwo,
-                section.itemAtPath("/items[section 2]"));
-
-        assertEquals("section three wrong", sectionThree,
-                section.itemAtPath("/items[section 2]/items[section 3]"));
-
-        assertEquals("observation one wrong", observationOne,
-                section.itemAtPath("/items[observation 1]"));
-
-        assertEquals("observation two wrong", observationTwo,
-                section.itemAtPath("/items[section 2]/items[observation 2]"));
-
+    
+    public void testItemAtPathSectionTwo() {
+    	path = "/items['section 2']";
+    	value = section.itemAtPath(path);
+    	assertEquals(sectionTwo, value);
+    }
+    
+    public void testItemAtPathSectionThree() {
+    	path = "/items['section 2']/items['section 3']";
+    	value = section.itemAtPath(path);
+    	assertEquals(sectionThree, value);
+    }
+    
+    public void testItemAtPathObservationOne() {
+    	path = "/items['observation 1']";
+    	value = section.itemAtPath(path);
+    	assertEquals(observationOne, value);
+    }
+    
+    public void testItemAtPathObservationTwo() {
+    	path = "/items['section 2']/items['observation 2']";
+    	value = section.itemAtPath(path);
+    	assertEquals(observationTwo, value);
     }
 
     /* fields */
     private Section section;
+    private Section sectionTwo;
+    private Section sectionThree;
+    private Observation observationOne;
+    private Observation observationTwo;
 }

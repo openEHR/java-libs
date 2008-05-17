@@ -140,7 +140,7 @@ public abstract class Entry extends ContentItem {
     }
 
     /**
-     * Name of charater set in which text values in this Entry 
+     * Name of character set in which text values in this Entry 
      * are encoded. Coded from openEHR code set "character sets".
      * 
      * @return encoding
@@ -150,7 +150,7 @@ public abstract class Entry extends ContentItem {
 	}
 
     /**
-     * Mandatory iindicator of the localised language in which 
+     * Mandatory indicator of the localized language in which 
      * this Entry is written. Coded from openEHR code set "languages".
      * @return
      */
@@ -186,53 +186,6 @@ public abstract class Entry extends ContentItem {
         return (subject instanceof PartySelf);
     }
     
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return the item
-     * @throws IllegalArgumentException if path invalid
-     */
-   /* public Object itemAtPath(String path) {
-        Object item = super.itemAtPath(path);
-        if(item != null) {
-            return item;
-        }
-        String whole = whole();
-        String tmp = path;
-        if(tmp.startsWith(whole)) {
-            tmp = tmp.substring(whole.length());
-        }
-        String attr = ROOT + PROTOCOL;
-        if (tmp.equals(attr)) {
-            return protocol;
-        }
-        if(tmp.startsWith(attr)) {
-            return protocol.itemAtPath(tmp.substring(attr.length()));
-        }
-        return null;    // path needs to be further processed by sub-class
-        //TODO: re-implement
-    }*/
-
-    /**
-     * Return true if the path is valid with respect to the current
-     * item.
-     *
-     * @param path
-     * @return true if valid
-     */
-    public boolean validPath(String path) {
-        if(super.validPath(path)) {
-            return true;
-        }
-        try {
-            itemAtPath(path);
-            return true;
-        } catch(IllegalArgumentException e) {
-            return false;
-        }
-    }    
-
     // POJO start
     protected Entry() {
     }
@@ -269,9 +222,6 @@ public abstract class Entry extends ContentItem {
     private PartyProxy provider;
     private ObjectRef workflowId;
     private List<Participation> otherParticipations;
-
-    /* static fields */
-    
 }
 
 /*
@@ -291,7 +241,7 @@ public abstract class Entry extends ContentItem {
  *  The Original Code is Entry.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

@@ -51,44 +51,11 @@ public class ActivityTest extends CompositionTestBase {
 		return suite;
 	}
 
-	public void testValidPath() throws Exception {
-		String[] validPathList = { "/", "/description", };
-
-		for (String path : validPathList) {
-			assertTrue("unexpected invalid path: " + path, activity
-					.validPath(path));
-		}
-
-		String[] invalidPathList = { "", null, "[]", "/activity",
-				"/[activity]", // bad root
-				"/[activity]/state", // bad attribute
-		};
-
-		for (String path : invalidPathList) {
-			assertFalse("unexpected valid path[" + path + "]", activity
-					.validPath(path));
-		}
-	}
-
-	public void testItemAtPath() throws Exception {
-		assertItemAtPath("/", activity, activity);
-		assertItemAtPath("/", activity, activity);
-
-		assertItemAtPath("/description", activity, activity.getDescription());
-
-		String[] invalidPathList = { "", null, "activity", "/activity", // bad root
-				"/[activity]/state" // bad attribute
-		};
-
-		for (String path : invalidPathList) {
-			try {
-				activity.itemAtPath(path);
-				fail("exception should be thrown on invalid path[" + path + "]");
-			} catch (Exception e) {
-				assertTrue(e instanceof IllegalArgumentException);
-			}
-		}
-	}
+	public void testItemAtPath() {
+    	path = "/";
+    	value = activity.itemAtPath(path);
+    	assertEquals(activity, value);
+    }
 
 	private Activity activity;
 }

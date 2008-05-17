@@ -53,56 +53,10 @@ public class EvaluationTest extends CompositionTestBase {
                 null, null, protocol, null, data, ts);
     }
 
-    public void testValidPath() throws Exception {
-        String[] validPathList = {
-            "/",                   // root
-            "/protocol", //"/[evaluation]/protocol",  // protocol
-            "/data", //"/[evaluation]/data"           // data
-        };
-
-        for(String path : validPathList) {
-            assertTrue("unexpected invalid path: " + path,
-                    evaluation.validPath(path));
-        }
-
-        String[] invalidPathList = {
-            "", null, "evaluation", "/evaluation", "/[evaluation]",  // bad root
-            "/[evaluation]/state"                   // unknown attribute
-        };
-
-        for (String path : invalidPathList) {
-            assertFalse("unexpected valid path: " + path,
-                    evaluation.validPath(path));
-        }
-    }
-
-    public void testItemAtPath() throws Exception {
-        assertItemAtPath("/", evaluation, evaluation);
-        //assertItemAtPath("/[evaluation]", evaluation, evaluation);
-
-        assertItemAtPath("/data", evaluation, evaluation.getData());
-        //assertItemAtPath("/[evaluation]/data", evaluation,
-          //      evaluation.getData());
-
-        assertItemAtPath("/protocol", evaluation, evaluation.getProtocol());
-        //assertItemAtPath("/[evaluation]/protocol", evaluation,
-          //      evaluation.getProtocol());
-
-        String[] invalidPathList = {
-            "", null, "evaluation", "/evaluation",   // bad root
-            "/[evaluation]/state"                   // unknown attribute
-        };
-
-        for (String path : invalidPathList) {
-            try {
-                evaluation.itemAtPath(path);
-                fail("exception should be thrown on invalid path[" + path
-                        + "]");
-            } catch (Exception e) {
-                assertTrue(e instanceof IllegalArgumentException);
-            }
-        }
-
+    public void testItemAtPath() {
+    	path = "/";
+    	value = evaluation.itemAtPath(path);
+    	assertEquals(evaluation, value);
     }
 
     /* field */

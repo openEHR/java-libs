@@ -40,11 +40,7 @@ public class InstructionTest extends CompositionTestBase {
     }
 
     public void setUp() throws Exception {
-        //ItemStructure action = list("list action");
-        //ItemStructure data = list("list data");
-        //ItemStructure profile = list("list profile");
         ItemStructure protocol = list("list protocol");
-        //DvState state = TestCodeSetAccess.DRAFT;
         Archetyped arch = new Archetyped(
                 new ArchetypeID("openehr-ehr_rm-instruction.physical_examination.v3"),
                 "1.1");
@@ -60,58 +56,10 @@ public class InstructionTest extends CompositionTestBase {
                 null, null, protocol, null, text("narrative"), activities, null, null, ts);
     }
 
-    public void testValidPath() throws Exception {
-        String[] validPathList = {
-            "/",
-            "/protocol",
-            "/activities[activity 1]",
-            "/activities[activity 1]/description",
-            "/protocol/list protocol",
-        };
-
-        for (String path : validPathList) {
-            assertTrue("unexpected invalid path: " + path,
-                    instruction.validPath(path));
-        }
-
-        String[] invalidPathList = {
-            "", null, "[instruction]", "/instruction",  "/[instruction]", // bad root
-            "/[instruction]/state",                    // bad attribute
-            "/activities"                              // incomplete
-        };
-
-        for (String path : invalidPathList) {
-            assertFalse("unexpected valid path[" + path + "]",
-                    instruction.validPath(path));
-        }
-    }
-
-    public void testItemAtPath() throws Exception {
-        assertItemAtPath("/", instruction, instruction);
-        assertItemAtPath("/", instruction, instruction);
-
-        assertItemAtPath("/protocol", instruction, instruction.getProtocol());
-
-        assertItemAtPath("/protocol/list protocol", instruction, 
-                instruction.getProtocol());
-        assertItemAtPath("/activities[activity 1]", instruction, instruction.getActivities().get(0));
-        assertItemAtPath("/activities[activity 1]/description", instruction, 
-                instruction.getActivities().get(0).getDescription());
-       
-        String[] invalidPathList = {
-            "", null, "instruction", "/instruction", // bad root
-            "/[instruction]/state"                    // bad attribute
-        };
-
-        for (String path : invalidPathList) {
-            try {
-                instruction.itemAtPath(path);
-                fail("exception should be thrown on invalid path[" + path
-                        + "]");
-            } catch (Exception e) {
-                assertTrue(e instanceof IllegalArgumentException);
-            }
-        }
+    public void testItemAtPath() {
+    	path = "/";
+    	value = instruction.itemAtPath(path);
+    	assertEquals(instruction, value);
     }
 
     /* fields */

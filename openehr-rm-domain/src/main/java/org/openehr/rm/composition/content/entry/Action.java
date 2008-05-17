@@ -73,8 +73,8 @@ public final class Action extends CareEntry {
             @Attribute(name = "parent") Locatable parent,
             @Attribute(name = "language", required = true) CodePhrase language,
             @Attribute(name = "encoding", required = true) CodePhrase encoding,
-            @Attribute(name = "subject", system = true) PartyProxy subject,
-            @Attribute(name = "provider", system = true) PartyProxy provider,
+            @Attribute(name = "subject", required = true) PartyProxy subject,
+            @Attribute(name = "provider") PartyProxy provider,
             @Attribute(name = "workflowId") ObjectRef workflowId,
             @Attribute(name = "otherParticipations") List<Participation> otherParticipations,
             @Attribute(name = "protocol") ItemStructure protocol,
@@ -140,34 +140,6 @@ public final class Action extends CareEntry {
      */
     public DvDateTime getTime() {
         return time;
-    }
-    
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return the item or null if not found
-     */
-    public Object itemAtPath(String path) {
-        
-        Object item = super.itemAtPath(path);
-        if (item != null) {
-            return item;
-        }
-        /*String[] attributeNames = {
-            DESCRIPTION
-        };
-        Locatable [] attributes = {
-            description
-        };
-        return locateAttribute(tmp, attributeNames, attributes);
-         */
-        Object ret = checkAttribute(path, "description", description);
-        if( ret != null) {
-            return ret;
-        } else {
-            throw new IllegalArgumentException("invalid path: " + path);
-        }
     }
     
     @Override

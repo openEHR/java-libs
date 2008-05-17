@@ -23,7 +23,6 @@ import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyProxy;
-import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -57,7 +56,7 @@ public final class Observation extends CareEntry {
      * @param subject
      * @param provider
      * @param protocol
-     * @param actID
+     * @param act
      * @param guidelineId
      * @param otherParticipations
      * @param data
@@ -80,8 +79,8 @@ public final class Observation extends CareEntry {
                                @Attribute(name = "otherParticipations") List<Participation> otherParticipations,
                                @Attribute(name = "protocol") ItemStructure protocol,
                                @Attribute(name = "guidelineId") ObjectRef guidelineId,                              
-                               @Attribute(name = "data", required = true) History<ItemStructure> data,
-                               @Attribute(name = "state") History<ItemStructure> state,
+                               @Attribute(name = "data", required = true) History<? extends ItemStructure> data,
+                               @Attribute(name = "state") History<? extends ItemStructure> state,
                                @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService
                                ) {
 
@@ -120,7 +119,7 @@ public final class Observation extends CareEntry {
      *
      * @return data
      */
-    public History<ItemStructure> getData() {
+    public History<? extends ItemStructure> getData() {
         return data;
     }
 
@@ -131,7 +130,7 @@ public final class Observation extends CareEntry {
      *
      * @return state null if unspecified
      */
-    public History<ItemStructure> getState() {
+    public History<? extends ItemStructure> getState() {
         return state;
     }
 
@@ -144,27 +143,6 @@ public final class Observation extends CareEntry {
      */
     public String pathOfItem(Locatable item) {
         return null;  // todo: implement this method
-    }
-
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return the item or null if not found
-     */
-    public Object itemAtPath(String path) {
-
-        Object item = super.itemAtPath(path);
-        if (item != null) {
-            return item;
-        }
-        String[] attributeNames = {
-            DATA, STATE
-        };
-        Locatable [] attributes = {
-            data, state
-        };
-        return locateAttribute(path, attributeNames, attributes);
     }
 
     @Override
@@ -195,18 +173,18 @@ public final class Observation extends CareEntry {
     Observation() {
     }
 
-    void setData(History<ItemStructure> data) {
+    void setData(History<? extends ItemStructure> data) {
         this.data = data;
     }
 
-    void setState(History<ItemStructure> state) {
+    void setState(History<? extends ItemStructure> state) {
         this.state = state;
     }
     // POJO end
 
     /* fields */
-    private History<ItemStructure> data;
-    private History<ItemStructure> state;
+    private History<? extends ItemStructure> data;
+    private History<? extends ItemStructure> state;
     
     /* static fields */
     public static final String DATA = "data";

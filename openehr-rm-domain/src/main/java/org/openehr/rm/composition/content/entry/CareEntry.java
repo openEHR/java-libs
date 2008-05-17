@@ -69,22 +69,6 @@ public abstract class CareEntry extends Entry {
         this.guidelineId = guidelineId;
     }
 
-    public Object itemAtPath(String path) {
-
-        Object item = super.itemAtPath(path);
-        if(item != null) {
-            return item;
-        }
-        String attr = ROOT + PROTOCOL;
-        if (path.equals(attr)) {
-            return protocol;
-        }
-        if(path.startsWith(attr)) {
-            return protocol.itemAtPath(path.substring(attr.length()));
-        }
-        return null;    // path needs to be further processed by sub-class
-    }
-    
     /**
      * Optional external identifier of guideline creating this action 
      * if relevant

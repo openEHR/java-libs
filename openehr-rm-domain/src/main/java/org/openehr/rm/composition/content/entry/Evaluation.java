@@ -23,7 +23,6 @@ import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyProxy;
-import org.openehr.rm.common.generic.PartyRelated;
 import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -67,8 +66,8 @@ public final class Evaluation extends CareEntry {
                               @Attribute(name = "parent") Locatable parent, 
                               @Attribute(name = "language", required = true) CodePhrase language,
                               @Attribute(name = "encoding", required = true) CodePhrase encoding, 
-                              @Attribute(name = "subject", system = true) PartyProxy subject,
-                              @Attribute(name = "provider", system = true) PartyProxy provider,
+                              @Attribute(name = "subject", required = true) PartyProxy subject,
+                              @Attribute(name = "provider") PartyProxy provider,
                               @Attribute(name = "workflowId") ObjectRef workflowId,
                               @Attribute(name = "otherParticipations") List<Participation> otherParticipations,
                               @Attribute(name = "protocol") ItemStructure protocol,
@@ -106,33 +105,6 @@ public final class Evaluation extends CareEntry {
         return null;  // todo: implement this method
     }
 
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return the item
-     * @throws IllegalArgumentException if path invalid
-     */
-    public Object itemAtPath(String path) {
-        
-        Object item = super.itemAtPath(path);
-        if (item != null) {
-            return item;
-        }
-        String whole = whole();
-        String tmp = path;
-        //if(tmp.startsWith(whole)) {
-        if(!whole.equals("/") && tmp.startsWith(whole)) {
-            tmp = path.substring(whole.length());
-        }
-        Object ret = checkAttribute(tmp, "data", data);
-        if( ret != null) {
-            return ret;
-        } else {
-            throw new IllegalArgumentException("invalid path: " + path);
-        }
-    }
-    
     @Override
 	public String pathOfItem(Pathable arg0) {
 		// TODO Auto-generated method stub

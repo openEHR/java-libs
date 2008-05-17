@@ -117,30 +117,6 @@ public class Activity extends Locatable {
 	}
 
 	@Override
-	public Object itemAtPath(String path) {
-		Object item = super.itemAtPath(path);
-		if (item != null) {
-			return item;
-		}
-		Object ret = checkAttribute(path, "description", description);
-		if (ret != null) {
-			return ret;
-		} else {
-			throw new IllegalArgumentException("invalid path: " + path);
-		}
-	}
-
-	@Override
-	public boolean validPath(String path) {
-		try {
-			itemAtPath(path);
-			return true;
-		} catch (IllegalArgumentException e) {
-			return false;
-		}
-	}
-	
-	@Override
 	public List<Object> itemsAtPath(String arg0) {
 		// TODO Auto-generated method stub
 		return null;

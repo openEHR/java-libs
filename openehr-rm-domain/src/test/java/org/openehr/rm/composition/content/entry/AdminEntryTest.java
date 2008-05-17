@@ -15,10 +15,14 @@
 
 package org.openehr.rm.composition.content.entry;
 
-import junit.framework.*;
+import java.util.*;
+
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.composition.CompositionTestBase;
-import org.openehr.rm.datastructure.itemstructure.ItemStructure;
+import org.openehr.rm.datastructure.itemstructure.ItemList;
+import org.openehr.rm.datastructure.itemstructure.representation.Element;
+import org.openehr.rm.datatypes.quantity.datetime.DvDate;
+import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.ArchetypeID;
 
 public class AdminEntryTest extends CompositionTestBase {
@@ -28,68 +32,112 @@ public class AdminEntryTest extends CompositionTestBase {
     }
 
     protected void setUp() throws Exception {
-        ItemStructure data = list("list data");
-        Archetyped arch = new Archetyped(
-                new ArchetypeID("openehr-ehr_rm-adminEntry.XYZ.v2"),
-                "1.1");
-        adminEntry = new AdminEntry(null, "at0001", text("admin entry"),
-                arch, null, null, null, language("en"), language("en"), subject(), provider(), 
-                null, null, data, ts);
+        Archetyped archetypeDetails = new Archetyped(
+                new ArchetypeID("openehr-ehr_rm-adminEntry.date.v2"),
+                "1.0.2");        
+        List<Element> items = new ArrayList<Element>();
+        items.add(new Element(("at0001"), "header", new DvText("date")));
+        items.add(new Element(("at0002"), "value",	new DvDate("2008-05-17")));
+        itemList = new ItemList("at0003", "item list", items);        
+        adminEntry = new AdminEntry(null, "at0004", new DvText("admin entry"),
+        		archetypeDetails, null, null, null, lang, encoding, 
+        		subject(), provider(), null, null, itemList, ts);
     }
 
     protected void tearDown() throws Exception {
+    	itemList = null;
+    	adminEntry = null;
     }
 
-    public static Test suite() {
-        TestSuite suite = new TestSuite(AdminEntryTest.class);
-        
-        return suite;
-    }
-
-    public void testValidPath() throws Exception {
-        String[] validPathList = {
-            "/",
-            "/data",
-        };
-
-        for (String path : validPathList) {
-            assertTrue("unexpected invalid path: " + path,
-                    adminEntry.validPath(path));
-        }
-
-        String[] invalidPathList = {
-            "", null, "[]", "/adminEntry",  "/[adminEntry]", // bad root
-            "/[adminEntry]/state",                    // bad attribute
-        };
-
-        for (String path : invalidPathList) {
-            assertFalse("unexpected valid path[" + path + "]",
-                    adminEntry.validPath(path));
-        }
+    public void testItemAtPathWhole() throws Exception {
+    	path = "/";
+    	value = adminEntry.itemAtPath(path);
+        assertEquals("unexpected result for path: " + path, adminEntry, value); 
     }
     
-    public void testItemAtPath() throws Exception {
-        assertItemAtPath("/", adminEntry, adminEntry);
-        assertItemAtPath("/", adminEntry, adminEntry);
-
-        assertItemAtPath("/data", adminEntry, adminEntry.getData());
-        
-        String[] invalidPathList = {
-            "", null, "adminEntry", "/adminEntry", // bad root
-            "/[adminEntry]/state"                    // bad attribute
-        };
-
-        for (String path : invalidPathList) {
-            try {
-                adminEntry.itemAtPath(path);
-                fail("exception should be thrown on invalid path[" + path
-                        + "]");
-            } catch (Exception e) {
-                assertTrue(e instanceof IllegalArgumentException);
-            }
-        }
+    public void testItemAtPathSubject() throws Exception {
+    	path = "/subject";
+    	value = adminEntry.itemAtPath(path);
+        assertEquals("unexpected result for path: " + path, 
+        		adminEntry.getSubject(), value); 
     }
     
+    public void testItemAtPathProvider() throws Exception {
+    	path = "/provider";
+    	value = adminEntry.itemAtPath(path);
+        assertEquals("unexpected result for path: " + path, 
+        		adminEntry.getProvider(), value); 
+    }
+    
+    public void testItemAtPathData() throws Exception {
+    	path = "/data";
+    	value = adminEntry.itemAtPath(path);
+    	assertEquals("unexpected result for path: " + path,	itemList, value); 
+    }
+    
+    public void testItemAtPathDataATCode() throws Exception {
+    	path = "/data[at0003]";
+    	value = adminEntry.itemAtPath(path);
+        assertEquals("unexpected result for path: " + path,	itemList, value); 
+    }
+    
+    public void testItemAtPathDataItemOne() throws Exception {
+    	path = "/data/items[at0001]";
+    	value = adminEntry.itemAtPath(path);
+        assertEquals("unexpected result for path: " + path, 
+        		itemList.getItems().get(0), value); 
+    }
+    
+    public void testItemAtPathDataItemTwo() throws Exception {
+    	path = "/data/items[at0002]";
+    	value = adminEntry.itemAtPath(path);
+        assertEquals("unexpected result for path: " + path, 
+        		itemList.getItems().get(1), value); 
+    }
+    
+    public void testItemAtPathDataItemOneValue() throws Exception {
+    	path = "/data/items[at0001]/value";
+    	value = adminEntry.itemAtPath(path);
+        assertEquals("unexpected result for path: " + path, 
+        		itemList.getItems().get(0).getValue(), value); 
+    }
+    
+    public void testItemAtPathDataItemTwoValue() throws Exception {
+    	path = "/data/items[at0002]/value";
+    	value = adminEntry.itemAtPath(path);
+        assertEquals("unexpected result for path: " + path, 
+        		itemList.getItems().get(1).getValue(), value); 
+    }
+    
+    public void testItemAtPathDataItemHeader() throws Exception {
+    	path = "/data/items['header']";
+    	value = adminEntry.itemAtPath(path);
+        assertEquals("unexpected result for path: " + path, 
+        		itemList.getItems().get(0), value); 
+    }
+    
+    public void testItemAtPathDataItemValue() throws Exception {
+    	path = "/data/items['value']";
+    	value = adminEntry.itemAtPath(path);
+        assertEquals("unexpected result for path: " + path, 
+        		itemList.getItems().get(1), value); 
+    }
+    
+    public void testItemAtPathDataItemHeaderValue() throws Exception {
+    	path = "/data/items['header']/value";
+    	value = adminEntry.itemAtPath(path);
+        assertEquals("unexpected result for path: " + path, 
+        		itemList.getItems().get(0).getValue(), value); 
+    }
+    
+    public void testItemAtPathDataItemValueValue() throws Exception {
+    	path = "/data/items['value']/value";
+    	value = adminEntry.itemAtPath(path);
+        assertEquals("unexpected result for path: " + path, 
+        		itemList.getItems().get(1).getValue(), value); 
+    }
+    
+    private ItemList itemList;
     private AdminEntry adminEntry;
 }
 
@@ -110,7 +158,7 @@ public class AdminEntryTest extends CompositionTestBase {
  *  The Original Code is AdminEntryTest.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

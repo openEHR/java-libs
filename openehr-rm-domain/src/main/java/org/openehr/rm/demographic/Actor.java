@@ -159,30 +159,6 @@ public abstract class Actor extends Party {
     }
 
     /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return relative path
-     * @throws IllegalArgumentException if path invalid
-     */
-    public Object itemAtPath(String path) {
-        Object ret = super.itemAtPath(path);
-        if (ret != null) {
-            return ret;
-        }
-        //String whole = whole();
-        String tmp = path;
-        //if (tmp.startsWith(whole)) {
-          //  tmp = tmp.substring(whole.length());
-        //}
-        ret = checkAttribute(tmp, "roles", roles);
-        if (ret != null) {
-            return ret;
-        }
-        throw new IllegalArgumentException("invalid path: " + path);
-    }
-
-    /**
      * Equals if two actors has same values
      *
      * @param o

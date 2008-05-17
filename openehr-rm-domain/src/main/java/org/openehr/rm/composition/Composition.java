@@ -222,42 +222,6 @@ public final class Composition extends Locatable {
         return null;  // todo: implement this method
     }
 
-    /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return relative path
-     * @throws IllegalArgumentException if path invalid
-     */
-    public Object itemAtPath(String path) {
-        Object ret = super.itemAtPath(path);
-        if (ret != null) {
-            return ret;
-        }
-        ret = checkAttribute(path, "content", content);
-        if (ret == null) {
-            throw new IllegalArgumentException("invalid path: " + path);
-        }
-        return ret;
-
-    }
-
-    /**
-     * Return true if the path is valid with respect to the current
-     * item.
-     *
-     * @param path
-     * @return true if valid
-     */
-    public boolean validPath(String path) {
-        try {
-            itemAtPath(path);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
-
     @Override
 	public String pathOfItem(Pathable arg0) {
 		// TODO Auto-generated method stub

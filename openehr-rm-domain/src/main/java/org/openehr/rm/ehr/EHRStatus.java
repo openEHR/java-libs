@@ -99,30 +99,6 @@ public class EHRStatus extends Locatable {
         return otherDetails;
     }
     
-    public boolean validPath(String path) {
-        try {
-            itemAtPath(path);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    } 
-    
-    public Object itemAtPath(String path) {
-        Object item = super.itemAtPath(path);
-        if(item != null) {
-            return item;
-        }
-        String tmp = path;
-        item = checkAttribute(tmp, "otherDetails", otherDetails);
-        if(item != null) {
-            return item;
-        } else {
-            throw new IllegalArgumentException("invalid path: " + path);
-        }
-        
-    }
-    
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!( o instanceof EHRStatus )) return false;

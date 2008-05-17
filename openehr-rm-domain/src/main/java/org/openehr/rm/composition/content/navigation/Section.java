@@ -93,63 +93,6 @@ public final class Section extends ContentItem {
     }
 
     /**
-     * The item at a path that is relative to this item.
-     *
-     * @param path
-     * @return relative path
-     */
-    public Object itemAtPath(String path) {
-        Object ret = super.itemAtPath(path);
-        if(ret != null) {
-            return ret;
-        }
-        //String whole = whole();
-        String tmp = path;
-        //if(tmp.startsWith(whole)) {
-          //  tmp = tmp.substring(whole.length());
-        //}
-        /*String attr = ROOT + "items";
-        if(tmp.startsWith(attr)) {
-            tmp = tmp.substring(attr.length());
-            for(ContentItem item : items) {
-                //String node = item.whole().substring(1);
-                String node = item.nodeName();
-                if(tmp.startsWith(node)) {
-                    if(tmp.equals(node)) {
-                        return item;
-                    }
-                    String subpath = tmp.substring(node.length());
-                    if(item.validPath(subpath))  {
-                        return item.itemAtPath(subpath);
-                    }
-                }
-            }
-        }*/
-        ret = checkAttribute(tmp, "items", items);
-        if (ret != null) {
-            return ret;
-        } else {
-        throw new IllegalArgumentException("invalid path: " + path);
-        }
-    }
-
-    /**
-     * Return true if the path is valid with respect to the current
-     * item.
-     *
-     * @param path
-     * @return true if valid
-     */
-    public boolean validPath(String path) {
-        try {
-            itemAtPath(path);
-            return true;
-        } catch(IllegalArgumentException e) {
-            return false;
-        }
-    }
-
-    /**
      * Ordered list of content items under this section, which may
      * include more Sections or Entries
      *
