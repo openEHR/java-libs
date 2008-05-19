@@ -429,6 +429,10 @@ public class ADLSerializer {
 	protected void printOccurrences(Interval<Integer> occurrences, Writer out)
 			throws IOException {
 
+		Interval<Integer> defaultOccurrences = new Interval<Integer>(1, 1);
+		if(occurrences == null || defaultOccurrences.equals(occurrences)) {
+			return;
+		}
 		if (occurrences != null) {
 			out.write(" occurrences matches {");
 			if (occurrences.getLower() == null) {
