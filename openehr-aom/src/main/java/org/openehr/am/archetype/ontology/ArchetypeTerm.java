@@ -18,6 +18,8 @@ package org.openehr.am.archetype.ontology;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class ArchetypeTerm {
 
@@ -119,6 +121,36 @@ public class ArchetypeTerm {
 	   return this.getItem(ArchetypeTerm.DESCRIPTION);
 	}
 	
+	/**
+     * Equals if two has have same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof ArchetypeTerm )) return false;
+
+        final ArchetypeTerm at = (ArchetypeTerm) o;
+
+        return new EqualsBuilder()
+                .append(code, at.code)
+                .append(items, at.items)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(7, 47)
+                .append(code)
+                .append(items)
+                .toHashCode();
+    }
+	
 	private String code;
 
 	private Map<String, String> items;
@@ -140,7 +172,7 @@ public class ArchetypeTerm {
  *  The Original Code is ArchetypeTerm.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2007
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s): Erik Sundvall
