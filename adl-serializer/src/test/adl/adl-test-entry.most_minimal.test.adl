@@ -1,4 +1,4 @@
-archetype
+archetype (adl_version=1.4)
     adl-test-ENTRY.most_minimal.draft
 concept
     [at0000]

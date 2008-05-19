@@ -42,8 +42,8 @@ public class CommonTest extends SerializerTestBase {
 		String conceptCode = "at0000";
 
 		clean();
-		outputter.printHeader(new ArchetypeID(id), new ArchetypeID(parentId),
-				conceptCode, out);
+		outputter.printHeader(null,	new ArchetypeID(id), 
+				new ArchetypeID(parentId), conceptCode, out);
 
 		verify("archetype\r\n" + "    " + id + "\r\n" + "specialize\r\n"
 				+ "    " + parentId + "\r\n\r\n" + "concept\r\n" + "    ["

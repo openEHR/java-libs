@@ -117,8 +117,8 @@ public class ADLSerializer {
 	 * @throws IOException
 	 */
 	public void output(Archetype archetype, Writer out) throws IOException {
-		printHeader(archetype.getArchetypeId(), archetype
-				.getParentArchetypeId(), archetype.getConcept(), out);
+		printHeader(archetype.getAdlVersion(), archetype.getArchetypeId(), 
+				archetype.getParentArchetypeId(), archetype.getConcept(), out);
 		newline(out);
 		
 		printLanguage(archetype, out);
@@ -137,10 +137,16 @@ public class ADLSerializer {
 		out.close();
 	}
 	
-	protected void printHeader(ArchetypeID id, ArchetypeID parentId,
+	protected void printHeader(String adlVersion,
+			ArchetypeID id, ArchetypeID parentId,
 			String conceptCode, Writer out) throws IOException {
 
 		out.write("archetype");
+		if(StringUtils.isNotEmpty(adlVersion)) {
+			out.write(" (adl_version=");
+			out.write(adlVersion);
+			out.write(")");
+		}
 		newline(out);
 		indent(1, out);
 		out.write(id.toString());

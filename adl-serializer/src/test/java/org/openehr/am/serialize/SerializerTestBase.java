@@ -53,6 +53,7 @@ public class SerializerTestBase extends TestCase
 	 */
 	protected void tearDown() throws Exception {
 		outputter = null;
+		adlFile = null;
 	}
 
 	/* clean the string writer for next test */
@@ -117,8 +118,9 @@ public class SerializerTestBase extends TestCase
 			String lineExpected = expected.get(i).trim();
 			String lineActual = actual.get(i).trim();
 			if( ! lineExpected.equals(lineActual)) {
-				assertEquals(">>> line no." + i + " different.. got: " 
-						+ lineActual, lineExpected, lineActual);
+				assertEquals(">>> line no." + i + " different.. got[" 
+						+ lineActual +"] - expected: " + lineExpected + "]", 
+						lineExpected, lineActual);
 			}
 		}
 		
@@ -130,6 +132,7 @@ public class SerializerTestBase extends TestCase
 	/* field */
 	protected ADLSerializer outputter;
 	protected StringWriter out;
+	protected String adlFile;
 	
 	/* static fields */
 	protected static final CodePhrase ENGLISH = new CodePhrase("ISO_639-1", "en");
