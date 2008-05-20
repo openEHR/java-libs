@@ -525,9 +525,11 @@ public class ADLSerializer {
 			printCardinality(
 					((CMultipleAttribute) cattribute).getCardinality(), out);
 		}
-		out.write(" matches {");
 		List<CObject> children = cattribute.getChildren();
-		if (children.size() != 1
+		out.write(" matches {");
+		if(children == null || children.size() == 0) {
+			out.write("*");
+		} else if (children.size() != 1
 				|| !(children.get(0) instanceof CPrimitiveObject)) {
 			newline(out);
 			for (CObject cobject : cattribute.getChildren()) {
