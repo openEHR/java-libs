@@ -43,6 +43,11 @@ public class CTimeTest extends TestCase {
      */
     protected void tearDown() throws Exception {
     }
+    
+    public void testCreateCTimeWithPattern() {
+    	CTime ctime = new CTime("HH:MM:SS");
+    	assertNotNull(ctime);
+    }
 
     public void testValidateByTimeInterval() throws Exception {
         CTime ct = new CTime(null, new Interval<DvTime>(dvTime(

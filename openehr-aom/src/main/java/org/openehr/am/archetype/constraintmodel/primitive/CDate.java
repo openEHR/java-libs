@@ -65,6 +65,16 @@ public final class CDate extends CPrimitive {
     public CDate(String pattern, Interval<DvDate> interval, List<DvDate> list) {
     	this(pattern, interval, list, null);
     }
+    
+    /**
+     * Constructs a CDate with pattern
+     *
+     * @param pattern not null
+     * @throws IllegalArgumentException if pattern null
+     */
+    public CDate(String pattern) {
+    	this(pattern, null, null, null);
+    }
 
     /**
      * Return the primitive type this constraint is applied on

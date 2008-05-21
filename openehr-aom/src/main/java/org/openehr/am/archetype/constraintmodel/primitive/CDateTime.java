@@ -64,6 +64,16 @@ public final class CDateTime extends CPrimitive {
                      List<DvDateTime> list) {
     	this(pattern, interval, list, null);
     }
+    
+    /**
+     * Convenience constructor to create CDateTime with pattern
+     * 
+     * @param pattern not null
+     * @throws IllegalArgumentException if pattern null
+     */
+    public CDateTime(String pattern) {
+    	this(pattern, null, null, null);
+    }
 
     /**
      * Return the primitive type this constraint is applied on

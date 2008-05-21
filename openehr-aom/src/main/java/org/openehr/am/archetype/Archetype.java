@@ -333,7 +333,7 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 	}
 
 	/**
-	 * Retrun a node at given path
+	 * Return a node at given path
 	 *
 	 * @param path
 	 * @return null if node not found

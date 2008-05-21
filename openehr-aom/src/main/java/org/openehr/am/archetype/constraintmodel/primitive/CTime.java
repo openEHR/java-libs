@@ -61,6 +61,16 @@ public final class CTime extends CPrimitive {
     public CTime(String pattern, Interval<DvTime> interval, List<DvTime> list) {
     	this(pattern, interval, list, null);
     }
+    
+    /**
+     * Convenient constructor to create CTime with a pattern
+     * 
+     * @param pattern not null
+     * @throws IllegalArgumentException if pattern null
+     */
+    public CTime(String pattern) {
+    	this(pattern, null, null);
+    }
     	
     /**
      * Return the primitive type this constraint is applied on

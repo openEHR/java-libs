@@ -54,6 +54,11 @@ public class CDateTest extends TestCase {
         assertFalse(cd.validValue(dvDate("2000-01-01")));
         assertFalse(cd.validValue(dvDate("2002-01-01")));
     }
+    
+    public void testCreateCDateWithPattern() {
+    	CDate cd = new CDate("yyyy-mm-dd");
+    	assertNotNull(cd);
+    }
 
     public void testValidValueWithDateList() throws Exception {
 

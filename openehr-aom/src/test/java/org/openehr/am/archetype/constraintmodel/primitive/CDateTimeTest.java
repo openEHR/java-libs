@@ -72,6 +72,11 @@ public class CDateTimeTest extends TestCase {
         assertValues(cd, values, false);
     }
 
+    public void testCreateCDateTimeWithPattern() {
+    	CDateTime cdatetime = new CDateTime("yyyy-mm-ddTHH:MM:SS");
+    	assertNotNull(cdatetime);
+    }
+    
     public void testValidDateWithDateList() throws Exception {
         String[] values = {
             "2000-10-25T00:00:00", "2001-10-26T20:05:10",
