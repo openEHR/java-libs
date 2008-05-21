@@ -20,6 +20,9 @@
  */
 package org.openehr.rm.datatypes.text;
 
+import org.openehr.rm.support.terminology.TerminologyService;
+import org.openehr.terminology.SimpleTerminologyService;
+
 import junit.framework.TestCase;
 
 public class DvTextTest extends TestCase {
@@ -57,6 +60,22 @@ public class DvTextTest extends TestCase {
 
         // try the new minimal constructor
         text = new DvText("value");
+    }
+    
+    public void testCreateWithNullEncoding() throws Exception {
+    	TerminologyService ts = SimpleTerminologyService.getInstance();
+    	CodePhrase lang = new CodePhrase("ISO_639-1", "en");
+    	CodePhrase charset = null;
+    	DvText dt = new DvText("test", lang, charset, ts);
+    	assertNotNull("failed to create dvText", dt);
+    }
+    
+    public void testCreateWithNullLanguage() throws Exception {
+    	TerminologyService ts = SimpleTerminologyService.getInstance();
+    	CodePhrase lang = null;
+    	CodePhrase charset = new CodePhrase("IANA_character-sets", "UTF-8");
+    	DvText dt = new DvText("test", lang, charset, ts);
+    	assertNotNull("failed to create dvText", dt);
     }
 
 }

@@ -71,12 +71,12 @@ public class DvText extends DataValue {
             if (terminologyService == null) {
                 throw new IllegalArgumentException("null terminologyService");
             }
-            if (!terminologyService.codeSetForId(
+            if (language != null && !terminologyService.codeSetForId(
             		OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(language)) {
                 throw new IllegalArgumentException(
                         "unknown language: " + language);
             }
-            if (!terminologyService.codeSetForId(
+            if (charset != null && !terminologyService.codeSetForId(
             		OpenEHRCodeSetIdentifiers.CHARACTER_SETS).hasCode(charset)) {
                 throw new IllegalArgumentException(
                         "unknown character set: " + charset);
