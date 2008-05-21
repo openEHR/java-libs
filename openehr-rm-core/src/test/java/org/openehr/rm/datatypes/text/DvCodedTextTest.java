@@ -7,7 +7,6 @@
 package org.openehr.rm.datatypes.text;
 
 import junit.framework.TestCase;
-import org.openehr.rm.support.terminology.TestTerminologyService;
 
 public class DvCodedTextTest extends TestCase {
 
