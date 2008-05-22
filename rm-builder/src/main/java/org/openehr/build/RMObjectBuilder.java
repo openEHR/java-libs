@@ -84,9 +84,9 @@ public class RMObjectBuilder {
 			// support classes
 			TerminologyID.class, ArchetypeID.class, HierObjectID.class,
 			AccessGroupRef.class, GenericID.class, InternetID.class,
-			ISO_OID.class, LocatableRef.class, ObjectRef.class,
-			ObjectVersionID.class, PartyRef.class, TemplateID.class,
-			TerminologyID.class, UUID.class, VersionTreeID.class,
+			ISO_OID.class, LocatableRef.class, ObjectVersionID.class, 
+			PartyRef.class, TemplateID.class, TerminologyID.class, 
+			UUID.class, VersionTreeID.class,
 			
 			// datatypes classes
 			DvBoolean.class, DvState.class, DvIdentifier.class,
@@ -357,7 +357,9 @@ public class RMObjectBuilder {
 			ret = constructor.newInstance(valueArray);
 		} catch (Exception e) {
 
-			e.printStackTrace();
+			if(log.isDebugEnabled()) {
+				e.printStackTrace();
+			}
 			 
 			log.debug("failed in constructor.newInstance()", e);
 
@@ -433,11 +435,19 @@ public class RMObjectBuilder {
 						+ rmClass);
 			}
 			Annotation[][] annotations = constructor.getParameterAnnotations();
+			if(annotations == null || annotations.length == 0) {
+				throw new RuntimeException("attribute annotations missing for " 
+						+ rmClass);
+			}
 			Class[] types = constructor.getParameterTypes();
 			boolean matched = true;
 			Set<String> attributes = new HashSet<String>();
 
 			for (int i = 0; i < types.length; i++) {
+				if(annotations[i].length == 0) {
+					throw new RuntimeException(
+							"attribute annotation missing for"	+ rmClass);
+				}
 				Attribute attribute = (Attribute) annotations[i][0];
 				attributes.add(attribute.name());
 

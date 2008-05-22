@@ -257,6 +257,7 @@ public class EHRBuildTest extends BuildTestBase {
         values.put("composer", composer);
         values.put("category", category);
         values.put("territory", territory);
+        values.put("language", lang);
         RMObject obj = builder.construct("Composition", values);
         assertTrue(obj instanceof Composition);
 
