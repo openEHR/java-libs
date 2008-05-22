@@ -16,6 +16,7 @@ package org.openehr.rm.common.generic;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.datatypes.quantity.DvInterval;
@@ -45,9 +46,12 @@ public final class Participation extends RMObject {
      *                                  or mode invalid or performer null
      */
 	@FullConstructor
-    public Participation(PartyProxy performer, DvText function,
-                         DvCodedText mode, DvInterval<DvDateTime> time,
-                         TerminologyService terminologyService) {
+    public Participation(
+    		@Attribute(name = "performer", required = true)PartyProxy performer,
+    		@Attribute(name = "function", required = true)DvText function,
+    		@Attribute(name = "mode", required = true)DvCodedText mode, 
+    		@Attribute(name = "time")DvInterval<DvDateTime> time,
+    		@Attribute(name = "terminologyService", system = true)TerminologyService terminologyService) {
         if (performer == null) {
             throw new IllegalArgumentException("null performer");
         }

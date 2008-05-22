@@ -21,7 +21,7 @@
 package org.openehr.rm.datatypes.text;
 
 import org.openehr.rm.support.terminology.TerminologyService;
-import org.openehr.terminology.SimpleTerminologyService;
+import org.openehr.rm.support.terminology.TestTerminologyService;
 
 import junit.framework.TestCase;
 
@@ -63,7 +63,7 @@ public class DvTextTest extends TestCase {
     }
     
     public void testCreateWithNullEncoding() throws Exception {
-    	TerminologyService ts = SimpleTerminologyService.getInstance();
+    	TerminologyService ts = TestTerminologyService.getInstance();
     	CodePhrase lang = new CodePhrase("ISO_639-1", "en");
     	CodePhrase charset = null;
     	DvText dt = new DvText("test", lang, charset, ts);
@@ -71,7 +71,7 @@ public class DvTextTest extends TestCase {
     }
     
     public void testCreateWithNullLanguage() throws Exception {
-    	TerminologyService ts = SimpleTerminologyService.getInstance();
+    	TerminologyService ts = TestTerminologyService.getInstance();
     	CodePhrase lang = null;
     	CodePhrase charset = new CodePhrase("IANA_character-sets", "UTF-8");
     	DvText dt = new DvText("test", lang, charset, ts);
@@ -96,7 +96,7 @@ public class DvTextTest extends TestCase {
  *  The Original Code is DvTextTest.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

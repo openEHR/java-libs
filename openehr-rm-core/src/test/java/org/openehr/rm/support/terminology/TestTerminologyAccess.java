@@ -123,7 +123,7 @@ public class TestTerminologyAccess implements TerminologyAccess {
     public static final CodePhrase CHANGE = new CodePhrase(TestTerminologyID.SNOMEDCT, 
             "changeTypeCode");
     public static final CodePhrase ACTIVE = new CodePhrase("test", "active");
-    public static final CodePhrase CREATION = new CodePhrase("test", "creation");
+    public static final CodePhrase CREATION = new CodePhrase("openehr", "249");
     public static final CodePhrase PERSISTENT = new CodePhrase("test", "persistent");
     public static final CodePhrase EVENT = new CodePhrase("test", "event");
     public static final CodePhrase ENGLISH = new CodePhrase("test", "en");
@@ -131,7 +131,8 @@ public class TestTerminologyAccess implements TerminologyAccess {
             "iso-8859-1");
     public static final CodePhrase NULL_FLAVOUR = new CodePhrase("test",
             "unanswered");
-
+    
+    
     static Set<CodePhrase> CODES; 
     static {
         CODES = new HashSet<CodePhrase>();

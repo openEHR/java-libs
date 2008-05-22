@@ -72,10 +72,6 @@ public class TestCodeSetAccess implements CodeSetAccess {
     }
     
     // change type
-    public static final DvCodedText CREATION = new DvCodedText("creation",
-            ENGLISH, LATIN_1, new CodePhrase("test", "creation"),
-            TestTerminologyService.getInstance());
-
     public static final DvCodedText AMENDMENT = new DvCodedText("creation",
             ENGLISH, LATIN_1, new CodePhrase("test", "creation"),
             TestTerminologyService.getInstance());

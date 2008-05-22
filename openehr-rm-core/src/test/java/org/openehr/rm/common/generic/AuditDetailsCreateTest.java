@@ -7,17 +7,15 @@ import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.support.terminology.*;
-import org.openehr.terminology.SimpleTerminologyService;
-
 import junit.framework.TestCase;
 
 public class AuditDetailsCreateTest extends TestCase {
 	 
 	public void setUp() throws Exception {
-		
+		termServ = TestTerminologyService.getInstance();		
 	}
+	
 	public void testCreateAuditDetailsWithOpenehrCode() throws Exception {
-		termServ = SimpleTerminologyService.getInstance();
 		CodePhrase lang = new CodePhrase("ISO_639-1", "en");
 	    CodePhrase encoding = new CodePhrase("IANA_character-sets", "UTF-8");	    
 		CodePhrase creationCode = new CodePhrase("openehr", "249");		
