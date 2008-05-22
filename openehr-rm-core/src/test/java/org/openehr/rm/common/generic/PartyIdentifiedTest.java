@@ -50,8 +50,7 @@ public class PartyIdentifiedTest extends TestCase {
     }
 
     public void test() {
-        PartyRef pr = new PartyRef(new HierObjectID("1-2-3-4-5"), 
-                ObjectRef.Type.PARTY);
+        PartyRef pr = new PartyRef(new HierObjectID("1-2-3-4-5"),"PARTY");
         PartyIdentified pi = new PartyIdentified(pr, "party name", null);
         PartyIdentified pi2 = new PartyIdentified(pr, "party name", null);
         assertEquals(pi, pi2);

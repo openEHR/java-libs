@@ -17,6 +17,8 @@ package org.openehr.rm.common.changecontrol;
 import java.util.List;
 import java.util.Set;
 
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.generic.Attestation;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.datatypes.text.DvCodedText;
@@ -40,13 +42,21 @@ public class OriginalVersion<T> extends Version<T> {
 	 * @param lifecycleState
 	 * @param terminologyService
 	 */
-	public OriginalVersion(ObjectVersionID uid, ObjectVersionID precedingVersionID,
-            T data, DvCodedText lifeCycleState, AuditDetails commitAudit, 
-            ObjectRef contribution, String signature, 
-            Set<ObjectVersionID> otherInputVersionUids, List<Attestation> attestations,
-            boolean isMerged, TerminologyService terminologyService) {
+	@FullConstructor
+	public OriginalVersion(
+			@Attribute(name = "uid", required = true)ObjectVersionID uid, 
+			@Attribute(name = "precedingVersionUid")ObjectVersionID precedingVersionUid,
+			@Attribute(name = "data")T data, 
+			@Attribute(name = "lifeCycleState", required = true)DvCodedText lifeCycleState, 
+			@Attribute(name = "commitAudit", required = true)AuditDetails commitAudit, 
+			@Attribute(name = "contribution", required = true)ObjectRef contribution, 
+			@Attribute(name = "signature")String signature, 
+			@Attribute(name = "otherInputVersionUids")Set<ObjectVersionID> otherInputVersionUids, 
+			@Attribute(name = "attestations")List<Attestation> attestations,
+			@Attribute(name = "isMerged") boolean isMerged, 
+			@Attribute(name = "terminologyService", system = true)TerminologyService terminologyService) {
             
-            super(uid, precedingVersionID, data, lifeCycleState, commitAudit, 
+            super(uid, precedingVersionUid, data, lifeCycleState, commitAudit, 
                     contribution, signature, terminologyService);
             if (attestations != null && attestations.isEmpty()) {
                 throw new IllegalArgumentException("empty attestations");

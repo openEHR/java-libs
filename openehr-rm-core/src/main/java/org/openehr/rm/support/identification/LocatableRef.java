@@ -41,8 +41,8 @@ public class LocatableRef extends ObjectRef {
 	@FullConstructor
     public LocatableRef(
     		@Attribute(name = "id", required = true)ObjectVersionID id, 
-    		@Attribute(name = "namespace", required = true)Namespace namespace,
-    		@Attribute(name = "type", required = true)Type type, 
+    		@Attribute(name = "namespace", required = true)String namespace,
+    		@Attribute(name = "type", required = true)String type, 
     		@Attribute(name = "path")String path) {
         super(id, namespace, type);
         

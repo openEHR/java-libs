@@ -31,8 +31,7 @@ public class AccessGroupRef extends ObjectRef {
 	@FullConstructor
     public AccessGroupRef(
     		@Attribute(name = "id", required = true)ObjectID id) {
-        super(id, ObjectRef.Namespace.ACCESS_CONTROL, 
-        		ObjectRef.Type.ACCESS_GROUP);
+        super(id, "ACCESS_CONTROL",	"ACCESS_GROUP");
     }    
 }
 /*
@@ -52,7 +51,7 @@ public class AccessGroupRef extends ObjectRef {
  *  The Original Code is AccessGroupRef.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2007
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

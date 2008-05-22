@@ -24,15 +24,11 @@ package org.openehr.rm.common.generic;
 import java.util.ArrayList;
 import junit.framework.*;
 import java.util.List;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.rm.RMObject;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.TestCodePhrase;
 import org.openehr.rm.support.identification.HierObjectID;
-import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.support.identification.TestTerminologyID;
@@ -45,8 +41,7 @@ public class RevisionHistoryTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        PartyRef pr = new PartyRef(new HierObjectID("1-2-3-4-5"), 
-                ObjectRef.Type.PARTY);
+        PartyRef pr = new PartyRef(new HierObjectID("1-2-3-4-5"), "PARTY");
         PartyIdentified pi = new PartyIdentified(pr, "party name", null);
         CodePhrase codePhrase =
                 new CodePhrase(TestTerminologyID.SNOMEDCT, "revisionCode");
@@ -112,7 +107,7 @@ public class RevisionHistoryTest extends TestCase {
  *  The Original Code is RevisionHistorytest.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

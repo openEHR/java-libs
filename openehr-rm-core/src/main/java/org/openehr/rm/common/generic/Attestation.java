@@ -47,17 +47,17 @@ public class Attestation extends AuditDetails {
      */
 	@FullConstructor    
     public Attestation(
-    		@Attribute(name = "systemId")String systemId, 
-    		@Attribute(name = "committer")PartyProxy committer,
-    		@Attribute(name = "timeCommitted")DvDateTime timeCommitted, 
+    		@Attribute(name = "systemId", required = true)String systemId, 
+    		@Attribute(name = "committer", required = true)PartyProxy committer,
+    		@Attribute(name = "timeCommitted", required = true)DvDateTime timeCommitted, 
     		@Attribute(name = "changeType", required = true)DvCodedText changeType,
-    		@Attribute(name = "description", required = true)DvText description, 
+    		@Attribute(name = "description")DvText description, 
             @Attribute(name = "terminologyService", system = true)TerminologyService terminologyService,
-            @Attribute(name = "attestedView", required = true)DvMultimedia attestedView, 
-            @Attribute(name = "proof", required = true)String proof, 
+            @Attribute(name = "attestedView")DvMultimedia attestedView, 
+            @Attribute(name = "proof")String proof, 
             @Attribute(name = "items")Set<DvEHRURI> items,
             @Attribute(name = "reason", required = true)DvText reason, 
-            @Attribute(name = "isPending")boolean isPending) {
+            @Attribute(name = "isPending", required = true)boolean isPending) {
     		super(systemId, committer, timeCommitted, changeType, description, terminologyService);
         if (items != null && items.isEmpty()) {
             throw new IllegalArgumentException("empty items");

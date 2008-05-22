@@ -16,6 +16,8 @@ package org.openehr.rm.support.identification;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 
 /**
@@ -31,40 +33,7 @@ import org.openehr.rm.RMObject;
  */
 public class ObjectRef extends RMObject {
 
-    /**
-     * List of known object reference types
-     */
-    public enum Type {
-        PARTY,
-        ROLE,
-        PERSON,
-        ORGANISATION,
-        AGENT,
-        GROUP,
-        ACCESS_GROUP,
-        CONTRIBUTION,
-        VERSION,
-        VERSIONED_COMPOSITION,
-        VERSIONED_FOLDER,
-        VERSIONED_PARTY,                
-        VERSION_REPOSITORY,
-        EHR,
-        COMPOSITION,
-        FOLDER,
-        ARCHETYPE,
-        GUIDELINE,
-        UNKNOWN        
-    }
-
-    /**
-     * List of known object reference namespaces
-     */
-    public enum Namespace {
-        LOCAL,
-        UNKNOWN,
-        ACCESS_CONTROL,
-        DEMOGRAPHIC
-    }
+    
 
     /**
      * Constructs an ObjectRef by id, namespace and type
@@ -74,8 +43,11 @@ public class ObjectRef extends RMObject {
      * @param type      not null or empty
      * @throws IllegalArgumentException if any invalid parameter
      */
-    public ObjectRef(ObjectID id, Namespace namespace,
-                           Type type) {
+    @FullConstructor
+    public ObjectRef(
+    		@Attribute(name = "id", required = true)ObjectID id, 
+    		@Attribute(name = "namespace", required = true)String namespace,
+    		@Attribute(name = "type", required = true)String type) {
         if (id == null) {
             throw new IllegalArgumentException("null id");
         }
@@ -110,7 +82,7 @@ public class ObjectRef extends RMObject {
      *
      * @return namespace
      */
-    public Namespace getNamespace() {
+    public String getNamespace() {
         return namespace;
     }
 
@@ -123,7 +95,7 @@ public class ObjectRef extends RMObject {
      *
      * @return type
      */
-    public Type getType() {
+    public String getType() {
         return type;
     }
 
@@ -197,18 +169,18 @@ public class ObjectRef extends RMObject {
     }
 
     void setNamespaceString(String namespace) {
-        this.namespace = Namespace.valueOf(namespace);
+        this.namespace = namespace;
     }
 
     void setTypeString(String type) {
-        this.type = Type.valueOf(type);
+        this.type = type;
     }
     // POJO end
 
     /* fields */
     private ObjectID id;
-    private Namespace namespace;
-    private Type type;
+    private String namespace;
+    private String type;
 }
 
 /*
@@ -228,7 +200,7 @@ public class ObjectRef extends RMObject {
  *  The Original Code is ObjectRef.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

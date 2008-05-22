@@ -55,9 +55,6 @@ public abstract class Version <T> extends RMObject {
         if (contribution == null) {
             throw new IllegalArgumentException("null contribution");
         }
-        if (!contribution.getType().equals(ObjectRef.Type.CONTRIBUTION)) {
-            throw new IllegalArgumentException("contribution not of type CONTRIBUTION");
-        }
         if (uid.versionTreeID().isFirst() == (precedingVersionID != null)) {
             throw new IllegalArgumentException("breach of precedingVersionUid validity");
         }

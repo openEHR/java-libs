@@ -41,17 +41,8 @@ public class PartyRef extends ObjectRef {
 	@FullConstructor
     public PartyRef(
     		@Attribute(name = "id", required = true)ObjectID id, 
-    		@Attribute(name = "type", required = true)ObjectRef.Type type) {
-        super(id, ObjectRef.Namespace.DEMOGRAPHIC,
-                type);
-        if (!type.equals(ObjectRef.Type.PARTY) &&
-        		!type.equals(ObjectRef.Type.PERSON) && 
-        		!type.equals(ObjectRef.Type.ORGANISATION) &&
-        		!type.equals(ObjectRef.Type.GROUP) &&
-        		!type.equals(ObjectRef.Type.AGENT) && 
-        		!type.equals(ObjectRef.Type.ROLE)) {
-        		throw new IllegalArgumentException("incorrect type for party");
-        }
+    		@Attribute(name = "type", required = true)String type) {
+        super(id, "DEMOGRAPHIC", type);        
     }    
 }
 
@@ -72,7 +63,7 @@ public class PartyRef extends ObjectRef {
  *  The Original Code is PartyRef.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

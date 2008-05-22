@@ -5,7 +5,7 @@
  *
  * author:      "Rong Chen <rong@acode.se>"
  * support:     "Acode HB <support@acode.se>"
- * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
+ * copyright:   "Copyright (c) 2008 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
  * file:        "$URL: http://svn.openehr.org/ref_impl_java/BRANCHES/RM-1.0-update/libraries/src/java/org/openehr/rm/common/changecontrol/Contribution.java $"
@@ -17,6 +17,8 @@ package org.openehr.rm.common.changecontrol;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.identification.ObjectRef;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -39,8 +41,11 @@ public class Contribution extends RMObject {
      * @param versions not null or empty
      * @param audit    not null
      */
-    public Contribution(ObjectID uid, Set<ObjectRef> versions,
-                        AuditDetails audit) {
+	@FullConstructor
+    public Contribution(
+    		@Attribute(name = "uid", required = true)ObjectID uid, 
+    		@Attribute(name = "versions", required = true)Set<ObjectRef> versions,
+    		@Attribute(name = "audit", required = true)AuditDetails audit) {
         if (uid == null) {
             throw new IllegalArgumentException("null uid");
         }
@@ -160,7 +165,7 @@ public class Contribution extends RMObject {
  *  The Original Code is Contribution.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

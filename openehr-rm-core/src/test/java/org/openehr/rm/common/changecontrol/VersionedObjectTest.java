@@ -118,7 +118,7 @@ public class VersionedObjectTest extends ChangeControlTestBase {
 			String time) throws Exception {
 		HierObjectID id = new HierObjectID("1-2-5-2-4");
 		ObjectRef ehrRef = new ObjectRef(new HierObjectID("ehrdomain::1"),
-				ObjectRef.Namespace.LOCAL, ObjectRef.Type.EHR);
+				"LOCAL", "EHR");
 		ObjectVersionID vUid = new ObjectVersionID(id.root(), new HierObjectID(
 				creatingSysID), new VersionTreeID("1"));
 		DvCodedText changeType = new DvCodedText("creation",
@@ -271,7 +271,7 @@ public class VersionedObjectTest extends ChangeControlTestBase {
 				pVersionID, time);
 		HierObjectID id = data.ownerID();
 		ObjectRef ehrRef = new ObjectRef(new HierObjectID("ehrdomain::1"),
-				ObjectRef.Namespace.LOCAL, ObjectRef.Type.EHR);
+				"LOCAL", "EHR");
 
 		return new VersionedObject<String>(id, ehrRef, new DvDateTime(time),
 				data, audit("1-6-7-7-2", "Yinsu", "changeTypeCode", time),
