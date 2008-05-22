@@ -15,13 +15,13 @@ package org.openehr.rm.composition.content.entry;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.openehr.rm.common.archetyped.Archetyped;
-import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.composition.CompositionTestBase;
+import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.encapsulated.DvParsable;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.identification.HierObjectID;
 
 /**
  * InstructionTest

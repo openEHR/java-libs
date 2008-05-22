@@ -21,10 +21,9 @@
 package org.openehr.rm.composition.content.entry;
 
 import org.openehr.rm.common.archetyped.Archetyped;
-import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.composition.CompositionTestBase;
+import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.identification.HierObjectID;
 
 public class EvaluationTest extends CompositionTestBase {
 

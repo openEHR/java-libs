@@ -128,7 +128,7 @@ public class VersionedComposition extends VersionedObject<Composition> {
     }
     
     protected static ObjectRef ownerIDCheck(ObjectRef ownerID) {
-        if(!ownerID.getType().equals(ObjectRef.Type.EHR)) {
+        if(!ownerID.getType().equals("EHR")) {
             throw new IllegalArgumentException("type of ownerID is not EHR");
         }
         return ownerID;
@@ -158,7 +158,7 @@ public class VersionedComposition extends VersionedObject<Composition> {
  *  The Original Code is VersionedComposition.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

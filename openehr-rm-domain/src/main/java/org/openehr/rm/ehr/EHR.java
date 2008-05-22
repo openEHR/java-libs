@@ -65,7 +65,7 @@ public class EHR extends RMObject {
     			throw new IllegalArgumentException("null contributions");
     		}    		
         for (ObjectRef ref : contributions) {
-            if (!ObjectRef.Type.CONTRIBUTION.equals(ref.getType())) {
+            if (! "CONTRIBUTION".equals(ref.getType())) {
                 throw new IllegalArgumentException(
                         "non-contribution type object reference");
             }
@@ -74,13 +74,13 @@ public class EHR extends RMObject {
             throw new IllegalArgumentException("null compositions");
         }
         for (ObjectRef ref : compositions) {
-            if (!ObjectRef.Type.VERSIONED_COMPOSITION.equals(
+            if (! "VERSIONED_COMPOSITION".equals(
                     ref.getType())) {
                 throw new IllegalArgumentException(
                         "non-versioned_composition type object reference");
             }
         }
-        if (directory != null && !ObjectRef.Type.VERSIONED_FOLDER.equals(
+        if (directory != null && !"VERSIONED_FOLDER".equals(
                 directory.getType())) {
         		throw new IllegalArgumentException(
         				"non-versioned_folder type object reference");

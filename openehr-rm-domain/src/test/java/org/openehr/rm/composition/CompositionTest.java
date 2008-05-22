@@ -13,26 +13,24 @@
  */
 package org.openehr.rm.composition;
 
-import org.openehr.rm.composition.content.ContentItem;
-import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.datatypes.text.DvCodedText;
-import org.openehr.rm.datatypes.text.CodePhrase;
-import org.openehr.rm.support.identification.UIDBasedID;
-import org.openehr.rm.support.identification.HierObjectID;
-import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
-import org.openehr.rm.support.terminology.TestCodeSetAccess;
-import org.openehr.rm.support.terminology.TerminologyService;
-import org.openehr.rm.support.terminology.TerminologyAccess;
-import org.openehr.rm.support.terminology.CodeSetAccess;
-import org.openehr.rm.composition.content.navigation.Section;
-import org.openehr.rm.composition.content.entry.Observation;
-import org.openehr.rm.common.archetyped.Archetyped;
-
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.openehr.rm.common.archetyped.Archetyped;
+import org.openehr.rm.composition.content.ContentItem;
+import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.datatypes.text.DvCodedText;
+import org.openehr.rm.datatypes.text.DvText;
+import org.openehr.rm.support.identification.ArchetypeID;
+import org.openehr.rm.support.identification.HierObjectID;
+import org.openehr.rm.support.identification.UIDBasedID;
+import org.openehr.rm.support.terminology.CodeSetAccess;
+import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
+import org.openehr.rm.support.terminology.TerminologyAccess;
+import org.openehr.rm.support.terminology.TerminologyService;
+import org.openehr.rm.support.terminology.TestCodeSetAccess;
 import org.openehr.rm.support.terminology.TestTerminologyAccess;
 import org.openehr.terminology.SimpleTerminologyService;
 

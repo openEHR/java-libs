@@ -22,11 +22,12 @@
 
 package org.openehr.rm.composition.content.entry;
 
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import org.openehr.rm.composition.CompositionTestBase;
-import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.encapsulated.DvParsable;
-import org.openehr.rm.datastructure.itemstructure.ItemStructure;
+import org.openehr.rm.datatypes.text.CodePhrase;
 
 public class ActivityTest extends CompositionTestBase {
 
