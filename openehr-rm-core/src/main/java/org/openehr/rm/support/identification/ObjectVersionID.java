@@ -15,6 +15,8 @@
 package org.openehr.rm.support.identification;
 
 import org.apache.commons.lang.StringUtils;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 
 /**
  * Globally unique identifier for one version of a versioned object.
@@ -36,7 +38,9 @@ public class ObjectVersionID extends UIDBasedID {
      * @param value
      * @throws IllegalArgumentException if value is empty
      */
-    public ObjectVersionID(String value) {
+	@FullConstructor
+    public ObjectVersionID(
+    		@Attribute(name = "value", required = true)String value) {
         super(value);
         loadValue(value);
     }

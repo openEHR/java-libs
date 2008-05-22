@@ -13,6 +13,9 @@
  */
 package org.openehr.rm.support.identification;
 
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
+
 /**
  * Reference to access group in an access control service
  * 
@@ -25,7 +28,9 @@ public class AccessGroupRef extends ObjectRef {
      * @param id
      * @throws IllegalArgumentException if id or type null
      */
-    public AccessGroupRef(ObjectID id) {
+	@FullConstructor
+    public AccessGroupRef(
+    		@Attribute(name = "id", required = true)ObjectID id) {
         super(id, ObjectRef.Namespace.ACCESS_CONTROL, 
         		ObjectRef.Type.ACCESS_GROUP);
     }    

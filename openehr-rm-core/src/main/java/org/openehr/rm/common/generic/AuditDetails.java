@@ -17,6 +17,7 @@ package org.openehr.rm.common.generic;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
@@ -44,6 +45,7 @@ public class AuditDetails extends RMObject {
      * @param terminologyService
      * @throws IllegalArgumentException
      */
+	@FullConstructor
     public AuditDetails(String systemId, PartyProxy committer,
                         DvDateTime timeCommitted, DvCodedText changeType,
                         DvText description,

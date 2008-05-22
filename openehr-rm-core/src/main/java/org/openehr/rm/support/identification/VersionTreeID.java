@@ -15,6 +15,8 @@
 package org.openehr.rm.support.identification;
 
 import org.apache.commons.lang.StringUtils;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 
 /**
@@ -33,7 +35,8 @@ public class VersionTreeID extends RMObject {
      * @param value
      * @throws IllegalArgumentException if value is null or empty
      */
-    public VersionTreeID(String value) {
+	@FullConstructor
+    public VersionTreeID(@Attribute(name = "value", required = true)String value) {
         if (StringUtils.isEmpty(value)) {
             throw new IllegalArgumentException("empty value");
         }

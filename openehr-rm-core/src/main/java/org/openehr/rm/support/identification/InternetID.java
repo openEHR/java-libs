@@ -14,6 +14,9 @@
  */
 package org.openehr.rm.support.identification;
 
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
+
 /**
  * Model of a reverse internet domain, as used to uniquely identify an internet domain.
  * 
@@ -26,7 +29,8 @@ public class InternetID extends UID {
     /**
      * @param value
      */
-    public InternetID(String value) {
+	@FullConstructor
+    public InternetID(@Attribute(name = "value", required = true)String value) {
         super(value);
         if (!value.matches(PATTERN)) {
             throw new IllegalArgumentException("wrong format");

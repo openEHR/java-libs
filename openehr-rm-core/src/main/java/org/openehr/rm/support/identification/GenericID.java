@@ -16,6 +16,8 @@ package org.openehr.rm.support.identification;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 
 /**
  * Generic identifier type for identifiers whose format is othterwise unknown 
@@ -26,7 +28,10 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class GenericID extends ObjectID {
 	
-	public GenericID(String value, String scheme) {
+	@FullConstructor
+	public GenericID(
+			@Attribute(name = "value", required = true)String value, 
+			@Attribute(name = "scheme")String scheme) {
 		super(value);
 		if(StringUtils.isEmpty(scheme)) {
 			throw new IllegalArgumentException("empty scheme");

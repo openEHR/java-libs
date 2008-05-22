@@ -14,6 +14,9 @@
  */
 package org.openehr.rm.support.identification;
 
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
+
 /**
  * Purpose Model of the DCE Universal Unique Identifier or UUID which
  * takes the form of hexadecimal integers separated by hyphens,
@@ -35,7 +38,8 @@ public class UUID extends UID {
      *
      * @param value
      */
-    public UUID(String value) {
+	@FullConstructor
+    public UUID(@Attribute(name = "value", required = true)String value) {
         super(value);
         // kind of validation
         java.util.UUID.fromString(value);

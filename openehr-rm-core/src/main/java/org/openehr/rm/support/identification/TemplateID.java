@@ -13,13 +13,19 @@
  */
 package org.openehr.rm.support.identification;
 
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
+
 /**
  * Identifier for templates. Lexical form to be determined.
  * 
  * @author Rong Chen
  */
 public class TemplateID extends ObjectID {
-	public TemplateID(String value) {
+	
+	@FullConstructor
+	public TemplateID(
+			@Attribute(name = "value", required = true)String value) {
 		super(value);
 	}
 }

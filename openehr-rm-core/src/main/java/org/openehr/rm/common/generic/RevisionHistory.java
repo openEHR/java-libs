@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 
 /**
@@ -36,6 +37,7 @@ public final class RevisionHistory extends RMObject {
      * @param items	not null
      * @throws IllegalArgumentException if items null or empty
      */
+	@FullConstructor
     public RevisionHistory(List<RevisionHistoryItem> items) {
         if (items == null || items.size() == 0) {
             throw new IllegalArgumentException("empty items");

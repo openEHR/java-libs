@@ -15,6 +15,8 @@
 package org.openehr.rm.support.identification;
 
 import org.apache.commons.lang.StringUtils;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 
 /**
  * Hierarhical object identifiers.
@@ -37,7 +39,9 @@ public class HierObjectID extends UIDBasedID {
      * @throws IllegalArgumentException if value is null
      *                                  
      */
-    public HierObjectID(String value) {
+	@FullConstructor
+    public HierObjectID(
+    		@Attribute(name = "value", required = true)String value) {
         super(value);
         loadValue(value);
     }

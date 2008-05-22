@@ -17,6 +17,8 @@ package org.openehr.rm.support.identification;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 
 
 /**
@@ -36,8 +38,12 @@ public class LocatableRef extends ObjectRef {
      * @param namespace
      * @param type
      */
-    public LocatableRef(ObjectVersionID id, Namespace namespace,
-            Type type, String path) {
+	@FullConstructor
+    public LocatableRef(
+    		@Attribute(name = "id", required = true)ObjectVersionID id, 
+    		@Attribute(name = "namespace", required = true)Namespace namespace,
+    		@Attribute(name = "type", required = true)Type type, 
+    		@Attribute(name = "path")String path) {
         super(id, namespace, type);
         
         if (path != null && StringUtils.isEmpty(path)) {

@@ -14,6 +14,8 @@
 package org.openehr.rm.support.identification;
 
 import org.apache.commons.lang.StringUtils;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 
 /**
  * Abstract model of UID-based identifiers consisting of a root part and 
@@ -28,7 +30,8 @@ public abstract class UIDBasedID extends ObjectID {
 	 * 
 	 * @param value
 	 */
-	public UIDBasedID(String value) {
+	@FullConstructor
+	public UIDBasedID(@Attribute(name = "value", required = true)String value) {
 		super(value);
 	}
 	

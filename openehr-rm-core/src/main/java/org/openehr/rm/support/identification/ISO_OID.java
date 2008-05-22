@@ -16,6 +16,8 @@ package org.openehr.rm.support.identification;
 
 import org.ietf.jgss.GSSException;
 import org.ietf.jgss.Oid;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 
 /**
  * Purpose Model of ISO s Object Identifier (oid) as defined by the
@@ -37,7 +39,8 @@ public class ISO_OID extends UID {
      * @throws IllegalArgumentException if value null
      *          or wrong format
      */
-    public ISO_OID(String value) {
+	@FullConstructor
+    public ISO_OID(@Attribute(name = "value", required = true)String value) {
         super(value);
         try {
             new Oid(value);

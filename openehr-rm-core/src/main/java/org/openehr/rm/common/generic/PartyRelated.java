@@ -18,6 +18,8 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.datatypes.basic.DvIdentifier;
 import org.openehr.rm.datatypes.text.DvCodedText;
@@ -39,9 +41,13 @@ public final class PartyRelated extends PartyIdentified {
      * @param terminologyService not null
      * @throws IllegalArgumentException if relationship invalid
      */
-    public PartyRelated(PartyRef externalRef, String name,
-			List<DvIdentifier> identifiers, DvCodedText relationship,
-                        TerminologyService terminologyService) {
+	@FullConstructor
+    public PartyRelated(
+    		@Attribute(name = "externalRef")PartyRef externalRef, 
+    		@Attribute(name = "name")String name,
+    		@Attribute(name = "identifiers")List<DvIdentifier> identifiers, 
+    		@Attribute(name = "relationship", required = true)DvCodedText relationship,
+    		@Attribute(name = "value")TerminologyService terminologyService) {
     		super(externalRef, name, identifiers);
         if (relationship == null) {
             throw new IllegalArgumentException("null relationship");

@@ -15,6 +15,7 @@
 package org.openehr.rm.support.identification;
 
 import org.apache.commons.lang.StringUtils;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 
 /**
@@ -34,6 +35,7 @@ public abstract class ObjectID extends RMObject {
      * @param value
      * @throws IllegalArgumentException if value is empty
      */
+	@FullConstructor
     public ObjectID(String value) {
         if (StringUtils.isEmpty(value)) {
             throw new IllegalArgumentException("empty value");

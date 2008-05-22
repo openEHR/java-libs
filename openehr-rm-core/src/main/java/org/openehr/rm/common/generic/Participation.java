@@ -16,6 +16,7 @@ package org.openehr.rm.common.generic;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
@@ -43,6 +44,7 @@ public final class Participation extends RMObject {
      * @throws IllegalArgumentException if function null
      *                                  or mode invalid or performer null
      */
+	@FullConstructor
     public Participation(PartyProxy performer, DvText function,
                          DvCodedText mode, DvInterval<DvDateTime> time,
                          TerminologyService terminologyService) {

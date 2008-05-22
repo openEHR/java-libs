@@ -14,6 +14,8 @@
  */
 package org.openehr.rm.common.generic;
 
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.datatypes.encapsulated.DvMultimedia;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.text.DvCodedText;
@@ -43,11 +45,19 @@ public class Attestation extends AuditDetails {
      * @param terminologyService not null
      * @throws IllegalArgumentException
      */
-    public Attestation(String systemId, PartyProxy committer,
-            DvDateTime timeCommitted, DvCodedText changeType,
-            DvText description, TerminologyService terminologyService,
-            DvMultimedia attestedView, String proof, Set<DvEHRURI> items,
-            DvText reason, boolean isPending) {
+	@FullConstructor    
+    public Attestation(
+    		@Attribute(name = "systemId")String systemId, 
+    		@Attribute(name = "committer")PartyProxy committer,
+    		@Attribute(name = "timeCommitted")DvDateTime timeCommitted, 
+    		@Attribute(name = "changeType", required = true)DvCodedText changeType,
+    		@Attribute(name = "description", required = true)DvText description, 
+            @Attribute(name = "terminologyService", system = true)TerminologyService terminologyService,
+            @Attribute(name = "attestedView", required = true)DvMultimedia attestedView, 
+            @Attribute(name = "proof", required = true)String proof, 
+            @Attribute(name = "items")Set<DvEHRURI> items,
+            @Attribute(name = "reason", required = true)DvText reason, 
+            @Attribute(name = "isPending")boolean isPending) {
     		super(systemId, committer, timeCommitted, changeType, description, terminologyService);
         if (items != null && items.isEmpty()) {
             throw new IllegalArgumentException("empty items");

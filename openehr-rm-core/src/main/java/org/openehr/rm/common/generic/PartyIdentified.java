@@ -19,6 +19,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.datatypes.basic.DvIdentifier;
 import org.openehr.rm.support.identification.PartyRef;
 
@@ -38,8 +40,11 @@ public class PartyIdentified extends PartyProxy {
 	 *@param identifiers
 	 *@throws IllegalArgumentException if identifiers is empty
 	 */
-	public PartyIdentified(PartyRef externalRef, String name,
-			List<DvIdentifier> identifiers) {
+	@FullConstructor    
+	public PartyIdentified(
+			@Attribute(name = "externalRef")PartyRef externalRef, 
+			@Attribute(name = "name")String name,
+			@Attribute(name = "identifiers")List<DvIdentifier> identifiers) {
 		super(externalRef);
 		if(externalRef == null && name == null && identifiers == null) {
 			throw new IllegalArgumentException("externalRef, name, identifiers all empty");

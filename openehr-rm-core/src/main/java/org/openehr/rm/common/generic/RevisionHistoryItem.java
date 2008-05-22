@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.support.identification.ObjectVersionID;
 
@@ -36,6 +37,7 @@ public final class RevisionHistoryItem extends RMObject {
 	 * @param versionId	not null
 	 * @throws IllegalArgumentException if audits null or empty, versionId null
 	 */
+	@FullConstructor
 	public RevisionHistoryItem(List<AuditDetails> audits, ObjectVersionID versionID) {
 	       if (audits == null || audits.size() == 0) {
 	            throw new IllegalArgumentException("empty audits");

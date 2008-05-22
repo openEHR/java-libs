@@ -14,6 +14,9 @@
  */
 package org.openehr.rm.support.identification;
 
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
+
 /**
  * Identifier for parties in a demographic service. There are
  * typically a number of subtypes of the "PARTY" class, including
@@ -35,7 +38,10 @@ public class PartyRef extends ObjectRef {
      * @param id
      * @throws IllegalArgumentException if id or type null
      */
-    public PartyRef(ObjectID id, ObjectRef.Type type) {
+	@FullConstructor
+    public PartyRef(
+    		@Attribute(name = "id", required = true)ObjectID id, 
+    		@Attribute(name = "type", required = true)ObjectRef.Type type) {
         super(id, ObjectRef.Namespace.DEMOGRAPHIC,
                 type);
         if (!type.equals(ObjectRef.Type.PARTY) &&
