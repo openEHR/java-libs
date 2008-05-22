@@ -19,6 +19,7 @@ import org.openehr.rm.*;
 import org.openehr.rm.common.archetyped.*;
 import org.openehr.rm.common.generic.*;
 import org.openehr.rm.composition.Composition;
+import org.openehr.rm.composition.EventContext;
 import org.openehr.rm.composition.content.entry.*;
 import org.openehr.rm.composition.content.navigation.*;
 import org.openehr.rm.datastructure.history.*;
@@ -31,6 +32,7 @@ import org.openehr.rm.datatypes.quantity.datetime.*;
 import org.openehr.rm.datatypes.text.*;
 import org.openehr.rm.demographic.*;
 import org.openehr.rm.support.identification.*;
+import org.openehr.rm.support.identification.UUID;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -75,10 +77,16 @@ public class RMObjectBuilder {
 		Class[] classes = {
 		
 			// common classes
-			PartySelf.class, Archetyped.class,
+			PartySelf.class, Archetyped.class, Attestation.class,
+			AuditDetails.class, Participation.class, PartyIdentified.class,
+			PartyRelated.class, PartySelf.class,
 			
 			// support classes
-			TerminologyID.class, ArchetypeID.class,
+			TerminologyID.class, ArchetypeID.class, HierObjectID.class,
+			AccessGroupRef.class, GenericID.class, InternetID.class,
+			ISO_OID.class, LocatableRef.class, ObjectRef.class,
+			ObjectVersionID.class, PartyRef.class, TemplateID.class,
+			TerminologyID.class, UUID.class, VersionTreeID.class,
 			
 			// datatypes classes
 			DvBoolean.class, DvState.class, DvIdentifier.class,
@@ -97,7 +105,7 @@ public class RMObjectBuilder {
 			// ehr classes
 			Action.class, Activity.class, Evaluation.class,
 			Instruction.class, Observation.class, AdminEntry.class, 
-			Section.class, Composition.class,
+			Section.class, Composition.class, EventContext.class,
 
 			// demographic classes
 			Address.class, PartyIdentity.class, Agent.class, Group.class,
@@ -271,17 +279,24 @@ public class RMObjectBuilder {
 				value = systemValues.get(sysvalue);
 				if (value == null) {
 					throw new AttributeMissingException("missing value for "
-							+ "system attribute \"" + name + "\"");
+							+ "system attribute \"" + name + "\" in class: "
+							+ rmClass + ", with valueMap: " + valueMap);
 				}
 			}
 
 			// check required attributes
 			if (value == null && attribute.required()) {
 				throw new AttributeMissingException("missing value for "
-						+ "required attribute \"" + name + "\" of type " + type);
+						+ "required attribute \"" + name + "\" of type " + type
+						+ " with valueMap: " + valueMap);
 			}
 
-			// set default value for primitive type
+			// enum
+			else if (type.isEnum()) {
+				Enum.valueOf(type, value.toString());
+			}
+
+			// in case of string value, convert to right type if necessary
 			else if (value == null) {
 				value = defaultValue(type);
 			}
@@ -303,6 +318,26 @@ public class RMObjectBuilder {
 					throw new AttributeFormatException("wrong format of "
 							+ "attribute " + name + ", expect " + type);
 				}
+			
+			// deal with mismatch between array and list	
+			} else if(type.isAssignableFrom(List.class) && value.getClass().isArray()) {
+				
+				Object[] array = (Object[]) value;
+				List list = new ArrayList();
+				for(Object o : array) {
+					list.add(o);
+				}
+				value = list;				
+			
+			// deal with mismatch between array and set
+			} else if(type.isAssignableFrom(Set.class) && value.getClass().isArray()) {
+				
+				Object[] array = (Object[]) value;
+				Set set = new HashSet();
+				for(Object o : array) {
+					set.add(o);
+				}
+				value = set;				
 			}
 			// check type
 			else if (value != null && !type.isPrimitive()) {
@@ -322,6 +357,8 @@ public class RMObjectBuilder {
 			ret = constructor.newInstance(valueArray);
 		} catch (Exception e) {
 
+			e.printStackTrace();
+			 
 			log.debug("failed in constructor.newInstance()", e);
 
 			if (stringParsingTypes.contains(rmClassName)) {
@@ -330,7 +367,9 @@ public class RMObjectBuilder {
 			}
 
 			throw new RMObjectBuildingException(
-					"failed to create new instance, " + e.getCause());
+					"failed to create new instance of  " + rmClassName 
+					+ " with valueMap: " + valueMap + ", cause: "
+					+ e.getCause());
 		}
 		return (RMObject) ret;
 	}

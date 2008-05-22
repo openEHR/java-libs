@@ -53,11 +53,6 @@ public class FindMatchingRMClassTest extends TestCase {
 		assertMatchedRMClass("DvQuantity");
 	}
 	
-	public void testMatchDvText() {
-		valueMap.put("value", "sitting");
-		assertMatchedRMClass("DvText");
-	}
-	
 	public void testMatchCodePhrase() {
 		valueMap.put("terminologyId", new TerminologyID("openehr"));
 		valueMap.put("codeString", "234");
