@@ -66,11 +66,11 @@ public final class Composition extends Locatable {
                                @Attribute(name = "links") Set<Link> links,
                                @Attribute(name = "parent") Locatable parent,
                                @Attribute(name = "content") List<ContentItem> content,
-                               @Attribute(name = "language", system = true) CodePhrase language,
-                               @Attribute(name = "context", system = true) EventContext context,
-                               @Attribute(name = "composer", system = true) PartyProxy composer,
-                               @Attribute(name = "category", system = true) DvCodedText category,
-                               @Attribute(name = "territory", system = true) CodePhrase territory,
+                               @Attribute(name = "language", required = true) CodePhrase language,
+                               @Attribute(name = "context", required = true) EventContext context,
+                               @Attribute(name = "composer", required = true) PartyProxy composer,
+                               @Attribute(name = "category", required = true) DvCodedText category,
+                               @Attribute(name = "territory", required = true) CodePhrase territory,
                                @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,

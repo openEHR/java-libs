@@ -17,6 +17,8 @@ package org.openehr.rm.composition;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyIdentified;
@@ -59,14 +61,16 @@ public final class EventContext extends RMObject {
      * @param terminologyService
      * @throws IllegalArgumentException
      */
-    public EventContext(PartyIdentified healthCareFacility,
-                        DvDateTime startTime,
-                        DvDateTime endTime,
-                        List<Participation> participations,
-                        String location,
-                        DvCodedText setting,
-                        ItemStructure otherContext,
-                        TerminologyService terminologyService) {
+	@FullConstructor
+    public EventContext(
+    		@Attribute(name = "healthCareFacility") PartyIdentified healthCareFacility,
+    		@Attribute(name = "startTime", required = true) DvDateTime startTime,
+    		@Attribute(name = "endTime") DvDateTime endTime,
+    		@Attribute(name = "participations") List<Participation> participations,
+    		@Attribute(name = "location") String location,
+    		@Attribute(name = "setting", required = true) DvCodedText setting,
+    		@Attribute(name = "otherContext") ItemStructure otherContext,
+    		@Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
 
         if (startTime == null) {
             throw new IllegalArgumentException("null startTime");
