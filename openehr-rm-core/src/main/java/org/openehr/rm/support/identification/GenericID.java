@@ -31,7 +31,7 @@ public class GenericID extends ObjectID {
 	@FullConstructor
 	public GenericID(
 			@Attribute(name = "value", required = true)String value, 
-			@Attribute(name = "scheme")String scheme) {
+			@Attribute(name = "scheme", required = true)String scheme) {
 		super(value);
 		if(StringUtils.isEmpty(scheme)) {
 			throw new IllegalArgumentException("empty scheme");

@@ -8,9 +8,9 @@
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
- * file:        "$URL: http://svn.openehr.org/ref_impl_java/BRANCHES/RM-1.0-update/libraries/src/java/org/openehr/rm/support/identification/ArchetypeID.java $"
- * revision:    "$LastChangedRevision: 2 $"
- * last_change: "$LastChangedDate: 2005-10-12 23:20:08 +0200 (Wed, 12 Oct 2005) $"
+ * file:        "$URL$"
+ * revision:    "$LastChangedRevision$"
+ * last_change: "$LastChangedDate$"
  */
 package org.openehr.rm.support.identification;
 

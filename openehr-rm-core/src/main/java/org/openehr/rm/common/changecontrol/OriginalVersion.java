@@ -47,7 +47,7 @@ public class OriginalVersion<T> extends Version<T> {
 			@Attribute(name = "uid", required = true)ObjectVersionID uid, 
 			@Attribute(name = "precedingVersionUid")ObjectVersionID precedingVersionUid,
 			@Attribute(name = "data")T data, 
-			@Attribute(name = "lifeCycleState", required = true)DvCodedText lifeCycleState, 
+			@Attribute(name = "lifecycleState", required = true)DvCodedText lifecycleState, 
 			@Attribute(name = "commitAudit", required = true)AuditDetails commitAudit, 
 			@Attribute(name = "contribution", required = true)ObjectRef contribution, 
 			@Attribute(name = "signature")String signature, 
@@ -56,7 +56,7 @@ public class OriginalVersion<T> extends Version<T> {
 			@Attribute(name = "isMerged") boolean isMerged, 
 			@Attribute(name = "terminologyService", system = true)TerminologyService terminologyService) {
             
-            super(uid, precedingVersionUid, data, lifeCycleState, commitAudit, 
+            super(uid, precedingVersionUid, data, lifecycleState, commitAudit, 
                     contribution, signature, terminologyService);
             if (attestations != null && attestations.isEmpty()) {
                 throw new IllegalArgumentException("empty attestations");
