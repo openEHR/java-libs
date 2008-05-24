@@ -17,6 +17,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.openehr.rm.*;
 import org.openehr.rm.common.archetyped.*;
+import org.openehr.rm.common.changecontrol.Contribution;
+import org.openehr.rm.common.changecontrol.OriginalVersion;
 import org.openehr.rm.common.generic.*;
 import org.openehr.rm.composition.Composition;
 import org.openehr.rm.composition.EventContext;
@@ -75,47 +77,77 @@ public class RMObjectBuilder {
 	// using FullConstructor annotation
 	private Map<String, Class> loadTypeMap() throws ClassNotFoundException {
 		Class[] classes = {
-		
-			// common classes
-			PartySelf.class, Archetyped.class, Attestation.class,
-			AuditDetails.class, Participation.class, PartyIdentified.class,
-			PartyRelated.class, PartySelf.class,
-			
-			// support classes
-			TerminologyID.class, ArchetypeID.class, HierObjectID.class,
-			AccessGroupRef.class, GenericID.class, InternetID.class,
-			ISO_OID.class, LocatableRef.class, ObjectVersionID.class, 
-			PartyRef.class, TemplateID.class, TerminologyID.class, 
-			UUID.class, VersionTreeID.class,
-			
-			// datatypes classes
-			DvBoolean.class, DvState.class, DvIdentifier.class,
-			DvText.class, DvCodedText.class, DvParagraph.class, 
-			CodePhrase.class,
-			DvCount.class, DvOrdinal.class, DvQuantity.class,
-			DvInterval.class, DvProportion.class,
-			DvDate.class, DvDateTime.class, DvTime.class, DvDuration.class,
-			DvParsable.class, // TODO "DvMultimedia" excluded for now			
 
-			// datastructure classes
-			Element.class, Cluster.class, ItemSingle.class, 
-			ItemList.class, ItemTable.class, ItemTree.class,
-			History.class, IntervalEvent.class, PointEvent.class,
+				// common classes
+				PartySelf.class,
+				Archetyped.class,
+				Attestation.class,
+				AuditDetails.class,
+				Participation.class,
+				PartyIdentified.class,
+				PartyRelated.class,
+				PartySelf.class,
+				OriginalVersion.class,
+				Contribution.class,
 
-			// ehr classes
-			Action.class, Activity.class, Evaluation.class,
-			Instruction.class, Observation.class, AdminEntry.class, 
-			Section.class, Composition.class, EventContext.class,
+				// support classes
+				TerminologyID.class,
+				ArchetypeID.class,
+				HierObjectID.class,
+				AccessGroupRef.class,
+				GenericID.class,
+				InternetID.class,
+				ISO_OID.class,
+				LocatableRef.class,
+				ObjectVersionID.class,
+				ObjectRef.class,
+				PartyRef.class,
+				TemplateID.class,
+				TerminologyID.class,
+				UUID.class,
+				VersionTreeID.class,
 
-			// demographic classes
-			Address.class, PartyIdentity.class, Agent.class, Group.class,
-			Organisation.class, Person.class, Contact.class, 
-			PartyRelationship.class, Role.class, Capability.class 
-		};
-		
+				// datatypes classes
+				DvBoolean.class,
+				DvState.class,
+				DvIdentifier.class,
+				DvText.class,
+				DvCodedText.class,
+				DvParagraph.class,
+				CodePhrase.class,
+				DvCount.class,
+				DvOrdinal.class,
+				DvQuantity.class,
+				DvInterval.class,
+				DvProportion.class,
+				DvDate.class,
+				DvDateTime.class,
+				DvTime.class,
+				DvDuration.class,
+				DvParsable.class, // TODO "DvMultimedia" excluded for now
+
+				// datastructure classes
+				Element.class, Cluster.class, ItemSingle.class, ItemList.class,
+				ItemTable.class,
+				ItemTree.class,
+				History.class,
+				IntervalEvent.class,
+				PointEvent.class,
+
+				// ehr classes
+				Action.class, Activity.class, Evaluation.class,
+				Instruction.class, Observation.class, AdminEntry.class,
+				Section.class, Composition.class,
+				EventContext.class,
+
+				// demographic classes
+				Address.class, PartyIdentity.class, Agent.class, Group.class,
+				Organisation.class, Person.class, Contact.class,
+				PartyRelationship.class, Role.class, Capability.class };
+
 		typeMap = new HashMap<String, Class>();
 		upperCaseMap = new HashMap<String, Class>();
-		for(Class klass : classes) {
+		for (Class klass : classes) {
 			String name = klass.getSimpleName();
 			typeMap.put(name, klass);
 			upperCaseMap.put(name.toUpperCase(), klass);
@@ -234,27 +266,19 @@ public class RMObjectBuilder {
 	public RMObject construct(String rmClassName, Map<String, Object> valueMap)
 			throws RMObjectBuildingException {
 
-		Class rmClass = typeMap.get(rmClassName);
-		if (rmClass == null) {
-			rmClass = upperCaseMap.get(rmClassName.replace("_", ""));
-		}
-		if (rmClass == null) {
-			throw new RMObjectBuildingException("RM type unknown: \""
-					+ rmClassName + "\"");
-		}
-		
+		Class rmClass = retrieveRMType(rmClassName);
+
 		// replace underscore separated names with camel case
 		Map<String, Object> filteredMap = new HashMap<String, Object>();
-		for(String name : valueMap.keySet()) {
+		for (String name : valueMap.keySet()) {
 			filteredMap.put(toCamelCase(name), valueMap.get(name));
 		}
-
 		Constructor constructor = fullConstructor(rmClass);
 		Map<String, Class> typeMap = attributeType(rmClass);
 		Map<String, Integer> indexMap = attributeIndex(rmClass);
 		Map<String, Attribute> attributeMap = attributeMap(rmClass);
 		Object[] valueArray = new Object[indexMap.size()];
-		
+
 		for (String name : typeMap.keySet()) {
 			Object value = filteredMap.get(name);
 			if (!typeMap.containsKey(name) || !attributeMap.containsKey(name)) {
@@ -292,8 +316,8 @@ public class RMObjectBuilder {
 			}
 
 			// enum
-			else if (type.isEnum()) {
-				Enum.valueOf(type, value.toString());
+			else if (type.isEnum() && !value.getClass().isEnum()) {
+				value = Enum.valueOf(type, value.toString());
 			}
 
 			// in case of string value, convert to right type if necessary
@@ -318,26 +342,28 @@ public class RMObjectBuilder {
 					throw new AttributeFormatException("wrong format of "
 							+ "attribute " + name + ", expect " + type);
 				}
-			
-			// deal with mismatch between array and list	
-			} else if(type.isAssignableFrom(List.class) && value.getClass().isArray()) {
-				
+
+				// deal with mismatch between array and list
+			} else if (type.isAssignableFrom(List.class)
+					&& value.getClass().isArray()) {
+
 				Object[] array = (Object[]) value;
 				List list = new ArrayList();
-				for(Object o : array) {
+				for (Object o : array) {
 					list.add(o);
 				}
-				value = list;				
-			
-			// deal with mismatch between array and set
-			} else if(type.isAssignableFrom(Set.class) && value.getClass().isArray()) {
-				
+				value = list;
+
+				// deal with mismatch between array and set
+			} else if (type.isAssignableFrom(Set.class)
+					&& value.getClass().isArray()) {
+
 				Object[] array = (Object[]) value;
 				Set set = new HashSet();
-				for(Object o : array) {
+				for (Object o : array) {
 					set.add(o);
 				}
-				value = set;				
+				value = set;
 			}
 			// check type
 			else if (value != null && !type.isPrimitive()) {
@@ -357,10 +383,10 @@ public class RMObjectBuilder {
 			ret = constructor.newInstance(valueArray);
 		} catch (Exception e) {
 
-			if(log.isDebugEnabled()) {
+			if (log.isDebugEnabled()) {
 				e.printStackTrace();
 			}
-			 
+
 			log.debug("failed in constructor.newInstance()", e);
 
 			if (stringParsingTypes.contains(rmClassName)) {
@@ -369,19 +395,54 @@ public class RMObjectBuilder {
 			}
 
 			throw new RMObjectBuildingException(
-					"failed to create new instance of  " + rmClassName 
-					+ " with valueMap: " + valueMap + ", cause: "
-					+ e.getCause());
+					"failed to create new instance of  " + rmClassName
+							+ " with valueMap: " + valueMap + ", cause: "
+							+ e.getCause());
 		}
 		return (RMObject) ret;
 	}
+
+	/**
+	 * Retrieves RM type using given name try both the CamelCase and
+	 * Underscore-separated ways
+	 * 
+	 * @param rmClassName
+	 * @return
+	 * @throws Exception
+	 */
+	public Class retrieveRMType(String rmClassName)
+			throws RMObjectBuildingException {
+		Class rmClass = typeMap.get(rmClassName);
+		if (rmClass == null) {
+			rmClass = upperCaseMap.get(rmClassName.replace("_", ""));
+		}
+		if (rmClass == null) {
+			throw new RMObjectBuildingException("RM type unknown: \""
+					+ rmClassName + "\"");
+		}
+		return rmClass;
+	}
 	
+	/**
+	 * Retrieves list of attribute names of given class
+	 * 
+	 * @param rmClassName
+	 * @return
+	 * @throws RMObjectBuildingException
+	 */
+	public Map<String, Class> retrieveAttribute(String rmClassName)
+			throws RMObjectBuildingException {
+		Class rmClass = retrieveRMType(rmClassName);
+		Map<String, Class> map = attributeType(rmClass);
+		return map;
+	}
+
 	private String toCamelCase(String underscoreSeparated) {
 		StringTokenizer tokens = new StringTokenizer(underscoreSeparated, "_");
 		StringBuffer buf = new StringBuffer();
-		while(tokens.hasMoreTokens()) {
+		while (tokens.hasMoreTokens()) {
 			String word = tokens.nextToken();
-			if(buf.length() == 0) {
+			if (buf.length() == 0) {
 				buf.append(word);
 			} else {
 				buf.append(word.substring(0, 1).toUpperCase());
@@ -390,15 +451,15 @@ public class RMObjectBuilder {
 		}
 		return buf.toString();
 	}
-	
+
 	private String toUnderscoreSeparated(String camelCase) {
 		String[] array = StringUtils.splitByCharacterTypeCamelCase(camelCase);
 		StringBuffer buf = new StringBuffer();
-		for(int i = 0; i < array.length; i++) {
+		for (int i = 0; i < array.length; i++) {
 			String s = array[i];
 			buf.append(s.substring(0, 1).toLowerCase());
 			buf.append(s.substring(1));
-			if(i != array.length -1 ) {
+			if (i != array.length - 1) {
 				buf.append("_");
 			}
 		}
@@ -414,29 +475,29 @@ public class RMObjectBuilder {
 	 */
 	public String findMatchingRMClass(Map<String, Object> valueMap) {
 		List simpleTypes = Arrays.asList(SKIPPED_TYPES_IN_MATCHING);
-		
+
 		for (Class rmClass : typeMap.values()) {
 
 			log.debug("matching rmClass: " + rmClass.getName());
-			
-			if(simpleTypes.contains(rmClass.getSimpleName())) {
+
+			if (simpleTypes.contains(rmClass.getSimpleName())) {
 				continue; // skip simple value types
 			}
-			
+
 			// replace underscore separated names with camel case
 			Map<String, Object> filteredMap = new HashMap<String, Object>();
-			for(String name : valueMap.keySet()) {
+			for (String name : valueMap.keySet()) {
 				filteredMap.put(toCamelCase(name), valueMap.get(name));
 			}
 
 			Constructor constructor = fullConstructor(rmClass);
-			if(constructor == null) {
-				throw new RuntimeException("annotated constructor missing for " 
+			if (constructor == null) {
+				throw new RuntimeException("annotated constructor missing for "
 						+ rmClass);
 			}
 			Annotation[][] annotations = constructor.getParameterAnnotations();
-			if(annotations == null || annotations.length == 0) {
-				throw new RuntimeException("attribute annotations missing for " 
+			if (annotations == null || annotations.length == 0) {
+				throw new RuntimeException("attribute annotations missing for "
 						+ rmClass);
 			}
 			Class[] types = constructor.getParameterTypes();
@@ -444,9 +505,9 @@ public class RMObjectBuilder {
 			Set<String> attributes = new HashSet<String>();
 
 			for (int i = 0; i < types.length; i++) {
-				if(annotations[i].length == 0) {
+				if (annotations[i].length == 0) {
 					throw new RuntimeException(
-							"attribute annotation missing for"	+ rmClass);
+							"attribute annotation missing for" + rmClass);
 				}
 				Attribute attribute = (Attribute) annotations[i][0];
 				attributes.add(attribute.name());
@@ -455,7 +516,7 @@ public class RMObjectBuilder {
 
 				String attrName = attribute.name();
 				Object attrValue = filteredMap.get(attrName);
-				
+
 				if (attribute.required() && attrValue == null) {
 
 					log.debug("missing required attribute..");
@@ -521,18 +582,19 @@ public class RMObjectBuilder {
 		}
 		return null;
 	}
-	
-	/* 
-	 * Skipped types during matching:
-	 * 1. Simple value types in DADL
-	 * 2. Cluster due to clash with ItemList
+
+	/*
+	 * Skipped types during matching: 1. Simple value types in DADL 2. Cluster
+	 * due to clash with ItemList
 	 */
-	private static final String[] SKIPPED_TYPES_IN_MATCHING = {
-		"DvDateTime", "DvDate", "DvTime", "DvDuration", "Cluster",
-		// due to clash with DvText
-		"TerminologyID", "ArchetypeID"		
+	private static final String[] SKIPPED_TYPES_IN_MATCHING = { "DvDateTime",
+			"DvDate", "DvTime", "DvDuration", "Cluster",
+			// due to clash with DvText
+			"TerminologyID", "ArchetypeID", "TemplateID", "ISO_OID",
+			"HierObjectID", "DvBoolean", "InternetID", "UUID",
+			"ObjectVersionID"
 	};
-	
+
 	/* logger */
 	private static final Logger log = Logger.getLogger(RMObjectBuilder.class);
 
