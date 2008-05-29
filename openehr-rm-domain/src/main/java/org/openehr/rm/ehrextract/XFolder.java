@@ -50,7 +50,7 @@ public class XFolder extends Locatable {
      */
     public XFolder(UIDBasedID uid, String archetypeNodeId, DvText name,
                    Archetyped archetypeDetails, FeederAudit feederAudit,
-                   Set<Link> links, Locatable parent, List<XFolder> folders,
+                   Set<Link> links, Pathable parent, List<XFolder> folders,
                    List<XComposition> compositions) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);

@@ -69,7 +69,7 @@ public final class Instruction extends CareEntry {
                     @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
                     @Attribute(name = "feederAudit") FeederAudit feederAudit,
                     @Attribute(name = "links") Set<Link> links,
-                    @Attribute(name = "parent") Locatable parent, 
+                    @Attribute(name = "parent") Pathable parent, 
                     @Attribute(name = "language", required = true) CodePhrase language,
                     @Attribute(name = "encoding", required = true) CodePhrase encoding, 
                     @Attribute(name = "subject", required = true) PartyProxy subject,

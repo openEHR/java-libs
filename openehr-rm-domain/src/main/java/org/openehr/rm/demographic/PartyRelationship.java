@@ -67,7 +67,7 @@ public class PartyRelationship extends Locatable {
             @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
             @Attribute(name = "feederAudit") FeederAudit feederAudit,
             @Attribute(name = "links") Set<Link> links,
-            @Attribute(name = "parent") Locatable parent,
+            @Attribute(name = "parent") Pathable parent,
             @Attribute(name = "details") ItemStructure details,
             @Attribute(name = "timeValidity") DvInterval<DvDate> timeValidity,
             @Attribute(name = "source", required = true) ObjectRef source,

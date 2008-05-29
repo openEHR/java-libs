@@ -58,7 +58,7 @@ public class Activity extends Locatable {
 			@Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
 			@Attribute(name = "feederAudit") FeederAudit feederAudit, 
 			@Attribute(name = "links") Set<Link> links, 
-			@Attribute(name = "parent")	Locatable parent, 
+			@Attribute(name = "parent")	Pathable parent, 
 			@Attribute(name = "description", required = true) ItemStructure description, 
 			@Attribute(name = "timing", required = true) DvParsable timing,
 			@Attribute(name = "actionArchetypeId", required = true) String actionArchetypeId) {

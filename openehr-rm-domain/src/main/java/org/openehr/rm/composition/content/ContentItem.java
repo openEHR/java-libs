@@ -18,6 +18,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datatypes.text.DvText;
 
@@ -43,7 +44,7 @@ public abstract class ContentItem extends Locatable {
      */
     protected ContentItem(UIDBasedID uid, String archetypeNodeId, DvText name,
                           Archetyped archetypeDetails, FeederAudit feederAudit,
-                          Set<Link> links, Locatable parent) {
+                          Set<Link> links, Pathable parent) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);
     }
 

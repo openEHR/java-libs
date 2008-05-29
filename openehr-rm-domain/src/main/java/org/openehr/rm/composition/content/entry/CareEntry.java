@@ -20,7 +20,7 @@ import java.util.Set;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
-import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.common.generic.Participation;
 import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
@@ -55,7 +55,7 @@ public abstract class CareEntry extends Entry {
      */
     protected CareEntry(UIDBasedID uid, String archetypeNodeId, DvText name,
                  Archetyped archetypeDetails, FeederAudit feederAudit,
-                 Set<Link> links, Locatable parent, CodePhrase language,
+                 Set<Link> links, Pathable parent, CodePhrase language,
                  CodePhrase encoding, PartyProxy subject, 
                  PartyProxy provider, ObjectRef workflowId,
                  List<Participation> otherParticipations,

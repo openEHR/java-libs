@@ -32,8 +32,6 @@ import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.terminology.TerminologyService;
 
-import org.openehr.rm.common.archetyped.Locatable;
-
 /**
  * Entry subtype for administrative information, i.e. information about setting up 
  * the clinical process, but not itself clinically relevant. Archetypes will define 
@@ -67,7 +65,7 @@ public class AdminEntry extends Entry {
                        @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
                        @Attribute(name = "feederAudit") FeederAudit feederAudit,
                        @Attribute(name = "links") Set<Link> links,
-                       @Attribute(name = "parent") Locatable parent,
+                       @Attribute(name = "parent") Pathable parent,
                        @Attribute(name = "language", required = true) CodePhrase language,
                        @Attribute(name = "encoding", required = true) CodePhrase encoding, 
                        @Attribute(name = "subject", required = true) PartyProxy subject,

@@ -55,7 +55,7 @@ public final class GenericEntry extends ContentItem {
     		@Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
     		@Attribute(name = "feederAudit") FeederAudit feederAudit,
     		@Attribute(name = "links") Set<Link> links, 
-    		@Attribute(name = "parent") Locatable parent,
+    		@Attribute(name = "parent") Pathable parent,
     		@Attribute(name = "data", required = true) ItemTree data) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, 
         		parent);

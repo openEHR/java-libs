@@ -64,7 +64,7 @@ public final class Composition extends Locatable {
                                @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
                                @Attribute(name = "feederAudit") FeederAudit feederAudit,
                                @Attribute(name = "links") Set<Link> links,
-                               @Attribute(name = "parent") Locatable parent,
+                               @Attribute(name = "parent") Pathable parent,
                                @Attribute(name = "content") List<ContentItem> content,
                                @Attribute(name = "language", required = true) CodePhrase language,
                                @Attribute(name = "context", required = true) EventContext context,
