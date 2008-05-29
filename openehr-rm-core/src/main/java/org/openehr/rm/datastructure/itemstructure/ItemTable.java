@@ -20,7 +20,6 @@ import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
-import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datastructure.itemstructure.representation.Cluster;
@@ -63,7 +62,7 @@ public final class ItemTable extends ItemStructure {
                              @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
                              @Attribute(name = "feederAudit") FeederAudit feederAudit,
                              @Attribute(name = "links") Set<Link> links,
-                             @Attribute(name = "parent") Locatable parent, 
+                             @Attribute(name = "parent") Pathable parent, 
                              @Attribute(name = "rows") List<Cluster> rows) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
                 links, parent);

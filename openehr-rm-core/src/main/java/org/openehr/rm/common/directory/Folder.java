@@ -46,14 +46,11 @@ public class Folder extends Locatable {
      */
     public Folder(UIDBasedID uid, String archetypeNodeId, DvText name,
             Archetyped archetypeDetails, FeederAudit feederAudit, Set<Link> links,
-            Locatable parent, List<Folder> folders, List<ObjectRef> items) {
+            Pathable parent, List<Folder> folders, List<ObjectRef> items) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);
         if(folders != null && folders.size() == 0) {
-            throw new IllegalArgumentException("empty folders");
+            throw new IllegalArgumentException("empty sub-folders");
         }
-        if (items != null && items.isEmpty()) {
-            throw new IllegalArgumentException("empty compositions");
-        } //TODO: necessary?
         this.folders = folders;
         this.items = items;
     }

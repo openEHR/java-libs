@@ -50,11 +50,11 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
      * @param archetypeDetails
      * @param feederAudit
      * @param links
-     * @param parent
-     * @param time
-     * @param data
+     * @param parent	null if unspecified
+     * @param time		not null
+     * @param data		not null
      * @param state
-     * @throws IllegalArgumentException if offset null
+     * @throws IllegalArgumentException if time, data or parent null
      */
     @FullConstructor protected Event(
             		   @Attribute(name = "uid") UIDBasedID uid,
@@ -69,10 +69,10 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
                     @Attribute(name = "state") ItemStructure state) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links, parent);
         if (time == null) {
-        		throw new IllegalArgumentException("null time");
+        	throw new IllegalArgumentException("null time");
         }
         if (data == null) {
-        		throw new IllegalArgumentException("null data");
+        	throw new IllegalArgumentException("null data");
         }
         this.parent = parent;
         this.time = time;
@@ -136,10 +136,7 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
      * @return offset = time - parent.origin
      */
     public DvDuration offset() {
-        if (parent != null) {
-            return DvDuration.getDifference(parent.getOrigin(), time);
-        } else return null;
-        //TODO: offset should not return null
+        return DvDuration.getDifference(parent.getOrigin(), time);
     }
     
     /**
