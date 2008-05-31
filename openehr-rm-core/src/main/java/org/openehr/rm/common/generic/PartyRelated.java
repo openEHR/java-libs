@@ -47,7 +47,7 @@ public final class PartyRelated extends PartyIdentified {
     		@Attribute(name = "name")String name,
     		@Attribute(name = "identifiers")List<DvIdentifier> identifiers, 
     		@Attribute(name = "relationship", required = true)DvCodedText relationship,
-    		@Attribute(name = "value")TerminologyService terminologyService) {
+    		@Attribute(name = "terminologyService")TerminologyService terminologyService) {
     		super(externalRef, name, identifiers);
         if (relationship == null) {
             throw new IllegalArgumentException("null relationship");
