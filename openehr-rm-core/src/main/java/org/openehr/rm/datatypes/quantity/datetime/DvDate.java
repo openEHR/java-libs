@@ -76,10 +76,6 @@ public class DvDate extends DvTemporal<DvDate> {
 	/**
 	 * Construct a DvDate of current date
 	 *
-	 * @param referenceRanges
-	 * @param normalRange
-	 * @param accuracy
-	 * @param accuracyPercent
 	 */
 	public DvDate() {
 		super(DvDateTimeParser.defaultDate());
