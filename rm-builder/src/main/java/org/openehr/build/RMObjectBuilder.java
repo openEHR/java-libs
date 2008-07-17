@@ -136,7 +136,7 @@ public class RMObjectBuilder {
 
 				// ehr classes
 				Action.class, Activity.class, Evaluation.class,
-				Instruction.class, Observation.class, AdminEntry.class,
+				Instruction.class, InstructionDetails.class, Observation.class, AdminEntry.class,
 				Section.class, Composition.class,
 				EventContext.class,
 
