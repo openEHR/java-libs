@@ -52,7 +52,7 @@ public class DvQuantity extends DvAmount<DvQuantity> {
      * @throws IllegalArgumentException
      */
     @FullConstructor
-            public DvQuantity(@Attribute (name = "referenceRanges") List<ReferenceRange<DvQuantity>> referenceRanges,
+            public DvQuantity(@Attribute (name = "otherReferenceRanges") List<ReferenceRange<DvQuantity>> otherReferenceRanges,
                               @Attribute (name = "normalRange") DvInterval<DvQuantity> normalRange,
                               @Attribute (name= "normalStatus") CodePhrase normalStatus,
                               @Attribute (name = "accuracy") double accuracy,
