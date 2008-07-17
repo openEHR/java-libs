@@ -16,6 +16,7 @@ package org.openehr.rm.composition.content.entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.support.identification.LocatableRef;
@@ -37,6 +38,7 @@ public class InstructionDetails extends RMObject {
 	 * @param links
 	 * @param parent
 	 */
+	@FullConstructor
 	public InstructionDetails(
             @Attribute(name = "instructionId", required = true) LocatableRef instructionId,
             @Attribute(name = "activityId", required = true) String activityId,
