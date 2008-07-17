@@ -38,7 +38,7 @@ public class DvQuantity extends DvAmount<DvQuantity> {
     /**
      * Constructs a Quantity by all components
      *
-     * @param referenceRanges
+     * @param otherReferenceRanges
      * @param normalRange
      * @param normalStatus
      * @param accuracy
@@ -63,7 +63,7 @@ public class DvQuantity extends DvAmount<DvQuantity> {
                               @Attribute (name = "precision") int precision,
                               @Attribute (name = "measurementService", system = true) MeasurementService measurementService) {
         
-        super(referenceRanges, normalRange, normalStatus, accuracy, 
+        super(otherReferenceRanges, normalRange, normalStatus, accuracy, 
         		accuracyPercent, magnitudeStatus);
 
         if (precision < -1) {
