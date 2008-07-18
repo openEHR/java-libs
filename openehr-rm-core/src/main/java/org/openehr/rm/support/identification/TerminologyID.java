@@ -56,7 +56,7 @@ public final class TerminologyID extends ObjectID {
 
     private void loadValue(String value) {
         int leftBrace = value.indexOf("(");
-        int rightBrace = value.indexOf(")");
+        int rightBrace = value.lastIndexOf(")");
         if (leftBrace > 1 && rightBrace == value.length() - 1) {
             name = value.substring(0, leftBrace);
             version = value.substring(leftBrace + 1, rightBrace);
