@@ -16,6 +16,8 @@ package org.openehr.rm.datastructure.history;
 
 import java.util.Set;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.Archetyped;
@@ -74,23 +76,12 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
         if (data == null) {
         	throw new IllegalArgumentException("null data");
         }
-        this.parent = parent;
+        //this.parent = parent;
         this.time = time;
         this.data = data;
         this.state = state;
     }
 
-    /**
-     * Constructs an instantaneous event
-     *
-     * @param item
-     * @param offset
-     */
-//    public Event(T item, DvDuration offset) {
-//        this(item, null, null, null, offset);
-//    }
-
-    
     /**
      * The data of this event
      * 
@@ -127,7 +118,7 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
      * @return parent null if not known
      */
     public History<T> getParent() {
-            return parent;
+    	return (History<T>) super.getParent();
     }
 
     /**
@@ -136,7 +127,7 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
      * @return offset = time - parent.origin
      */
     public DvDuration offset() {
-        return DvDuration.getDifference(parent.getOrigin(), time);
+        return DvDuration.getDifference(getParent().getOrigin(), time);
     }
     
     /**
@@ -154,8 +145,8 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
      * 		a copy of this Event object, or if this.parent is not null
      */
     void assignParent(History<T> parent) {
-        if (this.parent == null) {
-               this.parent = parent; 
+        if (getParent() == null) {
+               super.setParent(parent); 
  
         } else {
             //TODO: throw or not throw?
@@ -173,6 +164,38 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
     public String pathOfItem(Pathable item) {
         return null;  // todo: implement this method
     }
+    
+    /**
+     * Two events are equal if both have the same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof Event )) return false;
+        
+        final Event event = (Event) o;
+
+        return new EqualsBuilder()
+            .append(time, event.time)
+            .append(data, event.data)
+            .append(state, event.state)
+            .isEquals();
+    }
+
+    /**
+     * Return a hash code of this event
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(13, 41)
+                .append(time)
+                .append(data)
+                .append(state)
+                .toHashCode();
+    }   
 
     // POJO start
     Event() {
@@ -190,16 +213,12 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
 		this.time = time;
 	}    
 
-	void setParent(History<T> parent) {
-		this.parent = parent;
-	}
-    // POJO end
+	// POJO end
 
     /* fields */
     private DvDateTime time;
     private T data;
     private ItemStructure state;
-    private History<T> parent;
 }
 
 /*
@@ -219,7 +238,7 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
  *  The Original Code is Event.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

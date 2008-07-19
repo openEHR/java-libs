@@ -24,7 +24,6 @@ import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
-import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.datastructure.DataStructure;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
@@ -227,11 +226,7 @@ public class History <T extends ItemStructure> extends DataStructure {
     protected History() {
     }
 
-    /**
-     * 
-     */
     void setEvents(List<Event<T>> events) {
-        //TODO: check this implementation...        
         if (events!= null) {          
             for(Event<T> event : events) {
                 event.assignParent(this);

@@ -37,6 +37,15 @@ public abstract class Pathable extends RMObject {
 	}
 	
 	/**
+	 * Sets the parent
+	 * 
+	 * @param parent
+	 */
+	protected void setParent(Pathable parent) {
+		this.parent = parent;
+	}
+	
+	/**
 	 * Creates a pathable without parent
 	 */
 	public Pathable() {
