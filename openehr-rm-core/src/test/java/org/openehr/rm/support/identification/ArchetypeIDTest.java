@@ -127,6 +127,20 @@ public class ArchetypeIDTest extends TestCase {
     		fail("failed to create ArchetypeID with multiple specialisation");
     	}
     }
+    
+    public void testWithConceptInSwedish() {
+    	ArchetypeID aid = null;
+    	try {
+    		// Omvårdnadsanteckning
+    		aid = new ArchetypeID(
+    				"openEHR-EHR-CLUSTER.Omv\u00E5rdnadsanteckning.v1");
+    		
+    		fail("expect to fail on Swedish concept name");
+    		
+    	} catch(Exception e) {
+    		
+    	}
+    }
 
 
     // assert content of archetype id
