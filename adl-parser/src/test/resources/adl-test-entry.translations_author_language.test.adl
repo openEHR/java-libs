@@ -1,0 +1,34 @@
+archetype 
+	adl-test-ENTRY.translation_author_language.draft
+	
+concept 
+	[at0000]	--  test
+	
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+        ["de"] = <
+            author = <
+                ["name"] = <"Harry Potter">
+                ["email"] = <"harry@something.somewhere.co.uk">             
+            >
+            language = <[ISO_639-1::de]>            
+        >
+    >
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test">; 
+					description = <"test">
+				>
+			>
+		>
+	>

@@ -721,10 +721,10 @@ Map<String, TranslationDetails> translations() :
 {
   Token t;
   String langAsKey;
-  CodePhrase language;
+  CodePhrase language = null;
   TranslationDetails td;	
   Map<String, TranslationDetails> map = new HashMap<String, TranslationDetails>();
-  Map<String, String> author;
+  Map<String, String> author = null;
   String  accreditation = null;
   Map<String, String> otherDetails = null;
 }
@@ -732,11 +732,13 @@ Map<String, TranslationDetails> translations() :
   (
     <SYM_L_BRACKET> langAsKey = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
       
-      <SYM_LANG_LANGUAGE> <SYM_EQ> "<" language = code_phrase() ">"
-      <SYM_AUTHOR> <SYM_EQ> <SYM_LT>
-        author = string_string_map()
-      <SYM_GT>
-      
+      (
+        <SYM_LANG_LANGUAGE> <SYM_EQ> "<" language = code_phrase() ">"
+      |
+        <SYM_AUTHOR> <SYM_EQ> <SYM_LT>
+          author = string_string_map()
+        <SYM_GT>
+      )*
       [
       	<SYM_ACCREDITATION> <SYM_EQ> <SYM_LT>
         	accreditation = string_value()
