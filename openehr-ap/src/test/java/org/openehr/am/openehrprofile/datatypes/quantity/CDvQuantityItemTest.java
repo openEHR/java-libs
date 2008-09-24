@@ -19,7 +19,7 @@ public class CDvQuantityItemTest extends TestCase {
 		String units = "Kg";
 		CDvQuantityItem item = new CDvQuantityItem(value, precision, units);
 		
-		assertEquals("value wrong", value, item.getValue());
+		assertEquals("magnitude wrong", value, item.getMagnitude());
 		assertEquals("precision wrong", precision, item.getPrecision());
 		assertEquals("units wrong", units, item.getUnits());
 	}

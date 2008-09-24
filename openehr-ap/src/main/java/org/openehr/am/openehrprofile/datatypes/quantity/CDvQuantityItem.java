@@ -30,28 +30,28 @@ public class CDvQuantityItem {
 	/**
 	 * Constructor 
 	 * 
-	 * @param value 
+	 * @param magnitude 
 	 * @param units not null or empty
 	 * @throws IllegalArgumentException if units null or empty
 	 */
-	public CDvQuantityItem(Interval<Double> value, String units) {
-		this(value, null, units);
+	public CDvQuantityItem(Interval<Double> magnitude, String units) {
+		this(magnitude, null, units);
 	}
 	
 	/**
 	 * Constructor
 	 * 
-	 * @param value 
+	 * @param magnitude 
 	 * @param precision null if unspecified
 	 * @param units not null or empty
 	 * @throws IllegalArgumentException if units null or empty
 	 */
-	public CDvQuantityItem(Interval<Double> value, Interval<Integer> precision,
+	public CDvQuantityItem(Interval<Double> magnitude, Interval<Integer> precision,
 			String units) {
 		if(StringUtils.isEmpty(units)) {
 			throw new IllegalArgumentException("units null or empty");
 		}
-		this.value = value;
+		this.magnitude = magnitude;
 		this.precision = precision;
 		this.units = units;
 	}
@@ -66,12 +66,12 @@ public class CDvQuantityItem {
 	}
 	
 	/**
-	 * Value must be inside the supplied interval.
+	 * Magnitude must be inside the supplied interval.
 	 * 
-	 * @return value interval
+	 * @return magnitude interval
 	 */
-	public Interval<Double> getValue() {
-		return value;
+	public Interval<Double> getMagnitude() {
+		return magnitude;
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class CDvQuantityItem {
         final CDvQuantityItem item = (CDvQuantityItem) o;
 
         return new EqualsBuilder()
-                .append(value, item.value)
+                .append(magnitude, item.magnitude)
                 .append(precision, item.precision)
                 .append(units, item.units)
                 .isEquals();
@@ -104,14 +104,14 @@ public class CDvQuantityItem {
      */
     public int hashCode() {
         return new HashCodeBuilder(7, 23)
-                .append(value)
+                .append(magnitude)
                 .append(precision)
                 .append(units)
                 .toHashCode();
     }
 	
 	/* fields */
-	private Interval<Double> value;
+	private Interval<Double> magnitude;
 	private Interval<Integer> precision;
 	private String units;	
 }
@@ -133,7 +133,7 @@ public class CDvQuantityItem {
  *  The Original Code is CDvQuantity.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2006
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):
