@@ -581,10 +581,10 @@ public class XMLSerializer {
                 Element lst = new Element("list", defaultNamespace);
                 children.getChildren().add(lst);
                 
-                if(item.getValue() != null) {
+                if(item.getMagnitude() != null) {
                     Element magnitude = new Element("magnitude", defaultNamespace);
                     lst.getChildren().add(magnitude);
-                    printInterval(item.getValue(), magnitude);
+                    printInterval(item.getMagnitude(), magnitude);
                 }
                 
                 printString("units", item.getUnits(), lst);
@@ -957,7 +957,7 @@ public class XMLSerializer {
  *
  * The Initial Developer of the Original Code is
  * Link�pings universitet, Sweden.
- * Portions created by the Initial Developer are Copyright (C) 2005-2006
+ * Portions created by the Initial Developer are Copyright (C) 2005-2008
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):  Mattias Forss <mattias.forss@gmail.com>

@@ -102,7 +102,7 @@ public class CDvQuantityTest extends ParserTestBase {
     		Interval<Double> magnitude, Interval<Integer> precision) {
     	assertEquals("unexpected units", units, item.getUnits());
     	assertEquals("unexpected magnitude interval", magnitude, 
-    			item.getValue());
+    			item.getMagnitude());
     	assertEquals("unexpected precision interval", precision, 
     			item.getPrecision());    	
     }

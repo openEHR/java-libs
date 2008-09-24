@@ -758,7 +758,7 @@ public class ADLSerializer {
 				out.write(item.getUnits());
 				out.write("\">");
 				newline(out);
-				Interval<Double> value = item.getValue();
+				Interval<Double> value = item.getMagnitude();
 				if (value != null) {
 					indent(indent + 3, out);
 					out.write("magnitude = <");
