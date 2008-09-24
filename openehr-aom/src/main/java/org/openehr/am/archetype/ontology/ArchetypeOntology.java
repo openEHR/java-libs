@@ -143,6 +143,16 @@ public class ArchetypeOntology {
     }
     
     /**
+     * Term definition for a code in the primary language.
+     * 
+     * @param code
+     * @return not null
+     */
+    public ArchetypeTerm termDefinition(String code) {
+    	return definition(primaryLanguage, code, termDefinitionMap);
+    }
+    
+    /**
      * String representation of this object
      *
      * @return string form

@@ -5,12 +5,7 @@ import java.util.*;
 
 public class ArchetypeOntologyTest extends TestCase {
 	
-	/**
-	 * Verify a bug-fix to do with definitions loading in the constructor
-	 * 
-	 * @throws Exception
-	 */
-	public void testCreateAndGetDefinitions() throws Exception {
+	public void setUp() {
 		String primaryLanguage = "en";
 		List<String> languages = new ArrayList<String>();
 		languages.add("en");
@@ -20,7 +15,7 @@ public class ArchetypeOntologyTest extends TestCase {
 		
 		List<OntologyDefinitions> termDefinitionsList = new ArrayList<OntologyDefinitions>();
 		List<ArchetypeTerm> items = new ArrayList<ArchetypeTerm>();
-		ArchetypeTerm item0001 = new ArchetypeTerm("at0001"); 
+		item0001 = new ArchetypeTerm("at0001"); 
 		item0001.addItem("text", "blood pressure");
 		item0001.addItem("description", "description of BP");
 		items.add(item0001);
@@ -28,14 +23,38 @@ public class ArchetypeOntologyTest extends TestCase {
 		
 		List<OntologyDefinitions> constDefinitionsList = new ArrayList<OntologyDefinitions>();
 		items = new ArrayList<ArchetypeTerm>();
-		ArchetypeTerm item0002 = new ArchetypeTerm("at0002");
+		item0002 = new ArchetypeTerm("at0002");
 		item0002.addItem("text", "systolic pressure");
 		item0002.addItem("description", "description SP");
 		items.add(item0002);
 		constDefinitionsList.add(new OntologyDefinitions("en", items));
 		
-		ArchetypeOntology ontology = new ArchetypeOntology(primaryLanguage, languages,
+		ontology = new ArchetypeOntology(primaryLanguage, languages,
 				terminologies, termDefinitionsList, constDefinitionsList, null, null);
+	}
+	
+	public void tearDown() {
+		ontology = null;
+		item0001 = null;
+		item0002 = null;
+	}
+	
+	public void testFetchTermDefinitionWithGivenLanguage() {
+		assertEquals("termDefinition wrong", item0001, 
+				ontology.termDefinition("en", "at0001"));
+	}
+	
+	public void testFetchTermDefinitionWithPrimaryLanguage() {
+		assertEquals("termDefinition wrong", item0001, 
+				ontology.termDefinition("at0001"));
+	}
+	
+	/**
+	 * Verify a bug-fix to do with definitions loading in the constructor
+	 * 
+	 * @throws Exception
+	 */
+	public void testCreateAndGetDefinitions() throws Exception {
 		
 		// check term definition
 		ArchetypeTerm item = ontology.termDefinition("en", "at0001");
@@ -55,5 +74,8 @@ public class ArchetypeOntologyTest extends TestCase {
 		
 		assertNull(ontology.constraintDefinition("en", "at0001"));
 	}
-
+	
+	private ArchetypeOntology ontology;
+	private ArchetypeTerm item0001;
+	private ArchetypeTerm item0002;
 }
