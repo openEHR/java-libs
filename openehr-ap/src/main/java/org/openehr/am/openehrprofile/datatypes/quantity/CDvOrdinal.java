@@ -54,7 +54,7 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 		if (list != null && list.isEmpty()) {
 			throw new IllegalArgumentException("list is empty");
 		}
-		this.list = list;
+		this.list = list == null ? null : new LinkedHashSet(list);
 	}
 	
 	/**
@@ -160,7 +160,7 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
  *  The Original Code is CDvOrdinal.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2007
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s): Sebastian Garde

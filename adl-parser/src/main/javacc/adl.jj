@@ -2737,7 +2737,7 @@ Interval occurrence_spec() :
 
 CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
 {
-  Set list = new HashSet();
+  Set list = new LinkedHashSet();
   org.openehr.am.openehrprofile.datatypes.quantity.Ordinal o;
   DvOrdinal defaultValue = null;
   int assumed = -1;

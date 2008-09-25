@@ -9,6 +9,7 @@ public class ArchetypeOntologyTest extends TestCase {
 		String primaryLanguage = "en";
 		List<String> languages = new ArrayList<String>();
 		languages.add("en");
+		languages.add("sv");
 		
 		List<String> terminologies = new ArrayList<String>();
 		terminologies.add("SNOMED CT");
@@ -19,7 +20,19 @@ public class ArchetypeOntologyTest extends TestCase {
 		item0001.addItem("text", "blood pressure");
 		item0001.addItem("description", "description of BP");
 		items.add(item0001);
+		item0003 = new ArchetypeTerm("at0003"); 
+		item0003.addItem("text", "diastolic pressure");
+		item0003.addItem("description", "description of DP");
+		items.add(item0003);
 		termDefinitionsList.add(new OntologyDefinitions("en", items));
+		
+		items = new ArrayList<ArchetypeTerm>();
+		item0004 = new ArchetypeTerm("at0004"); 
+		item0004.addItem("text", "diastolic pressure 2");
+		item0004.addItem("description", "description of DP 2");
+		items.add(item0004);
+		termDefinitionsList.add(new OntologyDefinitions("sv", items));
+		
 		
 		List<OntologyDefinitions> constDefinitionsList = new ArrayList<OntologyDefinitions>();
 		items = new ArrayList<ArchetypeTerm>();
@@ -27,7 +40,7 @@ public class ArchetypeOntologyTest extends TestCase {
 		item0002.addItem("text", "systolic pressure");
 		item0002.addItem("description", "description SP");
 		items.add(item0002);
-		constDefinitionsList.add(new OntologyDefinitions("en", items));
+		constDefinitionsList.add(new OntologyDefinitions("sv", items));
 		
 		ontology = new ArchetypeOntology(primaryLanguage, languages,
 				terminologies, termDefinitionsList, constDefinitionsList, null, null);
@@ -37,11 +50,18 @@ public class ArchetypeOntologyTest extends TestCase {
 		ontology = null;
 		item0001 = null;
 		item0002 = null;
+		item0003 = null;
 	}
 	
 	public void testFetchTermDefinitionWithGivenLanguage() {
 		assertEquals("termDefinition wrong", item0001, 
 				ontology.termDefinition("en", "at0001"));
+		
+		assertEquals("termDefinition wrong", item0003, 
+				ontology.termDefinition("en", "at0003"));
+		
+		assertEquals("termDefinition of item00004 wrong", item0004, 
+				ontology.termDefinition("sv", "at0004"));
 	}
 	
 	public void testFetchTermDefinitionWithPrimaryLanguage() {
@@ -68,7 +88,7 @@ public class ArchetypeOntologyTest extends TestCase {
 		assertNull(ontology.termDefinition("en", "at0002"));
 		
 		// check constraint definition
-		item = ontology.constraintDefinition("en", "at0002");
+		item = ontology.constraintDefinition("sv", "at0002");
 		assertNotNull("definition of [at0002] not found", item);
 		assertEquals("item wrong", item0002, item);
 		
@@ -78,4 +98,6 @@ public class ArchetypeOntologyTest extends TestCase {
 	private ArchetypeOntology ontology;
 	private ArchetypeTerm item0001;
 	private ArchetypeTerm item0002;
+	private ArchetypeTerm item0003;
+	private ArchetypeTerm item0004;	
 }
