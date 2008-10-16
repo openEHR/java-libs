@@ -24,7 +24,7 @@ import org.openehr.rm.support.basic.Interval;
  * @author Rong Chen
  * @version 1.0
  */
-public class ArchetypeInternalRef extends CObject {
+public class ArchetypeInternalRef extends CReferenceObject {
     
 	/**
      * Creates an ObjectConstraint

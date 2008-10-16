@@ -26,7 +26,7 @@ import org.openehr.rm.support.basic.Interval;
  * @author Rong Chen
  * @version 1.0
  */
-public final class ConstraintRef extends CObject {
+public final class ConstraintRef extends CReferenceObject {
 
     /**
      * Constructs a ConstraintRef
