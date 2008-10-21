@@ -20,6 +20,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
@@ -46,12 +47,13 @@ public class TranslationDetails extends RMObject {
 		}
 		if (author == null) {
 			throw new IllegalArgumentException("null author");
+		}		
+		if (!terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(language)) {
+			throw new IllegalArgumentException("unknown original language " + 
+					language);
 		}
 		
-		if (terminologyService != null && 
-				!terminologyService.codeSet("languages").hasLang(language)) {
-			throw new IllegalArgumentException("unknown language " + language);
-		}
 		this.language = language;
 		this.author = author;
 		this.accreditation = accreditation;
