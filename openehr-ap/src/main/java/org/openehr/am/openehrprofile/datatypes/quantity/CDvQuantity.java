@@ -142,9 +142,23 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 	}
 
 	@Override
-	public boolean validValue(DvQuantity arg0) {
-		// TODO Auto-generated method stub
-		return true;
+	public boolean validValue(DvQuantity value) {
+		if(list == null) {
+			return true;
+		}
+		for(CDvQuantityItem item : list) {
+			if( ! item.getUnits().equals(value.getUnits())) {
+				continue;
+			}
+			if(item.getMagnitude() != null 
+					&& !item.getMagnitude().has(value.getMagnitude())) {
+				continue;
+			}
+			
+			// TODO precision check
+			return true;			
+		}
+		return false;
 	}
 
 	@Override

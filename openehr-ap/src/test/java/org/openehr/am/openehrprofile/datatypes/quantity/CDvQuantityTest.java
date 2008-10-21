@@ -98,4 +98,50 @@ public class CDvQuantityTest extends TestCase {
 		assertTrue("CDvQuantity with the same quantity items should equal",
 				cq2.equals(cq1));
 	}
+	
+	public void testValidValueExpected() throws Exception {
+		Interval<Integer> required = new Interval<Integer>(1,1);
+		CDvQuantityItem item1 = new CDvQuantityItem(
+				new Interval<Double>(0.0, 1.0), 
+				new Interval<Integer>(2, 2), "mg");
+		List<CDvQuantityItem> list1 = new ArrayList<CDvQuantityItem>();
+		list1.add(item1);
+		CDvQuantity cdq = new CDvQuantity("/path", required, list1, null);
+		
+		DvQuantity dq = new DvQuantity("mg", 0.9, measureService);		
+		
+		assertTrue("expected valid value expected", cdq.validValue(dq));				
+	}
+	
+	public void testValidValueValueOutOfRange() throws Exception {
+		Interval<Integer> required = new Interval<Integer>(1,1);
+		CDvQuantityItem item1 = new CDvQuantityItem(
+				new Interval<Double>(0.0, 1.0), 
+				new Interval<Integer>(2, 2), "mg");
+		List<CDvQuantityItem> list1 = new ArrayList<CDvQuantityItem>();
+		list1.add(item1);
+		CDvQuantity cdq = new CDvQuantity("/path", required, list1, null);
+		
+		DvQuantity dq = new DvQuantity("mg", 1.5, measureService);		
+		
+		assertFalse("expected value out of range", cdq.validValue(dq));
+		
+		
+	}
+	
+	public void testValidValueValueWrongUnits() throws Exception {
+		Interval<Integer> required = new Interval<Integer>(1,1);
+		CDvQuantityItem item1 = new CDvQuantityItem(
+				new Interval<Double>(0.0, 1.0), 
+				new Interval<Integer>(2, 2), "mg");
+		List<CDvQuantityItem> list1 = new ArrayList<CDvQuantityItem>();
+		list1.add(item1);
+		CDvQuantity cdq = new CDvQuantity("/path", required, list1, null);
+		
+		DvQuantity dq = new DvQuantity("kg", 0.9, measureService);		
+		
+		assertFalse("expected invalid units", cdq.validValue(dq));	
+	}	
+	
+	private MeasurementService measureService = SimpleMeasurementService.getInstance();
 }
