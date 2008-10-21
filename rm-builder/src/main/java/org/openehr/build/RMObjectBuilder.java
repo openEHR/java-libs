@@ -555,6 +555,9 @@ public class RMObjectBuilder {
 			// matching found
 			if (matched) {
 				String className = rmClass.getSimpleName();
+				
+				log.debug(">>> MATCHING FOUND: " + className);
+				
 				return className;
 			}
 		}

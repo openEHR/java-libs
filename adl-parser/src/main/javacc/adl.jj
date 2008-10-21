@@ -717,7 +717,7 @@ CodePhrase code_phrase() :
   { return new CodePhrase(langTerm, langCode); }	
 }
 
-Map<String, TranslationDetails> translations() : 
+Map<String, TranslationDetails> translations() throws Exception : 
 {
   Token t;
   String langAsKey;
@@ -727,6 +727,7 @@ Map<String, TranslationDetails> translations() :
   Map<String, String> author = null;
   String  accreditation = null;
   Map<String, String> otherDetails = null;
+  TerminologyService terminologyService = SimpleTerminologyService.getInstance();
 }
 {
   (
@@ -754,7 +755,7 @@ Map<String, TranslationDetails> translations() :
     { 
       // TODO null terminology service
       td = new TranslationDetails(language, author, accreditation, 
-      		otherDetails, null); 
+      		otherDetails, terminologyService); 
       map.put(langAsKey, td);
     }
   )+
@@ -2739,7 +2740,7 @@ CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
 {
   Set list = new LinkedHashSet();
   org.openehr.am.openehrprofile.datatypes.quantity.Ordinal o;
-  DvOrdinal defaultValue = null;
+  Ordinal defaultValue = null;
   int assumed = -1;
   Ordinal assumedValue = null;
   Interval<Integer> occurrences = new Interval<Integer>(1, 1);

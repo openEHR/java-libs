@@ -26,20 +26,21 @@ public class ArchetypeLanguageTest extends SerializerTestBase {
 		SortedMap<String, String> otherDetails = new TreeMap<String, String>();
 		otherDetails.put("reviewer 1", "Ron Weasley");
 		otherDetails.put("reviewer 2", "Rubeus Hagrid");	
+		TerminologyService ts =	SimpleTerminologyService.getInstance();
 		
 		TranslationDetails td = new TranslationDetails(
 				new CodePhrase("ISO_639-1", "de"), author, 
-				"British Medical Translator id 00400595", otherDetails, null);
+				"British Medical Translator id 00400595", otherDetails, ts);
+		
 		translations.put("de", td);
 		
 		ResourceDescription description = null;
 		RevisionHistory revisionHistory = null;
 		boolean isControlled = false;
-		TerminologyService service = SimpleTerminologyService.getInstance();
 		
 		AuthoredResource authored = new AuthoredResource(originalLanguage,
 				translations, description, revisionHistory, isControlled, 
-				service) {};
+				ts) {};
 		
 		clean();
 		outputter.printLanguage(authored, out);
