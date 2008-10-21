@@ -23,7 +23,6 @@ import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
-import org.openehr.rm.datatypes.quantity.DvOrdinal;
 import org.openehr.rm.support.basic.Interval;
 
 /**
@@ -46,9 +45,9 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 	 */
 	public CDvOrdinal(String path, Interval<Integer> occurrences,
 			String nodeID, CAttribute parent, Set<Ordinal> list,
-			DvOrdinal defaultValue, Ordinal assumedValue) {
+			Ordinal defaultValue, Ordinal assumedValue) {
 
-		super(list == null, path, "DvOrdinal", occurrences, nodeID, null,
+		super(list == null, path, "DvOrdinal", occurrences, nodeID, defaultValue,
 				assumedValue, parent);
 
 		if (list != null && list.isEmpty()) {
