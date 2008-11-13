@@ -739,7 +739,6 @@ Map<String, TranslationDetails> translations() throws Exception :
         <SYM_AUTHOR> <SYM_EQ> <SYM_LT>
           author = string_string_map()
         <SYM_GT>
-      )*
       [
       	<SYM_ACCREDITATION> <SYM_EQ> <SYM_LT>
         	accreditation = string_value()
@@ -751,6 +750,7 @@ Map<String, TranslationDetails> translations() throws Exception :
           otherDetails = string_string_map()
         <SYM_GT>
       ]
+	  )*
     <SYM_GT>	    	    
     { 
       // TODO null terminology service

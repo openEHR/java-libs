@@ -80,8 +80,33 @@ public class ArchetypeLanguageTest extends ParserTestBase {
 		assertEquals("author.email wrong", "harry@something.somewhere.co.uk",
 				map.get("email"));
 
-		assertEquals("acrreditation wrong", null, td.getAccreditation());
+		assertEquals("accreditation wrong", null, td.getAccreditation());
 
+		map = td.getOtherDetails();
+		assertEquals("review 1 wrong", "Ron Weasley", map.get("review 1"));
+		assertEquals("review 2 wrong", "Rubeus Hagrid", map.get("review 2"));
+	}
+	
+	public void testParseLanguageWithAccreditationBeforeLanguage() throws Exception {
+		ADLParser parser = new ADLParser(loadFromClasspath(
+				"adl-test-entry.archetype_language_order_of_translation_details.test.adl"));
+		Archetype archetype = parser.parse();
+		assertNotNull(archetype);
+
+		Map<String, TranslationDetails> translations = archetype
+				.getTranslations();
+		assertNotNull("translations null");
+
+		TranslationDetails td = translations.get("de");
+		assertNotNull("translation de missing", td);
+		Map<String, String> map = td.getAuthor();
+		assertNotNull("author null", map);
+		assertEquals("author.name wrong", "Harry Potter", map.get("name"));
+		assertEquals("author.email wrong", "harry@something.somewhere.co.uk",
+				map.get("email"));
+
+		assertEquals("accreditation wrong", "Seven OWLs at Hogwards", td.getAccreditation());
+		assertEquals("language wrong", "de", td.getLanguage().getCodeString());
 		map = td.getOtherDetails();
 		assertEquals("review 1 wrong", "Ron Weasley", map.get("review 1"));
 		assertEquals("review 2 wrong", "Rubeus Hagrid", map.get("review 2"));
