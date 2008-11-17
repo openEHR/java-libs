@@ -301,9 +301,9 @@ PARSER_END(ADLParser)
 | < SYM_LANGUAGES_AVAILABLE: "languages_available">
 | < SYM_TERMINOLOGIES_AVAILABLE: "terminologies_available">
 | < SYM_TERM_DEFINITIONS: "term_definitions">
-| < SYM_TERM_BINDING: "term_binding">
+| < SYM_TERM_BINDING: "term_binding"("s")?> 
 | < SYM_CONSTRAINT_DEFINITIONS: "constraint_definitions">
-| < SYM_CONSTRAINT_BINDING: "constraint_binding">
+| < SYM_CONSTRAINT_BINDING: "constraint_binding"("s")?>
 | < SYM_ITEMS: "items">
 | < SYM_TEXT: "text">
 | < SYM_TRANSLATION: "translation">
