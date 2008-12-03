@@ -58,7 +58,7 @@ public abstract class Event <T extends ItemStructure> extends Locatable {
      * @param state
      * @throws IllegalArgumentException if time, data or parent null
      */
-    @FullConstructor protected Event(
+    @FullConstructor public Event(
             		   @Attribute(name = "uid") UIDBasedID uid,
                     @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
                     @Attribute(name = "name", required = true) DvText name,

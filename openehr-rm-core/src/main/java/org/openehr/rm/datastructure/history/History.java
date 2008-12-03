@@ -34,9 +34,10 @@ import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.UIDBasedID;
 
 /**
- * The abstract parent class of various concrete historical
- * structures, currently including discrete series and series of
- * states, either of which may be periodic.
+ * Root object of a linear history, i.e. time series structure. For a periodic 
+ * series of events, period will be set, and the time of each Event in the 
+ * History must correspond; i.e. the EVENT.offset must be a multiple of period 
+ * for each Event. Missing events in a period History are however allowed.
  *
  * @author Rong Chen
  * @version 1.0

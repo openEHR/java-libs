@@ -20,6 +20,9 @@
  */
 package org.openehr.rm.support.identification;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
 
 public class ArchetypeIDTest extends TestCase {
@@ -121,7 +124,12 @@ public class ArchetypeIDTest extends TestCase {
     	try {
     		aid = new ArchetypeID("openEHR-EHR-CLUSTER.exam-generic-joint.v1");
     		
-    		assertEquals("wrong specialisation", "joint", aid.specialisation());
+    		List<String> list = new ArrayList<String>();
+    		list.add("generic");
+    		list.add("joint");
+    		
+    		assertEquals("wrong specialisation", list, aid.specialisation());
+    		
     	} catch(Exception e) {
     		e.printStackTrace();
     		fail("failed to create ArchetypeID with multiple specialisation");
@@ -156,8 +164,12 @@ public class ArchetypeIDTest extends TestCase {
                 aid.rmEntity());
         assertEquals("conceptName", SECTIONS[ i ][ 3 ],
                 aid.conceptName());
-        assertEquals("specialisation", SECTIONS[ i ][ 4 ],
-                aid.specialisation());
+        
+        List<String> list = new ArrayList<String>();
+        if(SECTIONS[ i ][ 4 ] != null) {
+        	list.add(SECTIONS[ i ][ 4 ]);
+        }
+        assertEquals("specialisation", list, aid.specialisation());
 
         assertEquals("qualifiedRmEntity", AXES[ i ][ 0 ],
                 aid.qualifiedRmEntity());

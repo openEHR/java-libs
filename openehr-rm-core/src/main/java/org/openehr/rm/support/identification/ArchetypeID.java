@@ -18,6 +18,8 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
@@ -71,10 +73,9 @@ public final class ArchetypeID extends ObjectID {
             		"bad format, too few sections for domainConcept, " + value);
         }
         conceptName = tokens.nextToken();
-        specialisation = null;
+        specialisation = new ArrayList<String>();
         while(tokens.hasMoreTokens()) {
-        	// only the last one should be kept    		
-            specialisation = tokens.nextToken();
+        	specialisation.add(tokens.nextToken());
         } 
         validateAll();
     }
@@ -115,7 +116,10 @@ public final class ArchetypeID extends ObjectID {
         this.rmName = rmName;
         this.rmEntity = rmEntity;
         this.conceptName = conceptName;
-        this.specialisation = specialisation;
+        this.specialisation = new ArrayList<String>();
+        if(specialisation != null) {        	
+        	this.specialisation.add(specialisation);
+        }
         this.versionID = versionID;
         validateAll();
     }
@@ -128,7 +132,9 @@ public final class ArchetypeID extends ObjectID {
         validateName(conceptName, "concept_name");
         
         if (specialisation != null) {
-            validateName(specialisation, "specialisation");
+        	for(String name : specialisation) {
+        		validateName(name, "specialisation");
+        	}
         }
         validateVersionID(versionID);
     }
@@ -161,10 +167,29 @@ public final class ArchetypeID extends ObjectID {
     }
 
     private static String toDomainConcept(String conceptName,
-                                          String specialisation) {
-        return conceptName + ( specialisation == null
-                ? "" : SECTION_SEPARATOR + specialisation );
+                                          List<String> specialisation) {
+        //return conceptName + ( specialisation == null
+        //        ? "" : SECTION_SEPARATOR + specialisation );
+        
+        StringBuffer buf = new StringBuffer(conceptName);
+        if(specialisation != null && !specialisation.isEmpty()) {
+        	for(int i = 0, j = specialisation.size(); i < j; i++) {
+            	buf.append(specialisation.get(i));
+            	if(i != j - 1) {
+            		buf.append(SECTION_SEPARATOR);
+            	}
+            }
+        }
+        return buf.toString();        
     }
+    
+    private static String toDomainConcept(String conceptName,
+			String specialisation) {
+		return conceptName + ( specialisation == null
+		 ? "" : SECTION_SEPARATOR + specialisation );	
+	}
+    
+    
 
     private static void validateName(String value, String label) {
         if (!NAME_PATTERN.matcher(value).matches()) {
@@ -244,9 +269,9 @@ public final class ArchetypeID extends ObjectID {
      * Name of specialisation of concept, if this archetype is a
      * specialisation of another archetype, eg "cholesterol"
      *
-     * @return specialisation
+     * @return specialisation list or empty if no specialisation
      */
-    public String specialisation() {
+    public List<String> specialisation() {
         return specialisation;
     }
 
@@ -319,7 +344,7 @@ public final class ArchetypeID extends ObjectID {
     private String rmEntity;
     private String domainConcept;       // calculated
     private String conceptName;
-    private String specialisation;
+    private List<String> specialisation;
     private String versionID;
 }
 
@@ -340,7 +365,7 @@ public final class ArchetypeID extends ObjectID {
  *  The Original Code is ArchetypeID.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):
