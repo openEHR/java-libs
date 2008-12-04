@@ -174,10 +174,8 @@ public final class ArchetypeID extends ObjectID {
         StringBuffer buf = new StringBuffer(conceptName);
         if(specialisation != null && !specialisation.isEmpty()) {
         	for(int i = 0, j = specialisation.size(); i < j; i++) {
-            	buf.append(specialisation.get(i));
-            	if(i != j - 1) {
-            		buf.append(SECTION_SEPARATOR);
-            	}
+            	buf.append(SECTION_SEPARATOR);
+				buf.append(specialisation.get(i));
             }
         }
         return buf.toString();        
@@ -303,7 +301,7 @@ public final class ArchetypeID extends ObjectID {
     }
 
     /**
-     * Return true if both arcetypeId has the same value, and versionID is
+     * Return true if both archetypeId has the same value, and versionID is
      * not included in comparison
      *
      * @return true if equals

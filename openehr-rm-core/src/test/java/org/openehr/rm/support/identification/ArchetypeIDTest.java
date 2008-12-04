@@ -149,6 +149,25 @@ public class ArchetypeIDTest extends TestCase {
     		
     	}
     }
+	
+	public void testArchetypeBase() {
+    	ArchetypeID aid = null;
+    	try {
+    		aid = new ArchetypeID("openEHR-EHR-CLUSTER.exam.v1");
+    		assertEquals("wrong base", "openEHR-EHR-CLUSTER.exam", aid.base());
+			
+			aid = new ArchetypeID("openEHR-EHR-CLUSTER.exam-generic.v1");
+    		assertEquals("wrong base", "openEHR-EHR-CLUSTER.exam-generic", aid.base());
+    		
+			aid = new ArchetypeID("openEHR-EHR-CLUSTER.exam-generic-joint.v1");
+    		assertEquals("wrong base", "openEHR-EHR-CLUSTER.exam-generic-joint", aid.base());
+    		
+    		
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		fail("failed to create ArchetypeID for testing base");
+    	}
+    }
 
 
     // assert content of archetype id
