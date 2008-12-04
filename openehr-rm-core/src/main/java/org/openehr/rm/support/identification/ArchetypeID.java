@@ -19,6 +19,7 @@ import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
@@ -123,6 +124,38 @@ public final class ArchetypeID extends ObjectID {
         this.versionID = versionID;
         validateAll();
     }
+    
+    /**
+     * Create an ArchetypeID by axis and section values
+     *
+     * @param rmOriginator
+     * @param rmName
+     * @param rmEntity
+     * @param conceptName
+     * @param specialisation
+     * @param versionID
+     * @throws IllegalArgumentException if any axis or section value
+     *                                  has wrong format
+     */
+    public ArchetypeID(String rmOriginator, String rmName,
+                       String rmEntity, String conceptName,
+                       List<String> specialisation, String versionID) {
+        super(toValue(rmOriginator, rmName, rmEntity, conceptName,
+                specialisation, versionID));
+        this.qualifiedRmEntity = toQualifiedRmEntity(rmOriginator,
+                rmName, rmEntity);
+        this.domainConcept = toDomainConcept(conceptName,
+                specialisation);
+        this.rmOriginator = rmOriginator;
+        this.rmName = rmName;
+        this.rmEntity = rmEntity;
+        this.conceptName = conceptName;
+        this.specialisation = specialisation == null 
+        		? Collections.EMPTY_LIST
+        		: Collections.unmodifiableList(specialisation);
+        this.versionID = versionID;
+        validateAll();
+    }
 
     // validate all axis and section values
     private void validateAll() {
@@ -154,6 +187,15 @@ public final class ArchetypeID extends ObjectID {
                 .append(versionID)
                 .toString();
     }
+    
+    private static String toValue(String rmOriginator, String rmName,
+			String rmEntity, String conceptName, List<String> specialisation,
+			String versionID) {
+		return new StringBuffer(toQualifiedRmEntity(rmOriginator, rmName,
+				rmEntity)).append(AXIS_SEPARATOR).append(
+				toDomainConcept(conceptName, specialisation)).append(
+				AXIS_SEPARATOR).append(versionID).toString();
+	}
 
     private static String toQualifiedRmEntity(String rmOriginator,
                                               String rmName,
