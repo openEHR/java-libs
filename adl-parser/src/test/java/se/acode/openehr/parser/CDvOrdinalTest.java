@@ -56,13 +56,17 @@ public class CDvOrdinalTest extends ParserTestBase {
         archetype = null;
     }
 
-    public void testCDvOrdinal() throws Exception {
+    public void testCDvOrdinalWithoutAssumedValue() throws Exception {
         CObject node = archetype.node(
                 "/types[at0001]/items[at10001]/value");
         String[] codes = {
             "at0003.0", "at0003.1", "at0003.2", "at0003.3", "at0003.4"
         };
         String terminology = "local";
+        
+        assertFalse("unexpected assumed value",  
+        		((CDvOrdinal) node).hasAssumedValue());       
+        
         assertCDvOrdinal(node, terminology, codes, null);
     }
     
@@ -73,7 +77,11 @@ public class CDvOrdinalTest extends ParserTestBase {
             "at0003.0", "at0003.1", "at0003.2", "at0003.3", "at0003.4"
         };
         String terminology = "local";
-        Ordinal assumed = new Ordinal(0, new CodePhrase(terminology, codes[0]));
+        Ordinal assumed = new Ordinal(0, new CodePhrase(terminology, codes[0]));     
+        
+        assertTrue("expected to have assumed value",  
+        		((CDvOrdinal) node).hasAssumedValue());
+        
         assertCDvOrdinal(node, terminology, codes, assumed);
     }
     
@@ -101,7 +109,7 @@ public class CDvOrdinalTest extends ParserTestBase {
             		codeList.contains(ordinal.getSymbol().getCodeString()));
         }
         assertEquals("assumedValue wrong", assumedValue, 
-        		cordinal.getAssumedValue());
+        		cordinal.getAssumedValue());        
     }
 
     private Archetype archetype;
