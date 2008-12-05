@@ -28,7 +28,7 @@ import java.util.Set;
 public class ArchetypeSlot extends CReferenceObject {
 
     /**
-     * Constructs an ArchetyepSlot
+     * Constructs an ArchetypeSlot
      *
      * @param path
      * @param rmTypeName
