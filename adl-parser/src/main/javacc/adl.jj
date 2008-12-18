@@ -454,7 +454,7 @@ TOKEN : /* IDENTIFIERS - ADL */
 |
   < V_ISO8601_DURATION: ("-")? "P"((<DIG>)+["y","Y"])?((<DIG>)+["m","M"])?((<DIG>)+["w","W"])?
   ((<DIG>)+["d","D"])?("T"((<DIG>)+["h","H"])?((<DIG>)+["m","M"])?
-  ((<DIG>)+["s","S"])?)?>
+  ((<DIG>)+("."(<DIG>)*)?["s","S"])?)?>
 |
   < V_ISO8601_DURATION_CONSTRAINT_PATTERN: "P"(["y","Y"])?(["m","M"])?
   (["w","W"])?(["d","D"])?"T"(["h","H"])?(["m","M"])?(["s","S"])? 

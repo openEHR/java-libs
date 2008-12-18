@@ -45,6 +45,15 @@ definition
                 	ELEMENT[at1011] matches {	-- duration ISO8601 pattern
                 		value matches {PYMWDTHMS} 
                 	}
+					ELEMENT[at1011] matches {	-- duration with fractional seconds
+                		value matches {|PT0.004s|}
+                	}
+					ELEMENT[at1012] matches {	-- duration with fractional seconds
+                		value matches {|PT10.01s|}
+                	}
+					ELEMENT[at1013] matches {	-- duration with fractional seconds
+                		value matches {|PT1.1s|}
+                	}
                 	
                 	-- matches {PT30s, PT45s, PT1m0s, PT2m0s} -- Not currently in ADL syntax
                 	-- matches {|P1d +/PT4h|}
