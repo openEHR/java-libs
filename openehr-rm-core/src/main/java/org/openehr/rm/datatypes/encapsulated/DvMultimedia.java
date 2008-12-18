@@ -19,6 +19,8 @@ import org.openehr.rm.datatypes.uri.DvURI;
 import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
 import org.openehr.rm.support.terminology.TerminologyAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 
 /**
  * A specialisation of Encapsulated for audiovisual and biosignal types.
@@ -48,15 +50,19 @@ public final class DvMultimedia extends DvEncapsulated {
      * @param terminologyService
      * @throws IllegalArgumentException if any invalid argument
      */
-    public DvMultimedia(CodePhrase charset, CodePhrase language,
-                        int size, String alternateText,
-                        CodePhrase mediaType,
-                        CodePhrase compressionAlgorithm,
-                        byte[] integrityCheck,
-                        CodePhrase integrityCheckAlgorithm,
-                        DvMultimedia thumbnail, DvURI uri,
-                        byte[] data,
-                        TerminologyService terminologyService) {
+	@FullConstructor
+    public DvMultimedia(@Attribute (name = "charset") CodePhrase charset, 
+						@Attribute (name = "language") CodePhrase language,
+                        @Attribute (name = "size") int size, 
+						@Attribute (name = "alternateText") String alternateText,
+                        @Attribute (name = "mediaType") CodePhrase mediaType,
+                        @Attribute (name = "compressionAlgorithm") CodePhrase compressionAlgorithm,
+                        @Attribute (name = "integrityCheck") byte[] integrityCheck,
+                        @Attribute (name = "integrityCheckAlgorithm") CodePhrase integrityCheckAlgorithm,
+                        @Attribute (name = "thumbnail") DvMultimedia thumbnail, 
+						@Attribute (name = "uri") DvURI uri,
+                        @Attribute (name = "data") byte[] data,
+                        @Attribute (name = "terminologyService") TerminologyService terminologyService) {
         super(charset, language, size, terminologyService);
         if (mediaType == null) {
             throw new IllegalArgumentException("null mediaType");
