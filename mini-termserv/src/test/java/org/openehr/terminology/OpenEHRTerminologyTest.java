@@ -47,5 +47,12 @@ public class OpenEHRTerminologyTest extends TestCase {
 				codeSet.hasCode(new CodePhrase("ISO_3166-1", "FR")));
 	}
 	
+	public void testHasCode() throws Exception {
+		TerminologyAccess terminology = service.terminology(
+				TerminologyService.OPENEHR);
+		assertTrue("code for signed missing", terminology.allCodes().contains(
+				new CodePhrase(TerminologyService.OPENEHR, "240")));
+	}
+	
 	TerminologyService service;
 }
