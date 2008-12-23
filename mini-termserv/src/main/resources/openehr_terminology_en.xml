@@ -437,6 +437,55 @@
 		<concept id="431" rubric="persistent"/>
 		<concept id="433" rubric="event"/>
 	</group>
+	<group name="MultiMedia">
+		<concept id="387" rubric="audio/DVI4" />
+		<concept id="388" rubric="audio/G722" />
+		<concept id="389" rubric="audio/G723" />
+		<concept id="390" rubric="audio/G726-16" />
+		<concept id="391" rubric="audio/G726-24" />
+		<concept id="392" rubric="audio/G726-32" />
+		<concept id="393" rubric="audio/G726-40" />
+		<concept id="394" rubric="audio/G728" />
+		<concept id="395" rubric="audio/L8" />
+		<concept id="396" rubric="audio/L16" />
+		<concept id="397" rubric="audio/LPC" />
+		<concept id="398" rubric="audio/G729" />
+		<concept id="399" rubric="audio/G729D" />
+		<concept id="400" rubric="audio/G729E" />
+		<concept id="401" rubric="video/BT656" />
+		<concept id="402" rubric="video/CelB" />
+		<concept id="403" rubric="video/JPEG" />
+		<concept id="404" rubric="video/H261" />
+		<concept id="405" rubric="video/H263" />
+		<concept id="406" rubric="video/H263-1998" />
+		<concept id="407" rubric="video/H263-2000" />
+		<concept id="408" rubric="video/MPV" />
+		<concept id="409" rubric="audio/mpeg" />
+		<concept id="410" rubric="audio/mpeg4-generic" />
+		<concept id="411" rubric="audio/L20" />
+		<concept id="412" rubric="audio/L24" />
+		<concept id="413" rubric="audio/telephone-event" />
+		<concept id="414" rubric="video/quicktime" />
+		<concept id="415" rubric="text/calendar" />
+		<concept id="416" rubric="text/directory" />
+		<concept id="417" rubric="text/html" />
+		<concept id="418" rubric="text/plain" />
+		<concept id="419" rubric="text/rtf" />
+		<concept id="420" rubric="text/sgml" />
+		<concept id="421" rubric="text/tab-separated-values" />
+		<concept id="422" rubric="text/uri-list" />
+		<concept id="423" rubric="text/xml" />
+		<concept id="424" rubric="text/xml-external-parsed-entity" />
+		<concept id="425" rubric="image/cgm" />
+		<concept id="426" rubric="image/gif" />
+		<concept id="427" rubric="image/png" />
+		<concept id="428" rubric="image/tiff" />
+		<concept id="429" rubric="image/jpeg" />
+		<concept id="517" rubric="application/msword" />
+		<concept id="518" rubric="application/pdf" />
+		<concept id="519" rubric="application/rtf" />
+		<concept id="637" rubric="application/dicom" />
+	</group>  
 	<group name="property">
 		<concept id="339" rubric="Acceleration"/>
 		<concept id="342" rubric="Acceleration, angular"/>
