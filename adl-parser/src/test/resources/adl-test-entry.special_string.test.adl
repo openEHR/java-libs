@@ -14,6 +14,9 @@ definition
 	        
                 -- escaped double quote
                 string_attr10 matches {"some\"thing"}
+                
+                -- escaped backslash
+                string_attr11 matches {"any\\thing"}                
                  
                 -- three-lines string
                 string_attr21 matches {"this is what it is used for, this could be a really long line or even

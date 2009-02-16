@@ -440,6 +440,8 @@ TOKEN : /* IDENTIFIERS - ADL */
   	( 
       ("\\\"" (~["\"","\n", "\\"])* )
       |
+      ("\\\\" (~["\"","\n", "\\"])* )
+      |
       ("\n" (["\r", " ", "\t"])* )
       |
       (~["\\","\n","\""])*
@@ -1517,6 +1519,12 @@ String string_value() :
     value = t.image;
   }
   {
+  	// remove escape, \" -> "
+  	value = value.replace("\\\"","\"");
+  	
+  	// remove escape, \\ -> \
+  	value = value.replace("\\\\","\\");
+  	    
     return value.substring(1, value.length() - 1);
   }
 }
