@@ -161,11 +161,6 @@ public class FindMatchingRMClassTest extends TestCase {
 		assertMatchedRMClass("Archetyped");
 	}
 	
-	public void testMatchDvText() throws Exception {
-		valueMap.put("value", "a text value");
-		assertMatchedRMClass("DvText");
-	}
-	
 	private void assertMatchedRMClass(String expectedRMClass) {
 		String actualRMClass = builder.findMatchingRMClass(valueMap);
 		assertEquals("failed to match " + expectedRMClass, expectedRMClass,
