@@ -41,9 +41,8 @@ public class MostMinimalADLTest extends ParserTestBase {
         assertNotNull(archetype);
         
         assertEquals("originalLanguage wrong", "en", 
-        		archetype.getOriginalLanguage().getCodeString());
+        		archetype.getOriginalLanguage().getCodeString());      
         
-        
-    }
+    }    
 }
 

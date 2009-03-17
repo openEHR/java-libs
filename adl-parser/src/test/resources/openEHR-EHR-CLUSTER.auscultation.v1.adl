@@ -1,0 +1,48 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-CLUSTER.auscultation.v1
+
+concept
+	[at0000]	-- Auscultation
+language
+	original_language = <[ISO_639-1::en]>
+
+definition
+	CLUSTER[at0000] matches {	-- Auscultation
+		items cardinality matches {0..*; unordered} matches {
+			CLUSTER[at0002] occurrences matches {0..1} matches {	-- Findings
+				items cardinality matches {0..*; unordered} matches {
+					CLUSTER[at0009] occurrences matches {0..1} matches {	-- Bowel sounds
+						items cardinality matches {0..*; unordered} matches {
+							ELEMENT[at0074] occurrences matches {0..*} matches {	-- Specific Findings
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {
+											[local::
+											at0078, 	-- Absent bowel sounds
+											at0079, 	-- Decreased bowel sounds
+											at0080, 	-- Increased bowel sounds
+											at0081]	-- Tinkling bowel sounds
+										}
+									}
+								}
+							}
+							use_node ELEMENT /items[at0004]	-- /items[Clinical Description]
+						}
+					}
+					
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Auscultation">
+					description = <"Findings on Auscultation">
+				>				
+			>
+		>
+	>

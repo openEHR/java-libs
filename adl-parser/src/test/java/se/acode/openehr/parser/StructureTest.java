@@ -19,6 +19,7 @@
 
 package se.acode.openehr.parser;
 
+import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.CString;
 import org.openehr.rm.support.basic.Interval;
@@ -94,6 +95,20 @@ public class StructureTest extends ParserTestBase {
         obj = (CComplexObject) attr.getChildren().get(1);
         assertCComplexObject(obj, "PERSON", null,
                 new Interval(new Integer(0), null, true, false), 1);
+    }
+    
+    public void testParseCommentWithSlashChar() throws Exception {
+        ADLParser parser = new ADLParser(loadFromClasspath(
+                "adl-test-entry.structure_test2.test.adl"));
+        Archetype archetype = parser.parse();        
+        assertNotNull(archetype);        
+    }
+    
+    public void __testParseCommentWithSlashCharAfterSlot() throws Exception {
+        ADLParser parser = new ADLParser(loadFromClasspath(
+                "openEHR-EHR-CLUSTER.auscultation.v1.adl"));
+        Archetype archetype = parser.parse();        
+        assertNotNull(archetype);        
     }
 
     private CComplexObject definition;

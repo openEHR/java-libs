@@ -1,0 +1,45 @@
+archetype 	
+	adl-test-ENTRY.structure_test1.draft
+concept 
+	[at0000]	--  structure test 1
+language
+	original_language = <[ISO_639-1::en]>
+	
+
+definition
+	ENTRY[at0000] matches { -- /items[Clinical Description]
+		subject_relationship matches {
+			RELATED_PARTY matches {
+				relationship matches {
+					TEXT matches {
+						value matches {"self"}
+					}
+				}
+			}
+		}
+		members existence matches {0..1} cardinality matches {0..8} matches {
+		    PERSON occurrences matches {1} matches {
+		        title matches {"head"}
+		    }
+		    PERSON occurrences matches {0..*} matches {
+		        title matches {"member"}
+		    }
+		}
+	}
+
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	terminologies_available = <"adl_test", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test entry">; 
+					description = <"test entry">
+				>
+			>
+		>
+	>
+
