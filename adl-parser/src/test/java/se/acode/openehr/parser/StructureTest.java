@@ -104,7 +104,7 @@ public class StructureTest extends ParserTestBase {
         assertNotNull(archetype);        
     }
     
-    public void __testParseCommentWithSlashCharAfterSlot() throws Exception {
+    public void testParseCommentWithSlashCharAfterSlot() throws Exception {
         ADLParser parser = new ADLParser(loadFromClasspath(
                 "openEHR-EHR-CLUSTER.auscultation.v1.adl"));
         Archetype archetype = parser.parse();        
