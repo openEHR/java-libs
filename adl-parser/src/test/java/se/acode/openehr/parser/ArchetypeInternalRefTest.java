@@ -42,4 +42,14 @@ public class ArchetypeInternalRefTest extends ParserTestBase {
 		assertEquals("path wrong", "/interval_attr[at0001]", 
 				ref.getTargetPath());
 	}
+	
+	public void testParseInternalRefWithCommentWithSlashAfterOnlyOneSlashInTarget() 
+			throws Exception {
+		ADLParser parser = new ADLParser(loadFromClasspath(
+				"adl-test-entry.archetype_internal_ref2.test.adl"));
+		Archetype archetype = parser.parse();
+		assertNotNull(archetype);
+
+	}
+	
 }

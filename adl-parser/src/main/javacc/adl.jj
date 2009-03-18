@@ -311,7 +311,7 @@ PARSER_END(ADLParser)
  
 }
 
-< CADL > TOKEN [IGNORE_CASE]: /* KEYWORDS - cADL */
+< CADL, USE_NODE > TOKEN [IGNORE_CASE]: /* KEYWORDS - cADL */
 {
   < SYM_THEN: "then">
 | < SYM_ELSE: "else">
@@ -330,7 +330,7 @@ PARSER_END(ADLParser)
 | < SYM_UNIQUE: "unique">
 | < SYM_MATCHES: "matches" | "is_in">
 | < SYM_INVARIANT: "invariant">
-| < SYM_USE_NODE: "use_node">
+| < SYM_USE_NODE: "use_node"> : USE_NODE
 | < SYM_ALLOW_ARCHETYPE: "allow_archetype" | "use_archetype">
 | < SYM_INCLUDE: "include">
 | < SYM_EXCLUDE: "exclude">
@@ -390,7 +390,7 @@ PARSER_END(ADLParser)
 |
   < #LET_DIG: ["a"-"z","A"-"Z","0"-"9"] >
 |
-  < #LET_DIG_DD: <LET_DIG> | "." | "-">
+  < #LET_DIG_DD: <LET_DIG> | "." | "-" >
 |
   < #LET_DIG_U: <LET_DIG> | "_" >
 |
@@ -495,7 +495,7 @@ TOKEN : /* IDENTIFIERS - ADL */
 |
   < #MINUTE: ["0"-"6"]["0"-"9"] >
 |
-  <V_LOCAL_TERM_CODE_REF: "["<LET_DIG>(<LET_DIG_DD>)*"]">
+  <V_LOCAL_TERM_CODE_REF: "["<LET_DIG>(<LET_DIG_DD>)*"]" >
 |
   < #CHAR_REF: "'&" (
                       (["a"-"z","A"-"Z"])+
@@ -519,6 +519,13 @@ TOKEN : /* IDENTIFIERS - ADL */
 
 < CADL > TOKEN: /* VALUES - cADL */
 {
+  < V_REGEXP: (["=","!"]"~ ")? (
+  ( "/"(~["/","{", "}","\r","\n"])*("\\/"(~["/","}","\r","\n"]))*"/" 
+  | "^"(~["^","\n","\r"])*"^")) >
+}
+
+< CADL, USE_NODE > TOKEN: /* VALUES - cADL */
+{
   < V_ISO8601_DATE_CONSTRAINT_PATTERN: (<YY>){4}"-"<MMQX_2>"-"<DDQX_2> >
 |
   < V_ISO8601_TIME_CONSTRAINT_PATTERN: (["h","H"]){2}":"<MMQX_2>":"<SSQX_2> >
@@ -526,22 +533,8 @@ TOKEN : /* IDENTIFIERS - ADL */
   < V_ISO8601_DATE_TIME_CONSTRAINT_PATTERN: (<YY>){4}"-"<MMQ_2>"-"<DDQX_2>
   [" ","\t","T"]<HHQX_2>":"<MMQX_2>":"<SSQX_2> >
 |
-  < V_TYPE_IDENTIFIER: ["A"-"Z"](<LET_DIG_U>)*>
-|
-  < V_ATTRIBUTE_IDENTIFIER: ["a"-"z"](<LET_DIG_U>)*>
-|
   < V_TERMINOLOGY_ID_BLOCK: "["(<LET_DIG_DUDSLR>)+"::" > : TERM_CODE	
 |
-  < V_REGEXP: (["=","!"]"~ ")? (
-  ( "/"(~["/","{", "}","\r","\n"])*("\\/"(~["/","}","\r","\n"]))*"/" 
-  | "^"(~["^","\n","\r"])*"^")) >
-|
-  < #PATH_SEGMENT:  <V_ATTRIBUTE_IDENTIFIER> ( <V_LOCAL_TERM_CODE_REF>)? >
-|
-  < V_RELATIVE_PATH: <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* >      
-| 
-  < V_ABSOLUTE_PATH: "/" <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* >      
-|   
   < #YY: ["y","Y"]>
 |
   < #MMQX_2: (["m","M","?","X"]){2}>
@@ -553,7 +546,18 @@ TOKEN : /* IDENTIFIERS - ADL */
   < #HHQX_2: (["h","H","?","X"]){2}>
 |
   < #SSQX_2: (["s","S","?","X"]){2}>
+|
+ < V_TYPE_IDENTIFIER: ["A"-"Z"](<LET_DIG_U>)*>
+|
+ < V_ATTRIBUTE_IDENTIFIER: ["a"-"z"](<LET_DIG_U>)* >
+|
+ < #PATH_SEGMENT: <V_ATTRIBUTE_IDENTIFIER>(<V_LOCAL_TERM_CODE_REF>)? >
+|
+  < V_RELATIVE_PATH: <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* >      
+| 
+  < V_ABSOLUTE_PATH: "/"<PATH_SEGMENT>("/"<PATH_SEGMENT>)* > : CADL
 }
+
 
 <ONTOLOGY> TOKEN : /* URL per RFC 1738 Section 5 */
 {
