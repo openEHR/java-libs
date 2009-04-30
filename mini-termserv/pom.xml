@@ -6,7 +6,7 @@
 	<groupId>openehr</groupId>
 	<artifactId>mini-termserv</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>openEHR Minimum Terminology Service</name>
 	<url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>
 	<developers>

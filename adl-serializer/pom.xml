@@ -5,7 +5,7 @@
 	<groupId>openehr</groupId>
 	<artifactId>adl-serializer</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>ADL Serializer</name>
 	<url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>
 	<ciManagement>
