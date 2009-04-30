@@ -6,7 +6,7 @@
 	<groupId>openehr</groupId>
 	<artifactId>mini-termserv</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>openEHR Minimum Terminology Service</name>
 	<url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>
 	<developers>
@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-rm-core</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>jdom</groupId>

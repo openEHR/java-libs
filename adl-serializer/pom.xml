@@ -5,7 +5,7 @@
 	<groupId>openehr</groupId>
 	<artifactId>adl-serializer</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>ADL Serializer</name>
 	<url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>
 	<ciManagement>
@@ -64,24 +64,35 @@
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-rm-core</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-rm-domain</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-aom</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-ap</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+            <groupId>openehr</groupId>
+            <artifactId>mini-termserv</artifactId>
+            <version>${project.version}</version>
+        </dependency>       
+        <dependency>
+            <groupId>openehr</groupId>
+            <artifactId>adl-parser</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>         
+        </dependency>
+        <dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.0</version>
@@ -91,17 +102,6 @@
 			<artifactId>commons-io</artifactId>
 			<version>1.2</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>openehr</groupId>
-			<artifactId>mini-termserv</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>		
-		<dependency>
-			<groupId>acode</groupId>
-			<artifactId>adl-parser</artifactId>
-			<version>1.0.5-SNAPSHOT</version>
-			<scope>test</scope>			
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -6,7 +6,7 @@
 	<groupId>openehr</groupId>
 	<artifactId>openehr-ap</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>openEHR Archetype Profile</name>
 	<url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>
 	<ciManagement>
@@ -60,28 +60,28 @@
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-rm-core</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-rm-domain</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-aom</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+            <groupId>openehr</groupId>
+            <artifactId>measure-serv</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>openehr</groupId>
-			<artifactId>measure-serv</artifactId>
-			<version>0.1-SNAPSHOT</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
