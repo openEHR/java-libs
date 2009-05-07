@@ -1,20 +1,16 @@
 /*
- * Copyright (C) 2005,2006,2007 ACODE HB, Sweden.
- * All Rights Reserved.
+ * component:   "openEHR Java Reference Implementation"
+ * description: "Java ADL Parser"
+ * keywords:    "binding"
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * author:      "Rong Chen <rong.acode@gmail.com>"
+ * copyright:   "Copyright (C) 2005,2006,2007 ACODE HB, Sweden"
+ * copyright:   "Copyright (C) 2008,2009 Cambio Healthcare Systems, Sweden"
+ * license:     "See notice at bottom of class"
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You may obtain a copy of the License at
- * http://www.gnu.org/licenses/gpl.txt
- *
+ * file:        "$URL$"
+ * revision:    "$LastChangedRevision$"
+ * last_change: "$LastChangedDate$"
  */
 
 options {
@@ -61,7 +57,7 @@ import org.openehr.terminology.SimpleTerminologyService;
  *
  * Included uriGrammarFragment.txt from Gregory Kick
  *
- * @author Rong Chen (rong@acode.se)
+ * @author Rong Chen (rong.acode@gmail.com)
  * @version 1.4
  */
 
@@ -3311,3 +3307,28 @@ String path_segment() :
   ]  	
   { return buf.toString(); }	
 }
+/*
+ * ***** BEGIN LICENSE BLOCK ***** Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ * 
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the 'License'); you may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at http://www.mozilla.org/MPL/
+ * 
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * 
+ * The Original Code is ADLParser.java
+ * 
+ * The Initial Developer of the Original Code is Rong Chen. Portions created by
+ * the Initial Developer are Copyright (C) 2003-2009 the Initial Developer. All
+ * Rights Reserved.
+ * 
+ * Contributor(s): Sebastian Garde
+ * 
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ * 
+ * ***** END LICENSE BLOCK *****
+ */

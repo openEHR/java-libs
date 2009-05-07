@@ -1,8 +1,6 @@
 package se.acode.openehr.parser;
 
 import org.openehr.am.archetype.Archetype;
-import org.openehr.am.archetype.constraintmodel.CPrimitiveObject;
-import org.openehr.am.archetype.constraintmodel.primitive.CDuration;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 import org.openehr.rm.support.basic.Interval;
 
