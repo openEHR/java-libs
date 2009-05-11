@@ -734,7 +734,10 @@ Map<String, TranslationDetails> translations() throws Exception :
 {
   (
     <SYM_L_BRACKET> langAsKey = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
-      
+      { accreditation = null; 
+		author=null;
+		otherDetails=null;
+	  }   
       (
         <SYM_LANG_LANGUAGE> <SYM_EQ> "<" language = code_phrase() ">"
       |

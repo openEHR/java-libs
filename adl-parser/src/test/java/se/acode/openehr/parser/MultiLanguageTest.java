@@ -1,9 +1,12 @@
 package se.acode.openehr.parser;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
+import org.openehr.rm.common.resource.TranslationDetails;
 
 public class MultiLanguageTest extends ParserTestBase {
 
@@ -58,5 +61,31 @@ public class MultiLanguageTest extends ParserTestBase {
 		
 		defs = list.get(1);
 		assertEquals("unexpected language", "sv", defs.getLanguage());
+	}
+	
+	/**
+	 * Verifies that translation details are parsed correctly if not all optional elements are present.
+	 * 
+	 * @throws Exception
+	 */
+	public void testTranslationDetails() throws Exception {
+		ADLParser parser = new ADLParser(loadFromClasspath(
+				"adl-test-entry.testtranslations.test.adl"));
+		
+		Archetype archetype = parser.parse();
+		Map<String, TranslationDetails> translations = archetype.getTranslations();
+		
+		for (Entry<String, TranslationDetails> translation : translations.entrySet()) {
+			TranslationDetails transDet = translation.getValue();
+			String lang = transDet.getLanguage().getCodeString();
+			if (lang.equals("de")) {
+				assertEquals("wrong accreditation", "test Accreditation!", transDet.getAccreditation());
+				assertEquals("wrong organisation", "test organisation", transDet.getAuthor().get("organisation"));
+			} else if (lang.equals("es")) {
+				//  They need to be null 
+				assertEquals("wrong accreditation", null, transDet.getAccreditation());
+				assertEquals("wrong organisation", null, transDet.getAuthor().get("organisation"));
+			}
+		}		
 	}
 }
