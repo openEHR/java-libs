@@ -28,7 +28,7 @@ public class ArchetypeSlotTest extends ParserTestBase {
         Archetype archetype = parser.parse();
         assertNotNull(archetype);
         
-        CObject node = archetype.node("/content");
+        CObject node = archetype.node("/content[at0001]");
         assertTrue("ArchetypeSlot expected", node instanceof ArchetypeSlot);
         
         ArchetypeSlot slot = (ArchetypeSlot) node;
@@ -36,6 +36,8 @@ public class ArchetypeSlotTest extends ParserTestBase {
         assertEquals("rmTypeName wrong", "SECTION", slot.getRmTypeName());
         assertEquals("occurrences wrong", new Interval<Integer>(0, 1), 
         		slot.getOccurrences());
+        
+        assertEquals("path wrong", "/content[at0001]", slot.path());
         
         assertEquals("includes total wrong", 1, slot.getIncludes().size());
         assertEquals("Excludes total wrong", 2, slot.getExcludes().size());

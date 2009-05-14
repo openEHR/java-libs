@@ -2311,6 +2311,11 @@ ArchetypeSlot archetype_slot(String path, CAttribute parent) :
     [ excludes = c_excludes() ]
   <SYM_END_CBLOCK>
   {
+  	if(path == null) {
+        path = "/";
+    } else {
+        path += (nodeID == null ? "" : "[" + nodeID + "]");
+    }   
     return new ArchetypeSlot(path, type, occurrences, nodeID, parent, includes, 
     		excludes);
   }
