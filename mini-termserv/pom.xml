@@ -7,20 +7,12 @@
 	<artifactId>mini-termserv</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.2-SNAPSHOT</version>
-	<name>openEHR Minimum Terminology Service</name>
-	<url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>
-	<developers>
-		<developer>
-			<id>rong.chen</id>
-			<name>Rong Chen</name>
-			<email>rong.acode@gmail.com</email>
-		</developer>
-	</developers>	
-	<scm>
-		<connection>scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/mini-termserv</connection>
-		<developerConnection>scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/mini-termserv</developerConnection>
-		<url> http://my.openehr.org/wsvn/ref_impl_java/TRUNK/mini-termserv/</url>
-	</scm>
+	<url>http://www.openehr.org/projects/java.html</url>   
+    <scm>
+        <connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/mini-termserv</connection>
+        <developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/mini-termserv</developerConnection>
+        <url>http://www.openehr.org/svn/ref_impl_java/TRUNK/mini-termserv/</url>
+    </scm>
 	<organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>

@@ -8,8 +8,13 @@
 	<packaging>jar</packaging>
 	<version>1.0.2-SNAPSHOT</version>
 	<name>openEHR Measurement Service Implementation</name>
-	<url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>
-	<organization>
+	<url>http://www.openehr.org/projects/java.html</url>   
+    <scm>
+        <connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/measure-serv</connection>
+        <developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/measure-serv</developerConnection>
+        <url>http://www.openehr.org/svn/ref_impl_java/TRUNK/measure-serv/</url>
+    </scm>
+    <organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>
 	</organization>
