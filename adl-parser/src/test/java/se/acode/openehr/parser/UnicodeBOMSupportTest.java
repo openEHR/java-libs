@@ -25,54 +25,30 @@ public class UnicodeBOMSupportTest extends ParserTestBase {
 		super(test);
 	}
 
-	public void setUp() throws Exception {
-		ADLParser parser = new ADLParser(loadFromClasspath(
-				"adl-test-entry.unicode_BOM_support.test.adl"), "UTF-8");
-		archetype = parser.parse();
-	}
-
-	public void tearDown() {
-		archetype = null;
-	}
-
-	public void testParse() {
-		assertNotNull("parsing failed", archetype);
-	}
-
 	/**
 	 * Tests parsing of Chinese text in the ADL file
 	 * 
 	 * @throws Exception
 	 */
-	public void testParsingWithChineseText() throws Exception {
-		ArchetypeTerm term = archetype.getOntology().termDefinition("zh", "at0000");
-		assertNotNull("definition in zh not found", term);
-
-		// "\u6982\u5ff5" is "concept" in Chinese in escaped unicode format 
-		assertEquals("concept text wrong", "\u6982\u5ff5", term.getItem("text"));
-
-		// "\u63cf\u8ff0" is "description" in Chinese in escaped unicode format 
-		assertEquals("concept description wrong", "\u63cf\u8ff0", 
-				term.getItem("description"));
+	public void testParsingWithUTF8Encoding() throws Exception {
+		try {
+			ADLParser parser = new ADLParser(loadFromClasspath(
+				"adl-test-entry.unicode_BOM_support.test.adl"), "UTF-8");
+			parser.parse();
+		
+		} catch(Throwable t) {
+			fail("failed to parse BOM with UTF8 encoding..");
+		}
 	}
 
-	/**
-	 * Tests parsing of Swedish text in the ADL file
-	 * 
-	 * @throws Exception
-	 */
-	public void testParsingWithSwedishText() throws Exception {
-		ArchetypeTerm term = archetype.getOntology().termDefinition("sv", "at0000");
-		assertNotNull("definition in sv not found", term);
-
-		// "spr\u00e5k" is "language" in Swedish in escaped unicode format 
-		assertEquals("concept text wrong", "spr\u00e5k", term.getItem("text"));
-
-		// "Hj\u00e4lp" is "help" in Swedish in escaped unicode format 
-		assertEquals("concept description wrong", "Hj\u00e4lp", 
-				term.getItem("description"));
-	}
-
-	private Archetype archetype;
-
+	public void testParsingWithoutUTF8Encoding() throws Exception {
+		try {
+			ADLParser parser = new ADLParser(loadFromClasspath(
+				"adl-test-entry.unicode_BOM_support.test.adl"));
+			parser.parse();
+		
+		} catch(Throwable t) {
+			fail("failed to parse BOM without UTF8 encoding..");
+		}
+	}	
 }

@@ -224,7 +224,8 @@ PARSER_END(ADLParser)
 | "\n"
 | "\r"
 | "\f"
-| "\ufeff" /* UTF-8 Byte Order Mark */
+| "\u00ef\u00bb\u00bf" /* UTF-8 Byte Order Mark */
+| "\ufeff" /* UTF-16 Byte Order Mark */
 }
 
 < * > SPECIAL_TOKEN : /* COMMENTS */
