@@ -592,7 +592,7 @@
 		<concept id="202" rubric="live audio-only; tel-"/>
 		<concept id="204" rubric="telephone"/>
 		<concept id="203" rubric="teleconference"/>
-		<concept id="204" rubric="internet telephone"/>
+		<concept id="205" rubric="internet telephone"/>
 		<concept id="222" rubric="interpreted audio-"/>
 		<concept id="199" rubric="asynchronous "/>
 		<concept id="200" rubric="dictated"/>
@@ -640,7 +640,7 @@
 		<concept id="547" rubric="abort"/>
 		<concept id="548" rubric="finish"/>
 		<concept id="549" rubric="time out"/>
-		<concept id="540" rubric="notify aborted"/>
+		<concept id="550" rubric="notify aborted"/>
 		<concept id="551" rubric="notify completed"/>
 		<concept id="552" rubric="notify cancelled"/>
 	</group>
