@@ -26,7 +26,7 @@ import java.util.*;
 public final class CMultipleAttribute extends CAttribute {
 
     /**
-     * Create a constraint for mulple-valued attribute node
+     * Create a constraint for multiple-valued attribute node
      *
      * @param path
      * @param rmAttributeName
