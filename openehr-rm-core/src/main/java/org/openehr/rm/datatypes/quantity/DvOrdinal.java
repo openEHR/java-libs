@@ -47,9 +47,6 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
             @Attribute (name = "value", required = true) int value,
             @Attribute (name = "symbol", required = true) DvCodedText symbol) {
         super(otherReferenceRanges, normalRange);
-        if (value <= 0) {
-            throw new IllegalArgumentException("bad value: " + value);
-        }
         if (symbol == null) {
             throw new IllegalArgumentException("null symbol");
         }
