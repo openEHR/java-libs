@@ -40,6 +40,7 @@ import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
+
 /**
  * XML serializer of the openEHR Archetype Object Model.
  * 
@@ -193,7 +194,13 @@ public class XMLSerializer {
     
     
     private void printString(String label, String value, Element out) {        
+       printString(label, value, out, false);
+    }
+    
+    private void printString(String label, String value, Element out, boolean addXSDStringType) {        
         Element elm = new Element(label, defaultNamespace);
+        if (addXSDStringType)
+            elm.setAttribute("type", "xsd:string", xsiNamespace); // the type is expected here.
         out.getChildren().add(elm);
         if (value != null)
             elm.setText(value);
@@ -339,8 +346,12 @@ public class XMLSerializer {
             Element item = new Element("item", defaultNamespace);
             elm.getChildren().add(item);
             printCPrimitive((CPrimitive) expLeaf.getItem(), item);
-        } else
-            printString("item", expLeaf.getItem().toString(), elm);
+        } else {          
+            //EXPR_LEAF.item is defined as xs:any in the AM schema (the reason for which is unclear)
+            //and consequently of type object in C# land. 
+            // That's why having the XSD type explicitly set to string fixes the problem when deserialising to a C# string instead of XmlText.
+            printString("item", expLeaf.getItem().toString(), elm, true);            
+        }    
         printString("reference_type", expLeaf.getReferenceType().name(), elm);
     }
     
@@ -460,8 +471,9 @@ public class XMLSerializer {
         if(cobj.isAnyAllowed()) { // Not sure if needed.
             printString("any_allowed", "true", out);
         }
-        
-        printString("rm_type_name", cobj.getRmTypeName(), out);
+    
+        // we always need the upper case with underscore notation for the rm type name
+        printString("rm_type_name", getUpperCaseWithUnderscoreFromCamelCase(cobj.getRmTypeName()), out);
         printOccurrences(cobj.getOccurrences(), out);
         printString("node_id", cobj.getNodeID(), out);
     }
@@ -923,6 +935,41 @@ public class XMLSerializer {
         if(lower != null) {
             printString("lower", lower.toString(), out);
         }
+    }
+    
+    private String getUpperCaseWithUnderscoreFromCamelCase(String str) {
+	if( str == null || str.length() == 0 )
+        {
+            return str;
+        }
+ 
+        StringBuffer result = new StringBuffer();
+
+        char prevChar = 'A'; // init with an upper case letter 
+        /*
+         * Change underscore to space, insert space before capitals
+         */
+        for( int i = 0; i < str.length(); i++ )
+        {
+            char c = str.charAt( i );
+             if(! Character.isUpperCase(prevChar) && 
+        	     !(prevChar=='_') && 
+        	     Character.isLetter(c) &&
+        	     Character.isUpperCase(c))
+            {
+        	 result.append("_");
+        	 result.append( Character.toUpperCase( c ) );
+            }
+            else { 
+        	result.append( Character.toUpperCase( c ) );
+            }
+            prevChar = c;
+        }
+ 
+        return result.toString();
+
+
+	
     }
 
     /* charset encodings */
