@@ -485,6 +485,8 @@
 		<concept id="518" rubric="application/pdf" />
 		<concept id="519" rubric="application/rtf" />
 		<concept id="637" rubric="application/dicom" />
+		<concept id="682" rubric="application/vnd.oasis.opendocument.text" />
+		<concept id="683" rubric="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
 	</group>  
 	<group name="property">
 		<concept id="339" rubric="Acceleration"/>
@@ -562,6 +564,7 @@
 		<concept id="374" rubric="Voltage, electrical"/>
 		<concept id="129" rubric="Volume"/>
 		<concept id="130" rubric="Work"/>
+		<concept id="685" rubric="Refractive power"/>
 	</group>
 	<group name="version lifecycle state">
 		<concept id="532" rubric="complete"/>
