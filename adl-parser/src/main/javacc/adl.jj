@@ -1126,28 +1126,38 @@ DefinitionItem definition_item() :
 
 ArchetypeTerm archetype_term() :
 {
+  Token t;
   String code;
+  String key;
   String value = null;
   ArchetypeTerm term;
 }
 {
-  "[" 
-     code = local_code_value() 
-     { term = new ArchetypeTerm(code); }
-     
-   "]" <SYM_EQ> "<"
-    ( 
-      <SYM_TEXT> <SYM_EQ> "<" 
-          value = string_value() { term.addItem("text", value); } 
-        ">" [ ";" ]
-      |
-      <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" 
-          value = string_value() { term.addItem("description", value); }
-        ">" [ ";" ]
-      |
-      <SYM_COMMENT> <SYM_EQ> "<" 
-          value = string_value() { term.addItem("comment", value); }
-        ">" [ ";" ]
+  "["
+     code = local_code_value()
+   { term = new ArchetypeTerm(code); }
+
+    "]" <SYM_EQ> "<"
+    (
+      <SYM_TEXT> <SYM_EQ> "<"
+      value = string_value() { term.addItem("text", value); }
+      ">" [ ";" ]
+    |
+      <SYM_DESCRIPTION_WORD> <SYM_EQ> "<"
+      value = string_value() { term.addItem("description", value); }
+      ">" [ ";" ]
+    |
+      <SYM_COMMENT> <SYM_EQ> "<"
+      value = string_value() { term.addItem("comment", value); }
+      ">" [ ";" ]
+    |
+       t = <V_IDENTIFIER> <SYM_EQ> "<"
+       value = string_value()
+    {
+       key = t.image;
+       term.addItem(key, value);
+    }
+    ">" [ ";" ]
     )*
   ">"
   { return term; }
