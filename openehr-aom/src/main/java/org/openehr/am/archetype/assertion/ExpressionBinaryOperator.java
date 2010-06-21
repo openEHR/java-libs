@@ -15,6 +15,11 @@
  
 package org.openehr.am.archetype.assertion;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.am.archetype.constraintmodel.CObject;
+import org.openehr.am.archetype.constraintmodel.primitive.CString;
+
 public class ExpressionBinaryOperator extends ExpressionOperator {
 	
 	public ExpressionBinaryOperator(String type, OperatorKind operator,
@@ -32,6 +37,39 @@ public class ExpressionBinaryOperator extends ExpressionOperator {
 	public ExpressionItem getRightOperand() {
 		return rightOperand;
 	}
+	
+
+	 /**
+	     * Equals if two ExpressionBinaryOperator Objects have same values
+	     *
+	     * @param o
+	     * @return true if equals
+	     */
+	    public boolean equals(Object o) {
+	        if (this == o) return true;
+	        if (!( o instanceof ExpressionBinaryOperator )) return false;
+
+	        final ExpressionBinaryOperator cobj = (ExpressionBinaryOperator) o;
+
+	        return new EqualsBuilder()	
+	        .appendSuper(super.equals(o))
+	                .append(leftOperand, cobj.leftOperand)
+	                .append(rightOperand, cobj.rightOperand)
+	                .isEquals();
+	    }
+	
+	   /**
+	     * Return a hash code of this object
+	     *
+	     * @return hash code
+	     */
+	    public int hashCode() {
+	        return new HashCodeBuilder(5, 23)
+	                .appendSuper(super.hashCode())
+	                .append(leftOperand)
+	                .append(rightOperand)
+	                .toHashCode();	                
+	    }
 	
 	private ExpressionItem leftOperand;
 	private ExpressionItem rightOperand;	

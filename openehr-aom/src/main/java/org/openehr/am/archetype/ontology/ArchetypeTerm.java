@@ -53,7 +53,7 @@ public class ArchetypeTerm {
 	/**
 	 * Convenience constructor that calls the other constructor [ArchetypeTerm(String code)]
 	 * and then adds two items to the hashmap using the keys described in parameters below.
-	 * @param code not null or empty (atNNNN or acNNNN codes depening on usage context)
+	 * @param code not null or empty (atNNNN or acNNNN codes depending on usage context)
 	 * @param text the String that will be stored in the item map under the key "text"
 	 * @param description the String that will be stored in the item map under the key "description"
 	 */

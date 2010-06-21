@@ -18,8 +18,8 @@ ontology
 		["en"] = <
 			items = <
 				["at0000"] = <
-					text = <"test">; 
-					description = <"test">
+					text = <"test text">; 
+					description = <"test description">
 					anotherkey = <"another key value">
 				>
 			>

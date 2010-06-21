@@ -18,6 +18,9 @@ package org.openehr.am.archetype.assertion;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.am.archetype.constraintmodel.CObject;
 
 /**
  * Structural model of a typed first order predicate logic assertion, in the
@@ -94,6 +97,42 @@ public class Assertion {
 		return stringExpression;
 	}
 
+	 /**
+	     * Equals if two Assertion Objects have same values
+	     *
+	     * @param o
+	     * @return true if equals
+	     */
+	    public boolean equals(Object o) {
+	        if (this == o) return true;
+	        if (!( o instanceof Assertion )) return false;
+
+	        final Assertion cobj = (Assertion) o;
+
+	        return new EqualsBuilder()	
+	                .append(tag, cobj.tag)
+	                .append(expression, cobj.expression)
+	                .append(stringExpression, cobj.stringExpression)
+	                .append(variables, cobj.variables)
+	                .isEquals();
+	    }
+	
+	
+	/**
+	     * Return a hash code of this object
+	     *
+	     * @return hash code
+	     */
+	    public int hashCode() {
+	        return new HashCodeBuilder(7, 19)	      
+	                .append(tag)
+	                .append(expression)
+	                .append(stringExpression)
+	                .append(variables)
+	                .toHashCode();
+	    }
+
+	
 	/* fields */
 	private String tag;
 

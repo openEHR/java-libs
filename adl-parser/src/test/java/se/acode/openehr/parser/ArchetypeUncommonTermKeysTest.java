@@ -29,6 +29,8 @@ public class ArchetypeUncommonTermKeysTest extends ParserTestBase {
 		ArchetypeTerm aterm = archetype.getOntology().termDefinition("at0000");
 	
 		assertEquals("key value wrong", "another key value", aterm.getItem("anotherkey"));
+		assertEquals("key value wrong", "test text", aterm.getItem("text"));
+		assertEquals("key value wrong", "test description", aterm.getItem("description"));
 	}
 
 	

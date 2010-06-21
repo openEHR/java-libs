@@ -15,6 +15,9 @@
  
 package org.openehr.am.archetype.assertion;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 public class ExpressionLeaf extends ExpressionItem {
 	
 	/**
@@ -88,6 +91,39 @@ public class ExpressionLeaf extends ExpressionItem {
 		return new ExpressionLeaf(ExpressionItem.BOOLEAN, new Boolean(b),
 				ExpressionLeaf.ReferenceType.CONSTANT);
 	}
+	
+
+	 /**
+	     * Equals if two ExpressionLeaf Objects have same values
+	     *
+	     * @param o
+	     * @return true if equals
+	     */
+	    public boolean equals(Object o) {
+	        if (this == o) return true;
+	        if (!( o instanceof ExpressionLeaf )) return false;
+
+	        final ExpressionLeaf cobj = (ExpressionLeaf) o;
+
+	        return new EqualsBuilder()	
+	        .appendSuper(super.equals(o))
+	                .append(item, cobj.item)
+	                .append(referenceType, cobj.referenceType)
+	                .isEquals();
+	    }
+	
+	   /**
+	     * Return a hash code of this object
+	     *
+	     * @return hash code
+	     */
+	    public int hashCode() {
+	        return new HashCodeBuilder(5, 23)
+	                .appendSuper(super.hashCode())
+	                .append(item)
+	                .append(referenceType)
+	                .toHashCode();	                
+	    }
 	
 	private Object item;
 	private ReferenceType referenceType;

@@ -15,6 +15,9 @@
 package org.openehr.am.archetype.constraintmodel.primitive;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.am.archetype.constraintmodel.CObject;
 
 import java.util.*;
 
@@ -114,6 +117,38 @@ public final class CString extends CPrimitive {
         }
         return list.get(0);
     }
+	
+	 /**
+	     * Equals if two CString Objects have same values
+	     *
+	     * @param o
+	     * @return true if equals
+	     */
+	    public boolean equals(Object o) {
+	        if (this == o) return true;
+	        if (!( o instanceof CString )) return false;
+
+	        final CString cobj = (CString) o;
+
+	        return new EqualsBuilder()	          
+	                .append(pattern, cobj.pattern)
+	                .append(list, cobj.list)
+	                .append(assumedValue, cobj.assumedValue)
+	                .isEquals();
+	    }
+	
+	   /**
+	     * Return a hash code of this object
+	     *
+	     * @return hash code
+	     */
+	    public int hashCode() {
+	        return new HashCodeBuilder(5, 23)
+	                .append(pattern)
+	                .append(list)
+	                .append(assumedValue)
+	                .toHashCode();	                
+	    }
 	
 	/* fields */
     private final String pattern;

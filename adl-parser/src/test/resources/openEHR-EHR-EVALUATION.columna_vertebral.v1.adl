@@ -1,0 +1,85 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-EVALUATION.columna_vertebral.v1
+
+concept
+	[at0000]	-- Columna vertebral
+language
+	original_language = <[ISO_639-1::es]>
+description
+	original_author = <
+		["name"] = <"">
+	>
+	details = <
+		["es"] = <
+			language = <[ISO_639-1::es]>
+			purpose = <"Evaluacion de columna vertebral">
+			use = <"Evaluacion de columna vertebral">
+			misuse = <"">
+		>
+	>
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+		["references"] = <"">
+		["MD5-CAM-1.0.1"] = <"0CD148BEA5220C93A938A3038D526998">
+	>
+
+definition
+	EVALUATION[at0000] matches {	-- Columna vertebral
+		data matches {
+			ITEM_LIST[at0001] matches {	-- Lista
+				items cardinality matches {0..*; unordered} matches {
+					ELEMENT[at0002] occurrences matches {0..1} matches {	-- Exploracion clinica cervical anormal
+						value matches {
+							DV_BOOLEAN matches {
+								value matches {True, False; True}
+							}
+						}
+					}
+					ELEMENT[at0003] occurrences matches {0..1} matches {	-- Indicacion de collar cervical
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {
+									[local::
+									at0004, 	-- Si
+									at0005]	-- No
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["es"] = <
+			items = <
+				["at0000"] = <
+					text = <"Columna vertebral">
+					description = <"Columna vertebral">
+				>
+				["at0001"] = <
+					text = <"Lista">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"Exploracion clinica cervical anormal">
+					description = <"Exploracion clinica cervical anormal">
+				>
+				["at0003"] = <
+					text = <"Indicacion de collar cervical">
+					description = <"Indicacion de collar cervical">
+				>
+				["at0004"] = <
+					text = <"Si">
+					description = <"hay indicacion de collar cervical">
+				>
+				["at0005"] = <
+					text = <"No">
+					description = <"no hay indicacion de collar cervical">
+				>
+			>
+		>
+	>

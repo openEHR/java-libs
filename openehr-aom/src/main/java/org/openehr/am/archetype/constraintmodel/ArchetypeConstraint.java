@@ -105,7 +105,7 @@ public abstract class ArchetypeConstraint {
      * Equals if two ArchetypeConstraint have same value
      *
      * @param o
-     * @return ture if equals
+     * @return true if equals
      */
     public boolean equals(Object o) {
         if (this == o) return true;

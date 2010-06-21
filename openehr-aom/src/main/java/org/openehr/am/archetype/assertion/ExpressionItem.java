@@ -15,6 +15,10 @@
  
 package org.openehr.am.archetype.assertion;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.am.archetype.constraintmodel.CObject;
+
 public abstract class ExpressionItem {
 	
 	public final static String BOOLEAN = "BOOLEAN";
@@ -41,7 +45,37 @@ public abstract class ExpressionItem {
 		return BOOLEAN.equals(type);
 	}
 	
-	private String type;
+	
+	 /**
+	     * Equals if two ExpressionItem Objects have same values
+	     *
+	     * @param o
+	     * @return true if equals
+	     */
+	    public boolean equals(Object o) {
+	        if (this == o) return true;
+	        if (!( o instanceof ExpressionItem )) return false;
+
+	        final ExpressionItem cobj = (ExpressionItem) o;
+
+	        return new EqualsBuilder()		      
+	                .append(type, cobj.type)
+	                .isEquals();
+	    }
+	
+	/**
+	     * Return a hash code of this object
+	     *
+	     * @return hash code
+	     */
+	    public int hashCode() {
+	        return new HashCodeBuilder(7, 19)	              
+	                .append(type)
+	                .toHashCode();
+	    }
+	    
+		private String type;
+
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
