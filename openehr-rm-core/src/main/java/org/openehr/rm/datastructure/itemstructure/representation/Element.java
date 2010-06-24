@@ -49,7 +49,7 @@ public final class Element extends Item {
      * @param feederAudit
      * @param links
      * @param value
-     * @param nullFlavor       required if value is null
+     * @param nullFlavour       required if value is null
      * @throws IllegalArgumentException if both value and nullFlavor
      *                                  are null
      */
@@ -62,12 +62,12 @@ public final class Element extends Item {
                            @Attribute(name = "links") Set<Link> links,
                            @Attribute(name = "parent") Pathable parent, 
                            @Attribute(name = "value",  required=true) DataValue value,
-                           @Attribute(name = "nullFlavor") DvCodedText nullFlavor,
+                           @Attribute(name = "nullFlavour") DvCodedText nullFlavour,
                            @Attribute(name = "terminologyService",  system=true) TerminologyService terminologyService) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
                 links, parent);
-        if (( value == null && nullFlavor == null )
-                || ( value != null && nullFlavor != null )) {
+        if (( value == null && nullFlavour == null )
+                || ( value != null && nullFlavour != null )) {
             throw new IllegalArgumentException(
                     "null or unnecessary nullFlavor");
         }
@@ -76,14 +76,14 @@ public final class Element extends Item {
                 throw new IllegalArgumentException("null terminologyService");
             }
             if (!terminologyService.terminology(TerminologyService.OPENEHR)
-                    .codesForGroupName("null flavour", "en")
-                    .contains(nullFlavor.getDefiningCode())) {
+                    .codesForGroupName("null flavours", "en")
+                    .contains(nullFlavour.getDefiningCode())) {
                 throw new IllegalArgumentException(
-                        "unknown nullFlavor: " + nullFlavor);
+                        "unknown nullFlavour: " + nullFlavour);
             }
         }
         this.value = value;
-        this.nullFlavor = nullFlavor;
+        this.nullFlavour = nullFlavour;
     }
 
     /**
@@ -124,11 +124,19 @@ public final class Element extends Item {
      * Gets flavor of null value, like indeterminate, not asked etc
      *
      * @return null flavor
+     * @deprecated use getNullFlavour instead
      */
     public DvCodedText getNullFlavor() {
-        return nullFlavor;
+        return nullFlavour;
     }
-
+    /**
+     * Gets flavour of null value, like indeterminate, not asked etc
+     *
+     * @return null flavour
+     */
+    public DvCodedText getNullFlavour() {
+        return nullFlavour;
+    }
 
     /**
      * True if value logically not known, if indeterminate,
@@ -183,9 +191,17 @@ public final class Element extends Item {
         this.value = value;
     }
 
+    /**
+     * @Deprecated Use setNullFlavour instead
+     */
     void setNullFlavor(DvCodedText nullFlavor) {
-        this.nullFlavor = nullFlavor;
+        this.nullFlavour = nullFlavor;
     }
+    
+    void setNullFlavour(DvCodedText nullFlavour) {
+        this.nullFlavour = nullFlavour;
+    }
+   
     // POJO end
 
 	@Override
@@ -208,7 +224,7 @@ public final class Element extends Item {
 	
 	/* fields */
     private DataValue value;
-    private DvCodedText nullFlavor;
+    private DvCodedText nullFlavour;
 }
 
 /*
