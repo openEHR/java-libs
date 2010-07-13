@@ -54,7 +54,9 @@ definition
 					ELEMENT[at1013] matches {	-- duration with fractional seconds
                 		value matches {|PT1.1s|}
                 	}
-                	
+                	ELEMENT[at1014] matches {	-- duration with mixed Pattern and Interval 
+						value matches {PTS/|PT0S..PT120S|}
+					}				
                 	-- matches {PT30s, PT45s, PT1m0s, PT2m0s} -- Not currently in ADL syntax
                 	-- matches {|P1d +/PT4h|}
                 }           	

@@ -103,6 +103,22 @@ public class CDurationTest extends ParserTestBase {
 		assertCDuration(archetype.node("/types[at0002]/items[at1006]/value"), 
 				null, null, "P1d", "PDTH");
 	}
+	
+	/**
+	 * Tests parsing CDurations with assumed values
+	 * 
+	 * @throws Exception
+	 */
+	public void testParseCDurationWithMixedPatternAndInterval() throws Exception {
+			Interval<DvDuration> interval = new Interval<DvDuration> (
+				DvDuration.getInstance("PT0S"), 
+				DvDuration.getInstance("PT120S"));
+		
+		
+		assertCDuration(archetype.node("/types[at0001]/items[at1014]/value"), 
+				null, interval, null, "PTS");
+		
+	}
 
 	private Archetype archetype;
 }
