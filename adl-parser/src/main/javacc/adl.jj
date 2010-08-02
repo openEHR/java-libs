@@ -3154,27 +3154,33 @@ CDuration c_duration() :
   DvDuration value = null;
   Interval interval = null;
   DvDuration assumed = null;
-  Token t = null;
   String pattern = null;
 }
 {
  (
-    t = <V_ISO8601_DURATION_CONSTRAINT_PATTERN>
-    { pattern = t.image; }  
-  |
-    value = duration_value()
+    pattern = duration_pattern() 
+    [
+       "/" interval = duration_interval_value()
+    ]    
   |
     interval = duration_interval_value()
+  |
+    value = duration_value()  
   )
-  [
-     "/" interval = duration_interval_value()
-  ]	 
+  	 
   [ 
     ";" assumed = duration_value()
   ]
   {
     return new CDuration(value, interval, assumed, pattern);
   }
+}
+
+String duration_pattern() :
+{  Token t = null;  
+}
+{  t = <V_ISO8601_DURATION_CONSTRAINT_PATTERN>
+  { return t.image; }
 }
 
 CString c_string() :
