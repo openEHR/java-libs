@@ -21,6 +21,8 @@ ontology
 					text = <"test text">; 
 					description = <"test description">
 					anotherkey = <"another key value">
+					status = <"status value">
+					revision = <"revision value">
 				>
 			>
 		>

@@ -258,7 +258,7 @@ PARSER_END(ADLParser)
 }
 
 
-< DESCRIPTION, ONTOLOGY > TOKEN [IGNORE_CASE]: /* KEYWORDS - ADL description */
+< DESCRIPTION > TOKEN [IGNORE_CASE]: /* KEYWORDS - ADL description */
 {
   < SYM_ORIGINAL_AUTHOR: "original_author">
 | < SYM_LIFECYCLE_STATE: "lifecycle_state">
@@ -279,9 +279,13 @@ PARSER_END(ADLParser)
 | < SYM_COPYRIGHT: "copyright">
 | < SYM_KEYWORDS: "keywords">
 | < SYM_RIGHTS: "rights">
-| < SYM_DESCRIPTION_WORD: "description">
-| < SYM_COMMENT: "comment">
 | < SYM_LANGUAGE_WORD: "language">
+}
+
+< DESCRIPTION, ONTOLOGY > TOKEN [IGNORE_CASE]: /* KEYWORDS - ADL description & ONTOLOGY */
+{
+  < SYM_DESCRIPTION_WORD: "description">
+| < SYM_COMMENT: "comment">
 }
 
 < * > TOKEN [IGNORE_CASE]: /* KEYWORDS - dADL */
