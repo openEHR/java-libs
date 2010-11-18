@@ -301,11 +301,11 @@ public class DvQuantity extends DvAmount<DvQuantity> {
     }
 
     // POJO start
-    void setMagnitude(double magnitude) {
+    public void setMagnitude(double magnitude) {
         this.magnitude = magnitude;
     }
 
-    void setPrecision(int precision) {
+    public void setPrecision(int precision) {
         this.precision = precision;
     }    
     // POJO end

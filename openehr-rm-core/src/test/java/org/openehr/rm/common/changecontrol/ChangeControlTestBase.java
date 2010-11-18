@@ -78,7 +78,8 @@ public class ChangeControlTestBase extends TestCase {
 	}
 
 	protected OriginalVersion<String> originalVersion(String data,
-			boolean isMerged, String uidStr, String time) {
+			boolean isMerged,
+			String uidStr, String time) {
 		ObjectVersionID uid = new ObjectVersionID(uidStr);
 		CodePhrase codePhrase = new CodePhrase(TestTerminologyID.SNOMEDCT,
 				"revisionCode");
@@ -98,12 +99,12 @@ public class ChangeControlTestBase extends TestCase {
 			otherUids.add(new ObjectVersionID(
 					"1.4.14.5::1.2.840.114.1.2.2::4.2.2"));
 			return new OriginalVersion<String>(uid, null, data, codedText,
-					audit1, lr, null, otherUids, null, isMerged,
+					audit1, lr, null, otherUids, null, // isMerged,
 					TestTerminologyService.getInstance());
 
 		} else {
 			return new OriginalVersion<String>(uid, null, data, codedText,
-					audit1, lr, null, null, null, isMerged,
+					audit1, lr, null, null, null, // isMerged,
 					TestTerminologyService.getInstance());
 		}
 	}

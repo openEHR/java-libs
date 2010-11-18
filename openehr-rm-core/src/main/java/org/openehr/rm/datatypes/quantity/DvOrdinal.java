@@ -14,11 +14,13 @@
  */
 package org.openehr.rm.datatypes.quantity;
 
+import java.util.List;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.datatypes.text.DvCodedText;
-
-import java.util.List;
 
 /**
  * Purpose Models rankings and scores, like pain, Apgar values, etc,
@@ -134,6 +136,36 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
     public ReferenceRange<DvOrdinal> limits() {
         return getOtherReferenceRanges().get(limitsIndex);
     }
+    
+    /**
+     * Equals if value and symbol equal in value
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof DvOrdinal )) return false;
+
+        final DvOrdinal ord = (DvOrdinal) o;
+
+        return new EqualsBuilder()
+                .append(value, ord.value)
+                .append(symbol, ord.symbol)
+                .isEquals();
+    }
+
+    /**
+     * Return hash code of this DvOrdinal
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(3, 31)
+                .append(value)
+                .append(symbol)
+                .toHashCode();
+    }
 
     /**
      * Tests if two instances are strictly comparable.
@@ -151,7 +183,7 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
                 dvOrdinal.symbol.getDefiningCode().getTerminologyId())) {
             return false;
         }
-        // todo: chevk if symbols are from same subset or value range in the same vocabulary
+        // todo: check if symbols are from same subset or value range in the same vocabulary
         return true;
     }
 
@@ -159,11 +191,11 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
     private DvOrdinal() {
     }
 
-    private void setValue(int value) {
+    public  void setValue(int value) {
         this.value = value;
     }
 
-    private void setSymbol(DvCodedText symbol) {
+    public  void setSymbol(DvCodedText symbol) {
         this.symbol = symbol;
     }
 

@@ -19,15 +19,11 @@ import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
-import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datatypes.text.DvText;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The grouping variant of Item, which may contain further instances
@@ -100,10 +96,10 @@ public final class Cluster extends Item {
      * Ordered list of items - CLUSTER or ELEMENT objects
      * - under this CLUSTER.
      *
-     * @return unmodifiable List of items
+     * @return items of this cluster
      */
     public List<Item> getItems() {
-        return Collections.unmodifiableList(items);
+        return items;
     }
 
     /**

@@ -53,7 +53,6 @@ public final class DvMultimedia extends DvEncapsulated {
 	@FullConstructor
     public DvMultimedia(@Attribute (name = "charset") CodePhrase charset, 
 						@Attribute (name = "language") CodePhrase language,
-                        @Attribute (name = "size") int size, 
 						@Attribute (name = "alternateText") String alternateText,
                         @Attribute (name = "mediaType") CodePhrase mediaType,
                         @Attribute (name = "compressionAlgorithm") CodePhrase compressionAlgorithm,
@@ -63,8 +62,10 @@ public final class DvMultimedia extends DvEncapsulated {
 						@Attribute (name = "uri") DvURI uri,
                         @Attribute (name = "data") byte[] data,
                         @Attribute (name = "terminologyService") TerminologyService terminologyService) {
-        super(charset, language, size, terminologyService);
-        if (mediaType == null) {
+        
+		super(charset, language, terminologyService);
+        
+		if (mediaType == null) {
             throw new IllegalArgumentException("null mediaType");
         }
         if (compressionAlgorithm == null) {
@@ -106,6 +107,11 @@ public final class DvMultimedia extends DvEncapsulated {
         this.uri = uri;
         this.data = data;
     }
+	
+	@Override
+	public int getSize() {
+		return data == null ? 0 : data.length;
+	}
 
     /**
      * Text to display in lieu of multimedia display/replay
@@ -277,7 +283,7 @@ public final class DvMultimedia extends DvEncapsulated {
     private CodePhrase integrityCheckAlgorithm;
     private DvMultimedia thumbnail;
     private DvURI uri;
-    private byte[] data;
+    private byte[] data;	
 }
 
 /*

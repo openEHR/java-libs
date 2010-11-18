@@ -31,7 +31,6 @@ import java.util.*;
 /**
  * Logical list data structure, where each item has a value and can
  * be referred to by a name and a positional index in the list.
- * Instances of this class are immutable.
  *
  * @author Rong Chen
  * @version 1.0
@@ -60,7 +59,7 @@ public final class ItemList extends ItemStructure {
                 @Attribute(name = "items") List<Element> items) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
                 links, parent);
-        this.items = items == null ? null : Collections.unmodifiableList(items);
+        this.items = items;
     }
     
     /**

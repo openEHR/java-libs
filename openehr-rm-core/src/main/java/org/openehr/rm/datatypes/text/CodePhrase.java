@@ -140,11 +140,11 @@ public final class CodePhrase extends DataValue {
     CodePhrase() {
     }
 
-    void setTerminologyId(TerminologyID terminologyID) {
+    public void setTerminologyId(TerminologyID terminologyID) {
         this.terminologyId = terminologyID;
     }
 
-    void setCodeString(String codeString) {
+    public void setCodeString(String codeString) {
         this.codeString = codeString;
     }
     // POJO end

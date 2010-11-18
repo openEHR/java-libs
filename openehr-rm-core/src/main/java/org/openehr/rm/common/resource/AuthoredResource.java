@@ -58,11 +58,13 @@ public abstract class AuthoredResource extends RMObject {
 			}
 		}
 		 
-		if (terminologyService == null) {
-			throw new IllegalArgumentException("null terminology service");
-		}
-		if (!terminologyService.codeSetForId(
-        		OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(originalLanguage)) {
+		// TODO
+		// if (terminologyService == null) {
+		// 	throw new IllegalArgumentException("null terminology service");
+		// }
+		if (terminologyService != null 
+				&& !terminologyService.codeSetForId(
+						OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(originalLanguage)) {
 			throw new IllegalArgumentException("unknown original language " + 
 					originalLanguage);
 		}

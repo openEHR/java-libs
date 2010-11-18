@@ -28,7 +28,7 @@ import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
  * @author yinsulim
- *
+ * @author Modified by Erik Sundvall 2010-03-19
  */
 public class OriginalVersion<T> extends Version<T> {
 
@@ -53,17 +53,20 @@ public class OriginalVersion<T> extends Version<T> {
 			@Attribute(name = "signature")String signature, 
 			@Attribute(name = "otherInputVersionUids")Set<ObjectVersionID> otherInputVersionUids, 
 			@Attribute(name = "attestations")List<Attestation> attestations,
-			@Attribute(name = "isMerged") boolean isMerged, 
+			// @Attribute(name = "isMerged") boolean isMerged, // This should not be an attribute, just internally calculated from existence of otherInputVersionUids
 			@Attribute(name = "terminologyService", system = true)TerminologyService terminologyService) {
             
             super(uid, precedingVersionUid, data, lifecycleState, commitAudit, 
                     contribution, signature, terminologyService);
             if (attestations != null && attestations.isEmpty()) {
-                throw new IllegalArgumentException("empty attestations");
+                throw new IllegalArgumentException("empty attestations");                
             }
-            if ((otherInputVersionUids == null) == isMerged ) {
-                throw new IllegalArgumentException("breach of isMerged validity");
+            this.attestations = attestations;
+            
+            if (otherInputVersionUids != null && otherInputVersionUids.isEmpty()) {   // == isMerged ) {
+                throw new IllegalArgumentException("empty otherInputVersionUids"); //("breach of isMerged validity");
             }
+            this.otherInputVersionUids = otherInputVersionUids;
 	}
     
     /**
@@ -75,12 +78,20 @@ public class OriginalVersion<T> extends Version<T> {
         return attestations;
     }
     
+//    /**
+//     * True if this Version was created from more than 
+//     * just the preceding (checked out) version.
+//     */
+//    public boolean getIsMerged() { // This should not be an attribute, just internally calculated from existence of otherInputVersionUids
+//    		return isMerged;
+//    }
+    
     /**
      * True if this Version was created from more than 
      * just the preceding (checked out) version.
      */
-    public boolean getIsMerged() {
-    		return isMerged;
+    public boolean isMerged() { // This should not be an attribute, just internally calculated from existence of otherInputVersionUids
+		return otherInputVersionUids != null && otherInputVersionUids.size() > 0;
     }
     
     /**
@@ -99,9 +110,9 @@ public class OriginalVersion<T> extends Version<T> {
             this.attestations = attestations;
     }
 
-    void setIsMerged(boolean isMerged) {
-            this.isMerged = isMerged;
-    }
+//    void setIsMerged(boolean isMerged) { // This should not be an attribute, just internally calculated from existence of otherInputVersionUids
+//            this.isMerged = isMerged;
+//    }
 
     void setOtherInputVersionUids(Set<ObjectVersionID> otherInputVersionUids) {
             this.otherInputVersionUids = otherInputVersionUids;

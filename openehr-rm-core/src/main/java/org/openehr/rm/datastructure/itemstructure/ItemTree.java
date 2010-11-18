@@ -14,6 +14,8 @@
  */
 package org.openehr.rm.datastructure.itemstructure;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.Archetyped;
@@ -28,7 +30,7 @@ import org.openehr.rm.datatypes.text.DvText;
 import java.util.*;
 
 /**
- * Logical tree data structure. Instances of this class are immutable.
+ * Logical tree data structure.
  *
  * @author Rong Chen
  * @version 1.0
@@ -54,10 +56,10 @@ public final class ItemTree extends ItemStructure {
                 @Attribute(name = "feederAudit") FeederAudit feederAudit,
                 @Attribute(name = "links") Set<Link> links,
                 @Attribute(name = "parent") Pathable parent,
-                @Attribute(name = "items", required=true) List<Item> items) {
+                @Attribute(name = "items") List<Item> items) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
                 links, parent);
-        this.items = items == null ? null : Collections.unmodifiableList(items);
+        this.items = items;
     }
 
     /**
@@ -118,6 +120,35 @@ public final class ItemTree extends ItemStructure {
      */
     public List<Item> getItems() {
     	return items;
+    }
+    
+    /**
+     * Equals if two item_tree has same values
+     *
+     * @param o
+     * @return equals if true
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof ItemTree )) return false;
+        
+        final ItemTree tree = (ItemTree) o;
+        return new EqualsBuilder()
+        		.appendSuper(super.equals(o))
+                .append(items, tree.items)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this actor
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(17, 23)
+                .appendSuper(super.hashCode())
+                .append(items)
+                .toHashCode();
     }
     
     /**

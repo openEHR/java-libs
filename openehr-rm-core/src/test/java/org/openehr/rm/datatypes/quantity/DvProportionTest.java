@@ -67,6 +67,22 @@ public class DvProportionTest extends TestCase {
 		new DvProportion(1.3, 1, ProportionKind.UNITARY, 1);		
 	}
 	
+	public void testCreateIngegerProportionWithoutPricision() {
+		try {
+			new DvProportion(1.0, 1.0, ProportionKind.RATIO, null);
+		} catch(Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+		}
+	}
+	
+	public void testCreateDoubleProportionWithoutPricision() {
+		try {
+			new DvProportion(0.5, 1.0, ProportionKind.RATIO, null);
+		} catch(Exception e) {
+			assertTrue(e instanceof IllegalArgumentException);
+		}
+	}
+	
 	public void testCreatePercentProportionWithBadDenominator() {
 		try {
 			new DvProportion(1.25, 10, ProportionKind.PERCENT, 2);
@@ -78,6 +94,11 @@ public class DvProportionTest extends TestCase {
 	
 	public void testCreatePercentProportionWithRightDenominator() {
 		new DvProportion(1.25, 100, ProportionKind.PERCENT, 2);		
+	}
+	
+	public void testCreateUnitaryProportionUsingFactoryMethod() {
+		DvProportion dp = DvProportion.createUnitaryProportion(1.2, 1);
+		assertEquals(1.2, dp.getNumerator(), 0);
 	}
 }
 /*

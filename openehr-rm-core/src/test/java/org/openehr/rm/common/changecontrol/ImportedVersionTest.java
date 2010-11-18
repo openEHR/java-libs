@@ -55,7 +55,8 @@ public class ImportedVersionTest extends ChangeControlTestBase {
             lifeCycleState("complete"), audit("1-4-3-5-2", "comitter's name", "changeTypeCode",
             "2006-07-01T13:22:55"), 
             contribution("1.4.4.5::1.2.840.114.1.2.2::2", "path/morePath"), null, 
-            null, null, false, TestTerminologyService.getInstance());
+            null, null, // false, 
+            TestTerminologyService.getInstance());
         ImportedVersion<String> iv = new ImportedVersion<String>(ov, 
             audit("adminc.nhs.uk", "comitter's name", "changeTypeCode", "2006-07-01T15:00:09"),
             contribution("1.4.4.15::1.2.840.114.1.2.2::1", "path/morePath"), 

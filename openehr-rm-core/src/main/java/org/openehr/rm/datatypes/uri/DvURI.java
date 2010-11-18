@@ -14,6 +14,8 @@
  */
 package org.openehr.rm.datatypes.uri;
 
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.datatypes.basic.DataValue;
 
 import java.net.URISyntaxException;
@@ -50,8 +52,8 @@ public class DvURI extends DataValue {
      * @param str The string to be parsed into a URI
      * @throws IllegalArgumentException if str null or bad syntax
      */
-    public DvURI(String str) {
-        loadValue(str);
+	@FullConstructor public DvURI(@Attribute(name = "value", required = true) String value) {
+        loadValue(value);
     }
 
     private void loadValue(String value) {
@@ -177,7 +179,7 @@ public class DvURI extends DataValue {
  *  Portions created by the Initial Developer are Copyright (C) 2003-2004
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Daniel Karlsson
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

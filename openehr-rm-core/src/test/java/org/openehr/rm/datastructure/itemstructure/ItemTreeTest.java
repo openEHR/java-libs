@@ -181,6 +181,11 @@ public class ItemTreeTest extends DataStructureTestBase {
     			itemTree.itemAtPath("/items[at0005]/items[at0004]/value"));
     }
     
+    public void testCreateEmptyTree() {
+    	ItemTree empty = new ItemTree("at0001", new DvText("tree"), null);
+    	assertNotNull(empty);
+    }
+    
     /* fields */
     private ItemTree itemTree;
     private Element sample;

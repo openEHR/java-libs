@@ -70,38 +70,38 @@ public class OriginalVersionTest extends TestCase {
 				"1.23.51.66::1.2.840.114.1.2.2::2"), "LOCAL", "CONTRIBUTION",
 				null);
 		OriginalVersion<String> ov = new OriginalVersion<String>(uid, null,
-				"A Party Info", codedText, audit1, lr, null, null, null, false,
+				"A Party Info", codedText, audit1, lr, null, null, null, // false,
 				TestTerminologyService.getInstance());
 		Set<ObjectVersionID> otherUids = new HashSet<ObjectVersionID>();
 		otherUids
 				.add(new ObjectVersionID("1.4.14.5::1.2.840.114.1.2.2::4.2.2"));
 		OriginalVersion<String> ov2 = new OriginalVersion<String>(uid, null,
-				"A Party Info", codedText, audit1, lr, null, otherUids, null,
-				true, TestTerminologyService.getInstance());
-		assertContructorError(uid, null, "A Party Info", codedText, audit1, lr,
-				null, otherUids, null, false, TestTerminologyService
-						.getInstance());
-		assertContructorError(uid, null, "A Party Info", codedText, audit1, lr,
-				null, null, null, true, TestTerminologyService.getInstance());
+				"A Party Info", codedText, audit1, lr, null, otherUids, null, //true, 
+				TestTerminologyService.getInstance());
+//		assertContructorError(uid, null, "A Party Info", codedText, audit1, lr,
+//				null, otherUids, null, false, TestTerminologyService
+//						.getInstance());
+//		assertContructorError(uid, null, "A Party Info", codedText, audit1, lr,
+//				null, null, null, true, TestTerminologyService.getInstance());
 
 	}
 
-	private void assertContructorError(ObjectVersionID uid,
-			ObjectVersionID pVersionID, String data, DvCodedText codedText,
-			AuditDetails audit, ObjectRef contribution, String signature,
-			Set<ObjectVersionID> otherUids, List<Attestation> attestations,
-			boolean isMerged, TerminologyService terminologyService) {
-
-		try {
-			OriginalVersion<String> ov = new OriginalVersion<String>(uid,
-					pVersionID, data, codedText, audit, contribution,
-					signature, otherUids, attestations, isMerged,
-					TestTerminologyService.getInstance());
-			fail("should throw exception, breach of isMerged validity");
-		} catch (IllegalArgumentException iae) {
-
-		}
-	}
+//	private void assertContructorError(ObjectVersionID uid,
+//			ObjectVersionID pVersionID, String data, DvCodedText codedText,
+//			AuditDetails audit, ObjectRef contribution, String signature,
+//			Set<ObjectVersionID> otherUids, List<Attestation> attestations,
+//			boolean isMerged, TerminologyService terminologyService) {
+//
+//		try {
+//			OriginalVersion<String> ov = new OriginalVersion<String>(uid,
+//					pVersionID, data, codedText, audit, contribution,
+//					signature, otherUids, attestations, // isMerged,
+//					TestTerminologyService.getInstance());
+//			fail("should throw exception, breach of isMerged validity");
+//		} catch (IllegalArgumentException iae) {
+//
+//		}
+//	}
 }
 
 /*

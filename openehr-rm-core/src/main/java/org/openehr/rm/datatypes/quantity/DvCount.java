@@ -176,7 +176,7 @@ public final class DvCount extends DvAmount<DvCount> {
 	DvCount() {
 	}
 
-	void setMagnitude(int magnitude) {
+	public void setMagnitude(int magnitude) {
 		this.magnitude = magnitude;
 	}
 

@@ -131,6 +131,8 @@ public class TestTerminologyAccess implements TerminologyAccess {
             "iso-8859-1");
     public static final CodePhrase NULL_FLAVOUR = new CodePhrase("test",
             "unanswered");
+	public static final CodePhrase SOME_STATE = null;
+	public static final CodePhrase SOME_TRANSITION = null;
     
     
     static Set<CodePhrase> CODES; 
@@ -146,6 +148,7 @@ public class TestTerminologyAccess implements TerminologyAccess {
         CODES.add(CREATION);
         CODES.add(ENGLISH); 
         CODES.add(ACTIVE);
+        CODES.add(NULL_FLAVOUR);
     }       
     
 }

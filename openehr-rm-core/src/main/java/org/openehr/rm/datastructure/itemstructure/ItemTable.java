@@ -37,7 +37,6 @@ import java.util.*;
  * site, a blood antigen etc. All values in a column have the same
  * data type.
  * <p/>
- * Instances of this class are immutable.
  *
  * @author Rong Chen
  * @version 1.0
@@ -66,7 +65,7 @@ public final class ItemTable extends ItemStructure {
                              @Attribute(name = "rows") List<Cluster> rows) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
                 links, parent);
-        this.rows = rows == null ? null : Collections.unmodifiableList(rows);
+        this.rows = rows;
     }
     
     /**

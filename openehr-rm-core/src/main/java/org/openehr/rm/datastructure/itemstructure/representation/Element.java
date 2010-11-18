@@ -14,12 +14,13 @@
  */
 package org.openehr.rm.datastructure.itemstructure.representation;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
-import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datatypes.basic.DataValue;
@@ -50,7 +51,7 @@ public final class Element extends Item {
      * @param links
      * @param value
      * @param nullFlavour       required if value is null
-     * @throws IllegalArgumentException if both value and nullFlavor
+     * @throws IllegalArgumentException if both value and nullFlavour
      *                                  are null
      */
     @FullConstructor
@@ -61,7 +62,7 @@ public final class Element extends Item {
                            @Attribute(name = "feederAudit") FeederAudit feederAudit,
                            @Attribute(name = "links") Set<Link> links,
                            @Attribute(name = "parent") Pathable parent, 
-                           @Attribute(name = "value",  required=true) DataValue value,
+                           @Attribute(name = "value") DataValue value,
                            @Attribute(name = "nullFlavour") DvCodedText nullFlavour,
                            @Attribute(name = "terminologyService",  system=true) TerminologyService terminologyService) {
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
@@ -69,14 +70,14 @@ public final class Element extends Item {
         if (( value == null && nullFlavour == null )
                 || ( value != null && nullFlavour != null )) {
             throw new IllegalArgumentException(
-                    "null or unnecessary nullFlavor");
+                    "null or unnecessary nullFlavour");
         }
         if (value == null) {
             if (terminologyService == null) {
                 throw new IllegalArgumentException("null terminologyService");
             }
             if (!terminologyService.terminology(TerminologyService.OPENEHR)
-                    .codesForGroupName("null flavours", "en")
+                    .codesForGroupName(TerminologyService.NULL_FLAVOURS, "en")
                     .contains(nullFlavour.getDefiningCode())) {
                 throw new IllegalArgumentException(
                         "unknown nullFlavour: " + nullFlavour);
@@ -85,7 +86,7 @@ public final class Element extends Item {
         this.value = value;
         this.nullFlavour = nullFlavour;
     }
-
+    
     /**
      * Constructs an Element node by archetypeNodeId, name and non-null value
      *
@@ -110,7 +111,7 @@ public final class Element extends Item {
     public Element(String archetypeNodeId, String name, DataValue value) {
         this(archetypeNodeId, new DvText(name), value);
     }
-
+    
     /**
      * Gets data value of this leaf
      *
@@ -129,12 +130,13 @@ public final class Element extends Item {
     public DvCodedText getNullFlavor() {
         return nullFlavour;
     }
-    /**
-     * Gets flavour of null value, like indeterminate, not asked etc
-     *
-     * @return null flavour
-     */
-    public DvCodedText getNullFlavour() {
+    
+    /**    
+     * Gets flavour of null value, like indeterminate, not asked etc 
+     * 
+     * @return null flavour 
+     */ 
+    public DvCodedText getNullFlavour() { 
         return nullFlavour;
     }
 
@@ -165,43 +167,51 @@ public final class Element extends Item {
      * @param o
      * @return true if equals
      */
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof Element )) return false;
-
-        final Element element = (Element) o;
-
-        return value.equals(element.value);
+    public boolean equals(Object obj) {
+    	if (obj == null) { return false; }
+    	   if (obj == this) { return true; }
+    	   if (obj.getClass() != getClass()) {
+    	     return false;
+    	   }
+    	   Element element = (Element) obj;
+    	   return new EqualsBuilder()
+    	                 .appendSuper(super.equals(obj))
+    	                 .append(value, element.value)
+    	                 .append(nullFlavour, element.nullFlavour)
+    	                 .isEquals();
     }
 
     /**
-     * Return hash code
+     * Return a hash code of this actor
      *
      * @return hash code
      */
     public int hashCode() {
-        return value.hashCode();
+        return new HashCodeBuilder(17, 71)
+                .appendSuper(super.hashCode())
+                .append(value)
+                .append(nullFlavour)
+                .toHashCode();
     }
     
     // POJO start
     Element() {
     }
 
-    void setValue(DataValue value) {
+    public void setValue(DataValue value) {
         this.value = value;
     }
 
-    /**
-     * @Deprecated Use setNullFlavour instead
+    /**    
+     * @deprecated Use setNullFlavour instead 
      */
-    void setNullFlavor(DvCodedText nullFlavor) {
+    public void setNullFlavor(DvCodedText nullFlavor) {
         this.nullFlavour = nullFlavor;
     }
     
-    void setNullFlavour(DvCodedText nullFlavour) {
-        this.nullFlavour = nullFlavour;
+    public void setNullFlavour(DvCodedText nullFlavour) {    	 
+        this.nullFlavour = nullFlavour; 
     }
-   
     // POJO end
 
 	@Override
@@ -244,10 +254,10 @@ public final class Element extends Item {
  *  The Original Code is Element.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2008
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2010
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Sebastian Garde
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

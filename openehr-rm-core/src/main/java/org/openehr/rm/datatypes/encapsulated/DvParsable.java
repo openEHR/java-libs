@@ -50,13 +50,14 @@ public final class DvParsable extends DvEncapsulated {
     @FullConstructor
             public DvParsable(@Attribute(name = "charset", system = true) CodePhrase charset,
                               @Attribute(name = "language", system = true) CodePhrase language,
-                              @Attribute(name = "size") int size,
                               @Attribute(name = "value", required = true) String value,
                               @Attribute(name = "formalism", required = true) String formalism,
                               @Attribute(name = "terminologyService", system = true)
             TerminologyService terminologyService) {
-        super(charset, language, size, terminologyService);
-        if (value == null) {
+        
+    	super(charset, language, terminologyService);
+        
+    	if (value == null) {
             throw new IllegalArgumentException("null value");
         }
         if (StringUtils.isEmpty(formalism)) {
@@ -66,6 +67,16 @@ public final class DvParsable extends DvEncapsulated {
         this.formalism = formalism;
     }
 
+    /**
+     * Create a parsable by value and formalism
+     * 
+     * @param value
+     * @param formalism
+     */
+    public DvParsable(String value, String formalism) {
+    	this(null, null, value, formalism, null);
+    }
+    
     /**
      * The string value, which may validly be empty in some syntaxes
      *
@@ -83,6 +94,11 @@ public final class DvParsable extends DvEncapsulated {
     public String getFormalism() {
         return formalism;
     }
+    
+    @Override
+	public int getSize() {
+		return value.length();
+	}
 
     /**
      * Two Parsable equal if both has same value and
@@ -131,7 +147,7 @@ public final class DvParsable extends DvEncapsulated {
 
     /* fields */
     private String value;
-    private String formalism;
+    private String formalism;	
 }
 
 /*

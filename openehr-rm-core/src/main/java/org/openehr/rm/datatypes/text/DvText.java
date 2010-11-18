@@ -227,11 +227,11 @@ public class DvText extends DataValue {
     protected DvText() {
     }
 
-    protected void setValue(String value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
-    protected void setMappings(List<TermMapping> mappings) {
+    public void setMappings(List<TermMapping> mappings) {
         this.mappings = mappings;   // todo: add unmodifiable
     }
 
@@ -243,11 +243,11 @@ public class DvText extends DataValue {
         this.hyperlink = hyperlink;
     }
 
-    protected void setLanguage(CodePhrase language) {
+    public void setLanguage(CodePhrase language) {
         this.language = language;
     }
 
-    protected void setEncoding(CodePhrase charset) {
+    public void setEncoding(CodePhrase charset) {
         this.encoding = charset;
     }
     // POJO end

@@ -68,7 +68,7 @@ public final class DvParagraph extends DataValue {
     DvParagraph() {
     }
 
-    void setItems(List<DvText> items) {
+    public void setItems(List<DvText> items) {
         this.items = items;
     }    
     // POJO end

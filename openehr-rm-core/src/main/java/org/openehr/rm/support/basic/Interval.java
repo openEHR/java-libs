@@ -188,19 +188,19 @@ public final class Interval<T extends Comparable> extends RMObject {
     private Interval() {
     }
 
-    private void setLower(T lower) {
+    public void setLower(T lower) {
         this.lower = lower;
     }
-
-    private void setUpper(T upper) {
+    
+    public void setUpper(T upper) {
         this.upper = upper;
     }
 
-    private void setLowerIncluded(boolean lowerInclusive) {
+    public void setLowerIncluded(boolean lowerInclusive) {
         this.lowerIncluded = lowerInclusive;
     }
 
-    private void setUpperIncluded(boolean upperInclusive) {
+    public void setUpperIncluded(boolean upperInclusive) {
         this.upperIncluded = upperInclusive;
     }
     // POJO end

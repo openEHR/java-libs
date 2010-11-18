@@ -34,37 +34,27 @@ public abstract class DvEncapsulated extends DataValue {
      *
      * @param charset            not null and valid
      * @param language           not null and valid
-     * @param size               >= 0
      * @param terminologyService
      * @throws IllegalArgumentException if any argument is invalid
      */
     protected DvEncapsulated(CodePhrase charset, CodePhrase language,
-                             int size, TerminologyService terminologyService) {
-        if (charset == null) {
-            throw new IllegalArgumentException("null charset");
-        }
-        if (language == null) {
-            throw new IllegalArgumentException("null language");
-        }
-        if (terminologyService == null) {
+                             TerminologyService terminologyService) {
+        
+    	if ((charset != null || language != null) && terminologyService == null) {
             throw new IllegalArgumentException("null terminologyService");
         }
-        if (!terminologyService.codeSetForId(
-        		OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(language)) {
+        if (language != null && ( ! terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(language))) {
             throw new IllegalArgumentException("unknown language: " + language);
             
         }
-        if (!terminologyService.codeSetForId(
-        		OpenEHRCodeSetIdentifiers.CHARACTER_SETS).hasCode(charset)) {
+        if (charset != null && ( ! terminologyService.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.CHARACTER_SETS).hasCode(charset))) {
             throw new IllegalArgumentException(
                     "unknown character set: " + charset);
         }
-        if (size < 0) {
-            throw new IllegalArgumentException("negative size");
-        }
         this.charset = charset;
         this.language = language;
-        this.size = size;
     }
 
     /**
@@ -90,9 +80,7 @@ public abstract class DvEncapsulated extends DataValue {
      *
      * @return size
      */
-    public int getSize() {
-        return size;
-    }
+    public abstract int getSize();
 
     // POJO start
     protected DvEncapsulated() {
@@ -106,15 +94,11 @@ public abstract class DvEncapsulated extends DataValue {
         this.language = language;
     }
 
-    void setSize(int size) {
-        this.size = size;
-    }
     // POJO end
 
     /* fields */
     private CodePhrase charset;
-    private CodePhrase language;
-    private int size;
+    private CodePhrase language;    
 }
 
 /*

@@ -14,6 +14,7 @@
  */
 package org.openehr.rm.common.changecontrol;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.support.identification.HierObjectID;
@@ -95,7 +96,8 @@ public abstract class Version <T> extends RMObject {
           //      "," + data.toString() + "," + lifecycleState.toString() + 
             //    "," + commitAudit.toString() + "," + contribution.toString(); 
             //TODO:implement
-        return "";
+		throw new NotImplementedException();
+        //return "";
     }
     
     /**

@@ -6,6 +6,7 @@
  * author:      "Rong Chen <rong@acode.se>"
  * support:     "Acode HB <support@acode.se>"
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
+ * copyright:   "Copyright (c) 2010 Cambio Healthcare Systems, Sweden"
  * license:     "See notice at bottom of class"
  *
  * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/common/archetyped/Locatable.java $"
@@ -29,7 +30,7 @@ import java.util.*;
  * @author Rong Chen
  * @version 1.0
  */
-public abstract class Locatable extends Pathable {
+public abstract class Locatable extends Pathable implements Settable {
 
     /**
      * Constructs a Locatable
@@ -168,12 +169,20 @@ public abstract class Locatable extends Pathable {
     /*
      * Simple fix doesn't take care of "/" inside predicates
      * e.g. data/events[at0006 and name/value='any event']
+     * 
+     * OG - 2010-03-15: Added fix that seems to solve this problem.
      */ 
-    private List<String> dividePathIntoSegments(String path) {
+    public static List<String> dividePathIntoSegments(String path) {
     	List<String> segments = new ArrayList<String>();
     	StringTokenizer tokens = new StringTokenizer(path, "/");
     	while(tokens.hasMoreTokens()) {
-    		segments.add(tokens.nextToken());
+    		String next = tokens.nextToken();
+    		if (next.matches(".+\\[.+[^\\]]$")) {
+    			do { 
+    				next = next + "/" + tokens.nextToken();
+    			} while (!next.matches(".*]$"));    			
+    		}
+    		segments.add(next);
     	}
     	return segments;
     }
@@ -209,14 +218,14 @@ public abstract class Locatable extends Pathable {
     		
     		assert(pathSegment.indexOf("]") > index);
     		
-    		attributeName = pathSegment.substring(0, index);    			
+    		attributeName = pathSegment.substring(0, index);   
     		expression = pathSegment.substring(index + 1, 
-    				pathSegment.indexOf("]"));    		 
+    				pathSegment.indexOf("]")); 
     	} else {
     		attributeName = pathSegment;
     	}
     		
-    	value = retrieveAttributeValue(object, attributeName);
+    	value = getAttributeValue(object, attributeName);
     	if(expression != null && value != null ) {
     		value = processPredicate(expression, value);
     	}    	
@@ -224,6 +233,30 @@ public abstract class Locatable extends Pathable {
     		return evaluatePathSegment(pathSegments, value);
     	}
     	return null;
+    }
+    
+    public String toCamelCase(String underscoreSeparated) {
+    	if( ! underscoreSeparated.contains("_")) {
+    		return underscoreSeparated;
+    	}
+		StringTokenizer tokens = new StringTokenizer(underscoreSeparated, "_");
+		StringBuffer buf = new StringBuffer();
+		while (tokens.hasMoreTokens()) {
+			String word = tokens.nextToken();
+			if (buf.length() == 0) {
+				buf.append(word);
+			} else {
+				buf.append(word.substring(0, 1).toUpperCase());
+				buf.append(word.substring(1));
+			}
+		}
+		return buf.toString();
+	}	
+    
+    public String toFirstUpperCaseCamelCase(String name) {
+    	name = toCamelCase(name);
+    	return name.substring(0, 1).toUpperCase() 
+		+ name.substring(1);
     }
     
     /**
@@ -244,27 +277,38 @@ public abstract class Locatable extends Pathable {
     	expression = expression.trim();
     	int index;
     	
-    	// [at0001, 'standing']
-    	if(expression.contains(",")) {
+    	// shortcut syntax, [at0001, 'standing']
+    	if(expression.contains(",")
+    			// avoid [at0001 and/value='status, 2nd']
+    			&& expression.indexOf(",") < expression.indexOf("'")) {
     		index = expression.indexOf(",");
     		archetypeNodeId = expression.substring(0, index).trim();
     		name = expression.substring(expression.indexOf("'") + 1,
     				expression.lastIndexOf("'"));
     		
     	// [at0006 and name/value='any event']
-    	} else if(expression.contains(" AND ")) {
-    		index = expression.indexOf("AND");
+    	// [at0006 AND name/value='any event']
+    	} else if(expression.contains(" AND ")
+    			|| expression.contains(" and ")) {
+    		
+    		// OG - 20100401: Fixed bug where the name contained 'AND' or 'and',
+    		// i.e. 'MEDICINSK BEHANDLING'. 
+    		if(expression.contains(" AND ")) {
+    			index = expression.indexOf(" AND ");
+    		} else {
+    			index = expression.indexOf(" and ");
+    		}
     		archetypeNodeId = expression.substring(0, index).trim();
     		name = expression.substring(expression.indexOf("'") + 1,
     				expression.lastIndexOf("'"));    		
-    	
-    	// [at0006]        	
-    	} else if (expression.startsWith("at")) {
-    		archetypeNodeId = expression;
-    		
-    	// ['standing']	
+    	// just name, ['standing']	
     	} else if (expression.startsWith("'") && expression.endsWith("'")) {
     		name = expression.substring(1, expression.length() - 1);
+    	
+    	// archetyped root node id or at-coded node
+    	// [at0006] or [openEHR-EHR-OBSERVATION.laboratory-lipids.v1]	
+    	} else {
+    		archetypeNodeId = expression;
     	}
     	
     	Iterable collection = null;
@@ -314,23 +358,148 @@ public abstract class Locatable extends Pathable {
     /*
      * Retrieves the value of named attribute of given object
      */
-    private Object retrieveAttributeValue(Object obj, String attributeName) {
+    private Object getAttributeValue(Object obj, String attribute) {
     	Class rmClass = obj.getClass();
     	Object value = null;
-    	Method getter;
+    	Method getter = null;
+    	String getterName = "get" + toFirstUpperCaseCamelCase(attribute);
     	
-    	String getterName = "get" + attributeName.substring(0, 1).toUpperCase() 
-						+ attributeName.substring(1);
     	try {
 			getter = rmClass.getMethod(getterName, null);
 			value = getter.invoke(obj, null);
-		} catch(Exception ignore) {
+
+    	} catch(Exception e) {
 			// TODO log as kernel warning
+			// e.printStackTrace();
 		}
 		return value;
-    }    
+    }
+    
+    /*
+     * Sets the value of named attribute of given object
+     */
+    private void setAttributeValue(Object obj, String attribute, Object value) {
+    	Class rmClass = obj.getClass();
+    	String setterName = "set" + toFirstUpperCaseCamelCase(attribute);
+
+    	try {
+			Method setter = getMethodByName(rmClass, setterName);
+			if(setter == null) {
+				throw new IllegalArgumentException("unkown setter method: " + setterName + " for rmClass=" + rmClass);
+			}
+			setter.invoke(obj, value);			
+		
+    	} catch(Exception e) {		
+    		// TODO log as kernel warning
+			e.printStackTrace();			
+		}
+    }
+    
+    private Method getMethodByName(Class klass, String method) {
+    	Method[] methods = klass.getMethods();
+    	for(Method m : methods) {
+    		if(method.equals(m.getName())) {
+    			return m;
+    		}
+    	}
+    	return null;
+    }
+    
+    
+    public void set(String path, Object value) {
+    	int i = path.lastIndexOf("/");
+    	if(i < 0 || i == path.length()) {
+    		throw new IllegalArgumentException(
+    				"invalid path for setting value: " + path);
+    	}
+    	String objPath = "/";
+    	if(i > 0) {
+    		objPath = path.substring(0, i);
+    	}
+    	String attributeName = path.substring(i + 1);
+    	
+    	Object obj = itemAtPath(objPath);
+    	if(obj == null) {
+    		throw new IllegalArgumentException("Item not found on path: " + path);
+    	}
+    	setAttributeValue(obj, attributeName, value);
+    }
     
     /**
+     * Computes the path of parent object
+     * 
+     * @param path
+     * @return
+     */
+    public static String parentPath(String path) {
+    	List<String> list = dividePathIntoSegments(path);
+    	int pathLevel = list.size();
+    	if(pathLevel == 0) {
+    		throw new IllegalArgumentException("Unable to compute parent path: "
+    				+ path);
+    	} else if(pathLevel == 1) {
+    		return PATH_SEPARATOR;
+    	}
+    	StringBuffer buf = new StringBuffer();
+    	for(int j = 0; j < pathLevel - 1; j++) {
+    		buf.append(PATH_SEPARATOR);
+    		buf.append(list.get(j));
+    	}
+    	return buf.toString();
+    }
+    
+    public void removeChild(String path) {
+    	int i = path.lastIndexOf(PATH_SEPARATOR);
+    	if(i < 0 || i == path.length()) {
+    		throw new IllegalArgumentException(
+    				"invalid path for setting value: " + path);
+    	}
+    	String objPath = PATH_SEPARATOR;
+    	
+    	List<String> list = dividePathIntoSegments(path);
+    	int pathLevel = list.size();
+    	if(pathLevel > 1) {
+    		StringBuffer buf = new StringBuffer();
+    		for(int j = 0; j < pathLevel - 1; j++) {
+    			buf.append(PATH_SEPARATOR);
+    			buf.append(list.get(j));
+    		}
+    		objPath = buf.toString();
+    	}
+    	
+    	Object obj = itemAtPath(objPath);
+    	if(obj == null) {
+    		throw new IllegalArgumentException("Item not found on path: " + path);
+    	}
+    	
+    	Object child = itemAtPath(path);
+    	if(child == null) {
+    		throw new IllegalArgumentException("Unknown child on path: " + path);
+    	}
+		
+    	String attributeName = list.get(list.size() - 1);    	
+    	int predicateIndex = attributeName.indexOf("[");
+    	if(predicateIndex > 0) {
+    		attributeName = attributeName.substring(0, predicateIndex);
+    	}
+    	Object attributeValue = getAttributeValue(obj, attributeName);
+    	
+    	if(attributeValue == null) {
+    		throw new IllegalArgumentException(
+    				"parent attribute not found on path: " + path);
+    	}
+    	if(attributeValue instanceof List) {
+    		
+    		List parent = (List) attributeValue;
+    		parent.remove(child);
+    		
+    	} else {
+    		throw new IllegalArgumentException(
+    				"non-container parent attribute on path: " + path);
+    	}    	
+	}
+
+	/**
      * Clinical concept of the archetype as a whole, derived from the
      * archetypeNodeId  of the root node
      *

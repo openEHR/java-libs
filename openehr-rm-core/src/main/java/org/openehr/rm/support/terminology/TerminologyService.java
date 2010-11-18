@@ -98,6 +98,7 @@ public interface TerminologyService {
     
     /* static fields */
     public static final String OPENEHR = "openehr";
+    public static final String NULL_FLAVOURS = "null flavours";
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

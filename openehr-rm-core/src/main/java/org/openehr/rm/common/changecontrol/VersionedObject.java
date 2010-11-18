@@ -152,7 +152,8 @@ public class VersionedObject<T> extends RMObject {
         commitVersionCheck(versionID, precedingVersionID);
         Version<T> version = new OriginalVersion<T>(versionID, precedingVersionID,
                 data, lifecycleState, commitAudit, contribution, signature, null, null, 
-                false,  terminologyService);
+                //false,  
+                terminologyService);
         addVersion(version);
     }
     
@@ -175,7 +176,9 @@ public class VersionedObject<T> extends RMObject {
         commitVersionCheck(versionID, precedingVersionID);
         Version<T> version = new OriginalVersion<T>(versionID, precedingVersionID,
                 data, lifecycleState, commitAudit, contribution, signature, otherInputVersionUids, 
-                null, true, terminologyService);
+                null, 
+                // true, 
+                terminologyService);
         addVersion(version);
     }
     

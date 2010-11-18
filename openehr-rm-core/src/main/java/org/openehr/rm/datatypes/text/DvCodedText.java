@@ -142,7 +142,7 @@ public final class DvCodedText extends DvText {
     DvCodedText() {
     }
 
-    void setDefiningCode(CodePhrase definingCode) {
+    public void setDefiningCode(CodePhrase definingCode) {
         this.definingCode = definingCode;
     }
     // POJO end

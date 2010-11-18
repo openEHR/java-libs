@@ -146,14 +146,14 @@ public final class DvInterval <T extends DvOrdered> extends DataValue {
 
 
     // POJO start
-    private void setInterval(Interval<T> interval) {
+    public void setInterval(Interval<T> interval) {
         this.interval = interval;
     }
 
     private DvInterval() {
     }
 
-    private Interval<T> getInterval() {
+    public Interval<T> getInterval() {
         return interval;
     }
     // POJO end

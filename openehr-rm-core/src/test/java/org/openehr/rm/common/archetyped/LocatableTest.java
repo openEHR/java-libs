@@ -56,7 +56,13 @@ public class LocatableTest extends TestCase {
     		String subname = "name" + i;
     		list.add(new TestLocatable(archetypeNodeId, subname));
     	}
-    	assert(list.size() == 9);
+    	
+    	// test iteam for testing archetyped root node
+    	list.add(new TestLocatable(
+    			"openEHR-EHR-OBSERVATION.laboratory-lipids.v1", 
+    			"archetyped root node"));
+    	
+    	assert(list.size() == 10);
     }
 
     /**
@@ -80,6 +86,16 @@ public class LocatableTest extends TestCase {
     	assertTrue("locatable expected", actual instanceof Locatable);
     	Locatable l = (Locatable) actual;
     	assertEquals("wrong match on archetyep predicate", "at0005", 
+    			l.getArchetypeNodeId());
+    }
+    
+    public void testProcessArchetypePredicateWithMatchedRootNode() throws Exception {
+    	String aid = "openEHR-EHR-OBSERVATION.laboratory-lipids.v1";
+    	Object actual = instance.processPredicate(aid, list);
+    	assertNotNull("match on archetype predicate expected", actual);
+    	assertTrue("locatable expected", actual instanceof Locatable);
+    	Locatable l = (Locatable) actual;
+    	assertEquals("wrong match on archetyep predicate", aid, 
     			l.getArchetypeNodeId());
     }
     
@@ -116,7 +132,7 @@ public class LocatableTest extends TestCase {
     	assertNull("match on name predicate unexpected", actual);
     }
     
-    public void testProcessArchetypeAndNamePredicateWithMatch() throws Exception {
+    public void testProcessArchetypeAndNamePredicateWithMatchUppercaseAnd() throws Exception {
     	Object actual = instance.processPredicate("at0008 AND 'name8'", list);
     	assertNotNull("match on archetype predicate expected", actual);
     	assertTrue("locatable expected", actual instanceof Locatable);
@@ -125,8 +141,40 @@ public class LocatableTest extends TestCase {
     			l.getArchetypeNodeId());
     }   
     
-    public void testProcessArchetypeAndNamePredicateWithoutMatch() throws Exception {
+    public void testProcessArchetypeAndNamePredicateWithMatchLowercaseAnd() throws Exception {
+    	Object actual = instance.processPredicate("at0008 and 'name8'", list);
+    	assertNotNull("match on archetype predicate expected", actual);
+    	assertTrue("locatable expected", actual instanceof Locatable);
+    	Locatable l = (Locatable) actual;
+    	assertEquals("wrong match on archetyep predicate", "at0008", 
+    			l.getArchetypeNodeId());
+    }   
+    
+    public void testProcessArchetypeAndNamePredicateWithMatchUppercaseAndNameValue() throws Exception {
+    	Object actual = instance.processPredicate("at0008 AND name/value='name8'", list);
+    	assertNotNull("match on archetype predicate expected", actual);
+    	assertTrue("locatable expected", actual instanceof Locatable);
+    	Locatable l = (Locatable) actual;
+    	assertEquals("wrong match on archetyep predicate", "at0008", 
+    			l.getArchetypeNodeId());
+    }   
+    
+    public void testProcessArchetypeAndNamePredicateWithMatchLowercaseAndNameValue() throws Exception {
+    	Object actual = instance.processPredicate("at0008 and name/value='name8'", list);
+    	assertNotNull("match on archetype predicate expected", actual);
+    	assertTrue("locatable expected", actual instanceof Locatable);
+    	Locatable l = (Locatable) actual;
+    	assertEquals("wrong match on archetyep predicate", "at0008", 
+    			l.getArchetypeNodeId());
+    } 
+    
+    public void testProcessArchetypeAndNamePredicateWithoutMatchUppercaseAnd() throws Exception {
     	Object actual = instance.processPredicate("at0088 AND 'name99'", list);
+    	assertNull("match on name predicate unexpected", actual);
+    }
+    
+    public void testProcessArchetypeAndNamePredicateWithoutMatchLowercaseAnd() throws Exception {
+    	Object actual = instance.processPredicate("at0088 and 'name99'", list);
     	assertNull("match on name predicate unexpected", actual);
     }
     
@@ -142,6 +190,15 @@ public class LocatableTest extends TestCase {
     	assertTrue(value instanceof String);
     	assertEquals(instance.getName().getValue(), value);
     }
+    
+    public void testItemAtPathWithAttributeHavingUnderscore() {
+    	path = "/archetype_node_id";
+    	value = instance.itemAtPath(path);
+    	assertTrue(value instanceof String);
+    	assertEquals(instance.getArchetypeNodeId(), value);
+    }
+    
+    
     
     private List<Locatable> list;
     private Locatable instance;

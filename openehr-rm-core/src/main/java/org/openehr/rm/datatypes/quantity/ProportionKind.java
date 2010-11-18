@@ -97,6 +97,10 @@ public enum ProportionKind {
 		}
 	}
 	
+	public static ProportionKind valueOf(int value) {
+		return fromValue(value);
+	}
+	
 	/* field */
 	private int value;
 }

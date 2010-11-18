@@ -14,6 +14,9 @@
  */
 package org.openehr.rm.datatypes.uri;
 
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
+
 /**
  * A EHRURI is a URI which has the scheme name "ehr", and which can
  * only reference elements in EHRs.
@@ -29,8 +32,8 @@ public final class DvEHRURI extends DvURI {
      * @param str The string to be parsed into a URI
      * @throws IllegalArgumentException if str null or bad syntax
      */
-    public DvEHRURI(String str) {
-        super(str);
+	@FullConstructor public DvEHRURI(@Attribute(name = "value", required = true) String value) {
+        super(value);
     }
 
     public String scheme() {
@@ -67,7 +70,7 @@ public final class DvEHRURI extends DvURI {
  *  Portions created by the Initial Developer are Copyright (C) 2003-2004
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Daniel Karlsson
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

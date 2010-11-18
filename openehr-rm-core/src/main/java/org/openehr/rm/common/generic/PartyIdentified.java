@@ -58,6 +58,16 @@ public class PartyIdentified extends PartyProxy {
 		this.name = name;
 		this.identifiers = identifiers;
 	}
+	
+	/**
+	 * Created a PartyIdentified by given name
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public static PartyIdentified named(String name) {
+		return new PartyIdentified(null, name, null);
+	}
 
 	/**
 	 * Human-readable name

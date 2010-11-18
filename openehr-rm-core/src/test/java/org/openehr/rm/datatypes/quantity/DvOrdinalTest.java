@@ -23,4 +23,15 @@ public class DvOrdinalTest extends TestCase {
         	fail("failed to create dvOrdinal with negative value");
         }
     } 
+    
+    public void testEquals() {
+    	DvOrdinal ord1 = new DvOrdinal(1, new DvCodedText("text",
+    			new CodePhrase("local", "at0002")));
+    	
+    	DvOrdinal ord2 = new DvOrdinal(1, new DvCodedText("text",
+    			new CodePhrase("local", "at0002")));
+    	
+    	assertTrue(ord1.equals(ord2));
+    	assertTrue(ord2.equals(ord1));
+    }
 }

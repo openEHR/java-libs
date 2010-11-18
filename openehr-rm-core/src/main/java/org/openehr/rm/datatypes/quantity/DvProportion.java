@@ -79,11 +79,13 @@ public class DvProportion extends DvAmount<DvProportion> {
         	}
         }
         
-        if(bothIntegral(numerator, denominator) && precision != 0) {
+        if(bothIntegral(numerator, denominator) 
+        		&& (precision != null && precision != 0)) {
         	throw new IllegalArgumentException("precision must be 0 if both " +
         			"numerator and denominator are integral");
         }
-        if( !bothIntegral(numerator, denominator) && precision == 0) {
+        if( !bothIntegral(numerator, denominator) 
+        		&& (precision != null && precision == 0)) {
         	throw new IllegalArgumentException("zero precision for " +
         			"non-integral numerator or denominator");
         }
@@ -101,6 +103,18 @@ public class DvProportion extends DvAmount<DvProportion> {
     		ProportionKind type, Integer precision) {
     	this(null, null, null, 0.0, false, null, numerator, denominator, type, 
     			precision);
+    }
+    
+    /**
+     * Create a unitary proportion
+     * 
+     * @param numerator
+     * @param precision
+     * @return
+     */
+    public static DvProportion createUnitaryProportion(double numerator, 
+    		Integer precision) {
+    	return new DvProportion(numerator, 1.0, ProportionKind.UNITARY, precision);
     }
     
     /**
@@ -173,11 +187,29 @@ public class DvProportion extends DvAmount<DvProportion> {
 		return 0;
 	}
 	
+	
+	
+	public void setNumerator(double numerator) {
+		this.numerator = numerator;
+	}
+
+	public void setDenominator(double denominator) {
+		this.denominator = denominator;
+	}
+
+	public void setType(ProportionKind type) {
+		this.type = type;
+	}
+
+	public void setPrecision(Integer precision) {
+		this.precision = precision;
+	}
+
 	/* fields */
-	private final double numerator;
-	private final double denominator;
-	private final ProportionKind type;
-	private final Integer precision;
+	private double numerator;
+	private double denominator;
+	private ProportionKind type;
+	private Integer precision;
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
