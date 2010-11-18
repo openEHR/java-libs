@@ -27,7 +27,6 @@ import junit.framework.TestSuite;
 
 import org.openehr.rm.composition.CompositionTestBase;
 import org.openehr.rm.datatypes.encapsulated.DvParsable;
-import org.openehr.rm.datatypes.text.CodePhrase;
 
 public class ActivityTest extends CompositionTestBase {
 
@@ -36,8 +35,7 @@ public class ActivityTest extends CompositionTestBase {
 	}
 
 	protected void setUp() throws Exception {
-		DvParsable timing = new DvParsable(new CodePhrase("test", "en"),
-				new CodePhrase("test", "en"), 1, "timing value", "fomalism", ts);
+		DvParsable timing = new DvParsable("timing value", "fomalism");
 		activity = new Activity("at0004", text("activity 1"),
 				list("list activity"), timing,
 				"openEHR-EHR-ITEM_TREE.intravenous_fluids.v1");

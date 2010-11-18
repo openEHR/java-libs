@@ -34,7 +34,6 @@ import java.util.*;
  * of attestation by authorising clinicians. In this latter sense,
  * it may be considered equivalent to a signed document.
  * <p/>
- * Instances of this class are immutable.
  *
  * @author Rong Chen
  * @version 1.0
@@ -67,7 +66,7 @@ public final class Composition extends Locatable {
                                @Attribute(name = "parent") Pathable parent,
                                @Attribute(name = "content") List<ContentItem> content,
                                @Attribute(name = "language", required = true) CodePhrase language,
-                               @Attribute(name = "context", required = true) EventContext context,
+                               @Attribute(name = "context") EventContext context,
                                @Attribute(name = "composer", required = true) PartyProxy composer,
                                @Attribute(name = "category", required = true) DvCodedText category,
                                @Attribute(name = "territory", required = true) CodePhrase territory,
@@ -150,10 +149,10 @@ public final class Composition extends Locatable {
      * The clinical session content of this Composition, ie the
      * information generated in the clinical session.
      *
-     * @return unmodibialbe list of section or null if not present
+     * @return list of section or null if not present
      */
     public List<ContentItem> getContent() {
-        return content == null ? null : Collections.unmodifiableList(content);
+        return content;
     }
 
     /**

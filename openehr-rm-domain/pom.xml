@@ -9,11 +9,11 @@
 	<version>1.0.2-SNAPSHOT</version>
 	<name>openEHR Reference Model Domain</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
-    <scm>
-        <connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/openehr-rm-domain</connection>
-        <developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/openehr-rm-domain</developerConnection>
-        <url>http://www.openehr.org/svn/ref_impl_java/TRUNK/openehr-rm-domain/</url>
-    </scm>
+	<scm>
+		<connection>scm:svn:http://openehr.cambio.se/svn/openehr/TRUNK/openehr-rm-domain</connection>
+		<developerConnection>scm:svn:http://openehr.cambio.se/svn/openehr/TRUNK/openehr-rm-domain</developerConnection>
+		<url>http://openehr.cambio.se/svn/openehr/TRUNK/openehr-rm-domain</url>
+	</scm>
 	<organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>
@@ -30,6 +30,14 @@
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 			<plugin>

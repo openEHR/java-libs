@@ -25,14 +25,10 @@ import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.datatypes.text.DvText;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
- * Represents a heading in a heading structure, or "section tree".
- * Instances of this class are immutable.
+ * Represents a heading in a heading structure, or "section tree". * 
  *
  * @author Rong Chen
  * @version 1.0
@@ -96,10 +92,10 @@ public final class Section extends ContentItem {
      * Ordered list of content items under this section, which may
      * include more Sections or Entries
      *
-     * @return unmodifiable list of ContentItem or null if not present
+     * @return list of ContentItem or null if not present
      */
     public List<ContentItem> getItems() {
-        return items == null ? null : Collections.unmodifiableList(items);
+        return items;
     }
     
     @Override

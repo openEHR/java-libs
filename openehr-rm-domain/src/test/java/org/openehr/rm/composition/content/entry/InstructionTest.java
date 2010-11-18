@@ -20,7 +20,6 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.composition.CompositionTestBase;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datatypes.encapsulated.DvParsable;
-import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.ArchetypeID;
 
 /**
@@ -44,8 +43,7 @@ public class InstructionTest extends CompositionTestBase {
         Archetyped arch = new Archetyped(
                 new ArchetypeID("openehr-ehr_rm-instruction.physical_examination.v3"),
                 "1.1");
-        DvParsable timing = new DvParsable(new CodePhrase("test", "en"), new CodePhrase("test", "en"),
-                 1, "timing value", "fomalism", ts);
+        DvParsable timing = new DvParsable("timing value", "fomalism");
         Activity activity = new Activity("at0004", text("activity 1"), 
         		list("list activity"), timing,
         		"openEHR-EHR-ITEM_TREE.intravenous_fluids.v1draft");

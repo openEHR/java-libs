@@ -1,13 +1,13 @@
 package org.openehr.rm.composition.content.entry;
 
+import junit.framework.TestCase;
+
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.terminology.TestTerminologyAccess;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 import org.openehr.terminology.SimpleTerminologyService;
-
-import junit.framework.TestCase;
 
 public class ISMTransitionTest extends TestCase {
 
