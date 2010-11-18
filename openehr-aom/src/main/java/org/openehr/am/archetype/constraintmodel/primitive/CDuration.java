@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.constraintmodel.primitive;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 import org.openehr.rm.support.basic.Interval;
 
@@ -35,7 +37,7 @@ public final class CDuration extends CPrimitive {
 	 * @param pattern null if unspecified
 	 */
 	public CDuration(DvDuration value, Interval<DvDuration> interval,
-			DvDuration assumedValue, String pattern) {
+			DvDuration assumedValue, String pattern, DvDuration defaultValue) {
 		if (interval != null && value != null) {
 			throw new IllegalArgumentException(
 					"both value and interval not null");
@@ -48,6 +50,7 @@ public final class CDuration extends CPrimitive {
 		this.interval = interval;
 		this.assumedValue = assumedValue;
 		this.pattern = pattern;
+		this.defaultValue = defaultValue;
 	}
 	
 	/**
@@ -60,6 +63,12 @@ public final class CDuration extends CPrimitive {
 	public CDuration(DvDuration value, Interval<DvDuration> interval) {
 		this(value, interval, null, null);
 	}
+	
+	public CDuration(DvDuration value, Interval<DvDuration> interval,
+			DvDuration assumedValue, String pattern) {
+		this(value, interval, assumedValue, pattern, null);
+	}
+	
 
 	/**
 	 * Return the primitive type this constraint is applied on
@@ -113,8 +122,18 @@ public final class CDuration extends CPrimitive {
 	}
 
 	@Override
-	public Object assumedValue() {
+	public DvDuration assumedValue() {
 		return assumedValue;
+	}
+	
+	@Override
+	public boolean hasDefaultValue() {
+		return defaultValue != null;
+	}
+
+	@Override
+	public DvDuration defaultValue() {
+		return defaultValue;
 	}
 
 	@Override
@@ -123,15 +142,52 @@ public final class CDuration extends CPrimitive {
 	}
 
 	@Override
-	public Object assignedValue() {
+	public DvDuration assignedValue() {
 		return value;
 	}
+	
+	/**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof CDuration )) return false;
+
+        final CDuration cobj = (CDuration) o;
+
+        return new EqualsBuilder()
+                .append(pattern, cobj.pattern)
+                .append(interval, cobj.interval)
+                .append(value, cobj.value)
+                .append(assumedValue, cobj.assumedValue)
+                .append(defaultValue, cobj.defaultValue)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(5, 37)
+                .append(pattern)
+                .append(interval)
+                .append(value)
+                .append(assumedValue)
+                .append(defaultValue)
+                .toHashCode();
+    }
 	
 	/* fields */
 	private final DvDuration value;
 	private final Interval<DvDuration> interval;
 	private final DvDuration assumedValue;	
 	private final String pattern;
+	private DvDuration defaultValue;
 }
 
 /*

@@ -23,6 +23,10 @@ public class CObjectTest extends TestCase {
         }
  	}
 	
+	public CObject copy() {
+		return null;
+	}
+	
 	public void testCreateCObjectWithDefaultOccurrences() {
 		boolean anyAllowed = false;
 		String path = "/[at001]";
@@ -39,7 +43,39 @@ public class CObjectTest extends TestCase {
         }
 	}
 	
+	public void testIsRequiredWithDefaultOccurrences() throws Exception {
+		boolean anyAllowed = false;
+		String path = "/[at001]";
+		String rmType = "TEST_OBJECT";
+		Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+		String nodeID = "at001";
+        CAttribute parent = null;
+        
+        CObject cobj = new TestCObject(anyAllowed, path, rmType, occurrences, 
+        		nodeID,	parent);        	
+        
+        assertTrue("expected to be required", cobj.isRequired());
+	}
+	
+	public void testIsRequiredWithOnlyLowerLimitOccurrences() throws Exception {
+		boolean anyAllowed = false;
+		String path = "/[at001]";
+		String rmType = "TEST_OBJECT";
+		Interval<Integer> occurrences = new Interval<Integer>(1, null);
+		String nodeID = "at001";
+        CAttribute parent = null;
+        
+        CObject cobj = new TestCObject(anyAllowed, path, rmType, occurrences, 
+        		nodeID,	parent);        	
+        
+        assertTrue("expected to be required", cobj.isRequired());
+	}
+	
 	private static class TestCObject extends CObject {
+		public CObject copy() {
+			return null;
+		}
+		
 		TestCObject(boolean anyAllowed, String path, String rmTypeName,
                 Interval<Integer> occurrences, String nodeID,
                 CAttribute parent) {

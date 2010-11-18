@@ -92,43 +92,43 @@ public class ExpressionLeaf extends ExpressionItem {
 				ExpressionLeaf.ReferenceType.CONSTANT);
 	}
 	
+	/**
+	 
+     * Equals if two ExpressionLeaf Objects have same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof ExpressionLeaf )) return false;
 
-	 /**
-	     * Equals if two ExpressionLeaf Objects have same values
-	     *
-	     * @param o
-	     * @return true if equals
-	     */
-	    public boolean equals(Object o) {
-	        if (this == o) return true;
-	        if (!( o instanceof ExpressionLeaf )) return false;
+        final ExpressionLeaf cobj = (ExpressionLeaf) o;
 
-	        final ExpressionLeaf cobj = (ExpressionLeaf) o;
+        return new EqualsBuilder()     
+        .appendSuper(super.equals(o))
+                .append(item, cobj.item)
+                .append(referenceType, cobj.referenceType)
+                .isEquals();
+    }
 
-	        return new EqualsBuilder()	
-	        .appendSuper(super.equals(o))
-	                .append(item, cobj.item)
-	                .append(referenceType, cobj.referenceType)
-	                .isEquals();
-	    }
-	
-	   /**
-	     * Return a hash code of this object
-	     *
-	     * @return hash code
-	     */
-	    public int hashCode() {
-	        return new HashCodeBuilder(5, 23)
-	                .appendSuper(super.hashCode())
-	                .append(item)
-	                .append(referenceType)
-	                .toHashCode();	                
-	    }
+   /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(5, 23)
+                .appendSuper(super.hashCode())
+                .append(item)
+                .append(referenceType)
+                .toHashCode();                 
+    }
 	
 	private Object item;
-	private ReferenceType referenceType;
-	
+	private ReferenceType referenceType;	
 }
+
 /*
  *  ***** BEGIN LICENSE BLOCK *****
  *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -146,10 +146,10 @@ public class ExpressionLeaf extends ExpressionItem {
  *  The Original Code is ExpressionLeaf.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2006
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2010
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s):  Sebastian Garde
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

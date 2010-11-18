@@ -26,7 +26,7 @@ import java.util.*;
 public final class CMultipleAttribute extends CAttribute {
 
     /**
-     * Create a constraint for multiple-valued attribute node
+     * Create a constraint for mulple-valued attribute node
      *
      * @param path
      * @param rmAttributeName
@@ -40,6 +40,12 @@ public final class CMultipleAttribute extends CAttribute {
         super(path, rmAttributeName, existence, children);
         this.cardinality = cardinality;
     }
+    
+    @Override
+	public CAttribute copy() {
+		return new CMultipleAttribute(path(), getRmAttributeName(), 
+				getExistence(), cardinality, copyChildren());
+	}
 
     /**
      * List of constraints representing members of the container value of this
@@ -93,7 +99,7 @@ public final class CMultipleAttribute extends CAttribute {
     }
 
     /* fields */
-    private final Cardinality cardinality;    
+    private final Cardinality cardinality;	    
 }
 
 /*

@@ -59,6 +59,11 @@ public class ArchetypeSlot extends CReferenceObject {
         this.includes = includes;
         this.excludes = excludes;
     }
+    
+    public CObject copy() {
+    	return new ArchetypeSlot(path(), getRmTypeName(), getOccurrences(),
+    			getNodeId(), getParent(), includes, excludes);
+    }
 
     /**
      * List of constraints defining other archetypes which could be included
@@ -110,40 +115,38 @@ public class ArchetypeSlot extends CReferenceObject {
     public boolean isSubsetOf(ArchetypeConstraint constraint) {
         return false;  // todo: implement this method
     }
-    
-    /**
+
+    /**    
      * Equals if two ArchetypeConstraint have same value
-     *
-     * @param o
-     * @return true if equals
-     */
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof ArchetypeSlot )) return false;
-
+     * 
+     * @param o 
+     * @return true if equals 
+     */ 
+    public boolean equals(Object o) { 
+        if (this == o) return true; 
+        if (!( o instanceof ArchetypeSlot )) return false; 
         final ArchetypeSlot as = (ArchetypeSlot) o;
-
-        return new EqualsBuilder()
-        	.appendSuper(super.equals(o))
-        	.append(includes, as.includes)
-                .append(excludes, as.excludes)
-                .isEquals();
+ 
+        return new EqualsBuilder() 
+                .appendSuper(super.equals(o)) 
+                .append(includes, as.includes) 
+                .append(excludes, as.excludes) 
+                .isEquals(); 
+    }
+  
+    /** 
+     * Return a hash code of this object 
+     * 
+     * @return hash code 
+     */ 
+    public int hashCode() { 
+        return new HashCodeBuilder(7, 19) 
+                .appendSuper(super.hashCode()) 
+                .append(includes)
+                 .append(excludes) 
+                .toHashCode(); 
     }
     
-    /**
-     * Return a hash code of this object
-     *
-     * @return hash code
-     */
-    public int hashCode() {
-        return new HashCodeBuilder(7, 19)
-                .appendSuper(super.hashCode())
-                .append(includes)
-                .append(excludes)
-                .toHashCode();
-    }
-
-
     /* fields */
     private Set<Assertion> includes;
     private Set<Assertion> excludes; 
@@ -166,10 +169,10 @@ public class ArchetypeSlot extends CReferenceObject {
  *  The Original Code is ArchetypeSlot.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2010
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Sebastian Garde
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.constraintmodel.primitive;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.datatypes.basic.DvBoolean;
 
 /**
@@ -35,7 +37,8 @@ public final class CBoolean extends CPrimitive {
 	 *             either trueValid or falseValid true
 	 */
 	public CBoolean(boolean trueValid, boolean falseValid, 
-			        boolean assumedValue, boolean hasAssumedValue) {
+			        boolean assumedValue, boolean hasAssumedValue,
+			        boolean defaultValue, boolean hasDefaultValue) {
 		if (!trueValid && !falseValid) {
 			throw new IllegalArgumentException(
 					"either of trueValid or falseValid, or both need to be true");
@@ -44,7 +47,15 @@ public final class CBoolean extends CPrimitive {
 		this.falseValid = falseValid;
 		this.assumedValue = assumedValue;
 		this.hasAssumedValue = hasAssumedValue;
+		this.defaultValue = defaultValue;
+		this.hasDefaultValue = hasDefaultValue;
 	}
+	
+	public CBoolean(boolean trueValid, boolean falseValid, 
+	        boolean assumedValue, boolean hasAssumedValue) {
+		this(trueValid, falseValid, assumedValue, hasAssumedValue, false, false);
+	}
+
 	
 	/**
 	 * Constructs a BooleanConstraint without an assumed value
@@ -124,11 +135,57 @@ public final class CBoolean extends CPrimitive {
         }
 	}
 	
+	@Override
+	public boolean hasDefaultValue() {
+		return hasDefaultValue;
+	}
+	
+	@Override
+	public DvBoolean defaultValue() {
+		return defaultValue ? DvBoolean.TRUE : DvBoolean.FALSE;
+	}
+	
+	/**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof CBoolean )) return false;
+
+        final CBoolean cobj = (CBoolean) o;
+
+        return new EqualsBuilder()
+                .append(trueValid, cobj.trueValid)
+                .append(falseValid, cobj.falseValid)
+                .append(assumedValue, cobj.assumedValue)
+                .append(defaultValue, cobj.defaultValue)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(5, 37)
+                .append(trueValid)
+                .append(falseValid)
+                .append(assumedValue)
+                .append(defaultValue)
+                .toHashCode();
+    }
+    
 	/* fields */
 	private final boolean trueValid;
 	private final boolean falseValid;
 	private final boolean assumedValue;
 	private final boolean hasAssumedValue;
+	private final boolean defaultValue;
+	private final boolean hasDefaultValue;
 }
 
 /*

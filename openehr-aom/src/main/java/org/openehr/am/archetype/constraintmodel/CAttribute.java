@@ -58,10 +58,41 @@ public abstract class CAttribute extends ArchetypeConstraint {
         }
         this.rmAttributeName = rmAttributeName;
         this.existence = existence;
-        this.children = (children == null ? null
-                : new ArrayList<CObject>(children));
+        this.children = new ArrayList<CObject>();
+        if(children != null) {
+        	this.children.addAll(children);
+        }
+    }
+    
+    public abstract CAttribute copy();
+    
+    protected List<CObject> copyChildren() {
+    	
+    	if(children == null) {
+    		return null;
+    	}
+    	List<CObject> list = new ArrayList<CObject>();
+    	for(CObject cobj : children) {
+    		if(cobj == null) {
+    			System.out.println("null cobj while copying c_attr: " + rmAttributeName + ", " + path());    			
+    		}
+    		list.add(cobj.copy());    		
+    	}    	
+    	return list;
     }
 
+    /**
+     * Creates a CAttribute without child
+     * 
+     * @param path
+     * @param rmAttributeName
+     * @param existence
+     */
+    public CAttribute(String path, String rmAttributeName,
+            Existence existence) {
+    	this(path, rmAttributeName, existence, null);
+    }
+    
     /**
      * Reference model attribute within the enclosing type represented by
      * a object constraint
@@ -82,12 +113,21 @@ public abstract class CAttribute extends ArchetypeConstraint {
     }
 
     /**
-     * Return true if this attribute is required
+     * Returns true if this attribute is required
      *
      * @return true if required
      */
     public boolean isRequired() {
         return Existence.REQUIRED.equals(existence);
+    }
+    
+    /**
+     * Returns true if this attribute should be allowed
+     * 
+     * @return
+     */
+    public boolean isAllowed() {
+    	return ! Existence.NOT_ALLOWED.equals(existence);
     }
 
     /**
@@ -111,22 +151,33 @@ public abstract class CAttribute extends ArchetypeConstraint {
     }
 
     /**
-     * Return true if this attribute is not allowed
-     *
-     * @return true if not allowed
-     */
-    public boolean isNotAllowed() {
-        return Existence.NOT_ALLOWED.equals(existence);
-    }
-
-    /**
      * List of children object constraint
      *
-     * @return unmodifialbe List<CObject> or null if not present
+     * @return  List<CObject> or null if not present
      */
     public List<CObject> getChildren() {
-        return children == null ? null
-                : Collections.unmodifiableList(children);
+        return children;
+    }
+    
+    /**
+     * Adds a child to the children list
+     * 
+     * @param child not null
+     */
+    public void addChild(CObject child) {
+    	if(child == null) {
+    		throw new IllegalArgumentException("null child");
+    	}
+    	children.add(child);
+    	child.setParent(this);
+    }    
+    
+    public void removeChild(CObject child) {
+    	children.remove(child);
+    }
+    
+    public void removeAllChildren() {
+    	children.clear();
     }
 
     /**

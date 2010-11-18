@@ -17,7 +17,7 @@ package org.openehr.am.archetype.constraintmodel.primitive;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.am.archetype.constraintmodel.CObject;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.*;
 
@@ -38,12 +38,26 @@ public final class CString extends CPrimitive {
      * @throws IllegalArgumentException if pattern not null and empty
      */
     public CString(String pattern, List<String> list, String assumedValue) {
+        this(pattern, list, assumedValue, null);
+    }
+    
+    /**
+     * Constructs a StringConstraint with an assumed value
+     *
+     * @param pattern
+     * @param list    List<String>
+     * @param assumedValue
+     * @throws IllegalArgumentException if pattern not null and empty
+     */
+    public CString(String pattern, List<String> list, String assumedValue,
+    		String defaultValue) {
         if (pattern != null && StringUtils.isEmpty(pattern)) {
             throw new IllegalArgumentException("empty pattern");
         }
         this.pattern = pattern;
         this.list = ( list == null ? null : new ArrayList<String>(list) );
         this.assumedValue = assumedValue;
+        this.defaultValue = defaultValue;
     }
     
     /**
@@ -73,9 +87,10 @@ public final class CString extends CPrimitive {
      * @return true if valid
      */
     public boolean validValue(Object value) {
-        String str = (String) value;
-        return ( pattern != null && str.matches(pattern)
-                || list != null && list.contains(str) );
+        String str = (String) value.toString();
+        return ( (pattern == null && list == null) 
+        		 || (pattern != null && str.matches(pattern)) 
+        		 || (list != null && list.contains(str)) );
     }
 
     /**
@@ -118,42 +133,66 @@ public final class CString extends CPrimitive {
         return list.get(0);
     }
 	
-	 /**
-	     * Equals if two CString Objects have same values
-	     *
-	     * @param o
-	     * @return true if equals
-	     */
-	    public boolean equals(Object o) {
-	        if (this == o) return true;
-	        if (!( o instanceof CString )) return false;
+	@Override
+	public boolean hasDefaultValue() {
+		return defaultValue != null;
+	}
 
-	        final CString cobj = (CString) o;
-
-	        return new EqualsBuilder()	          
-	                .append(pattern, cobj.pattern)
-	                .append(list, cobj.list)
-	                .append(assumedValue, cobj.assumedValue)
-	                .isEquals();
-	    }
+	@Override
+	public String defaultValue() {
+        return defaultValue;
+    }
 	
-	   /**
-	     * Return a hash code of this object
-	     *
-	     * @return hash code
-	     */
-	    public int hashCode() {
-	        return new HashCodeBuilder(5, 23)
-	                .append(pattern)
-	                .append(list)
-	                .append(assumedValue)
-	                .toHashCode();	                
-	    }
+	/**
+     * Return ture if two CString has same value
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof CString )) return false;
+
+        final CString cstring = (CString) o;
+
+        return new EqualsBuilder()
+        .append(pattern, cstring.pattern)
+        .append(list, cstring.list)
+        .append(assumedValue, cstring.assumedValue)
+        .append(defaultValue, cstring.defaultValue)
+        .isEquals();
+    }
+
+    /**
+     * Return a hash code of this cstring
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(13, 29)
+                .appendSuper(super.hashCode())
+                .append(pattern)
+                .append(list)
+                .append(assumedValue)
+                .append(defaultValue)
+                .toHashCode();
+    }
+    
+    public String toString() {
+        return new ToStringBuilder(this).
+          append("pattern", pattern).
+          append("list", list).
+          append("assumedValue", assumedValue).
+          append("defaultValue", defaultValue).
+          toString();
+      }
+
 	
 	/* fields */
     private final String pattern;
     private final List<String> list;
     private final String assumedValue;	
+    private final String defaultValue;
 }
 
 /*

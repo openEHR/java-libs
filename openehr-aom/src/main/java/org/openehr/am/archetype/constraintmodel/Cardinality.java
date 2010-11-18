@@ -15,6 +15,7 @@
 package org.openehr.am.archetype.constraintmodel;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.openehr.rm.support.basic.Interval;
 
 /**
@@ -128,6 +129,15 @@ public final class Cardinality {
         result = 29 * result + ( interval != null ? interval.hashCode() : 0 );
         return result;
     }
+    
+    public String toString() {
+    	return new ToStringBuilder(this).
+        append("ordered", ordered).
+        append("unique", unique).
+        append("interval", interval).
+        toString();
+
+    }
 
     /* fields */
     private final boolean ordered;
@@ -137,12 +147,14 @@ public final class Cardinality {
     /**
      * Pre-defined List cardinality, whoes members are ordered and non-unique
      */
-    public static final Cardinality LIST = new Cardinality(true, false, null);
+    public static final Cardinality LIST = 
+    	new Cardinality(true, false, new Interval<Integer>(0, null));
 
     /**
      * Pre-defined Set cardinality, whoes members are unordered and unique
      */
-    public static final Cardinality SET = new Cardinality(false, true, null);
+    public static final Cardinality SET = new Cardinality(false, true, 
+    		new Interval<Integer>(0, null));
 }
 
 /*

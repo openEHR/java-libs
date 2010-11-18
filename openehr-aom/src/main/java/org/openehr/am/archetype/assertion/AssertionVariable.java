@@ -17,7 +17,6 @@ package org.openehr.am.archetype.assertion;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.am.archetype.constraintmodel.CObject;
 
 public class AssertionVariable {
 	
@@ -34,37 +33,36 @@ public class AssertionVariable {
 		return name;
 	}
 	
-	
-	 /**
-	     * Equals if two AssertionVariable Objects have same values
-	     *
-	     * @param o
-	     * @return true if equals
-	     */
-	    public boolean equals(Object o) {
-	        if (this == o) return true;
-	        if (!( o instanceof AssertionVariable )) return false;
+	/**	 
+     * Equals if two AssertionVariable Objects have same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof AssertionVariable )) return false;
 
-	        final AssertionVariable cobj = (AssertionVariable) o;
+        final AssertionVariable cobj = (AssertionVariable) o;
 
-	        return new EqualsBuilder()	
-	                .append(name, cobj.name)
-	                .append(definition, cobj.definition)	              
-	                .isEquals();
-	    }
-	    
-	 /**
-	     * Return a hash code of this object
-	     *
-	     * @return hash code
-	     */
-	    public int hashCode() {
-	        return new HashCodeBuilder()
-	                .append(name)
-	                .append(definition)
-	                .toHashCode();
-	    }
-	
+        return new EqualsBuilder()     
+                .append(name, cobj.name)
+                .append(definition, cobj.definition)
+                .isEquals();
+    }   
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder()
+                .append(name)
+                .append(definition)
+                .toHashCode();
+    }
+    
 	private String name;
 	private String definition;	
 }
@@ -85,10 +83,10 @@ public class AssertionVariable {
  *  The Original Code is AssertionVariable.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2006
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2010
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ * Contributor(s):  Sebastian Garde
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

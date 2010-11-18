@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.constraintmodel;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.support.basic.Interval;
 
 /**
@@ -39,8 +41,29 @@ public abstract class CDefinedObject extends CObject {
 	protected CDefinedObject(boolean anyAllowed, String path, String rmTypeName,
 			Interval<Integer> occurrences, String nodeID, CAttribute parent,
 			Object assumedValue) {
+		
+		this(anyAllowed, path, rmTypeName, occurrences, nodeID, parent, 
+				assumedValue, null);
+	}
+	
+	/**
+	 * Create a CDefinedObject
+	 * 
+	 * @param anyAllowed
+	 * @param path
+	 * @param rmTypeName
+	 * @param occurrences
+	 * @param nodeID
+	 * @param parent
+	 * @param assumedValue
+	 * @param defaultValue
+	 */	
+	protected CDefinedObject(boolean anyAllowed, String path, String rmTypeName,
+			Interval<Integer> occurrences, String nodeID, CAttribute parent,
+			Object assumedValue, Object defaultValue) {
 		super(anyAllowed, path, rmTypeName, occurrences, nodeID, parent);
 		this.assumedValue = assumedValue;
+		this.defaultValue = defaultValue;
 	}
 	
 	/**
@@ -51,9 +74,51 @@ public abstract class CDefinedObject extends CObject {
 	public boolean hasAssumedValue() {
 		return assumedValue != null;
 	}
+	
+	/**
+	 * True if there is a default value
+	 * 
+	 * @return default value or null
+	 */
+	public boolean hasDefaultValue() {
+		return defaultValue != null;
+	}	
+	
+	/**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof CDefinedObject )) return false;
 
-	/* field */
+        final CDefinedObject cobj = (CDefinedObject) o;
+
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o))
+                .append(assumedValue, cobj.assumedValue)
+                .append(defaultValue, cobj.defaultValue)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(7, 23)
+                .appendSuper(super.hashCode())
+                .append(assumedValue)
+                .append(defaultValue)
+                .toHashCode();
+    }
+
+	/* fields */
 	private Object assumedValue;
+	private Object defaultValue;
 
 }
 

@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.constraintmodel.primitive;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.support.basic.Interval;
 
 import java.util.*;
@@ -35,7 +37,7 @@ public final class CReal extends CPrimitive {
      * @throws IllegalArgumentException if boht null or bot not null
      */
     public CReal(Interval<Double> interval, List<Double> list,
-    		Double assumedValue) {
+    		Double assumedValue, Double defaultValue) {
         if (( interval != null && list != null )
                 || ( interval == null && list == null )) {
             throw new IllegalArgumentException("both null or both not null");
@@ -43,6 +45,12 @@ public final class CReal extends CPrimitive {
         this.interval = interval;
         this.list = ( list == null ? null : new ArrayList<Double>(list) );
         this.assumedValue = assumedValue;
+        this.defaultValue = defaultValue;
+    }
+    
+    public CReal(Interval<Double> interval, List<Double> list,
+    		Double assumedValue) {
+    	this(interval, list, assumedValue, null);
     }
 
     /**
@@ -102,12 +110,58 @@ public final class CReal extends CPrimitive {
 	public Object assumedValue() {
 		return assumedValue;
 	}
+	
+	@Override
+	public boolean hasDefaultValue() {
+		return defaultValue != null;
+	}
 
+	@Override
+	public Object defaultValue() {
+		return defaultValue;
+	}
+
+	/**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof CReal )) return false;
+
+        final CReal cobj = (CReal) o;
+
+        return new EqualsBuilder()
+                .append(list, cobj.list)
+                .append(interval, cobj.interval)
+                .append(assumedValue, cobj.assumedValue)
+                .append(defaultValue, cobj.defaultValue)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(5, 23)
+                .append(list)
+                .append(interval)
+                .append(assumedValue)
+                .append(defaultValue)
+                .toHashCode();
+    }
+		
     /* fields */
     private final List<Double> list;
     private final Interval<Double> interval;
     private final Double assumedValue;
-	@Override
+	private Double defaultValue;
+    
+    @Override
 	public boolean hasAssignedValue() {
 		// TODO Auto-generated method stub
 		return false;

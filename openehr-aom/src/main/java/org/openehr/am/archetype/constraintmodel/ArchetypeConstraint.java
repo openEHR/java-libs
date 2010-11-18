@@ -56,19 +56,32 @@ public abstract class ArchetypeConstraint {
     public String path() {
         return path;
     }
+    
+    public void setPath(String path) {
+    	this.path = path;
+    }
 
     /**
      * True if this node is a valid archetype node.
      *
-     * @return ture if valid
+     * @return true if valid
      */
     public abstract boolean isValid();
+    
+    /**
+     * Returns true if the constraint is a root node
+     * 
+     * @return
+     */
+    public boolean isRoot() {
+    	return PATH_SEPARATOR.equals(path);
+    }
 
     /**
      * True if the relative path exists at this node.
      *
      * @param path
-     * @return ture if has
+     * @return true if has
      * @throws IllegalArgumentException if path null
      */
     public abstract boolean hasPath(String path);
@@ -90,7 +103,28 @@ public abstract class ArchetypeConstraint {
     public boolean isAnyAllowed() {
         return anyAllowed;
     }
+    
+    public void setAnyAllowed(boolean anyAllowed) {
+    	this.anyAllowed = anyAllowed;
+    }
 
+    /**
+     * True if hide_on_form is set on the template
+     * 
+     * @return
+     */
+    public boolean isHiddenOnForm() {
+    	return hiddenOnForm;
+    }
+    
+    public String getAnnotation() {
+		return annotation;
+	}
+    
+    public void setAnnotation(String annotation) {
+    	this.annotation = annotation;
+    }
+    
     /**
      * String representation of this object
      *
@@ -128,12 +162,17 @@ public abstract class ArchetypeConstraint {
         return new HashCodeBuilder()
                 .append(anyAllowed)
                 .append(path)
+                .append(hiddenOnForm)
                 .toHashCode();
-    }
+    }    
 
     /* fields */
     private boolean anyAllowed;
     private String path;
+    
+    // TODO experimental feature in ADL 1.5
+    private boolean hiddenOnForm;    
+    private String annotation;
 }
 
 /*

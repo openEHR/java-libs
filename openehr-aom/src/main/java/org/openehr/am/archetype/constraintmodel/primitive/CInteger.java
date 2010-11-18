@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.constraintmodel.primitive;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.support.basic.Interval;
 
 import java.util.*;
@@ -36,7 +38,7 @@ public final class CInteger extends CPrimitive {
 	 *             if both null or both non-null
 	 */
 	public CInteger(Interval<Integer> interval, List<Integer> list,
-			Integer assumedValue) {
+			Integer assumedValue, Integer defaultValue) {
 		if ((interval != null && list != null)
 				|| (interval == null && list == null)) {
 			throw new IllegalArgumentException("both null or both not null");
@@ -44,6 +46,12 @@ public final class CInteger extends CPrimitive {
 		this.interval = interval;
 		this.list = (list == null ? null : new ArrayList<Integer>(list));
 		this.assumedValue = assumedValue;
+		this.defaultValue = defaultValue;
+	}
+	
+	public CInteger(Interval<Integer> interval, List<Integer> list,
+			Integer assumedValue) {
+		this(interval, list, assumedValue, null);
 	}
 
 	/**
@@ -129,11 +137,56 @@ public final class CInteger extends CPrimitive {
 	public Object assumedValue() {
 		return assumedValue;
 	}
+	
+	@Override
+	public boolean hasDefaultValue() {
+		return defaultValue != null;
+	}
 
+	@Override
+	public Object defaultValue() {
+		return defaultValue;
+	}
+	
+	/**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof CInteger )) return false;
+
+        final CInteger cobj = (CInteger) o;
+
+        return new EqualsBuilder()
+                .append(list, cobj.list)
+                .append(interval, cobj.interval)
+                .append(assumedValue, cobj.assumedValue)
+                .append(defaultValue, cobj.defaultValue)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(5, 43)
+                .append(list)
+                .append(interval)
+                .append(assumedValue)
+                .append(defaultValue)
+                .toHashCode();
+    }
+	
 	/* fields */
 	private final Interval<Integer> interval;
 	private final List<Integer> list;
 	private final Integer assumedValue;
+	private Integer defaultValue;
 }
 
 /*

@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.constraintmodel.primitive;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.support.basic.Interval;
 
@@ -42,7 +44,7 @@ public final class CDate extends CPrimitive {
      *                                  or not null
      */
     public CDate(String pattern, Interval<DvDate> interval, List<DvDate> list,
-    		DvDate assumedValue) {
+    		DvDate assumedValue, DvDate defaultValue) {
         if (interval == null && pattern == null && list == null) {
             throw new IllegalArgumentException(
                     "pattern, interval and list can't be all null");
@@ -51,6 +53,12 @@ public final class CDate extends CPrimitive {
         this.interval = interval;
         this.list = ( list == null ? null : new ArrayList<DvDate>(list) );
         this.assumedValue = assumedValue;
+        this.defaultValue = defaultValue;
+    }
+    
+    public CDate(String pattern, Interval<DvDate> interval, List<DvDate> list,
+    		DvDate assumedValue) {
+    	this(pattern, interval, list, assumedValue, null);
     }
     
     /**
@@ -95,9 +103,17 @@ public final class CDate extends CPrimitive {
         // todo: validate by pattern ?
         if (pattern != null && value instanceof String) {
             String str = (String) value;
-            String pat = FULL_PATTERN;
-            if (pattern.endsWith("XX")) {
-                pat = SHORT_PATTERN;
+            String pat = "";
+            if (str.contains("-")) {
+	            pat = FULL_PATTERN;
+	            if (pattern.endsWith("XX")) {
+	                pat = SHORT_PATTERN;
+	            }
+            } else {
+            	pat = FULL_PATTERN_WITHOUT_DASHES;
+	            if (pattern.endsWith("XX")) {
+	                pat = SHORT_PATTERN_WITHOUT_DASHES;
+	            }
             }
             try {
                 new SimpleDateFormat(pat).parse(str);
@@ -171,16 +187,66 @@ public final class CDate extends CPrimitive {
 	public Object assumedValue() {
 		return assumedValue;
 	}
+	
+	@Override
+	public boolean hasDefaultValue() {
+		return defaultValue != null;
+	}
 
+	@Override
+	public Object defaultValue() {
+		return defaultValue;
+	}
+
+	
+	/**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof CDate )) return false;
+
+        final CDate cobj = (CDate) o;
+
+        return new EqualsBuilder()
+                .append(pattern, cobj.pattern)
+                .append(interval, cobj.interval)
+                .append(list, cobj.list)
+                .append(assumedValue, cobj.assumedValue)
+                .append(defaultValue, cobj.defaultValue)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(5, 37)
+                .append(pattern)
+                .append(interval)
+                .append(list)
+                .append(assumedValue)
+                .append(defaultValue)
+                .toHashCode();
+    }
+    
     /* static fields */
     public final String FULL_PATTERN = "yyyy-MM-dd";
     public final String SHORT_PATTERN = "yyyy-MM";
+    public final String FULL_PATTERN_WITHOUT_DASHES = "yyyyMMdd";
+    public final String SHORT_PATTERN_WITHOUT_DASHES = "yyyyMM";
 
     /* fields */
     private final String pattern;
     private final Interval<DvDate> interval; // Interval<DvDate>
     private final List<DvDate> list; // List<DvDate>
     private final DvDate assumedValue;
+    private DvDate defaultValue;
 }
 
 /*

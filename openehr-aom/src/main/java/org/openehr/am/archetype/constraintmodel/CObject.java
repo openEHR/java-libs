@@ -62,6 +62,8 @@ public abstract class CObject extends ArchetypeConstraint {
         this.nodeID = nodeID;
         this.parent = parent;
     }
+    
+    protected abstract CObject copy();
 
     /**
      * Reference model type which this node corresponds to.
@@ -82,15 +84,42 @@ public abstract class CObject extends ArchetypeConstraint {
     public Interval<Integer> getOccurrences() {
         return occurrences;
     }
+    
+    public void setOccurrences(Interval<Integer> occurrences) {
+    	this.occurrences = occurrences;
+    }
 
+    /**
+     * Semantic id of this node, used to differentiate sibling nodes of the
+     * same type. [Previously called  meaning ].
+     *
+     * @deprecated
+     * @return node ids null if unspecified
+     */
+    public String getNodeID() {
+        return nodeID;
+    }
+    
     /**
      * Semantic id of this node, used to differentiate sibling nodes of the
      * same type. [Previously called  meaning ].
      *
      * @return node ids null if unspecified
      */
-    public String getNodeID() {
+    public String getNodeId() {
         return nodeID;
+    }
+    
+    /**
+     * Sets nodeId of this cobject
+     * 
+     * @param nodeId
+     */
+    public void setNodeId(String nodeId) {
+    	if(nodeId == null || StringUtils.isEmpty(nodeID)) {
+    		throw new IllegalArgumentException("null or empty nodeId");
+    	}
+    	this.nodeID = nodeId;
     }
     
     /**
@@ -101,7 +130,11 @@ public abstract class CObject extends ArchetypeConstraint {
     public CAttribute getParent() {
     	return parent;
     }
-
+    
+    public void setParent(CAttribute parent) {
+    	this.parent = parent;
+    }
+    
     /**
      * Check if this object node is required by occurrences
      * and path of nodes for which values are submitted
@@ -155,12 +188,11 @@ public abstract class CObject extends ArchetypeConstraint {
                 .append(rmTypeName)
                 .append(occurrences)
                 .append(nodeID)
-                .append(parent)
                 .toHashCode();
     }
 
     /**
-     * Return true if this object node is required
+     * Returns true if this object node is required
      *
      * @return true if required
      */
@@ -168,19 +200,28 @@ public abstract class CObject extends ArchetypeConstraint {
         if (occurrences == null) { // default {1..1}
             return true;
         }
-        if (occurrences.getLower() != null && occurrences.getLower() > 0
-                && occurrences.getUpper() != null
-                && occurrences.getLower() < occurrences.getUpper()) {
+        if (occurrences.getLower() != null && occurrences.getLower() > 0) {
             return true;
         }
         return false; // {0..N}
     }
+    
+    
+    /**
+     * Returns true if occurrences doesn't match {0..0} 
+     * 
+     * @return
+     */
+    public boolean isAllowed() {
+    	return ! NOT_ALLOWED.equals(occurrences);
+    }
 
     /* fields */
     private final String rmTypeName;
-    private final Interval<Integer> occurrences;
-    private final String nodeID;
-    private final CAttribute parent;
+    private Interval<Integer> occurrences;
+    private String nodeID;
+    private CAttribute parent;
+    private static final Interval<Integer> NOT_ALLOWED = new Interval<Integer>(0,0);    
 }
 
 /*

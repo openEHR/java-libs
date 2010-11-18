@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.constraintmodel.primitive;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.datatypes.quantity.datetime.DvTime;
 import org.openehr.rm.support.basic.Interval;
 
@@ -38,7 +40,7 @@ public final class CTime extends CPrimitive {
      *                                  both null or both not null
      */
     public CTime(String pattern, Interval<DvTime> interval, List<DvTime> list,
-    		DvTime assumedValue) {
+    		DvTime assumedValue, DvTime defaultValue) {
         if (interval == null && pattern == null && list == null) {
             throw new IllegalArgumentException(
                     "pattern, interval and list can't be all null");
@@ -47,6 +49,12 @@ public final class CTime extends CPrimitive {
         this.interval = interval;
         this.list = ( list == null ? null : new ArrayList<DvTime>(list) );
         this.assumedValue = assumedValue;
+        this.defaultValue = defaultValue;
+    }
+    
+    public CTime(String pattern, Interval<DvTime> interval, List<DvTime> list,
+    		DvTime assumedValue) {
+    	this(pattern, interval, list, assumedValue, null);
     }
     
     /**
@@ -153,12 +161,59 @@ public final class CTime extends CPrimitive {
 	public Object assumedValue() {
 		return assumedValue;
 	}
+	
+	@Override
+	public boolean hasDefaultValue() {
+		return defaultValue != null;
+	}
 
+	@Override
+	public Object defaultValue() {
+		return defaultValue;
+	}
+	
+	/**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof CTime )) return false;
+
+        final CTime cobj = (CTime) o;
+
+        return new EqualsBuilder()
+                .append(pattern, cobj.pattern)
+                .append(interval, cobj.interval)
+                .append(list, cobj.list)
+                .append(assumedValue, cobj.assumedValue)
+                .append(defaultValue, cobj.defaultValue)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(11, 31)
+                .append(pattern)
+                .append(interval)
+                .append(list)
+                .append(assumedValue)
+                .append(defaultValue)
+                .toHashCode();
+    }
+    
     /* fields */
     private final String pattern;
     private final Interval<DvTime> interval;
     private final List<DvTime> list;
     private final DvTime assumedValue;
+    private DvTime defaultValue;
 }
 
 /*

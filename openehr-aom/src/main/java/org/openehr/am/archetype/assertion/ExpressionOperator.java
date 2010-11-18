@@ -17,7 +17,6 @@ package org.openehr.am.archetype.assertion;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.am.archetype.constraintmodel.CObject;
 
 public abstract class ExpressionOperator extends ExpressionItem {	
 	private OperatorKind operator;
@@ -28,44 +27,44 @@ public abstract class ExpressionOperator extends ExpressionItem {
 	public boolean isPrecedenceOverridden() {
 		return precedenceOverridden;
 	}
+	
 	public ExpressionOperator(String type, OperatorKind operator, boolean precedenceOverridden) {
 		super(type);
 		this.operator = operator;
 		this.precedenceOverridden = precedenceOverridden;
 	}
 	
-	
-	 /**
-	     * Equals if two ExpressionOperator Objects have same values
-	     *
-	     * @param o
-	     * @return true if equals
-	     */
-	    public boolean equals(Object o) {
-	        if (this == o) return true;
-	        if (!( o instanceof ExpressionOperator )) return false;
+	/**	 
+     * Equals if two ExpressionOperator Objects have same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof ExpressionOperator )) return false;
 
-	        final ExpressionOperator cobj = (ExpressionOperator) o;
+        final ExpressionOperator cobj = (ExpressionOperator) o;
 
-	        return new EqualsBuilder()	
-	        .appendSuper(super.equals(o))
-	                .append(operator, cobj.operator)
-	                .append(precedenceOverridden, cobj.precedenceOverridden)
-	                .isEquals();
-	    }
-	
-	   /**
-	     * Return a hash code of this object
-	     *
-	     * @return hash code
-	     */
-	    public int hashCode() {
-	        return new HashCodeBuilder(5, 23)
-	                .appendSuper(super.hashCode())
-	                .append(operator) 
-	                .append(precedenceOverridden)
-	                .toHashCode();	                
-	    }
+        return new EqualsBuilder()     
+        .appendSuper(super.equals(o))
+        .append(operator, cobj.operator)
+        .append(precedenceOverridden, cobj.precedenceOverridden)
+        .isEquals();
+    }
+
+   /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(5, 23)
+                .appendSuper(super.hashCode())
+                .append(operator)
+                .append(precedenceOverridden)
+                .toHashCode();                 
+    }
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
@@ -84,10 +83,10 @@ public abstract class ExpressionOperator extends ExpressionItem {
  *  The Original Code is ExpressionOperator.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2006
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2010
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Sebastian Garde
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

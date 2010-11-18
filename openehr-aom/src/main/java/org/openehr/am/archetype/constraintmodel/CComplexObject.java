@@ -22,14 +22,14 @@ import java.util.*;
 
 /**
  * Constraint on complex objects, ie any object which consists of other object
- * constraints. Instances of this class are immutable.
+ * constraints. Instances of this class are mutable.
  *
  * @author Rong Chen
  * @version 1.0
  */
 public final class CComplexObject extends CDefinedObject {
-
-    /**
+	
+	/**
      * Constructs a complexObjectConstraint
      *
      * @param path
@@ -47,22 +47,80 @@ public final class CComplexObject extends CDefinedObject {
         super(attributes == null, path, rmTypeName, occurrences, nodeID, 
         		parent, null);
 
-        if (attributes != null && attributes.isEmpty()) {
-            throw new IllegalArgumentException("empty attributes");
-        }
-        this.attributes = ( attributes == null
-                ? null : new ArrayList<CAttribute>(attributes) );        
+        this.attributes = new ArrayList<CAttribute>();
+        if(attributes != null) {
+        	this.attributes.addAll(attributes);
+        }	        
+    }
+    
+    /**
+     * Create a single required node constrained only by given RM type
+     * 
+     * @param path
+     * @param rmTypeName
+     * @return
+     */
+    public static CComplexObject createSingleRequired(String path, String rmTypeName) {
+    	Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+    	return new CComplexObject(path, rmTypeName, occurrences, null, null, null);
+    }
+    
+    /**
+     * Make a copy of this instance
+     * 
+     * @return
+     */
+    public CObject copy() {
+    	
+    	//System.out.println("copying " + getRmTypeName() + ", " + path());
+    	
+    	List<CAttribute> list = new ArrayList<CAttribute>();
+    	for(CAttribute attr : attributes) {
+    		list.add(attr.copy());
+    	}
+    	return new CComplexObject(path(), getRmTypeName(), getOccurrences(),
+    			getNodeId(), list, getParent());
+    }
+    
+    /**
+     * Adds an attribute constraint to this CComplexObject
+     *  
+     * @param attribute not null
+     */
+    public void addAttribute(CAttribute attribute) {
+    	if(attribute == null) {
+    		throw new IllegalArgumentException("null cattribute");
+    	}
+    	attributes.add(attribute);
+    	setAnyAllowed(false);
+    }
+    
+    /**
+     * Removes the attribute of given name
+     * 
+     * @param name
+     */
+    public void removeAttribute(String name) {
+    	if(name == null) {
+    		return;
+    	}
+    	for(Iterator<CAttribute> it = getAttributes().iterator(); 
+    			it.hasNext();) {
+    		CAttribute cattr = it.next();
+    		if(name.equals(cattr.getRmAttributeName())) {
+    			it.remove();    			
+    		}
+    	}
     }
 
     /**
      * List of constraints on attributes of the reference model type
      * represented by this object.
      *
-     * @return Unmodifiable List<CAttribute>, null if allow any
+     * @return null if allow any
      */
     public List<CAttribute> getAttributes() {
-        return attributes == null ?
-                null : Collections.unmodifiableList(attributes);
+        return attributes;
     }
 
     /**
@@ -78,6 +136,21 @@ public final class CComplexObject extends CDefinedObject {
         	}
         }
         return null;
+    }
+    
+    /**
+     * Checks if a specific attribute constraint identified by its rmAttributeName.
+     * @param rmAttributeName the attribute name of the attribute to be retrieved
+     * @return the attribute or null if no specific constraint with that rmAttributeName exists
+     */
+    public boolean hasAttribute(String rmAttributeName) {
+        if (attributes == null) return false;
+        for (CAttribute attribute : attributes) {
+        	if (attribute.getRmAttributeName().equals(rmAttributeName)) {
+        		return true;
+        	}
+        }
+        return false;
     }
     
     
@@ -144,9 +217,9 @@ public final class CComplexObject extends CDefinedObject {
                 .append(attributes)
                 .toHashCode();
     }
-
+    
     /* fields */
-    private final List<CAttribute> attributes;    
+    private List<CAttribute> attributes;    
 }
 
 /*

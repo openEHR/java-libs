@@ -15,8 +15,6 @@
  
 package org.openehr.am.archetype.assertion;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 public enum OperatorKind {
     /**
      * Equals operator ("=" or "==")
@@ -122,8 +120,6 @@ public enum OperatorKind {
     public int getValue() {
         return value;
     }
-    
-   
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

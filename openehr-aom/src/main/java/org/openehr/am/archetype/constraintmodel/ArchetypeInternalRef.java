@@ -50,6 +50,11 @@ public class ArchetypeInternalRef extends CReferenceObject {
         // TODO: and then ultimate_root.has_path(target_path)
         this.targetPath = targetPath;
     }
+    
+    public CObject copy() {
+    	return new ArchetypeInternalRef(path(), getRmTypeName(), getOccurrences(),
+    			getNodeID(), getParent(), targetPath);
+    }
 
     /**
      * Reference to an object node using archetype path notation.

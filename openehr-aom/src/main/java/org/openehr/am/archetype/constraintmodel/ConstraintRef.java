@@ -15,6 +15,9 @@
 package org.openehr.am.archetype.constraintmodel;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.am.archetype.constraintmodel.primitive.CDate;
 import org.openehr.rm.support.basic.Interval;
 
 /**
@@ -50,6 +53,11 @@ public final class ConstraintRef extends CReferenceObject {
         }
         // TODO archetype.ontology.has_constraint(reference)
         this.reference = reference;
+    }
+    
+    public CObject copy() {
+    	return new ConstraintRef(path(), getRmTypeName(), getOccurrences(),
+    			getNodeID(), getParent(), reference);
     }
 
     /**
@@ -90,6 +98,34 @@ public final class ConstraintRef extends CReferenceObject {
      */
     public boolean isSubsetOf(ArchetypeConstraint constraint) {
         return false;  // todo: implement this method
+    }
+    
+    /**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof ConstraintRef )) return false;
+
+        final ConstraintRef cobj = (ConstraintRef) o;
+
+        return new EqualsBuilder()
+                .append(reference, cobj.reference)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(7, 47)
+                .append(reference)
+                .toHashCode();
     }
 
     private String reference;

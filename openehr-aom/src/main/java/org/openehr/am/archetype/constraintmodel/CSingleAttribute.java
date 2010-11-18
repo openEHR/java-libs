@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Concrete model of constraint on a single-valued attribute node. The meaning
  * of the inherited children attribute is that they are alternatives.
- * Instances of this class are immutable.
+ * Instances of this class are mutable.
  *
  * @author Rong Chen
  * @version 1.0
@@ -37,6 +37,35 @@ public final class CSingleAttribute extends CAttribute {
     public CSingleAttribute(String path, String rmAttributeName,
                             Existence existence, List<CObject> alternatives) {
         super(path, rmAttributeName, existence, alternatives);
+    }
+    
+    /**
+     * Create a single required attribute without children
+     * 
+     * @param path
+     * @param rmAttributeName
+     * @return
+     */
+    public static CSingleAttribute createRequired(String path, String rmAttributeName) {
+    	return new CSingleAttribute(path, rmAttributeName, Existence.REQUIRED);
+    }
+    
+    @Override
+	public CAttribute copy() {
+		return new CSingleAttribute(path(), getRmAttributeName(), 
+				getExistence(), copyChildren());
+	}
+    
+    /**
+     * Create a cSingleAttribute without children
+     * 
+     * @param path
+     * @param rmAttributeName
+     * @param existence
+     */
+    public CSingleAttribute(String path, String rmAttributeName,
+            Existence existence) {
+    	super(path, rmAttributeName, existence);
     }
 
     /**

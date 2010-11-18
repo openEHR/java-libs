@@ -14,6 +14,9 @@
  */
 package org.openehr.am.archetype.constraintmodel.primitive;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * Super class of all primitive type constraint
  *
@@ -65,7 +68,31 @@ public abstract class CPrimitive {
      * 
      * @return an assumed value
      */
-    public abstract Object assumedValue();
+    public abstract Object assumedValue(); 
+    
+    /**
+     * Default value to this object
+     * 
+     * @return
+     */
+    public abstract Object defaultValue();
+    
+    /**
+     * Return true if there is a default value
+     * 
+     * @return true if has a default value
+     */
+    public abstract boolean hasDefaultValue();
+    
+    /**
+     * String representation of this object
+     *
+     * @return string form
+     */
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this,
+                ToStringStyle.MULTI_LINE_STYLE);
+    }
 }
 
 /*

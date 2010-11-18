@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.constraintmodel;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.am.archetype.constraintmodel.primitive.CPrimitive;
 import org.openehr.rm.support.basic.Interval;
 
@@ -41,6 +43,23 @@ public class CPrimitiveObject extends CDefinedObject {
 				occurrences, nodeId, parent, 
 				item == null ? null : item.assumedValue());
 		this.item = item;
+	}
+	
+	/**
+	 * Create a single required CPrimitiveObject with given primitive item
+	 * 
+	 * @param path
+	 * @param item
+	 * @return
+	 */
+	public static CPrimitiveObject createSingleRequired(String path, CPrimitive item) {
+		Interval<Integer> occurrences = new Interval<Integer>(1,1);
+		return new CPrimitiveObject(path, occurrences, null, null, item);
+	}
+	
+	public CObject copy() {
+		return new CPrimitiveObject(path(), getOccurrences(), getNodeID(),
+				getParent(), item);
 	}
 
 	/**
@@ -94,6 +113,36 @@ public class CPrimitiveObject extends CDefinedObject {
 		return false; // todo: implement this method
 	}
 
+	/**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof CPrimitiveObject )) return false;
+
+        final CPrimitiveObject cobj = (CPrimitiveObject) o;
+
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o))
+                .append(item, cobj.item)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31)
+                .appendSuper(super.hashCode())
+                .append(item)
+                .toHashCode();
+    }
+	
 	/* fields */
 	private CPrimitive item;
 }

@@ -33,7 +33,7 @@ public class CAttributeTest extends TestCase {
 	 */
 	protected void setUp() throws Exception {
 	}
-
+		
 	/**
 	 * The fixture clean up called after every test method.
 	 */
@@ -56,6 +56,10 @@ public class CAttributeTest extends TestCase {
 
 	private static final class TestCAttribute extends CAttribute {
 
+		public CAttribute copy() {
+			return null;
+		}
+		
 		public TestCAttribute(String path, String rmAttributeName) {
 			super(path, rmAttributeName, Existence.OPTIONAL, null);
 		}

@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehr.am.archetype.assertion.Assertion;
+import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.ArchetypeInternalRef;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
@@ -65,7 +66,7 @@ public final class Archetype extends AuthoredResource {
 	 * @param ontology
 	 * @throws IllegalArgumentException if description null or ontology null
 	 */
-public Archetype(String adlVersion, String id, String parentId,	String concept, 
+	public Archetype(String adlVersion, String id, String parentId,	String concept, 
 			CodePhrase originalLanguage,
 			Map<String, TranslationDetails> translations,
 			ResourceDescription description, RevisionHistory revisionHistory,
@@ -76,8 +77,8 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 		super(originalLanguage, translations, description, revisionHistory,
 			isControlled, terminologyService);
 		
-		if (id != null && StringUtils.isEmpty(id)) {
-			throw new IllegalArgumentException("empty id");
+		if (id == null) {
+			throw new IllegalArgumentException("archetypeId null");
 		}
 		if (ontology == null) {
 			throw new IllegalArgumentException("ontology null");
@@ -96,10 +97,37 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 		this.pathNodeMap = new HashMap<String, CObject>();
 		this.pathInputMap = new HashMap<String, String>();
 		this.inputPathMap = new HashMap<String, String>();
+		reloadNodeMaps();
+	}
+
+	public Archetype copy() {
+		String parentId = 
+			parentArchetypeId == null ? null : parentArchetypeId.toString();
+		
+		Archetype archetype = new Archetype(adlVersion, archetypeId.toString(), 
+				parentId, concept, getOriginalLanguage(), getTranslations(), 
+				null, getRevisionHistory(), isControlled(), 
+				(CComplexObject) definition.copy(),	ontology, invariants, null);
+		
+		reloadNodeMaps();
+		
+		// set c_obj.parent()?
+		
+		return archetype;
+	}
+	
+	/**
+	 * Reload node maps. It's required when archetype definition is
+	 * modified after it's constructed by the parser.
+	 */
+	public void reloadNodeMaps() {
+		pathNodeMap.clear();
+		pathInputMap.clear();
+		inputPathMap.clear();
 		loadMaps(definition, true);
 		loadInternalRefs(definition, true, null);
 	}
-
+	
 	/**
 	 * Set of language-independent paths extracted
 	 * from archetype. Paths obey Xpath-like syntax
@@ -128,22 +156,10 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 	}
 
 	private void loadMaps(CObject node, boolean required) {
-		pathNodeMap.put(node.path(), node);
-
-		// TODO
-		/*if (node instanceof LeafConstraint) {
-		 LeafConstraint leaf = (LeafConstraint) node;
-		 if (!leaf.hasAssignedValue()) {
-		 inputCounter++;
-		 String input = INPUT + inputCounter;
-		 pathInputMap.put(node.path(), input);
-		 inputPathMap.put(input, node.path());
-		 if (required && node.isRequired()) {
-		 requiredInput.add(node.path());
-		 }
-		 }
-		 return;
-		 }*/
+		
+		if(node != null && node.path() != null) {
+			pathNodeMap.put(node.path(), node);
+		}
 
 		if (!(node instanceof CComplexObject)) {
 			return; // other types of cobject
@@ -154,6 +170,10 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 			return; // no attribute
 		}
 		for (CAttribute attribute : parent.getAttributes()) {
+			
+			
+			// pathNodeMap.put(attribute.path(), attribute);
+			
 			if (attribute.getExistence().equals(
 					CAttribute.Existence.NOT_ALLOWED)) {
 				continue;
@@ -165,32 +185,23 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 				loadMaps(child, required && node.isRequired()
 						&& attribute.isRequired());
 			}
-		}
+		}		
+	}
+	
+	public Map<String, CObject> getPathNodeMap() {
+		return pathNodeMap;
 	}
 
 	private void loadInternalRefs(CObject node, boolean required, String refPath) {
 
-		// TODO
-		/*	if ((node instanceof LeafConstraint) && refPath != null) {
-		 LeafConstraint leaf = (LeafConstraint) node;
-		 if (!leaf.hasAssignedValue()) {
-		 inputCounter++;
-		 String input = INPUT + inputCounter;
-		 String path = refPath + ArchetypeInternalRef.USE_NODE
-		 + node.path();
-		 pathInputMap.put(path, input);
-		 inputPathMap.put(input, path);
-		 if (required && node.isRequired()) {
-		 requiredInput.add(path);
-		 }
-		 }
-		 return;
-		 }*/
-
 		if (node instanceof ArchetypeInternalRef) {
 			ArchetypeInternalRef ref = (ArchetypeInternalRef) node;
-			loadInternalRefs(node(ref.getTargetPath()), required
-					&& node.isRequired(), ref.path());
+			
+			ArchetypeConstraint target = node(ref.getTargetPath());
+			if(target instanceof CObject) {
+				loadInternalRefs((CObject) target, required
+						&& node.isRequired(), ref.path());
+			}
 		}
 
 		if (!(node instanceof CComplexObject)) {
@@ -333,13 +344,63 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 	}
 
 	/**
-	 * Return a node at given path
+	 * Return an object node or attribute at given path
 	 *
 	 * @param path
 	 * @return null if node not found
 	 */
-	public CObject node(String path) {
+	public ArchetypeConstraint node(String path) {
+		
+		// TODO complete new implementation of path-based node retrieval
+		// based on runtime object tree traverse. Map-based path retrieval
+		// need to be removed from the code
+	
 		return pathNodeMap.get(path);
+	}
+	
+	/**
+	 * Updates the pathNodeMap with given cobj
+	 * 
+	 * @param cobj
+	 */
+	public void updatePathNodeMap(CObject cobj) {
+		if(cobj != null) {
+			pathNodeMap.put(cobj.path(), cobj);
+		}
+	}
+	
+	/**
+	 * Updates the pathNodeMap with given path and cobj
+	 * 
+	 * @param path
+	 * @param cobj
+	 */
+	public void updatePathNodeMap(String path, CObject cobj) {
+		if(cobj != null && path != null) {
+			pathNodeMap.put(path, cobj);
+		}
+	}
+	
+	/**
+	 * Updates the pathNodeMap with given cobj
+	 * 
+	 * @param cobj
+	 */
+	public void updatePathNodeMapRecursively(CObject cobj) {
+		updatePathNodeMap(cobj);
+		if(cobj instanceof CComplexObject) {
+			CComplexObject ccobj = (CComplexObject) cobj;
+			if(ccobj.getAttributes() == null) {
+				return;
+			}
+			for(CAttribute cattr : ccobj.getAttributes()) {
+				if(cattr.getChildren() != null) {
+					for(CObject child : cattr.getChildren()) {
+						updatePathNodeMapRecursively(child);
+					}
+				}
+			}
+		}		
 	}
 
 	/**
@@ -414,7 +475,7 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
  *  The Original Code is Archetype.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2009
  *  the Initial Developer. All Rights Reserved.
  *
  *  Contributor(s):

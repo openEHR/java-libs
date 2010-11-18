@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.constraintmodel.primitive;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.support.basic.Interval;
 
@@ -40,7 +42,8 @@ public final class CDateTime extends CPrimitive {
      *                                  or not null
      */
     public CDateTime(String pattern, Interval<DvDateTime> interval,
-                     List<DvDateTime> list, DvDateTime assumedValue) {
+                     List<DvDateTime> list, DvDateTime assumedValue,
+                     DvDateTime defaultValue) {
         if (interval == null && pattern == null && list == null) {
             throw new IllegalArgumentException(
                     "pattern, interval and list can't be all null");
@@ -49,6 +52,12 @@ public final class CDateTime extends CPrimitive {
         this.interval = interval;
         this.list = ( list == null ? null : new ArrayList<DvDateTime>(list) );
         this.assumedValue = assumedValue;
+        this.defaultValue = defaultValue;
+    }
+    
+    public CDateTime(String pattern, Interval<DvDateTime> interval,
+            List<DvDateTime> list, DvDateTime assumedValue) {
+    	this(pattern, interval, list, assumedValue, null);
     }
     
     /**
@@ -158,11 +167,58 @@ public final class CDateTime extends CPrimitive {
 		return assumedValue;
 	}
 
+	@Override
+	public boolean hasDefaultValue() {
+		return defaultValue != null;
+	}
+
+	@Override
+	public Object defaultValue() {
+		return defaultValue;
+	}
+	
+	/**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof CDateTime )) return false;
+
+        final CDateTime cobj = (CDateTime) o;
+
+        return new EqualsBuilder()
+                .append(pattern, cobj.pattern)
+                .append(interval, cobj.interval)
+                .append(list, cobj.list)
+                .append(assumedValue, cobj.assumedValue)
+                .append(defaultValue, cobj.defaultValue)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(pattern)
+                .append(interval)
+                .append(list)
+                .append(assumedValue)
+                .append(defaultValue)
+                .toHashCode();
+    }
+    
     /* fields */
     private final String pattern;
     private final Interval<DvDateTime> interval;
     private final List<DvDateTime> list;
     private final DvDateTime assumedValue;   	
+    private DvDateTime defaultValue;
 }
 
 /*
