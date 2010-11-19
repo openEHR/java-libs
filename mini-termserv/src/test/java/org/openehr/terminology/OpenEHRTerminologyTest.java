@@ -29,6 +29,14 @@ public class OpenEHRTerminologyTest extends TestCase {
 		assertTrue("code 225 (home) doesn't exist..", codes.contains(home));
 	}
 	
+	public void testRubricForCode() throws Exception {
+		TerminologyAccess terminology = service.terminology(
+				TerminologyService.OPENEHR);
+		
+		assertEquals("event", terminology.rubricForCode("433", "en"));		
+		assertEquals("initial", terminology.rubricForCode("524", "en"));		
+	}
+	
 	public void testHasCountryCodes() throws Exception {
 		CodeSetAccess codeSet = service.codeSetForId(
 				OpenEHRCodeSetIdentifiers.COUNTRIES);
