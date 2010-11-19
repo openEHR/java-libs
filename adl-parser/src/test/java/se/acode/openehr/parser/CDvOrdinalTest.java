@@ -1,6 +1,6 @@
 package se.acode.openehr.parser;
 
-import org.openehr.am.archetype.constraintmodel.CObject;
+import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
@@ -35,11 +35,11 @@ public class CDvOrdinalTest extends ParserTestBase {
      */
     protected void tearDown() throws Exception {
         archetype = null;
+        node = null;
     }
 
     public void testCDvOrdinalWithoutAssumedValue() throws Exception {
-        CObject node = archetype.node(
-                "/types[at0001]/items[at10001]/value");
+        node = archetype.node("/types[at0001]/items[at10001]/value");
         String[] codes = {
             "at0003.0", "at0003.1", "at0003.2", "at0003.3", "at0003.4"
         };
@@ -52,8 +52,7 @@ public class CDvOrdinalTest extends ParserTestBase {
     }
     
     public void testCDvOrdinalWithAssumedValue() throws Exception {
-        CObject node = archetype.node(
-                "/types[at0001]/items[at10002]/value");
+        node = archetype.node("/types[at0001]/items[at10002]/value");
         String[] codes = {
             "at0003.0", "at0003.1", "at0003.2", "at0003.3", "at0003.4"
         };
@@ -67,14 +66,13 @@ public class CDvOrdinalTest extends ParserTestBase {
     }
     
     public void testEmptyCDvOrdinal() throws Exception {
-    	CObject node = archetype.node(
-    		"/types[at0001]/items[at10003]/value");
+    	node = archetype.node("/types[at0001]/items[at10003]/value");
     	assertTrue("CDvOrdinal expected", node instanceof CDvOrdinal);
         CDvOrdinal cordinal = (CDvOrdinal) node;
         assertTrue(cordinal.isAnyAllowed());
     }
     
-    private void assertCDvOrdinal(CObject node, String terminoloy,
+    private void assertCDvOrdinal(ArchetypeConstraint node, String terminoloy,
     		String[] codes,	Ordinal assumedValue) {
     	
     	assertTrue("CDvOrdinal expected", node instanceof CDvOrdinal);
@@ -94,4 +92,5 @@ public class CDvOrdinalTest extends ParserTestBase {
     }
 
     private Archetype archetype;
+    private ArchetypeConstraint node;
 }

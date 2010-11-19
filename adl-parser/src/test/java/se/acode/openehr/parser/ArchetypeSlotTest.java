@@ -5,8 +5,8 @@ import org.openehr.am.archetype.assertion.Assertion;
 import org.openehr.am.archetype.assertion.ExpressionBinaryOperator;
 import org.openehr.am.archetype.assertion.ExpressionItem;
 import org.openehr.am.archetype.assertion.ExpressionLeaf;
+import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.ArchetypeSlot;
-import org.openehr.am.archetype.constraintmodel.CObject;
 import org.openehr.am.archetype.constraintmodel.primitive.CString;
 import org.openehr.rm.support.basic.Interval;
 
@@ -28,7 +28,7 @@ public class ArchetypeSlotTest extends ParserTestBase {
         Archetype archetype = parser.parse();
         assertNotNull(archetype);
         
-        CObject node = archetype.node("/content[at0001]");
+        ArchetypeConstraint node = archetype.node("/content[at0001]");
         assertTrue("ArchetypeSlot expected", node instanceof ArchetypeSlot);
         
         ArchetypeSlot slot = (ArchetypeSlot) node;

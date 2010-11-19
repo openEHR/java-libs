@@ -16,6 +16,7 @@
 package se.acode.openehr.parser;
 
 import org.openehr.am.archetype.Archetype;
+import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CObject;
@@ -87,10 +88,12 @@ public class ArchetypeValidator {
             for (CObject cobj : cattribute.getChildren()) {
                 if (cobj instanceof ArchetypeInternalRef) {
                     ArchetypeInternalRef ref = (ArchetypeInternalRef) cobj;
-                    CObject target = archetype.node(ref.getTargetPath());
+                    ArchetypeConstraint target = archetype.node(ref.getTargetPath());
+                    
                     if (target == null
-                            || !target.getRmTypeName().equals(
-                                    cobj.getRmTypeName())) {
+                    		|| (! (target instanceof CObject))
+                            || (!((CObject) target).getRmTypeName().equals(
+                                    cobj.getRmTypeName()))) {
                         // either target unknown or wrong type
                         errors.put(ref.path(), ref.getTargetPath());
                     }

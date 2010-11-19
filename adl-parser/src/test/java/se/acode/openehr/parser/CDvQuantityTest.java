@@ -1,6 +1,6 @@
 package se.acode.openehr.parser;
 
-import org.openehr.am.archetype.constraintmodel.CObject;
+import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
@@ -25,14 +25,14 @@ public class CDvQuantityTest extends ParserTestBase {
      */
     protected void tearDown() throws Exception {
         archetype = null;
+        node = null;
     }
 
     public void testParseFullCDvQuantityStartsWithProperty() throws Exception {
     	ADLParser parser = new ADLParser(loadFromClasspath(
         	"adl-test-entry.c_dv_quantity_full.test.adl"));
     	archetype = parser.parse();        
-    	CObject node = archetype.node(
-                "/types[at0001]/items[at10005]/value");
+    	node = archetype.node("/types[at0001]/items[at10005]/value");
     	verifyCDvQuantityValue(node);      
     }
     
@@ -40,8 +40,7 @@ public class CDvQuantityTest extends ParserTestBase {
     	ADLParser parser = new ADLParser(loadFromClasspath(
         	"adl-test-entry.c_dv_quantity_full2.test.adl"));
     	archetype = parser.parse();        
-    	CObject node = archetype.node(
-                "/types[at0001]/items[at10005]/value");
+    	node = archetype.node("/types[at0001]/items[at10005]/value");
         verifyCDvQuantityValue(node);       
     }
     
@@ -49,12 +48,12 @@ public class CDvQuantityTest extends ParserTestBase {
     	ADLParser parser = new ADLParser(loadFromClasspath(
         	"adl-test-entry.c_dv_quantity_full3.test.adl"));
     	archetype = parser.parse();        
-    	CObject node = archetype.node(
+    	node = archetype.node(
                 "/types[at0001]/items[at10005]/value");
         verifyCDvQuantityValue(node);       
     }
     
-    private void verifyCDvQuantityValue(CObject node) {
+    private void verifyCDvQuantityValue(ArchetypeConstraint node) {
     	assertTrue("CDvQuantity expected", node instanceof CDvQuantity);
         
     	CDvQuantity cdvquantity = (CDvQuantity) node;
@@ -116,8 +115,7 @@ public class CDvQuantityTest extends ParserTestBase {
     	ADLParser parser = new ADLParser(loadFromClasspath(
         	"adl-test-entry.c_dv_quantity_empty.test.adl"));
     	archetype = parser.parse();
-    	CObject node = archetype.node(
-        	"/types[at0001]/items[at10005]/value");
+    	node = archetype.node("/types[at0001]/items[at10005]/value");
     	assertTrue("CDvQuantity expected", node instanceof CDvQuantity);
         
     	CDvQuantity cdvquantity = (CDvQuantity) node;
@@ -128,4 +126,5 @@ public class CDvQuantityTest extends ParserTestBase {
     }
     
     private Archetype archetype;
+    private ArchetypeConstraint node;
 }

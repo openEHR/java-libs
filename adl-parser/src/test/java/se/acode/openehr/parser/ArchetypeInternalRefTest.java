@@ -1,8 +1,8 @@
 package se.acode.openehr.parser;
 
 import org.openehr.am.archetype.Archetype;
+import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.ArchetypeInternalRef;
-import org.openehr.am.archetype.constraintmodel.CObject;
 import org.openehr.rm.support.basic.Interval;
 
 public class ArchetypeInternalRefTest extends ParserTestBase {
@@ -13,7 +13,7 @@ public class ArchetypeInternalRefTest extends ParserTestBase {
 		Archetype archetype = parser.parse();
 		assertNotNull(archetype);
 
-		CObject node = archetype.node("/attribute2");
+		ArchetypeConstraint node = archetype.node("/attribute2");
 		assertTrue("ArchetypeInternalRef expected, actual: " + node.getClass(),
 				node instanceof ArchetypeInternalRef);
 
@@ -32,7 +32,7 @@ public class ArchetypeInternalRefTest extends ParserTestBase {
 		Archetype archetype = parser.parse();
 		assertNotNull(archetype);
 		
-		CObject node = archetype.node("/interval_attr2");
+		ArchetypeConstraint node = archetype.node("/interval_attr2");
 		assertTrue("ArchetypeInternalRef expected, actual: " + node.getClass(),
 				node instanceof ArchetypeInternalRef);
 

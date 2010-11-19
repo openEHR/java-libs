@@ -1,6 +1,6 @@
 package se.acode.openehr.parser;
 
-import org.openehr.am.archetype.constraintmodel.CObject;
+import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 
@@ -33,6 +33,7 @@ public class CCodePhraseTest extends ParserTestBase {
 	 */
 	protected void tearDown() throws Exception {
 		archetype = null;
+		node = null;
 	}
 
 	/**
@@ -41,13 +42,13 @@ public class CCodePhraseTest extends ParserTestBase {
 	 * @throws Exception
 	 */
 	public void testParseExternalCodes() throws Exception {
-		CObject node = archetype.node("/types[at0001]/items[at10002]/value");
+		node = archetype.node("/types[at0001]/items[at10002]/value");
 		String[] codes = { "F43.00", "F43.01", "F32.02" };
 		assertCCodePhrase(node, "icd10", codes, null);
 	}
 	
 	public void testParseExternalCodesWithAssumedValue() throws Exception {
-		CObject node = archetype.node("/types[at0001]/items[at10005]/value");
+		node = archetype.node("/types[at0001]/items[at10005]/value");
 		String[] codes = { "F43.00", "F43.01", "F32.02" };
 		assertCCodePhrase(node, "icd10", codes, "F43.00");
 	}
@@ -58,19 +59,19 @@ public class CCodePhraseTest extends ParserTestBase {
 	 * @throws Exception
 	 */
 	public void testParseLocalCodes() throws Exception {
-		CObject node = archetype.node("/types[at0001]/items[at10003]/value");
+		node = archetype.node("/types[at0001]/items[at10003]/value");
 		String[] codeList = { "at1311","at1312", "at1313", "at1314","at1315" }; 
 		assertCCodePhrase(node, "local", codeList, null);
 	}
 	
 	public void testParseEmptyCodeList() throws Exception {
-		CObject node = archetype.node("/types[at0001]/items[at10004]/value");
+		node = archetype.node("/types[at0001]/items[at10004]/value");
 		String[] codeList = null; 
 		assertCCodePhrase(node, "icd10", codeList, null);
 	}
 	
-	private void assertCCodePhrase(CObject actual, String terminologyId,
-			String[] codes, String assumedValue) {
+	private void assertCCodePhrase(ArchetypeConstraint actual, 
+			String terminologyId, String[] codes, String assumedValue) {
 		
 		// check type
 		assertTrue("CCodePhrase expected, got " + actual.getClass(), 
@@ -104,4 +105,5 @@ public class CCodePhraseTest extends ParserTestBase {
 	}
 
 	private Archetype archetype;
+	private ArchetypeConstraint node;
 }

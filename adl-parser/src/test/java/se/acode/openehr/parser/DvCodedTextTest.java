@@ -1,7 +1,7 @@
 package se.acode.openehr.parser;
 
 import org.openehr.am.archetype.Archetype;
-import org.openehr.am.archetype.constraintmodel.CObject;
+import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 
 public class DvCodedTextTest extends ParserTestBase {
@@ -12,7 +12,7 @@ public class DvCodedTextTest extends ParserTestBase {
         Archetype archetype = parser.parse();
         assertNotNull(archetype);
         
-        CObject node = archetype.node("/category/defining_code");
+        ArchetypeConstraint node = archetype.node("/category/defining_code");
         assertTrue("CCodePhrase expected, but got " + node.getClass(),
         		node instanceof CCodePhrase);
         CCodePhrase ccp = (CCodePhrase) node;
