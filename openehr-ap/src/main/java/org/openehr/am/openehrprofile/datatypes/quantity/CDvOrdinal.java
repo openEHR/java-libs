@@ -56,6 +56,11 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 		this.list = list == null ? null : new LinkedHashSet(list);
 	}
 	
+	public CDvOrdinal copy() {
+		return new CDvOrdinal(path(), getOccurrences(), getNodeID(), getParent(), list,				
+			getDefaultValue(), getAssumedValue());
+	}
+	
 	/**
 	 * Convenience constructor
 	 * 

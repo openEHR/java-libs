@@ -25,6 +25,11 @@ public class CDvQuantityTest extends TestCase {
 		assertTrue("anyAllowed expected", constraint.isAnyAllowed());
 	}
 	
+	public void testCreateAnyAllowed() {
+		CDvQuantity dq = CDvQuantity.anyAllowed("/at0001");
+		assertNotNull("failed to create anyAllowed");
+	}
+	
 	public void testCreateWithAssumedValue() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
 		Interval<Integer> occurrences = new Interval<Integer>(1,1);

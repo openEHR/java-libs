@@ -16,6 +16,8 @@
 package org.openehr.am.openehrprofile.datatypes.basic;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * Abstract definition of one state in a state machine.
@@ -46,6 +48,36 @@ public abstract class State {
 	public String getName() {
 		return name;
 	}
+	
+	/**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof State )) return false;
+
+        final State cobj = (State) o;
+
+        return new EqualsBuilder()
+                .append(name, cobj.name)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(7, 31)
+        		.appendSuper(super.hashCode())
+                .append(name)
+                .toHashCode();
+    }
+	
 	
 	private String name;
 }

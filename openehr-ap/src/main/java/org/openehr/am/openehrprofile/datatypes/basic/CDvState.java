@@ -15,10 +15,13 @@
 
 package org.openehr.am.openehrprofile.datatypes.basic;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
+import org.openehr.am.archetype.constraintmodel.primitive.CDateTime;
 import org.openehr.rm.datatypes.basic.DvState;
 import org.openehr.rm.support.basic.Interval;
 
@@ -50,6 +53,41 @@ public class CDvState extends CDomainType<DvState> {
 		}
 		this.value = value;
 	}
+	
+	public CDvState copy() {
+		return new CDvState(path(), getOccurrences(), getNodeID(), getParent(), 
+				value);
+	}
+	
+	/**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof CDvState )) return false;
+
+        final CDvState cobj = (CDvState) o;
+
+        return new EqualsBuilder()
+        		.appendSuper(super.equals(o))
+                .append(value, cobj.value)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31)
+        		.appendSuper(super.hashCode())
+                .append(value)
+                .toHashCode();
+    }
 	
 	/**
 	 * Gets value

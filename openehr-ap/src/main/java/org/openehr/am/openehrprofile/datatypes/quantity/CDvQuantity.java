@@ -43,8 +43,7 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 	 *            null if unspecified
 	 * @param property
 	 *            null if unspecified, no empty
-	 * @throws IllegalArgumentException if list is empty, 
-	 *             or both list and property null
+	 * @throws IllegalArgumentException if list is empty
 	 */
 	public CDvQuantity(String path, Interval<Integer> occurrences, 
 			String nodeId, CAttribute parent, List<CDvQuantityItem> list,
@@ -62,6 +61,24 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 		this.property = property;
 	}
 	
+	public CDvQuantity copy() {
+		return new CDvQuantity(path(), getOccurrences(), getNodeId(), 
+				getParent(), list,	property, getDefaultValue(), 
+				getAssumedValue());
+	}
+	
+	/**
+	 * Convenience constructor
+	 * 
+	 * @param path
+	 * @param occurrences
+	 * @param list
+	 */
+	public CDvQuantity(String path, Interval<Integer> occurrences,
+			List<CDvQuantityItem> list) {
+		this(path, occurrences, null, null, list, null, null, null);
+	}
+	
 	/**
 	 * Convenience constructor
 	 * 
@@ -74,6 +91,32 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 			List<CDvQuantityItem> list, CodePhrase property) {
 		this(path, occurrences, null, null, list, property, null, null);
 	}
+	
+	/**
+	 * Create a required CDvQuantity with a single item
+	 * 
+	 * @param path
+	 * @param item	not null
+	 */
+	public static CDvQuantity singleRequired(String path, CDvQuantityItem item) {
+		if(item == null) {
+			throw new IllegalArgumentException("item null");
+		}
+		Interval<Integer> occurrences = new Interval<Integer>(1,1);
+		List<CDvQuantityItem> list = new ArrayList<CDvQuantityItem>();
+		list.add(item);
+		return new CDvQuantity(path, occurrences, list);
+	}
+	
+	/**
+	 * Create a CDvQuantity that would allow any DV_QUANTITY value
+	 * @param path
+	 * @return
+	 */
+	public static CDvQuantity anyAllowed(String path) {
+		Interval<Integer> occurrences = new Interval<Integer>(1,1);
+		return new CDvQuantity(path, occurrences, null);
+	}
 
 	/**
 	 * List of value/units pairs.
@@ -84,6 +127,50 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 		return list == null ? null 
 				: Collections.unmodifiableList(list);
 	}
+	
+	/**
+	 * Removes the given item from the list
+	 * 
+	 * @param item not null
+	 */
+	public void removeItem(CDvQuantityItem item) {
+		if(list != null && item != null) {
+			list.remove(item);
+		}
+	}
+	
+	/**
+	 * Removes the items that have the given units
+	 * 
+	 * @param item not null
+	 */
+	public void removeItemByUnitsList(String[] unitsList) {
+		if(list == null || unitsList == null) {
+			return;
+		}
+		for(Iterator<CDvQuantityItem> it =  list.iterator(); it.hasNext(); ) {
+			CDvQuantityItem item = it.next();
+			for(String units : unitsList) {
+				if(units.equals(item.getUnits())) {
+					it.remove();
+					break;
+				}
+			}
+		}
+	}		
+	
+	/**
+	 * Adds a c_dv_quantity_item by given units
+	 * 
+	 * @param units
+	 */
+	public void addItem(CDvQuantityItem item) {
+		if(list == null) {
+			list = new ArrayList<CDvQuantityItem>();			
+		}
+		list.add(item);
+	}
+	
 
 	/**
 	 * Optional constraint on units property

@@ -18,6 +18,7 @@ package org.openehr.am.openehrprofile.datatypes.quantity;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.openehr.rm.support.basic.Interval;
 
 /**
@@ -36,6 +37,16 @@ public class CDvQuantityItem {
 	 */
 	public CDvQuantityItem(Interval<Double> magnitude, String units) {
 		this(magnitude, null, units);
+	}
+	
+	/**
+	 * Constructor using only units
+	 * 
+	 * @param units not null or empty
+	 * @throws IllegalArgumentException if units null or empty
+	 */
+	public CDvQuantityItem(String units) {
+		this(null, null, units);
 	}
 	
 	/**
@@ -108,6 +119,15 @@ public class CDvQuantityItem {
                 .append(precision)
                 .append(units)
                 .toHashCode();
+    }
+    
+    public String toString() {
+    	return new ToStringBuilder(this).
+        append("magnitude", magnitude).
+        append("precision", precision).
+        append("units", units).
+        toString();
+
     }
 	
 	/* fields */

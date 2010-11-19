@@ -19,6 +19,9 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Collections;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * Definition of a state machine in terms of states, transition events and
  * outputs, and next states.
@@ -49,6 +52,36 @@ public class StateMachine {
 	public Set<State> getStates() {
 		return Collections.unmodifiableSet(states);
 	}
+	
+	/**
+     * Equals if two CObject has same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!( o instanceof StateMachine )) return false;
+
+        final StateMachine cobj = (StateMachine) o;
+
+        return new EqualsBuilder()
+        		.appendSuper(super.equals(o))
+                .append(states, cobj.states)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    public int hashCode() {
+        return new HashCodeBuilder(7, 23)
+                .append(states)
+                .toHashCode();
+    }
+	
 	
 	private Set<State> states;
 }

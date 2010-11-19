@@ -73,6 +73,28 @@ public class CCodePhrase extends CDomainType<CodePhrase> {
 	}	
 	
 	/**
+	 * Creates a single required CCodePhrase with terminologyId and codeList
+	 * 
+	 * @param path
+	 * @param terminologyId
+	 * @param codeList
+	 * @return
+	 */
+	public static CCodePhrase singleRequired(String path, String terminologyId, 
+			List<String> codeList) {
+		Interval<Integer> occurrences = new Interval<Integer>(1,1);
+		TerminologyID tid = new TerminologyID(terminologyId);
+		return new CCodePhrase(path, occurrences, null, 
+				null, tid, codeList, null, null);
+	}
+	
+	public CCodePhrase copy() {
+		return new CCodePhrase(path(), getOccurrences(), getNodeId(), 
+				getParent(), terminologyId, codeList, getDefaultValue(),
+				getAssumedValue());
+	}
+	
+	/**
 	 * Convenience constructor to create CCodePhrase with only terminologyId
 	 * and single code
 	 * 
