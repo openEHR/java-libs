@@ -1,0 +1,3 @@
+# some comment
+key1=/path1
+key2=/path2[at0001 and name/value='text']

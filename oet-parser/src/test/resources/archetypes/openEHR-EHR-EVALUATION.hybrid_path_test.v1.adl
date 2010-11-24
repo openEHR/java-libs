@@ -1,0 +1,89 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-EVALUATION.hybrid_path_test.v1
+
+concept
+	[at0000]	-- hand-made expected flattening reesult
+language
+	original_language = <[ISO_639-1::sv]>
+
+definition
+	EVALUATION[at0000] matches {	-- Genomgång av insatser
+		data matches {
+			ITEM_TREE[at0001] matches {	-- Träd
+				items cardinality matches {0..*; unordered} matches {
+					CLUSTER[at0002] occurrences matches {0..*} matches {	-- one
+						items cardinality matches {0..*; unordered} matches {
+							ELEMENT[at0003] occurrences matches {0..1} matches {	-- Typ av insats
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+							ELEMENT[at0004] occurrences matches {0..1} matches {	-- Tidpunkt
+								value matches {
+									DV_DATE_TIME matches {*}
+								}
+							}
+							ELEMENT[at0005] occurrences matches {0..*} matches {	-- Genomförandestatus
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+						}
+						name matches { "one"}
+					}
+					CLUSTER[at0002] occurrences matches {0..*} matches {	-- two
+						items cardinality matches {0..*; unordered} matches {
+							ELEMENT[at0003] occurrences matches {0..1} matches {	-- Typ av insats
+								value matches {
+									DV_CODED_TEXT matches {*} -- changed to different type to facilitate testing
+								}
+							}
+							ELEMENT[at0004] occurrences matches {0..1} matches {	-- Tidpunkt
+								value matches {
+									DV_DATE_TIME matches {*}
+								}
+							}
+							ELEMENT[at0005] occurrences matches {0..*} matches {	-- Genomförandestatus
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+						}
+						name matches { "two"}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["sv"] = <
+			items = <
+				["at0000"] = <
+					text = <"Genomgång av insatser">
+					description = <"Review of a list of procedure in the same context">
+				>
+				["at0001"] = <
+					text = <"Träd">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"Insats">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"Typ av insats">
+					description = <"*">
+				>
+				["at0004"] = <
+					text = <"Tidpunkt">
+					description = <"*">
+				>
+				["at0005"] = <
+					text = <"Genomförandestatus">
+					description = <"*">
+				>
+			>
+		>
+	>

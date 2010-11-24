@@ -1,0 +1,31 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ITEM_TREE.medication_test_two.v1
+
+concept
+	[at0000]	-- Medication description
+	
+language
+	original_language = <[ISO_639-1::en]>
+
+definition
+	ITEM_TREE[at0000] occurrences matches {0..*} matches {	
+		items cardinality matches {0..*; ordered} matches {
+			ELEMENT[at0001] matches {	-- Name of medication
+				value matches {
+					DV_CODED_TEXT matches {*}
+				}
+			}
+		}
+	}	
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Medication description">
+					description = <"The description of a medication">
+				>				
+			>
+		>
+	>

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0"?>
+<template xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="openEHR/v1/Template">
+  <id>3695cc66-95ef-4029-b807-98bc45971a3b</id>
+  <name>GENOMGÅNGNA INGREPP NÅGONSIN</name>  
+  <definition xsi:type="EVALUATION" archetype_id="openEHR-EHR-EVALUATION.review_of_procedures.v1">
+      <Rule path="/data[at0001]/items[at0002]" max="1" name="one" />
+      <Rule path="/data[at0001]/items[at0002 and name/value='one']/items[at0003]" default="SNOMED::111::one" />
+      <Rule path="/data[at0001]/items[at0002]" max="1" clone="true" name="two" />
+      <Rule path="/data[at0001]/items[at0002 and name/value='two']/items[at0003]" default="SNOMED::222::two" />
+    </Item>
+  </definition>
+</template>

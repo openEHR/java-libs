@@ -1,0 +1,50 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ITEM_TREE.medication_multiple_constraint_test.v1
+
+concept
+	[at0000]	-- Medication description
+	
+language
+	original_language = <[ISO_639-1::en]>
+
+definition
+	ITEM_TREE[at0000] occurrences matches {0..*} matches {	
+		items cardinality matches {0..*; ordered} matches {
+			ELEMENT[at0001] matches {	-- Name of medication
+				value matches {
+					DV_COUNT matches {
+						magnitude matches {|>=1|}
+					}
+					DV_INTERVAL<DV_COUNT> matches {
+						upper matches {
+							DV_COUNT matches {
+								magnitude matches {|>=1|}
+							}
+						}
+						lower matches {
+							DV_COUNT matches {
+								magnitude matches {|>=1|}
+							}
+						}
+					}
+					DV_PROPORTION matches {
+						numerator matches {|>=1.0|}
+						denominator matches {|1.0..4.0|}
+						type matches {1, 2, 4}
+					}
+				}
+			}
+		}
+	}	
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Medication description">
+					description = <"The description of a medication">
+				>				
+			>
+		>
+	>

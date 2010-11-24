@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<template xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="openEHR/v1/Template">
+  <id>56acd032-79e1-4a98-90f5-9c190c95dc32</id>
+  <name>Text Value Test Template</name>  
+  <definition xsi:type="ITEM_TREE" archetype_id="openEHR-EHR-ITEM_TREE.medication_test_one.v1">
+    <Rule path="/items[at0001]" min="2" />
+  </definition>
+</template>

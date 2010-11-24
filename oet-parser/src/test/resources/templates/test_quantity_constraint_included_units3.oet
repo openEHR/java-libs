@@ -1,0 +1,12 @@
+﻿<?xml version="1.0"?>
+<template xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="openEHR/v1/Template">
+  <id>56acd032-79e1-4a98-90f5-9c190c95dc32</id>
+  <name>Quantity Value Units Test Template</name>  
+  <definition xsi:type="ITEM_TREE" archetype_id="openEHR-EHR-EVALUATION.medication_review.v1">
+    <Rule path="/data[at0001]/items[at0004]">
+        <constraint xsi:type="quantityConstraint">
+          <includedUnits>mg/day</includedUnits>
+        </constraint>
+      </Rule>
+  </definition>
+</template>

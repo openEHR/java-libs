@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<template xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="openEHR/v1/Template">
+  <id>c7fbcfe3-068d-4c0e-8209-66882ef78454</id>
+  <name>test</name>
+  <definition xsi:type="SECTION" archetype_id="openEHR-EHR-SECTION.ad_hoc_heading.v1" max="1" name="Biokemiska data">
+    <Item xsi:type="OBSERVATION" archetype_id="openEHR-EHR-OBSERVATION.lab_test.v1" max="1" min="1" path="/items" name="B-HB">
+      <Rule path="/data[at0001]/events[at0002]/data[at0003]/items[at0078]" max="1" min="1">
+        <constraint xsi:type="quantityConstraint">
+          <includedUnits>g/L</includedUnits>
+          <unitMagnitude>
+            <unit>g/L</unit>
+            <maxMagnitude>300</maxMagnitude>
+            <minMagnitude>20</minMagnitude>
+            <includesMaximum>true</includesMaximum>
+            <includesMinimum>true</includesMinimum>
+          </unitMagnitude>
+        </constraint>
+      </Rule>
+    </Item>
+  </definition>  
+</template>
