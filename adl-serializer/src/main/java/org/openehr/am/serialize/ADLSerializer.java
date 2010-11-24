@@ -18,6 +18,7 @@ import org.openehr.rm.common.resource.AuthoredResource;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
 import org.openehr.rm.common.resource.TranslationDetails;
+import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.basic.Interval;
@@ -400,6 +401,15 @@ public class ADLSerializer {
 
 	protected void printCComplexObject(CComplexObject ccobj, int indent,
 			Writer out) throws IOException {
+		
+		// TODO skip c_obj with [0,0] occurrences
+		Interval<Integer> occurrences = ccobj.getOccurrences();
+		if(occurrences != null 
+				&& (Integer.valueOf(0).equals(occurrences.getLower()))
+				&& (Integer.valueOf(0).equals(occurrences.getUpper()))) {
+			return;		
+		}
+						
 
 		// print rmTypeName and nodeId
 		indent(indent, out);
@@ -492,11 +502,21 @@ public class ADLSerializer {
 	
 	private void printAssertions(Set<Assertion> assertions, String purpose,
 			int indent, Writer out)	throws IOException {
+
+		if(assertions == null) {
+			return;
+		}
+		
 		newline(out);
 		indent(indent + 1, out);
 		out.write(purpose);
 		
 		for (Assertion assertion : assertions) {
+			
+			if(assertion.getStringExpression() == null) {
+				continue;
+			}
+			
 			newline(out);
 			indent(indent + 2, out);
 			
@@ -521,9 +541,11 @@ public class ADLSerializer {
 		}
 		printExistence(cattribute.getExistence(), out);
 		if (cattribute instanceof CMultipleAttribute) {
-			out.write(" ");
-			printCardinality(
-					((CMultipleAttribute) cattribute).getCardinality(), out);
+			CMultipleAttribute cma = (CMultipleAttribute) cattribute;
+			if(cma.getCardinality() != null) {
+				out.write(" ");
+			    printCardinality(cma.getCardinality(), out);
+			}
 		}
 		List<CObject> children = cattribute.getChildren();
 		out.write(" matches {");
@@ -784,9 +806,49 @@ public class ADLSerializer {
 			out.write(">");
 			newline(out);
 		}
+		
+		
+		if(cquantity.getAssumedValue() != null) {
+			newline(out);			
+			indent(indent + 1, out);
+			out.write("assumed_value = <");
+			newline(out);
+			printDvQuantity(cquantity.getAssumedValue(), indent + 1, out);
+			indent(indent + 1, out);
+			out.write(">");
+			newline(out);
+		}		
+		
 		indent(indent, out);
 		out.write(">");
 		newline(out);
+	}
+	
+	protected void printDvQuantity(DvQuantity quantity, int indent, Writer out) 
+			throws IOException {
+		
+		indent(indent + 1, out);
+		printUnits(quantity.getUnits(), out);
+		newline(out);
+		
+		if(quantity.getMagnitude() != null) {
+			indent(indent + 1, out);
+			out.write("magnitude = <");
+			out.write(quantity.getMagnitude().toString());
+			out.write(">");
+			newline(out);
+		}
+		indent(indent + 1, out);
+		out.write("precision = <");
+		out.write(Integer.toString(quantity.getPrecision()));
+		out.write(">");
+		newline(out);
+	}
+	
+	protected void printUnits(String units, Writer out) throws IOException {
+		out.write("units = <\"");
+		out.write(units);
+		out.write("\">");		
 	}
 
 	protected void printOntology(ArchetypeOntology ontology, Writer out)
@@ -1085,8 +1147,12 @@ public class ADLSerializer {
 	protected void printCString(CString cstring, Writer out) throws IOException {
 		if (cstring.getPattern() != null) {
 			out.write("/" + cstring.getPattern() + "/");
-		} else {
+		} else if(cstring.getList() != null){
 			printList(cstring.getList(), out, true);
+		} else if(cstring.defaultValue() != null) {
+			out.write("\"");
+			out.write(cstring.defaultValue());
+			out.write("\"");
 		}
 		if(cstring.hasAssumedValue()) {
 			out.write("; ");

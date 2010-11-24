@@ -67,11 +67,11 @@ public class CommonTest extends SerializerTestBase {
 	public void testPrintCardinality() throws Exception {
 		clean();
 		outputter.printCardinality(Cardinality.LIST, out);
-		verify("cardinality matches {*; ordered}");
+		verify("cardinality matches {0..*; ordered}");
 
 		clean();
 		outputter.printCardinality(Cardinality.SET, out);
-		verify("cardinality matches {*; unordered; unique}");
+		verify("cardinality matches {0..*; unordered; unique}");
 
 		clean();
 		Cardinality cardinality = new Cardinality(true, true,
