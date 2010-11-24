@@ -32,9 +32,9 @@ import org.openehr.rm.datatypes.encapsulated.*;
 import org.openehr.rm.datatypes.quantity.*;
 import org.openehr.rm.datatypes.quantity.datetime.*;
 import org.openehr.rm.datatypes.text.*;
+import org.openehr.rm.datatypes.uri.*;
 import org.openehr.rm.demographic.*;
 import org.openehr.rm.support.identification.*;
-import org.openehr.rm.support.identification.UUID;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -47,6 +47,16 @@ import java.util.*;
  * @version 1.0
  */
 public class RMObjectBuilder {
+	
+	/**
+	 * Factory method to create an instance of the RM builder
+	 * 
+	 * @param systemValues
+	 * @return
+	 */
+	public static RMObjectBuilder getInstance(Map<SystemValue, Object> systemValues) {
+		return new RMObjectBuilder(systemValues);
+	}
 
 	/**
 	 * Create a RMObjectBuilder
@@ -104,8 +114,8 @@ public class RMObjectBuilder {
 				PartyRef.class,
 				TemplateID.class,
 				TerminologyID.class,
-				UUID.class,
-				VersionTreeID.class,
+				org.openehr.rm.support.identification.UUID.class,
+				//VersionTreeID.class,
 
 				// datatypes classes
 				DvBoolean.class,
@@ -125,20 +135,26 @@ public class RMObjectBuilder {
 				DvTime.class,
 				DvDuration.class,
 				DvParsable.class, // TODO "DvMultimedia" excluded for now
+				DvURI.class,
+				DvEHRURI.class,
 
 				// datastructure classes
-				Element.class, Cluster.class, ItemSingle.class, ItemList.class,
+				Element.class, 
+				Cluster.class, 
+				ItemSingle.class, 
+				ItemList.class,
 				ItemTable.class,
 				ItemTree.class,
+				//ItemStructure.class,
 				History.class,
 				IntervalEvent.class,
 				PointEvent.class,
 
 				// ehr classes
-				Action.class, Activity.class, Evaluation.class,
+				Action.class, Activity.class, Evaluation.class, ISMTransition.class,
 				Instruction.class, InstructionDetails.class, Observation.class, AdminEntry.class,
 				Section.class, Composition.class,
-				EventContext.class,
+				EventContext.class, ISMTransition.class,
 
 				// demographic classes
 				Address.class, PartyIdentity.class, Agent.class, Group.class,
@@ -152,6 +168,7 @@ public class RMObjectBuilder {
 			typeMap.put(name, klass);
 			upperCaseMap.put(name.toUpperCase(), klass);
 		}
+		
 		return typeMap;
 	}
 
@@ -267,7 +284,7 @@ public class RMObjectBuilder {
 			throws RMObjectBuildingException {
 
 		Class rmClass = retrieveRMType(rmClassName);
-
+		
 		// replace underscore separated names with camel case
 		Map<String, Object> filteredMap = new HashMap<String, Object>();
 		for (String name : valueMap.keySet()) {
@@ -280,10 +297,13 @@ public class RMObjectBuilder {
 		Object[] valueArray = new Object[indexMap.size()];
 
 		for (String name : typeMap.keySet()) {
+			
 			Object value = filteredMap.get(name);
+			
 			if (!typeMap.containsKey(name) || !attributeMap.containsKey(name)) {
 				throw new RMObjectBuildingException("unknown attribute " + name);
 			}
+			
 			Class type = typeMap.get(name);
 			Integer index = indexMap.get(name);
 
@@ -310,17 +330,22 @@ public class RMObjectBuilder {
 
 			// check required attributes
 			if (value == null && attribute.required()) {
+				log.info(attribute);
 				throw new AttributeMissingException("missing value for "
 						+ "required attribute \"" + name + "\" of type " + type
-						+ " with valueMap: " + valueMap);
+						+ " while constructing " + rmClass + " with valueMap: " + valueMap);
 			}
 
 			// enum
 			else if (type.isEnum() && !value.getClass().isEnum()) {
-				value = Enum.valueOf(type, value.toString());
+				// OG added
+				if (type.equals(ProportionKind.class)) 
+					value = ProportionKind.fromValue(Integer.parseInt(value.toString()));			
+				else 
+					value = Enum.valueOf(type, value.toString());
 			}
 
-			// in case of string value, convert to right type if necessary
+			// in case of null, create a default value
 			else if (value == null) {
 				value = defaultValue(type);
 			}
@@ -337,7 +362,12 @@ public class RMObjectBuilder {
 						// for DvQuantity
 					} else if (type.equals(double.class)) {
 						value = Double.parseDouble(str);
+					
+						// for DvProportion.precision
+					} else if (type.equals(Integer.class)) {
+						value = new Integer(str);
 					}
+					
 				} catch (NumberFormatException e) {
 					throw new AttributeFormatException("wrong format of "
 							+ "attribute " + name + ", expect " + type);
@@ -380,9 +410,20 @@ public class RMObjectBuilder {
 
 		Object ret = null;
 		try {
+			// OG added hack
+			if (rmClassName.equalsIgnoreCase("DVCOUNT")) {
+				log.debug("Fixing DVCOUNT...");
+				for (int i = 0; i < valueArray.length; i++) {
+					Object value = valueArray[i];
+					if (value != null && value.getClass().equals(Float.class))
+						valueArray[i] = Double.parseDouble(value.toString());
+					else if (value != null && value.getClass().equals(Long.class))
+						valueArray[i] = Integer.parseInt(value.toString());
+				}
+			}	
 			ret = constructor.newInstance(valueArray);
 		} catch (Exception e) {
-
+			
 			if (log.isDebugEnabled()) {
 				e.printStackTrace();
 			}
@@ -396,12 +437,30 @@ public class RMObjectBuilder {
 
 			throw new RMObjectBuildingException(
 					"failed to create new instance of  " + rmClassName
-							+ " with valueMap: " + valueMap + ", cause: "
-							+ e.getCause());
+							+ " with valueMap: " + toString(valueMap) + ", cause: "
+							+ e.getMessage());
 		}
 		return (RMObject) ret;
 	}
 
+	private String toString(Map<String,Object> map) {
+		StringBuffer buf = new StringBuffer();
+		for(String key : map.keySet()) {
+			buf.append(key);
+			buf.append("=");
+			Object value = map.get(key);
+			if(value != null) { 
+				buf.append(value.getClass().getName());
+				buf.append(":");
+				buf.append(value.toString());
+			} else {
+				buf.append("null");
+			}
+			buf.append(", ");
+		}		
+		return buf.toString();
+	}
+	
 	/**
 	 * Retrieves RM type using given name try both the CamelCase and
 	 * Underscore-separated ways
@@ -595,7 +654,7 @@ public class RMObjectBuilder {
 			// due to clash with DvText
 			"TerminologyID", "ArchetypeID", "TemplateID", "ISO_OID",
 			"HierObjectID", "DvBoolean", "InternetID", "UUID",
-			"ObjectVersionID"
+			"ObjectVersionID", "DvURI", "DvEHRURI"
 	};
 
 	/* logger */
@@ -635,7 +694,7 @@ public class RMObjectBuilder {
  * the Initial Developer are Copyright (C) 2003-2008 the Initial Developer. All
  * Rights Reserved.
  * 
- * Contributor(s):
+ * Contributor(s): Daniel Karlsson
  * 
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
