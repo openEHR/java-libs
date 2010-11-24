@@ -19,7 +19,7 @@
     <module>mini-termserv</module>
     <module>adl-parser</module>
     <module>rm-builder</module>
-    <module>dal-parser</module>
+    <module>dadl-parser</module>
     <module>rm-skeleton</module>
     <module>oet-parser</module>
   </modules>  
