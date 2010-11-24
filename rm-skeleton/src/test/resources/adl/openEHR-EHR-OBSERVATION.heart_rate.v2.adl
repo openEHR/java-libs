@@ -1,0 +1,393 @@
+﻿archetype (adl_version=1.4)
+	openEHR-EHR-OBSERVATION.heart_rate.v2
+
+concept
+	[at0000]	-- Heart rate and rhythm
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			author = <
+				["organisation"] = <"University of Heidelberg, Central Queensland University">
+				["name"] = <"Jasmin Buck, Sebastian Garde">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"26/03/2006">
+	>
+	details = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			purpose = <"Zur Dokumentation der Frequenz und des Rhythmus des Herzens.">
+			use = <"Zur allgemeinen Dokumentation der Herzfrequenz, besonders der elektrischen Frequenz.">
+			keywords = <"Frequenz", "Herzfrequenz", "Rhythmus">
+			misuse = <"Zur Dokumentation der mechanischen Frequenz Puls benutzen (OSBSERVATION.heart_reate-pulse.v1).">
+			copyright = <"copyright (c) 2009 openEHR Foundation">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details about the rate and rhythm of the heart.">
+			use = <"Use to record the measured characteristics related to the rate and rhythm of the heart, including a simple statement of presence of heart rate.  These are not recorded by direct observation of the heart itself but inferenced from alternative sources including the auscultation of the apex beat or an electrocardiograph reflecting the electrical activity of the heart.
+Heart rate and rhythm (or it's specialisation, Pulse) are commonly recorded as one component of Vital signs - comprising Blood Pressure, Respirations, Temperature, and Oximetry. There are additional specific archetypes for each of these concepts.
+
+">
+			keywords = <"rate", "heart rate", "rhythm">
+			misuse = <"Not to be used to record conclusions about the measured heart rate and rhythm.  Statements such as the patient is in Atrial Fibrillation, or is tachycardic, should be recorded in other specific and related EVALUATION archetypes.
+Not to be used to record the mechanical heart rate, rhythm and related characteristics - this is recorded using the specialisation of this archetype OBSERVATION.heart_rate-pulse.
+Not to be used to record other details of the broader cardiovascular examination or assessment.  Other specific archetypes will be used to record characteristics such as apex beat, murmurs, auscultatory findings etc.  
+Concepts such as Maximal or Target Heart Rate should be recorded in separate archetypes specifically related to exercise assessment.">
+			copyright = <"copyright (c) 2009 openEHR Foundation">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <>
+	other_details = <
+		["references"] = <"">
+		["MD5-CAM-1.0.1"] = <"48DEE828B4C8AB55F79B1EFBA7E088A7">
+	>
+
+definition
+	OBSERVATION[at0000] matches {	-- Heart rate and rhythm
+		data matches {
+			HISTORY[at0002] matches {	-- history
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[at0003] occurrences matches {0..*} matches {	-- Any event
+						data matches {
+							ITEM_TREE[at0001] matches {	-- structure
+								items cardinality matches {0..*; unordered} matches {
+									ELEMENT[at1005] occurrences matches {0..1} matches {	-- Heart rate present
+										value matches {
+											DV_BOOLEAN matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[at0004] occurrences matches {0..1} matches {	-- Rate
+										value matches {
+											C_DV_QUANTITY <
+												property = <[openehr::382]>
+												list = <
+													["1"] = <
+														units = <"/min">
+														magnitude = <|>=0.0|>
+														precision = <|0|>
+													>
+												>
+											>
+										}
+									}
+									ELEMENT[at0005] occurrences matches {0..1} matches {	-- Rhythm
+										value matches {
+											DV_CODED_TEXT matches {
+												defining_code matches {
+													[local::
+													at0006, 	-- Regular
+													at0007, 	-- Irregular
+													at0008]	-- Irregularly irregular
+												}
+											}
+										}
+									}
+									ELEMENT[at0009] occurrences matches {0..1} matches {	-- Comment
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+								}
+							}
+						}
+						state matches {
+							ITEM_TREE[at0012] matches {	-- List
+								items cardinality matches {0..*; unordered} matches {
+									ELEMENT[at0013] occurrences matches {0..1} matches {	-- Position
+										value matches {
+											DV_CODED_TEXT matches {
+												defining_code matches {
+													[local::
+													at1000, 	-- Lying
+													at1001, 	-- Sitting
+													at1002, 	-- Reclining
+													at1003; 	-- Standing
+													at1001]	-- assumed value
+												}
+											}
+										}
+									}
+									ELEMENT[at1018] occurrences matches {0..1} matches {	-- Confounding factors
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+									allow_archetype CLUSTER[at1017] occurrences matches {0..*} matches {	-- Exertion
+										include
+											archetype_id/value matches {/openEHR-EHR-CLUSTER\.exertion(-[a-zA-Z0-9_]+)*\.v1/}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[at0010] matches {	-- List
+				items cardinality matches {0..*; unordered} matches {
+					allow_archetype CLUSTER[at1013] occurrences matches {0..1} matches {	-- Device
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.device(-[a-zA-Z0-9_]+)*\.v1/}
+						exclude
+							archetype_id/value matches {/.*/}
+					}
+					ELEMENT[at1014] occurrences matches {0..1} matches {	-- Description 
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at1019] occurrences matches {0..1} matches {	-- Method
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {
+									[local::
+									at1020, 	-- Apex beat auscultation
+									at1021]	-- Electrocardiograph
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	terminologies_available = <"SNOMED-CT", ...>
+	term_definitions = <
+		["de"] = <
+			items = <
+				["at0000"] = <
+					text = <"*Heart rate and rhythm(en)">
+					description = <"*The characteristics of the heart rate and rhythm.
+(en)">
+				>
+				["at0001"] = <
+					text = <"Structure">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"History">
+					description = <"@ internal @">
+				>
+				["at0003"] = <
+					text = <"*Any event(en)">
+					description = <"*Default and unspecified event.(en)">
+				>
+				["at0004"] = <
+					text = <"*Rate(en)">
+					description = <"*The rate of the heart in beats per minute.(en)">
+				>
+				["at0005"] = <
+					text = <"*Rhythm(en)">
+					description = <"*The non-interpreted rhythm of the heartbeat.(en)">
+				>
+				["at0006"] = <
+					text = <"Regulär">
+					description = <"Regulärer Herzschlag">
+				>
+				["at0007"] = <
+					text = <"Unregulär">
+					description = <"Unregulärer Herzschlag">
+				>
+				["at0008"] = <
+					text = <"Unregulär unregulär">
+					description = <"Unregulär in einer chaotischen Art und Weise">
+				>
+				["at0009"] = <
+					text = <"*Comment(en)">
+					description = <"*Comment about the heart rate and rhythm.(en)">
+				>
+				["at0010"] = <
+					text = <"List">
+					description = <"@ internal @">
+				>
+				["at0012"] = <
+					text = <"List">
+					description = <"@ internal @">
+				>
+				["at0013"] = <
+					text = <"Position">
+					description = <"Die Position des Patienten während der Messung der Herzfrequenz">
+				>
+				["at1000"] = <
+					text = <"Liegend">
+					description = <"Gestrecktes Liegen">
+				>
+				["at1001"] = <
+					text = <"Sitzend">
+					description = <"Auf dem Bett oder einem Stuhl sitzend">
+				>
+				["at1002"] = <
+					text = <"Liegesitz">
+					description = <"Person sitzt im 45° Winkel mit erhöhten Beinen">
+				>
+				["at1003"] = <
+					text = <"Stehend">
+					description = <"Aufrecht stehend">
+				>
+				["at1005"] = <
+					text = <"*Heart rate present(en)">
+					description = <"*The pulse rate is present (implied true if rate >0).(en)">
+				>
+				["at1013"] = <
+					text = <"*Device(en)">
+					description = <"*Details about the device used to measure heart rate and rhythm.(en)">
+				>
+				["at1014"] = <
+					text = <"*Description (en)">
+					description = <"*Details about the method used to record the heart rate and rhythm.(en)">
+				>
+				["at1017"] = <
+					text = <"*Exertion(en)">
+					description = <"*Details about physical exertion being undertaken at the time of recording heart rate and/or rhythm.(en)">
+				>
+				["at1018"] = <
+					text = <"*Confounding factors(en)">
+					description = <"*Comment on and record other incidental factors that may be contributing to the heart rate and rhythm measurement. For example, level of anxiety or 'white coat syndrome'; pain or fever etc.(en)">
+				>
+				["at1019"] = <
+					text = <"*Method(en)">
+					description = <"*Source of heart rate and rhythm record.(en)">
+				>
+				["at1020"] = <
+					text = <"*Apex beat auscultation(en)">
+					description = <"*Direct auscultation of the apex beat of the heart.(en)">
+				>
+				["at1021"] = <
+					text = <"*Electrocardiograph(en)">
+					description = <"*Derived from the electrical activity of the heart found in an electrocardiograph.(en)">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Heart rate and rhythm">
+					description = <"The characteristics of the heart rate and rhythm.
+">
+				>
+				["at0001"] = <
+					text = <"structure">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"history">
+					description = <"@ internal @">
+				>
+				["at0003"] = <
+					text = <"Any event">
+					description = <"Default unspecified event.">
+				>
+				["at0004"] = <
+					text = <"Rate">
+					description = <"The rate of the heart in beats per minute.">
+				>
+				["at0005"] = <
+					text = <"Rhythm">
+					description = <"The non-interpreted rhythm of the heartbeat.">
+				>
+				["at0006"] = <
+					text = <"Regular">
+					description = <"Heart rhythm is regular.">
+				>
+				["at0007"] = <
+					text = <"Irregular">
+					description = <"Heart rhythm is irregular.">
+				>
+				["at0008"] = <
+					text = <"Irregularly irregular">
+					description = <"Heart rhythm is irregular in a chaotic manner.">
+				>
+				["at0009"] = <
+					text = <"Comment">
+					description = <"Comment about the heart rate and rhythm.">
+				>
+				["at0010"] = <
+					text = <"List">
+					description = <"@ internal @">
+				>
+				["at0012"] = <
+					text = <"List">
+					description = <"@ internal @">
+				>
+				["at0013"] = <
+					text = <"Position">
+					description = <"The position of the patient when the heartbeat was recorded.">
+				>
+				["at1000"] = <
+					text = <"Lying">
+					description = <"Lying prone.">
+				>
+				["at1001"] = <
+					text = <"Sitting">
+					description = <"Sitting on bed or chair.">
+				>
+				["at1002"] = <
+					text = <"Reclining">
+					description = <"Person reclining at 45 degrees with legs raised.">
+				>
+				["at1003"] = <
+					text = <"Standing">
+					description = <"Standing upright.">
+				>
+				["at1005"] = <
+					text = <"Heart rate present">
+					description = <"The pulse rate is present (implied true if rate >0).">
+				>
+				["at1013"] = <
+					text = <"Device">
+					description = <"Details about the device used to measure heart rate and rhythm.">
+				>
+				["at1014"] = <
+					text = <"Description ">
+					description = <"Details about the method used to record the heart rate and rhythm.">
+				>
+				["at1017"] = <
+					text = <"Exertion">
+					description = <"Details about physical exertion being undertaken at the time of recording heart rate and/or rhythm.">
+				>
+				["at1018"] = <
+					text = <"Confounding factors">
+					description = <"Comment on and record other incidental factors that may be contributing to the heart rate and rhythm measurement. For example, level of anxiety or 'white coat syndrome'; pain or fever etc.">
+				>
+				["at1019"] = <
+					text = <"Method">
+					description = <"Source of heart rate and rhythm record.">
+				>
+				["at1020"] = <
+					text = <"Apex beat auscultation">
+					description = <"Direct auscultation of the apex beat of the heart.">
+				>
+				["at1021"] = <
+					text = <"Electrocardiograph">
+					description = <"Derived from the electrical activity of the heart found in an electrocardiograph.">
+				>
+			>
+		>
+	>
+	term_bindings = <
+		["SNOMED-CT"] = <
+			items = <
+				["at0000"] = <[SNOMED-CT::106066004]>
+				["at0004"] = <[SNOMED-CT::364075005]>
+				["at0005"] = <[SNOMED-CT::364074009]>
+				["at0006"] = <[SNOMED-CT::248649006]>
+				["at0007"] = <[SNOMED-CT::248650006]>
+				["at0008"] = <[SNOMED-CT::248651005]>
+			>
+		>
+	>

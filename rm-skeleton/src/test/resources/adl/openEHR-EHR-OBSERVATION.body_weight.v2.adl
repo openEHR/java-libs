@@ -1,0 +1,268 @@
+﻿archetype (adl_version=1.4)
+	openEHR-EHR-OBSERVATION.body_weight.v2
+
+concept
+	[at0000]	-- Body weight
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			author = <
+				["organisation"] = <"University of Heidelberg">
+				["name"] = <"Jasmin Buck">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"9/03/2006">
+	>
+	details = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			purpose = <"Zur Dokumentation des Gewichtes einer Person, eines Neugeborenen oder eines Fötus.">
+			use = <"Zur Dokumentation des gesamten Körpergewichtes eines Menschen.">
+			keywords = <"Gewicht", "Verlust", "Zunahme">
+			misuse = <"Nicht zur Dokumentation einer anderen Einheit oder eines Teils des Körpers. Siehe measurement-weight.">
+			copyright = <"copyright (c) 2009 openEHR Foundation">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the body weight of an individual - both actual and approximate.">
+			use = <"To be used for recording the actual measurement of body weight, including when the individual is missing a body part due to a congenital cause or after surgical removal.   A statement identifying the physical incompleteness of the body can be recorded in the 'Confounding factors' data element, if required. This is the usual archetype to be used for a typical measurement of weight, for example self-measured by the individual at home, a clinician measurement in a clinic/hospital, or a fitness instructor in a gymnasium.  
+
+Can also be used for recording an approximation of body weight measurement in a clinical scenario where it is not possible to measure accurately body weight - for example, weighing an uncooperative child, or estimating the weight of an unborn fetus (where the 'subject of data' is the Fetus and recording occurs within the mother's health record).  This is not modelled explicitly in the archetype as the openEHR Reference model allows the attribute of Approximation for any Quantity data type.  At implementation, for example, an application user interface could allow clinicians to select an appropriately labelled check box adjacent to the Weight data field to indicate that the recorded weight is an approximation, rather than actual.
+
+To be used for recording weight change, that is, either weight loss or weight gain.  This can currently be modelled by constraining the 'any event' to an interval with associated mathematical function of increase or decrease, as appropriate. ">
+			keywords = <"weight", "gain", "loss", "increase", "decrease", "mass", "estimate", "actual">
+			misuse = <"Not to be used to record the first weight of an infant soon after birth which is designated as their 'birth weight' - use the specialisation of this archetype OBSERVATION.body_weight-birth.
+Not to be used to record the adjusted body weight eg a calculation of the full body weight of a person with limb amputation, based on other body part measurements and an algorithm - use OBSERVATION.body_weight-adjusted.
+Not to be used to record the weight of an object or body part. ">
+			copyright = <"copyright (c) 2009 openEHR Foundation">
+		>
+	>
+	lifecycle_state = <"AuthorDraft">
+	other_contributors = <"Jeroen Meintjens, Medisch Centrum Alkmaar, Netherlands", "Marja Buur-Krom, Medisch Centrum Alkmaar, Netherlands", "Sebastian Garde, Ocean Informatics, Germany", "Ian McNicoll, Ocean Informatics, Scotland", "Heather Leslie, Ocean Informatics, Australia", "Paul Donaldson, Queensland Health, Australia", "Heather Grain, Llewellyn Informatics, Australia", "Anne Harbison, Australia", "Andrew James, University of Toronto, Canada", "Rikard Lovstrom, Swedish Medical Association, Sweden", "Hans Demski, Helmholtz Zentrum München, Germany", "Soon Ghee Yap, Singapore Health Services Pte Ltd, Singapore">
+	other_details = <
+		["references"] = <"">
+		["MD5-CAM-1.0.1"] = <"27F7E169FB5ACFD6C13E4B061298DD7D">
+	>
+
+definition
+	OBSERVATION[at0000] matches {	-- Body weight
+		data matches {
+			HISTORY[at0002] matches {	-- history
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[at0003] occurrences matches {0..*} matches {	-- Any event
+						data matches {
+							ITEM_TREE[at0001] matches {	-- Simple
+								items cardinality matches {1; unordered} matches {
+									ELEMENT[at0004] matches {	-- Weight
+										value matches {
+											C_DV_QUANTITY <
+												property = <[openehr::124]>
+												list = <
+													["1"] = <
+														units = <"kg">
+														magnitude = <|0.0..1000.0|>
+													>
+													["2"] = <
+														units = <"lb">
+														magnitude = <|0.0..2000.0|>
+													>
+												>
+											>
+										}
+									}
+									ELEMENT[at0024] occurrences matches {0..1} matches {	-- Comment
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+								}
+							}
+						}
+						state matches {
+							ITEM_TREE[at0008] matches {	-- state structure
+								items cardinality matches {0..*; ordered} matches {
+									ELEMENT[at0009] occurrences matches {0..1} matches {	-- State of Dress
+										value matches {
+											DV_CODED_TEXT matches {
+												defining_code matches {
+													[local::
+													at0011, 	-- Lightly clothed/underwear
+													at0013, 	-- Naked
+													at0010, 	-- Fully clothed, including shoes
+													at0017; 	-- Nappy/diaper
+													at0011]	-- assumed value
+												}
+											}
+										}
+									}
+									ELEMENT[at0025] occurrences matches {0..1} matches {	-- Confounding Factors
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[at0015] matches {	-- protocol structure
+				items cardinality matches {0..*; ordered} matches {
+					allow_archetype CLUSTER[at0020] occurrences matches {0..1} matches {	-- Device
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.device(-[a-zA-Z0-9_]+)*\.v1/}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	terminologies_available = <"SNOMED-CT", ...>
+	term_definitions = <
+		["de"] = <
+			items = <
+				["at0000"] = <
+					text = <"*Body weight(en)">
+					description = <"*Measurement of the body weight of an individual.(en)">
+				>
+				["at0001"] = <
+					text = <"Simple">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"History">
+					description = <"@ internal @">
+				>
+				["at0003"] = <
+					text = <"*Any event(en)">
+					description = <"*Any event(en)">
+				>
+				["at0004"] = <
+					text = <"*Weight(en)">
+					description = <"*The weight of the individual.(en)">
+				>
+				["at0008"] = <
+					text = <"State structure">
+					description = <"@ internal @">
+				>
+				["at0009"] = <
+					text = <"*State of Dress(en)">
+					description = <"*Description of the state of dress of the person at the time of weighing.(en)">
+				>
+				["at0010"] = <
+					text = <"*Fully clothed, including shoes(en)">
+					description = <"*Clothing which may add significantly to weight, including shoes.(en)">
+				>
+				["at0011"] = <
+					text = <"*Lightly clothed/underwear(en)">
+					description = <"*Clothing which will not add to weight significantly.(en)">
+				>
+				["at0013"] = <
+					text = <"unbekleidet">
+					description = <"Ohne Kleidung">
+				>
+				["at0015"] = <
+					text = <"Protocol structure">
+					description = <"@ internal @">
+				>
+				["at0017"] = <
+					text = <"*Nappy/diaper(en)">
+					description = <"*Wearing only a nappy - can add significant weight.(en)">
+				>
+				["at0020"] = <
+					text = <"*Device(en)">
+					description = <"*Details about the weighing device.(en)">
+				>
+				["at0024"] = <
+					text = <"*Comment(en)">
+					description = <"*Comment about the measurement of weight.(en)">
+				>
+				["at0025"] = <
+					text = <"*Confounding Factors(en)">
+					description = <"*Record any issues or factors that may impact on the measurement of body weight eg timing in menstrual cycle, timing of recent bowel motion or noting of amputation.(en)">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Body weight">
+					description = <"Measurement of the body weight of an individual.">
+				>
+				["at0001"] = <
+					text = <"Simple">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"history">
+					description = <"@ internal @">
+				>
+				["at0003"] = <
+					text = <"Any event">
+					description = <"Any event">
+				>
+				["at0004"] = <
+					text = <"Weight">
+					description = <"The weight of the individual.">
+				>
+				["at0008"] = <
+					text = <"state structure">
+					description = <"@ internal @">
+				>
+				["at0009"] = <
+					text = <"State of Dress">
+					description = <"Description of the state of dress of the person at the time of weighing.">
+				>
+				["at0010"] = <
+					text = <"Fully clothed, including shoes">
+					description = <"Clothing which may add significantly to weight, including shoes.">
+				>
+				["at0011"] = <
+					text = <"Lightly clothed/underwear">
+					description = <"Clothing which will not add to weight significantly.">
+				>
+				["at0013"] = <
+					text = <"Naked">
+					description = <"Without any clothes">
+				>
+				["at0015"] = <
+					text = <"protocol structure">
+					description = <"@ internal @">
+				>
+				["at0017"] = <
+					text = <"Nappy/diaper">
+					description = <"Wearing only a nappy - can add significant weight.">
+				>
+				["at0020"] = <
+					text = <"Device">
+					description = <"Details about the weighing device.">
+				>
+				["at0024"] = <
+					text = <"Comment">
+					description = <"Comment about the measurement of weight.">
+				>
+				["at0025"] = <
+					text = <"Confounding Factors">
+					description = <"Record any issues or factors that may impact on the measurement of body weight eg timing in menstrual cycle, timing of recent bowel motion or noting of amputation.">
+				>
+			>
+		>
+	>
+	term_bindings = <
+		["SNOMED-CT"] = <
+			items = <
+				["at0004"] = <[SNOMED-CT::363808001]>
+			>
+		>
+	>
