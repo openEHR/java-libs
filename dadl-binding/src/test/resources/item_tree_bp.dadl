@@ -1,0 +1,46 @@
+(ITEM_TREE) <
+    archetype_node_id = <"at0003">
+    name = <
+    	value = <"item tree">
+    >     
+    items = <  
+        [1] = <
+            name = <
+                value = <"systolic">
+            >
+            archetype_node_id = <"at0004">
+            value = <
+                magnitude = <120.0>
+                units = <"mmHg">
+            >
+        >
+        [2] = <
+            name = <
+                value = <"diastolic">
+            >
+            archetype_node_id = <"at0005">
+            value = <
+                magnitude = <80.0>
+                units = <"mmHg">
+            >
+        >
+        [3] = <
+            name = <
+                value = <"cluster">
+            >
+            archetype_node_id = <"at0006">
+            items = <
+                [1] = <
+                    name = <
+                        value = <"extra">
+                    >
+                    archetype_node_id = <"at0007">
+                    value = <
+                        magnitude = <150.0>
+                        units = <"mmHg">
+                    >
+                >
+            >
+        >
+    >  
+>
