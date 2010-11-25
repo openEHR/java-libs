@@ -13,14 +13,16 @@
     <module>openehr-rm-domain</module>
     <module>openehr-aom</module>
     <module>openehr-ap</module>
+    <module>adl-parser</module>
+    <module>dadl-parser</module>
+    <module>oet-parser</module>        
     <module>adl-serializer</module>
     <module>xml-serializer</module>
     <module>measure-serv</module>
     <module>mini-termserv</module>
-    <module>adl-parser</module>
     <module>rm-builder</module>
-    <module>dadl-parser</module>
     <module>rm-skeleton</module>
-    <module>oet-parser</module>
+    <module>xml-binding</module>
+    <module>dadl-binding</module>
   </modules>  
 </project>
