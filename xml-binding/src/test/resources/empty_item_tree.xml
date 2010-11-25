@@ -1,0 +1,8 @@
+<xml-fragment xsi:type="ITEM_TREE" 
+    archetype_node_id="at0003" 
+    xmlns:v1="http://schemas.openehr.org/v1" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <v1:name>
+    <v1:value>item tree</v1:value>
+  </v1:name>
+</xml-fragment>

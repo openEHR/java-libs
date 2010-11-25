@@ -1,0 +1,56 @@
+<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:type="ITEM_TREE" xmlns="http://schemas.openehr.org/v1"
+	archetype_node_id="at0003">
+	<name>
+		<value>data</value>
+	</name>
+	<items xsi:type="ELEMENT" archetype_node_id="at0013.1">
+		<name>
+			<value>Total Cholesterol</value>
+		</name>
+		<value xsi:type="DV_QUANTITY">
+			<magnitude>6.1</magnitude>
+			<units>mmol/l</units>
+		</value>
+	</items>
+	<items xsi:type="ELEMENT" archetype_node_id="at0013.2">
+		<name>
+			<value>Triglycerides</value>
+		</name>
+		<value xsi:type="DV_QUANTITY">
+			<magnitude>2.3</magnitude>
+			<units>mmol/l</units>
+		</value>
+	</items>
+	<items xsi:type="CLUSTER" archetype_node_id="at0011.1">
+		<name>
+			<value>Fractions</value>
+		</name>
+		<items xsi:type="ELEMENT" archetype_node_id="at0013.3">
+			<name>
+				<value>HDL-Cholesterol</value>
+			</name>
+			<value xsi:type="DV_QUANTITY">
+				<magnitude>0.9</magnitude>
+				<units>mmol/l</units>
+			</value>
+		</items>
+		<items xsi:type="ELEMENT" archetype_node_id="at0013.4">
+			<name>
+				<value>LDL-Cholesterol</value>
+			</name>
+			<value xsi:type="DV_QUANTITY">
+				<magnitude>52</magnitude>
+				<units>mmol/l</units>
+			</value>
+		</items>
+	</items>
+	<items xsi:type="ELEMENT" archetype_node_id="at0017">
+		<name>
+			<value>Overall Comment</value>
+		</name>
+		<value xsi:type="DV_TEXT">
+			<value>high cardiac risk</value>
+		</value>
+	</items>
+</items>
