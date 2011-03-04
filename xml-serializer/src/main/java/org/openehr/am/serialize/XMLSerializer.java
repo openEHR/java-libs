@@ -93,6 +93,7 @@ public class XMLSerializer {
     public void output(Archetype archetype, Document out) {
         Element rootElement = new Element("archetype", defaultNamespace);
         rootElement.addNamespaceDeclaration(xsiNamespace);
+        rootElement.addNamespaceDeclaration(xsdNamespace);
 
         out.setRootElement(rootElement);
         output(archetype, rootElement);
@@ -981,6 +982,8 @@ public class XMLSerializer {
     
     public static final Namespace xsiNamespace = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
+    public static final Namespace xsdNamespace = Namespace.getNamespace("xsd", "http://www.w3.org/2001/XMLSchema");
+    
     /* fields */  
     private Charset encoding;
 
