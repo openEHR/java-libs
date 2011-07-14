@@ -71,6 +71,8 @@ public abstract class ExpressionItem {
                 .append(type)
                 .toHashCode();
     }
+    
+    public abstract String toString();
 	
 	private String type;
 }

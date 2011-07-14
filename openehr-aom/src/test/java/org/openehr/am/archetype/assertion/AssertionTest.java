@@ -68,5 +68,5 @@ public class AssertionTest extends TestCase {
 				include.getExpression());		
 		assertEquals("string expression wrong", stringExpression, 
 				include.getStringExpression());
-	}
+	}	
 }

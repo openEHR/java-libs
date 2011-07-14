@@ -59,6 +59,15 @@ public class ExpressionUnaryOperator extends ExpressionOperator {
                 .append(operand)
                 .toHashCode();                 
     }
+    
+    /**
+     * Returns the String representation of this unary operator
+     * 
+     * @return string 
+     */
+    public String toString() {
+    	return operand.toString();
+    }
 
 	private ExpressionItem operand;
 }

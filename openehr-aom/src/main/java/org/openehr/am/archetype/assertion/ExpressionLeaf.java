@@ -23,7 +23,7 @@ public class ExpressionLeaf extends ExpressionItem {
 	/**
 	 * ReferenceType enum 
 	 */
-	public enum ReferenceType { CONSTANT, ATTRIBUTE, FUNCTION };
+	public enum ReferenceType { CONSTANT, ATTRIBUTE, FUNCTION, CONSTRAINT };
 	
 	public ExpressionLeaf(String type, Object item, ReferenceType referenceType) {
 		super(type);
@@ -123,6 +123,15 @@ public class ExpressionLeaf extends ExpressionItem {
                 .append(item)
                 .append(referenceType)
                 .toHashCode();                 
+    }
+    
+    /**
+     * The string representation of this expression leaf
+     * 
+     * @return string
+     */
+    public String toString() {
+    	return item.toString();
     }
 	
 	private Object item;

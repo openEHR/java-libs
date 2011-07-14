@@ -68,6 +68,15 @@ public class ExpressionBinaryOperator extends ExpressionOperator {
                 .toHashCode();
     }
     
+    public String toString() {
+    	StringBuffer buf = new StringBuffer(leftOperand.toString());
+    	buf.append(" ");
+    	buf.append(getOperator().toString());
+    	buf.append(" ");
+    	buf.append(rightOperand.toString());
+    	return buf.toString();
+    }
+    
 	private ExpressionItem leftOperand;
 	private ExpressionItem rightOperand;	
 }
