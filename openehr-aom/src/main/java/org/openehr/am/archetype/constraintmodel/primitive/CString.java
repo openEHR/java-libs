@@ -70,6 +70,15 @@ public final class CString extends CPrimitive {
     public CString(String pattern, List<String> list) {
     	this(pattern, list, null);
     }
+    
+    /**
+     * Constructs a stringConstraint with pattern
+     * 
+     * @param pattern
+     */
+    public CString(String pattern) {
+    	this(pattern, null, null);
+    }
     	
     /**
      * Return the primitive type this constraint is applied on

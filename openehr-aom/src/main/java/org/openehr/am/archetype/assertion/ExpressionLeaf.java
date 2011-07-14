@@ -17,6 +17,7 @@ package org.openehr.am.archetype.assertion;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.am.archetype.constraintmodel.primitive.CString;
 
 public class ExpressionLeaf extends ExpressionItem {
 	
@@ -131,7 +132,16 @@ public class ExpressionLeaf extends ExpressionItem {
      * @return string
      */
     public String toString() {
-    	return item.toString();
+    	String value;
+    	
+    	/* special case with CString */
+    	if(item instanceof CString) {
+    		CString cstr = (CString) item;
+    		value = "/" + cstr.getPattern() + "/";
+    	} else {
+    		value = item.toString();
+    	}
+    	return value;
     }
 	
 	private Object item;

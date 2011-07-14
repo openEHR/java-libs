@@ -1,5 +1,7 @@
 package org.openehr.am.archetype.assertion;
 
+import org.openehr.am.archetype.constraintmodel.primitive.CString;
+
 import junit.framework.TestCase;
 
 /**
@@ -42,7 +44,23 @@ public class ExpressionToStringTest extends TestCase {
 		ExpressionItem concept = new ExpressionLeaf(ExpressionItem.ARCHETYPE,
 				"domain_concept", ExpressionLeaf.ReferenceType.ATTRIBUTE);
 		ExpressionItem aid = new ExpressionLeaf(ExpressionItem.ARCHETYPE,
-				"{/medications.v1/}", ExpressionLeaf.ReferenceType.CONSTANT);
+				"/medications.v1/", ExpressionLeaf.ReferenceType.CONSTANT);
+		ExpressionItem whole = new ExpressionBinaryOperator(
+				ExpressionItem.BOOLEAN, OperatorKind.OP_MATCHES, false,
+				concept, aid);
+		
+		String expected = "domain_concept matches {/medications.v1/}";
+		
+		assertEquals("toString fails, got: " + whole.toString(), 
+				expected, whole.toString());
+	}	
+	
+	public void testSimpleArchetypeSlotToStringUsingCString() {
+		ExpressionItem concept = new ExpressionLeaf(ExpressionItem.ARCHETYPE,
+				"domain_concept", ExpressionLeaf.ReferenceType.ATTRIBUTE);
+		ExpressionItem aid = new ExpressionLeaf(ExpressionItem.ARCHETYPE,
+				new CString("medications.v1"), 
+				ExpressionLeaf.ReferenceType.CONSTANT);
 		ExpressionItem whole = new ExpressionBinaryOperator(
 				ExpressionItem.BOOLEAN, OperatorKind.OP_MATCHES, false,
 				concept, aid);

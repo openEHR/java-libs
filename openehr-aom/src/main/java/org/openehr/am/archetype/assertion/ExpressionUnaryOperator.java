@@ -66,7 +66,7 @@ public class ExpressionUnaryOperator extends ExpressionOperator {
      * @return string 
      */
     public String toString() {
-    	return operand.toString();
+    	return getOperator() + " " + operand.toString();
     }
 
 	private ExpressionItem operand;

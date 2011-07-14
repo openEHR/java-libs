@@ -72,8 +72,18 @@ public class ExpressionBinaryOperator extends ExpressionOperator {
     	StringBuffer buf = new StringBuffer(leftOperand.toString());
     	buf.append(" ");
     	buf.append(getOperator().toString());
+    	
     	buf.append(" ");
+    	
+    	if(OperatorKind.OP_MATCHES.equals(getOperator())) {
+    		buf.append("{");
+    	}
+    	
     	buf.append(rightOperand.toString());
+    	
+    	if(OperatorKind.OP_MATCHES.equals(getOperator())) {
+    		buf.append("}");
+    	}
     	return buf.toString();
     }
     
