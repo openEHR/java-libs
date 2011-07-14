@@ -106,6 +106,12 @@ public class ArchetypeSlotTest extends ParserTestBase {
         assertTrue("right item type wrong", right.getItem() instanceof CString);
         CString cstring = (CString) right.getItem();
         assertEquals("right value wrong", "openEHR-EHR-CLUSTER\\.device\\.v1", 
-        		cstring.getPattern());       
+        		cstring.getPattern());
+        
+        assertNotNull("stringExpression missing", assertion.getStringExpression());
+        String expectedStringExpression = 
+        	"archetype_id/value matches {/openEHR-EHR-CLUSTER\\.device\\.v1/}";
+        assertEquals("stringExpression wrong, got: " + assertion.getStringExpression(),
+        		expectedStringExpression, assertion.getStringExpression());
     }
 }
