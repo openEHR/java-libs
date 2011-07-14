@@ -22,7 +22,7 @@ public class ArchetypeSlotTest extends ParserTestBase {
         super(test);
     }
 
-    public void testParse() throws Exception {
+    public void testParseIncludesExcludes() throws Exception {
         ADLParser parser = new ADLParser(loadFromClasspath(
                 "adl-test-entry.archetype_slot.test.adl"));
         Archetype archetype = parser.parse();
@@ -32,7 +32,7 @@ public class ArchetypeSlotTest extends ParserTestBase {
         assertTrue("ArchetypeSlot expected", node instanceof ArchetypeSlot);
         
         ArchetypeSlot slot = (ArchetypeSlot) node;
-        assertEquals("nodeId wrong", "at0001", slot.getNodeID());
+        assertEquals("nodeId wrong", "at0001", slot.getNodeId());
         assertEquals("rmTypeName wrong", "SECTION", slot.getRmTypeName());
         assertEquals("occurrences wrong", new Interval<Integer>(0, 1), 
         		slot.getOccurrences());
@@ -63,6 +63,49 @@ public class ArchetypeSlotTest extends ParserTestBase {
         assertTrue("right item type wrong", right.getItem() instanceof CString);
         CString cstring = (CString) right.getItem();
         assertEquals("right value wrong", "blood_pressure.v1", 
+        		cstring.getPattern());       
+    }
+    
+    public void testParseSingleInclude() throws Exception {
+        ADLParser parser = new ADLParser(loadFromClasspath(
+                "adl-test-entry.archetype_slot.test2.adl"));
+        Archetype archetype = parser.parse();
+        assertNotNull(archetype);
+        
+        ArchetypeConstraint node = archetype.node("/content[at0001]");
+        assertTrue("ArchetypeSlot expected", node instanceof ArchetypeSlot);
+        
+        ArchetypeSlot slot = (ArchetypeSlot) node;
+        assertEquals("nodeId wrong", "at0001", slot.getNodeId());
+        assertEquals("rmTypeName wrong", "SECTION", slot.getRmTypeName());
+        assertEquals("occurrences wrong", new Interval<Integer>(0, 1), 
+        		slot.getOccurrences());
+        
+        assertEquals("path wrong", "/content[at0001]", slot.path());
+        
+        assertEquals("includes total wrong", 1, slot.getIncludes().size());
+        
+        Assertion assertion = slot.getIncludes().iterator().next();       
+        
+        ExpressionItem item = assertion.getExpression();
+        
+        assertTrue("expressionItem type wrong", 
+        		item instanceof ExpressionBinaryOperator);
+        ExpressionBinaryOperator bo = (ExpressionBinaryOperator) item;
+        ExpressionItem leftOp = bo.getLeftOperand();
+        ExpressionItem rightOp = bo.getRightOperand();
+        
+        assertTrue("left operator type wrong", 
+        		leftOp instanceof ExpressionLeaf);
+        ExpressionLeaf left = (ExpressionLeaf) leftOp;
+        assertEquals("left value wrong", "archetype_id/value", left.getItem());
+        
+        assertTrue("right operator type wrong", 
+        		rightOp instanceof ExpressionLeaf);
+        ExpressionLeaf right = (ExpressionLeaf) rightOp;
+        assertTrue("right item type wrong", right.getItem() instanceof CString);
+        CString cstring = (CString) right.getItem();
+        assertEquals("right value wrong", "openEHR-EHR-CLUSTER\\.device\\.v1", 
         		cstring.getPattern());       
     }
 }
