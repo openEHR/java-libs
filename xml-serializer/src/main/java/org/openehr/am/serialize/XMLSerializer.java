@@ -108,13 +108,20 @@ public class XMLSerializer {
      */
     public void output(Archetype archetype, Element out) {
         printHeader(archetype, out);
-        printDescription(archetype.getDescription(), out);
-        // TODO: Print translations
         printDefinition(archetype.getDefinition(), out);
         printOntology(archetype.getOntology(), archetype.getConcept(), out);
     }
 
     protected void printHeader(Archetype archetype, Element out) {
+	Element originalLanguage = new Element("original_language", defaultNamespace);
+        out.getChildren().add(originalLanguage);
+        printCodePhrase(archetype.getOriginalLanguage(), originalLanguage);
+        printString("is_controlled", archetype.isControlled() ? "true" : "false", out);
+	
+        printDescription(archetype.getDescription(), out);
+        
+        //TODO printTranslations
+	
         Element archetypeId = new Element("archetype_id", defaultNamespace);
         out.getChildren().add(archetypeId);
         printString("value", archetype.getArchetypeId().toString(), archetypeId);
@@ -127,10 +134,7 @@ public class XMLSerializer {
             out.getChildren().add(parentArchetypeId);
             printString("value", archetype.getArchetypeId().toString(), parentArchetypeId);
         }
-        Element originalLanguage = new Element("original_language", defaultNamespace);
-        out.getChildren().add(originalLanguage);
-        printCodePhrase(archetype.getOriginalLanguage(), originalLanguage);
-        printString("is_controlled", archetype.isControlled() ? "true" : "false", out);
+        
     }
 
     protected void printDescription(ResourceDescription description, Element out) {
@@ -144,14 +148,16 @@ public class XMLSerializer {
         printStringList("other_contributors", description.getOtherContributors(), des);
         printString("lifecycle_state", description.getLifecycleState(), des); 
          
+        
+        printString("resource_package_uri", description.getResourcePackageUri(), des);
+        printStringMap("other_details", description.getOtherDetails(), des);
+        
         for (ResourceDescriptionItem item : description.getDetails()) {
             Element details = new Element("details", defaultNamespace);
             des.getChildren().add(details);
             printDescriptionItem(item, details);
         }
         
-        printString("resource_package_uri", description.getResourcePackageUri(), des);
-        printStringMap("other_details", description.getOtherDetails(), des);
     }
 
     protected void printDescriptionItem(ResourceDescriptionItem item, Element out) {
@@ -173,10 +179,11 @@ public class XMLSerializer {
     private void printCodePhrase(CodePhrase cp, Element out) {
         if (cp == null) return;
         
-        printString("code_string", cp.getCodeString(), out);
         Element terminologyId = new Element("terminology_id", defaultNamespace);
         out.getChildren().add(terminologyId);
         printString("value", cp.getTerminologyId().getValue(), terminologyId);
+        
+        printString("code_string", cp.getCodeString(), out);    
     }
     
     
@@ -402,6 +409,10 @@ public class XMLSerializer {
             attributes.setAttribute("type", "C_SINGLE_ATTRIBUTE", xsiNamespace);
         }
 
+        // FIXME: AOM XML schema spec is wrong. Has 'unbounded' attribute for C_ATTRIBUTE and element with name
+        // 'rm_type_name' instead of 'rm_attribute_name'.
+        printString("rm_attribute_name", cattribute.getRmAttributeName(), attributes);
+        
         Element existence = new Element("existence", defaultNamespace);
         attributes.getChildren().add(existence);
         printString("lower_unbounded", "false", existence);
@@ -423,9 +434,6 @@ public class XMLSerializer {
             printString("any_allowed", "true", attributes);
         }
         
-        // FIXME: AOM XML schema spec is wrong. Has 'unbounded' attribute for C_ATTRIBUTE and element with name
-        // 'rm_type_name' instead of 'rm_attribute_name'.
-        printString("rm_attribute_name", cattribute.getRmAttributeName(), attributes);
         
         if(!cattribute.isAnyAllowed()) { 
             List<CObject> children = cattribute.getChildren();
@@ -469,9 +477,10 @@ public class XMLSerializer {
     }
     
     protected void printCObjectElements(CObject cobj, Element out) {
-        if(cobj.isAnyAllowed()) { // Not sure if needed.
-            printString("any_allowed", "true", out);
-        }
+        // SG: While this may be interesting, it is not part of the xsds at present	
+		// if(cobj.isAnyAllowed()) { // Not sure if needed.
+        //    printString("any_allowed", "true", out);
+        //}
     
         // we always need the upper case with underscore notation for the rm type name
         printString("rm_type_name", getUpperCaseWithUnderscoreFromCamelCase(cobj.getRmTypeName()), out);
@@ -916,26 +925,29 @@ public class XMLSerializer {
         final Comparable lower = interval.getLower();
         final Comparable upper = interval.getUpper();
 
-        printString("upper_included",
-                interval.isUpperIncluded() == true ? "true" : "false",
-                out);
         printString("lower_included",
                 interval.isLowerIncluded() == true ? "true" : "false",
                 out);
+        printString("upper_included",
+                interval.isUpperIncluded() == true ? "true" : "false",
+                out);
   
+        
+        
+        printString("lower_unbounded",
+                       interval.isLowerUnbounded() ? "true" : "false", out);
         
         printString("upper_unbounded",
                        interval.isUpperUnbounded() ? "true" : "false", out);
-        printString("lower_unbounded",
-                       interval.isLowerUnbounded() ? "true" : "false", out);
+        
+        if(lower != null) {
+            printString("lower", lower.toString(), out);
+        }
         
         if(upper != null) {
             printString("upper", upper.toString(), out);
         }
         
-        if(lower != null) {
-            printString("lower", lower.toString(), out);
-        }
     }
     
     private String getUpperCaseWithUnderscoreFromCamelCase(String str) {
