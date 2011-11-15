@@ -341,14 +341,15 @@
 		<code value="it" Description="Italian (Standard)"/>
 		<code value="it-ch" Description="Italian (Switzerland)"/>
 		<code value="ja" Description="Japanese"/>
+		<code value="kk" Description="Kasakh"/>
 		<code value="ko" Description="Korean"/>
 		<code value="ko" Description="Korean (Johab)"/>
 		<code value="lv" Description="Latvian"/>
 		<code value="lt" Description="Lithuanian"/>
 		<code value="mk" Description="FYRO Macedonian ms Malaysian"/>
 		<code value="mt" Description="Maltese"/>
-		<code value="no" Description="Norwegian (Bokmal)"/>
-		<code value="no" Description="Norwegian (Nynorsk)"/>
+		<code value="nb" Description="Norwegian Bokmal"/>
+		<code value="nn" Description="Norwegian Nynorsk"/>
 		<code value="pl" Description="Polish"/>
 		<code value="pt-br" Description="Portuguese (Brazil)"/>
 		<code value="pt" Description="Portuguese (Portugal)"/>
