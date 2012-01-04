@@ -1,0 +1,59 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-ENTRY.VCOV_value_duplicated_in_ordinal.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Peter Gummer">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VCOV validity check, triggered when a value is duplicated in an ordinal.">
+			keywords = <"ADL", "validation", "test">
+			copyright = <"copyright (c) 2008 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VCOV">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	ENTRY[at0000] matches {
+		ordinal_attr_1 matches {
+			1|[local::at0001],
+			2|[local::at0002],
+			2|[local::at0003],
+			3|[local::at0004]
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"">
+					description = <"">
+				>
+				["at0001"] = <
+					text = <"">
+					description = <"">
+				>
+				["at0002"] = <
+					text = <"">
+					description = <"">
+				>
+				["at0003"] = <
+					text = <"">
+					description = <"">
+				>
+				["at0004"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>

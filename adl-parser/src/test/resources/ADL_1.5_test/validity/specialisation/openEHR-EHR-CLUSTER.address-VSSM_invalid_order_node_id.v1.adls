@@ -1,0 +1,67 @@
+﻿archetype (adl_version=1.5)
+	openEHR-EHR-CLUSTER.address-VSSM_invalid_order_node_id.v1
+
+specialize
+	openEHR-EHR-CLUSTER.address.v1
+
+concept
+	[at0000.1]	
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+		["organisation"] = <"openEHR Foundation">
+		["email"] = <"">
+		["date"] = <"22/05/2010">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VSSM validity check, triggered by invalid node_id in order marker">
+			use = <"">
+			misuse = <"">
+			copyright = <"copyright (c) 2010 openEHR foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VSSM">
+	>
+	lifecycle_state = <"AuthorDraft">
+
+definition
+	CLUSTER[at0000.1] matches {	
+		/items matches {
+			after [at0004]
+			ELEMENT[at0.2] occurrences matches {0..1} matches {	
+				value matches {
+					DV_BOOLEAN matches {*}
+				}
+			}
+			ELEMENT[at0.3] occurrences matches {0..*} matches {	
+				value matches {
+					DV_TEXT matches {*}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0.2"] = <
+					text = <"element 1">
+					description = <"element 1">
+				>
+				["at0.3"] = <
+					text = <"element 2">
+					description = <"element 2">
+				>
+				["at0000.1"] = <
+					text = <"cluster">
+					description = <"cluster">
+				>
+			>
+		>
+	>

@@ -1,0 +1,53 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-ENTRY.VOKU_ac_code_duplicated_in_ontology.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Peter Gummer">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VOKU validity check: should be triggered when an ac-code is duplicated in the ontology.">
+			keywords = <"ADL", "validation", "test">
+			copyright = <"copyright (c) 2008 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VOKU">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	ENTRY[at0000] matches {
+		value matches {[ac0001]}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>
+
+	constraint_definitions = <
+		["en"] = <
+			items = <
+				["ac0001"] = <
+					text = <"">
+					description = <"">
+				>
+				["ac0001"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>

@@ -1,0 +1,84 @@
+﻿archetype (adl_version=1.5)
+	openEHR-EHR-OBSERVATION.FAIL_dadl_spurious_delimiter.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["zh-cn"] = <
+			language = <[ISO_639-1::zh-cn]>
+			author = <
+				["name"] = <"Rong Chen">
+	        	["organisation"] = <"A-code">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Sam Heard">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"This archetype contains a spurious '>' character at between the two term_definition blocks in the ontology section. The dADL parser currently does not pick it up properly, although it does generate a VOTM error.">
+			status = <"UNRESOLVED">
+		>
+		["zh-cn"] = <
+			language = <[ISO_639-1::zh-cn]>
+			purpose = <"描述系统性血压测量的结果和协议">
+		>
+	>
+	other_details = <
+		["regression"] = <"FAIL">
+	>
+	lifecycle_state = <"AuthorDraft">
+
+definition
+	OBSERVATION[at0000] matches {	-- Blood pressure
+		data matches {
+			HISTORY[at0001] matches {	-- history
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[at0002] occurrences matches {0..*} matches {	-- any event
+						data matches {*}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"the measurement by any means (invasive or non-invasive) of systemic arterial blood pressure which is deemed to represent the actual systemic blood pressure">
+					text = <"Blood pressure">
+				>
+				["at0001"] = <
+					description = <"history Structural node">
+					text = <"history">
+				>
+				["at0002"] = <
+					description = <"other event in event history">
+					text = <"any event">
+				>
+			>
+		>
+	>
+		["zh-cn"] = <
+			items = <
+				["at0000"] = <
+					description = <"the measurement of systemic arterial blood pressure which is deemed to represent the actual systemic blood pressure">
+					text = <"血压测量">
+				>
+				["at0001"] = <
+					description = <"history Structural node">
+					text = <"既往史">
+				>
+				["at0002"] = <
+					description = <"other event in event history">
+					text = <"任意事件">
+				>
+			>
+		>
+	>
+

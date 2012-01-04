@@ -1,0 +1,55 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-CAR.paths_alts_coded.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test paths in archetypes. This archetype contains a single-valed attribute 'wheels', with multiple identified alternatives.">
+			keywords = <"ADL", "test">
+			copyright = <"copyright (c) 2006 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	CAR[at0000] matches {	-- car
+		body matches {
+			CAR_BODY[at0001] matches {	-- hatchback body
+				description matches {"hatchback body"}
+				model matches {"xxxx"}
+			}
+			CAR_BODY[at0002] matches {	-- coupe body
+				description matches {"coupe body"}
+				model matches {"xxxx"}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"car">
+					text = <"car">
+				>
+				["at0001"] = <
+					description = <"hatchback body">
+					text = <"hatchback body">
+				>
+				["at0002"] = <
+					description = <"coupe body">
+					text = <"coupe body">
+				>
+			>
+		>
+	>

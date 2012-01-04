@@ -1,0 +1,82 @@
+archetype (adl_version=1.5)
+	openEHR-EHR-SECTION.VDIFP_non_matching_path.v1
+specialize
+	openEHR-EHR-SECTION.section_parent.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"thomas.beale@oceaninformatics.com">
+		["date"] = <"8/04/2007">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VDIFP validity check, triggered when a differential path is mentioned that does not occur in the parent archetype, even if the path is valid in the RM. To state this constraint correctly, it should be done as a normal constraint structure, as if it were being defined in a top-level archetype.">
+		>
+	>
+	other_details = <
+		["regression"] = <"VDIFP1">
+	>
+	lifecycle_state = <"AuthorDraft">
+
+definition
+	SECTION[at0000.1] matches {
+		/items cardinality matches {1..8; unordered} matches {
+			SECTION[at0.1] occurrences matches {0..1} matches {*}
+			SECTION[at0.2] occurrences matches {0..1} matches {*}
+			SECTION[at0.3] occurrences matches {0..1} matches {*}
+			SECTION[at0.4] occurrences matches {0..1} matches {*}
+			SECTION[at0.5] occurrences matches {0..1} matches {*}
+			SECTION[at0.6] occurrences matches {0..1} matches {*}
+			SECTION[at0.7] occurrences matches {0..1} matches {*}
+			SECTION[at0.8] occurrences matches {0..1} matches {*}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000.1"] = <
+					description = <"section">
+					text = <"section">
+				>
+				["at0.1"] = <
+					description = <"sub-section 1">
+					text = <"sub-section 1">
+				>
+				["at0.2"] = <
+					description = <"sub-section 2">
+					text = <"sub-section 2">
+				>
+				["at0.3"] = <
+					description = <"sub-section 3">
+					text = <"sub-section 3">
+				>
+				["at0.4"] = <
+					description = <"sub-section 4">
+					text = <"sub-section 4">
+				>
+				["at0.5"] = <
+					description = <"sub-section 5">
+					text = <"sub-section 5">
+				>
+				["at0.6"] = <
+					description = <"sub-section 6">
+					text = <"sub-section 6">
+				>
+				["at0.7"] = <
+					description = <"sub-section 7">
+					text = <"sub-section 7">
+				>
+				["at0.8"] = <
+					description = <"sub-section 8">
+					text = <"sub-section 8">
+				>
+			>
+		>
+	>

@@ -1,0 +1,51 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-ENTRY.VATDF_at_code_in_ordinal_not_in_ontology.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Peter Gummer">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VATDF validity check, triggered by an at-code used in an ordinal is not in the ontology.">
+			keywords = <"ADL", "validation", "test">
+			copyright = <"copyright (c) 2008 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VATDF">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	ENTRY[at0000] matches {
+		ordinal_attr_1 matches {
+			0|[local::at0001],
+			1|[local::at0002],
+			2|[local::at0003]; 	-- This one is missing!
+			0  	-- assumed value
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"">
+					description = <"">
+				>
+				["at0001"] = <
+					description = <"">
+					text = <"">
+				>
+				["at0002"] = <
+					description = <"">
+					text = <"">
+				>
+			>
+		>
+	>

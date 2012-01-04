@@ -1,0 +1,62 @@
+archetype (adl_version=1.5)
+	openEHR-EHR-OBSERVATION.VONSD_ontology_code_from_lower_level.v1
+specialize
+	openEHR-EHR-OBSERVATION.spec_test_obs.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["organisation"] = <"Ocean Informatics">
+		["name"] = <"Thomas Beale">
+		["date"] = <"11/8/2008">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VONSD validity check, triggered by at-code from a lower level in the ontology">
+		>
+	>
+	other_details = <
+		["regression"] = <"VONSD">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	OBSERVATION[at0000.1] matches {	-- specialisation containing ordered extension nodes
+		/data/events[at0002]/data/items cardinality matches {2..*} matches {
+			ELEMENT[at0.1] matches {	-- Text field 2
+				value matches {
+					DV_TEXT matches {*}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0.1"] = <
+					text = <"Text field 2">
+					description = <"*">
+				>
+				["at0.1.2"] = <
+					text = <"xx">
+					description = <"xx">
+				>
+				["at0.2"] = <
+					text = <"Quantity 2">
+					description = <"*">
+				>
+				["at0.3"] = <
+					text = <"Text field 3">
+					description = <"*">
+				>
+				["at0000.1"] = <
+					text = <"specialisation containing ordered extension nodes">
+					description = <"specialisation containing ordered extension nodes">
+				>
+			>
+		>
+	>

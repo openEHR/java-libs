@@ -1,0 +1,100 @@
+archetype (adl_version=1.5)
+	openehr-TEST_PKG-SOME_TYPE.terms_conversion.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test terms expressed as inline C_CODED_TEXT dADL sections. This archetype will not pass the diff test, since the save form will revert to the C_CODED_TEXT special syntax, not inline dADL (although this could be changed easily)">
+			keywords = <"ADL", "test">
+			copyright = <"copyright (c) 2004 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	SOME_TYPE[at0000] matches {	-- Test
+		clinical_coded_attr_2 matches {
+			C_CODE_PHRASE <
+				terminology_id = <
+					value = <"local">
+				>
+			>
+		}
+		clinical_coded_attr_3 matches {
+			C_CODE_PHRASE <
+				terminology_id = <
+					value = <"local">
+				>
+				code_list = <
+					["1"] = <"at0111">
+					["2"] = <"at0112">
+					["3"] = <"at0113">
+					["4"] = <"at0114">
+					["5"] = <"at0115">
+				>
+			>
+		}
+		clinical_coded_attr_4 matches {
+			C_CODE_PHRASE <
+				terminology_id = <
+					value = <"local">
+				>
+				code_list = <
+					["1"] = <"at0111">
+					["2"] = <"at0112">
+					["3"] = <"at0113">
+					["4"] = <"at0114">
+					["5"] = <"at0115">
+				>
+				assumed_value = <
+					terminology_id = <
+						value = <"local">
+					>
+					code_string = <"at0111">
+				>
+			>
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"Test">
+					text = <"Test">
+				>
+				["at0111"] = <
+					description = <"Site">
+					text = <"Anus">
+				>
+				["at0112"] = <
+					description = <"Site">
+					text = <"Rectum">
+				>
+				["at0113"] = <
+					description = <"Site">
+					text = <"Sigmoid">
+				>
+				["at0114"] = <
+					description = <"Site">
+					text = <"Descending">
+				>
+				["at0115"] = <
+					description = <"Site">
+					text = <"Splenic">
+				>
+			>
+		>
+	>

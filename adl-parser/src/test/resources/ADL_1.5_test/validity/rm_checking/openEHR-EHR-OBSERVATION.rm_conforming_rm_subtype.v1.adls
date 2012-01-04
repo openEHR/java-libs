@@ -1,0 +1,73 @@
+archetype (adl_version=1.5)
+	openEHR-EHR-OBSERVATION.rm_conforming_rm_subtype.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"thomas.beale@oceaninformatics.com">
+		["date"] = <"2009-03-18">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test for conformance of RM subtype (here: POINT_EVENT) to statically declared RM type (EVENT). This archetype should pass validation.">
+			keywords = <"test", "RM checking">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"AuthorDraft">
+
+definition
+	OBSERVATION[at0000] matches {
+		data matches {
+			HISTORY matches {
+				events cardinality matches {1..*; unordered} matches {
+					POINT_EVENT[at0001] occurrences matches {0..1} matches {
+						offset matches {
+							DV_DURATION matches {
+								value matches {|PT1M|}
+							}
+						}
+						data matches {
+							ITEM_LIST matches {
+								items cardinality matches {1..6; ordered} matches {
+									ELEMENT[at0002] occurrences matches {0..1} matches {*}
+									ELEMENT[at0003] occurrences matches {0..1} matches {*}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"An Observation">
+					text = <"An Observation">
+				>
+				["at0001"] = <
+					description = <"A Point_event">
+					text = <"A Point_event">
+				>
+				["at0002"] = <
+					description = <"Element #1">
+					text = <"Element #1">
+				>
+				["at0003"] = <
+					description = <"Element #2">
+					text = <"Element #2">
+				>
+			>
+		>
+	>

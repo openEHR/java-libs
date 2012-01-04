@@ -1,0 +1,70 @@
+archetype 
+	openEHR-TEST_PKG-CAR.VUNP_internal_ref_bad_path.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	lifecycle_state = <"draft">
+	details = <
+		["en"] = <
+			language = <"en">
+			purpose = <"Test VUNP validity check, triggered by incorrect path in internal reference">
+			keywords = <"ADL", "test">
+			copyright = <"copyright (c) 2004 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VUNP">
+	>
+
+definition
+	CAR [at0000] matches {  
+		wheels matches {
+			WHEEL[at0001] matches {
+				description matches {"front left hand wheel"}
+				parts matches {
+					RIM[at0002] matches {
+						nuts matches {|>=4|}
+						hubcap matches {/metal|plastic/}
+					}
+				}
+			}
+			WHEEL[at0003] matches {
+				description matches {"front right hand wheel"}
+				parts matches {
+					use_node RIM /wheels[at0001]/parts[at0002] -- will pass
+				}
+			}
+			WHEEL[at0004] matches {
+				description matches {"rear left hand wheel"}
+				parts matches {
+					use_node RIM /wheels[at0001]/parts[at0002]	-- will pass
+				}
+			}
+			WHEEL[at0005] matches {
+				description matches {"rear right hand wheel"}
+				parts matches {
+					use_node RIM /engine[at0001]/parts[at0002] -- will fail
+				}
+			}
+		}
+	}
+
+
+ontology 
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <text = <"car">; 				description = <"car">>
+				["at0001"] = <text = <"front left hand wheel">; 	description = <"front left hand wheel">>
+				["at0002"] = <text = <"wheel part">; 			description = <"wheel part">>
+				["at0003"] = <text = <"front right hand wheel">; 	description = <"front right hand wheel">>
+				["at0004"] = <text = <"rear left hand wheel">; 	description = <"rear left hand wheel">>
+				["at0005"] = <text = <"rear right hand wheel">; 	description = <"rear right hand wheel">>
+			>
+		>
+	>

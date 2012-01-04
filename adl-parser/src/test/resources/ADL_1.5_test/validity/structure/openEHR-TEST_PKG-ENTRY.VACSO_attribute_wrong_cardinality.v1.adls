@@ -1,0 +1,44 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-ENTRY.VACSO_attribute_wrong_cardinality.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Peter Gummer">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VACSO validity check, triggered when an object constraint with occurrences greater than 1 is added to a single-valued attribute.">
+			keywords = <"ADL", "validation", "test">
+			copyright = <"copyright (c) 2008 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VACSO">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	ENTRY[at0000] matches {
+		element_attr matches {
+			ELEMENT[at0001] occurrences matches {1..2} matches {*}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"">
+					description = <"">
+				>
+				["at0001"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>

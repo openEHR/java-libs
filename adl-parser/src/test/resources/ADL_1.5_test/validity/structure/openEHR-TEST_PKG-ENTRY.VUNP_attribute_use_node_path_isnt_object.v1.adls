@@ -1,0 +1,48 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-ENTRY.VUNP_attribute_use_node_path_isnt_object.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Peter Gummer">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VUNP validity check, triggered when a use_node refers to a path that isn't an object node.">
+			keywords = <"ADL", "validation", "test">
+			copyright = <"copyright (c) 2008 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VUNP">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	ENTRY[at0000] matches {
+		element_attr_2 matches {
+			use_node ELEMENT /value[at00001]
+		}
+		value matches {
+			[local::
+			at0001]
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"">
+					description = <"">
+				>
+				["at0001"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>

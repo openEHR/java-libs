@@ -1,0 +1,106 @@
+archetype (adl_version=1.5)
+	openEHR-EHR-OBSERVATION.VACMC_container_items_out_of_bounds.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+		["organisation"] = <"Ocean Informatics">
+		["date"] = <"05/06/2011">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VACMC error, triggered by occurrences of container attributes being outside of cardinality bounds.">
+			copyright = <"copyright 2011 openEHR Foundation">
+		>
+	>
+	lifecycle_state = <"AuthorDraft">
+	other_details = <
+		["regression"] = <"VACMC">
+	>
+
+definition
+	OBSERVATION[at0000] matches {	
+		data matches {
+			HISTORY[at0001] matches {	
+				events cardinality matches {1; unordered} matches {
+					EVENT[at0002] matches {	
+						data matches {
+							ITEM_TREE[at0003] matches {	
+								items matches {
+									CLUSTER[at0004] matches {	
+										items cardinality matches {1; unordered} matches {
+											ELEMENT[at0005] occurrences matches {0..1} matches {*}
+											ELEMENT[at0006] occurrences matches {0..1} matches {*}
+										}
+									}
+									CLUSTER[at0007] matches {	
+										items cardinality matches {1..2} matches {
+											ELEMENT[at0008] occurrences matches {1} matches {*}
+											ELEMENT[at0009] occurrences matches {0..1} matches {*}
+											ELEMENT[at0010] occurrences matches {0..1} matches {*}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"aaa">
+					description = <"aaa">
+				>
+				["at0001"] = <
+					text = <"Event Series">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"bbbb">
+					description = <"bbbb">
+				>
+				["at0003"] = <
+					text = <"Tree">
+					description = <"@ internal @">
+				>
+				["at0004"] = <
+					text = <"xxx">
+					description = <"xxx">
+				>
+				["at0005"] = <
+					text = <"cccc">
+					description = <"ccc">
+				>
+				["at0006"] = <
+					text = <"ddd">
+					description = <"ddd">
+				>
+				["at0007"] = <
+					text = <"eee">
+					description = <"eee">
+				>
+				["at0008"] = <
+					text = <"fff">
+					description = <"fff">
+				>
+				["at0009"] = <
+					text = <"ggg">
+					description = <"ggg">
+				>
+				["at0010"] = <
+					text = <"hhh">
+					description = <"hhh">
+				>
+			>
+		>
+	>

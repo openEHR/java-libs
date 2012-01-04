@@ -1,0 +1,77 @@
+archetype (adl_version=1.5)
+	openEHR-EHR-EVALUATION.VCORM_rm_non_existent_type.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"thomas.beale@oceaninformatics.com">
+		["date"] = <"10/03/2009">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VCORM validity check, triggered by non-existent object type CODED_TEXT (should be DV_CODED_TEXT)">
+			keywords = <"test", "RM checker">
+		>
+	>
+	other_details = <
+		["regression"] = <"VCORM">
+	>
+	lifecycle_state = <"AuthorDraft">
+
+definition
+	EVALUATION[at0000] matches {	
+		data matches {
+			ITEM_TREE matches {
+				items cardinality matches {0..*; unordered} matches {
+					ELEMENT[at0002] matches {
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0003] occurrences matches {0..1} matches {
+						value matches {
+							CODED_TEXT matches {
+								defining_code matches {
+									[local::
+									at0004, 
+									at0005]
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"Some evaluation">
+					text = <"Some evaluation">
+				>
+				["at0002"] = <
+					description = <"An Element">
+					text = <"An Element">
+				>
+				["at0003"] = <
+					description = <"Another Element">
+					text = <"Another Element">
+				>
+				["at0004"] = <
+					description = <"coded item #1">
+					text = <"coded item #1">
+				>
+				["at0005"] = <
+					description = <"coded item #2">
+					text = <"coded item #2">
+				>
+			>
+		>
+	>

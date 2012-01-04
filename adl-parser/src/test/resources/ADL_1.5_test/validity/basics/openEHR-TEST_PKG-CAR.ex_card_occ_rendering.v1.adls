@@ -1,0 +1,118 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-CAR.ex_card_occ_rendering.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test visual rendering of existence, cardinality and occurrences in the ADL Workbench.">
+			copyright = <"copyright (c) 2006 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	CAR[at0000] matches {	-- car
+		body matches {
+			CAR_BODY[at0001] matches {
+				 model existence matches {1} matches {"existence {1}"}
+			}
+		}
+		engine_parts existence matches {1} matches {
+			ENGINE_PART[at0002] matches {	
+				items existence matches {1} cardinality matches {0..*} matches {
+					ENGINE_PART_ITEM[at0013] matches {*}
+				}
+			}
+			ENGINE_PART[at0003] matches {
+				items cardinality matches {1..*} matches {
+					ENGINE_PART_ITEM[at0004] matches {*}
+					ENGINE_PART_ITEM[at0005] occurrences matches {0..1} matches {*}
+					ENGINE_PART_ITEM[at0006] occurrences matches {1} matches {*}
+					ENGINE_PART_ITEM[at0007] occurrences matches {0..*} matches {*}
+					ENGINE_PART_ITEM[at0008] occurrences matches {1..*} matches {*}
+					ENGINE_PART_ITEM[at0009] occurrences matches {0..5} matches {*}
+					ENGINE_PART_ITEM[at0010] occurrences matches {1..5} matches {*}
+					ENGINE_PART_ITEM[at0011] occurrences matches {10..20} matches {*}
+				}
+			}
+			ENGINE_PART[at0012] matches {	
+				items cardinality matches {2..5} matches {
+					ENGINE_PART_ITEM[at0013] matches {*}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"car">
+					text = <"car">
+				>
+				["at0001"] = <
+					description = <"car body">
+					text = <"car body">
+				>
+				["at0002"] = <
+					description = <"gearbox">
+					text = <"gearbox">
+				>
+				["at0003"] = <
+					description = <"engine block">
+					text = <"block">
+				>
+				["at0004"] = <
+					description = <"Use occurrences {0..*} from RM">
+					text = <"Use occurrences {0..*} from RM">
+				>
+				["at0005"] = <
+					description = <"Ocurrences {0..1}">
+					text = <"Ocurrences {0..1}">
+				>
+				["at0006"] = <
+					description = <"Occurrences {1}">
+					text = <"Occurrences {1}">
+				>
+				["at0007"] = <
+					description = <"Occurrences {0..*}">
+					text = <"Occurrences {0..*}">
+				>
+				["at0008"] = <
+					description = <"Occurrences {1..*}">
+					text = <"Occurrences {1..*}">
+				>
+				["at0009"] = <
+					description = <"Occurrences {0..5}">
+					text = <"Occurrences {0..5}">
+				>
+				["at0010"] = <
+					description = <"Occurrences {1..5}">
+					text = <"Occurrences {1..5}">
+				>
+				["at0011"] = <
+					description = <"Occurrences {10..20}">
+					text = <"Occurrences {10..20}">
+				>
+				["at0012"] = <
+					description = <"exhaust manifold">
+					text = <"exhaust manifold">
+				>
+				["at0013"] = <
+					description = <"exhaust manifold gasket">
+					text = <"exhaust manifold gasket">
+				>
+			>
+		>
+	>

@@ -1,0 +1,53 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-ENTRY.long_lines.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"author name">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"what this is for">
+			use = <"this is what it is used for, this could be a really long line or even
+multiple lines, just like 
+what you are reading now">
+			keywords = <"this", "is", "a", "list", "keywords">
+			misuse = <"this is not what it is used for">
+			copyright = <"this is mine, mine, mine I tell you! Since 2003. 
+And another thing.
+And another">
+			original_resource_uri = <
+				["guideline"] = <"http://guidelines.are.us/wherever/en">
+				["medline"] = <"http://some%20medline%20ref">
+			>
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"draft">
+	other_contributors = <"friend 1", ...>
+
+definition
+	ENTRY[at0000] matches {	-- most minimal sdfasdjb adsnfsadf s dns cshdisdh;sidoew dfhswdisdh sd swdf
+		element_attr matches {*}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"long lines of description asf asdf wfs f dsfwewfvkuwbefovewfd ewfvhewofn wefv
+ewdfcewfc ewdfch ofd ewdchew cwec ewfv ewfvwec ewfvcoidsc d d s sdfch swhd dc
+dwf wsdswfvwd">
+					text = <"most minimal sdfasdjb adsnfsadf s dns cshdisdh;sidoew dfhswdisdh sd swdf
+sdfsdf sdf sdfs sds a saof sodfhsdf sdf ashsdos ss sjhsdoisd shsdic sos shdodshdsf 
+sdfsdf sdf sdfs sds a saof sodfhsdf sdf">
+				>
+			>
+		>
+	>

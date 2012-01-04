@@ -1,0 +1,575 @@
+﻿archetype (adl_version=1.5)
+	openEHR-EHR-EVALUATION.unicode_farsi.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["fa"] = <
+			language = <[ISO_639-1::fa]>
+			author = <
+				["name"] = <"unknown">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["date"] = <"23/04/2006">
+		["email"] = <"sam.heard@oceaninformatics.com">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test unicode language archetype with Farsi translation">
+			use = <"For recording information about the prevalence of the condition in relatives and quantifying risk to the subject of care.">
+			misuse = <"Not for recording problems of individual relatives - use 'openEHR-EHR-EVALUATION.problem' and 'openEHR-EHR-EVALUATION.problem-diagnosis' and set the subject of data to the relative.">
+		>
+		["fa"] = <
+			language = <[ISO_639-1::fa]>
+			purpose = <"ثبت احتمال خطرداشتن و یا ایجاد شرایط ارزیابی شده به دلیل بروز در اقوام ">
+			use = <"برای ثبت اطلاعات درباره بروز شرایط در اقوام و احتمال خطر برای موضوع مراقبت ">
+			misuse = <"برای ثبت مشکلات اقوام فرد -از مشکل و مشکل_تشخیص و مجموعه ای از داده های مربوطه استفاده کنید">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"Initial">
+
+definition
+	EVALUATION[at0000] matches {	-- Evaluation of risk of condition
+		data matches {
+			ITEM_TREE[at0001] matches {	-- structure
+				items cardinality matches {1..*; ordered} matches {
+					ELEMENT[at0002] matches {	-- Index condition
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0004] occurrences matches {0..1} matches {	-- Assessed risk
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {
+									[local::
+									at0006, 	-- Not significant
+									at0007, 	-- Minimal significance
+									at0008, 	-- Significant
+									at0009]	-- Highly significant
+								}
+							}
+						}
+					}
+					CLUSTER[at0101] occurrences matches {0..1} matches {	-- Affected relatives
+						items matches {
+							CLUSTER[at0102] occurrences matches {0..*} matches {	-- Relative
+								name matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {[ac0000]}		-- Relationship
+									}
+								}
+								items matches {
+									ELEMENT[at0103] occurrences matches {0..1} matches {	-- Name
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+									ELEMENT[at0104] occurrences matches {0..1} matches {	-- Age at onset
+										value matches {
+											C_DV_QUANTITY <
+												property = <[openehr::128]>
+												list = <
+													["1"] = <
+														units = <"yr">
+														magnitude = <|0.0..200.0|>
+													>
+													["2"] = <
+														units = <"mth">
+														magnitude = <|0.0..36.0|>
+													>
+													["3"] = <
+														units = <"wk">
+														magnitude = <|0.0..52.0|>
+													>
+													["4"] = <
+														units = <"day">
+														magnitude = <|0.0..56.0|>
+													>
+												>
+											>
+										}
+									}
+									ELEMENT[at0127] occurrences matches {0..1} matches {	-- Date of onset
+										value matches {
+											DV_DATE matches {
+												value matches {yyyy-??-??}
+											}
+										}
+									}
+
+									ELEMENT[at0105] occurrences matches {0..1} matches {	-- Age at death
+										value matches {
+											C_DV_QUANTITY <
+												property = <[openehr::128]>
+												list = <
+													["1"] = <
+														units = <"yr">
+														magnitude = <|0.0..200.0|>
+													>
+												>
+											>
+										}
+									}
+									ELEMENT[at0106] occurrences matches {0..1} matches {	-- Date of death
+										value matches {
+											DV_DATE matches {
+												value matches {yyyy-??-??}
+											}
+										}
+									}
+									ELEMENT[at0107] occurrences matches {0..1} matches {	-- Index condition was cause of death
+										value matches {
+											DV_BOOLEAN matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[at0108] occurrences matches {0..1} matches {	-- Severity
+										value matches {
+											1|[local::at0109], 	-- Mild
+											4|[local::at0110], 	-- Moderate
+											7|[local::at0111]  	-- Severe
+										}
+									}
+									ELEMENT[at0128] occurrences matches {0..1} matches {	-- More specific condition
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+									ELEMENT[at0112] occurrences matches {0..1} matches {	-- Clinical description
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+									ELEMENT[at0113] occurrences matches {0..1} matches {	-- Genetic relative
+										value matches {
+											DV_BOOLEAN matches {
+												value matches {True, False}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					CLUSTER[at0114] occurrences matches {0..*} matches {	-- Affected ratio
+						items cardinality matches {1..4; ordered} matches {
+							ELEMENT[at0115] occurrences matches {0..1} matches {	-- Degree
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {
+											[local::
+											at0116, 	-- First degree relatives
+											at0117, 	-- Second degree relatives
+											at0118, 	-- Third degree relatives
+											at0119, 	-- Maternal relatives
+											at0120, 	-- Paternal relatives
+											at0121]	-- Family
+										}
+									}
+								}
+							}
+							ELEMENT[at0122] occurrences matches {0..1} matches {	-- Gender
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {
+											[local::
+											at0123, 	-- Male
+											at0124, 	-- Female
+											at0125]	-- Male and female
+										}
+									}
+								}
+							}
+							ELEMENT[at0126] occurrences matches {0..1} matches {	-- Number unaffected
+								value matches {
+									DV_COUNT matches {
+										magnitude matches {|0..100|}
+									}
+								}
+							}
+							ELEMENT[at0129] matches {	-- Number affected
+								value matches {
+									DV_COUNT matches {
+										magnitude matches {|0..100|}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_LIST[at0010] matches {	-- List
+				items matches {
+					ELEMENT[at0011] occurrences matches {0..1} matches {	-- Risk calculation
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0101"] = <
+					description = <"The family members affected by the condition">
+					text = <"Affected relatives">
+				>
+				["at0110"] = <
+					description = <"Significant morbidity and reduced capability">
+					text = <"Moderate">
+				>
+				["at0111"] = <
+					description = <"Major morbidity with significant social impact">
+					text = <"Severe">
+				>
+				["at0112"] = <
+					description = <"A clinical description of the affected relatives condition">
+					text = <"Clinical description">
+				>
+				["at0113"] = <
+					description = <"A genetic relative of the data subject - not an adoptive relative">
+					text = <"Genetic relative">
+				>
+				["at0114"] = <
+					description = <"A ratio of the affected to non-affected relatives of a particular type">
+					text = <"Affected ratio">
+				>
+				["at0115"] = <
+					description = <"The proximity or line of the relatives">
+					text = <"Degree">
+				>
+				["at0116"] = <
+					description = <"Relatives with 50% genetic share - parent, sibling, child">
+					text = <"First degree relatives">
+				>
+				["at0117"] = <
+					description = <"Relatives with 25% genetic share - grand parent, aunts and uncles, nieces and nephews, grand children">
+					text = <"Second degree relatives">
+				>
+				["at0118"] = <
+					description = <"Relatives with 12.5% genetic share, great grand parents, great aunts and uncles, first cousins, children of neices and nephews, great grand children">
+					text = <"Third degree relatives">
+				>
+				["at0119"] = <
+					description = <"Related through mother">
+					text = <"Maternal relatives">
+				>
+				["at0102"] = <
+					description = <"Details about the affected relative">
+					text = <"Relative">
+				>
+				["at0120"] = <
+					description = <"Related through father">
+					text = <"Paternal relatives">
+				>
+				["at0121"] = <
+					description = <"Entire family">
+					text = <"Family">
+				>
+				["at0122"] = <
+					description = <"The gender of the relatives included in the affected ratio">
+					text = <"Gender">
+				>
+				["at0123"] = <
+					description = <"Male gender">
+					text = <"Male">
+				>
+				["at0124"] = <
+					description = <"Female gender">
+					text = <"Female">
+				>
+				["at0125"] = <
+					description = <"Male and female relatives">
+					text = <"Male and female">
+				>
+				["at0126"] = <
+					description = <"The number of relatives in this group unaffected by the index condition">
+					text = <"Number unaffected">
+				>
+				["at0127"] = <
+					description = <"Date of onset">
+					text = <"Date of onset">
+				>
+				["at0128"] = <
+					description = <"A coded entry which is more specific than the index condition">
+					text = <"More specific condition">
+				>
+				["at0129"] = <
+					description = <"The number affected by the index condition">
+					text = <"Number affected">
+				>
+				["at0103"] = <
+					description = <"Optional name of the person for future reference">
+					text = <"Name">
+				>
+				["at0104"] = <
+					description = <"The age at which the condition was apparent">
+					text = <"Age at onset">
+				>
+				["at0105"] = <
+					description = <"The age at which this relative died">
+					text = <"Age at death">
+				>
+				["at0106"] = <
+					description = <"The year or date of death">
+					text = <"Date of death">
+				>
+				["at0107"] = <
+					description = <"Indication that the index was a significant factor in the death of this relative">
+					text = <"Index condition was cause of death">
+				>
+				["at0108"] = <
+					description = <"The severity of the condition for this relative">
+					text = <"Severity">
+				>
+				["at0109"] = <
+					description = <"Little affect on lifestyle">
+					text = <"Mild">
+				>
+				["at0000"] = <
+					description = <"Evaluation to indicate that there is, or is not, a significant risk of this subject of care having, now or in the future, a condition due to prior occurrence in a family member.">
+					text = <"Risk of condition based on family history">
+				>
+				["at0001"] = <
+					description = <"@ internal @">
+					text = <"structure">
+				>
+				["at0002"] = <
+					description = <"The condition on which the risk assessment is focussed">
+					text = <"Index condition">
+				>
+				["at0003"] = <
+					description = <"The likelihood that this person will develop this condition or suffer in this way in the future">
+					text = <"Significance of risk">
+				>
+				["at0004"] = <
+					description = <"The degree of risk conferred on the subject by the presence of this condition amongst relatives">
+					text = <"Assessed risk">
+				>
+				["at0006"] = <
+					description = <"The person is not assessed at being at higher risk than the general population">
+					text = <"Not significant">
+				>
+				["at0007"] = <
+					description = <"The person may be of somewhat greater risk of developing the condition ">
+					text = <"Minimal significance">
+				>
+				["at0008"] = <
+					description = <"The person is considered to be more likely to develop the condition than the general population">
+					text = <"Significant">
+				>
+				["at0009"] = <
+					description = <"The person is considered to be likely to develop the condition">
+					text = <"Highly significant">
+				>
+				["at0010"] = <
+					description = <"@ internal @">
+					text = <"List">
+				>
+				["at0011"] = <
+					description = <"The means of calculating the risk">
+					text = <"Risk calculation">
+				>
+			>
+		>
+		["fa"] = <
+			items = <
+				["at0101"] = <
+					text = <"اقوام  تاثیر پذیرنده">
+					description = <"اعضا خانواده که تحت تاثیر شرایط قرار می گیرند">
+				>
+				["at0110"] = <
+					text = <"متوسط">
+					description = <"بیماری مهم و کاهش دهنده توانایی">
+				>
+				["at0111"] = <
+					text = <"شدید">
+					description = <"بیماری عمده با تاثیر اجتماعی عمده">
+				>
+				["at0112"] = <
+					text = <"شرح بالینی">
+					description = <"شرح بالینی از شرایط اقوام تاثیر پذیر">
+				>
+				["at0113"] = <
+					text = <"اقوام وابسته از نظر ژنتیکی">
+					description = <" اقوام وابسته از نظر ژنتیکی و موضوع داده ها -منظور اقوام وابسته نیست">
+				>
+				["at0114"] = <
+					text = <"نسبت تاثیر پذیری">
+					description = <"نسبتی از تاثیر پذیری به اقوام تاثیر نپذیرفته ا ز شرایط خاص">
+				>
+				["at0115"] = <
+					text = <"درجه">
+					description = <"نزدیکی اقوام">
+				>
+				["at0116"] = <
+					text = <"اقوام درجه یک">
+					description = <"نسبت ژنتیکی-والدین ، خواهر، فرزند 50% اقوام با">
+				>
+				["at0117"] = <
+					text = <"اقوام درجه دو">
+					description = <"نسبت ژنتیکی-مادربزرگ یا پدر بزرگ ، امه و عمو، خواهر یا برادر زاده ،نوه 25% اقوام با">
+				>
+				["at0118"] = <
+					text = <"اقوام درجه سه">
+					description = <"نسبت ژنتیکی-جد ، امه و عمو مادری یا پدری،اولین پسر عمو یا دختر عمو ، فرزند خواهر زاده یا برادر زاده،فرزند نوه 12.5% اقوام با">
+				>
+				["at0119"] = <
+					text = <"اقوام مادری">
+					description = <"مربوط به مادر">
+				>
+				["at0102"] = <
+					text = <"نسبت">
+					description = <"جزییات در مورد اقوام تاثیر پذیر">
+				>
+				["at0120"] = <
+					text = <"اقوام والدین">
+					description = <"مربوط به پدر">
+				>
+				["at0121"] = <
+					text = <"خانواده">
+					description = <"کل خانواده">
+				>
+				["at0122"] = <
+					text = <"جنس">
+					description = <"جنس اقوام که شامل نسبت تاثیر پذیری نیز می باشد">
+				>
+				["at0123"] = <
+					text = <"مذکر">
+					description = <"جنس مذکر">
+				>
+				["at0124"] = <
+					text = <"مونث">
+					description = <"جنس مونث">
+				>
+				["at0125"] = <
+					text = <"مذکر و مونث">
+					description = <"اقوام مذکر و مونث">
+				>
+				["at0126"] = <
+					text = <"تعداد افراد تاثیر نپذیرنده">
+					description = <"تعداد اقوامی که در این گروه توسط شرایط ایندکس شده تحتا تاثیر قرار گرفته اند">
+				>
+				["at0127"] = <
+					text = <"تاریخ بروز">
+					description = <"تاریخ بروز">
+				>
+				["at0128"] = <
+					text = <"شرایط خاص تر">
+					description = <"موارد وارد کرده شده که نسبت به شرایط ایندکس خاص تر هستند">
+				>
+				["at0129"] = <
+					text = <"تعداد موارد تاثیر پذیرفته">
+					description = <"تعداد موارد تاثیر پذیرفته توسط شرایط ایندکس">
+				>
+				["at0103"] = <
+					text = <"نام">
+					description = <"نام اختیاری فرد برای ارجاع در آینده">
+				>
+				["at0104"] = <
+					text = <"سن در زمان بروز">
+					description = <"سنی که شرایط ظاهر شده است ">
+				>
+				["at0105"] = <
+					text = <"سن در زمان فوت">
+					description = <"سنی که این اقوام فوت کرده است">
+				>
+				["at0106"] = <
+					text = <"تاریخ فوت">
+					description = <"سال یا تاریخ فوت">
+				>
+				["at0107"] = <
+					text = <"شرایط ایندکس باعث فوت شده اند">
+					description = <"ایندکاسیونی که ایندکس ، فاکتور مهمی درفوت این اقوام بوده است ">
+				>
+				["at0108"] = <
+					text = <"شدت">
+					description = <"شدت شرایط این اقوام">
+				>
+				["at0109"] = <
+					text = <"خفیف">
+					description = <"تاثیر اندک بر شیوه زندگی">
+				>
+				["at0000"] = <
+					text = <"احتمال خطر شرایط بر اساس سابقه خانوادگی">
+					description =<"ارزشیابی برای مشخص کردن اینکه احتمال خطر مهمی در مورد این موضوع اکنون یا در آینده وجود دارد، شرایطی به دلیل رخداد قبلی شرایط در اعضا خانواده فرد "> 
+				>
+				["at0001"] = <
+					text = <"ساختار">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"ایندکس شرایط">
+					description = <"شرایطی که احتمال خطر بر آن متمرکز شده است">
+				>
+				["at0003"] = <
+					text = <"اهمیت احتمال خطر">
+					description = <"احتمال اینکه این شرایط برای فرد ایجاد شود یا به طریقی در آینده رنج ببرد">
+				>
+				["at0004"] = <
+					text = <"احتمال خطر ارزیابی شده">
+					description = <"درجه ای از احتمال خطر بر موضوع توسط حضور این شرایط در میان اقوام">
+				>
+				["at0006"] = <
+					text = <"مهم نیست">
+					description = <"فرد برای مشخص شدن اینکه در احتمال خطر بالایی نسبت به جمعیت معمول قرار دارد ارزیابی نشده است  ">
+				>
+				["at0007"] = <
+					text = <"اهمیت اندک">
+					description = <"فرد ممکن است احتمال خطر بیشتری برای ایجاد شرایط داشته باشد">
+				>
+				["at0008"] = <
+					text = <"مهم">
+					description = <"فرد در احتمال خطر ببیشتری برای ایجاد شرایط نسبت به جمعیت معمول قرار دارد ">
+				>
+				["at0009"] = <
+					text = <"اهمیت بالا">
+					description = <"فرد در احتمال خطر بالایی برای ایجاد شرایط نسبت به جمعیت معمول قرار دارد">
+				>
+				["at0010"] = <
+					description = <"@ internal @">
+					text = <"List">
+				>
+				["at0011"] = <
+					description = <"The means of calculating the risk">
+					text = <"Risk calculation">
+				>
+			>
+		>
+	>
+
+	constraint_definitions = <
+		["en"] = <
+			items = <
+				["ac0000"] = <
+					description = <"The relationship of this relative to the subject">
+					text = <"Relationship">
+				>
+			>
+		>
+		["fa"] = <
+			items = <
+				["ac0000"] = <
+					text = <"ارتباط">
+					description = <"ارتباط این اقوام با موضوع">
+				>
+			>
+		>
+	>

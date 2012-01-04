@@ -1,0 +1,88 @@
+﻿archetype (adl_version=1.5)
+	openEHR-EHR-OBSERVATION.VRDLA_inconsistent_lang_codes.v1
+concept
+	[at0000]	-- Blood pressure
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["zh-cn"] = <
+			language = <[ISO_639-1::zh-cn]>
+			author = <
+				["name"] = <"Rong Chen">
+	        	["organisation"] = <"A-code">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Sam Heard">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VDRLA validity check, triggered when language code in a dADL block (e.g. this 'details' block) does not match the code used in the 'language' attribute within the block; see the following block where 'zh-cn' does not match 'zh'.">
+		>
+		["zh-cn"] = <
+			language = <[ISO_639-1::zh]>
+			purpose = <"描述系统性血压测量的结果和协议">
+			keywords = <"血压">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["regression"] = <"VRDLA">
+	>
+	lifecycle_state = <"AuthorDraft">
+	other_contributors = <>
+
+definition
+	OBSERVATION[at0000] matches {	-- Blood pressure
+		data matches {
+			HISTORY[at0001] matches {	-- history
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[at0006] occurrences matches {0..*} matches {	-- any event
+						data matches {*}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	terminologies_available = <"SNOMED-CT", ...>
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"the measurement by any means (invasive or non-invasive) of systemic arterial blood pressure which is deemed to represent the actual systemic blood pressure">
+					text = <"Blood pressure">
+				>
+				["at0001"] = <
+					description = <"history Structural node">
+					text = <"history">
+				>
+				["at0006"] = <
+					description = <"other event in event history">
+					text = <"any event">
+				>
+			>
+		>
+		["zh-cn"] = <
+			items = <
+				["at0000"] = <
+					description = <"the measurement of systemic arterial blood pressure which is deemed to represent the actual systemic blood pressure">
+					text = <"血压测量">
+				>
+				["at0001"] = <
+					description = <"history Structural node">
+					text = <"既往史">
+				>
+				["at0006"] = <
+					description = <"other event in event history">
+					text = <"任意事件">
+				>
+			>
+		>
+	>
+

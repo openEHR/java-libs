@@ -1,0 +1,34 @@
+archetype (adl_version=1.5)
+	openehr-TEST_PKG-WHOLE.most_minimal.v3
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"unknown">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test what happens when a different version of an existing archetype is encountered by AWB.">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+
+definition
+	WHOLE[at0000] matches {*}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"most minimal">
+					text = <"most minimal">
+				>
+			>
+		>
+	>

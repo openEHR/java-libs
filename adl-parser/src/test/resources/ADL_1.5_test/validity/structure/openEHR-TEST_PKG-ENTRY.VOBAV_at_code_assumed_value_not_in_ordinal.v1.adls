@@ -1,0 +1,55 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-ENTRY.VOBAV_at_code_assumed_value_not_in_ordinal.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VOBAV validity check, triggered when an an ordinal's assumed value is not in the list.">
+			keywords = <"ADL", "validation", "test">
+			copyright = <"copyright (c) 2008 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VOBAV">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	ENTRY[at0000] matches {
+		ordinal_attr_1 matches {
+			0|[local::at0001], 	-- +
+			1|[local::at0002], 	-- ++
+			2|[local::at0003]; 	-- +++
+			9  	-- assumed value
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"">
+					description = <"">
+				>
+				["at0001"] = <
+					text = <"">
+					description = <"">
+				>
+				["at0002"] = <
+					text = <"">
+					description = <"">
+				>
+				["at0003"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>

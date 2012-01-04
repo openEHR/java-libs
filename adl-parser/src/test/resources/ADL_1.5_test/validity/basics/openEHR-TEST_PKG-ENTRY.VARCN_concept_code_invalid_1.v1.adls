@@ -1,0 +1,36 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-ENTRY.VARCN_concept_code_invalid_1.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Peter Gummer">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VARCN validity constraint, triggered with an invalid concept code.">
+			keywords = <"ADL", "validation", "test">
+			copyright = <"copyright (c) 2008 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VARCN">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	ENTRY[at0001] matches {*}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0001"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>

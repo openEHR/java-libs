@@ -1,0 +1,62 @@
+archetype (adl_version=1.5)
+	openehr-TEST_PKG-BOOK.structure_test1.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test basic structure hierarchy">
+			keywords = <"ADL", "structure", "test">
+			copyright = <"copyright (c) 2010 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	BOOK[at0000] matches {
+		title matches {"Devils"}
+		author matches {"Fyodor Dostoyevsky"}
+		chapters matches {
+			CHAPTER[at0001] matches {
+				title matches {"By way of introductoin"}
+			}
+			CHAPTER[at0002] matches {
+				title matches {"Prince Harry, matchmaking"}
+			}
+			CHAPTER[at0003] matches {
+				title matches {"Another man's sins"}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"Novel">
+					text = <"Work of fiction">
+				>
+				["at0001"] = <
+					description = <"Chapter 1">
+					text = <"1st chapter of the book">
+				>
+				["at0002"] = <
+					description = <"Chapter 2">
+					text = <"2nd chapter of the book">
+				>
+				["at0003"] = <
+					description = <"Chapter 3">
+					text = <"3rd chapter of the book">
+				>
+			>
+		>
+	>

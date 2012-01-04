@@ -1,0 +1,77 @@
+archetype (adl_version=1.5)
+	openEHR-EHR-CLUSTER.quoted_strings.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["organisation"] = <"a\"x'c\\d">
+		["name"] = <"Peter Gummer">
+		["email"] = <"a\"x'c\\d">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"This archetype should parse fine, and when saved and reparsed, no changes should occur in the strings of the at0001 term, i.e. the quoted slash and quoted double quote should remain as they are. However, both should display in the GUI without the backslash symbol">
+			use = <"\\">
+			keywords = <"a\"x'c\\d", "p\"q\\s\"">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"0">
+	other_contributors = <"a\"x'c\\d", ...>
+
+definition
+	CLUSTER[at0000] matches {	-- unknown
+		items matches {
+			ELEMENT[at0001] occurrences matches {0..1} matches {	-- a\b
+				value matches {
+					DV_CODED_TEXT matches {
+						defining_code matches {
+							[local::
+							at0010, 	-- \
+							at0011]	-- \\
+						}
+					}
+				}
+			}
+			ELEMENT[at0002] occurrences matches {0..1} matches {	-- \a\
+				value matches {
+					DV_TEXT matches {
+						value matches {"No quoting should happen here"}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"unknown">
+					description = <"unknown">
+				>
+				["at0001"] = <
+					text = <"a\\b">
+					description = <"a\"b">
+				>
+				["at0002"] = <
+					text = <"\\a\\">
+					description = <"\"a\"">
+				>
+				["at0010"] = <
+					text = <"\\">
+					description = <"xxx">
+				>
+				["at0011"] = <
+					text = <"\\\\">
+					description = <"xxx">
+				>
+			>
+		>
+	>

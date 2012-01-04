@@ -1,0 +1,149 @@
+archetype (adl_version=1.5)
+	openEHR-EHR-EVALUATION.table.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+		["organisation"] = <"Ocean Informatics">
+		["date"] = <"01/05/2004">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test archetype of openEHR ITEM_TABLE type">
+			keywords = <"ADL", "test">
+			copyright = <"copyright (c) 2010 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"FAIL">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	EVALUATION[at0000] matches {	-- outer object
+		data matches {
+			ITEM_TABLE[at0001] matches {	-- some kind of result
+				columns cardinality matches {3; ordered} matches {
+					CLUSTER[at0002] matches {	-- aspect
+						name matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[local::at0002]}		-- aspect
+							}
+						}
+						items cardinality matches {0..*; ordered} matches {
+							ELEMENT matches {
+								value matches {
+									DV_CODED_TEXT matches {*}
+								}
+							}
+						}
+					}
+					CLUSTER[at0003] matches {	-- left
+						name matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[local::at0003]}		-- left
+							}
+						}
+						items cardinality matches {0..*; ordered} matches {
+							ELEMENT matches {
+								value matches {
+									DV_QUANTITY matches {*}
+								}
+							}
+						}
+					}
+					CLUSTER[at0004] matches {	-- right
+						name matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[local::at0004]}		-- right
+							}
+						}
+						items cardinality matches {0..*; ordered} matches {
+							ELEMENT matches {
+								value matches {
+									DV_QUANTITY matches {*}
+								}
+							}
+						}
+					}
+				}
+				rows cardinality matches {4; ordered} matches {
+					CLUSTER[at0005] matches {	-- knee
+						items cardinality matches {0..*; ordered} matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[local::at0005]}		-- knee
+							}
+						}
+					}
+					CLUSTER[at0006] matches {	-- hip
+						items cardinality matches {0..*; ordered} matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[local::at0006]}		-- hip
+							}
+						}
+					}
+					CLUSTER[at0007] matches {	-- ankle
+						items cardinality matches {0..*; ordered} matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[local::at0007]}		-- ankle
+							}
+						}
+					}
+					CLUSTER[at0008] matches {	-- heel
+						items cardinality matches {0..*; ordered} matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[local::at0008]}		-- heel
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"outer object">
+					text = <"outer object">
+				>
+				["at0001"] = <
+					description = <"some kind of result">
+					text = <"some kind of result">
+				>
+				["at0002"] = <
+					description = <"aspect">
+					text = <"aspect">
+				>
+				["at0003"] = <
+					description = <"left side">
+					text = <"left">
+				>
+				["at0004"] = <
+					description = <"right side">
+					text = <"right">
+				>
+				["at0005"] = <
+					description = <"knee">
+					text = <"knee">
+				>
+				["at0006"] = <
+					description = <"hip">
+					text = <"hip">
+				>
+				["at0007"] = <
+					description = <"ankle">
+					text = <"ankle">
+				>
+				["at0008"] = <
+					description = <"heel">
+					text = <"heel">
+				>
+			>
+		>
+	>

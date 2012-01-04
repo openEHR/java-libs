@@ -53,7 +53,7 @@ import org.openehr.terminology.SimpleTerminologyService;
 /**
  * JavaCC grammer file for Archteype Definition Language (ADL)
  *
- * Targeted ADL revision 1.4
+ * Targeted ADL revision 1.5
  *
  * Included uriGrammarFragment.txt from Gregory Kick
  *

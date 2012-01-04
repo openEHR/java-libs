@@ -1,0 +1,49 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-ENTRY.VONSD_ac_code_wrong_specialisation_level.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Peter Gummer">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VONSD validation test, triggered when a constraint code has a specialisation level in a non-specialised archetype.">
+			keywords = <"ADL", "test">
+			copyright = <"copyright (c) 2008 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VONSD">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	ENTRY[at0000] matches {
+		value matches {[ac0001.1]}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>
+
+	constraint_definitions = <
+		["en"] = <
+			items = <
+				["ac0001.1"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>

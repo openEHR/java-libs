@@ -1,0 +1,92 @@
+archetype (adl_version=1.5)
+	openEHR-EHR-OBSERVATION.spec_test_obs3.v2
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"thomas.beale@oceaninformatics.com">
+		["date"] = <"23/04/2010">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Parent of specialised archetype(s) that test use of attribute paths">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"AuthorDraft">
+	other_contributors = <>
+
+definition
+	OBSERVATION[at0000] matches {	
+		data matches {
+			HISTORY[at0002] matches {	
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[at0003] occurrences matches {0..*} matches {	
+						data matches {
+							ITEM_TREE[at0001] matches {	
+								items cardinality matches {0..*; ordered} matches {
+									CLUSTER[at0005] occurrences matches {0..1} matches {	
+										items cardinality matches {1..8; ordered} matches {
+											ELEMENT[at0004] occurrences matches {0..1} matches {	
+												value matches {
+													C_DV_QUANTITY <
+														property = <[openehr::125]>
+														list = <
+															["1"] = <
+																units = <"kPa">
+																magnitude = <|>=0.0|>
+															>
+														>
+													>
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"obs">
+					text = <"obs">
+				>
+				["at0001"] = <
+					description = <"tree">
+					text = <"tree">
+				>
+				["at0002"] = <
+					description = <"history">
+					text = <"history">
+				>
+				["at0003"] = <
+					description = <"event">
+					text = <"event">
+				>
+				["at0004"] = <
+					description = <"element">
+					text = <"element">
+				>
+				["at0005"] = <
+					description = <"cluster">
+					text = <"cluster">
+				>
+			>
+		>
+	>

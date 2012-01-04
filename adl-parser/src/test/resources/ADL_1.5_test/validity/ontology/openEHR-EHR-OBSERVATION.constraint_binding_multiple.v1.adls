@@ -1,0 +1,105 @@
+archetype (adl_version=1.5)
+	openEHR-EHR-OBSERVATION.constraint_binding_multiple.v1
+
+concept
+	[at0000]	
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To document cough assessment for use in nursing care">
+		>
+	>
+	lifecycle_state = <"0">
+	other_details = <
+		["regression"] = <"PASS">
+	>
+
+definition
+	OBSERVATION[at0000] matches {
+		data matches {
+			HISTORY[at0001] matches {
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[at0002] occurrences matches {0..1} matches {	
+						data matches {
+							ITEM_TREE[at0003] matches {	
+								items matches {
+									ELEMENT[at0004] occurrences matches {0..1} matches {	
+										value matches {
+											DV_CODED_TEXT matches {
+												defining_code matches {[ac0001]}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	terminologies_available = <"AIR93", "AIR93(1.0.0)">
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Cough - ZN">
+					description = <"Documenting cough assessment as needed for nursing care">
+				>
+				["at0001"] = <
+					text = <"Event Series">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"Any event">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"Tree">
+					description = <"@ internal @">
+				>
+				["at0004"] = <
+					text = <"Character">
+					description = <"The character of the cough.">
+				>
+			>
+		>
+	>
+	constraint_definitions = <
+		["en"] = <
+			items = <
+				["ac0001"] = <
+					text = <"MZN-SIF-Dihanje-Kašelj">
+					description = <"Link to ISPEK termset.">
+				>
+			>
+		>
+	>
+	term_bindings = <
+		["AIR93"] = <
+			items = <
+			>
+		>
+	>
+	constraint_bindings = <
+		["AIR93(1.0.0)"] = <
+			items = <
+				["ac0001"] = <http://openEHR.org/MZN-SIF-Dihanje-Kašelj>
+			>
+		>
+		["AIR93"] = <
+			items = <
+				["ac0001"] = <http://openEHR.org/MZN-SIF-Dihanje-Kašelj>
+			>
+		>
+	>

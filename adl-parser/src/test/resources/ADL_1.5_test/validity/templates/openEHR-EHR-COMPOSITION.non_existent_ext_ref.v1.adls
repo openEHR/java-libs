@@ -1,0 +1,42 @@
+template (adl_version=1.5)
+	openEHR-EHR-COMPOSITION.t_non_existent_ext_ref.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"Ian McNicoll">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"ian.mcnicoll@oceaninformatics.com">
+		["date"] = <"12/03/2010">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test legal external reference">
+		>
+	>
+	other_details = <
+		["regression"] = <"FAIL">
+	>
+	lifecycle_state = <"Initial">
+
+definition
+	COMPOSITION[at0000] matches {
+		content matches {
+			use_archetype OBSERVATION[openEHR-EHR-OBSERVATION.doesnt_exist.v1]
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Composition">
+					description = <"Composition">
+				>
+			>
+		>
+	>

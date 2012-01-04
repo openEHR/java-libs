@@ -1,0 +1,49 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-ENTRY.VACSIT_attribute_missing_ids_on_alternative_children.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Peter Gummer">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VACSIT validity check, triggered when two alternative objects, which have children, don't have disambiguating node identifiers.">
+			keywords = <"ADL", "validation", "test">
+			copyright = <"copyright (c) 2008 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VACSIT">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	ENTRY[at0000] matches {
+		element_attr matches {
+			ELEMENT matches {
+				value matches {
+					DV_TEXT matches {*}
+				}
+			}
+			ELEMENT matches {
+				value matches {
+					DV_TEXT matches {*}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>

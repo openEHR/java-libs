@@ -1,0 +1,38 @@
+archetype
+	openehr-TEST_PKG-WHOLE.VACCD_missing_root_node_id.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	lifecycle_state = <"draft">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VARCN validity check, triggered by node_id missing from root object">
+			keywords = <"ADL", "test">
+			copyright = <"copyright (c) 2010 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VARCN">
+	>
+
+definition
+	WHOLE matches {*}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"test entry">
+					text = <"test entry">
+				>
+			>
+		>
+	>

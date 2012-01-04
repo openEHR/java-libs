@@ -1,0 +1,81 @@
+archetype (adl_version=1.5)
+	openEHR-EHR-EVALUATION.mixed_types.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+		["submission"] = <"01/05/2004">
+		["organisation"] = <"OceanInformatics.com">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test various C_OBJECT types together">
+			keywords = <"ADL", "test">
+			copyright = <"copyright (c) 2010 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	EVALUATION[at0000] matches {
+		data matches {
+			ITEM_TREE matches {
+				items matches {
+					CLUSTER[at0001] matches {
+						items matches {
+							use_node ELEMENT /data/items[at0010]/items[at0012]
+							allow_archetype CLUSTER[at0003] matches {
+								include
+									archetype_id/value matches {/.*/}
+							}
+							ELEMENT[at0002] matches {*}
+						}
+					}
+					CLUSTER[at0010] matches {
+						items matches {
+							ELEMENT[at0012] matches {*}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"Evaluation">
+					text = <"Evaluation">
+				>
+				["at0001"] = <
+					description = <"cluster">
+					text = <"cluster">
+				>
+				["at0002"] = <
+					description = <"element">
+					text = <"element">
+				>
+				["at0010"] = <
+					description = <"cluster">
+					text = <"cluster">
+				>
+				["at0012"] = <
+					description = <"element">
+					text = <"element">
+				>
+				["at0003"] = <
+					description = <"element">
+					text = <"element">
+				>
+			>
+		>
+	>

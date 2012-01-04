@@ -1,0 +1,73 @@
+archetype (adl_version=1.5)
+	openEHR-DEMOGRAPHIC-PERSON.use_node_occurrences.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test for override of occurrences in use_node node; ">
+			use = <"Test">
+			keywords = <"test", "use_node", "occurrences">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"Initial">
+
+definition
+	PERSON[at0000] matches {	-- person demographics
+		contacts matches {
+			CONTACT[at0005] matches {	-- home contact
+				addresses matches {
+					ADDRESS[at0006] occurrences matches {0..1} matches {*}
+					ADDRESS[at0007] occurrences matches {0..2} matches {*}
+					ADDRESS[at0008] matches {*}
+				}
+			}
+			CONTACT[at0009] matches {	-- work contact
+				addresses matches {
+					use_node ADDRESS /contacts[at0005]/addresses[at0006]
+					use_node ADDRESS /contacts[at0005]/addresses[at0007]
+					use_node ADDRESS occurrences matches {1..3} /contacts[at0005]/addresses[at0008]
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"demographic person details">
+					text = <"person demographics">
+				>
+				["at0005"] = <
+					description = <"person's home contact details">
+					text = <"home contact">
+				>
+				["at0006"] = <
+					description = <"person's phone number">
+					text = <"phone number">
+				>
+				["at0007"] = <
+					description = <"person's fax number">
+					text = <"fax number">
+				>
+				["at0008"] = <
+					description = <"person's email address">
+					text = <"email address">
+				>
+				["at0009"] = <
+					description = <"person's home contact details">
+					text = <"work contact">
+				>
+			>
+		>
+	>

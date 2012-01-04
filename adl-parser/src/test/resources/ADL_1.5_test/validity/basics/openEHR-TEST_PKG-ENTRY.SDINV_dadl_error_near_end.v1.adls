@@ -1,0 +1,45 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-ENTRY.SDINV_dadl_error_near_end.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Peter Gummer">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test that the dADL parser resets itself properly when run a second time after encountering an error in embedded dADL near the end of an archetype.">
+			keywords = <"ADL", "validation", "test">
+			copyright = <"copyright (c) 2008 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"SDINV">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	ENTRY[at0000] matches {
+		item matches {
+			C_DV_QUANTITY <
+				property = <[openehr::125]>
+			>
+			DV_PROPORTION <
+				numerator = <|>=0,3.0|>		-- THE COMMA IS AN ERROR!
+			>
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>

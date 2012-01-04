@@ -1,0 +1,64 @@
+archetype (adl_version=1.5)
+	openEHR-EHR-OBSERVATION.redefine_1_value.v1
+specialize
+	openEHR-EHR-OBSERVATION.spec_test_obs.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["organisation"] = <"Ocean Informatics">
+		["name"] = <"Thomas Beale">
+		["date"] = <"11/8/2008">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test redefinition of a single value into a more constrained form">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	OBSERVATION[at0000.1] matches {	-- first level specialisation archetype
+		/data/events[at0002]/data/items matches {
+			ELEMENT[at0003.1] matches {	-- Redefined text field
+				value matches {
+					DV_CODED_TEXT matches {
+						defining_code matches {
+							[local::
+							at0.1, 	-- internal code A
+							at0.2]	-- internal code B
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0.1"] = <
+					text = <"internal code A">
+					description = <"internal code A description">
+				>
+				["at0.2"] = <
+					text = <"internal code B">
+					description = <"internal code B description">
+				>
+				["at0000.1"] = <
+					text = <"first level specialisation archetype">
+					description = <"first level specialisation test archetype">
+				>
+				["at0003.1"] = <
+					text = <"Redefined text field">
+					description = <"redefined text field">
+				>
+			>
+		>
+	>

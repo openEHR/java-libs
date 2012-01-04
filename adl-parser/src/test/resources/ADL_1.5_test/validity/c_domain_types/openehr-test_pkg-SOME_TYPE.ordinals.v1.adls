@@ -1,0 +1,93 @@
+archetype (adl_version=1.5)
+	openehr-TEST_PKG-SOME_TYPE.ordinals.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test ADL ordinal syntax">
+			keywords = <"ADL", "ordinal", "test">
+			copyright = <"copyright (c) 2004 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	SOME_TYPE[at0000] matches {	-- root item
+		standard_ordinal_attr matches {
+			DV_ORDINAL [at0004] matches {
+				value matches {|0|}
+				symbol matches {
+					DV_CODED_TEXT matches {
+						defining_code matches {[local::at0001]}		-- +
+					}
+				}
+			}
+			DV_ORDINAL [at0005] matches {
+				value matches {|1|}
+				symbol matches {
+					DV_CODED_TEXT matches {
+						defining_code matches {[local::at0002]}		-- ++
+					}
+				}
+			}
+			DV_ORDINAL [at0006] matches {
+				value matches {|2|}
+				symbol matches {
+					DV_CODED_TEXT matches {
+						defining_code matches {[local::at0003]}		-- +++
+					}
+				}
+			}
+		}
+		clinical_ordinal_attr_1 matches {
+			0|[local::at0001], 	-- +
+			1|[local::at0002], 	-- ++
+			2|[local::at0003]; 	-- +++
+			0  	-- assumed value
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"xxxx">
+					text = <"root item">
+				>
+				["at0001"] = <
+					description = <"mild">
+					text = <"+">
+				>
+				["at0002"] = <
+					description = <"medium">
+					text = <"++">
+				>
+				["at0003"] = <
+					description = <"severe">
+					text = <"+++">
+				>
+				["at0004"] = <
+					description = <"ordinal 1">
+					text = <"ordinal 1">
+				>
+				["at0005"] = <
+					description = <"ordinal 2">
+					text = <"ordinal 2">
+				>
+				["at0006"] = <
+					description = <"ordinal 3">
+					text = <"ordinal 3">
+				>
+			>
+		>
+	>

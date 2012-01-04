@@ -1,0 +1,106 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-OBSERVATION.three_languages.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["fr"] = <
+			language = <[ISO_639-1::fr]>
+			author = <
+				["name"] = <"Frederik Tyler">
+				["email"] = <"freddy@something.somewhere.co.uk">
+			>
+			accreditation = <"British Medical Translator id 00400595">
+		>
+		["ru"] = <
+			language = <[ISO_639-1::ru]>
+			author = <
+				["name"] = <"Nina Alexandrovna">
+				["organisation"] = <"Dostoevsky Media Services">
+				["email"] = <"nina@translation.dms.ru">
+			>
+			accreditation = <"Russian Translator id 892230-3A">
+		>
+	>
+
+description
+	original_author = <
+		["name"] = <"author name">
+		["email"] = <"someone@home">
+	>
+	details = <
+		["fr"] = <
+			language = <[ISO_639-1::fr]>
+			purpose = <"a quoi ça sert">
+			use = <"ceçi explique la fonction de l'archetype">
+			keywords = <"ceçi", "est", "une", "liste", "de", "mots", "clés">
+			misuse = <"les interdictions de l'utilisation de cet archetype">
+			copyright = <"c'est à moi tout ce travail!">
+			original_resource_uri = <
+				["ligne guide"] = <"http://guidelines.are.us/wherever/fr">
+				["medline"] = <"http://some%20medline%20ref">
+			>
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"what this is for">
+			use = <"this explains the usage of the archetype">
+			keywords = <"this", "is", "a", "list", "of", "keywords">
+			misuse = <"this is not what it is used for">
+			copyright = <"this is mine, mine, mine I tell you! Since 2003">
+			original_resource_uri = <
+				["guideline"] = <"http://guidelines.are.us/wherever/en">
+				["medline"] = <"http://some%20medline%20ref">
+			>
+		>
+		["ru"] = <
+			language = <[ISO_639-1::ru]>
+			purpose = <"funktsiia">
+			use = <"v kakih sluchaiah ispol'zuetsia dannii arkhetip">
+			keywords = <"eto", "spisok", "kliuchevih", "slov">
+			misuse = <"Eto ob'iasniaet, pochemu etot arkhetip bil ispol'zovan ne po prednaznacheniiu">
+			copyright = <"Eta rabota bila vipolnena mnoi">
+			original_resource_uri = <
+				["guideline"] = <"http://guidelines.are.us/wherever/ru">
+				["medline"] = <"http://some%20medline%20ref">
+			>
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"draft">
+	other_contributors = <"friend 1", "friend 2", "friend 3">
+
+definition
+	OBSERVATION[at0000] matches {	-- most minimal
+		data matches {*}
+	}
+
+ontology
+	term_definitions = <
+		["fr"] = <
+			items = <
+				["at0000"] = <
+					description = <"le plus minimal">
+					text = <"le plus minimal">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"most minimal">
+					text = <"most minimal">
+				>
+			>
+		>
+		["ru"] = <
+			items = <
+				["at0000"] = <
+					description = <"le plus minimal">
+					text = <"le plus minimal">
+				>
+			>
+		>
+	>

@@ -1,0 +1,114 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-CAR.paths_basic.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test paths in archetypes. This archetype contains a single-valed attribute 'body', with one object, and a multiple-valued attribute, 'engine', which has a number of sub-items.">
+			keywords = <"ADL", "test">
+			copyright = <"copyright (c) 2006 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	CAR[at0000] matches {	-- car
+		body matches {
+			CAR_BODY[at0001] matches {	-- car body
+				description matches {"principal car body"}
+				model matches {"xxxx"}
+			}
+		}
+		engine_parts matches {
+			ENGINE_PART[at0003] matches {	-- block
+				items matches {
+					ENGINE_PART_ITEM[at0004] matches {	-- head
+						model matches {"xxx"}
+						type matches {"xxx"}
+					}
+					ENGINE_PART_ITEM[at0005] matches {	-- body
+						model matches {"xxx"}
+						type matches {"xxx"}
+					}
+					ENGINE_PART_ITEM[at0006] matches {	-- pistons
+						model matches {"xxx"}
+						type matches {"xxx"}
+					}
+					ENGINE_PART_ITEM[at0007] matches {	-- cam shaft
+						model matches {"xxx"}
+						type matches {"xxx"}
+					}
+					ENGINE_PART_ITEM[at0008] matches {	-- sump
+						model matches {"xxx"}
+						type matches {"xxx"}
+					}
+				}
+			}
+			ENGINE_PART[at0009] matches {	-- exhaust manifold
+				items matches {
+					ENGINE_PART_ITEM[at0010] matches {	-- exhaust manifold gasket
+						model matches {"xxx"}
+						type matches {"xxx"}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"car">
+					text = <"car">
+				>
+				["at0001"] = <
+					description = <"car body">
+					text = <"car body">
+				>
+				["at0003"] = <
+					description = <"engine block">
+					text = <"block">
+				>
+				["at0004"] = <
+					description = <"engine block head">
+					text = <"head">
+				>
+				["at0005"] = <
+					description = <"engine block body">
+					text = <"body">
+				>
+				["at0006"] = <
+					description = <"engine pistons">
+					text = <"pistons">
+				>
+				["at0007"] = <
+					description = <"engine cam shaft">
+					text = <"cam shaft">
+				>
+				["at0008"] = <
+					description = <"oil sump">
+					text = <"sump">
+				>
+				["at0009"] = <
+					description = <"exhaust manifold">
+					text = <"exhaust manifold">
+				>
+				["at0010"] = <
+					description = <"exhaust manifold gasket">
+					text = <"exhaust manifold gasket">
+				>
+			>
+		>
+	>

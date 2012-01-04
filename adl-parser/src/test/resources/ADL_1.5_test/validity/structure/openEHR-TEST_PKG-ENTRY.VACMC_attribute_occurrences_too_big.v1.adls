@@ -1,0 +1,40 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-ENTRY.VACMC_occurrences_too_big.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Peter Gummer">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test VACMC validity check, triggered when an object's occurrences exceeds the attribute's cardinality.">
+			keywords = <"ADL", "validation", "test">
+			copyright = <"copyright (c) 2008 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"VACMC">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	ENTRY[at0000] matches {
+		element_attr_2 cardinality matches {0..1} matches {
+			ELEMENT occurrences matches {1..2} matches {*}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"">
+					description = <"">
+				>
+			>
+		>
+	>

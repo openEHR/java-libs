@@ -1,0 +1,161 @@
+﻿archetype (adl_version=1.5)
+	openEHR-EHR-CLUSTER.address.v1
+
+concept
+	[at0000]	-- Address
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["organisation"] = <"Ocean Informatics">
+		["name"] = <"Ian McNicoll">
+		["date"] = <"11/11/2007">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record details of one or more personal addresses for an individual">
+			use = <"">
+			keywords = <"address", ...>
+			misuse = <"">
+			copyright = <"copyright (c) 2010 openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"Initial">
+
+definition
+	CLUSTER[at0000] matches {	-- Address
+		items matches {
+			CLUSTER[at0001] occurrences matches {0..*} matches {	-- Address
+				items matches {
+					ELEMENT[at0006] matches {	-- Address Type
+						value matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {
+									[local::
+									at0011, 	-- Residential
+									at0012, 	-- Correspondence
+									at0013, 	-- Business
+									at0014]	-- Temporary
+								}
+							}
+						}
+					}
+					ELEMENT[at0002] occurrences matches {0..1} matches {	-- Unstructured address
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					CLUSTER[at0003] occurrences matches {0..1} matches {	-- Structured address
+						items matches {
+							ELEMENT[at0005] occurrences matches {0..1} matches {	-- Property number
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+							ELEMENT[at0009] occurrences matches {0..4} matches {	-- Address line
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+						}
+					}
+					ELEMENT[at0004] occurrences matches {0..1} matches {	-- Post code
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					CLUSTER[at0015] occurrences matches {0..1} matches {	-- AddressValid Period
+						items matches {
+							ELEMENT[at0007] occurrences matches {0..1} matches {	-- Valid from
+								value matches {
+									DV_DATE_TIME matches {
+										value matches {yyyy-??-??T??:??:??}
+									}
+								}
+							}
+							ELEMENT[at0008] occurrences matches {0..1} matches {	-- Valid to
+								value matches {
+									DV_DATE_TIME matches {
+										value matches {yyyy-??-??T??:??:??}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Address">
+					description = <"To record details of one or more personal addresses">
+				>
+				["at0001"] = <
+					text = <"Address">
+					description = <"One or more adresses for an individual">
+				>
+				["at0002"] = <
+					text = <"Unstructured address">
+					description = <"A postal address expressed in an unstructured format. ENV 13606 - 4:2000 7.11.15">
+				>
+				["at0003"] = <
+					text = <"Structured address">
+					description = <"The structure of a postal address representing the residence of a patient or the physical location of an organisation.  ENV 13606-4:2000 7.11.1">
+				>
+				["at0004"] = <
+					text = <"Post code">
+					description = <"Post code">
+				>
+				["at0005"] = <
+					text = <"Property number">
+					description = <"The number of the property">
+				>
+				["at0006"] = <
+					text = <"Address Type">
+					description = <"The type of address">
+				>
+				["at0007"] = <
+					text = <"Valid from">
+					description = <"The start of the period for which this address is valid">
+				>
+				["at0008"] = <
+					text = <"Valid to">
+					description = <"Date from which the Address is no longer valid">
+				>
+				["at0009"] = <
+					text = <"Address line">
+					description = <"A series of address lines">
+				>
+				["at0011"] = <
+					text = <"Residential">
+					description = <"*">
+				>
+				["at0012"] = <
+					text = <"Correspondence">
+					description = <"*">
+				>
+				["at0013"] = <
+					text = <"Business">
+					description = <"*">
+				>
+				["at0014"] = <
+					text = <"Temporary">
+					description = <"*">
+				>
+				["at0015"] = <
+					text = <"AddressValid Period">
+					description = <"The period during which the associated address is applicable to the person / organisation.  ENV 13606 - 4:2000 7.11.11.  This describes the actual period.">
+				>
+			>
+		>
+	>

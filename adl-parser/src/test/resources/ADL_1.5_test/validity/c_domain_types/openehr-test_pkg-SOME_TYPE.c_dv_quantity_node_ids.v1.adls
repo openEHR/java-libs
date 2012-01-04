@@ -1,0 +1,79 @@
+archetype (adl_version=1.5)
+	openehr-TEST_PKG-SOME_TYPE.c_dv_quantity_node_ids.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Illustrates the use of inline dADL representing C_DV_QUANTITY, including with no magnitude">
+			keywords = <"ADL", "test">
+			copyright = <"copyright (c) 2004 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	SOME_TYPE[at0000] matches {	-- root item
+		clinical_quantity_attr_2 matches {
+			(C_DV_QUANTITY) <
+				node_id = <"at0003">
+				property = <[openehr::127]>
+				list = <
+					["1"] = <
+						units = <"C">
+					>
+					["2"] = <
+						units = <"F">
+					>
+				>
+			>
+			(C_DV_QUANTITY) <
+				node_id = <"at0004">
+				property = <[openehr::127]>
+				list = <
+					["1"] = <
+						units = <"C">
+					>
+					["2"] = <
+						units = <"F">
+					>
+				>
+			>
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"xxxx">
+					text = <"root item">
+				>
+				["at0001"] = <
+					description = <"Centigrade temperature">
+					text = <"Centigrade temperature">
+				>
+				["at0002"] = <
+					description = <"Fahrenheit temperature">
+					text = <"Fahrenheit temperature">
+				>
+				["at0003"] = <
+					description = <"first instance">
+					text = <"first instance">
+				>
+				["at0004"] = <
+					description = <"second instance">
+					text = <"second instance">
+				>
+			>
+		>
+	>

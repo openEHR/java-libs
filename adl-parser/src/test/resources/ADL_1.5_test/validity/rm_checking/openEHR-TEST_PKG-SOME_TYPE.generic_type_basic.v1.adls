@@ -1,0 +1,55 @@
+archetype (adl_version=1.5)
+	openEHR-TEST_PKG-SOME_TYPE.generic_type_basic.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Illustrates the use of generic types">
+			keywords = <"ADL", "test">
+			copyright = <"copyright (c) 2006 The openEHR Foundation">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+	lifecycle_state = <"draft">
+
+definition
+	SOME_TYPE[at0000] matches {	-- root item
+		qty_interval_attr_1 matches {
+			DV_INTERVAL<DV_QUANTITY> matches {
+				lower matches {
+					DV_QUANTITY matches {
+						units matches {"C"}
+						magnitude matches {|>=37.0|}
+					}
+				}
+				upper matches {
+					DV_QUANTITY matches {
+						units matches {"C"}
+						magnitude matches {|>=39.0|}
+					}
+				}
+				lower_included matches {True}
+				upper_included matches {True}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"xxxx">
+					text = <"root item">
+				>
+			>
+		>
+	>
