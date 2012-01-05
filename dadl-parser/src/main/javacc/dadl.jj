@@ -243,8 +243,6 @@ PARSER_END(DADLParser)
                     |
                       "#" ( (["0"-"9"])+ | "x" (["0"-"9","a"-"f","A"-"F"])+ )
                     ) ";'">
-|
-  < V_CODE_PHRASE: "["(<LET_DIG_DUDSLR>)+"::"(<LET_DIG_DUDS>)+"]">              
 }
 
 < * > TOKEN: /* VALUES - dADL */
@@ -474,7 +472,7 @@ SimpleValue simple_value() :
   |
     LOOKAHEAD( string_value() )
     str = string_value()
-    { value = new StringValue(str); }
+    { value = new StringValue(str); }  
   )
   { return value; }
 }
@@ -1168,10 +1166,13 @@ Interval duration_interval_value() :
 String term_code() :
 {
   Token t;
+  String value;
 }
 {
-  t = <V_QUALIFIED_TERM_CODE_REF>    
-  { return t.image; }
+  t = <V_QUALIFIED_TERM_CODE_REF> {
+    value = t.image;
+  }  
+  { return value.substring(1, value.length() - 1); }
 }
 
 List<String> term_code_list_value() :

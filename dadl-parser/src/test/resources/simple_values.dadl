@@ -7,5 +7,5 @@ simple_values = <
     character_value = <'a'>
     integer_value = <100>
     real_value = <9.5>
-    boolean_value = <True>    
+    boolean_value = <True>  
 >

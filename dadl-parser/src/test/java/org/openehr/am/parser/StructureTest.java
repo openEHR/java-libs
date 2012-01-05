@@ -17,4 +17,20 @@ public class StructureTest extends ParserTestBase {
 			"person_001.dadl"));
 		parser.parse();
 	}
+	
+	public void testParseOriginalAuthorBlock() throws Exception {
+		DADLParser parser = new DADLParser(loadFromClasspath(
+			"original_author.dadl"));
+		parser.parse();
+	}
+	
+	public void testParseTermDefinitionsBlock() throws Exception {
+		DADLParser parser = new DADLParser(loadFromClasspath(
+			"term_definitions.dadl"));				
+	}
+	
+	public void testParseOriginalLanguageAsTermCode() throws Exception {
+		DADLParser parser = new DADLParser(loadFromClasspath(
+			"original_language.dadl"));		
+	}
 }
