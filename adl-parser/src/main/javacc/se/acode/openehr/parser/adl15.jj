@@ -1,11 +1,11 @@
 /*
  * component:   "openEHR Java Reference Implementation"
- * description: "Java ADL Parser"
- * keywords:    "binding"
+ * description: "Java ADL 1.5 Parser"
+ * keywords:    "ADL"
  *
  * author:      "Rong Chen <rong.acode@gmail.com>"
  * copyright:   "Copyright (C) 2005,2006,2007 ACODE HB, Sweden"
- * copyright:   "Copyright (C) 2008,2009 Cambio Healthcare Systems, Sweden"
+ * copyright:   "Copyright (C) 2008-2012 Cambio Healthcare Systems, Sweden"
  * license:     "See notice at bottom of class"
  *
  * file:        "$URL$"
@@ -22,7 +22,7 @@ options {
   UNICODE_INPUT = true;
 }
 
-PARSER_BEGIN(ADLParser)
+PARSER_BEGIN(ADL15Parser)
 
 package se.acode.openehr.parser;
 
@@ -41,7 +41,6 @@ import org.openehr.rm.support.identification.*;
 import org.openehr.rm.support.terminology.*;
 import org.openehr.rm.support.measurement.*;
 
-import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.assertion.*;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
@@ -57,13 +56,11 @@ import org.openehr.am.parser.*;
  *
  * Targeted ADL revision 1.5
  *
- * Included uriGrammarFragment.txt from Gregory Kick
- *
  * @author Rong Chen (rong.acode@gmail.com)
  * @version 1.4
  */
 
-public class ADLParser {
+public class ADL15Parser {
 
   /* static fields */
   private static final String CHARSET = "UTF-8";
@@ -80,17 +77,17 @@ public class ADLParser {
   /* =======================  public constructors  ======================== */
 
   /* Constructor that takes file as input */
-  public ADLParser(File file) throws IOException {
+  public ADL15Parser(File file) throws IOException {
       this(new FileInputStream(file), CHARSET);
   }
 
   /* Constructor that takes string as input */
-  public ADLParser(String value) {
+  public ADL15Parser(String value) {
       this(new BufferedReader(new StringReader(value)));
   }
   
   /* Constructor that takes file as input */
-  public ADLParser(File file, boolean missingLanguageCompatible,
+  public ADL15Parser(File file, boolean missingLanguageCompatible,
       boolean emptyPurposeCompatible) throws IOException {
       this(new FileInputStream(file), CHARSET);
       this.missingLanguageCompatible = missingLanguageCompatible;
@@ -98,7 +95,7 @@ public class ADLParser {
   }
 
   /* Constructor that takes string as input */
-  public ADLParser(String value, boolean missingLanguageCompatible,
+  public ADL15Parser(String value, boolean missingLanguageCompatible,
   		boolean emptyPurposeCompatible) {
       this(new BufferedReader(new StringReader(value)));
       this.missingLanguageCompatible = missingLanguageCompatible;
@@ -106,7 +103,7 @@ public class ADLParser {
   }
   
   /* Constructor that takes Reader as input */
-  public ADLParser(Reader reader, boolean missingLanguageCompatible,
+  public ADL15Parser(Reader reader, boolean missingLanguageCompatible,
   		boolean emptyPurposeCompatible) {
       this(reader);
       this.missingLanguageCompatible = missingLanguageCompatible;
@@ -114,7 +111,7 @@ public class ADLParser {
   }
   
   /* Constructor that takes InputStream as input */
-  public ADLParser(InputStream input, boolean missingLanguageCompatible,
+  public ADL15Parser(InputStream input, boolean missingLanguageCompatible,
   		boolean emptyPurposeCompatible) {
       this(input);
       this.missingLanguageCompatible = missingLanguageCompatible;
@@ -124,7 +121,7 @@ public class ADLParser {
   /* =========================  public interface ======================== */
 
   /* execute the parsing */
-  public Archetype parse() throws ParseException, Exception {
+  public ParsedArchetype parse() throws ParseException, Exception {
       return archetype();
   }
 
@@ -140,20 +137,14 @@ public class ADLParser {
   
   /* ===================  entry point from command-line  ================ */
   public static void main(String args[]) throws IOException {
-    ADLParser parser = null;
+    ADL15Parser parser = null;
     String title = "ADL 1.4 Parser: ";
-
-// read from stdin disabled
-//    if (args.length == 0) {
-//      System.out.println(title + "  Reading from standard input . . .");
-//      parser = new ADLParser(System.in);
-//    }
 
     if (args.length == 1) {
       System.out.println(title + "  Reading from file " + args[0] + " . . .");
       try {
       	// be permissive in console mode
-        parser = new ADLParser(new File(args[0]), true, true);
+        parser = new ADL15Parser(new File(args[0]), true, true);
       } catch (IOException e) {
         System.out.println(title + "  File " + args[0] + " not found.");
         return;
@@ -177,13 +168,13 @@ public class ADLParser {
     			continue;
     		}
     		if(parser == null) {
-    			parser = new ADLParser(files[i], true, true);
+    			parser = new ADL15Parser(files[i], true, true);
     		} else {
     			parser.reInit(files[i]);
     		}    		
     		total++;
     		try {
-		      Archetype a = parser.archetype();
+		      ParsedArchetype a = parser.archetype();
 		      System.out.println(files[i] + "  parsed successfully");
 		      passed ++;
 		    } catch (Throwable e) {
@@ -198,15 +189,15 @@ public class ADLParser {
     	return;	
     } else {
       System.out.println(title + "  Usage is one of:");
-      System.out.println("         java ADLParser < inputfile");
+      System.out.println("         java ADL15Parser < inputfile");
       System.out.println("OR");
-      System.out.println("         java ADLParser inputfile");
+      System.out.println("         java ADL15Parser inputfile");
       System.out.println("OR");
-      System.out.println("         java ADLParser -d directory");
+      System.out.println("         java ADL15Parser -d directory");
       return;
     }
     try {
-      Archetype a = parser.archetype();
+      ParsedArchetype a = parser.archetype();
       // System.out.println(a.toString());
       System.out.println(title + "  ADL file parsed successfully.");
     } catch (Throwable e) {
@@ -217,7 +208,7 @@ public class ADLParser {
 
 }
 
-PARSER_END(ADLParser)
+PARSER_END(ADL15Parser)
 
 < * > SKIP : /* WHITE SPACE */
 {
@@ -243,51 +234,10 @@ PARSER_END(ADLParser)
 | <SYM_UNCONTROLLED: "uncontrolled"> : DEFAULT
 | <SYM_SPECIALIZE: "speciali"["s","z"]"e"([" ","\t","\r","\n"])*"\n"> : DEFAULT
 | <SYM_CONCEPT: "concept"([" ","\t","\r","\n"])*"\n" > : DEFAULT
-| <SYM_LANGUAGE: "language"([" ","\t","\r","\n"])*"\n"> : LANGUAGE
+| <SYM_LANGUAGE: "language"([" ","\t","\r","\n"])*"\n"> : DEFAULT
 | <SYM_DEFINITION: "definition"([" ","\t","\r","\n"])*"\n" > : CADL
-| <SYM_DESCRIPTION: "description"([" ","\t","\r","\n"])*"\n" > : DESCRIPTION
-| <SYM_ONTOLOGY: "ontology"([" ","\t","\r","\n"])*"\n" > : ONTOLOGY
-}
-
-< LANGUAGE > TOKEN [IGNORE_CASE]: /* KEYWORDS - archetype language */
-{
-  < SYM_ORIGINAL_LANGUAGE: "original_language">
-| < SYM_TRANSLATIONS: "translations">
-| < SYM_LANG_LANGUAGE: "language">
-| < SYM_AUTHOR: "author">
-| < SYM_ACCREDITATION: "accreditation">
-| < SYM_LANG_OTHER_DETAILS: "other_details">
-}
-
-
-< DESCRIPTION > TOKEN [IGNORE_CASE]: /* KEYWORDS - ADL description */
-{
-  < SYM_ORIGINAL_AUTHOR: "original_author">
-| < SYM_LIFECYCLE_STATE: "lifecycle_state">
-| < SYM_ARCHETYPE_PACKAGE_URI: "archetype_package_uri">
-| < SYM_DETAILS: "details">
-| < SYM_ORIGINAL_RESOURCE_URI: "original_resource_uri">
-| < SYM_OTHER_DETAILS: "other_details">
-| < SYM_OTHER_CONTRIBUTORS: "other_contributors">
-| < SYM_SUBMISSION: "submission">
-| < SYM_ORGANISATION: "organisation">
-| < SYM_DATE: "date">
-| < SYM_VERSION: "version">
-| < SYM_STATUS: "status">
-| < SYM_REVISION: "revision">
-| < SYM_PURPOSE: "purpose">
-| < SYM_USE: "use">
-| < SYM_MISUSE: "misuse">
-| < SYM_COPYRIGHT: "copyright">
-| < SYM_KEYWORDS: "keywords">
-| < SYM_RIGHTS: "rights">
-| < SYM_LANGUAGE_WORD: "language">
-}
-
-< DESCRIPTION, ONTOLOGY > TOKEN [IGNORE_CASE]: /* KEYWORDS - ADL description & ONTOLOGY */
-{
-  < SYM_DESCRIPTION_WORD: "description">
-| < SYM_COMMENT: "comment">
+| <SYM_DESCRIPTION: "description"([" ","\t","\r","\n"])*"\n" > : DEFAULT
+| <SYM_ONTOLOGY: "ontology"([" ","\t","\r","\n"])*"\n" > : DEFAULT
 }
 
 < * > TOKEN [IGNORE_CASE]: /* KEYWORDS - dADL */
@@ -296,22 +246,6 @@ PARSER_END(ADLParser)
 | < SYM_FALSE: "false">
 | < SYM_INFINITY: "infinity">
 | < SYM_QUERY_FUNC: "query">
-}
-
-< ONTOLOGY > TOKEN [IGNORE_CASE]: /* KEYWORDS - ontology */
-{
-  < SYM_PRIMARY_LANGUAGE: "primary_language">
-| < SYM_LANGUAGES_AVAILABLE: "languages_available">
-| < SYM_TERMINOLOGIES_AVAILABLE: "terminologies_available">
-| < SYM_TERM_DEFINITIONS: "term_definitions">
-| < SYM_TERM_BINDING: "term_binding"("s")?> 
-| < SYM_CONSTRAINT_DEFINITIONS: "constraint_definitions">
-| < SYM_CONSTRAINT_BINDING: "constraint_binding"("s")?>
-| < SYM_ITEMS: "items">
-| < SYM_TEXT: "text">
-| < SYM_TRANSLATION: "translation">
-| < V_ABSOLUTE_PATH_WQ: "\"/" <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* "\"" >      
- 
 }
 
 < CADL, USE_NODE > TOKEN [IGNORE_CASE]: /* KEYWORDS - cADL */
@@ -423,8 +357,6 @@ TOKEN : /* IDENTIFIERS - ADL */
 {
   < #V_LOCAL_CODE_CORE: "a"["c","t"](["0"-"9","."])+>
 |
-  < V_LOCAL_CODE: "\""<V_LOCAL_CODE_CORE>"\"">
-| 
   < V_INTEGER:   (<DIG>)+
                | (<DIG>){1,3}(","(<DIG>){3})+>
 | < V_REAL:  (<DIG>)+"./"~[".","0"-"9"]
@@ -506,12 +438,14 @@ TOKEN : /* IDENTIFIERS - ADL */
                       "#" ( (["0"-"9"])+ | "x" (["0"-"9","a"-"f","A"-"F"])+ )
                     ) ";'">
 |
-  < V_CODE_PHRASE: "["(<LET_DIG_DUDSLR>)+"::"(<LET_DIG_DUDS>)+"]">              
+  < V_CODE_PHRASE: "["(<LET_DIG_DUDSLR>)+"::"(<LET_DIG_DUDS>)+"]">
+| 
+  < V_ATTRIBUTE_IDENTIFIER: ["a"-"z"](<LET_DIG_U>)* >               
 }
 
 /* ----------------------- TOKEN - dADL ---------------------------- */
 
-< DADL, ONTOLOGY > TOKEN: /* VALUES - dADL */
+< DADL> TOKEN: /* VALUES - dADL */
 {
   < V_QUALIFIED_TERM_CODE_REF: "["(<LET_DIG_DUDSLR>)+"::"(<LET_DIG_DUDS>)+"]">
 |
@@ -552,8 +486,6 @@ TOKEN : /* IDENTIFIERS - ADL */
 |
  < V_TYPE_IDENTIFIER: ["A"-"Z"](<LET_DIG_U>)*>
 |
- < V_ATTRIBUTE_IDENTIFIER: ["a"-"z"](<LET_DIG_U>)* >
-|
  < #PATH_SEGMENT: <V_ATTRIBUTE_IDENTIFIER>(<V_LOCAL_TERM_CODE_REF>)? >
 |
   < V_RELATIVE_PATH: <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* >      
@@ -561,104 +493,28 @@ TOKEN : /* IDENTIFIERS - ADL */
   < V_ABSOLUTE_PATH: "/"<PATH_SEGMENT>("/"<PATH_SEGMENT>)* > : CADL
 }
 
-
-<ONTOLOGY> TOKEN : /* URL per RFC 1738 Section 5 */
-{
-  < URL : <httpurl> | <ftpurl> | <newsurl> | <nntpurl> | <telneturl> | <gopherurl> | <waisurl> | <mailtourl> | <fileurl> | <prosperourl> | <otherurl> >
-| < #genericurl : <scheme> ":" <schemepart> >
-| < #otherurl : <genericurl> >
-| < #scheme : ( <lowalpha> | <digit> | "+" | "-" | "." )+ >
-| < #schemepart : ( <xchar> )* | <ipschemepart> >
-| < #ipschemepart : "//" <login> ( "/" <urlpath> )? >
-| < #login : ( <user> ( ":" <password> )? "@" )? <hostport> >
-| < #hostport : <host> ( ":" <port> )? >
-| < #host : <hostname> | <hostnumber> >
-| < #hostname : ( <domainlabel> "." )* <toplabel> >
-| < #domainlabel : <alphadigit> | ( <alphadigit> ( <alphadigit> | "-" )* <alphadigit> ) >
-| < #toplabel : <alpha> | ( <alpha> ( <alphadigit> | "-" )* <alphadigit> ) >
-| < #alphadigit : <alpha> | <digit> >
-| < #hostnumber :  <digits> "." <digits> "." <digits> "." <digits> >
-| < #port :  <digits> >
-| < #user :  ( <uchar> | ";" | "?" | "&" | "=" )* >
-| < #password :  ( <uchar> | ";" | "?" | "&" | "=" )* >
-| < #urlpath :  ( <xchar> )* >
-| < #ftpurl : "ftp://" <login> ( "/" <fpath> ( ";type=" <ftptype> )? )? >
-| < #fpath : <fsegment> ( "/" <fsegment> )* >
-| < #fsegment :  ( <uchar> | "?" | ":" | "@" | "&" | "=" )* >
-| < #ftptype : "A" | "I" | "D" | "a" | "i" | "d" >
-| < #fileurl : "file://" ( <host> | "localhost" )? "/" <fpath> >
-| < #httpurl : "http://" <hostport> ( "/" <hpath> ( "?" <search> )? )? >
-| < #hpath : <hsegment> ( "/" <hsegment> )* >
-| < #hsegment :  ( <uchar> | ";" | ":" | "@" | "&" | "=" )* >
-| < #search :  ( <uchar> | ";" | ":" | "@" | "&" | "=" )* >
-| < #gopherurl : "gopher://" <hostport> ( "/" ( <gtype> ( <selector> ( "%09" <search> ( "%09" <gopherstring> )? )? )? )? )? >
-| < #gtype : <xchar> >
-| < #selector : ( <xchar> )* >
-| < #gopherstring : ( <xchar> )* >
-| < #mailtourl : "mailto:" <encoded822addr> >
-| < #encoded822addr : ( <xchar> )+ >
-| < #newsurl : "news:" <grouppart> >
-| < #grouppart : "*" | <group> | <article> >
-| < #group : <alpha> ( <alpha> | <digit> | "-" | "." | "+" | "_" )* >
-| < #article : ( <uchar> | ";" | "/" | "?" | ":" | "&" | "="  )* "@" <host> >
-| < #nntpurl : "nntp://" <hostport> "/" <group> ( "/" <digits> )? >
-| < #telneturl : "telnet://" <login> "/" >
-| < #waisurl :  <waisdatabase> | <waisindex> | <waisdoc> >
-| < #waisdatabase : "wais://" <hostport> "/" >
-| < #waisindex : "wais://" <hostport> "/" <database> "?" <search> >
-| < #waisdoc : "wais://" <hostport> "/" <database> "/" <wtype> "/" <wpath> >
-| < #database : ( <uchar> )* >
-| < #wtype : ( <uchar> )* >
-| < #wpath : ( <uchar> )* >
-| < #prosperourl : "prospero://" <hostport> "/" <ppath> ( <fieldspec> )* >
-| < #ppath : <psegment> ( "/" <psegment> )* >
-| < #psegment :  ( <uchar> | "?" | ":" | "@" | "&" | "=" )* >
-| < #fieldspec : ";" <fieldname> "=" <fieldvalue> >
-| < #fieldname :  ( <uchar> | "?" | ":" | "@" | "&" )* >
-| < #fieldvalue :  ( <uchar> | "?" | ":" | "@" | "&" )* >
-| < #lowalpha : [ "a"-"z" ] >
-| < #hialpha : [ "A"-"Z" ] >
-| < #alpha : <lowalpha> | <hialpha> >
-| < #digit : [ "0"-"9" ] >
-| < #safe : "$" | "-" | "_" | "." | "+" >
-| < #extra : "!" | "*" | "'" | "(" | ")" | "," >
-| < #national : "{" | "}" | "|" | "\\" | "^" | "~" | "[" | "]" | "`" >
-| < #punctuation : "<" | ">" | "#" | "%" | "\"" >
-| < #reserved : ";" | "/" | "?" | ":" | "@" | "&" | "=" >
-| < #hex : <digit> | "A" | "B" | "C" | "D" | "E" | "F" | "a" | "b" | "c" | "d" | "e" | "f" >
-| < #escape : "%" <hex> <hex> >
-| < #unreserved : <alpha> | <digit> | <safe> | <extra> >
-| < #uchar : <unreserved> | <escape> >
-| < #xchar : <unreserved> | <reserved> | <escape> >
-| < #digits : ( <digit> )+ >
-}
-
 /*****************************************
  * THE ADL LANGUAGE GRAMMAR STARTS HERE *
  *****************************************/
 
-Archetype archetype() throws Exception :
+ParsedArchetype archetype() throws Exception :
 {
   Token t;	
   String id;
   String adlVersion = null;
-  boolean isControlled = false;
+  boolean isControlled = false;  // TODO
   String parent = null;
   String concept = null;
-  String lang = null;
-  String langTerm = null;
-  String langCode = null;
-  CodePhrase originalLanguage = null;
-  Map<String, TranslationDetails> translations = null; 
-  TranslationDetails translationDetails = null;
-  RevisionHistory revisionHistory = null;
-  ResourceDescription description = null;
-  CComplexObject definition;
-  ArchetypeOntology ontology;
-  Set<Assertion> invariants = null; // TODO
-  TerminologyService terminologyService = 
-  		SimpleTerminologyService.getInstance();
+  
+  CComplexObject definition;  
+  ParsedArchetype pArchetype = new ParsedArchetype();
+  ContentObject language = null;
+  ContentObject description = null;
+  ContentObject ontology = null;
+  ContentObject revisionHistory = null;
+  ContentObject annotations = null;
 }
+
 {
   <SYM_ARCHETYPE>	
   [ 
@@ -667,7 +523,7 @@ Archetype archetype() throws Exception :
     [ 
       <SYM_SEMICOLON>
       isControlled = controlled() 
-    ]
+    ]    
     <SYM_R_PARENTHESIS>
   ]
 
@@ -677,34 +533,28 @@ Archetype archetype() throws Exception :
   [ parent = arch_specialisation() ]
   [ concept = arch_concept() ]
   
-  [
-    <SYM_LANGUAGE>  
-  	<SYM_ORIGINAL_LANGUAGE> <SYM_EQ> "<" originalLanguage = code_phrase() ">"
-    [ 
-      <SYM_TRANSLATIONS> <SYM_EQ> "<"
-      
-      { translations = translations(); }       
-        
-      ">"	
-    ]
-  ]
+  [ <SYM_LANGUAGE> language = dadl()]
    
-  [ description = arch_description() ]
+  [ <SYM_DESCRIPTION> description = dadl() ]
 
-  definition = arch_definition()
+  <SYM_DEFINITION> definition = cadl() 
 
-  ontology = arch_ontology()
+  <SYM_ONTOLOGY> ontology = dadl()
+  
   <EOF>
 
   {
-  	if(originalLanguage == null && missingLanguageCompatible) {
-  		langCode = ontology.getPrimaryLanguage();		
-  		originalLanguage = new CodePhrase("ISO_639-1", langCode);  
-  	}       	
+  	pArchetype.setArchetypeId(concept);
+	pArchetype.setParentArchetypeId(parent);
+	pArchetype.setConceptId(concept);
+	pArchetype.setLanguage(language);
+	pArchetype.setDescription(description);
+	pArchetype.setDefinition(definition);
+	pArchetype.setOntology(ontology);
+	pArchetype.setAnnotations(annotations);
+	pArchetype.setRevisionHistory(revisionHistory);
   	
-    return new Archetype(adlVersion, id, parent, concept, originalLanguage,
-    		translations, description, revisionHistory, isControlled,
-    		definition, ontology, invariants, terminologyService);
+    return pArchetype;
   }
 }
 
@@ -724,54 +574,6 @@ CodePhrase code_phrase() :
   	  langCode = lang.substring(i + 2, lang.length() - 1);
     }  	  
   { return new CodePhrase(langTerm, langCode); }	
-}
-
-Map<String, TranslationDetails> translations() throws Exception : 
-{
-  Token t;
-  String langAsKey;
-  CodePhrase language = null;
-  TranslationDetails td;	
-  Map<String, TranslationDetails> map = new HashMap<String, TranslationDetails>();
-  Map<String, String> author = null;
-  String  accreditation = null;
-  Map<String, String> otherDetails = null;
-  TerminologyService terminologyService = SimpleTerminologyService.getInstance();
-}
-{
-  (
-    <SYM_L_BRACKET> langAsKey = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
-      { accreditation = null; 
-		author=null;
-		otherDetails=null;
-	  }   
-      (
-        <SYM_LANG_LANGUAGE> <SYM_EQ> "<" language = code_phrase() ">"
-      |
-        <SYM_AUTHOR> <SYM_EQ> <SYM_LT>
-          author = string_string_map()
-        <SYM_GT>
-      [
-      	<SYM_ACCREDITATION> <SYM_EQ> <SYM_LT>
-        	accreditation = string_value()
-      	<SYM_GT>
-      ]
-      
-      [ 
-        <SYM_LANG_OTHER_DETAILS> <SYM_EQ> <SYM_LT>
-          otherDetails = string_string_map()
-        <SYM_GT>
-      ]
-	  )*
-    <SYM_GT>	    	    
-    { 
-      // TODO null terminology service
-      td = new TranslationDetails(language, author, accreditation, 
-      		otherDetails, terminologyService); 
-      map.put(langAsKey, td);
-    }
-  )+
-  { return map; }	
 }
 
 Map<String, String> string_string_map() :
@@ -829,466 +631,9 @@ String arch_concept() :
   { return value; }
 }
 
-ResourceDescription arch_description() throws Exception :
+List<AttributeValue> attr_vals() :
 {
-  Map originalAuthor = new HashMap();
-  String key = null;
-  String value = null;
-  List otherContributors = null;
-  String lifecycleState = null;
-  List details = new ArrayList();
-  ResourceDescriptionItem item = null;
-  String archetypePackageURI = null;
-  Map otherDetails = null;
-  Archetype parentArchetype = null;
-  AuthoredResource parent = null; // not used  
-}
-{
-   <SYM_DESCRIPTION>
-   (
-     <SYM_LIFECYCLE_STATE> <SYM_EQ> "<" lifecycleState =   string_value() ">"
-   |
-     <SYM_ARCHETYPE_PACKAGE_URI> <SYM_EQ> "<" 
-       archetypePackageURI = string_value() 
-     ">"
-   |
-     <SYM_DETAILS> <SYM_EQ> "<"
-         (
-           LOOKAHEAD(2)       
-           item = arch_description_item()
-           {
-             details.add(item);
-           }
-         )+
-     ">"
-   |
-   	 <SYM_ORIGINAL_AUTHOR> <SYM_EQ> "<" 
-   	 	originalAuthor = string_string_map()         
-   	 ">"
-   |    
-     <SYM_COPYRIGHT> <SYM_EQ> "<" string_value() ">" 
-   |    
-     <SYM_OTHER_CONTRIBUTORS> <SYM_EQ> "<" 
-        ( 
-          otherContributors = string_list_value()   
-        |
-          otherContributors = index_string_list()
-        )   
-     ">"    
-   | 
-     <SYM_OTHER_DETAILS> <SYM_EQ> "<"
-     	otherDetails = string_string_map()
-     ">"
-   )*
-   {
-     ResourceDescription resourceDescription = new ResourceDescription(
-     		originalAuthor, otherContributors, lifecycleState, details,
-            archetypePackageURI, otherDetails, parent);
-
-     return resourceDescription;     
-   }
-}
-
-ResourceDescriptionItem arch_description_item() throws Exception :
-{
-  String langAsKey = null;	
-  CodePhrase lang = null;	
-  String purpose = null;
-  String use = null;
-  String misuse = null;
-  String copyright = null;
-  List keywords = null; 
-  String keyword = null;
-  Map originalResourceURI = new HashMap();
-  Map otherDetails = null; // not used  
-  TerminologyService terminologyService = 
-  		SimpleTerminologyService.getInstance();
-}
-{
-  "[" langAsKey = string_value() "]" <SYM_EQ> "<"
-  (
-    <SYM_LANGUAGE_WORD> <SYM_EQ> "<" lang = code_phrase() ">"
-  | 
-    <SYM_PURPOSE> <SYM_EQ> "<" purpose = string_value() ">"
-  |  
-          
-    <SYM_KEYWORDS> <SYM_EQ> "<" 
-        (
-          LOOKAHEAD(2) 
-          keywords = string_list_value() 
-        |
-          LOOKAHEAD(2) 
-          keyword = string_value()
-          { 
-          	keywords = new ArrayList();
-          	keywords.add(keyword);
-          }
-		)
-         
-      ">" 
-   |
-    
-     <SYM_USE> <SYM_EQ> "<" use = string_value() ">"
-   | 
-   
-     <SYM_MISUSE> <SYM_EQ> "<" misuse = string_value() ">" 
-   | 
-   
-     <SYM_COPYRIGHT> <SYM_EQ> "<" copyright = string_value() ">" 
-   
-   |     
-     <SYM_ORIGINAL_RESOURCE_URI> <SYM_EQ> "<" 
-     	originalResourceURI = string_string_map()
-	 ">"	
-   | 
-     <SYM_OTHER_DETAILS> <SYM_EQ> "<"
-     	otherDetails = string_string_map()
-     ">"	 
-	
-   )*
-  ">"
-  {
-    if(use != null && use.trim().length() == 0) {
-      use = null;
-    }
-    if(misuse != null && misuse.trim().length() == 0) {
-      misuse = null;
-    }
-    if(copyright != null && copyright.trim().length() == 0) {
-      copyright = null;
-    }  
-    
-    if((purpose == null || purpose.length() == 0) && emptyPurposeCompatible) {
-    	purpose = ATTRIBUTE_UNKNOWN;
-    } 
-
-    return new ResourceDescriptionItem(lang, purpose, keywords,
-    	use, misuse, copyright, originalResourceURI, otherDetails,
-    	terminologyService);
-  }
-}
-
-CComplexObject arch_definition() :
-{
-  CComplexObject obj;
-}
-{
-  <SYM_DEFINITION> obj = cadl_text()
-  { return obj; }
-}
-
-
-/*********************************************
- * THE ONTOLOGY LANGUAGE GRAMMAR STARTS HERE *
- *********************************************/
-
-ArchetypeOntology arch_ontology() :
-{
-  String primaryLanguage = null;
-  List languages = null;
-  List terminologies = null;
-  List termDefinitionsList = new ArrayList();
-  List constraintDefinitionsList = new ArrayList();
-  List termBindingList = new ArrayList();
-  List constraintBindingList = new ArrayList();
-
-  OntologyDefinitions definitions;
-  OntologyBinding binding;
-  Token t = null;
-  String key = null;
-  Object value = null;
-}
-{
-  <SYM_ONTOLOGY>
-  [primaryLanguage = primary_language()]
-  [languages = languages_available()]
-  [ terminologies = terminologies_available() ]
-
-  termDefinitionsList = term_definitions_list()
-  
-  [ constraintDefinitionsList = constraint_definitions_list() ]
-  
-  [ termBindingList = term_binding_list() ]	  
-   
-  [ constraintBindingList = constraint_binding_list() ]
-    
-  (
-    t = <V_IDENTIFIER> { key = t.image; }
-    <SYM_EQ> "<" value = dadl() ">"
-    {
-      // skipped for now
-      // ontology.extra.put(key, value);
-    }
-  )*
-
-  {
-    return new ArchetypeOntology(primaryLanguage, languages, terminologies,
-                                 termDefinitionsList, constraintDefinitionsList,
-                                 termBindingList, constraintBindingList);
-  }
-}
-
-String primary_language() :
-{
-  String lang;
-}
-{
-  <SYM_PRIMARY_LANGUAGE> <SYM_EQ> "<" lang = string_value() ">"
-  { return lang; }
-}
-
-List languages_available() :
-{
-  List list;
-}
-{
-  <SYM_LANGUAGES_AVAILABLE> <SYM_EQ> "<" list = string_list_value() ">"
-  { return list; }
-}
-
-List terminologies_available() :
-{
-  List list;
-}
-{
-  <SYM_TERMINOLOGIES_AVAILABLE> <SYM_EQ> "<" list = string_list_value() ">"
-  { return list; }
-}
-
-List term_definitions_list() :
-{
-  List list = new ArrayList();
-  OntologyDefinitions definitions = null;
-}
-{
-  <SYM_TERM_DEFINITIONS> <SYM_EQ> "<"    
-  ( 
-    definitions = definitions_body()
-    { list.add(definitions); }
-  )+
-  ">"
-  { return list; }
-}
-
-List constraint_definitions_list() :
-{
-  List list = new ArrayList();	
-  OntologyDefinitions definitions = null;
-}
-{
-  <SYM_CONSTRAINT_DEFINITIONS> <SYM_EQ> "<" 
-  ( 
-    definitions = definitions_body()
-    { list.add(definitions); }
-  )*
-  ">"
-  { return list; }
-}
-
-OntologyDefinitions definitions_body() :
-{
-  OntologyDefinitions definitions;
-  String language;
-  List list = new ArrayList();
-  ArchetypeTerm term;
-}
-{
-  "[" language = string_value() "]"
-  <SYM_EQ> "<"
-    <SYM_ITEMS> <SYM_EQ> "<"
-	    [
-	      (
-	        term = archetype_term()
-	        {
-	          list.add(term);
-	        }
-	      )+
-	    ]
-	">"
-  ">"
-  { return new OntologyDefinitions(language, list); }
-}
-
-DefinitionItem definition_item() :
-{
-  String code;
-  String text;
-  String description;
-}
-{
-  "[" code = local_code_value() "]" <SYM_EQ> "<"
-    ( 
-      <SYM_TEXT> <SYM_EQ> "<" text = string_value() ">"
-      [ ";" ]
-      <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" description = string_value() ">"
-    |
-      <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" description = string_value() ">"
-      [ ";" ]
-      <SYM_TEXT> <SYM_EQ> "<" text = string_value() ">"      
-    )
-  ">"
-  { return new DefinitionItem(code, text, description); }
-}
-
-ArchetypeTerm archetype_term() :
-{
-  Token t;
-  String code;
-  String key;
-  String value = null;
-  ArchetypeTerm term;
-}
-{
-  "["
-     code = local_code_value()
-   { term = new ArchetypeTerm(code); }
-
-    "]" <SYM_EQ> "<"
-    (
-      <SYM_TEXT> <SYM_EQ> "<"
-      value = string_value() { term.addItem("text", value); }
-      ">" [ ";" ]
-    |
-      <SYM_DESCRIPTION_WORD> <SYM_EQ> "<"
-      value = string_value() { term.addItem("description", value); }
-      ">" [ ";" ]
-    |
-      <SYM_COMMENT> <SYM_EQ> "<"
-      value = string_value() { term.addItem("comment", value); }
-      ">" [ ";" ]
-    |
-       t = <V_IDENTIFIER> <SYM_EQ> "<"
-       value = string_value()
-    {
-       key = t.image;
-       term.addItem(key, value);
-    }
-    ">" [ ";" ]
-    )*
-  ">"
-  { return term; }
-}
-
-List term_binding_list() :
-{
-  List list = new ArrayList();	
-  OntologyBinding binding = null;
-}
-{
-  <SYM_TERM_BINDING> <SYM_EQ> "<"
-  ( 
-    binding = ontology_binding_body() 
-    { list.add(binding); }
-   )*
-  ">"
-  { return list; }
-}
-
-List constraint_binding_list() :
-{
-  List list = new ArrayList();	 
-  OntologyBinding binding = null;
-}
-{
-   <SYM_CONSTRAINT_BINDING> <SYM_EQ> "<"
-   ( 
-     binding = ontology_binding_body()
-     { list.add(binding); }
-   )*
-   ">"
-  { return list; }
-}
-
-OntologyBinding ontology_binding_body() :
-{
-  OntologyBinding binding;
-  String terminology;
-  List bindingList = new ArrayList();
-  OntologyBindingItem item;
-}
-{
-   "[" terminology = string_value() "]" <SYM_EQ> "<"
-     
-     <SYM_ITEMS> <SYM_EQ> "<"
-
-	    (
-	      LOOKAHEAD( query_binding_item() )
-	      item = query_binding_item()
-	      { bindingList.add(item); }
-	    |
-	      LOOKAHEAD( term_binding_item() )
-	      item = term_binding_item()
-	      { bindingList.add(item); }
-	    )*
-	 ">"
-  ">"
-  { return new OntologyBinding(terminology, bindingList); }
-}
-
-TermBindingItem term_binding_item() :
-{
-  String code;
-  String term;
-  List terms = new ArrayList();
-}
-{
-  "["
-  (
-    LOOKAHEAD( local_code_value())
-    code = local_code_value()
-  |
-    code = local_code_path_value()
-  )
-  "]" <SYM_EQ> "<"
-    term = term_code() {
-      terms.add(term);
-    }
-    ("," term = term_code() {
-           terms.add(term);
-         }
-    )*
-  ">"
-  { return new TermBindingItem(code, terms); }
-}
-
-QueryBindingItem query_binding_item() :
-{
-  String code;
-  Token t;
-}
-{
-  "[" code = local_code_value() "]" <SYM_EQ> "<" t = <URL> ">"
-  { return new QueryBindingItem(code, new Query(t.image)); }
-}
-
-String local_code_value() :
-{
-  Token t;
-}
-{
-  t = <V_LOCAL_CODE>
-  {
-    String value = t.image;
-    return value.substring(1, value.length() - 1);
-  }
-}
-
-String local_code_path_value() :
-{
-  Token t;
-}
-{
-  t = <V_ABSOLUTE_PATH_WQ>
-  { 
-    String value = t.image;
-    return value.substring(1, value.length() - 1);
-  }
-}
-
-
-List attr_vals() :
-{
-  List list = new ArrayList();
+  List<AttributeValue> list = new ArrayList<AttributeValue>();
   AttributeValue av;
 }
 {
@@ -2163,7 +1508,7 @@ List term_code_list_value() :
  * THE cADL LANGUAGE GRAMMAR STARTS HERE *
  *****************************************/
 
-CComplexObject cadl_text() :
+CComplexObject cadl() :
 {
   CComplexObject c;
 }
@@ -3404,7 +2749,8 @@ String type_identifier() :
 {
   t = <V_TYPE_IDENTIFIER> 
   { type = t.image; }
-  [ 
+  [
+    LOOKAHEAD(2)
     "<"  t = <V_TYPE_IDENTIFIER> ">" 
     { type += "<" + t.image + ">"; }
   ]
@@ -3474,7 +2820,7 @@ String path_segment() :
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
  * 
- * The Original Code is ADLParser.java
+ * The Original Code is ADL15Parser.java
  * 
  * The Initial Developer of the Original Code is Rong Chen. Portions created by
  * the Initial Developer are Copyright (C) 2003-2009 the Initial Developer. All
