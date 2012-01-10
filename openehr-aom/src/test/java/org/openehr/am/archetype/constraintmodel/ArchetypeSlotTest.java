@@ -2,6 +2,7 @@ package org.openehr.am.archetype.constraintmodel;
 
 import org.openehr.am.archetype.assertion.*;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 
 import junit.framework.TestCase;
 
@@ -15,7 +16,7 @@ import java.util.*;
 public class ArchetypeSlotTest extends TestCase {
 	
 	public void testCreateEmptyArchetypeSlot() {
-		Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
 		ArchetypeSlot slot = new ArchetypeSlot("/path", "Entry", occurrences, 
 				"at001", null, null, null);
 		assertTrue("anyAllowed expected for empty slot", slot.isAnyAllowed());
@@ -60,7 +61,7 @@ public class ArchetypeSlotTest extends TestCase {
 		Set<Assertion> excludes = new HashSet<Assertion>();
 		excludes.add(exclude);
 		ArchetypeSlot slot = new ArchetypeSlot("/[at001]", "SECTION", 
-				new Interval<Integer>(0, null), "at001", null, includes, 
+				new MultiplicityInterval(0), "at001", null, includes, 
 				excludes);		
 	}	
 }
