@@ -27,6 +27,7 @@ import org.openehr.rm.common.resource.ResourceDescriptionItem;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval.ExistenceValues;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -420,10 +421,10 @@ public class XMLSerializer {
 
         int lower = 0, upper = 0;
         
-        if(cattribute.getExistence().equals(CAttribute.Existence.REQUIRED)) {
+        if(cattribute.getExistence().intervalValueEquals(ExistenceValues.REQUIRED)) {
             lower = 1;
             upper = 1;
-        } else if(cattribute.getExistence().equals(CAttribute.Existence.OPTIONAL)) {
+        } else if(cattribute.getExistence().intervalValueEquals(ExistenceValues.OPTIONAL)) {
             lower = 0;
             upper = 1;
         }
