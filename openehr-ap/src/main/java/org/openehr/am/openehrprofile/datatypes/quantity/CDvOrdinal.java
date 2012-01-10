@@ -24,6 +24,7 @@ import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 
 /**
  * Class specifying constraints on instances of DV_ORDINAL. Custom 
@@ -43,7 +44,7 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 	 * @param list
 	 * @throws IllegalArgument if list null or empty
 	 */
-	public CDvOrdinal(String path, Interval<Integer> occurrences,
+	public CDvOrdinal(String path, MultiplicityInterval occurrences,
 			String nodeID, CAttribute parent, Set<Ordinal> list,
 			Ordinal defaultValue, Ordinal assumedValue) {
 
@@ -70,7 +71,7 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 	 * @param list
 	 * @throws IllegalArgument if list null or empty
 	 */
-	public CDvOrdinal(String path, Interval<Integer> occurrences, 
+	public CDvOrdinal(String path, MultiplicityInterval occurrences, 
 			Set<Ordinal> list) {
 		this(path, occurrences, null, null, list, null, null);
 	}

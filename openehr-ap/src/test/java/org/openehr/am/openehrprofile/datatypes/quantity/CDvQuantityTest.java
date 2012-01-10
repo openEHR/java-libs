@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.measurement.*;
@@ -14,7 +15,7 @@ public class CDvQuantityTest extends TestCase {
 	
 	public void testCreateEmptyCDvQuantity() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		Interval<Integer> occurrences = new Interval<Integer>(1,1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(1,1);
 		String nodeId = "at0010";
 		CAttribute parent = null;
 		List<CDvQuantityItem> list = null;
@@ -32,7 +33,7 @@ public class CDvQuantityTest extends TestCase {
 	
 	public void testCreateWithAssumedValue() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		Interval<Integer> occurrences = new Interval<Integer>(1,1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(1,1);
 		String nodeId = "at0010";
 		CAttribute parent = null;
 		List<CDvQuantityItem> list = null;
@@ -47,7 +48,7 @@ public class CDvQuantityTest extends TestCase {
 	
 	public void testCreateWithDefaultValue() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		Interval<Integer> occurrences = new Interval<Integer>(1,1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(1,1);
 		String nodeId = "at0010";
 		CAttribute parent = null;
 		List<CDvQuantityItem> list = null;
@@ -61,7 +62,7 @@ public class CDvQuantityTest extends TestCase {
 	}
 	
 	public void testEqualsWithDifferentQuantityItems() {
-		Interval<Integer> required = new Interval<Integer>(1,1);
+		MultiplicityInterval required = new MultiplicityInterval(1,1);
 		CDvQuantityItem item1 = new CDvQuantityItem(
 				new Interval<Double>(0.0, 1.0), 
 				new Interval<Integer>(2, 2), "mg");
@@ -83,7 +84,7 @@ public class CDvQuantityTest extends TestCase {
 	}
 	
 	public void testEqualsWithSameQuantityItems() {
-		Interval<Integer> required = new Interval<Integer>(1,1);
+		MultiplicityInterval required = new MultiplicityInterval(1,1);
 		CDvQuantityItem item1 = new CDvQuantityItem(
 				new Interval<Double>(0.0, 1.0), 
 				new Interval<Integer>(2, 2), "mg");
@@ -105,7 +106,7 @@ public class CDvQuantityTest extends TestCase {
 	}
 	
 	public void testValidValueExpected() throws Exception {
-		Interval<Integer> required = new Interval<Integer>(1,1);
+		MultiplicityInterval required = new MultiplicityInterval(1,1);
 		CDvQuantityItem item1 = new CDvQuantityItem(
 				new Interval<Double>(0.0, 1.0), 
 				new Interval<Integer>(2, 2), "mg");
@@ -119,7 +120,7 @@ public class CDvQuantityTest extends TestCase {
 	}
 	
 	public void testValidValueValueOutOfRange() throws Exception {
-		Interval<Integer> required = new Interval<Integer>(1,1);
+		MultiplicityInterval required = new MultiplicityInterval(1,1);
 		CDvQuantityItem item1 = new CDvQuantityItem(
 				new Interval<Double>(0.0, 1.0), 
 				new Interval<Integer>(2, 2), "mg");
@@ -135,7 +136,7 @@ public class CDvQuantityTest extends TestCase {
 	}
 	
 	public void testValidValueValueWrongUnits() throws Exception {
-		Interval<Integer> required = new Interval<Integer>(1,1);
+		MultiplicityInterval required = new MultiplicityInterval(1,1);
 		CDvQuantityItem item1 = new CDvQuantityItem(
 				new Interval<Double>(0.0, 1.0), 
 				new Interval<Integer>(2, 2), "mg");

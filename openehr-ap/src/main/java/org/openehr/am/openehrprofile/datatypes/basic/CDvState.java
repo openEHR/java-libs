@@ -24,6 +24,7 @@ import org.openehr.am.archetype.constraintmodel.CDomainType;
 import org.openehr.am.archetype.constraintmodel.primitive.CDateTime;
 import org.openehr.rm.datatypes.basic.DvState;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 
 /**
  * Constraint type for DV_STATE instances. The attribute c_value defines a
@@ -43,7 +44,7 @@ public class CDvState extends CDomainType<DvState> {
 	 * @param value not null
 	 * @throws IllegalArgumentException if value null
 	 */
-	public CDvState(String path, Interval<Integer> occurrences, String nodeId,
+	public CDvState(String path, MultiplicityInterval occurrences, String nodeId,
             CAttribute parent, StateMachine value) {
 		
 		super(false, path, "DvState", occurrences, nodeId, parent);

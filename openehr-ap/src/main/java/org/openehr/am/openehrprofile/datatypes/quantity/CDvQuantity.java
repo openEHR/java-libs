@@ -26,6 +26,7 @@ import org.openehr.am.archetype.constraintmodel.CDomainType;
 import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 
 /**
  * This class represents constrain instances of DV_QUANTITY.
@@ -45,7 +46,7 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 	 *            null if unspecified, no empty
 	 * @throws IllegalArgumentException if list is empty
 	 */
-	public CDvQuantity(String path, Interval<Integer> occurrences, 
+	public CDvQuantity(String path, MultiplicityInterval occurrences, 
 			String nodeId, CAttribute parent, List<CDvQuantityItem> list,
 			CodePhrase property, DvQuantity defaultValue, 
 			DvQuantity assumedValue) {
@@ -74,7 +75,7 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 	 * @param occurrences
 	 * @param list
 	 */
-	public CDvQuantity(String path, Interval<Integer> occurrences,
+	public CDvQuantity(String path, MultiplicityInterval occurrences,
 			List<CDvQuantityItem> list) {
 		this(path, occurrences, null, null, list, null, null, null);
 	}
@@ -87,7 +88,7 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 	 * @param list
 	 * @param property
 	 */
-	public CDvQuantity(String path, Interval<Integer> occurrences,
+	public CDvQuantity(String path, MultiplicityInterval occurrences,
 			List<CDvQuantityItem> list, CodePhrase property) {
 		this(path, occurrences, null, null, list, property, null, null);
 	}
@@ -102,7 +103,7 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 		if(item == null) {
 			throw new IllegalArgumentException("item null");
 		}
-		Interval<Integer> occurrences = new Interval<Integer>(1,1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(1,1);
 		List<CDvQuantityItem> list = new ArrayList<CDvQuantityItem>();
 		list.add(item);
 		return new CDvQuantity(path, occurrences, list);
@@ -114,7 +115,7 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 	 * @return
 	 */
 	public static CDvQuantity anyAllowed(String path) {
-		Interval<Integer> occurrences = new Interval<Integer>(1,1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(1,1);
 		return new CDvQuantity(path, occurrences, null);
 	}
 

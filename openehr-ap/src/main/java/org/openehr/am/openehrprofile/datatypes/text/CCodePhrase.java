@@ -26,6 +26,7 @@ import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 import org.openehr.rm.support.identification.TerminologyID;
 
 /**
@@ -50,7 +51,7 @@ public class CCodePhrase extends CDomainType<CodePhrase> {
 	 *            null if unspecified
 	 * @throws IllegalArgumentException 
 	 */
-	public CCodePhrase(String path, Interval<Integer> occurrences,
+	public CCodePhrase(String path, MultiplicityInterval occurrences,
 			String nodeID, CAttribute parent, TerminologyID terminologyId, 
 			List<String> codeList, CodePhrase defaultValue, 
 			CodePhrase assumedValue) {
@@ -82,7 +83,7 @@ public class CCodePhrase extends CDomainType<CodePhrase> {
 	 */
 	public static CCodePhrase singleRequired(String path, String terminologyId, 
 			List<String> codeList) {
-		Interval<Integer> occurrences = new Interval<Integer>(1,1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(1,1);
 		TerminologyID tid = new TerminologyID(terminologyId);
 		return new CCodePhrase(path, occurrences, null, 
 				null, tid, codeList, null, null);
@@ -104,7 +105,7 @@ public class CCodePhrase extends CDomainType<CodePhrase> {
 	 */
 	public CCodePhrase(String path, String terminologyId, String code) {
 		
-		super(false, path, CODE_PHRASE, new Interval<Integer>(0, 1), null, null, 
+		super(false, path, CODE_PHRASE, new MultiplicityInterval(0, 1), null, null, 
 				null, null);
 		
 		ArrayList<String> codeList = new ArrayList<String>();

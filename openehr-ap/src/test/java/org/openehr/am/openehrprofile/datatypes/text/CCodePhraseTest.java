@@ -5,6 +5,7 @@ import java.util.*;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 import org.openehr.rm.support.identification.TerminologyID;
 
 import junit.framework.TestCase;
@@ -18,7 +19,7 @@ public class CCodePhraseTest extends TestCase {
 	
 	public void testCreateEmptyCCodePhrase() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		Interval<Integer> occurrences = new Interval<Integer>(1,1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(1,1);
 		String nodeId = "at0010";
 		CAttribute parent = null;
 		TerminologyID terminologyId = null;
@@ -30,7 +31,7 @@ public class CCodePhraseTest extends TestCase {
 
 	public void testCreateCCodePhraseWithCodeList() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		Interval<Integer> occurrences = new Interval<Integer>(0, 1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(0, 1);
 		String nodeId = "at0010";
 		TerminologyID terminologyId = new TerminologyID("openehr");
 		List<String> codeList = new ArrayList<String>();
@@ -47,7 +48,7 @@ public class CCodePhraseTest extends TestCase {
 	
 	public void testValidValue() {
 		String path = "/term_definitions[en]/items[at0001]/text/";
-		Interval<Integer> occurrences = new Interval<Integer>(0, 1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(0, 1);
 		String nodeId = "at0010";
 		TerminologyID terminologyId = new TerminologyID("test");
 		List<String> codeList = new ArrayList<String>();
