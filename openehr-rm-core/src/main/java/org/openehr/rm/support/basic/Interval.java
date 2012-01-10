@@ -26,7 +26,7 @@ import org.openehr.rm.RMObject;
  * @author Rong Chen
  * @version 1.0
  */
-public final class Interval<T extends Comparable> extends RMObject {
+public class Interval<T extends Comparable> extends RMObject {
 
     /**
      * Constructs an Interval
@@ -206,10 +206,10 @@ public final class Interval<T extends Comparable> extends RMObject {
     // POJO end
 
     /* fields */
-    private T lower;
-    private T upper;
-    private boolean lowerIncluded;
-    private boolean upperIncluded;
+    protected T lower;
+    protected T upper;
+    protected boolean lowerIncluded;
+    protected boolean upperIncluded;
 }
 
 /*

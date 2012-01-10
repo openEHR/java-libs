@@ -77,6 +77,7 @@ public abstract class AuthoredResource extends RMObject {
 		setDescription(description);
 		this.revisionHistory = revisionHistory;
 		this.isControlled = isControlled;
+		this.annotations = new ArrayList<Annotation>();
 	}
 
 	/**
@@ -230,6 +231,10 @@ public abstract class AuthoredResource extends RMObject {
 	void setTranslations(Map<String, TranslationDetails> translations) {
 		this.translations = translations;
 	}
+	
+	public List<Annotation> getAnnotations(){
+		return annotations;
+	}
 
 	//POJO end
 
@@ -243,6 +248,8 @@ public abstract class AuthoredResource extends RMObject {
 	private RevisionHistory revisionHistory;
 
 	private boolean isControlled;
+	
+	private List<Annotation> annotations;
 
 }
 
