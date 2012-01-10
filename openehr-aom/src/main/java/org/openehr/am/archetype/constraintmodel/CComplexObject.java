@@ -15,6 +15,7 @@
 package org.openehr.am.archetype.constraintmodel;
 
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -27,7 +28,7 @@ import java.util.*;
  * @author Rong Chen
  * @version 1.0
  */
-public final class CComplexObject extends CDefinedObject {
+public class CComplexObject extends CDefinedObject {
 	
 	/**
      * Constructs a complexObjectConstraint
@@ -40,7 +41,7 @@ public final class CComplexObject extends CDefinedObject {
      * @param invariants
      */
     public CComplexObject(String path, String rmTypeName,
-                          Interval<Integer> occurrences, String nodeID, 
+                          MultiplicityInterval occurrences, String nodeID, 
                           List<CAttribute> attributes, CAttribute parent) {
 
     	// TODO probably need to inherit from CObject directly
@@ -61,7 +62,7 @@ public final class CComplexObject extends CDefinedObject {
      * @return
      */
     public static CComplexObject createSingleRequired(String path, String rmTypeName) {
-    	Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+    	MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
     	return new CComplexObject(path, rmTypeName, occurrences, null, null, null);
     }
     
@@ -218,8 +219,17 @@ public final class CComplexObject extends CDefinedObject {
                 .toHashCode();
     }
     
+    public boolean isPassThrough(){
+    	return passThrough;
+    }
+    
+    public void setIsPassThrough(boolean passThrough){
+    	this.passThrough = passThrough;
+    }
+    
     /* fields */
     private List<CAttribute> attributes;    
+    private boolean passThrough;
 }
 
 /*

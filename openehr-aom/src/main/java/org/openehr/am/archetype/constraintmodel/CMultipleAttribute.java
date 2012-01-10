@@ -16,6 +16,8 @@ package org.openehr.am.archetype.constraintmodel;
 
 import java.util.*;
 
+import org.openehr.rm.support.basic.MultiplicityInterval;
+
 /**
  * Concrete model of constraint on a multiple-valued attribute node. Instances
  * of this class are immutable.
@@ -35,7 +37,7 @@ public final class CMultipleAttribute extends CAttribute {
      * @param cardinality
      */
     public CMultipleAttribute(String path, String rmAttributeName,
-                              Existence existence, Cardinality cardinality,
+                              MultiplicityInterval existence, Cardinality cardinality,
                               List<CObject> children) {
         super(path, rmAttributeName, existence, children);
         this.cardinality = cardinality;

@@ -17,6 +17,7 @@ package org.openehr.am.archetype.constraintmodel;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 
 /**
  * Abstract parent type of C_OBJECT subtypes that are defined by value, i.e. 
@@ -39,7 +40,7 @@ public abstract class CDefinedObject extends CObject {
 	 * @param assumedValue
 	 */
 	protected CDefinedObject(boolean anyAllowed, String path, String rmTypeName,
-			Interval<Integer> occurrences, String nodeID, CAttribute parent,
+			MultiplicityInterval occurrences, String nodeID, CAttribute parent,
 			Object assumedValue) {
 		
 		this(anyAllowed, path, rmTypeName, occurrences, nodeID, parent, 
@@ -59,7 +60,7 @@ public abstract class CDefinedObject extends CObject {
 	 * @param defaultValue
 	 */	
 	protected CDefinedObject(boolean anyAllowed, String path, String rmTypeName,
-			Interval<Integer> occurrences, String nodeID, CAttribute parent,
+			MultiplicityInterval occurrences, String nodeID, CAttribute parent,
 			Object assumedValue, Object defaultValue) {
 		super(anyAllowed, path, rmTypeName, occurrences, nodeID, parent);
 		this.assumedValue = assumedValue;
@@ -115,10 +116,56 @@ public abstract class CDefinedObject extends CObject {
                 .append(defaultValue)
                 .toHashCode();
     }
+    
+    /**
+     * Create an instance that would be representative of this object
+     * with default values. 
+     * @return An object with default state.
+     */
+    public 	Object prototypeValue(){
+    	return new Object();//default implementation, supposed to be overriden by descending types
+    }
+    
+    /*
+     * According to specs, this method should invoke a cascading validation down the chain of the object that
+     * is being validated. TODO: why is this taking another object as a parameter?
+     * ask T.B
+     */
+    public boolean validValue(Object object){
+    	return false;//default implementation, supposed to be overriden by descending types
+    }
+    
+    public Object getAssumedValue(){
+    	return assumedValue;
+    }
+    
+    public void setAssumedValue(Object assumedValue){
+    	this.assumedValue = assumedValue;
+    }
+    
+    public Object getDefaultValue(){
+    	return defaultValue;
+    }
+    
+    public void setDefaultValue(Object defaultValue){
+    	this.defaultValue = defaultValue;
+    }
+    
+    public boolean isDeprecated(){
+    	return isDeprecated;
+    }
+    
+    public void setIsDeprecated(boolean isDeprecated){
+    	this.isDeprecated = isDeprecated;
+    }
+    
+    
 
 	/* fields */
 	private Object assumedValue;
 	private Object defaultValue;
+	private boolean isDeprecated;
+	
 
 }
 

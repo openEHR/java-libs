@@ -16,6 +16,8 @@ package org.openehr.am.archetype.constraintmodel;
 
 import java.util.List;
 
+import org.openehr.rm.support.basic.MultiplicityInterval;
+
 /**
  * Concrete model of constraint on a single-valued attribute node. The meaning
  * of the inherited children attribute is that they are alternatives.
@@ -35,8 +37,8 @@ public final class CSingleAttribute extends CAttribute {
      * @param alternatives    null if allow any
      */
     public CSingleAttribute(String path, String rmAttributeName,
-                            Existence existence, List<CObject> alternatives) {
-        super(path, rmAttributeName, existence, alternatives);
+                            MultiplicityInterval existence, List<CObject> alternatives) {
+        super(path, rmAttributeName, existence, alternatives);        
     }
     
     /**
@@ -47,7 +49,7 @@ public final class CSingleAttribute extends CAttribute {
      * @return
      */
     public static CSingleAttribute createRequired(String path, String rmAttributeName) {
-    	return new CSingleAttribute(path, rmAttributeName, Existence.REQUIRED);
+    	return new CSingleAttribute(path, rmAttributeName, new MultiplicityInterval(1, 1));//TODO: MultiplicityInterval(1,1) corresponds to required
     }
     
     @Override
@@ -64,7 +66,7 @@ public final class CSingleAttribute extends CAttribute {
      * @param existence
      */
     public CSingleAttribute(String path, String rmAttributeName,
-            Existence existence) {
+            MultiplicityInterval existence) {
     	super(path, rmAttributeName, existence);
     }
 

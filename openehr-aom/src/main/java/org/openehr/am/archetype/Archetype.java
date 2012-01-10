@@ -32,6 +32,7 @@ import org.openehr.rm.common.resource.AuthoredResource;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.TranslationDetails;
 import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.support.basic.MultiplicityInterval.ExistenceValues;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.identification.ObjectID;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -48,7 +49,7 @@ import org.openehr.rm.support.terminology.TerminologyService;
  * @version 1.0
  */
 
-public final class Archetype extends AuthoredResource {
+public class Archetype extends AuthoredResource {
 
 	/**
 	 * Constructs an Archetype
@@ -64,6 +65,7 @@ public final class Archetype extends AuthoredResource {
 	 * @param isControlled
 	 * @param definition
 	 * @param ontology
+	 * @params artefactType
 	 * @throws IllegalArgumentException if description null or ontology null
 	 */
 	public Archetype(String adlVersion, String id, String parentId,	String concept, 
@@ -72,7 +74,8 @@ public final class Archetype extends AuthoredResource {
 			ResourceDescription description, RevisionHistory revisionHistory,
 			boolean isControlled, CComplexObject definition, 
 			ArchetypeOntology ontology,	Set<Assertion> invariants,
-			TerminologyService terminologyService) {	
+			TerminologyService terminologyService,
+			int artefactType) {	
 		
 		super(originalLanguage, translations, description, revisionHistory,
 			isControlled, terminologyService);
@@ -97,6 +100,7 @@ public final class Archetype extends AuthoredResource {
 		this.pathNodeMap = new HashMap<String, CObject>();
 		this.pathInputMap = new HashMap<String, String>();
 		this.inputPathMap = new HashMap<String, String>();
+		this.artefactType = artefactType;
 		reloadNodeMaps();
 	}
 
@@ -107,7 +111,7 @@ public final class Archetype extends AuthoredResource {
 		Archetype archetype = new Archetype(adlVersion, archetypeId.toString(), 
 				parentId, concept, getOriginalLanguage(), getTranslations(), 
 				null, getRevisionHistory(), isControlled(), 
-				(CComplexObject) definition.copy(),	ontology, invariants, null);
+				(CComplexObject) definition.copy(),	ontology, invariants, null, artefactType);
 		
 		reloadNodeMaps();
 		
@@ -174,8 +178,7 @@ public final class Archetype extends AuthoredResource {
 			
 			// pathNodeMap.put(attribute.path(), attribute);
 			
-			if (attribute.getExistence().equals(
-					CAttribute.Existence.NOT_ALLOWED)) {
+			if (attribute.getExistence().intervalValueEquals(ExistenceValues.NOT_ALLOWED)) {
 				continue;
 			}
 			if (attribute.getChildren() == null) {
@@ -213,8 +216,7 @@ public final class Archetype extends AuthoredResource {
 			return; // no attribute
 		}
 		for (CAttribute attribute : parent.getAttributes()) {
-			if (attribute.getExistence().equals(
-					CAttribute.Existence.NOT_ALLOWED)) {
+			if (attribute.getExistence().intervalValueEquals(ExistenceValues.NOT_ALLOWED)) {
 				continue;
 			}
 			if (attribute.getChildren() == null) {
@@ -323,6 +325,16 @@ public final class Archetype extends AuthoredResource {
 	public ArchetypeOntology getOntology() {
 		return ontology;
 	}	
+	
+	/**
+	 * Artefact type of this archetype. Starting with ADL 1.5
+	 * archetypes and templates are represented with the same formalism, 
+	 *so AOM can include templating related concepts, such as this. 
+	 *This field returns the purpose of this artefact. @see org.openehr.am.Archetype.ArtefactType
+	 */
+	public int getArtefactType(){
+		return artefactType;
+	}
 
 	/**
 	 * Version of this archetype, extracted from id.
@@ -446,9 +458,11 @@ public final class Archetype extends AuthoredResource {
 
 	private final CComplexObject definition;
 
-	private final ArchetypeOntology ontology;
+	protected final ArchetypeOntology ontology;
 
 	private final Set<Assertion> invariants;
+	
+	private final int artefactType;//todo: this is likely to change into a boolean, says T.B
 
 	/* calculated fields */
 	private final Map<String, CObject> pathNodeMap;

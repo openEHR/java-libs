@@ -16,6 +16,7 @@ package org.openehr.am.archetype.constraintmodel;
 
 import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 
 /**
  * A constraint defined by proxy, using a reference to an object constraint
@@ -39,7 +40,7 @@ public class ArchetypeInternalRef extends CReferenceObject {
      *                                  or nodeID null or empty
      */
     public ArchetypeInternalRef(String path, String rmTypeName,
-                                Interval<Integer> occurrences, String nodeID,
+                                MultiplicityInterval occurrences, String nodeID,
                                 CAttribute parent, String targetPath) {
         
     	super(false, path, rmTypeName, occurrences, nodeID, parent);        

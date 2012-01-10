@@ -17,6 +17,7 @@ package org.openehr.am.archetype.constraintmodel;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 
 /**
  * This class represents the semantic of a container type. Two pre-defined
@@ -36,7 +37,7 @@ public final class Cardinality {
      * @throws IllegalArgumentException if lower boundary of interval is < 0
      */
     public Cardinality(boolean ordered, boolean unique,
-                       Interval<Integer> interval) {
+                       MultiplicityInterval interval) {
 
         if (interval != null && interval.getLower() != null
                 && ( (Integer) interval.getLower() ).intValue() < 0) {
@@ -70,7 +71,7 @@ public final class Cardinality {
      *
      * @return Interval<Integer> null indicates from 0 to many
      */
-    public Interval<Integer> getInterval() {
+    public MultiplicityInterval getInterval() {
         return interval;
     }
     
@@ -142,19 +143,19 @@ public final class Cardinality {
     /* fields */
     private final boolean ordered;
     private final boolean unique;
-    private final Interval<Integer> interval;
+    private final MultiplicityInterval interval;
 
     /**
      * Pre-defined List cardinality, whoes members are ordered and non-unique
      */
     public static final Cardinality LIST = 
-    	new Cardinality(true, false, new Interval<Integer>(0, null));
+    	new Cardinality(true, false, new MultiplicityInterval(0));
 
     /**
      * Pre-defined Set cardinality, whoes members are unordered and unique
      */
     public static final Cardinality SET = new Cardinality(false, true, 
-    		new Interval<Integer>(0, null));
+    		new MultiplicityInterval(0));
 }
 
 /*

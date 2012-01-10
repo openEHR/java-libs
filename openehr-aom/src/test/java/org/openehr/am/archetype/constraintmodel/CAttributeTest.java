@@ -20,6 +20,8 @@
  */
 package org.openehr.am.archetype.constraintmodel;
 
+import org.openehr.rm.support.basic.MultiplicityInterval;
+
 import junit.framework.TestCase;
 
 public class CAttributeTest extends TestCase {
@@ -61,7 +63,7 @@ public class CAttributeTest extends TestCase {
 		}
 		
 		public TestCAttribute(String path, String rmAttributeName) {
-			super(path, rmAttributeName, Existence.OPTIONAL, null);
+			super(path, rmAttributeName, new MultiplicityInterval(0, 1), null);
 		}
 
 		/**

@@ -17,6 +17,7 @@ package org.openehr.am.archetype.constraintmodel;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 
 /**
  * Abstract parent type of domain-specific constrainer types, to be defined in
@@ -36,7 +37,7 @@ public abstract class CDomainType<T> extends CObject {
 	 * @param nodeID
 	 */
 	protected CDomainType(boolean anyAllowed, String path, String rmTypeName,
-			Interval<Integer> occurrences, String nodeID, CAttribute parent) {
+			MultiplicityInterval occurrences, String nodeID, CAttribute parent) {
 		this(anyAllowed, path, rmTypeName, occurrences, nodeID, null, null,
 				parent);
 	}
@@ -52,7 +53,7 @@ public abstract class CDomainType<T> extends CObject {
 	 * @param assumedValue
 	 */
 	protected CDomainType(boolean anyAllowed, String path, String rmTypeName,
-			Interval<Integer> occurrences, String nodeID,		
+			MultiplicityInterval occurrences, String nodeID,		
 			T defaultValue, T assumedValue, CAttribute parent) {
 		
 		super(anyAllowed, path, rmTypeName, occurrences, nodeID, parent);

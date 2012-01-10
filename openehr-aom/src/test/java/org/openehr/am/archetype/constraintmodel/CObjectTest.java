@@ -1,6 +1,7 @@
 package org.openehr.am.archetype.constraintmodel;
 
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 
 import junit.framework.TestCase;
 
@@ -10,7 +11,7 @@ public class CObjectTest extends TestCase {
 		boolean anyAllowed = false;
 		String path = "/[at001]";
 		String rmType = "TEST_OBJECT";
-		Interval<Integer> occurrences = null;
+		MultiplicityInterval occurrences = null;
 		String nodeID = "at001";
         CAttribute parent = null;
         
@@ -31,7 +32,7 @@ public class CObjectTest extends TestCase {
 		boolean anyAllowed = false;
 		String path = "/[at001]";
 		String rmType = "TEST_OBJECT";
-		Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
 		String nodeID = "at001";
         CAttribute parent = null;
         
@@ -47,7 +48,7 @@ public class CObjectTest extends TestCase {
 		boolean anyAllowed = false;
 		String path = "/[at001]";
 		String rmType = "TEST_OBJECT";
-		Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
 		String nodeID = "at001";
         CAttribute parent = null;
         
@@ -61,7 +62,7 @@ public class CObjectTest extends TestCase {
 		boolean anyAllowed = false;
 		String path = "/[at001]";
 		String rmType = "TEST_OBJECT";
-		Interval<Integer> occurrences = new Interval<Integer>(1, null);
+		MultiplicityInterval occurrences = new MultiplicityInterval(1, null);
 		String nodeID = "at001";
         CAttribute parent = null;
         
@@ -77,7 +78,7 @@ public class CObjectTest extends TestCase {
 		}
 		
 		TestCObject(boolean anyAllowed, String path, String rmTypeName,
-                Interval<Integer> occurrences, String nodeID,
+                MultiplicityInterval occurrences, String nodeID,
                 CAttribute parent) {
 			super(anyAllowed, path, rmTypeName, occurrences, nodeID, parent);
 		}		

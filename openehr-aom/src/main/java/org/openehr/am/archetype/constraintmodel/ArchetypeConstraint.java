@@ -39,13 +39,15 @@ public abstract class ArchetypeConstraint {
      * Constructor
      *
      * @param anyAllowed
+     * @param path     
+     * @param parent
      */
     protected ArchetypeConstraint(boolean anyAllowed, String path) {
         if (StringUtils.isEmpty(path)) {
             throw new IllegalArgumentException("path null");
         }
         this.anyAllowed = anyAllowed;
-        this.path = path;
+        this.path = path;                
     }
 
     /**
@@ -126,6 +128,52 @@ public abstract class ArchetypeConstraint {
     }
     
     /**
+     * See adl 1.5 specifications for congruent
+     */
+    public boolean isCongruent(){
+    	return isCongruent;
+    }
+    
+    /**
+     * See adl 1.5 specifications for congruent
+     */
+    public void setIsCongruent(boolean isCongruent){
+    	this.isCongruent = isCongruent; 
+    }
+    
+    
+    /**
+     * See adl 1.5 specifications for ArchetypeConstraint type
+     * @param otherNode Node to compare to
+     * @return comparison result
+     */
+    public  boolean nodeConformsTo(ArchetypeConstraint otherNode){return false;};
+    
+    /**
+     * See adl 1.5 specifications for ArchetypeConstraint type
+     * @param otherNode
+     * @return comparison result
+     */
+    public boolean nodeCongruentTo(ArchetypeConstraint otherNode){return false;};
+    
+    /**
+     * Get parent constraint
+     * @return Parent ArchetypeConstraint
+     */
+    public ArchetypeConstraint getParent(){
+    	return parent;
+    }
+    
+    /**
+     * Set parent ArchetypeConstraint
+     * @param parent
+     */
+    public void setParent(ArchetypeConstraint parent){
+    	this.parent = parent;
+    }
+    
+    
+    /**
      * String representation of this object
      *
      * @return string form
@@ -169,6 +217,8 @@ public abstract class ArchetypeConstraint {
     /* fields */
     private boolean anyAllowed;
     private String path;
+    protected boolean isCongruent;
+    protected ArchetypeConstraint parent;
     
     // TODO experimental feature in ADL 1.5
     private boolean hiddenOnForm;    

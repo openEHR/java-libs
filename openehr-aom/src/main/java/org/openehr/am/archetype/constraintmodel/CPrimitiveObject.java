@@ -18,6 +18,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.am.archetype.constraintmodel.primitive.CPrimitive;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 
 /**
  * PrimitiveObject Constraint
@@ -36,7 +37,7 @@ public class CPrimitiveObject extends CDefinedObject {
 	 * @param parent
 	 * @param item
 	 */
-	public CPrimitiveObject(String path, Interval<Integer> occurrences,
+	public CPrimitiveObject(String path, MultiplicityInterval occurrences,
 			String nodeId, CAttribute parent, CPrimitive item) {
 
 		super(item == null, path, item == null ? null : item.getType(),
@@ -53,7 +54,7 @@ public class CPrimitiveObject extends CDefinedObject {
 	 * @return
 	 */
 	public static CPrimitiveObject createSingleRequired(String path, CPrimitive item) {
-		Interval<Integer> occurrences = new Interval<Integer>(1,1);
+		MultiplicityInterval occurrences = new MultiplicityInterval(1,1);
 		return new CPrimitiveObject(path, occurrences, null, null, item);
 	}
 	

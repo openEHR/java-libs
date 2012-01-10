@@ -17,6 +17,7 @@ package org.openehr.am.archetype.constraintmodel;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 import org.openehr.am.archetype.assertion.Assertion;
 
 import java.util.Set;
@@ -43,7 +44,7 @@ public class ArchetypeSlot extends CReferenceObject {
      *         or if excludes not null and empty or both are null
      */
     public ArchetypeSlot(String path, String rmTypeName,
-                         Interval<Integer> occurrences,
+                         MultiplicityInterval occurrences,
                          String nodeID, CAttribute parent,
                          Set<Assertion> includes, Set<Assertion> excludes) {
 
@@ -147,9 +148,18 @@ public class ArchetypeSlot extends CReferenceObject {
                 .toHashCode(); 
     }
     
+    public boolean isExhaustive(){
+    	return isExhaustive;
+    }
+    
+    public void setIsExhaustive(boolean isExhaustive){
+    	this.isExhaustive = isExhaustive;
+    }
+    
     /* fields */
     private Set<Assertion> includes;
-    private Set<Assertion> excludes; 
+    private Set<Assertion> excludes;
+    private boolean isExhaustive;
 }
 
 /*

@@ -19,6 +19,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.am.archetype.constraintmodel.primitive.CDate;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 
 /**
  * Reference to a constraint described in the same archetype, but outside
@@ -43,7 +44,7 @@ public final class ConstraintRef extends CReferenceObject {
      * @throws IllegalArgumentException if reference null
      */
     public ConstraintRef(String path, String rmTypeName,
-            Interval<Integer> occurrences, String nodeId, CAttribute parent, 
+            MultiplicityInterval occurrences, String nodeId, CAttribute parent, 
             String reference) {
 
         super(false, path, rmTypeName, occurrences, nodeId, parent);

@@ -17,6 +17,9 @@ package org.openehr.am.archetype.constraintmodel;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.rm.support.basic.MultiplicityInterval;
+import org.openehr.rm.support.basic.MultiplicityInterval.ExistenceValues;
+
 
 import java.util.*;
 
@@ -31,9 +34,10 @@ public abstract class CAttribute extends ArchetypeConstraint {
     /**
      * enumeration of attribute existence
      */
-    public enum Existence {
-        REQUIRED, OPTIONAL, NOT_ALLOWED
-    };
+//    public enum Existence {
+//        REQUIRED, OPTIONAL, NOT_ALLOWED
+//    };
+	
 
     /**
      * Constructs an AttributeConstraint
@@ -46,7 +50,7 @@ public abstract class CAttribute extends ArchetypeConstraint {
      *                                  or existence null or children null
      */
     public CAttribute(String path, String rmAttributeName,
-                      Existence existence, List<CObject> children) {
+                      MultiplicityInterval existence, List<CObject> children) {
 
         super(children == null, path);
 
@@ -89,8 +93,8 @@ public abstract class CAttribute extends ArchetypeConstraint {
      * @param existence
      */
     public CAttribute(String path, String rmAttributeName,
-            Existence existence) {
-    	this(path, rmAttributeName, existence, null);
+            MultiplicityInterval existence) {
+    	this(path, rmAttributeName, existence, null);    	
     }
     
     /**
@@ -108,7 +112,7 @@ public abstract class CAttribute extends ArchetypeConstraint {
      *
      * @return existence
      */
-    public Existence getExistence() {
+    public MultiplicityInterval getExistence() {
         return existence;
     }
 
@@ -118,7 +122,7 @@ public abstract class CAttribute extends ArchetypeConstraint {
      * @return true if required
      */
     public boolean isRequired() {
-        return Existence.REQUIRED.equals(existence);
+    	return getExistence().intervalValueEquals(ExistenceValues.REQUIRED);
     }
     
     /**
@@ -127,7 +131,7 @@ public abstract class CAttribute extends ArchetypeConstraint {
      * @return
      */
     public boolean isAllowed() {
-    	return ! Existence.NOT_ALLOWED.equals(existence);
+    	return ! getExistence().intervalValueEquals(ExistenceValues.NOT_ALLOWED);//Existence.NOT_ALLOWED.equals(existence);
     }
 
     /**
@@ -243,12 +247,30 @@ public abstract class CAttribute extends ArchetypeConstraint {
                 .append(children)
                 .toHashCode();
     }
+    
+    public boolean getMatchNegated(){
+    	return matchNegated;
+    }
+    
+    public void setMatchNegated(boolean matchNegated){
+    	this. matchNegated = matchNegated; 
+    }
+    
+    public String getDifferentialPath(){
+    	return differentialPath;
+    }
+    
+    public void setDifferentialPath(String differentialPath){
+    	this.differentialPath = differentialPath; 
+    }
 
 
     /* fields */
     private final String rmAttributeName;
-    private final Existence existence;
+    private final MultiplicityInterval existence;
     final List<CObject> children;
+    private boolean matchNegated;
+    private String differentialPath;
 }
 
 /*

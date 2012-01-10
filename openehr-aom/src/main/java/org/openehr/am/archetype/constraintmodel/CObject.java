@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 
 import java.util.Set;
 
@@ -43,7 +44,7 @@ public abstract class CObject extends ArchetypeConstraint {
      *                                  or nodeID null or empty
      */
     protected CObject(boolean anyAllowed, String path, String rmTypeName,
-                      Interval<Integer> occurrences, String nodeID,
+                      MultiplicityInterval occurrences, String nodeID,
                       CAttribute parent) {
 
         super(anyAllowed, path);
@@ -81,11 +82,11 @@ public abstract class CObject extends ArchetypeConstraint {
      *
      * @return Interval<Integer>, null indicates {1..1}
      */
-    public Interval<Integer> getOccurrences() {
+    public MultiplicityInterval getOccurrences() {
         return occurrences;
     }
     
-    public void setOccurrences(Interval<Integer> occurrences) {
+    public void setOccurrences(MultiplicityInterval occurrences) {
     	this.occurrences = occurrences;
     }
 
@@ -134,6 +135,24 @@ public abstract class CObject extends ArchetypeConstraint {
     public void setParent(CAttribute parent) {
     	this.parent = parent;
     }
+    
+    public SiblingOrder getSiblingOrder(){
+    	return siblingOrder;
+    }
+    
+    public void setSiblingOrder(SiblingOrder siblingOrder){
+    	this.siblingOrder = siblingOrder;
+    }
+    
+    public int getSpecialisationDepth(){
+    	return specialisationDepth;
+    }
+    
+    public void setSpecialisationDepth(int specialisationDepth){
+    	this.specialisationDepth = specialisationDepth; 
+    }
+    
+    //TODO: nodeConformsTo nodeCongruentTo implementations
     
     /**
      * Check if this object node is required by occurrences
@@ -218,9 +237,12 @@ public abstract class CObject extends ArchetypeConstraint {
 
     /* fields */
     private final String rmTypeName;
-    private Interval<Integer> occurrences;
+    private MultiplicityInterval occurrences;
     private String nodeID;
     private CAttribute parent;
+    private SiblingOrder siblingOrder;
+    private int specialisationDepth;
+    
     private static final Interval<Integer> NOT_ALLOWED = new Interval<Integer>(0,0);    
 }
 
