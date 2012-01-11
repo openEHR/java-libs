@@ -22,12 +22,39 @@ public class ParseADLSFileTest extends ParserTestBase {
 	
 	public void testParseMostMinimalV1() throws Exception{
 		ADL15Parser parser = new ADL15Parser(
-				loadFromClasspath("ADL_1.5_test/validity/basics/" +
-						"openEHR-TEST_PKG-WHOLE.most_minimal.v1.adls"));
+				loadFromClasspath(ADL15_TEST_PATH +
+						"basics/openEHR-TEST_PKG-WHOLE.most_minimal.v1.adls"));
+		archetype = parser.parse();
+		assertNotNull(archetype);
+	}
+
+	
+	public void testParseStructureTest() throws Exception{
+		ADL15Parser parser = new ADL15Parser(
+				loadFromClasspath(ADL15_TEST_PATH +
+						"basics/openEHR-TEST_PKG-BOOK.structure_test1.v1.adls"));
 		archetype = parser.parse();
 		assertNotNull(archetype);
 	}
 	
+	public void testParseBasicTypesTest() throws Exception{
+		ADL15Parser parser = new ADL15Parser(
+				loadFromClasspath(ADL15_TEST_PATH +
+						"basics/openehr-TEST_PKG-WHOLE.basic_types.v1.adls"));
+		archetype = parser.parse();
+		assertNotNull(archetype);
+	}
+
+	
+	public void testParseAnnotationsTest() throws Exception{
+		ADL15Parser parser = new ADL15Parser(
+				loadFromClasspath(ADL15_TEST_PATH +
+						"annotations/openEHR-EHR-EVALUATION.annotations_1st_child.v1.adls"));
+		archetype = parser.parse();
+		assertNotNull(archetype);
+	}
+	
+	private static final String ADL15_TEST_PATH = "ADL_1.5_test/validity/";
 	private ParsedArchetype archetype;
 	private ArchetypeConstraint node;
 }

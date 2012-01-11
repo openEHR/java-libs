@@ -238,6 +238,7 @@ PARSER_END(ADL15Parser)
 | <SYM_DEFINITION: "definition"([" ","\t","\r","\n"])*"\n" > : CADL
 | <SYM_DESCRIPTION: "description"([" ","\t","\r","\n"])*"\n" > : DEFAULT
 | <SYM_ONTOLOGY: "ontology"([" ","\t","\r","\n"])*"\n" > : DEFAULT
+| <SYM_ANNOTATIONS: "annotations"([" ","\t","\r","\n"])*"\n" > : DEFAULT
 }
 
 < * > TOKEN [IGNORE_CASE]: /* KEYWORDS - dADL */
@@ -443,15 +444,6 @@ TOKEN : /* IDENTIFIERS - ADL */
   < V_ATTRIBUTE_IDENTIFIER: ["a"-"z"](<LET_DIG_U>)* >               
 }
 
-/* ----------------------- TOKEN - dADL ---------------------------- */
-
-< DADL> TOKEN: /* VALUES - dADL */
-{
-  < V_QUALIFIED_TERM_CODE_REF: "["(<LET_DIG_DUDSLR>)+"::"(<LET_DIG_DUDS>)+"]">
-|
-  <V_IDENTIFIER: <LET_DIG>(<LET_DIG_U>)*>
-}
-
 /* ----------------------- TOKEN - cADL ---------------------------- */
 
 < CADL > TOKEN: /* VALUES - cADL */
@@ -540,6 +532,8 @@ ParsedArchetype archetype() throws Exception :
   <SYM_DEFINITION> definition = cadl() 
 
   <SYM_ONTOLOGY> ontology = dadl()
+
+  [ <SYM_ANNOTATIONS> annotations = dadl() ]
   
   <EOF>
 
@@ -813,6 +807,7 @@ List simple_list_value() :
   |
     list = character_list_value()
   |
+  	LOOKAHEAD( string_list_value() )
     list = string_list_value()
   )
   { return list; }
@@ -1203,11 +1198,33 @@ Interval date_interval_value() :
   DvDate upper = null;
 }
 {
-    <SYM_INTERVAL_DELIM>
+  <SYM_INTERVAL_DELIM>
   (
+    LOOKAHEAD( 3 )
+    {
+      boolean lowerInclusive = true;
+	  boolean upperInclusive = true;  	
+    }
+    [
+      // TODO use the flag in constructor
+      <SYM_GT> { lowerInclusive = false; }
+	]
+
     lower = date_value() 
+
     { upper = lower; }
-    [ <SYM_ELLIPSIS> upper = date_value() ]
+
+    [
+	  <SYM_ELLIPSIS>
+
+	  [
+	    // TODO use the flag in constructor
+        <SYM_LT> {  upperInclusive = false; } 
+      ]	
+	
+	  upper = date_value()
+	  
+    ]
     {
       i = new Interval(lower, upper, true, true);
     }
@@ -1293,9 +1310,25 @@ Interval time_interval_value() :
 {
     <SYM_INTERVAL_DELIM>
   (
+    LOOKAHEAD( 3 )
+    {
+      boolean lowerInclusive = true;
+	  boolean upperInclusive = true;  	
+    }
+    [
+      // TODO use the flag in constructor
+      <SYM_GT> { lowerInclusive = false; }
+	]
     lower = time_value()
     { upper = lower; }
-    [ <SYM_ELLIPSIS> upper = time_value() ]
+    [
+      <SYM_ELLIPSIS>
+      [
+	    // TODO use the flag in constructor
+        <SYM_LT> {  upperInclusive = false; } 
+      ]
+      upper = time_value()
+    ]
     {
       i = new Interval(lower, upper, true, true);
     }
@@ -1377,9 +1410,25 @@ Interval date_time_interval_value() :
 {
     <SYM_INTERVAL_DELIM>
   (
+    LOOKAHEAD( 3 )
+    {
+      boolean lowerInclusive = true;
+	  boolean upperInclusive = true;  	
+    }
+    [
+      // TODO use the flag in constructor
+      <SYM_GT> { lowerInclusive = false; }
+	]
     lower = date_time_value() 
     { upper = lower; }
-    [ <SYM_ELLIPSIS> upper = date_time_value() ]
+    [
+      <SYM_ELLIPSIS>
+      [
+	    // TODO use the flag in constructor
+        <SYM_LT> {  upperInclusive = false; } 
+      ]
+      upper = date_time_value()
+    ]
     {
       i = new Interval(lower, upper, true, true);
     }
@@ -1445,10 +1494,24 @@ Interval duration_interval_value() :
 {
   <SYM_INTERVAL_DELIM>
   (
-    lower = duration_value() 
+    LOOKAHEAD( 3 )
+    {
+      boolean lowerInclusive = true;
+	  boolean upperInclusive = true;  	
+    }
+    [
+      // TODO use the flag in constructor
+      <SYM_GT> { lowerInclusive = false; }
+	]
+	lower = duration_value() 
     { upper = lower; }
     [ 
-      <SYM_ELLIPSIS> upper = duration_value() 
+      <SYM_ELLIPSIS>
+      [
+	    // TODO use the flag in constructor
+        <SYM_LT> {  upperInclusive = false; } 
+      ]
+      upper = duration_value() 
     ]
     {
       i = new Interval(lower, upper, true, true);
@@ -1708,7 +1771,8 @@ void c_any() :
 
 CAttribute c_attribute(String path) :
 {
-  String name;
+  // TODO 
+  String name = "name";
   CAttribute.Existence existence = CAttribute.Existence.REQUIRED;
   Cardinality cardinality = null; // default to non-container type
   List children;
@@ -1719,8 +1783,12 @@ CAttribute c_attribute(String path) :
   	if( ! path.endsWith("/")) {
 	    path += "/";
   	}
-  }	
-  name = attribute_identifier()
+  }
+  (    name = attribute_identifier()
+  |
+    // TODO use the path in extended AOM
+    absolute_path()
+  )
   [ existence = c_existence() ]
   [ cardinality = c_cardinality() ]
   <SYM_MATCHES> <SYM_START_CBLOCK>
@@ -2696,10 +2764,10 @@ PrimitiveObjectBlock primitive_object_block() :
   <SYM_LT>
   (
     LOOKAHEAD( 2 )
-    simpleValue = simple_value()
+    simpleListValue = simple_list_value()
   | 
     LOOKAHEAD( 2 )
-    simpleListValue = simple_list_value()
+    simpleValue = simple_value()
   | 
     simpleIntervalValue = simple_interval_value()
   | 
