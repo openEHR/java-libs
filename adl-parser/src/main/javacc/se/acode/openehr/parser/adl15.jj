@@ -54,10 +54,9 @@ import org.openehr.am.parser.*;
 /**
  * JavaCC grammer file for Archteype Definition Language (ADL)
  *
- * Targeted ADL revision 1.5
+ * Targeted ADL revision 1.5.0
  *
- * @author Rong Chen (rong.acode@gmail.com)
- * @version 1.4
+ * @author Rong Chen (rong.chen@cambio.se)
  */
 
 public class ADL15Parser {
@@ -118,8 +117,6 @@ public class ADL15Parser {
       this.emptyPurposeCompatible = emptyPurposeCompatible;
   }
 
-  /* =========================  public interface ======================== */
-
   /* execute the parsing */
   public ParsedArchetype parse() throws ParseException, Exception {
       return archetype();
@@ -133,79 +130,7 @@ public class ADL15Parser {
   /* re-initial the parser */
   public void reInit(InputStream input) throws IOException {
       ReInit(new BufferedInputStream(input));
-  }
-  
-  /* ===================  entry point from command-line  ================ */
-  public static void main(String args[]) throws IOException {
-    ADL15Parser parser = null;
-    String title = "ADL 1.4 Parser: ";
-
-    if (args.length == 1) {
-      System.out.println(title + "  Reading from file " + args[0] + " . . .");
-      try {
-      	// be permissive in console mode
-        parser = new ADL15Parser(new File(args[0]), true, true);
-      } catch (IOException e) {
-        System.out.println(title + "  File " + args[0] + " not found.");
-        return;
-      }
-    } else if(args.length == 2 && "-d".equals(args[0])) {
-    	System.out.println(title + "  Reading from directory " + args[1] + " . . .");
-    	File dir = new File(args[1]);	
-    	if( ! dir.isDirectory()) {
-    		System.out.println(args[1] + " not a directory.. aborted");
-    		return;	
-    	}
-    	File[] files = dir.listFiles();
-    	if(files == null || files.length == 0) {
-    		System.out.println(args[1] + " has no file.. aborted");
-    		return;	
-    	}
-    	int passed = 0;
-    	int total = 0;
-    	for(int i = 0; i < files.length; i++) {
-    		if( ! files[i].getName().endsWith(".adl")) {
-    			continue;
-    		}
-    		if(parser == null) {
-    			parser = new ADL15Parser(files[i], true, true);
-    		} else {
-    			parser.reInit(files[i]);
-    		}    		
-    		total++;
-    		try {
-		      ParsedArchetype a = parser.archetype();
-		      System.out.println(files[i] + "  parsed successfully");
-		      passed ++;
-		    } catch (Throwable e) {
-		      e.printStackTrace();
-		      System.out.println(files[i] + "  failed in parsing");
-		    }
-    	}
-    	System.out.println("Total files parsed: " + total);
-    	System.out.println("Parsed successfully: " + passed);
-    	System.out.println("Failed in parsing: " + (total - passed));
-    	
-    	return;	
-    } else {
-      System.out.println(title + "  Usage is one of:");
-      System.out.println("         java ADL15Parser < inputfile");
-      System.out.println("OR");
-      System.out.println("         java ADL15Parser inputfile");
-      System.out.println("OR");
-      System.out.println("         java ADL15Parser -d directory");
-      return;
-    }
-    try {
-      ParsedArchetype a = parser.archetype();
-      // System.out.println(a.toString());
-      System.out.println(title + "  ADL file parsed successfully.");
-    } catch (Throwable e) {
-      e.printStackTrace();
-      System.out.println(title + "  Encountered errors during parsing " + args[0]);
-    }
-  }
-
+  }  
 }
 
 PARSER_END(ADL15Parser)
@@ -228,20 +153,24 @@ PARSER_END(ADL15Parser)
 
 < * > TOKEN [IGNORE_CASE]: /* RESERVED WORDS AND LITERALS - ADL */
 {
-  <SYM_ARCHETYPE: "archetype"([" ","\t","\r","\n"])* > : DEFAULT
-| <SYM_ADL_VERSION: "adl_version"> : DEFAULT
-| <SYM_CONTROLLED: "controlled"> : DEFAULT
-| <SYM_UNCONTROLLED: "uncontrolled"> : DEFAULT
-| <SYM_SPECIALIZE: "speciali"["s","z"]"e"([" ","\t","\r","\n"])*"\n"> : DEFAULT
-| <SYM_CONCEPT: "concept"([" ","\t","\r","\n"])*"\n" > : DEFAULT
-| <SYM_LANGUAGE: "language"([" ","\t","\r","\n"])*"\n"> : DEFAULT
-| <SYM_DEFINITION: "definition"([" ","\t","\r","\n"])*"\n" > : CADL
-| <SYM_DESCRIPTION: "description"([" ","\t","\r","\n"])*"\n" > : DEFAULT
-| <SYM_ONTOLOGY: "ontology"([" ","\t","\r","\n"])*"\n" > : DEFAULT
-| <SYM_ANNOTATIONS: "annotations"([" ","\t","\r","\n"])*"\n" > : DEFAULT
+  <SYM_ARCHETYPE: "archetype"([" ","\t","\r"])*> 
+| <SYM_TEMPLATE: "template"([" ","\t","\r"])*> 
+| <SYM_TEMPLATE_COMPONENT: "template_component"([" ","\t","\r"])*> 
+| <SYM_OPERATIONAL_TEMPLATE: "operational_template"([" ","\t","\r"])*>
+| <SYM_ADL_VERSION: "adl_version">
+| <SYM_IS_CONTROLLED: "controlled">
+| <SYM_IS_GENERATED: "generated">
+| <SYM_SPECIALIZE: "speciali"["s","z"]"e"([" ","\t","\r"])*"\n">
+| <SYM_CONCEPT: "concept"([" ","\t","\r"])*"\n">
+| <SYM_LANGUAGE: "language"([" ","\t","\r"])*"\n"> 
+| <SYM_DESCRIPTION: "description"([" ","\t","\r"])*"\n">
+| <SYM_DEFINITION: "definition"([" ","\t","\r"])*"\n"> : CADL
+| <SYM_ONTOLOGY: "ontology"([" ","\t","\r"])*"\n"> 
+| <SYM_ANNOTATIONS: "annotations"([" ","\t","\r"])*"\n">
+| <SYM_REVISION_HISTORY: "revision_history"([" ","\t","\r"])*"\n"> 
 }
 
-< * > TOKEN [IGNORE_CASE]: /* KEYWORDS - dADL */
+< CADL> TOKEN [IGNORE_CASE]: /* KEYWORDS - dADL */
 {
   < SYM_TRUE: "true">
 | < SYM_FALSE: "false">
@@ -266,6 +195,8 @@ PARSER_END(ADL15Parser)
 | < SYM_ORDERED: "ordered">
 | < SYM_UNORDERED: "unordered">
 | < SYM_UNIQUE: "unique">
+| < SYM_BEFORE: "before">
+| < SYM_AFTER: "after">
 | < SYM_MATCHES: "matches" | "is_in">
 | < SYM_INVARIANT: "invariant">
 | < SYM_USE_NODE: "use_node"> : USE_NODE
@@ -339,7 +270,7 @@ PARSER_END(ADL15Parser)
   < #LET_DIG_DUDSLR: <LET_DIG_DUDS> | "(" | ")" >
 }
 
-TOKEN : /* IDENTIFIERS - ADL */
+< * > TOKEN : /* IDENTIFIERS - ADL */
 {
   <V_ARCHETYPE_ID: <LET_DIG>(<LET_DIG_DU>)+"."<LET_DIG>(<LET_DIG_DU>)+
   "."(<LET_DIG>)+>
@@ -508,13 +439,13 @@ ParsedArchetype archetype() throws Exception :
 }
 
 {
-  <SYM_ARCHETYPE>	
+  // TODO
+  arch_head()	
   [ 
     <SYM_L_PARENTHESIS>
-    adlVersion = adl_version() 
-    [ 
-      <SYM_SEMICOLON>
-      isControlled = controlled() 
+    [
+      // TODO
+      arch_meta_data_items()     
     ]    
     <SYM_R_PARENTHESIS>
   ]
@@ -549,6 +480,49 @@ ParsedArchetype archetype() throws Exception :
 	pArchetype.setRevisionHistory(revisionHistory);
   	
     return pArchetype;
+  }
+}
+
+void arch_head() :
+{  Token t;
+}
+{
+  (    
+	  < SYM_ARCHETYPE >
+	| < SYM_TEMPLATE >
+	| < SYM_TEMPLATE_COMPONENT >
+	| < SYM_OPERATIONAL_TEMPLATE >
+  )  {    return;
+  }
+}    
+
+void arch_meta_data_items() :
+{  Token t;
+}
+{
+     
+  arch_meta_data_item()
+  (    <SYM_SEMICOLON>
+    arch_meta_data_item()
+  )*
+  {    return;
+  }
+}
+
+void arch_meta_data_item() :
+{
+  Token t;
+}
+{
+  (    adl_version()
+  |
+    <SYM_IS_CONTROLLED>
+  |
+    <SYM_IS_GENERATED> 
+  )
+
+  {
+    return;
   }
 }
 
@@ -593,18 +567,6 @@ String adl_version() :
 {
   <SYM_ADL_VERSION> <SYM_EQ> t = <V_REAL>
   { return t.image; }
-}
-
-boolean controlled() :
-{
-  boolean ret = false;	
-}
-{
-  <SYM_CONTROLLED> 
-  { return true; }
-  |
-  <SYM_UNCONTROLLED>
-  { return false; }
 }
 
 String arch_specialisation() :
@@ -1588,6 +1550,10 @@ CComplexObject c_complex_object(String path, CAttribute parent) :
   List attributes;
 }
 {
+  // TODO
+  [
+    sibling_order()
+  ]
   type = type_identifier()
   [ nodeID = constraint_ref() ]
   [ occurrences = c_occurrences() ]
@@ -1604,6 +1570,19 @@ CComplexObject c_complex_object(String path, CAttribute parent) :
   {
     return new CComplexObject(path, type, occurrences, nodeID, attributes, parent);
   }
+}
+
+// TODO
+void sibling_order() :
+{  Token t;
+}
+{
+  (    <SYM_AFTER>
+  |
+    <SYM_BEFORE>
+  )   <V_LOCAL_TERM_CODE_REF>	
+  {
+    return;  }
 }
 
 List c_complex_object_body(String path) :
@@ -1640,7 +1619,7 @@ CObject c_object(String path, CAttribute parent) :
     |
       c = archetype_internal_ref(path, parent)
     |
-      c = archetype_slot(path, parent)
+      c = c_archetype_root(path, parent)
     |
       c = c_code_phrase(path, parent)
     |
@@ -1688,7 +1667,7 @@ ArchetypeInternalRef archetype_internal_ref(String path, CAttribute parent) :
   }
 }
 
-ArchetypeSlot archetype_slot(String path, CAttribute parent) :
+ArchetypeSlot c_archetype_root(String path, CAttribute parent) :
 {
   String type;
   String nodeID = null;
@@ -1699,14 +1678,16 @@ ArchetypeSlot archetype_slot(String path, CAttribute parent) :
 {
   <SYM_ALLOW_ARCHETYPE> type = type_identifier()
   
-  [ nodeID = constraint_ref() ]
+  (    nodeID = constraint_ref()
+  |
+    // TODO
+    <SYM_L_BRACKET>
+		<V_ARCHETYPE_ID>
+    <SYM_R_BRACKET>
+  )
   
-  [ occurrences = c_occurrences() ] 
+  occurrences = c_occurrences()
   
-  <SYM_MATCHES> <SYM_START_CBLOCK>
-    [ includes = c_includes() ]
-    [ excludes = c_excludes() ]
-  <SYM_END_CBLOCK>
   {
   	if(path == null) {
         path = "/";
@@ -1819,7 +1800,7 @@ List c_attr_values(String path, CAttribute parent) :
   |
     { list = new ArrayList(); }
     (
-      LOOKAHEAD(2)
+      LOOKAHEAD(3)
       c = c_object(path, parent)
       { list.add(c); }
     )*
@@ -2281,22 +2262,17 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
 }
 {
   <SYM_C_DV_QUANTITY> "<"
-    (
-        	
-	  <SYM_PROPERTY> <SYM_EQ> "<" property = code_phrase() ">" 	 	  
-    
-    | 
-    	
+    (        	
+	  <SYM_PROPERTY> <SYM_EQ> "<" property = code_phrase() ">"    
+    |     	
 	  { list = new ArrayList(); }
 	  <SYM_LIST> <SYM_EQ> "<"	  
 	    ( 
 	      item = c_dv_quantity_item() 
 	      { list.add(item); }
 	    )+	  	  
-	  ">"
-	  
-   |   
-    
+	  ">"	  
+   |       
       <SYM_C_QUANTITY_ASSUMED_VALUE> <SYM_EQ> "<"
         assumedValue = dv_quantity() 
       ">"
@@ -2891,7 +2867,7 @@ String path_segment() :
  * The Original Code is ADL15Parser.java
  * 
  * The Initial Developer of the Original Code is Rong Chen. Portions created by
- * the Initial Developer are Copyright (C) 2003-2009 the Initial Developer. All
+ * the Initial Developer are Copyright (C) 2003-2012 the Initial Developer. All
  * Rights Reserved.
  * 
  * Contributor(s): Sebastian Garde
