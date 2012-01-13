@@ -1,5 +1,6 @@
 package org.openehr.am.parser;
 
+import org.openehr.am.archetype.ArtefactType;
 import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 
 /**
@@ -16,6 +17,21 @@ public class ParsedArchetype extends Parsed {
 	public ParsedArchetype(){		
 	}	
 	
+	
+	/**
+	 * @return the artefactType
+	 */
+	public ArtefactType getArtefactType() {
+		return artefactType;
+	}
+
+	/**
+	 * @param artefactType the artefactType to set
+	 */
+	public void setArtefactType(ArtefactType artefactType) {
+		this.artefactType = artefactType;
+	}
+
 	/**
 	 * @return the archetypeId
 	 */
@@ -125,6 +141,62 @@ public class ParsedArchetype extends Parsed {
 		this.revisionHistory = revisionHistory;
 	}
 
+	/**
+	 * @return the generated
+	 */
+	public boolean isGenerated() {
+		return generated;
+	}
+
+
+
+	/**
+	 * @param generated the generated to set
+	 */
+	public void setGenerated(boolean generated) {
+		this.generated = generated;
+	}
+
+
+
+	/**
+	 * @return the controlled
+	 */
+	public boolean isControlled() {
+		return controlled;
+	}
+
+
+
+	/**
+	 * @param controlled the controlled to set
+	 */
+	public void setControlled(boolean controlled) {
+		this.controlled = controlled;
+	}
+
+
+
+	/**
+	 * @return the adlVersion
+	 */
+	public String getAdlVersion() {
+		return adlVersion;
+	}
+
+
+
+	/**
+	 * @param adlVersion the adlVersion to set
+	 */
+	public void setAdlVersion(String adlVersion) {
+		this.adlVersion = adlVersion;
+	}
+
+	private ArtefactType artefactType;	
+	private boolean generated;
+	private boolean controlled;
+	private String adlVersion;	
 	private String archetypeId;
 	private String parentArchetypeId;
 	private String conceptId;

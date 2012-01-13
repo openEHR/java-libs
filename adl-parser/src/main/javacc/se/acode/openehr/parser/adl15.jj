@@ -42,6 +42,7 @@ import org.openehr.rm.support.identification.*;
 import org.openehr.rm.support.terminology.*;
 import org.openehr.rm.support.measurement.*;
 
+import org.openehr.am.archetype.ArtefactType;
 import org.openehr.am.archetype.assertion.*;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
@@ -423,7 +424,8 @@ PARSER_END(ADL15Parser)
 
 ParsedArchetype archetype() throws Exception :
 {
-  Token t;	
+  Token t;
+  ArtefactType type;
   String id;
   String adlVersion = null;
   boolean isControlled = false;  // TODO
@@ -441,12 +443,12 @@ ParsedArchetype archetype() throws Exception :
 
 {
   // TODO
-  arch_head()	
+  type = arch_head()	
   [ 
     <SYM_L_PARENTHESIS>
     [
       // TODO
-      arch_meta_data_items()     
+      arch_meta_data_items(pArchetype)     
     ]    
     <SYM_R_PARENTHESIS>
   ]
@@ -470,7 +472,8 @@ ParsedArchetype archetype() throws Exception :
   <EOF>
 
   {
-  	pArchetype.setArchetypeId(concept);
+    pArchetype.setArtefactType(type);
+  	pArchetype.setArchetypeId(id);
 	pArchetype.setParentArchetypeId(parent);
 	pArchetype.setConceptId(concept);
 	pArchetype.setLanguage(language);
@@ -484,42 +487,61 @@ ParsedArchetype archetype() throws Exception :
   }
 }
 
-void arch_head() :
-{  Token t;
+ArtefactType arch_head() :
+{
+  ArtefactType type;
 }
 {
   (    
-	  < SYM_ARCHETYPE >
-	| < SYM_TEMPLATE >
-	| < SYM_TEMPLATE_OVERLAY >
-	| < SYM_OPERATIONAL_TEMPLATE >
-  )  {    return;
+	  < SYM_ARCHETYPE >	  {	    type = ArtefactType.ARCHETYPE;	  }	  
+	|
+	  < SYM_TEMPLATE >
+	  {
+	    type = ArtefactType.TEMPLATE;
+	  }
+	|
+	  < SYM_TEMPLATE_OVERLAY >
+	  {
+	    type = ArtefactType.TEMPLATE_OVERLAY;
+	  }
+	|
+	  < SYM_OPERATIONAL_TEMPLATE >
+	  {
+	    type = ArtefactType.OPERATION_TEMPLATE;
+	  }
+  )  {    return type;
   }
 }    
 
-void arch_meta_data_items() :
+void arch_meta_data_items(ParsedArchetype pArchetype) :
 {  Token t;
 }
 {
      
-  arch_meta_data_item()
+  arch_meta_data_item(pArchetype)
   (    <SYM_SEMICOLON>
-    arch_meta_data_item()
+    arch_meta_data_item(pArchetype)
   )*
   {    return;
   }
 }
 
-void arch_meta_data_item() :
+void arch_meta_data_item(ParsedArchetype pArchetype) :
 {
-  Token t;
+  String ver;
 }
 {
-  (    adl_version()
+  (    ver = adl_version()
+    {      pArchetype.setAdlVersion(ver);
+  	} 
   |
     <SYM_IS_CONTROLLED>
+  	{
+  	  pArchetype.setControlled(true);  	}
   |
-    <SYM_IS_GENERATED> 
+    <SYM_IS_GENERATED>
+    {	  pArchetype.setGenerated(true);	
+    }
   )
 
   {

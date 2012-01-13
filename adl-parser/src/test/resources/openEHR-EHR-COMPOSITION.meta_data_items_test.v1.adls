@@ -1,0 +1,34 @@
+archetype (adl_version=1.5; generated)
+	openEHR-EHR-COMPOSITION.meta_data_items_test.v1
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+	original_author = <
+		["name"] = <"unknown">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test artefact type parsing.">
+		>
+	>
+	other_details = <
+		["regression"] = <"PASS">
+	>
+
+definition
+	WHOLE[at0000] matches {*}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"most minimal">
+					text = <"most minimal">
+				>
+			>
+		>
+	>
