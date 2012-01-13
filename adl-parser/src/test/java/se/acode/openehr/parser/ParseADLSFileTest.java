@@ -15,8 +15,7 @@ public class ParseADLSFileTest extends ParserTestBase {
 	 */
 	protected void tearDown() throws Exception {
 		archetype = null;		
-	}
-	
+	}	
 
 	public void testParseMostMinimalV1() throws Exception{
 		ADL15Parser parser = new ADL15Parser(
@@ -41,7 +40,6 @@ public class ParseADLSFileTest extends ParserTestBase {
 		archetype = parser.parse();
 		assertNotNull(archetype);
 	}
-
 	
 	public void testParseStructureTest() throws Exception{
 		ADL15Parser parser = new ADL15Parser(
@@ -95,6 +93,14 @@ public class ParseADLSFileTest extends ParserTestBase {
 		ADL15Parser parser = new ADL15Parser(
 				loadFromClasspath(ADL15_TEST_PATH +
 						"templates/openEHR-EHR-COMPOSITION.ext_ref.v1.adls"));
+		archetype = parser.parse();
+		assertNotNull(archetype);
+	}
+	
+	public void testMultipleAlternatives() throws Exception {
+		ADL15Parser parser = new ADL15Parser(
+				loadFromClasspath(ADL15_TEST_PATH +
+						"structure/openEHR-EHR-OBSERVATION.multiple_alternatives.v1.adls"));
 		archetype = parser.parse();
 		assertNotNull(archetype);
 	}

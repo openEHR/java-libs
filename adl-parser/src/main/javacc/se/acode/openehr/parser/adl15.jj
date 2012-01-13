@@ -31,6 +31,7 @@ import java.util.*;
 import java.text.*;
 
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.quantity.datetime.*;
 import org.openehr.rm.datatypes.text.*;
@@ -155,7 +156,7 @@ PARSER_END(ADL15Parser)
 {
   <SYM_ARCHETYPE: "archetype"([" ","\t","\r"])*> 
 | <SYM_TEMPLATE: "template"([" ","\t","\r"])*> 
-| <SYM_TEMPLATE_COMPONENT: "template_component"([" ","\t","\r"])*> 
+| <SYM_TEMPLATE_OVERLAY: "template_overlay"([" ","\t","\r"])*> 
 | <SYM_OPERATIONAL_TEMPLATE: "operational_template"([" ","\t","\r"])*>
 | <SYM_ADL_VERSION: "adl_version">
 | <SYM_IS_CONTROLLED: "controlled">
@@ -490,7 +491,7 @@ void arch_head() :
   (    
 	  < SYM_ARCHETYPE >
 	| < SYM_TEMPLATE >
-	| < SYM_TEMPLATE_COMPONENT >
+	| < SYM_TEMPLATE_OVERLAY >
 	| < SYM_OPERATIONAL_TEMPLATE >
   )  {    return;
   }
@@ -1546,7 +1547,7 @@ CComplexObject c_complex_object(String path, CAttribute parent) :
 {
   String type;
   String nodeID = null;
-  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
   List attributes;
 }
 {
@@ -1640,7 +1641,7 @@ ConstraintRef constraint_ref_obj(String path, CAttribute parent) :
 {
   String reference;
   String rmTypeName = "CodePhrase";
-  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
   String nodeId = null;  
 }
 {
@@ -1654,7 +1655,7 @@ ConstraintRef constraint_ref_obj(String path, CAttribute parent) :
 ArchetypeInternalRef archetype_internal_ref(String path, CAttribute parent) :
 {
   String type;
-  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
   String target;
 }
 {
@@ -1671,7 +1672,7 @@ ArchetypeSlot c_archetype_root(String path, CAttribute parent) :
 {
   String type;
   String nodeID = null;
-  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
   Set includes = null;
   Set excludes = null;
 }
@@ -1702,7 +1703,7 @@ ArchetypeSlot c_archetype_root(String path, CAttribute parent) :
 CPrimitiveObject c_primitive_object(String path, CAttribute parent) :
 {
   CPrimitive c;
-  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
 }
 {
   c = c_primitive()
@@ -1754,7 +1755,7 @@ CAttribute c_attribute(String path) :
 {
   // TODO 
   String name = "name";
-  CAttribute.Existence existence = CAttribute.Existence.REQUIRED;
+  MultiplicityInterval existence =	MultiplicityInterval.REQUIRED;
   Cardinality cardinality = null; // default to non-container type
   List children;
   CAttribute attribute;
@@ -2035,8 +2036,7 @@ ExpressionItem arithmetic_leaf() :
 
 /* ---------------- existence, occurrences, cardinality ---------------- */
 
-/* return true if optional */
-CAttribute.Existence c_existence() :
+MultiplicityInterval c_existence() :
 {
   Interval interval;
 }
@@ -2046,12 +2046,12 @@ CAttribute.Existence c_existence() :
   <SYM_END_CBLOCK>
   {
     if(((Integer) interval.getLower()).intValue() == 1) {
-        return CAttribute.Existence.REQUIRED;
+        return MultiplicityInterval.REQUIRED;
     }
     if(((Integer) interval.getUpper()).intValue() == 0) {
-        return CAttribute.Existence.NOT_ALLOWED;
+        return MultiplicityInterval.NOT_ALLOWED;
     } else {
-        return CAttribute.Existence.OPTIONAL;
+        return MultiplicityInterval.OPTIONAL;
     }
   }
 }
@@ -2071,7 +2071,7 @@ Cardinality cardinality_spec() :
 {
   boolean ordered = true;
   boolean unique = false;
-  Interval interval;
+  MultiplicityInterval interval;
 }
 {
   interval = occurrence_spec()
@@ -2090,9 +2090,9 @@ Cardinality cardinality_spec() :
   { return new Cardinality(ordered, unique, interval); }
 }
 
-Interval c_occurrences() :
+MultiplicityInterval c_occurrences() :
 {
-  Interval i;
+  MultiplicityInterval i;
 }
 {
   <SYM_OCCURRENCES> <SYM_MATCHES> <SYM_START_CBLOCK> i = occurrence_spec()
@@ -2100,7 +2100,7 @@ Interval c_occurrences() :
   { return i; }
 }
 
-Interval occurrence_spec() :
+MultiplicityInterval occurrence_spec() :
 {
   Interval i = null;
   int num = 0;
@@ -2130,7 +2130,7 @@ Interval occurrence_spec() :
         }
       )
     ]
-    { return new Interval(lower, upper); }
+    { return new MultiplicityInterval(lower, upper); }
 }
 
 /* ---------------------- leaf constraint types ----------------------- */
@@ -2142,7 +2142,7 @@ CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
   Ordinal defaultValue = null;
   int assumed = -1;
   Ordinal assumedValue = null;
-  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
 }
 {
   	
@@ -2199,7 +2199,7 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
   CodePhrase assumedValue = null;
   CodePhrase defaultValue = null; // not used 
   CodePhrase singleValue = null;
-  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
 }
 {
   (	
@@ -2258,7 +2258,7 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
   Token t = null;
   DvQuantity defaultValue = null;
   DvQuantity assumedValue = null;
-  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
 }
 {
   <SYM_C_DV_QUANTITY> "<"

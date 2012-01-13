@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
 import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.basic.MultiplicityInterval;
 import org.openehr.rm.datatypes.quantity.datetime.*;
 
 /**
@@ -49,7 +50,7 @@ public class ParserTestBase extends TestCase {
 
     // assert CAttribute has expected values
     void assertCAttribute(CAttribute attr, String rmAttributeName,
-                          CAttribute.Existence existence,
+    					  MultiplicityInterval existence,
                           Cardinality cardinality, int children)
             throws Exception {
         assertEquals("rmAttributeName", rmAttributeName,
@@ -65,7 +66,7 @@ public class ParserTestBase extends TestCase {
     // assert CAttribute has expected values
     void assertCAttribute(CAttribute attr, String rmAttributeName,
                           int children) throws Exception {
-        assertCAttribute(attr, rmAttributeName, CAttribute.Existence.REQUIRED,
+        assertCAttribute(attr, rmAttributeName, MultiplicityInterval.REQUIRED,
                 null, children);
     }
 
