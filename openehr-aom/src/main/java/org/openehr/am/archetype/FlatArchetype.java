@@ -14,16 +14,16 @@ import org.openehr.rm.support.terminology.TerminologyService;
 
 public class FlatArchetype extends Archetype {
 
-	public FlatArchetype(String adlVersion, String id, String parentId,
+	public FlatArchetype(ArtefactType artefactType, String adlVersion, String id, String parentId,
 			String concept, CodePhrase originalLanguage,
 			Map<String, TranslationDetails> translations,
 			ResourceDescription description, RevisionHistory revisionHistory,
 			boolean isControlled, CComplexObject definition,
 			FlatArchetypeOntology ontology, Set<Assertion> invariants,
-			TerminologyService terminologyService, int artefactType) {
-		super(adlVersion, id, parentId, concept, originalLanguage, translations,
+			TerminologyService terminologyService) {
+		super(artefactType, adlVersion, id, parentId, concept, originalLanguage, translations,
 				description, revisionHistory, isControlled, definition, ontology,
-				invariants, terminologyService, artefactType);
+				invariants, terminologyService);
 		// TODO Auto-generated constructor stub
 	}
 	

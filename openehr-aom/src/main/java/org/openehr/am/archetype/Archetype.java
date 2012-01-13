@@ -4,7 +4,6 @@
  * keywords:    "archetype"
  *
  * author:      "Rong Chen <rong@acode.se>"
- * support:     "Acode HB <support@acode.se>"
  * copyright:   "Copyright (c) 2004 Acode HB, Sweden"
  * license:     "See notice at bottom of class"
  *
@@ -16,7 +15,6 @@ package org.openehr.am.archetype;
 
 import java.util.*;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehr.am.archetype.assertion.Assertion;
@@ -68,17 +66,21 @@ public class Archetype extends AuthoredResource {
 	 * @params artefactType
 	 * @throws IllegalArgumentException if description null or ontology null
 	 */
-	public Archetype(String adlVersion, String id, String parentId,	String concept, 
+	public Archetype(ArtefactType artefactType, 
+			String adlVersion, String id, String parentId,	String concept, 
 			CodePhrase originalLanguage,
 			Map<String, TranslationDetails> translations,
 			ResourceDescription description, RevisionHistory revisionHistory,
 			boolean isControlled, CComplexObject definition, 
 			ArchetypeOntology ontology,	Set<Assertion> invariants,
-			TerminologyService terminologyService,
-			int artefactType) {	
+			TerminologyService terminologyService) {	
 		
 		super(originalLanguage, translations, description, revisionHistory,
 			isControlled, terminologyService);
+		
+		if (artefactType == null) {
+			throw new IllegalArgumentException("archetypeType null");
+		}
 		
 		if (id == null) {
 			throw new IllegalArgumentException("archetypeId null");
@@ -89,6 +91,7 @@ public class Archetype extends AuthoredResource {
 		if (definition == null) {
 			throw new IllegalArgumentException("definition null");
 		}
+		this.artefactType = artefactType;
 		this.adlVersion = adlVersion;
 		this.archetypeId = new ArchetypeID(id);
 		this.concept = concept;
@@ -100,7 +103,6 @@ public class Archetype extends AuthoredResource {
 		this.pathNodeMap = new HashMap<String, CObject>();
 		this.pathInputMap = new HashMap<String, String>();
 		this.inputPathMap = new HashMap<String, String>();
-		this.artefactType = artefactType;
 		reloadNodeMaps();
 	}
 
@@ -108,16 +110,36 @@ public class Archetype extends AuthoredResource {
 		String parentId = 
 			parentArchetypeId == null ? null : parentArchetypeId.toString();
 		
-		Archetype archetype = new Archetype(adlVersion, archetypeId.toString(), 
+		Archetype archetype = new Archetype(artefactType, adlVersion, archetypeId.toString(), 
 				parentId, concept, getOriginalLanguage(), getTranslations(), 
 				null, getRevisionHistory(), isControlled(), 
-				(CComplexObject) definition.copy(),	ontology, invariants, null, artefactType);
+				(CComplexObject) definition.copy(),	ontology, invariants, null);
 		
 		reloadNodeMaps();
 		
 		// set c_obj.parent()?
 		
 		return archetype;
+	}
+	
+	/**
+	 * Indicates the type of artefact, i.e. archetype, or template. 
+	 * If not present (e.g. in serialised forms), assumed to be False
+	 * 
+	 * @return
+	 */
+	public boolean isTemplate() {
+		return ArtefactType.TEMPLATE.equals(artefactType); 
+	}
+	
+	/**
+	 * Indicates the artefact to be an overlay of an archetype or template; 
+	 * if True, is_specialised must also be True.
+	 * 
+	 * @return
+	 */
+	public boolean isOverlay() {
+		return ArtefactType.TEMPLATE_OVERLAY.equals(artefactType);
 	}
 	
 	/**
@@ -327,16 +349,6 @@ public class Archetype extends AuthoredResource {
 	}	
 	
 	/**
-	 * Artefact type of this archetype. Starting with ADL 1.5
-	 * archetypes and templates are represented with the same formalism, 
-	 *so AOM can include templating related concepts, such as this. 
-	 *This field returns the purpose of this artefact. @see org.openehr.am.Archetype.ArtefactType
-	 */
-	public int getArtefactType(){
-		return artefactType;
-	}
-
-	/**
 	 * Version of this archetype, extracted from id.
 	 *
 	 * @return version
@@ -446,6 +458,8 @@ public class Archetype extends AuthoredResource {
 	}
 
 	/* fields */
+	private final ArtefactType artefactType;
+	
 	private final String adlVersion;
 
 	private final ArchetypeID archetypeId;
@@ -462,8 +476,6 @@ public class Archetype extends AuthoredResource {
 
 	private final Set<Assertion> invariants;
 	
-	private final int artefactType;//todo: this is likely to change into a boolean, says T.B
-
 	/* calculated fields */
 	private final Map<String, CObject> pathNodeMap;
 
@@ -489,10 +501,10 @@ public class Archetype extends AuthoredResource {
  *  The Original Code is Archetype.java
  *
  *  The Initial Developer of the Original Code is Rong Chen.
- *  Portions created by the Initial Developer are Copyright (C) 2003-2009
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2012
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s):
+ *  Contributor(s): Seref Arikan
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

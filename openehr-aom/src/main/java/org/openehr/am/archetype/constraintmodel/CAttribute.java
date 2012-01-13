@@ -32,14 +32,6 @@ import java.util.*;
 public abstract class CAttribute extends ArchetypeConstraint {
 
     /**
-     * enumeration of attribute existence
-     */
-//    public enum Existence {
-//        REQUIRED, OPTIONAL, NOT_ALLOWED
-//    };
-	
-
-    /**
      * Constructs an AttributeConstraint
      *
      * @param path
