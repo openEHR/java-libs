@@ -11,6 +11,11 @@ public class MultiplicityInterval extends Interval<Integer>{
 		REQUIRED, OPTIONAL, NOT_ALLOWED
 	}
 	
+	public final static MultiplicityInterval REQUIRED = new MultiplicityInterval(1, 1);
+	public final static MultiplicityInterval OPTIONAL = new MultiplicityInterval(0, 1);
+	public final static MultiplicityInterval NOT_ALLOWED = new MultiplicityInterval(0, 0);
+	
+	
 	/*
 	 * Factory method to create intances that comply with pre defined Existence values
 	 */
@@ -18,11 +23,11 @@ public class MultiplicityInterval extends Interval<Integer>{
 		MultiplicityInterval instance = null;
 		
 		if(value.equals(ExistenceValues.REQUIRED)){
-			instance = new MultiplicityInterval(1, 1);
+			instance = REQUIRED;
 		}else if(value.equals(ExistenceValues.OPTIONAL))
-			instance = new MultiplicityInterval(0,1);
+			instance = OPTIONAL;
 		else if(value.equals(ExistenceValues.NOT_ALLOWED))
-			instance = new MultiplicityInterval(0,0);
+			instance = NOT_ALLOWED;
 		
 		if(instance != null){//the following should be true for all assignments above
 			instance.setLowerIncluded(true);
@@ -34,6 +39,10 @@ public class MultiplicityInterval extends Interval<Integer>{
 	
 	public MultiplicityInterval(Integer lower, Integer upper) {
 		super(lower, upper);				
+	}
+	
+	public MultiplicityInterval(int lower, int upper) {
+		this(new Integer(lower), new Integer(upper));				
 	}
 	
 	/**
