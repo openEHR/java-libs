@@ -59,6 +59,5 @@ public class ParseADLSFileTest extends ParserTestBase {
 		assertNotNull(archetype);
 	}
 	
-	private static final String ADL15_TEST_PATH = "ADL_1.5_test/validity/";
 	private ParsedArchetype archetype;
 }

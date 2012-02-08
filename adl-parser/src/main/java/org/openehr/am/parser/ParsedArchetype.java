@@ -193,6 +193,25 @@ public class ParsedArchetype extends Parsed {
 		this.adlVersion = adlVersion;
 	}
 
+	/**
+	 * @return the flat
+	 */
+	public boolean isFlat() {
+		return flat;
+	}
+
+
+	/**
+	 * @param flat the flat to set
+	 */
+	public void setFlat(boolean flat) {
+		this.flat = flat;
+	}
+	
+	/**
+	 * 
+	 */
+	private boolean flat;
 	private ArtefactType artefactType;	
 	private boolean generated;
 	private boolean controlled;
@@ -206,4 +225,5 @@ public class ParsedArchetype extends Parsed {
 	private ContentObject ontology;
 	private ContentObject annotations;
 	private ContentObject revisionHistory;
+	
 }

@@ -155,7 +155,8 @@ PARSER_END(ADL15Parser)
 
 < * > TOKEN [IGNORE_CASE]: /* RESERVED WORDS AND LITERALS - ADL */
 {
-  <SYM_ARCHETYPE: "archetype"([" ","\t","\r"])*> 
+  <SYM_FLAT: "flat">
+| <SYM_ARCHETYPE: "archetype"([" ","\t","\r"])*> 
 | <SYM_TEMPLATE: "template"([" ","\t","\r"])*> 
 | <SYM_TEMPLATE_OVERLAY: "template_overlay"([" ","\t","\r"])*> 
 | <SYM_OPERATIONAL_TEMPLATE: "operational_template"([" ","\t","\r"])*>
@@ -206,20 +207,7 @@ PARSER_END(ADL15Parser)
 | < SYM_INCLUDE: "include">
 | < SYM_EXCLUDE: "exclude">
 | < SYM_START_CBLOCK: "{">
-| < SYM_END_CBLOCK: "}">
-| < SYM_C_DV_QUANTITY: "c_dv_quantity" >: DOMAIN_TYPE_C_QUANTITY
-| < SYM_UNITS: "units">: DOMAIN_TYPE_C_QUANTITY 
-| < SYM_ASSUMED_VALUE: "assumed_value">
-}
-
-< DOMAIN_TYPE_C_QUANTITY > TOKEN [IGNORE_CASE]:
-{
-  < SYM_PROPERTY: "property">
-| < SYM_LIST: "list">  
-| < SYM_C_QUANTITY_UNITS: "units"> 
-| < SYM_PRECISION: "precision">
-| < SYM_MAGNITUDE: "magnitude">
-| < SYM_C_QUANTITY_ASSUMED_VALUE: "assumed_value">
+| < SYM_END_CBLOCK: "}"> 
 }
 
 < * > TOKEN: /* SYMBOLS - common */
@@ -1636,8 +1624,7 @@ CObject c_object(String path, CAttribute parent) :
 }
 {
   (
-      c = c_dv_quantity(path, parent)    
-    |
+      LOOKAHEAD(3)	
       c = c_complex_object(path, parent)
     |
       c = archetype_internal_ref(path, parent)
@@ -1653,9 +1640,22 @@ CObject c_object(String path, CAttribute parent) :
       c = c_primitive_object(path, parent)
     |
       c = constraint_ref_obj(path, parent)
+    |
+	  LOOKAHEAD(3)	
+      v_c_domain_type() 
   )
   {
     return c;
+  }
+}
+
+void v_c_domain_type() :
+{}
+{
+      
+  [ <SYM_L_PARENTHESIS> ] type_identifier() [ <SYM_R_PARENTHESIS> ]
+
+  dadl()  {    	return;
   }
 }
 
@@ -2265,97 +2265,7 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
   {   	
   	return new CCodePhrase(path, occurrences, null, parent, terminologyId, 
   		codeList, defaultValue, assumedValue); 
-  }
-  
-  
-}
-
-CDvQuantity c_dv_quantity(String path, CAttribute parent) :
-{
-  CodePhrase property = null;
-  String terminology = null;
-  String code = null;
-  List list = null;
-  CDvQuantityItem item = null;  
-  Token t = null;
-  DvQuantity defaultValue = null;
-  DvQuantity assumedValue = null;
-  MultiplicityInterval occurrences = new MultiplicityInterval(1, 1);
-}
-{
-  <SYM_C_DV_QUANTITY> "<"
-    (        	
-	  <SYM_PROPERTY> <SYM_EQ> "<" property = code_phrase() ">"    
-    |     	
-	  { list = new ArrayList(); }
-	  <SYM_LIST> <SYM_EQ> "<"	  
-	    ( 
-	      item = c_dv_quantity_item() 
-	      { list.add(item); }
-	    )+	  	  
-	  ">"	  
-   |       
-      <SYM_C_QUANTITY_ASSUMED_VALUE> <SYM_EQ> "<"
-        assumedValue = dv_quantity() 
-      ">"
-    
-    )*
-  ">"	   
-  { 
-  	{ token_source.SwitchTo(CADL); }
-  	
-  	return new CDvQuantity(path, occurrences, null, parent, list, property, 
-  		defaultValue, assumedValue);  		  	
-  } 
-}
-
-DvQuantity dv_quantity() :
-{
-  String units = null;
-  double magnitude = 0;
-  int  precision = 0;
-}
-{
-  (	
-    <SYM_C_QUANTITY_UNITS> <SYM_EQ> "<" units = string_value() ">"
-  |  
-    <SYM_MAGNITUDE> <SYM_EQ> "<" magnitude = real_value() ">"	  
-  |  
-    <SYM_PRECISION> <SYM_EQ> "<" precision = integer_value() ">"	
-  )*  
-  { 
-  	return new DvQuantity(units, magnitude, precision, measureServ); 
-  }	
-}
-
-CDvQuantityItem c_dv_quantity_item() :
-{
-  Interval value = null;
-  Interval precision = null;
-  String units;  	
-}
-{
-  "[" string_value() "]" <SYM_EQ> "<"
-    
-    (<SYM_C_QUANTITY_UNITS>|<SYM_UNITS>) <SYM_EQ> "<" 
-      units = string_value() 
-    ">"
-    
-    [
-      <SYM_MAGNITUDE> <SYM_EQ> "<" 
-        value = real_interval_value()       
-      ">"
-    ]
-    
-    [
-      <SYM_PRECISION> <SYM_EQ> "<" 
-        precision = integer_interval_value()
-      ">"
-	]
-  ">"
-  { 
-  	return new CDvQuantityItem(value, precision, units); 
-  } 		
+  }  
 }
 
 List<String> string_list() :

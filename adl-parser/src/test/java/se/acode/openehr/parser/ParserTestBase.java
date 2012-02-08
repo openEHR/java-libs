@@ -280,5 +280,6 @@ public class ParserTestBase extends TestCase {
     }
 
     /* fields */
+    static final String ADL15_TEST_PATH = "ADL_1.5_test/validity/";
     static protected File dir = new File("res" + File.separator + "test");
 }
