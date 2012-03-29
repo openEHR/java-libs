@@ -430,11 +430,6 @@ public class XMLSerializer {
         printString("lower", Integer.toString(lower), existence);
         printString("upper", Integer.toString(upper), existence);
         
-        if(cattribute.isAnyAllowed()) {
-            printString("any_allowed", "true", attributes);
-        }
-        
-        
         if(!cattribute.isAnyAllowed()) { 
             List<CObject> children = cattribute.getChildren();
 
@@ -477,10 +472,6 @@ public class XMLSerializer {
     }
     
     protected void printCObjectElements(CObject cobj, Element out) {
-        // SG: While this may be interesting, it is not part of the xsds at present	
-		// if(cobj.isAnyAllowed()) { // Not sure if needed.
-        //    printString("any_allowed", "true", out);
-        //}
     
         // we always need the upper case with underscore notation for the rm type name
         printString("rm_type_name", getUpperCaseWithUnderscoreFromCamelCase(cobj.getRmTypeName()), out);
