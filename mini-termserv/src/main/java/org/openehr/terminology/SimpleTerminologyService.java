@@ -78,23 +78,37 @@ public class SimpleTerminologyService implements TerminologyService {
 	 * Creates a simpleTerminologyService
 	 */
 	private SimpleTerminologyService() {
+		
+		terminologies = new HashMap<String, TerminologyAccess>();
+		codeSets = new HashMap<String, CodeSetAccess>();
+		codeSetInternalIdToExternalName = new HashMap<String, String>();
+		
 		try {			
 			TerminologySource terminologySource = 
-				TerminologySourceFactory.getXMLTerminologySource();
+				TerminologySourceFactory.getOpenEHRTerminology();
 			
 			loadTerminologies(terminologySource);
+			loadCodeSets(terminologySource);
+			
+			terminologySource = 
+			TerminologySourceFactory.getExternalTerminologies();
+				
+			loadTerminologies(terminologySource);
 			loadCodeSets(terminologySource);			
+			
 		} catch(Exception e) {
 			log.error("failed to initialize terminology service..", e);
 			throw new RuntimeException(e);
 		}
 	}
 	
-	private void loadTerminologies(TerminologySource source) {
-		terminologies = new HashMap<String, TerminologyAccess>();		
+	private void loadTerminologies(TerminologySource source) {	
 		
-		SimpleTerminologyAccess terminology = 
-			new SimpleTerminologyAccess(TerminologyService.OPENEHR);
+		SimpleTerminologyAccess terminology = (SimpleTerminologyAccess)
+				terminologies.get(TerminologyService.OPENEHR);
+		if(terminology == null) {
+			terminology = new SimpleTerminologyAccess(TerminologyService.OPENEHR);
+		}
 		
 		List<Group> groups = source.getConceptGroups();
 		for(Group group : groups) {
@@ -111,9 +125,7 @@ public class SimpleTerminologyService implements TerminologyService {
 		terminologies.put(TerminologyService.OPENEHR, terminology);
 	}
 	
-	private void loadCodeSets(TerminologySource source) {
-		codeSets = new HashMap<String, CodeSetAccess>();
-		codeSetInternalIdToExternalName = new HashMap<String, String>();
+	private void loadCodeSets(TerminologySource source) {		
 		
 		for(CodeSet codeset : source.getCodeSets()) {
 			SimpleCodeSetAccess codeSetAccess = new SimpleCodeSetAccess(

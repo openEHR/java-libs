@@ -20,15 +20,25 @@ package org.openehr.terminology;
  */
 public class TerminologySourceFactory {
 	
-	private static final String XML_FILE = "/openehr_terminology_en.xml";
+	private static final String OPENEHR_TERMINOLOGY = "/openehr_terminology_en.xml";
+	private static final String EXTERNAL_TERMINOLOGIES = "/external_terminologies_en.xml";
 	
 	/**
-	 * Gets an instance of xml terminology source
+	 * Gets an instance of openEHR terminology source
 	 * 
 	 * @return terminology source instance
 	 */
-	public static TerminologySource getXMLTerminologySource() throws Exception {
-		return XMLTerminologySource.getInstance(XML_FILE);
+	public static TerminologySource getOpenEHRTerminology() throws Exception {
+		return XMLTerminologySource.getInstance(OPENEHR_TERMINOLOGY);
+	}
+	
+	/**
+	 * Gets an instance of external terminologies source
+	 * 
+	 * @return terminology source instance
+	 */
+	public static TerminologySource getExternalTerminologies() throws Exception {
+		return XMLTerminologySource.getInstance(EXTERNAL_TERMINOLOGIES);
 	}
 }
 /*
