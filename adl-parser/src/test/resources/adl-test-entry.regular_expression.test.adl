@@ -1,0 +1,42 @@
+archetype 	
+	adl-test-ENTRY.regular_expression.test
+
+concept 
+	[at0000]	--   test 1
+
+language
+	original_language = <[ISO_639-1::en]> 
+	
+definition
+	ENTRY[at0000] matches {
+	    string_attributes matches {
+	        LIST matches {	        
+                -- 
+                string_attr1 matches  {/.*/}
+                
+                -- 
+                string_attr2 matches  {/[0-9]|([0-9]|[0-9]\.[0-9]+)([+\-][0-9])?/}
+
+				-- problematic one (part)
+				string_attr3 matches {/[0-9]{1,8}/}	
+				
+				-- problematic one 
+				string_attr3 matches {/[0-9]{1,8}|([0-9]{9,14}|[0-9]{14,14}\.[0-9]+)([+\-][0-9]{1,4})?/}	
+            }
+        }                
+    }
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	terminologies_available = <"adl_test", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test entry">; 
+					description = <"test entry">
+				>
+			>
+		>
+	>
