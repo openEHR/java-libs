@@ -14,6 +14,9 @@
  */
 package org.openehr.am.archetype.ontology;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * OntologyBindingItem that defines the binding by a query to external service
  *
@@ -33,6 +36,44 @@ public class QueryBindingItem extends OntologyBindingItem {
         this.query = query;
     }
 
+    /**
+     * Equals if two has have same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof QueryBindingItem )) {
+            return false;
+        }
+
+        final QueryBindingItem qbi = (QueryBindingItem) o;
+
+        return new EqualsBuilder()
+        .appendSuper(super.equals(o))
+                .append(query, qbi.query)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(19, 49)
+        .appendSuper(super.hashCode())
+        .append(query)
+        .toHashCode();
+    }
+    
+    
+    
     /**
      * Query of this binding item
      *

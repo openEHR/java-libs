@@ -14,10 +14,12 @@
  */
 package org.openehr.am.archetype.ontology;
 
+import java.util.List;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-
-import java.util.List;
 
 /**
  * This class represents a list of binding within a terminology using either
@@ -47,11 +49,49 @@ public class OntologyBinding {
      *
      * @return string form
      */
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this,
                 ToStringStyle.MULTI_LINE_STYLE);
     }
 
+    /**
+     * Equals if two has have same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof OntologyBinding )) {
+            return false;
+        }
+
+        final OntologyBinding ob = (OntologyBinding) o;
+
+        return new EqualsBuilder()
+                .append(terminology, ob.terminology)
+                .append(bindingList, ob.bindingList)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(7, 47)
+        .append(terminology)
+        .append(bindingList)
+                .toHashCode();
+    }
+    
+    
     /* fields */
     private String terminology;
     private List<OntologyBindingItem> bindingList;

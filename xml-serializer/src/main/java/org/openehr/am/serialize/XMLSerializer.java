@@ -132,7 +132,7 @@ public class XMLSerializer {
         if(parentID != null) {
             Element parentArchetypeId = new Element("parent_archetype_id", defaultNamespace);
             out.getChildren().add(parentArchetypeId);
-            printString("value", archetype.getArchetypeId().toString(), parentArchetypeId);
+            printString("value", parentID.toString(), parentArchetypeId);
         }
         
     }

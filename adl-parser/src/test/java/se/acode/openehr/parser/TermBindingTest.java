@@ -71,5 +71,36 @@ public class TermBindingTest extends ParserTestBase {
         assertEquals("wrong term", "[LNC205::8310-5]", item.getTerms().get(0));
 
     }
+	
+	public void testPathBasedBindingWithinInternalReference() throws Exception {
+    	ADLParser parser = new ADLParser(loadFromClasspath(
+        	"openEHR-EHR-OBSERVATION.test_internal_ref_binding.v1.adl"));
+    	Archetype archetype = parser.parse();
+
+    	OntologyBinding binding = archetype.getOntology().getTermBindingList().get(0);
+        assertEquals("wrong binding terminology", "DDB00", binding.getTerminology());
+
+       
+        TermBindingItem item1 = (TermBindingItem) binding.getBindingList().get(0); 
+        assertEquals("wrong terms size", 1, item1.getTerms().size());
+
+        assertEquals("wrong local code path", 
+        		"/data[at0001]/events[at0002]/data[at0003]/items[at0004]", 
+        		item1.getCode());
+        assertEquals("wrong term", "[DDB00::12345]", item1.getTerms().get(0));
+
+		TermBindingItem item2 = (TermBindingItem) binding.getBindingList().get(1); 
+        assertEquals("wrong terms size", 1, item2.getTerms().size());
+
+		assertEquals("wrong local code path", 
+        		"/data[at0001]/events[at0005]/data[at0003]/items[at0004]", 
+        		item2.getCode());
+        assertEquals("wrong term", "[DDB00::98765]", item2.getTerms().get(0));
+		
+		assertTrue(archetype.physicalPaths().contains("/data[at0001]/events[at0002]/data[at0003]/items[at0004]"));
+		assertTrue(archetype.physicalPaths().contains("/data[at0001]/events[at0005]/data[at0003]/items[at0004]")); // path within an archetype internal ref. Must be included in the physical paths!
+		assertFalse(archetype.physicalPaths().contains("/data[at0001]/events[at9999]/data[at0003]/items[at0004]"));
+
+    }
 }
 

@@ -16,8 +16,8 @@ package org.openehr.rm.common.generic;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.rm.FullConstructor;
 import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.support.identification.PartyRef;
 
@@ -32,12 +32,12 @@ public abstract class PartyProxy extends RMObject {
    /**
      * Constructs a PartyProxy
      *
-     * @param uid              null if not specified
+     * @param externalRef null if not specified
      * @throws IllegalArgumentException if name null or archetypeNodeId null
      *                                  or links not null and empty
      */
 	@FullConstructor
-	protected PartyProxy(@Attribute(name = "externalRef") PartyRef externalRef) {
+	public PartyProxy(@Attribute(name = "externalRef") PartyRef externalRef) { // need this constructor public for reflection to work properly within the archetype validator
     		this.externalRef = externalRef;	
 	}
   
@@ -56,9 +56,14 @@ public abstract class PartyProxy extends RMObject {
      * @param o
      * @return equals if true
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof PartyProxy)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof PartyProxy)) {
+            return false;
+        }
 
         final PartyProxy pp = (PartyProxy) o;
         return new EqualsBuilder()
@@ -71,6 +76,7 @@ public abstract class PartyProxy extends RMObject {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(3, 23)
                 .append(externalRef)

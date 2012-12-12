@@ -261,6 +261,7 @@
 		<code value="ISO_8859-1:1987"/>
 	</codeset>
 	<codeset issuer="ISO" openehr_id="languages" external_id="ISO_639-1">
+		<code value="aa" Description="Afar"/>
 		<code value="af" Description="Afrikaans"/>
 		<code value="sq" Description="Albanian"/>
 		<code value="ar-sa" Description="Arabic (Saudi Arabia)"/>
@@ -279,6 +280,7 @@
 		<code value="ar-ae" Description="Arabic (U.A.E.)"/>
 		<code value="ar-bh" Description="Arabic (Bahrain)"/>
 		<code value="ar-qa" Description="Arabic (Qatar)"/>
+		<code value="az" Description="Azerbaijani"/>
 		<code value="eu" Description="Basque"/>
 		<code value="bg" Description="Bulgarian"/>
 		<code value="be" Description="Belarusian"/>
@@ -331,6 +333,7 @@
 		<code value="it-ch" Description="Italian (Switzerland)"/>
 		<code value="ja" Description="Japanese"/>
 		<code value="kk" Description="Kasakh"/>
+		<code value="km" Description="Khmer"/>
 		<code value="ko" Description="Korean"/>
 		<code value="ko" Description="Korean (Johab)"/>
 		<code value="lv" Description="Latvian"/>

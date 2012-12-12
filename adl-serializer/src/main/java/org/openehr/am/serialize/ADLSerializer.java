@@ -14,39 +14,60 @@
  */
 package org.openehr.am.serialize;
 
-import org.openehr.rm.common.resource.AuthoredResource;
-import org.openehr.rm.common.resource.ResourceDescription;
-import org.openehr.rm.common.resource.ResourceDescriptionItem;
-import org.openehr.rm.common.resource.TranslationDetails;
-import org.openehr.rm.datatypes.quantity.DvQuantity;
-import org.openehr.rm.datatypes.text.CodePhrase;
-import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.basic.Interval;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.openehr.am.archetype.Archetype;
+import org.openehr.am.archetype.assertion.Assertion;
+import org.openehr.am.archetype.constraintmodel.ArchetypeInternalRef;
+import org.openehr.am.archetype.constraintmodel.ArchetypeSlot;
+import org.openehr.am.archetype.constraintmodel.CAttribute;
+import org.openehr.am.archetype.constraintmodel.CComplexObject;
+import org.openehr.am.archetype.constraintmodel.CDomainType;
+import org.openehr.am.archetype.constraintmodel.CMultipleAttribute;
+import org.openehr.am.archetype.constraintmodel.CObject;
+import org.openehr.am.archetype.constraintmodel.CPrimitiveObject;
+import org.openehr.am.archetype.constraintmodel.Cardinality;
+import org.openehr.am.archetype.constraintmodel.ConstraintRef;
+import org.openehr.am.archetype.constraintmodel.primitive.CBoolean;
+import org.openehr.am.archetype.constraintmodel.primitive.CDate;
+import org.openehr.am.archetype.constraintmodel.primitive.CDateTime;
+import org.openehr.am.archetype.constraintmodel.primitive.CDuration;
+import org.openehr.am.archetype.constraintmodel.primitive.CInteger;
+import org.openehr.am.archetype.constraintmodel.primitive.CPrimitive;
+import org.openehr.am.archetype.constraintmodel.primitive.CReal;
+import org.openehr.am.archetype.constraintmodel.primitive.CString;
+import org.openehr.am.archetype.constraintmodel.primitive.CTime;
 import org.openehr.am.archetype.ontology.ArchetypeOntology;
 import org.openehr.am.archetype.ontology.ArchetypeTerm;
 import org.openehr.am.archetype.ontology.OntologyBinding;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
 import org.openehr.am.archetype.ontology.QueryBindingItem;
 import org.openehr.am.archetype.ontology.TermBindingItem;
-import org.openehr.am.archetype.assertion.Assertion;
-import org.openehr.am.archetype.constraintmodel.*;
-import org.openehr.am.archetype.constraintmodel.primitive.*;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
-import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
+import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
-
-import org.apache.commons.lang.StringUtils;
-
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import org.openehr.rm.common.resource.AuthoredResource;
+import org.openehr.rm.common.resource.ResourceDescription;
+import org.openehr.rm.common.resource.ResourceDescriptionItem;
+import org.openehr.rm.common.resource.TranslationDetails;
+import org.openehr.rm.datatypes.quantity.DvQuantity;
+import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.support.basic.Interval;
+import org.openehr.rm.support.identification.ArchetypeID;
 
 /**
  * ADL serializer for the openEHR Java kernel
@@ -414,8 +435,8 @@ public class ADLSerializer {
 		// print rmTypeName and nodeId
 		indent(indent, out);
 		out.write(ccobj.getRmTypeName());
-		if (StringUtils.isNotEmpty(ccobj.getNodeID())) {
-			out.write("[" + ccobj.getNodeID() + "]");
+		if (StringUtils.isNotEmpty(ccobj.getNodeId())) {
+			out.write("[" + ccobj.getNodeId() + "]");
 		}
 
 		printOccurrences(ccobj.getOccurrences(), out);
@@ -477,8 +498,8 @@ public class ADLSerializer {
 		indent(indent, out);
 		out.write("allow_archetype ");
 		out.write(slot.getRmTypeName());
-		if (StringUtils.isNotEmpty(slot.getNodeID())) {
-			out.write("[" + slot.getNodeID() + "]");
+		if (StringUtils.isNotEmpty(slot.getNodeId())) {
+			out.write("[" + slot.getNodeId() + "]");
 		}
 
 		printOccurrences(slot.getOccurrences(), out);
@@ -919,8 +940,9 @@ public class ADLSerializer {
 					out.write(item.getTerms().get(0));
 
 					if (item.getTerms().size() > 1) {
-						for (int k = 1; k < item.getTerms().size(); k++)
-							out.write("," + item.getTerms().get(k));
+						for (int k = 1; k < item.getTerms().size(); k++) {
+                            out.write("," + item.getTerms().get(k));
+                        }
 					}
 
 					out.write(">");

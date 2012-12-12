@@ -51,9 +51,10 @@ public class ArchetypeInternalRef extends CReferenceObject {
         this.targetPath = targetPath;
     }
     
+    @Override
     public CObject copy() {
     	return new ArchetypeInternalRef(path(), getRmTypeName(), getOccurrences(),
-    			getNodeID(), getParent(), targetPath);
+    			getNodeId(), getParent(), targetPath);
     }
 
     /**
@@ -70,6 +71,7 @@ public class ArchetypeInternalRef extends CReferenceObject {
      *
      * @return ture if valid
      */
+    @Override
     public boolean isValid() {
         return false;  // todo: implement this method
     }
@@ -81,6 +83,7 @@ public class ArchetypeInternalRef extends CReferenceObject {
      * @return ture if has
      * @throws IllegalArgumentException if path null
      */
+    @Override
     public boolean hasPath(String path) {
         return false;  // todo: implement this method
     }
@@ -92,6 +95,7 @@ public class ArchetypeInternalRef extends CReferenceObject {
      * @return true if subset
      * @throws IllegalArgumentException if constraint null
      */
+    @Override
     public boolean isSubsetOf(ArchetypeConstraint constraint) {
         return false;  // todo: implement this method
     }

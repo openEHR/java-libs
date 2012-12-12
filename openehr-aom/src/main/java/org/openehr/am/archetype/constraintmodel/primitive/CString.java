@@ -14,12 +14,14 @@
  */
 package org.openehr.am.archetype.constraintmodel.primitive;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
-
-import java.util.*;
 
 /**
  * Constraint on instances of String.
@@ -85,6 +87,7 @@ public final class CString extends CPrimitive {
      *
      * @return name of the type
      */
+    @Override
     public String getType() {
         return "String";
     }
@@ -95,8 +98,9 @@ public final class CString extends CPrimitive {
      * @param value
      * @return true if valid
      */
+    @Override
     public boolean validValue(Object value) {
-        String str = (String) value.toString();
+        String str = value.toString();
         return ( (pattern == null && list == null) 
         		 || (pattern != null && str.matches(pattern)) 
         		 || (list != null && list.contains(str)) );
@@ -158,9 +162,14 @@ public final class CString extends CPrimitive {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof CString )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof CString )) {
+            return false;
+        }
 
         final CString cstring = (CString) o;
 
@@ -177,9 +186,10 @@ public final class CString extends CPrimitive {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(13, 29)
-                .appendSuper(super.hashCode())
+             // must not appendSuper here!   .appendSuper(super.hashCode())
                 .append(pattern)
                 .append(list)
                 .append(assumedValue)
@@ -187,6 +197,7 @@ public final class CString extends CPrimitive {
                 .toHashCode();
     }
     
+    @Override
     public String toString() {
         return new ToStringBuilder(this).
           append("pattern", pattern).

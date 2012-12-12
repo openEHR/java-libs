@@ -15,10 +15,10 @@
 package org.openehr.am.archetype.constraintmodel;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * Purpose Archetype equivalent to LOCATABLE class in openEHR Common reference
@@ -130,6 +130,7 @@ public abstract class ArchetypeConstraint {
      *
      * @return string form
      */
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this,
                 ToStringStyle.MULTI_LINE_STYLE);
@@ -141,15 +142,21 @@ public abstract class ArchetypeConstraint {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof ArchetypeConstraint )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof ArchetypeConstraint )) {
+            return false;
+        }
 
         final ArchetypeConstraint ac = (ArchetypeConstraint) o;
 
         return new EqualsBuilder()
                 .append(anyAllowed, ac.anyAllowed)
                 .append(path, ac.path)
+       //         .append(hiddenOnForm, ac.hiddenOnForm)
                 .isEquals();
     }
 
@@ -158,11 +165,12 @@ public abstract class ArchetypeConstraint {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(anyAllowed)
                 .append(path)
-                .append(hiddenOnForm)
+         //       .append(hiddenOnForm)
                 .toHashCode();
     }    
 

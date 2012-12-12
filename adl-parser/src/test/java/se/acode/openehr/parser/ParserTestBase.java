@@ -1,16 +1,34 @@
 package se.acode.openehr.parser;
 
-import junit.framework.TestCase;
-
 import java.io.File;
 import java.io.InputStream;
-import java.util.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import org.openehr.am.archetype.constraintmodel.*;
-import org.openehr.am.archetype.constraintmodel.primitive.*;
+import junit.framework.TestCase;
+
+import org.openehr.am.archetype.constraintmodel.CAttribute;
+import org.openehr.am.archetype.constraintmodel.CComplexObject;
+import org.openehr.am.archetype.constraintmodel.CMultipleAttribute;
+import org.openehr.am.archetype.constraintmodel.CObject;
+import org.openehr.am.archetype.constraintmodel.CPrimitiveObject;
+import org.openehr.am.archetype.constraintmodel.Cardinality;
+import org.openehr.am.archetype.constraintmodel.primitive.CBoolean;
+import org.openehr.am.archetype.constraintmodel.primitive.CDate;
+import org.openehr.am.archetype.constraintmodel.primitive.CDateTime;
+import org.openehr.am.archetype.constraintmodel.primitive.CDuration;
+import org.openehr.am.archetype.constraintmodel.primitive.CInteger;
+import org.openehr.am.archetype.constraintmodel.primitive.CPrimitive;
+import org.openehr.am.archetype.constraintmodel.primitive.CReal;
+import org.openehr.am.archetype.constraintmodel.primitive.CString;
+import org.openehr.am.archetype.constraintmodel.primitive.CTime;
+import org.openehr.rm.datatypes.quantity.datetime.DvDate;
+import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
+import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
+import org.openehr.rm.datatypes.quantity.datetime.DvTime;
 import org.openehr.rm.support.basic.Interval;
-import org.openehr.rm.datatypes.quantity.datetime.*;
 
 /**
  * ADLParser testing config and common logic
@@ -43,7 +61,7 @@ public class ParserTestBase extends TestCase {
     void assertCObject(CObject obj, String rmTypeName, String nodeID,
                        Interval occurrences) throws Exception {
         assertEquals("rmTypeName", rmTypeName, obj.getRmTypeName());
-        assertEquals("nodeID", nodeID, obj.getNodeID());
+        assertEquals("nodeID", nodeID, obj.getNodeId());
         assertEquals("occurrences", occurrences, obj.getOccurrences());
     }
 

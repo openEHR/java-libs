@@ -57,8 +57,9 @@ public class CPrimitiveObject extends CDefinedObject {
 		return new CPrimitiveObject(path, occurrences, null, null, item);
 	}
 	
-	public CObject copy() {
-		return new CPrimitiveObject(path(), getOccurrences(), getNodeID(),
+	@Override
+    public CObject copy() {
+		return new CPrimitiveObject(path(), getOccurrences(), getNodeId(),
 				getParent(), item);
 	}
 
@@ -87,7 +88,8 @@ public class CPrimitiveObject extends CDefinedObject {
 	 *
 	 * @return ture if valid
 	 */
-	public boolean isValid() {
+	@Override
+    public boolean isValid() {
 		return false; // todo: implement this method
 	}
 
@@ -98,7 +100,8 @@ public class CPrimitiveObject extends CDefinedObject {
 	 * @return ture if has
 	 * @throws IllegalArgumentException if path null
 	 */
-	public boolean hasPath(String path) {
+	@Override
+    public boolean hasPath(String path) {
 		return false; // todo: implement this method
 	}
 
@@ -109,7 +112,8 @@ public class CPrimitiveObject extends CDefinedObject {
 	 * @return true if subset
 	 * @throws IllegalArgumentException if constraint null
 	 */
-	public boolean isSubsetOf(ArchetypeConstraint constraint) {
+	@Override
+    public boolean isSubsetOf(ArchetypeConstraint constraint) {
 		return false; // todo: implement this method
 	}
 
@@ -119,9 +123,14 @@ public class CPrimitiveObject extends CDefinedObject {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof CPrimitiveObject )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof CPrimitiveObject )) {
+            return false;
+        }
 
         final CPrimitiveObject cobj = (CPrimitiveObject) o;
 
@@ -136,6 +145,7 @@ public class CPrimitiveObject extends CDefinedObject {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31)
                 .appendSuper(super.hashCode())

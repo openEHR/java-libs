@@ -14,12 +14,12 @@
  */
 package org.openehr.am.archetype.constraintmodel;
 
+import java.util.Set;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.rm.support.basic.Interval;
 import org.openehr.am.archetype.assertion.Assertion;
-
-import java.util.Set;
+import org.openehr.rm.support.basic.Interval;
 
 /**
  * ArchetypeSlot
@@ -60,6 +60,7 @@ public class ArchetypeSlot extends CReferenceObject {
         this.excludes = excludes;
     }
     
+    @Override
     public CObject copy() {
     	return new ArchetypeSlot(path(), getRmTypeName(), getOccurrences(),
     			getNodeId(), getParent(), includes, excludes);
@@ -88,8 +89,9 @@ public class ArchetypeSlot extends CReferenceObject {
     /**
      * True if this node is a valid archetype node.
      *
-     * @return ture if valid
+     * @return true if valid
      */
+    @Override
     public boolean isValid() {
         return false;  // todo: implement this method
     }
@@ -101,6 +103,7 @@ public class ArchetypeSlot extends CReferenceObject {
      * @return ture if has
      * @throws IllegalArgumentException if path null
      */
+    @Override
     public boolean hasPath(String path) {
         return false;  // todo: implement this method
     }
@@ -112,6 +115,7 @@ public class ArchetypeSlot extends CReferenceObject {
      * @return true if subset
      * @throws IllegalArgumentException if constraint null
      */
+    @Override
     public boolean isSubsetOf(ArchetypeConstraint constraint) {
         return false;  // todo: implement this method
     }
@@ -122,9 +126,14 @@ public class ArchetypeSlot extends CReferenceObject {
      * @param o 
      * @return true if equals 
      */ 
+    @Override
     public boolean equals(Object o) { 
-        if (this == o) return true; 
-        if (!( o instanceof ArchetypeSlot )) return false; 
+        if (this == o) {
+            return true;
+        } 
+        if (!( o instanceof ArchetypeSlot )) {
+            return false;
+        } 
         final ArchetypeSlot as = (ArchetypeSlot) o;
  
         return new EqualsBuilder() 
@@ -139,11 +148,12 @@ public class ArchetypeSlot extends CReferenceObject {
      * 
      * @return hash code 
      */ 
+    @Override
     public int hashCode() { 
         return new HashCodeBuilder(7, 19) 
                 .appendSuper(super.hashCode()) 
                 .append(includes)
-                 .append(excludes) 
+                .append(excludes) 
                 .toHashCode(); 
     }
     

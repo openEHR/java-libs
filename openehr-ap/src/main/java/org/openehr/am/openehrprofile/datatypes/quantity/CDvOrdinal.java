@@ -15,7 +15,9 @@
 
 package org.openehr.am.openehrprofile.datatypes.quantity;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -56,8 +58,9 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 		this.list = list == null ? null : new LinkedHashSet(list);
 	}
 	
-	public CDvOrdinal copy() {
-		return new CDvOrdinal(path(), getOccurrences(), getNodeID(), getParent(), list,				
+	@Override
+    public CDvOrdinal copy() {
+		return new CDvOrdinal(path(), getOccurrences(), getNodeId(), getParent(), list,				
 			getDefaultValue(), getAssumedValue());
 	}
 	
@@ -108,9 +111,14 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 	/**
      * Returns true if fields are the same
      */
+    @Override
     public boolean equals(Object o) {
-    	if (this == o) return true;
-        if (!( o instanceof CDvOrdinal )) return false;
+    	if (this == o) {
+            return true;
+        }
+        if (!( o instanceof CDvOrdinal )) {
+            return false;
+        }
 
         final CDvOrdinal ordinal = (CDvOrdinal) o;
 
@@ -125,6 +133,7 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
      * 
      * @return hashcode
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(3, 19)
         		.appendSuper(super.hashCode())

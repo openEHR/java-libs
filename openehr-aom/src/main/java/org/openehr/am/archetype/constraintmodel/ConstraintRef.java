@@ -17,7 +17,6 @@ package org.openehr.am.archetype.constraintmodel;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.am.archetype.constraintmodel.primitive.CDate;
 import org.openehr.rm.support.basic.Interval;
 
 /**
@@ -55,9 +54,10 @@ public final class ConstraintRef extends CReferenceObject {
         this.reference = reference;
     }
     
+    @Override
     public CObject copy() {
     	return new ConstraintRef(path(), getRmTypeName(), getOccurrences(),
-    			getNodeID(), getParent(), reference);
+    			getNodeId(), getParent(), reference);
     }
 
     /**
@@ -74,6 +74,7 @@ public final class ConstraintRef extends CReferenceObject {
      *
      * @return ture if valid
      */
+    @Override
     public boolean isValid() {
         return false;  // todo: implement this method
     }
@@ -85,6 +86,7 @@ public final class ConstraintRef extends CReferenceObject {
      * @return ture if has
      * @throws IllegalArgumentException if path null
      */
+    @Override
     public boolean hasPath(String path) {
         return false;  // todo: implement this method
     }
@@ -96,6 +98,7 @@ public final class ConstraintRef extends CReferenceObject {
      * @return true if subset
      * @throws IllegalArgumentException if constraint null
      */
+    @Override
     public boolean isSubsetOf(ArchetypeConstraint constraint) {
         return false;  // todo: implement this method
     }
@@ -106,9 +109,14 @@ public final class ConstraintRef extends CReferenceObject {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof ConstraintRef )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof ConstraintRef )) {
+            return false;
+        }
 
         final ConstraintRef cobj = (ConstraintRef) o;
 
@@ -122,6 +130,7 @@ public final class ConstraintRef extends CReferenceObject {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(7, 47)
                 .append(reference)

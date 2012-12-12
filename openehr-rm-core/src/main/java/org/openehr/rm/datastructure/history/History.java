@@ -171,8 +171,9 @@ public class History <T extends ItemStructure> extends DataStructure {
 		return period != null;
 	}
         
+    @Override
     public String pathOfItem(Pathable item) {
-        return null; //TODO: implement
+        throw new org.apache.commons.lang.NotImplementedException(); //TODO: implement
     }
 	
 	/**
@@ -181,10 +182,17 @@ public class History <T extends ItemStructure> extends DataStructure {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof History )) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof History )) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         
         final History history = (History) o;
 
@@ -202,6 +210,7 @@ public class History <T extends ItemStructure> extends DataStructure {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(43, 53)
                 .appendSuper(super.hashCode())

@@ -59,8 +59,17 @@ public class ArchetypeSlotTest extends TestCase {
 		includes.add(include);
 		Set<Assertion> excludes = new HashSet<Assertion>();
 		excludes.add(exclude);
-		ArchetypeSlot slot = new ArchetypeSlot("/[at001]", "SECTION", 
+		ArchetypeSlot slot1 = new ArchetypeSlot("/[at001]", "SECTION", 
 				new Interval<Integer>(0, null), "at001", null, includes, 
 				excludes);		
+				
+		// create another identical slot and compare
+		ArchetypeSlot slot2 = new ArchetypeSlot("/[at001]", "SECTION", 
+				new Interval<Integer>(0, null), "at001", null, includes, 
+				excludes);		
+		
+		assertEquals(slot1, slot2);
+		assertEquals(slot1.hashCode(), slot2.hashCode());
+				
 	}	
 }

@@ -54,6 +54,18 @@ public class CAttributeTest extends TestCase {
 				cattr.childNodePathBase());
 	}
 
+	
+	public void testEqualityOfTwoIdenticalAttributes() throws Exception {
+		CAttribute cattr1 = new TestCAttribute(
+				"/[at0001]/content[at0003]/items", "items");
+		CAttribute cattr2 = new TestCAttribute(
+				"/[at0001]/content[at0003]/items", "items");
+
+		assertEquals(cattr1, cattr2);
+		assertEquals(cattr1.hashCode(), cattr2.hashCode());
+	
+	}
+	
 	private static final class TestCAttribute extends CAttribute {
 
 		public CAttribute copy() {

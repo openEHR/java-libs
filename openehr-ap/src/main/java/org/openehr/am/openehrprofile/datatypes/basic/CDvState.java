@@ -21,7 +21,6 @@ import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CComplexObject;
 import org.openehr.am.archetype.constraintmodel.CDomainType;
-import org.openehr.am.archetype.constraintmodel.primitive.CDateTime;
 import org.openehr.rm.datatypes.basic.DvState;
 import org.openehr.rm.support.basic.Interval;
 
@@ -54,8 +53,9 @@ public class CDvState extends CDomainType<DvState> {
 		this.value = value;
 	}
 	
-	public CDvState copy() {
-		return new CDvState(path(), getOccurrences(), getNodeID(), getParent(), 
+	@Override
+    public CDvState copy() {
+		return new CDvState(path(), getOccurrences(), getNodeId(), getParent(), 
 				value);
 	}
 	
@@ -65,9 +65,14 @@ public class CDvState extends CDomainType<DvState> {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof CDvState )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof CDvState )) {
+            return false;
+        }
 
         final CDvState cobj = (CDvState) o;
 
@@ -82,6 +87,7 @@ public class CDvState extends CDomainType<DvState> {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31)
         		.appendSuper(super.hashCode())

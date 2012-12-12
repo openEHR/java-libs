@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.ontology;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -48,11 +50,47 @@ public class Query {
      *
      * @return string form
      */
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this,
                 ToStringStyle.MULTI_LINE_STYLE);
     }
 
+    /**
+     * Equals if two has have same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof Query )) {
+            return false;
+        }
+
+        final Query query = (Query) o;
+
+        return new EqualsBuilder()
+                .append(url, query.url)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(7, 47)
+        .append(url)
+        .toHashCode();
+    }
+    
+    
     /* fields */
     private String url;
 }

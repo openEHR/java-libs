@@ -14,8 +14,11 @@
  */
 package org.openehr.am.archetype.ontology;
 
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * OntologyBindingItem that defines the binding by a list of external terms
@@ -36,6 +39,43 @@ public class TermBindingItem extends OntologyBindingItem {
         this.terms = terms;
     }
 
+
+    /**
+     * Equals if two has have same values
+     *
+     * @param o
+     * @return true if equals
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof TermBindingItem )) {
+            return false;
+        }
+
+        final TermBindingItem tbi = (TermBindingItem) o;
+
+        return new EqualsBuilder()
+        .appendSuper(super.equals(o))
+                .append(terms, tbi.terms)
+                .isEquals();
+    }
+
+    /**
+     * Return a hash code of this object
+     *
+     * @return hash code
+     */
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(21, 51)
+        .appendSuper(super.hashCode())
+        .append(terms)
+        .toHashCode();
+    }
+    
     /**
      * Gets an unmodifiable list of terms
      *

@@ -14,7 +14,10 @@
  */
 package org.openehr.am.archetype;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -66,7 +69,7 @@ public final class Archetype extends AuthoredResource {
 	 * @param ontology
 	 * @throws IllegalArgumentException if description null or ontology null
 	 */
-	public Archetype(String adlVersion, String id, String parentId,	String concept, 
+public Archetype(String adlVersion, String id, String parentId,	String concept, 
 			CodePhrase originalLanguage,
 			Map<String, TranslationDetails> translations,
 			ResourceDescription description, RevisionHistory revisionHistory,
@@ -125,9 +128,9 @@ public final class Archetype extends AuthoredResource {
 		pathInputMap.clear();
 		inputPathMap.clear();
 		loadMaps(definition, true);
-		loadInternalRefs(definition, true, null);
+		loadInternalRefs(definition, true, null, null);
 	}
-	
+
 	/**
 	 * Set of language-independent paths extracted
 	 * from archetype. Paths obey Xpath-like syntax
@@ -152,15 +155,15 @@ public final class Archetype extends AuthoredResource {
 	 */
 	public Set<String> logicalPaths(String language) {
 		// TODO 
-		return null;
+		throw new org.apache.commons.lang.NotImplementedException();
+
 	}
 
 	private void loadMaps(CObject node, boolean required) {
 		
 		if(node != null && node.path() != null) {
-			pathNodeMap.put(node.path(), node);
+		pathNodeMap.put(node.path(), node);
 		}
-
 		if (!(node instanceof CComplexObject)) {
 			return; // other types of cobject
 		}
@@ -185,22 +188,35 @@ public final class Archetype extends AuthoredResource {
 				loadMaps(child, required && node.isRequired()
 						&& attribute.isRequired());
 			}
-		}		
+		}
 	}
-	
+
 	public Map<String, CObject> getPathNodeMap() {
 		return pathNodeMap;
 	}
+	private void loadInternalRefs(CObject node, boolean required, String refPath, String baseTargetPath ) {
 
-	private void loadInternalRefs(CObject node, boolean required, String refPath) {
+	    if (node == null) {
+            return; // if the target wasn't found
+        }
+	    if (refPath!= null && baseTargetPath != null &&  node.path() != null) {
+           String usenodePath = refPath + node.path().substring(baseTargetPath.length());
+	        pathNodeMap.put(usenodePath, node);	        
+	    }
 
 		if (node instanceof ArchetypeInternalRef) {
 			ArchetypeInternalRef ref = (ArchetypeInternalRef) node;
 			
 			ArchetypeConstraint target = node(ref.getTargetPath());
 			if(target instanceof CObject) {
-				loadInternalRefs((CObject) target, required
-						&& node.isRequired(), ref.path());
+     
+				String atpart ="";
+				if (!ref.path().endsWith("]" ) && ref.getTargetPath().endsWith("]")) {
+					atpart+= ref.getTargetPath().substring(ref.getTargetPath().lastIndexOf("["));
+				}
+				loadInternalRefs((CObject)node(ref.getTargetPath()), required
+					&& node.isRequired(), ref.path()+atpart, ref.getTargetPath()); 
+			
 			}
 		}
 
@@ -220,9 +236,10 @@ public final class Archetype extends AuthoredResource {
 			if (attribute.getChildren() == null) {
 				continue; // no child
 			}
-			for (CObject child : attribute.getChildren()) {
+			for (CObject child : attribute.getChildren()) {			   
 				loadInternalRefs(child, required && node.isRequired()
-						&& attribute.isRequired(), refPath);
+                      && attribute.isRequired(), refPath, baseTargetPath);
+        
 			}
 		}
 	}
@@ -357,7 +374,7 @@ public final class Archetype extends AuthoredResource {
 	
 		return pathNodeMap.get(path);
 	}
-	
+
 	/**
 	 * Updates the pathNodeMap with given cobj
 	 * 
@@ -408,7 +425,8 @@ public final class Archetype extends AuthoredResource {
 	 *
 	 * @return string form
 	 */
-	public String toString() {
+	@Override
+    public String toString() {
 		return ToStringBuilder.reflectionToString(this,
 				ToStringStyle.MULTI_LINE_STYLE);
 	}

@@ -1,0 +1,94 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-OBSERVATION.test_internal_ref_binding.v1
+
+concept
+	[at0000]	-- Test internal ref binding
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"test">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"test">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"90A264EB6540FEEE77D65E14C98CAC80">
+	>
+
+definition
+	OBSERVATION[at0000] matches {	-- Test internal ref binding
+		data matches {
+			HISTORY[at0001] matches {	-- Event Series
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[at0002] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[at0003] matches {	-- Tree
+								items cardinality matches {0..*; unordered} matches {
+									ELEMENT[at0004] occurrences matches {0..1} matches {	-- test element
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+								}
+							}
+						}
+					}
+					EVENT[at0005] occurrences matches {0..1} matches {	-- another event using use node
+						data matches {
+							use_node ITEM_TREE /data[at0001]/events[at0002]/data[at0003]	-- /data[Event Series]/events[Any event]/data[Tree]
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	terminologies_available = <"DDB00", ...>
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Test internal ref binding">
+					description = <"unknown">
+				>
+				["at0001"] = <
+					text = <"Event Series">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"Any event">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"Tree">
+					description = <"@ internal @">
+				>
+				["at0004"] = <
+					text = <"test element">
+					description = <"*">
+				>
+				["at0005"] = <
+					text = <"another event using use node">
+					description = <"*">
+				>
+			>
+		>
+	>
+	term_bindings = <
+		["DDB00"] = <
+			items = <
+				["/data[at0001]/events[at0002]/data[at0003]/items[at0004]"] = <[DDB00::12345]>
+				["/data[at0001]/events[at0005]/data[at0003]/items[at0004]"] = <[DDB00::98765]>
+			>
+		>
+	>
