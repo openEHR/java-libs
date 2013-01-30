@@ -1,0 +1,40 @@
+<template xmlns="http://schemas.openehr.org/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <id>Template1</id>
+  <name>Template1</name>
+  <original_language>
+    <code_string>en</code_string>
+    <terminology_id>
+      <value>ISO_639-1</value>
+    </terminology_id>
+  </original_language>
+  <definition xsi:type="TEMPLATE_COMPOSITION" archetype_id="openEHR-EHR-COMPOSITION.composition_test.v1">
+    <Content xsi:type="TEMPLATE_SECTION" path="/content" archetype_id="openEHR-EHR-SECTION.section_test.v1">
+      <Item xsi:type="TEMPLATE_OBSERVATION" name="Observation 1" path="/items[at0001]/items" archetype_id="openEHR-EHR-OBSERVATION.observation_test.v1">
+        <Rule path="/data[at0001]/events[at0026]/data[at0003]/items[at0007]" max="0" min="0" exclusive="false" />
+		<Rule path="/data[at0001]/period[1]" max="0"/>
+		<Rule path="/data[at0001]/duration[1]" max="0"/>
+		<Rule path="/data[at0001]/origin[1]" max="0"/>
+        <Rule path="/data[at0001]">
+          <Metadata id="metadata3">Some metadata</Metadata>
+          <Metadata id="metadata4">Other metadata</Metadata>
+        </Rule>
+        <Items xsi:type="TEMPLATE_ELEMENT" name="Element Test (Renamed)" path="/data[at0001]/events[at0002]/data[at0003]/items" archetype_id="openEHR-EHR-ELEMENT.element_test.v1" />
+      </Item>
+      <Item xsi:type="TEMPLATE_EVALUATION" path="/items[at0002]/items" min="0" archetype_id="openEHR-EHR-EVALUATION.evaluation_test.v1" />
+      <Item xsi:type="TEMPLATE_INSTRUCTION" path="/items" archetype_id="openEHR-EHR-INSTRUCTION.instruction_test.v1" />
+      <Item xsi:type="TEMPLATE_ADMIN_ENTRY" path="/items" archetype_id="openEHR-EHR-ADMIN_ENTRY.admin_entry_test.v1">
+        <Items xsi:type="TEMPLATE_ELEMENT" path="/data[at0001]/items" archetype_id="openEHR-EHR-ELEMENT.element_test.v1" />
+        <Items xsi:type="TEMPLATE_CLUSTER" path="/data[at0001]/items" archetype_id="openEHR-EHR-CLUSTER.cluster_test.v1">
+          <Rule path="/items[at0007]" max="0" min="0" exclusive="false" >
+            <Metadata id="metadata1">Some metadata</Metadata>
+            <Metadata id="metadata2">Other metadata</Metadata>
+          </Rule>
+        </Items>
+      </Item>
+      <Item xsi:type="TEMPLATE_EVALUATION" name="Evaluation Test (Renamed)" path="/items" min="0" archetype_id="openEHR-EHR-EVALUATION.evaluation_test.v1">
+        <Rule path="/data[at0001]/items[at0006]/items[at0010]" max="0" min="0" exclusive="false" />
+        <Rule path="/protocol[at0017]/items[at0019]" max="0" min="0" exclusive="false"  />
+      </Item>
+    </Content>
+  </definition>
+</template>

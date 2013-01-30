@@ -18,7 +18,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
- * Super class of all primitive type constraint
+ * Super class of all primitive type constraints
  *
  * @author Rong Chen
  * @version 1.0
@@ -89,6 +89,7 @@ public abstract class CPrimitive {
      *
      * @return string form
      */
+    @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this,
                 ToStringStyle.MULTI_LINE_STYLE);

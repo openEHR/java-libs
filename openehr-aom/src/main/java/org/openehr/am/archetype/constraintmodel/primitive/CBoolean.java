@@ -75,8 +75,9 @@ public final class CBoolean extends CPrimitive {
 	 * 
 	 * @return name of the type
 	 */
-	public String getType() {
-		return "DvBoolean";
+	@Override
+    public String getType() {
+		return "Boolean";
 	}
 
 	/**
@@ -85,7 +86,8 @@ public final class CBoolean extends CPrimitive {
 	 * @param value
 	 * @return true if valid
 	 */
-	public boolean validValue(Object value) {
+	@Override
+    public boolean validValue(Object value) {
 		boolean b = ((Boolean) value).booleanValue();
 		return ((b && isTrueValid()) || !b && isFalseValid());
 	}
@@ -151,9 +153,14 @@ public final class CBoolean extends CPrimitive {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof CBoolean )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof CBoolean )) {
+            return false;
+        }
 
         final CBoolean cobj = (CBoolean) o;
 
@@ -170,6 +177,7 @@ public final class CBoolean extends CPrimitive {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(5, 37)
                 .append(trueValid)

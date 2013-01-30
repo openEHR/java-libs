@@ -1,0 +1,61 @@
+archetype 
+	adl-test-ENTRY.archetype_description.draft
+	
+concept 
+	[at0000]	--  test
+
+language
+	original_language = <[ISO_639-1::en]> 
+	
+description
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["date"] = <"23/04/2006">
+		["email"] = <"sam.heard@oceaninformatics.biz">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"For recording a problem, condition or issue that has ongoing significance to the person's health.">
+			use = <"Used for recording any problem, present or past - so is used for recording past history as well as current problems. Used with changed 'Subject of care' for recording problems of relatives and so for family history.">
+			keywords = <"issue", "condition">
+			misuse = <"Use specialisations for medical diagnoses, 'openEHR-EHR-EVALUATION.problem-diagnosis' and histological diagnoses 'openEHR-EHR-EVALUATION.problem-diagnosis-histological'">
+			copyright = <"copyright (c) 2004 The openEHR Foundation">
+			original_resource_uri = <
+				["ligne guide"] = <"http://guidelines.are.us/wherever/fr">
+				["medline"] = <"http://some%20medline%20ref">
+			>
+			other_details = <
+				["item other 1"] = <"item details 1">
+				["item other 2"] = <"item details 2">
+			>
+		>
+	>
+	lifecycle_state = <"AuthorDraft">
+	archetype_package_uri = <"www.aihw.org.au/data_sets/diabetic_archetypes.html">
+	other_contributors = <
+		["1"] = <"Ian McNicoll, MD">
+	>
+	other_details = <
+		["other 1"] = <"details 1">
+		["other 2"] = <"details 2">
+	>
+	
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test"> 
+					description = <"test">
+				>
+			>
+		>
+	>

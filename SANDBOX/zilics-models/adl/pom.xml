@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.com.zilics.archetypes.models</groupId>
+	<artifactId>adl</artifactId>
+	<version>1.4.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>Zilics Models - ADL Parser/Serializer</name>
+	<description>Java implementation of the ADL Parser/Serializer (based on openEHR)</description>
+	<scm>
+		<connection>scm:svn:https://desenvolvimento.zilics.com.br/svn/healthcomponents/trunk/archetypes/codebase/models/adl</connection>
+		<developerConnection>scm:svn:https://desenvolvimento.zilics.com.br/svn/healthcomponents/trunk/archetypes/codebase/models/adl</developerConnection>
+		<url>https://desenvolvimento.zilics.com.br/svn/healthcomponents/trunk</url>
+	</scm>
+	<dependencies>
+		<dependency>
+			<groupId>br.com.zilics.archetypes.models</groupId>
+			<artifactId>test</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.com.zilics.archetypes.models</groupId>
+			<artifactId>rm</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>javacc-maven-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<packageName>br.com.zilics.archetypes.models.adl.parser</packageName>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>javacc</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

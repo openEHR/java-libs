@@ -1,0 +1,36 @@
+archetype
+	adl-test-ITEM_TREE.attribute_cardinality.v1
+
+concept 
+	[at0000]	--  cardinality test
+
+language
+	original_language = <[ISO_639-1::en]>	
+	
+definition
+	ITEM_TREE[at0000] matches {	-- most minimal
+		items cardinality matches {0..1; ordered} matches {
+			allow_archetype CLUSTER[at0001] occurrences matches {0..*} matches {	-- Device
+				include
+					archetype_id/value matches {/openEHR-EHR-CLUSTER\.device\.v1/}
+			}
+		}
+	}
+	                           
+
+ontology 
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"cardinality test">; 
+					description = <"most minimal cardinality test">
+				>
+				["at0001"] = <
+					text = <"cluster with wrong cardinality for occurences">; 
+					description = <"most minimal cardinality test cluster">
+				>
+			>
+		>
+	>
+	

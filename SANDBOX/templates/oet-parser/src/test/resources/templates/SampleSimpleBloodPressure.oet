@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<template xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="openEHR/v1/Template">
+  <id>53f0d4fa-a00b-493b-a9cb-223e6247c4ae</id>
+  <name>Blood pressure</name>
+  <description>
+    <lifecycle_state>Initial</lifecycle_state>
+    <details>
+      <purpose />
+      <use />
+      <misuse />
+    </details>
+    <other_details>
+      <item>
+        <key>MetaDataSet:Sample Set </key>
+        <value>Template metadata sample set </value>
+      </item>
+      <item>
+        <key>Acknowledgements</key>
+        <value />
+      </item>
+      <item>
+        <key>Business Process Level</key>
+        <value />
+      </item>
+      <item>
+        <key>Care setting</key>
+        <value />
+      </item>
+      <item>
+        <key>Client group</key>
+        <value />
+      </item>
+      <item>
+        <key>Clinical Record Element</key>
+        <value />
+      </item>
+      <item>
+        <key>Copyright</key>
+        <value />
+      </item>
+      <item>
+        <key>Issues</key>
+        <value />
+      </item>
+      <item>
+        <key>Owner</key>
+        <value />
+      </item>
+      <item>
+        <key>Sign off</key>
+        <value />
+      </item>
+      <item>
+        <key>Speciality</key>
+        <value />
+      </item>
+      <item>
+        <key>User roles</key>
+        <value />
+      </item>
+    </other_details>
+  </description>
+  <definition xsi:type="OBSERVATION" archetype_id="openEHR-EHR-OBSERVATION.sample_blood_pressure.v1" max="1" name="Routine Blood pressure" annotation="A simple annotation on the header of the NHETA Lymphoma test template which is fairly long and will probably need to be displayed over several lines">
+    <Rule path="/data[at0001]" hide_on_form="true" annotation="annotation on data" />
+    <Rule path="/data[at0001]/events[at0006]" hide_on_form="true" />
+    <Rule path="/data[at0001]/events[at0006]/data[at0003]" hide_on_form="true" />
+    <Rule path="/data[at0001]/events[at0006]/data[at0003]/items[at0004]" name="systolic modified" />
+    <Rule path="/data[at0001]/events[at0006]/data[at0003]/items[at1006]" max="0" />
+    <Rule path="/data[at0001]/events[at0006]/data[at0003]/items[at1007]" max="0" />
+    <Rule path="/data[at0001]/events[at0006]/state[at0007]" hide_on_form="true" />
+    <Rule path="/data[at0001]/events[at0006]/state[at0007]/items[at0008]" max="0" />
+    <Rule path="/data[at0001]/events[at0006]/state[at0007]/items[at1005]" max="0" />
+    <Rule path="/data[at0001]/events[at0002]" max="0" />
+    <Rule path="/data[at0001]/events[at0029]" max="0" />
+    <Rule path="/data[at0001]/events[at0030]" max="0" />
+    <Rule path="/data[at0001]/events[at0031]" max="0" />
+    <Rule path="/data[at0001]/events[at1004]" max="0" />
+    <Rule path="/protocol[at0011]" hide_on_form="true" />
+    <Rule path="/protocol[at0011]/items[at0014]" max="0" />
+    <Rule path="/protocol[at0011]/items[at1010]" max="0" />
+    <Items xsi:type="CLUSTER" archetype_id="openEHR-EHR-CLUSTER.sample_level_of_exertion.v1" path="/data[at0001]/events[at0006 and name/value='any event']/state[at0007]/items[at1030]" hide_on_form="true">
+      <Rule path="/items[at0010]/items[at0016]" max="0" />
+      <Rule path="/items[at0010]/items[at0005]" max="0" />
+      <Rule path="/items[at0009]" max="0" />
+    </Items>
+    <Items xsi:type="CLUSTER" archetype_id="openEHR-EHR-CLUSTER.sample_device.v1" path="/protocol[at0011]/items[at1025]" hide_on_form="true">
+      <Rule path="/items[at0001]" name="Device name" />
+      <Rule path="/items[at0002]" max="0" />
+      <Rule path="/items[at0004]" max="0" />
+      <Rule path="/items[at0007]" max="0" />
+      <Rule path="/items[at0008]" max="0" />
+    </Items>
+  </definition>
+  <integrity_checks xsi:type="ArchetypeIntegrity" archetype_id="openEHR-EHR-OBSERVATION.sample_blood_pressure.v1">
+    <digest id="MD5-CAM-1.0.1">DF7B1532856EC51A95483307F6654441</digest>
+  </integrity_checks>
+  <integrity_checks xsi:type="ArchetypeIntegrity" archetype_id="openEHR-EHR-CLUSTER.sample_level_of_exertion.v1">
+    <digest id="MD5-CAM-1.0.1">8607C17C672C1A7C9411A39A21CABD27</digest>
+  </integrity_checks>
+  <integrity_checks xsi:type="ArchetypeIntegrity" archetype_id="openEHR-EHR-CLUSTER.sample_device.v1">
+    <digest id="MD5-CAM-1.0.1">9FF331C1EF6193B3E69527757E3DAC6A</digest>
+  </integrity_checks>
+</template>

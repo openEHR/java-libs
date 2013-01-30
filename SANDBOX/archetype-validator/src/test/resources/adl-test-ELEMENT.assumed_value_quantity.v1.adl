@@ -1,0 +1,40 @@
+archetype
+    adl-test-ELEMENT.assumed_value_quantity.v1
+
+concept 
+    [at0000]    --  wrong assumed value for DV_Quantity test
+
+language
+    original_language = <[ISO_639-1::en]>   
+    
+definition
+    ELEMENT[at0000] occurrences matches {0..1} matches {	-- most minimal
+		value matches {
+			C_DV_QUANTITY <
+				property = <[openehr::381]>
+				list = <
+					["1"] = <
+						units = <"Eq">
+						magnitude = <|0.0..2.0|>
+					>
+				>
+				assumed_value = <
+					magnitude = <3.0>
+					units = <"Eq">
+					precision = <-1>
+				>
+			>
+		}
+	}                     
+
+ontology 
+    term_definitions = <
+        ["en"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"most minimal">; 
+                    description = <"most minimal">
+                >
+            >
+        >
+    >   

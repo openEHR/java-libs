@@ -1,0 +1,97 @@
+archetype
+	adl-test-ENTRY.domain_types.test
+
+concept
+	[at0000]
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	ENTRY[at0000] matches {	
+        types matches {
+            LIST[at0001] matches {
+                items cardinality matches {0..*} matches {
+                    ELEMENT[at10001] matches {	-- ordinal
+                        value matches {
+                            0|[local::at0003.0], 	-- capsule
+                            1|[local::at0003.1], 	-- powder
+                            2|[local::at0003.2],  	-- tablet
+                            3|[local::at0003.3],  	-- solution
+                            4|[local::at0003.4]  	-- suspension
+                        }
+                    }
+                    ELEMENT[at10002] matches {	-- coded_text
+                        value matches {
+                            [local::
+                            at2001.0, 	-- initial
+                            at2001.1, 	-- wait
+                            at2001.2] 	-- completed
+                        }
+                    }
+                    
+                    -- not a domain type
+                    -- here for testing C_QUANTITY parsing
+                    
+                    ELEMENT[at10006] matches {	-- count     
+	                	value matches {
+							COUNT matches {
+								magnitude matches {|0..100|}
+							}
+						}
+					}	
+					
+					-- not a domain type
+					-- here for verifying a bug fix
+					
+					ELEMENT[at10006] matches {	-- count     
+	                	value matches {
+							COUNT matches {*}
+						}
+					}		
+                }
+            }
+        }
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions = < 
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"domain types test">
+					description = <"domain types test">
+				>
+				["at0001"] = <
+					text = <"items">
+					description = <"items">
+				>
+				["at0002"] = <
+					text = <"*">
+					description = <"*">
+				>
+				["at0003.0"] = <
+					text = <"capsule">
+					description = <"">
+				>
+				["at0003.1"] = <
+					text = <"powder">
+					description = <"">
+				>
+				["at0003.2"] = <
+					text = <"tablet">
+					description = <"">
+				>
+				["at0003.3"] = <
+					text = <"solution">
+					description = <"">
+				>
+				["at0003.4"] = <
+					text = <"suspension">
+					description = <"">
+				>
+			>
+		>
+	>

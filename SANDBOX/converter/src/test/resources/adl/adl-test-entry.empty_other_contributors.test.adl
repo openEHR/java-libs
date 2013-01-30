@@ -1,0 +1,42 @@
+archetype 
+	adl-test-ENTRY.empty_other_contributors.draft
+	
+concept 
+	[at0000]	--  test
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+description
+	original_author = <
+		["name"] = <"name">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"purpose">
+			use = <"use">
+			misuse = <"misuse">
+			copyright = <"copyright">
+		>
+	>
+	lifecycle_state = <"AuthorDraft">
+	other_contributors = <>
+	
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"text">; 
+					description = <"description">
+				>
+			>
+		>
+	>

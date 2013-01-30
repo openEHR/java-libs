@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<version xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:type="ORIGINAL_VERSION" xmlns="http://schemas.openehr.org/v1">
+	<contribution>
+		<id xsi:type="GENERIC_ID">
+			<value>10aec661-5458-4ff6-8e63-c2265537196d::000000001567</value>
+			<scheme/>
+		</id>
+		<namespace/>
+		<type/>
+	</contribution>
+	<commit_audit>
+		<system_id>10aec661-5458-4ff6-8e63-c2265537196d</system_id>
+		<committer xsi:type="PARTY_IDENTIFIED">
+			<name>Sam Heard</name>
+		</committer>
+		<time_committed>
+			<value>2006-11-22T18:56:59</value>
+		</time_committed>
+		<change_type>
+			<value>creation</value>
+			<defining_code>
+				<terminology_id>
+					<value>openehr</value>
+				</terminology_id>
+				<code_string>249</code_string>
+			</defining_code>
+		</change_type>
+	</commit_audit>
+	<uid>
+		<value>
+			a83c1b5b-9de5-4e38-b358-e49594b989ec::10aec661-5458-4ff6-8e63-c2265537196d::1</value>
+	</uid>
+	<data xsi:type="COMPOSITION"
+		archetype_node_id="openEHR-EHR-COMPOSITION.problem_list.v1">
+		<name>
+			<value>Current Problems</value>
+		</name>
+		<language>
+			<terminology_id>
+				<value>openehr</value>
+			</terminology_id>
+			<code_string>en</code_string>
+		</language>
+		<territory>
+			<terminology_id>
+				<value>ISO 1366</value>
+			</terminology_id>
+			<code_string>036</code_string>
+		</territory>
+		<category>
+			<value>persistent</value>
+			<defining_code>
+				<terminology_id>
+					<value>openehr</value>
+				</terminology_id>
+				<code_string>431</code_string>
+			</defining_code>
+		</category>
+		<composer xsi:type="PARTY_IDENTIFIED">
+			<name>Sam Heard</name>
+		</composer>
+		<context>
+			<start_time>
+				<value>2006-11-22T18:56:59</value>
+			</start_time>
+			<setting>
+				<value>event</value>
+				<defining_code>
+					<terminology_id>
+						<value>openEHR</value>
+					</terminology_id>
+					<code_string>433</code_string>
+				</defining_code>
+			</setting>
+		</context>
+		<content xsi:type="EVALUATION"
+			archetype_node_id="openEHR-EHR-EVALUATION.problem-diagnosis.v1">
+			<name>
+				<value>Seminoma, testicle</value>
+			</name>
+			<language>
+				<terminology_id>
+					<value>openehr</value>
+				</terminology_id>
+				<code_string>en</code_string>
+			</language>
+			<encoding>
+				<terminology_id>
+					<value>IANA</value>
+				</terminology_id>
+				<code_string>utf-8</code_string>
+			</encoding>
+			<subject xsi:type="PARTY_SELF"/>
+			<data xsi:type="ITEM_TREE" archetype_node_id="at0001">
+				<name>
+					<value>structure</value>
+				</name>
+				<items xsi:type="ELEMENT" archetype_node_id="at0002.1">
+					<name>
+						<value>Diagnosis</value>
+					</name>
+					<value xsi:type="DV_CODED_TEXT">
+						<value>Seminoma, testicle</value>
+						<defining_code>
+							<terminology_id>
+								<value>SNOMED-CT</value>
+							</terminology_id>
+							<code_string>314567</code_string>
+						</defining_code>
+					</value>
+				</items>
+			</data>
+		</content>
+	</data>
+	<lifecycle_state>
+		<value>completed</value>
+		<defining_code>
+			<terminology_id>
+				<value>openehr</value>
+			</terminology_id>
+			<code_string>532</code_string>
+		</defining_code>
+	</lifecycle_state>
+</version>

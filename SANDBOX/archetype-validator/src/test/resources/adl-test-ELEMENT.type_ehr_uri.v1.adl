@@ -1,0 +1,27 @@
+archetype
+    adl-test-ELEMENT.type_uri.v1
+
+concept 
+    [at0000]    --  empty definition test
+
+language
+    original_language = <[ISO_639-1::en]>   
+    
+definition
+    ELEMENT[at0000] matches {    -- Diagnosis
+        value matches {
+            DV_EHR_URI matches {*}
+        }
+    }                           
+
+ontology 
+    term_definitions = <
+        ["en"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"most minimal">; 
+                    description = <"most minimal">
+                >
+            >
+        >
+    >   

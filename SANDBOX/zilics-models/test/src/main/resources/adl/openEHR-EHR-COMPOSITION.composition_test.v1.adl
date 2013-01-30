@@ -1,0 +1,120 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-COMPOSITION.composition_test.v1
+
+concept
+	[at0000]	-- Composition Test
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Some author">
+		["organisation"] = <"Some organization">
+		["email"] = <"Some e-mail">
+		["date"] = <"Date">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Archetype Purpose">
+			use = <"Archetype Use">
+			keywords = <"archetype", "test">
+			misuse = <"Archetype Misuse">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <"Other Contributor", ...>
+	other_details = <
+		["references"] = <"Some reference">
+	>
+
+definition
+	COMPOSITION[at0000] matches {	-- Composition Test
+		category matches {
+			DV_CODED_TEXT matches {
+				defining_code matches {[openehr::433]}
+			}
+		}
+		context matches {
+			EVENT_CONTEXT[at0008] matches {
+				other_context matches {
+					ITEM_TREE[at0001] matches {	-- Tree
+						items cardinality matches {0..*; unordered} matches {
+							ELEMENT[at0002] occurrences matches {0..1} matches {	-- Context Text Element
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {
+											[local::
+											at0006, 	-- Value 1
+											at0007]	-- Value 2
+										}
+									}
+								}
+							}
+							ELEMENT[at0003] occurrences matches {0..1} matches {	-- Context Ordinal Element
+								value matches {
+									0|[local::at0004], 	-- Option 0
+									1|[local::at0005]; 	-- Option 1
+									0  	-- assumed value
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		content cardinality matches {0..*; unordered} matches {
+			allow_archetype SECTION occurrences matches {0..*} matches {
+				include
+					archetype_id/value matches {/section_test\.v1/}
+			}
+			allow_archetype OBSERVATION occurrences matches {0..*} matches {
+				include
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					comment = <"Archetype Comments">
+					text = <"Composition Test">
+					description = <"Archetype Description">
+				>
+				["at0001"] = <
+					text = <"Tree">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"Context Text Element">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"Context Ordinal Element">
+					description = <"*">
+				>
+				["at0004"] = <
+					text = <"Option 0">
+					description = <"Description 0">
+				>
+				["at0005"] = <
+					text = <"Option 1">
+					description = <"Description 1">
+				>
+				["at0006"] = <
+					text = <"Value 1">
+					description = <"Description 1">
+				>
+				["at0007"] = <
+					text = <"Value 2">
+					description = <"Description 2">
+				>
+				["at0008"] = <
+					text = <"Event context">
+					description = <"Description of Event context">
+				>
+			>
+		>
+	>

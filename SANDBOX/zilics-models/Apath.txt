@@ -1,0 +1,185 @@
+Apath language
+
+Some examples:
+
+Query: "/"
+Result:
+  Returns the root object of the evaluating context: if the query is being executed on an composition instance, then it will returns a reference to it.
+
+Query: "/." or "/self::*"
+Result:
+  Returns the same result of the preceding query. The "." is the contract form of "self::*".
+
+Query: "/items" or "/child::items"
+Result:
+  Return the list of child objects inside the "items" attribute of the root object. For example, if this query is performed on an ItemList object, then it will return all objects insithe the "items" attribute. "items" is the contract form of "child::items".
+  
+Query: "/*" ou "/child::*"
+Result:
+  Returns the list of all child object of all attributes inside the root object.
+
+Query: "/items[at0001]"
+Result:
+  Returns the child object inside the "items" attribute whose node_id is "at0001". This query is exactly the same as: a: '/items[@node_id = "at0001"]'
+ 
+Query: "/@node_id" ou "/metadata::node_id"
+Result:
+  Returns the "node_id" metadata of the root object. "@xxx" is the contract form of "metadata::xxx".
+
+Query: "/items[at0001]/value"
+Result:
+  Returns all child objects inside the "value" attribute of all instances of "/items[at0001]". Generally "part1/part2" will execute query "part2" for each result of "part1". 
+
+Query: "/items/value/.." or "/items/value/parent::*"
+Result:
+  Returns the parent object of all instances of "/items/value". This query is **NOT** equivalent to the query "/items", because not every object of "/items" necessarily has a "value" attribute.
+
+Query: "/descendant::*"
+Result:
+  Returns all descendat objects of the root object.
+
+Query: "/descendant::nnn"
+Result:
+  Returns all descendat objects of the root object with name "nnn".
+
+Query: "/descendant-or-self::*" or "//."
+Result:
+  Returns all descendant objects of the root object (including itself). "//" is the contract form of "descendant-or-self::*"
+
+Query: "XXX/ancestor::*"
+Result:
+  Returns all the ancestors of "XXX".
+
+Query: "/items/ancestor-or-self::nnn"
+Result:
+  Returns all the ancestors of "XXX" with name "nnn". (including itself)
+
+Query: "/descendant::*[at0008]"
+Result:
+  Returns all the descendant objects of "/" whose "node_id" is "at0008".
+
+Query: "//@node_id"
+Result:
+  Returns the list of all "node_id" metadata of all descendant objects of the root object (incluing itself).
+
+Query: "/items[2]" or "/items[position()=2]"
+Result:
+  Returns the second child of the root object inside the "items" attribute. "items[2]" is the contract form of "[position()=2]"
+
+Query: "/items[position()=last()]
+Result:
+  Returns the last child of the root object inside the "items" attribute
+
+Query: "/toXml()"
+Result:
+  Returns the root object in a XML form (String).
+  
+Query: "/items[at0001]/toXml()"
+Result:
+  Returns "/items[at0001]" in a XML form;
+
+Query: "/|/items" ou "/ union /items"
+Result:
+  Returns the union between the results of "/" and "/items". "|" is the contract form of "union".
+
+Query: "/ intersect /items"
+Result:
+  Returns the intersection between the results of "/" and "/items". 
+
+Query: "/ except /items"
+Result:
+  Returns the set difference of the results of "/" and "/items".
+
+Query: "1"
+Result:
+  Returns the Integer "1"
+
+Query: "1+1"
+Result:
+  Eval the sum "1+1" = "2"
+
+Query: "2*3"
+Result:
+  Eval the product
+
+Query: "10.0 div 3.0"
+Result:
+  Eval the quotient
+
+Query: "3>2"
+Result:
+  Returns "true".
+
+Query: "1=0"
+Result:
+  Returns "false".
+
+Query: "1=0 or 3>2"
+Result:
+  Returns "true"
+  
+Query: "1=0 and 3>2"
+Result:
+  Returns "false"
+
+Query: "(1, 2, 3, 4, 5)"
+Result:
+  Returns a list with the integers 1, 2, 3, 4 and 5 in that order.
+
+Query: "(1 to 5)"
+Result:
+  Returns the same result as the above query.
+
+Query: "(1 to 5)[. mod 2 = 1]"
+Result:
+  Returns all odd integers between 1 and 5 (inclusive). Generally speaking "part1[part2]" will evaluate "part2" to each result of "part1" and will let it pass to the final result only if result of "part2" was "true" (Filter).
+
+Query: "(1 to 5)/(. * 2)"
+Result:
+  Returns the list "2, 4, 6, 8, 10".
+
+Query: "if (2 > 1) then (3) else (4)"
+Result:
+  Returns "3"
+
+Query: "for $n in (1 to 10) return ($n * $n)"
+Result:
+  Returns the list "1, 4, 9, 16, 25, 36, 49, 64, 81, 100".
+
+Query: "for $x in (1 to 10), $y in (1 to 10) return ($x + $y)"
+Result:
+
+Query: "every $x in (1 to 4) satisfies ($x < 5)"
+Result:
+  Retorna "true"
+
+Query: "every $x in (1 to 4) satisfies ($x > 1)"
+Result:
+  Returns "false"
+
+Query: "some $x in (1 to 4) satisfies ($x > 1)"
+Result:
+  Returns "true"
+
+Query: "function(1, 2)"
+Result:
+  Eval function "function" with parameters (1, 2).
+
+
+
+Internal functions:
+
+"position()"
+The current position of the child object
+
+"last()"
+The last position (number of elements)
+
+"define()"
+Define an function. Examples:
+  'define(("fatorial", "n"), if ($n > 0) then $n * fatorial($n-1) else 1)'
+
+
+
+
+

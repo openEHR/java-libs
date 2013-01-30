@@ -1,0 +1,75 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-SECTION.section_test.v1
+
+concept
+	[at0000]	-- Section Test
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Some author">
+		["organisation"] = <"Some organization">
+		["email"] = <"Some e-mail">
+		["date"] = <"Date">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Archetype Purpose">
+			use = <"Archetype Use">
+			keywords = <"archetype", "test">
+			misuse = <"Archetype Misuse">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <"Other Contributor", ...>
+	other_details = <
+		["references"] = <"Some reference">
+	>
+
+definition
+	SECTION[at0000] matches {	-- Section Test
+		items cardinality matches {0..*; unordered} matches {
+			SECTION[at0001] occurrences matches {0..*} matches {	-- Sub-Section 1 (Multiple)
+				items cardinality matches {0..*; unordered} matches {
+					allow_archetype OBSERVATION occurrences matches {0..*} matches {
+						include
+							archetype_id/value matches {/observation_test\.v1/}
+					}
+				}
+			}
+			SECTION[at0002] occurrences matches {0..1} matches {	-- Sub-Section 2
+				items cardinality matches {0..*; unordered} matches {
+					allow_archetype EVALUATION occurrences matches {0..*} matches {
+						include
+							archetype_id/value matches {/evaluation_test\.v1/}
+					}
+				}
+			}
+			allow_archetype EVALUATION occurrences matches {0..*} matches {
+				include
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					comment = <"Archetype Comments">
+					text = <"Section Test">
+					description = <"Archetype Description">
+				>
+				["at0001"] = <
+					text = <"Sub-Section 1 (Multiple)">
+					description = <"*">
+				>
+				["at0002"] = <
+					text = <"Sub-Section 2">
+					description = <"*">
+				>
+			>
+		>
+	>

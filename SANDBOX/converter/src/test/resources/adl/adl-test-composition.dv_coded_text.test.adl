@@ -1,0 +1,29 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-COMPOSITION.dv_coded_text.test
+
+concept
+	[at0000]	-- Problem list
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	COMPOSITION[at0000] matches {	-- Problem list
+		category matches {
+			DV_CODED_TEXT matches {
+				defining_code matches {[openehr::431]}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"A list of the ongoing health problems of this person.">
+					text = <"Problem list">
+				>
+			>
+		>
+	>

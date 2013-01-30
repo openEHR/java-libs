@@ -1,0 +1,69 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-CLUSTER.cardinality_occurrences.v1
+
+concept
+	[at0000]	-- Cardinality occurrences
+language
+	original_language = <[ISO_639-1::de]>
+description
+	original_author = <
+		["name"] = <"">
+	>
+	details = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			purpose = <"test VACMC">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"544674A16697A8D3AF23245DF4EF0479">
+	>
+
+definition
+	CLUSTER[at0000] matches {	-- Cardinality occurrences
+		items cardinality matches {1..*; unordered} matches {
+			CLUSTER[at0001] occurrences matches {0..1} matches {	-- Cluster
+				items cardinality matches {1; unordered} matches {
+					ELEMENT[at0003] matches {	-- N1
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0002] matches {	-- N2
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["de"] = <
+			items = <
+				["at0000"] = <
+					text = <"Cardinality occurrences">
+					description = <"unknown">
+				>
+				["at0001"] = <
+					text = <"Cluster">
+					description = <"Should report a VACMC error">
+				>
+				["at0002"] = <
+					text = <"N2">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"N1">
+					description = <"*">
+				>
+			>
+		>
+	>

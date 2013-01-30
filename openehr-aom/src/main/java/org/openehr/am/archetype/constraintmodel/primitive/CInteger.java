@@ -14,11 +14,13 @@
  */
 package org.openehr.am.archetype.constraintmodel.primitive;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.support.basic.Interval;
-
-import java.util.*;
 
 /**
  * Constraint on integer values. Immutable.
@@ -29,7 +31,7 @@ import java.util.*;
 public final class CInteger extends CPrimitive {
 
 	/**
-	 * Constrcts an IntegerConstraint with an assumed value
+	 * Constructs an IntegerConstraint with an assumed value
 	 * 
 	 * @param interval
 	 * @param list
@@ -55,7 +57,7 @@ public final class CInteger extends CPrimitive {
 	}
 
 	/**
-	 * Constrcts an IntegerConstraint
+	 * Constructs an IntegerConstraint
 	 * 
 	 * @param interval
 	 * @param list
@@ -71,7 +73,8 @@ public final class CInteger extends CPrimitive {
 	 * 
 	 * @return name of the type
 	 */
-	public String getType() {
+	@Override
+    public String getType() {
 		return "Integer";
 	}
 
@@ -81,7 +84,8 @@ public final class CInteger extends CPrimitive {
 	 * @param value
 	 * @return true if valid
 	 */
-	public boolean validValue(Object value) {
+	@Override
+    public boolean validValue(Object value) {
 		Integer integer = (Integer) value;
 		return (interval != null && interval.has(integer) || list != null
 				&& list.contains(integer));
@@ -94,7 +98,8 @@ public final class CInteger extends CPrimitive {
 	 * 
 	 * @return true if has
 	 */
-	public boolean hasAssignedValue() {
+	@Override
+    public boolean hasAssignedValue() {
 		return list != null && list.size() == 1;
 	}
 
@@ -103,7 +108,8 @@ public final class CInteger extends CPrimitive {
 	 * 
 	 * @return datavalue or null if not assigned
 	 */
-	public Object assignedValue() {
+	@Override
+    public Object assignedValue() {
 		if (!hasAssignedValue()) {
 			return null;
 		}
@@ -154,9 +160,14 @@ public final class CInteger extends CPrimitive {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof CInteger )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof CInteger )) {
+            return false;
+        }
 
         final CInteger cobj = (CInteger) o;
 
@@ -173,6 +184,7 @@ public final class CInteger extends CPrimitive {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(5, 43)
                 .append(list)

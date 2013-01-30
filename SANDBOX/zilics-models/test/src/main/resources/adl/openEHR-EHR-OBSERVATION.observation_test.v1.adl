@@ -1,0 +1,387 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-OBSERVATION.observation_test.v1
+
+concept
+	[at0000]	-- Observation Test
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Author name">
+		["organisation"] = <"Organization">
+		["email"] = <"Author email">
+		["date"] = <"Date">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Archetype purpose">
+			use = <"Archetype use">
+			keywords = <"archetype", "test">
+			misuse = <"Archetype misuse">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <"Some contributor", ...>
+	other_details = <
+		["references"] = <"Archetype references">
+	>
+
+definition
+	OBSERVATION[at0000] matches {	-- Observation Test
+		data matches {
+			HISTORY[at0001] matches {	-- Event Series
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[at0002] occurrences matches {0..1} matches {	-- First event
+						data matches {
+							ITEM_LIST[at0003] matches {	-- List
+								items cardinality matches {0..*; unordered} matches {
+									ELEMENT[at0004] occurrences matches {0..1} matches {	-- Free or coded text element
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+									ELEMENT[at0005] occurrences matches {0..1} matches {	-- Internal codes text element
+										value matches {
+											DV_CODED_TEXT matches {
+												defining_code matches {
+													[local::
+													at0022, 	-- Option 1
+													at0023]	-- Option 2
+												}
+											}
+										}
+									}
+									ELEMENT[at0006] occurrences matches {0..1} matches {	-- Terminology text element
+										value matches {
+											DV_CODED_TEXT matches {
+												defining_code matches {[ac0001]}		-- Terminology text element constraint
+											}
+										}
+									}
+									ELEMENT[at0007] occurrences matches {0..1} matches {	-- Quantity element
+										value matches {
+											C_DV_QUANTITY <
+												property = <[openehr::350]>
+												list = <
+													["1"] = <
+														units = <"kg/m3">
+													>
+													["2"] = <
+														units = <"g/cm3">
+													>
+													["3"] = <
+														units = <"lbm/gal">
+														precision = <|3|>
+													>
+												>
+											>
+										}
+									}
+									ELEMENT[at0008] occurrences matches {0..1} matches {	-- Count element
+										value matches {
+											DV_COUNT matches {
+												magnitude matches {|<=6|}
+											}
+										}
+									}
+									ELEMENT[at0009] occurrences matches {0..1} matches {	-- Date element
+										value matches {
+											DV_DATE matches {
+												value matches {yyyy-mm-??}
+											}
+										}
+									}
+									ELEMENT[at0010] occurrences matches {0..1} matches {	-- Time element
+										value matches {
+											DV_TIME matches {
+												value matches {HH:MM:SS}
+											}
+										}
+									}
+									ELEMENT[at0011] occurrences matches {0..1} matches {	-- Date and Time element
+										value matches {
+											DV_DATE_TIME matches {
+												value matches {yyyy-mm-ddTHH:MM:SS}
+											}
+										}
+									}
+									ELEMENT[at0012] occurrences matches {0..1} matches {	-- Ordinal element
+										value matches {
+											1|[local::at0024], 	-- Ordinal 1
+											2|[local::at0025]  	-- Ordinal 2
+										}
+									}
+									ELEMENT[at0013] occurrences matches {0..1} matches {	-- Boolean element
+										value matches {
+											DV_BOOLEAN matches {
+												value matches {True}
+											}
+										}
+									}
+									ELEMENT[at0014] occurrences matches {0..1} matches {*}
+									ELEMENT[at0015] occurrences matches {0..1} matches {	-- Interval of Count element
+										value matches {
+											DV_INTERVAL<DV_COUNT> matches {
+												upper matches {
+													DV_COUNT matches {*}
+												}
+												lower matches {
+													DV_COUNT matches {*}
+												}
+											}
+										}
+									}
+									ELEMENT[at0016] occurrences matches {0..1} matches {	-- Interval of Quantity element
+										value matches {
+											DV_INTERVAL<DV_QUANTITY> matches {
+												upper matches {
+													C_DV_QUANTITY <
+													>
+												}
+												lower matches {
+													C_DV_QUANTITY <
+													>
+												}
+											}
+										}
+									}
+									ELEMENT[at0017] occurrences matches {0..1} matches {	-- Interval of DateTime element
+										value matches {
+											DV_INTERVAL<DV_DATE_TIME> matches {
+												upper matches {
+													DV_DATE_TIME matches {
+														value matches {yyyy-??-??T??:??:??}
+													}
+												}
+												lower matches {
+													DV_DATE_TIME matches {
+														value matches {yyyy-??-??T??:??:??}
+													}
+												}
+											}
+										}
+									}
+									ELEMENT[at0018] occurrences matches {0..1} matches {	-- Choice element
+										value matches {
+											DV_TEXT matches {*}
+											C_DV_QUANTITY <
+											>
+											DV_COUNT matches {*}
+											DV_BOOLEAN matches {
+												value matches {True, False}
+											}
+										}
+									}
+									ELEMENT[at0019] occurrences matches {0..1} matches {	-- Multimedia element
+										value matches {
+											DV_MULTIMEDIA matches {
+												media_type matches {
+													[openEHR::
+													426, 
+													518]
+												}
+											}
+										}
+									}
+									ELEMENT[at0020] occurrences matches {0..1} matches {	-- URI element
+										value matches {
+											DV_URI matches {*}
+										}
+									}
+									ELEMENT[at0021] occurrences matches {0..1} matches {	-- Proportion element
+										value matches {
+											DV_PROPORTION matches {*}
+										}
+									}
+									allow_archetype ELEMENT occurrences matches {0..*} matches {
+										include
+											archetype_id/value matches {/.*/}
+									}
+									ELEMENT[at0032] occurrences matches {0..1} matches {	-- Duration YWmS element
+										value matches {
+											DV_DURATION matches {
+												value matches {PYWTMS}
+											}
+										}
+									}
+									ELEMENT[at0033] occurrences matches {0..1} matches {	-- Duration all units
+										value matches {
+											DV_DURATION matches {*}
+										}
+									}
+								}
+							}
+						}
+					}
+					POINT_EVENT[at0026] occurrences matches {0..1} matches {	-- Second event
+						data matches {
+							use_node ITEM_LIST /data[at0001]/events[at0002]/data[at0003]
+						}
+					}
+					INTERVAL_EVENT[at0027] occurrences matches {0..1} matches {	-- Third event
+						math_function matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[openehr::147]}
+							}
+						}
+						data matches {
+							use_node ITEM_LIST /data[at0001]/events[at0002]/data[at0003]
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	terminologies_available = <"SNMI98", "SNM2">
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"Archetáipe description">
+					text = <"Observation Test">
+					comment = <"Archetype comments">
+				>
+				["at0001"] = <
+					text = <"Event Series">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"First event">
+					description = <"First event">
+				>
+				["at0003"] = <
+					text = <"List">
+					description = <"@ internal @">
+				>
+				["at0004"] = <
+					text = <"Free or coded text element">
+					description = <"Free or coded text element description">
+				>
+				["at0005"] = <
+					text = <"Internal codes text element">
+					description = <"Internal codes text element description">
+				>
+				["at0006"] = <
+					text = <"Terminology text element">
+					description = <"Terminology text element description">
+				>
+				["at0007"] = <
+					text = <"Quantity element">
+					description = <"Quantity element description">
+				>
+				["at0008"] = <
+					text = <"Count element">
+					description = <"Count element description">
+				>
+				["at0009"] = <
+					text = <"Date element">
+					description = <"Date element description">
+				>
+				["at0010"] = <
+					text = <"Time element">
+					description = <"Time element description">
+				>
+				["at0011"] = <
+					text = <"Date and Time element">
+					description = <"Date and Time element description">
+				>
+				["at0012"] = <
+					text = <"Ordinal element">
+					description = <"Ordinal element description">
+				>
+				["at0013"] = <
+					text = <"Boolean element">
+					description = <"Boolean element description">
+				>
+				["at0014"] = <
+					text = <"Any element">
+					description = <"Any element description">
+				>
+				["at0015"] = <
+					text = <"Interval of Count element">
+					description = <"Interval of Count element description">
+				>
+				["at0016"] = <
+					text = <"Interval of Quantity element">
+					description = <"Interval of Quantity element description">
+				>
+				["at0017"] = <
+					text = <"Interval of DateTime element">
+					description = <"Interval of DateTime element description">
+				>
+				["at0018"] = <
+					text = <"Choice element">
+					description = <"Choice element description">
+				>
+				["at0019"] = <
+					text = <"Multimedia element">
+					description = <"Multimedia element description">
+				>
+				["at0020"] = <
+					text = <"URI element">
+					description = <"URI element description">
+				>
+				["at0021"] = <
+					text = <"Proportion element">
+					description = <"Proportion element description">
+				>
+				["at0022"] = <
+					text = <"Option 1">
+					description = <"Description of option 1">
+				>
+				["at0023"] = <
+					text = <"Option 2">
+					description = <"Description of option 2">
+				>
+				["at0024"] = <
+					text = <"Ordinal 1">
+					description = <"Description of ordinal 1">
+				>
+				["at0025"] = <
+					text = <"Ordinal 2">
+					description = <"Description of ordinal 2">
+				>
+				["at0026"] = <
+					text = <"Second event">
+					description = <"*">
+				>
+				["at0027"] = <
+					text = <"Third event">
+					description = <"*">
+				>
+				["at0032"] = <
+					text = <"Duration YWmS element">
+					description = <"*">
+				>
+				["at0033"] = <
+					text = <"Duration all units">
+					description = <"*">
+				>
+			>
+		>
+	>
+	constraint_definitions = <
+		["en"] = <
+			items = <
+				["ac0001"] = <
+					text = <"Terminology text element constraint">
+					description = <"Description of terminology text element constraint">
+				>
+			>
+		>
+	>
+	constraint_binding = <
+		["SNM2"] = <
+			items = <
+				["ac0001"] = <http://openEHR.org/otherquery>
+			>
+		>
+		["SNMI98"] = <
+			items = <
+				["ac0001"] = <http://openEHR.org/somequery?option=1&jd>
+			>
+		>
+	>

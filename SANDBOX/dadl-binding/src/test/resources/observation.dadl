@@ -1,0 +1,69 @@
+<
+    archetype_node_id = <"openEHR-EHR-OBSERVATION.blood_pressure.v1">
+    name = <
+    	value = <"BP measurement">
+    >
+    archetype_details = <
+	    archetype_id = (ARCHETYPE_ID) <
+			value = <"openEHR-EHR-OBSERVATION.blood_pressure.v1">
+		>
+	    rm_version = <"1.0.1">
+	>
+	language = <
+		terminology_id = (TERMINOLOGY_ID) <
+			value = <"ISO_639-1">
+		>
+		code_string = <"en">
+	>   
+	encoding = <
+		terminology_id = (TERMINOLOGY_ID) <
+			value = <"IANA_character-sets">
+		>
+		code_string = <"UTF-8">
+	>   
+	subject = (PARTY_SELF) <>
+    data = <
+        archetype_node_id = <"at0001">
+        name = <
+	    	value = <"history">
+	    >
+        origin = <2007-10-30T09:22:00>
+        events = <
+            [1] = <
+                archetype_node_id = <"at0006">
+                name = <
+                	value = <"sitting">
+                >
+                time = <2005-12-03T09:22:00>
+                data = <
+                    archetype_node_id = <"at0003">
+                    name = <
+				    	value = <"item list">
+				    >
+                    items = <
+                        [1] = <
+                            name = <
+                            	value = <"systolic">
+                            >
+                            archetype_node_id = <"at0004">
+                            value = <
+                                magnitude = <120.0>
+                                units = <"mmHg">
+                            >
+                        >
+                        [2] = <
+                            name = <
+                            	value = <"diastolic">
+                            >
+                            archetype_node_id = <"at0005">
+                            value = <
+                                magnitude = <80.0>
+                                units = <"mmHg">
+                            >
+                        >
+                    >
+                >
+            >
+        >  
+	>
+>

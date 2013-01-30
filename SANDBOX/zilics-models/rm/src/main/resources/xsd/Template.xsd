@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- openEHR Release 1.0.1 XML schema. Modified by P2D  -->
+<xs:schema xmlns="http://schemas.openehr.org/v1" xmlns:mstns="http://schemas.openehr.org/v1" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://schemas.openehr.org/v1" elementFormDefault="qualified" version="v1.0.1" id="Template.xsd">
+	<xs:include schemaLocation="Resource.xsd"/>
+	<xs:element name="template" type="TEMPLATE"/>
+	<xs:complexType name="TEMPLATE">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string"/>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="definition" type="TEMPLATE_LOCATABLE"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_LOCATABLE" abstract="true">
+		<xs:sequence>
+			<xs:element name="Rule" type="TEMPLATE_STATEMENT" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="path" type="xs:string"/>
+		<xs:attribute name="max" type="xs:int"/>
+		<xs:attribute name="min" type="xs:int"/>
+		<xs:attribute name="archetype_id" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_COMPOSITION">
+		<xs:complexContent>
+			<xs:extension base="TEMPLATE_LOCATABLE">
+				<xs:sequence>
+					<xs:element name="Content" type="TEMPLATE_CONTENT_ITEM" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_CONTENT_ITEM" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="TEMPLATE_LOCATABLE">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_SECTION">
+		<xs:complexContent>
+			<xs:extension base="TEMPLATE_CONTENT_ITEM">
+				<xs:sequence>
+					<xs:element name="Item" type="TEMPLATE_CONTENT_ITEM" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_ADMIN_ENTRY">
+		<xs:complexContent>
+			<xs:extension base="TEMPLATE_CONTENT_ITEM">
+				<xs:sequence>
+					<xs:element name="Items" type="TEMPLATE_ENTRY_SUBTYPE" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_EVALUATION">
+		<xs:complexContent>
+			<xs:extension base="TEMPLATE_CONTENT_ITEM">
+				<xs:sequence>
+				    <xs:element name="Items" type="TEMPLATE_ENTRY_SUBTYPE" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_OBSERVATION">
+		<xs:complexContent>
+			<xs:extension base="TEMPLATE_CONTENT_ITEM">
+				<xs:sequence>
+					<xs:element name="Items" type="TEMPLATE_ENTRY_SUBTYPE" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_INSTRUCTION">
+		<xs:complexContent>
+			<xs:extension base="TEMPLATE_CONTENT_ITEM">
+				<xs:sequence>
+					<xs:element name="activityDescription" type="TEMPLATE_ITEM_TREE" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_ACTION">
+		<xs:complexContent>
+			<xs:extension base="TEMPLATE_CONTENT_ITEM">
+				<xs:sequence>
+					<xs:element name="description" type="TEMPLATE_ITEM_TREE"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_ITEM_TREE">
+		<xs:complexContent>
+			<xs:extension base="TEMPLATE_LOCATABLE">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_ENTRY_SUBTYPE" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="TEMPLATE_LOCATABLE">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_ELEMENT">
+		<xs:complexContent>
+			<xs:extension base="TEMPLATE_ENTRY_SUBTYPE">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_CLUSTER">
+		<xs:complexContent>
+			<xs:extension base="TEMPLATE_ENTRY_SUBTYPE">
+				<xs:sequence/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TEMPLATE_STATEMENT">
+		<xs:sequence>			<xs:element name="metadata" type="StringDictionaryItem" minOccurs="0"
+				maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="path" type="xs:string" use="required"/>
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="max" type="xs:int"/>
+		<xs:attribute name="min" type="xs:int"/>
+		<xs:attribute name="exclusive" type="xs:boolean"/>
+		<xs:attribute name="default_value" type="xs:string"/>
+	</xs:complexType>
+</xs:schema>

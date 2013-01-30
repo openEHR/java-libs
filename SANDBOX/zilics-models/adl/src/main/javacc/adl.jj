@@ -1,0 +1,3233 @@
+/*
+ * Copyright (C) 2005,2006,2007 ACODE HB, Sweden.
+ * All Rights Reserved.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You may obtain a copy of the License at
+ * http://www.gnu.org/licenses/gpl.txt
+ *
+ */
+
+options {
+  STATIC = false;
+  DEBUG_PARSER = false;
+  DEBUG_TOKEN_MANAGER = false;
+  DEBUG_LOOKAHEAD = false;
+  LOOKAHEAD = 1;
+  UNICODE_INPUT = true;
+}
+
+PARSER_BEGIN(ADLParser)
+
+package br.com.zilics.archetypes.models.adl.parser;
+
+import java.io.*;
+import java.util.*;
+import java.text.*;
+
+
+import br.com.zilics.archetypes.models.rm.support.basic.Interval;
+import br.com.zilics.archetypes.models.rm.datatypes.text.CodePhrase;
+import br.com.zilics.archetypes.models.rm.datatypes.quantity.datetime.*;
+import br.com.zilics.archetypes.models.rm.datatypes.text.*;
+import br.com.zilics.archetypes.models.rm.datatypes.quantity.*;
+import br.com.zilics.archetypes.models.rm.common.resource.*;
+import br.com.zilics.archetypes.models.rm.common.generic.RevisionHistory;
+import br.com.zilics.archetypes.models.rm.support.identification.*;
+
+import br.com.zilics.archetypes.models.am.archetype.Archetype;
+import br.com.zilics.archetypes.models.am.archetype.assertion.*;
+import br.com.zilics.archetypes.models.am.archetype.constraintmodel.*;
+import br.com.zilics.archetypes.models.am.archetype.constraintmodel.primitive.*;
+import br.com.zilics.archetypes.models.am.archetype.ontology.*;
+import br.com.zilics.archetypes.models.am.openehrprofile.datatypes.quantity.*;
+import br.com.zilics.archetypes.models.am.openehrprofile.datatypes.text.CCodePhrase;
+
+/**
+ * JavaCC grammer file for Archteype Definition Language (ADL)
+ *
+ * Targeted ADL revision 1.4
+ *
+ * Included uriGrammarFragment.txt from Gregory Kick
+ *
+ * @author Rong Chen (rong@acode.se)
+ * @version 1.4
+ */
+
+public class ADLParser {
+
+  /* static fields */
+  private static final String CHARSET = "UTF-8";
+  private static final String ATTRIBUTE_UNKNOWN = "__unknown__";
+
+  /* member flags for backwards compatibility */
+  private boolean missingLanguageCompatible = false;
+  private boolean emptyPurposeCompatible = false;
+  
+  	
+  /* =======================  public constructors  ======================== */
+
+  /* Constructor that takes file as input */
+  public ADLParser(File file) throws IOException {
+      this(new FileInputStream(file), CHARSET);
+  }
+
+  /* Constructor that takes string as input */
+  public ADLParser(String value) {
+      this(new BufferedReader(new StringReader(value)));
+  }
+  
+  /* Constructor that takes file as input */
+  public ADLParser(File file, boolean missingLanguageCompatible,
+      boolean emptyPurposeCompatible) throws IOException {
+      this(new FileInputStream(file), CHARSET);
+      this.missingLanguageCompatible = missingLanguageCompatible;
+      this.emptyPurposeCompatible = emptyPurposeCompatible;
+  }
+
+  /* Constructor that takes string as input */
+  public ADLParser(String value, boolean missingLanguageCompatible,
+  		boolean emptyPurposeCompatible) {
+      this(new BufferedReader(new StringReader(value)));
+      this.missingLanguageCompatible = missingLanguageCompatible;
+      this.emptyPurposeCompatible = emptyPurposeCompatible;
+  }
+  
+  /* Constructor that takes Reader as input */
+  public ADLParser(Reader reader, boolean missingLanguageCompatible,
+  		boolean emptyPurposeCompatible) {
+      this(reader);
+      this.missingLanguageCompatible = missingLanguageCompatible;
+      this.emptyPurposeCompatible = emptyPurposeCompatible;
+  }
+  
+  /* Constructor that takes InputStream as input */
+  public ADLParser(InputStream input, boolean missingLanguageCompatible,
+  		boolean emptyPurposeCompatible) {
+      this(input, CHARSET);
+      this.missingLanguageCompatible = missingLanguageCompatible;
+      this.emptyPurposeCompatible = emptyPurposeCompatible;
+  }
+
+  /* =========================  public interface ======================== */
+
+  /* execute the parsing */
+  public Archetype parse() throws ParseException, Exception {
+      return archetype();
+  }
+
+  /* re-initial the parser */
+  public void reInit(File file) throws IOException {
+      ReInit(new FileInputStream(file), CHARSET);
+  }
+
+  /* re-initial the parser */
+  public void reInit(InputStream input) throws IOException {
+      ReInit(new BufferedInputStream(input));
+  }
+  
+  /* ===================  entry point from command-line  ================ */
+  public static void main(String args[]) throws IOException {
+    ADLParser parser = null;
+    String title = "ADL 1.4 Parser: ";
+
+// read from stdin disabled
+//    if (args.length == 0) {
+//      System.out.println(title + "  Reading from standard input . . .");
+//      parser = new ADLParser(System.in);
+//    }
+
+    if (args.length == 1) {
+      System.out.println(title + "  Reading from file " + args[0] + " . . .");
+      try {
+      	// be permissive in console mode
+        parser = new ADLParser(new File(args[0]), true, true);
+      } catch (IOException e) {
+        System.out.println(title + "  File " + args[0] + " not found.");
+        return;
+      }
+    } else if(args.length == 2 && "-d".equals(args[0])) {
+    	System.out.println(title + "  Reading from directory " + args[1] + " . . .");
+    	File dir = new File(args[1]);	
+    	if( ! dir.isDirectory()) {
+    		System.out.println(args[1] + " not a directory.. aborted");
+    		return;	
+    	}
+    	File[] files = dir.listFiles();
+    	if(files == null || files.length == 0) {
+    		System.out.println(args[1] + " has no file.. aborted");
+    		return;	
+    	}
+    	int passed = 0;
+    	int total = 0;
+    	for(int i = 0; i < files.length; i++) {
+    		if( ! files[i].getName().endsWith(".adl")) {
+    			continue;
+    		}
+    		if(parser == null) {
+    			parser = new ADLParser(files[i], true, true);
+    		} else {
+    			parser.reInit(files[i]);
+    		}    		
+    		total++;
+    		try {
+		      parser.archetype();
+		      System.out.println(files[i] + "  parsed successfully");
+		      passed ++;
+		    } catch (Throwable e) {
+		      e.printStackTrace();
+		      System.out.println(files[i] + "  failed in parsing");
+		    }
+    	}
+    	System.out.println("Total files parsed: " + total);
+    	System.out.println("Parsed successfully: " + passed);
+    	System.out.println("Failed in parsing: " + (total - passed));
+    	
+    	return;	
+    } else {
+      System.out.println(title + "  Usage is one of:");
+      System.out.println("         java ADLParser < inputfile");
+      System.out.println("OR");
+      System.out.println("         java ADLParser inputfile");
+      System.out.println("OR");
+      System.out.println("         java ADLParser -d directory");
+      return;
+    }
+    try {
+      parser.archetype();
+      // System.out.println(a.toString());
+      System.out.println(title + "  ADL file parsed successfully.");
+    } catch (Throwable e) {
+      e.printStackTrace();
+      System.out.println(title + "  Encountered errors during parsing " + args[0]);
+    }
+  }
+
+}
+
+PARSER_END(ADLParser)
+
+< * > SKIP : /* WHITE SPACE */
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+| "\ufeff" /* UTF-8 Byte Order Mark */
+}
+
+< * > SPECIAL_TOKEN : /* COMMENTS */
+{
+  <SINGLE_LINE_COMMENT: "--" (~["\n","\r"])*>
+}
+
+< * > TOKEN [IGNORE_CASE]: /* RESERVED WORDS AND LITERALS - ADL */
+{
+  <SYM_ARCHETYPE: "archetype"([" ","\t","\r","\n"])* > : DEFAULT
+| <SYM_ADL_VERSION: "adl_version"> : DEFAULT
+| <SYM_CONTROLLED: "controlled"> : DEFAULT
+| <SYM_UNCONTROLLED: "uncontrolled"> : DEFAULT
+| <SYM_SPECIALIZE: "speciali"["s","z"]"e"([" ","\t","\r","\n"])*"\n"> : DEFAULT
+| <SYM_CONCEPT: "concept"([" ","\t","\r","\n"])*"\n" > : DEFAULT
+| <SYM_LANGUAGE: "language"([" ","\t","\r","\n"])*"\n"> : LANGUAGE
+| <SYM_DEFINITION: "definition"([" ","\t","\r","\n"])*"\n" > : CADL
+| <SYM_DESCRIPTION: "description"([" ","\t","\r","\n"])*"\n" > : DESCRIPTION
+| <SYM_ONTOLOGY: "ontology"([" ","\t","\r","\n"])*"\n" > : ONTOLOGY
+}
+
+< LANGUAGE > TOKEN [IGNORE_CASE]: /* KEYWORDS - archetype language */
+{
+  < SYM_ORIGINAL_LANGUAGE: "original_language">
+| < SYM_TRANSLATIONS: "translations">
+| < SYM_LANG_LANGUAGE: "language">
+| < SYM_AUTHOR: "author">
+| < SYM_ACCREDITATION: "accreditation">
+| < SYM_LANG_OTHER_DETAILS: "other_details">
+}
+
+
+< DESCRIPTION, ONTOLOGY > TOKEN [IGNORE_CASE]: /* KEYWORDS - ADL description */
+{
+  < SYM_ORIGINAL_AUTHOR: "original_author">
+| < SYM_LIFECYCLE_STATE: "lifecycle_state">
+| < SYM_ARCHETYPE_PACKAGE_URI: "archetype_package_uri">
+| < SYM_DETAILS: "details">
+| < SYM_ORIGINAL_RESOURCE_URI: "original_resource_uri">
+| < SYM_OTHER_DETAILS: "other_details">
+| < SYM_OTHER_CONTRIBUTORS: "other_contributors">
+| < SYM_SUBMISSION: "submission">
+| < SYM_ORGANISATION: "organisation">
+| < SYM_DATE: "date">
+| < SYM_VERSION: "version">
+| < SYM_STATUS: "status">
+| < SYM_REVISION: "revision">
+| < SYM_PURPOSE: "purpose">
+| < SYM_USE: "use">
+| < SYM_MISUSE: "misuse">
+| < SYM_COPYRIGHT: "copyright">
+| < SYM_KEYWORDS: "keywords">
+| < SYM_RIGHTS: "rights">
+| < SYM_DESCRIPTION_WORD: "description">
+| < SYM_COMMENT: "comment">
+| < SYM_LANGUAGE_WORD: "language">
+}
+
+< * > TOKEN [IGNORE_CASE]: /* KEYWORDS - dADL */
+{
+  < SYM_TRUE: "true">
+| < SYM_FALSE: "false">
+| < SYM_INFINITY: "infinity">
+| < SYM_QUERY_FUNC: "query">
+}
+
+< ONTOLOGY > TOKEN [IGNORE_CASE]: /* KEYWORDS - ontology */
+{
+  < SYM_PRIMARY_LANGUAGE: "primary_language">
+| < SYM_LANGUAGES_AVAILABLE: "languages_available">
+| < SYM_TERMINOLOGIES_AVAILABLE: "terminologies_available">
+| < SYM_TERM_DEFINITIONS: "term_definitions">
+| < SYM_TERM_BINDING: "term_binding">
+| < SYM_CONSTRAINT_DEFINITIONS: "constraint_definitions">
+| < SYM_CONSTRAINT_BINDING: "constraint_binding">
+| < SYM_ITEMS: "items">
+| < SYM_TEXT: "text">
+| < SYM_TRANSLATION: "translation">
+| < V_ABSOLUTE_PATH_WQ: "\"/" <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* "\"" >      
+ 
+}
+
+< CADL > TOKEN [IGNORE_CASE]: /* KEYWORDS - cADL */
+{
+  < SYM_THEN: "then">
+| < SYM_ELSE: "else">
+| < SYM_AND: "and">
+| < SYM_OR: "or">
+| < SYM_XOR: "xor">
+| < SYM_NOT: "not">
+| < SYM_IMPLIES: "implies">
+| < SYM_FORALL: "forall">
+| < SYM_EXISTS: "exists">
+| < SYM_EXISTENCE: "existence">
+| < SYM_OCCURRENCES: "occurrences">
+| < SYM_CARDINALITY: "cardinality">
+| < SYM_ORDERED: "ordered">
+| < SYM_UNORDERED: "unordered">
+| < SYM_UNIQUE: "unique">
+| < SYM_MATCHES: "matches" | "is_in">
+| < SYM_INVARIANT: "invariant">
+| < SYM_USE_NODE: "use_node">
+| < SYM_ALLOW_ARCHETYPE: "allow_archetype" | "use_archetype">
+| < SYM_INCLUDE: "include">
+| < SYM_EXCLUDE: "exclude">
+| < SYM_START_CBLOCK: "{">
+| < SYM_END_CBLOCK: "}">
+| < SYM_C_DV_QUANTITY: "c_dv_quantity" >: DOMAIN_TYPE_C_QUANTITY
+| < SYM_UNITS: "units">: DOMAIN_TYPE_C_QUANTITY 
+| < SYM_ASSUMED_VALUE: "assumed_value">
+}
+
+< DOMAIN_TYPE_C_QUANTITY > TOKEN [IGNORE_CASE]:
+{
+  < SYM_PROPERTY: "property">
+| < SYM_LIST: "list">  
+| < SYM_C_QUANTITY_UNITS: "units"> 
+| < SYM_PRECISION: "precision">
+| < SYM_MAGNITUDE: "magnitude">
+| < SYM_C_QUANTITY_ASSUMED_VALUE: "assumed_value">
+}
+
+< * > TOKEN: /* SYMBOLS - common */
+{
+  < SYM_MINUS: "-">
+| < SYM_PLUS: "+">
+| < SYM_STAR: "*">
+| < SYM_SLASH: "/">
+| < SYM_CARET: "^">
+| < SYM_DOT: ".">
+| < SYM_SEMICOLON: ";">
+| < SYM_COMMA: ",">
+| < SYM_TWO_COLONS: "::">
+| < SYM_COLON: ":">
+| < SYM_EXCLAMATION: "!">
+| < SYM_L_PARENTHESIS: "(">
+| < SYM_R_PARENTHESIS: ")">
+| < SYM_DOLLAR: "$">
+| < SYM_QUESTION: "?">
+| < SYM_L_BRACKET: "["> 
+| < SYM_R_BRACKET: "]">  /* : CADL		/* !!! cause problems with description_item !!! */
+| < SYM_INTERVAL_DELIM: "|">
+| < SYM_EQ: "=">
+| < SYM_GE: ">=">
+| < SYM_LE: "<=">
+| < SYM_LT: "<">
+| < SYM_GT: ">">
+| < SYM_NE: "!=">
+| < SYM_MODULO: "\\">
+| < SYM_DIV: "//">
+| < SYM_ELLIPSIS: "..">
+| < SYM_LIST_CONTINUE: "...">
+| < SYM_C_DV_ORDINAL: "C_DV_ORDINAL" >
+}
+
+< * > TOKEN : /* LOCAL TOKENS */
+{
+  < #DIG: ["0"-"9"]>
+|
+  < #LET_DIG: ["a"-"z","A"-"Z","0"-"9"] >
+|
+  < #LET_DIG_DD: <LET_DIG> | "." | "-">
+|
+  < #LET_DIG_U: <LET_DIG> | "_" >
+|
+  < #LET_DIG_DU: <LET_DIG_U> | "-" >
+|
+  < #LET_DIG_DUDS: <LET_DIG_DU> | "." | "\\" >
+|
+  < #LET_DIG_DUDSLR: <LET_DIG_DUDS> | "(" | ")" >
+}
+
+TOKEN : /* IDENTIFIERS - ADL */
+{
+  <V_ARCHETYPE_ID: <LET_DIG>(<LET_DIG_DU>)+"."<LET_DIG>(<LET_DIG_DU>)+
+  "."(<LET_DIG>)+>
+}
+
+/* ----------------------- TOKEN - cADL ---------------------------- */
+
+< TERM_CODE > TOKEN: /* VALUES - cADL */
+{
+  < V_TERM_CODE: (<LET_DIG_DUDS>)+ > 
+}
+
+/* -------------------- TOKEN - dADL & cADL ------------------------- */
+
+< * > TOKEN: /* VALUES - dADL & cADL */
+{
+  < #V_LOCAL_CODE_CORE: "a"["c","t"](["0"-"9","."])+>
+|
+  < V_LOCAL_CODE: "\""<V_LOCAL_CODE_CORE>"\"">
+| 
+  < V_INTEGER:   (<DIG>)+
+               | (<DIG>){1,3}(","(<DIG>){3})+>
+| < V_REAL:  (<DIG>)+"./"~[".","0"-"9"]
+           | (<DIG>)+"."(<DIG>)*["e","E"](["+","-"])?(<DIG>)+
+           | (<DIG>)*"."(<DIG>)+(["e","E"](["+","-"])?(<DIG>)+)?
+           | (<DIG>){1,3}("_"(<DIG>){3})+"./"~[".","0"-"9"]
+           | (<DIG>){1,3}("_"(<DIG>){3})*"."((<DIG>){1,3}
+             ("_"(<DIG>){3})*)?["e","E"](["+","-"])?(<DIG>){1,3}
+             ("_"(<DIG>){3})*
+           | ((<DIG>){1,3}("_"(<DIG>){3})*)?"."(<DIG>){1,3}
+             ("_"(<DIG>){3})*(["e","E"](["+","-"])?(<DIG>){1,3}
+             ("_"(<DIG>){3})*)?>
+|
+  < V_STRING: 
+    "\"" 
+  	( 
+      ("\\\"" (~["\"","\n", "\\"])* )
+      |
+      ("\n" (["\r", " ", "\t"])* )
+      |
+      (~["\\","\n","\""])*
+    )*
+    "\""
+  >           
+|
+  < V_LOCAL_CODE_PATH: "\"["<V_LOCAL_CODE_CORE>"]/"
+  (<V_ATTRIBUTE_IDENTIFIER>("/"<V_ATTRIBUTE_IDENTIFIER>)*"["<V_LOCAL_CODE_CORE>"]/")*"\"">
+|
+  < V_CHARACTER: "'"~["\\","\n","'"]"'" | <CHAR_REF> >
+|
+  < V_ISO8601_DURATION: ("-")? "P"((<DIG>)+["y","Y"])?((<DIG>)+["m","M"])?((<DIG>)+["w","W"])?
+  ((<DIG>)+["d","D"])?("T"((<DIG>)+["h","H"])?((<DIG>)+["m","M"])?
+  ((<DIG>)+["s","S"])?)?>
+|
+  < V_ISO8601_DURATION_CONSTRAINT_PATTERN: "P"(["y","Y"])?(["m","M"])?
+  (["w","W"])?(["d","D"])?"T"(["h","H"])?(["m","M"])?(["s","S"])? 
+  |"P"(["y","Y"])?(["m","M"])?(["w","W"])?(["d","D"])?>
+|
+  < V_DATE: (["0"-"9"]){4} "-" ( "0"["1"-"9"] | "1"["0"-"2"] ) "-"
+            ( "0"["1"-"9"] | ["1"-"2"]["0"-"9"]|"3"["0"-"1"] ) >
+|
+  < V_HHMM_TIME: <HOUR_MINUTE> >
+|
+  < V_HHMMSS_TIME: < HOUR_MINUTE> <SECOND> >
+|
+  < V_HHMMSSss_TIME: < HOUR_MINUTE> <SECOND> <MILLI_SECOND> >
+|
+  < V_HHMMSSZ_TIME: < HOUR_MINUTE> <SECOND> <TIME_ZONE> >
+|
+  < V_HHMMSSssZ_TIME: < HOUR_MINUTE> <SECOND> <MILLI_SECOND> <TIME_ZONE> >
+|
+  < V_DATE_TIME: <V_DATE>"T"<HOUR> (":"<MINUTE>(<SECOND>)?)? >
+|
+  < V_DATE_TIME_MS: <V_DATE_TIME> <MILLI_SECOND> >
+|
+  < V_DATE_TIME_Z: <V_DATE_TIME> <TIME_ZONE> >
+|
+  < V_DATE_TIME_MSZ: <V_DATE_TIME> <MILLI_SECOND> <TIME_ZONE> >
+|
+  < #TIME_ZONE: ["-","+"](["0"-"9"]){4} | "Z" >
+|
+  < #SECOND: ":" ["0"-"5"]["0"-"9"] >
+|
+  < #MILLI_SECOND: ","(["0"-"9"]){1, 3} >
+|
+  < #HOUR_MINUTE: <HOUR> ":" <MINUTE> >
+|
+  < #HOUR: ["0"-"2"]["0"-"9"] >
+|
+  < #MINUTE: ["0"-"6"]["0"-"9"] >
+|
+  <V_LOCAL_TERM_CODE_REF: "["<LET_DIG>(<LET_DIG_DD>)*"]">
+|
+  < #CHAR_REF: "'&" (
+                      (["a"-"z","A"-"Z"])+
+                    |
+                      "#" ( (["0"-"9"])+ | "x" (["0"-"9","a"-"f","A"-"F"])+ )
+                    ) ";'">
+|
+  < V_CODE_PHRASE: "["(<LET_DIG_DUDSLR>)+"::"(<LET_DIG_DUDS>)+"]">              
+}
+
+/* ----------------------- TOKEN - dADL ---------------------------- */
+
+< DADL, ONTOLOGY > TOKEN: /* VALUES - dADL */
+{
+  < V_QUALIFIED_TERM_CODE_REF: "["(<LET_DIG_DUDSLR>)+"::"(<LET_DIG_DUDS>)+"]">
+|
+  <V_IDENTIFIER: <LET_DIG>(<LET_DIG_U>)*>
+}
+
+/* ----------------------- TOKEN - cADL ---------------------------- */
+
+< CADL > TOKEN: /* VALUES - cADL */
+{
+  < V_ISO8601_DATE_CONSTRAINT_PATTERN: (<YY>){4}"-"<MMQX_2>"-"<DDQX_2> >
+|
+  < V_ISO8601_TIME_CONSTRAINT_PATTERN: (["h","H"]){2}":"<MMQX_2>":"<SSQX_2> >
+|
+  < V_ISO8601_DATE_TIME_CONSTRAINT_PATTERN: (<YY>){4}"-"<MMQ_2>"-"<DDQX_2>
+  [" ","\t","T"]<HHQX_2>":"<MMQX_2>":"<SSQX_2> >
+|
+  < V_TYPE_IDENTIFIER: ["A"-"Z"](<LET_DIG_U>)*>
+|
+  < V_ATTRIBUTE_IDENTIFIER: ["a"-"z"](<LET_DIG_U>)*>
+|
+  < V_TERMINOLOGY_ID_BLOCK: "["(<LET_DIG_DUDSLR>)+"::" > : TERM_CODE	
+|
+  < V_REGEXP: (["=","!"]"~ ")? (
+  ( "/"(~["/","{", "}","\r","\n"])*("\\/"(~["/","}","\r","\n"]))*"/" 
+  | "^"(~["^","\n","\r"])*"^")) >
+|
+  < #PATH_SEGMENT:  <V_ATTRIBUTE_IDENTIFIER> ( <V_LOCAL_TERM_CODE_REF>)? >
+|
+  < V_RELATIVE_PATH: <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* >      
+| 
+  < V_ABSOLUTE_PATH: "/" <PATH_SEGMENT> ( "/" <PATH_SEGMENT> )* >      
+|   
+  < #YY: ["y","Y"]>
+|
+  < #MMQX_2: (["m","M","?","X"]){2}>
+|
+  < #MMQ_2: (["m","M","?"]){2}>
+|
+  < #DDQX_2: (["d","D","?","X"]){2}>
+|
+  < #HHQX_2: (["h","H","?","X"]){2}>
+|
+  < #SSQX_2: (["s","S","?","X"]){2}>
+}
+
+<ONTOLOGY> TOKEN : /* URL per RFC 1738 Section 5 */
+{
+  < URL : <httpurl> | <ftpurl> | <newsurl> | <nntpurl> | <telneturl> | <gopherurl> | <waisurl> | <mailtourl> | <fileurl> | <prosperourl> | <otherurl> >
+| < #genericurl : <scheme> ":" <schemepart> >
+| < #otherurl : <genericurl> >
+| < #scheme : ( <lowalpha> | <digit> | "+" | "-" | "." )+ >
+| < #schemepart : ( <xchar> )* | <ipschemepart> >
+| < #ipschemepart : "//" <login> ( "/" <urlpath> )? >
+| < #login : ( <user> ( ":" <password> )? "@" )? <hostport> >
+| < #hostport : <host> ( ":" <port> )? >
+| < #host : <hostname> | <hostnumber> >
+| < #hostname : ( <domainlabel> "." )* <toplabel> >
+| < #domainlabel : <alphadigit> | ( <alphadigit> ( <alphadigit> | "-" )* <alphadigit> ) >
+| < #toplabel : <alpha> | ( <alpha> ( <alphadigit> | "-" )* <alphadigit> ) >
+| < #alphadigit : <alpha> | <digit> >
+| < #hostnumber :  <digits> "." <digits> "." <digits> "." <digits> >
+| < #port :  <digits> >
+| < #user :  ( <uchar> | ";" | "?" | "&" | "=" )* >
+| < #password :  ( <uchar> | ";" | "?" | "&" | "=" )* >
+| < #urlpath :  ( <xchar> )* >
+| < #ftpurl : "ftp://" <login> ( "/" <fpath> ( ";type=" <ftptype> )? )? >
+| < #fpath : <fsegment> ( "/" <fsegment> )* >
+| < #fsegment :  ( <uchar> | "?" | ":" | "@" | "&" | "=" )* >
+| < #ftptype : "A" | "I" | "D" | "a" | "i" | "d" >
+| < #fileurl : "file://" ( <host> | "localhost" )? "/" <fpath> >
+| < #httpurl : "http://" <hostport> ( "/" <hpath> ( "?" <search> )? )? >
+| < #hpath : <hsegment> ( "/" <hsegment> )* >
+| < #hsegment :  ( <uchar> | ";" | ":" | "@" | "&" | "=" )* >
+| < #search :  ( <uchar> | ";" | ":" | "@" | "&" | "=" )* >
+| < #gopherurl : "gopher://" <hostport> ( "/" ( <gtype> ( <selector> ( "%09" <search> ( "%09" <gopherstring> )? )? )? )? )? >
+| < #gtype : <xchar> >
+| < #selector : ( <xchar> )* >
+| < #gopherstring : ( <xchar> )* >
+| < #mailtourl : "mailto:" <encoded822addr> >
+| < #encoded822addr : ( <xchar> )+ >
+| < #newsurl : "news:" <grouppart> >
+| < #grouppart : "*" | <group> | <article> >
+| < #group : <alpha> ( <alpha> | <digit> | "-" | "." | "+" | "_" )* >
+| < #article : ( <uchar> | ";" | "/" | "?" | ":" | "&" | "="  )* "@" <host> >
+| < #nntpurl : "nntp://" <hostport> "/" <group> ( "/" <digits> )? >
+| < #telneturl : "telnet://" <login> "/" >
+| < #waisurl :  <waisdatabase> | <waisindex> | <waisdoc> >
+| < #waisdatabase : "wais://" <hostport> "/" >
+| < #waisindex : "wais://" <hostport> "/" <database> "?" <search> >
+| < #waisdoc : "wais://" <hostport> "/" <database> "/" <wtype> "/" <wpath> >
+| < #database : ( <uchar> )* >
+| < #wtype : ( <uchar> )* >
+| < #wpath : ( <uchar> )* >
+| < #prosperourl : "prospero://" <hostport> "/" <ppath> ( <fieldspec> )* >
+| < #ppath : <psegment> ( "/" <psegment> )* >
+| < #psegment :  ( <uchar> | "?" | ":" | "@" | "&" | "=" )* >
+| < #fieldspec : ";" <fieldname> "=" <fieldvalue> >
+| < #fieldname :  ( <uchar> | "?" | ":" | "@" | "&" )* >
+| < #fieldvalue :  ( <uchar> | "?" | ":" | "@" | "&" )* >
+| < #lowalpha : [ "a"-"z" ] >
+| < #hialpha : [ "A"-"Z" ] >
+| < #alpha : <lowalpha> | <hialpha> >
+| < #digit : [ "0"-"9" ] >
+| < #safe : "$" | "-" | "_" | "." | "+" >
+| < #extra : "!" | "*" | "'" | "(" | ")" | "," >
+| < #national : "{" | "}" | "|" | "\\" | "^" | "~" | "[" | "]" | "`" >
+| < #punctuation : "<" | ">" | "#" | "%" | "\"" >
+| < #reserved : ";" | "/" | "?" | ":" | "@" | "&" | "=" >
+| < #hex : <digit> | "A" | "B" | "C" | "D" | "E" | "F" | "a" | "b" | "c" | "d" | "e" | "f" >
+| < #escape : "%" <hex> <hex> >
+| < #unreserved : <alpha> | <digit> | <safe> | <extra> >
+| < #uchar : <unreserved> | <escape> >
+| < #xchar : <unreserved> | <reserved> | <escape> >
+| < #digits : ( <digit> )+ >
+}
+
+/*****************************************
+ * THE ADL LANGUAGE GRAMMAR STARTS HERE *
+ *****************************************/
+
+Archetype archetype() throws Exception :
+{
+  Token t;	
+  String id;
+  String adlVersion = null;
+  boolean isControlled = false;
+  String parent = null;
+  String concept;
+  //String lang = null;
+  //String langTerm = null;
+  String langCode = null;
+  CodePhrase originalLanguage = null;
+  Map<String, TranslationDetails> translations = null; 
+  //TranslationDetails translationDetails = null;
+  RevisionHistory revisionHistory = null;
+  ResourceDescription description = null;
+  CComplexObject definition;
+  ArchetypeOntology ontology;
+  Set<Assertion> invariants = null; // TODO
+}
+{
+  <SYM_ARCHETYPE>	
+  [ 
+    <SYM_L_PARENTHESIS>
+    adlVersion = adl_version() 
+    [ 
+      <SYM_SEMICOLON>
+      isControlled = controlled() 
+    ]
+    <SYM_R_PARENTHESIS>
+  ]
+
+  t = <V_ARCHETYPE_ID>
+  { id = t.image; }
+
+  [ parent = arch_specialisation() ]
+  concept = arch_concept()
+  
+  [
+    <SYM_LANGUAGE>  
+  	<SYM_ORIGINAL_LANGUAGE> <SYM_EQ> "<" originalLanguage = code_phrase() ">"
+    [ 
+      <SYM_TRANSLATIONS> <SYM_EQ> "<"
+      
+      { translations = translations(); }       
+        
+      ">"	
+    ]
+  ]
+   
+  [ description = arch_description() ]
+
+  definition = arch_definition()
+
+  ontology = arch_ontology()
+  <EOF>
+
+  {
+  	if(originalLanguage == null && missingLanguageCompatible) {
+  		//langCode = ontology.getPrimaryLanguage();
+  		langCode = "en";		
+  		originalLanguage = new CodePhrase(new TerminologyID("ISO_639-1"), langCode);
+  	}       	
+  	
+  	Archetype r = new Archetype();
+  	r.setAdlVersion(adlVersion);
+  	r.setArchetypeId(new ArchetypeID(id));
+  	if (parent != null)
+  		r.setParentArchetypeId(new ArchetypeID(parent));
+  	r.setConcept(concept);
+  	r.setOriginalLanguage(originalLanguage);
+  	if (translations != null)
+  		r.setTranslations(new HashSet<TranslationDetails>(translations.values()));
+  	r.setDescription(description);
+  	r.setRevisionHistory(revisionHistory);
+  	r.setControlled(isControlled);
+  	r.setDefinition(definition);
+  	r.setOntology(ontology);
+  	r.setInvariants(invariants);
+    return r;
+  }
+}
+
+CodePhrase code_phrase() : 
+{
+  Token t; 	
+  String lang = null;
+  String langTerm = null;
+  String langCode = null;
+}
+{
+  t = <V_CODE_PHRASE> 
+    { 
+  	  lang = t.image; 
+  	  int i = lang.indexOf("::");
+  	  langTerm = lang.substring(1, i);
+  	  langCode = lang.substring(i + 2, lang.length() - 1);
+    }  	  
+  {
+    return new CodePhrase(new TerminologyID(langTerm), langCode);
+  }	
+}
+
+Map<String, TranslationDetails> translations() : 
+{
+  //Token t;
+  String langAsKey;
+  CodePhrase language;
+  TranslationDetails td;	
+  Map<String, TranslationDetails> map = new HashMap<String, TranslationDetails>();
+  Map<String, String> author;
+  String  accreditation = null;
+  Map<String, String> otherDetails = null;
+}
+{
+  (
+    <SYM_L_BRACKET> langAsKey = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
+      
+      <SYM_LANG_LANGUAGE> <SYM_EQ> "<" language = code_phrase() ">"
+      <SYM_AUTHOR> <SYM_EQ> <SYM_LT>
+        author = string_string_map()
+      <SYM_GT>
+      
+      [
+      	<SYM_ACCREDITATION> <SYM_EQ> <SYM_LT>
+        	accreditation = string_value()
+      	<SYM_GT>
+      ]
+      
+      [ 
+        <SYM_LANG_OTHER_DETAILS> <SYM_EQ> <SYM_LT>
+          otherDetails = string_string_map()
+        <SYM_GT>
+      ]
+    <SYM_GT>	    	    
+    { 
+      // TODO null terminology service
+      td = new TranslationDetails(language, author, accreditation, 
+      		otherDetails); 
+      map.put(langAsKey, td);
+    }
+  )+
+  { return map; }	
+}
+
+Map<String, String> string_string_map() :
+{
+  Map<String, String> map = new HashMap<String, String>();	
+  String key;
+  String value;	 	
+}
+{ 
+  (
+    <SYM_L_BRACKET> key = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>     	
+      value = string_value()
+    <SYM_GT>    
+    { map.put(key, value); }  
+  )*		
+  { return map; }	
+}
+
+String adl_version() :
+{
+  Token t;
+}
+{
+  <SYM_ADL_VERSION> <SYM_EQ> t = <V_REAL>
+  { return t.image; }
+}
+
+boolean controlled() :
+{
+}
+{
+  <SYM_CONTROLLED> 
+  { return true; }
+  |
+  <SYM_UNCONTROLLED>
+  { return false; }
+}
+
+String arch_specialisation() :
+{
+  Token t;
+}
+{
+  <SYM_SPECIALIZE> t = <V_ARCHETYPE_ID>
+  { return t.image; }
+}
+
+String arch_concept() :
+{
+  String value;
+}
+{
+  <SYM_CONCEPT> value = constraint_ref()
+  { return value; }
+}
+
+ResourceDescription arch_description() throws Exception :
+{
+  Map<String, String> originalAuthor = new HashMap<String, String>();
+  //String key = null;
+  //String value = null;
+  List<String> otherContributors = null;
+  String lifecycleState = null;
+  List<ResourceDescriptionItem> details = new ArrayList<ResourceDescriptionItem>();
+  ResourceDescriptionItem item = null;
+  String archetypePackageURI = null;
+  Map<String,String> otherDetails = null;
+  //Archetype parentArchetype = null;
+  AuthoredResource parent = null; // not used  
+}
+{
+   <SYM_DESCRIPTION>
+   (
+     <SYM_LIFECYCLE_STATE> <SYM_EQ> "<" lifecycleState = string_value() ">"
+   |
+     <SYM_ARCHETYPE_PACKAGE_URI> <SYM_EQ> "<" 
+       archetypePackageURI = string_value() 
+     ">"
+   |
+     <SYM_DETAILS> <SYM_EQ> "<"
+         (
+           LOOKAHEAD(2)       
+           item = arch_description_item()
+           {
+             details.add(item);
+           }
+         )+
+     ">"
+   |
+   	 <SYM_ORIGINAL_AUTHOR> <SYM_EQ> "<" 
+   	 	originalAuthor = string_string_map()         
+   	 ">"
+   |    
+     <SYM_COPYRIGHT> <SYM_EQ> "<" string_value() ">" 
+   |    
+     <SYM_OTHER_CONTRIBUTORS> <SYM_EQ> "<" 
+        ( 
+          otherContributors = string_list_value()   
+        |
+          otherContributors = index_string_list()
+        )   
+     ">"    
+   | 
+     <SYM_OTHER_DETAILS> <SYM_EQ> "<"
+     	otherDetails = string_string_map()
+     ">"
+   )*
+   {
+     ResourceDescription resourceDescription = new ResourceDescription(
+     		originalAuthor, otherContributors, lifecycleState, details,
+            archetypePackageURI, otherDetails, parent);
+
+     return resourceDescription;     
+   }
+}
+
+ResourceDescriptionItem arch_description_item() throws Exception :
+{
+  //String langAsKey = null;	
+  CodePhrase lang = null;	
+  String purpose = null;
+  String use = null;
+  String misuse = null;
+  String copyright = null;
+  List<String> keywords = null; 
+  String keyword = null;
+  Map<String,String> originalResourceURI = new HashMap<String, String>();
+  Map<String,String> otherDetails = null; // not used  
+}
+{
+  "[" string_value() "]" <SYM_EQ> "<"
+  (
+    <SYM_LANGUAGE_WORD> <SYM_EQ> "<" lang = code_phrase() ">"
+  | 
+    <SYM_PURPOSE> <SYM_EQ> "<" purpose = string_value() ">"
+  |  
+          
+    <SYM_KEYWORDS> <SYM_EQ> "<" 
+        (
+          LOOKAHEAD(2) 
+          keywords = string_list_value() 
+        |
+          LOOKAHEAD(2) 
+          keyword = string_value()
+          { 
+          	keywords = new ArrayList<String>();
+          	keywords.add(keyword);
+          }
+		)
+         
+      ">" 
+   |
+    
+     <SYM_USE> <SYM_EQ> "<" use = string_value() ">"
+   | 
+   
+     <SYM_MISUSE> <SYM_EQ> "<" misuse = string_value() ">" 
+   | 
+   
+     <SYM_COPYRIGHT> <SYM_EQ> "<" copyright = string_value() ">" 
+   
+   |     
+     <SYM_ORIGINAL_RESOURCE_URI> <SYM_EQ> "<" 
+     	originalResourceURI = string_string_map()
+	 ">"	
+   | 
+     <SYM_OTHER_DETAILS> <SYM_EQ> "<"
+     	otherDetails = string_string_map()
+     ">"	 
+	
+   )*
+  ">"
+  {
+    if(use != null && use.trim().length() == 0) {
+      use = null;
+    }
+    if(misuse != null && misuse.trim().length() == 0) {
+      misuse = null;
+    }
+    if(copyright != null && copyright.trim().length() == 0) {
+      copyright = null;
+    }  
+    
+    if((purpose == null || purpose.length() == 0) && emptyPurposeCompatible) {
+    	purpose = ATTRIBUTE_UNKNOWN;
+    } 
+
+    return new ResourceDescriptionItem(lang, purpose, keywords,
+    	use, misuse, copyright, originalResourceURI, otherDetails);
+  }
+}
+
+CComplexObject arch_definition() :
+{
+  CComplexObject obj;
+}
+{
+  <SYM_DEFINITION> obj = cadl_text()
+  { return obj; }
+}
+
+
+/*********************************************
+ * THE ONTOLOGY LANGUAGE GRAMMAR STARTS HERE *
+ *********************************************/
+
+ArchetypeOntology arch_ontology() :
+{
+  //String primaryLanguage = null;
+  //List<String> languages = null;
+  //List<String> terminologies = null;
+
+  Map<String, CodeDefinitionSet> termDefinitions = null;
+  Map<String, CodeDefinitionSet> constraintDefinitions = null;
+  Map<String, ConstraintBindingSet> constraintBindings = null;
+  Map<String, TermBindingSet> termBindings = null;
+  //Token t = null;
+  //String key = null;
+  //Object value = null;
+}
+{
+  <SYM_ONTOLOGY>
+  [ /*primaryLanguage =*/ primary_language() ]
+  [ /*languages =*/ languages_available() ]
+  [ /*terminologies =*/ terminologies_available() ]
+
+  termDefinitions = term_definitions_list()
+  
+  [ constraintDefinitions = constraint_definitions_list() ]
+  
+  [ termBindings = term_binding_list() ]	  
+   
+  [ constraintBindings = constraint_binding_list() ]
+    
+  (
+    <V_IDENTIFIER>
+    <SYM_EQ> "<" dadl_text() ">"
+    {
+      // skipped for now
+      // ontology.extra.put(key, value);
+    }
+  )*
+
+  {
+    return new ArchetypeOntology(termDefinitions, constraintDefinitions,
+                                 termBindings, constraintBindings);
+  }
+}
+
+String primary_language() :
+{
+  String lang;
+}
+{
+  <SYM_PRIMARY_LANGUAGE> <SYM_EQ> "<" lang = string_value() ">"
+  { return lang; }
+}
+
+List<String> languages_available() :
+{
+  List<String> list;
+}
+{
+  <SYM_LANGUAGES_AVAILABLE> <SYM_EQ> "<" list = string_list_value() ">"
+  { return list; }
+}
+
+List<String> terminologies_available() :
+{
+  List<String> list;
+}
+{
+  <SYM_TERMINOLOGIES_AVAILABLE> <SYM_EQ> "<" list = string_list_value() ">"
+  { return list; }
+}
+
+Map<String, CodeDefinitionSet> term_definitions_list() :
+{
+  CodeDefinitionSet definitions = null;
+  Map<String, CodeDefinitionSet> items = new HashMap<String, CodeDefinitionSet>();
+}
+{
+  <SYM_TERM_DEFINITIONS> <SYM_EQ> "<"    
+  ( 
+    definitions = definitions_body()
+    { items.put(definitions.getLanguage(), definitions); }
+  )+
+  ">"
+  { return items; }
+}
+
+Map<String, CodeDefinitionSet> constraint_definitions_list() :
+{
+  CodeDefinitionSet definitions = null;
+  Map<String, CodeDefinitionSet> items = new HashMap<String, CodeDefinitionSet>();
+}
+{
+  <SYM_CONSTRAINT_DEFINITIONS> <SYM_EQ> "<" 
+  ( 
+    definitions = definitions_body()
+    { items.put(definitions.getLanguage(), definitions); }
+  )*
+  ">"
+  { return items; }
+}
+
+CodeDefinitionSet definitions_body() :
+{
+  String language;
+  Map<String, ArchetypeTerm> items = new HashMap<String, ArchetypeTerm>();
+  ArchetypeTerm term;
+}
+{
+  "[" language = string_value() "]"
+  <SYM_EQ> "<"
+    <SYM_ITEMS> <SYM_EQ> "<"
+	    [
+	      (
+	        term = archetype_term()
+	        {
+	          items.put(term.getCode(), term);
+	        }
+	      )+
+	    ]
+	">"
+  ">"
+  { return new CodeDefinitionSet(language, items); }
+}
+
+ArchetypeTerm archetype_term() :
+{
+  String code;
+  String value = null;
+  ArchetypeTerm term;
+}
+{
+  "[" 
+     code = local_code_value() 
+     { term = new ArchetypeTerm(code, new HashMap<String, String>());  }
+     
+   "]" <SYM_EQ> "<"
+    ( 
+      <SYM_TEXT> <SYM_EQ> "<" 
+          value = string_value() { term.getItems().put("text", value); } 
+        ">" [ ";" ]
+      |
+      <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" 
+          value = string_value() { term.getItems().put("description", value); }
+        ">" [ ";" ]
+      |
+      <SYM_COMMENT> <SYM_EQ> "<" 
+          value = string_value() { term.getItems().put("comment", value); }
+        ">" [ ";" ]
+    )*
+  ">"
+  { return term; }
+}
+
+Map<String, TermBindingSet> term_binding_list() :
+{
+  Map<String, TermBindingSet> items = new HashMap<String, TermBindingSet>();	
+  TermBindingSet binding = null;
+}
+{
+  <SYM_TERM_BINDING> <SYM_EQ> "<"
+  ( 
+    binding = ontology_binding_body() 
+    { items.put(binding.getTerminology(), binding); }
+   )*
+  ">"
+  { return items; }
+}
+
+Map<String, ConstraintBindingSet> constraint_binding_list() :
+{
+  Map<String, ConstraintBindingSet> items = new HashMap<String, ConstraintBindingSet>();
+  ConstraintBindingSet binding = null;
+}
+{
+   <SYM_CONSTRAINT_BINDING> <SYM_EQ> "<"
+   ( 
+     binding = constraint_binding_body()
+     { items.put(binding.getTerminology(), binding); }
+   )*
+   ">"
+  { return items; }
+}
+
+TermBindingSet ontology_binding_body() :
+{
+  String terminology;
+  Map<String, TermBindingItem> bindingList = new HashMap<String, TermBindingItem>();
+  TermBindingItem item;
+}
+{
+   "[" terminology = string_value() "]" <SYM_EQ> "<"
+     
+     <SYM_ITEMS> <SYM_EQ> "<"
+
+	    (
+	      LOOKAHEAD( term_binding_item(terminology) )
+	      item = term_binding_item(terminology)
+	      { bindingList.put(item.getCode(), item); }
+	    )*
+	 ">"
+  ">"
+  { return new TermBindingSet(terminology, bindingList); }
+}
+
+ConstraintBindingSet constraint_binding_body() :
+{
+  String terminology;
+  Map<String, ConstraintBindingItem> bindingList = new HashMap<String, ConstraintBindingItem>();
+  ConstraintBindingItem item;
+}
+{
+   "[" terminology = string_value() "]" <SYM_EQ> "<"
+     
+     <SYM_ITEMS> <SYM_EQ> "<"
+
+	    (
+	      LOOKAHEAD( query_binding_item() )
+	      item = query_binding_item()
+	      { bindingList.put(item.getCode(), item); }
+	    )*
+	 ">"
+  ">"
+  { return new ConstraintBindingSet(terminology, bindingList); }
+}
+
+TermBindingItem term_binding_item(String terminology) :
+{
+  String code;
+  String term;
+}
+{
+  "["
+  (
+    LOOKAHEAD( local_code_value())
+    code = local_code_value()
+  |
+    code = local_code_path_value()
+  )
+  "]" <SYM_EQ> "<"
+    term = term_code()
+    ( "," term_code() ) *
+  ">"
+  { return new TermBindingItem(code, new CodePhrase(new TerminologyID(terminology), term)); }
+}
+
+ConstraintBindingItem query_binding_item() :
+{
+  String code;
+  Token t;
+}
+{
+  "[" code = local_code_value() "]" <SYM_EQ> "<" t = <URL> ">"
+  { return new ConstraintBindingItem(code, t.image); }
+}
+
+String local_code_value() :
+{
+  Token t;
+}
+{
+  t = <V_LOCAL_CODE>
+  {
+    String value = t.image;
+    return value.substring(1, value.length() - 1);
+  }
+}
+
+String local_code_path_value() :
+{
+  Token t;
+}
+{
+  t = <V_ABSOLUTE_PATH_WQ>
+  { 
+    String value = t.image;
+    return value.substring(1, value.length() - 1);
+  }
+}
+
+
+/*****************************************
+ * THE dADL LANGUAGE GRAMMAR STARTS HERE *
+ *****************************************/
+
+ContentObject dadl_text() :
+{
+  ContentObject obj = new ContentObject();
+}
+{
+  (
+    LOOKAHEAD( 2 )
+    obj.attributes = attr_vals()
+  |
+    LOOKAHEAD( 2 )
+    obj = identified_object()
+  )
+  { return obj; }
+}
+
+ContentObject identified_object() :
+{
+  ContentObject obj = new ContentObject();
+  Token t;
+}
+{
+  t = <V_IDENTIFIER> { obj.id = t.image; }
+  obj.constraint = constraint_ref() <SYM_EQ> <SYM_LT>
+    obj.attributes = attr_vals()
+  <SYM_GT>
+  { return obj; }
+}
+
+List<AttributeValue> attr_vals() :
+{
+  List<AttributeValue> list = new ArrayList<AttributeValue>();
+  AttributeValue av;
+}
+{
+  av = attr_val() { list.add(av); }
+  (
+    (";")? av = attr_val() { list.add(av); }
+  )*
+  { return list; }
+}
+
+AttributeValue attr_val() :
+{
+  AttributeValue av = new AttributeValue();
+  Token t;
+}
+{
+  t = <V_IDENTIFIER> { av.id = t.image; }
+  [ "(" av.qualifier = simple_value() ")" ] <SYM_EQ>
+    <SYM_LT>
+    [
+      LOOKAHEAD ( basic_object_val() )
+      av.value = basic_object_val()
+    |
+      LOOKAHEAD (attr_vals() )
+      av.value = attr_vals()
+    ]
+  <SYM_GT>
+  { return av; }
+}
+
+List<Assertion> c_includes() :
+{
+  List<Assertion> set ;
+}
+{
+  <SYM_INCLUDE> set = assertions()
+  { return set; }
+}
+
+List<Assertion> c_excludes() :
+{
+  List<Assertion> set;
+}
+{
+  <SYM_EXCLUDE> set = assertions()
+  { return set; }
+}
+
+List<Assertion> assertions() :
+{
+  List<Assertion> set = new ArrayList<Assertion>();
+  Assertion a;
+}
+{
+  (
+    a = assertion()
+    {
+      set.add(a);
+    }
+  )+
+  { return set; }
+}
+
+Assertion assertion() :
+{
+  String tag = null; 
+  ExpressionItem expression;
+  List<AssertionVariable> variables = null;	
+}
+{
+  [ 
+    LOOKAHEAD(2)
+    tag = any_identifier() ":" 
+  ] 
+  expression = boolean_expression()
+  { 
+    return new Assertion(tag, expression, variables); 
+  }
+}
+
+Object basic_object_val() :
+{
+  Object value;
+}
+{
+  (
+    LOOKAHEAD( simple_list_value() )
+    value = simple_list_value()
+  |
+    value = simple_interval_value()
+  |
+    LOOKAHEAD( simple_value() )
+    value = simple_value()
+  |
+    LOOKAHEAD( term_code_list_value() )
+    value = term_code_list_value()
+  |
+    LOOKAHEAD( term_code() )
+    value = term_code()
+  )  
+  { return value; }
+}
+
+Object simple_value() :
+{
+  Object value;
+  int i = 0;
+  double d = 0;
+  boolean b = false;
+  char c = 0;
+}
+{
+  (
+    LOOKAHEAD ( date_time_value() )
+    value = date_time_value()
+  |
+    LOOKAHEAD( date_value() )
+    value = date_value()
+  |
+    LOOKAHEAD( time_value() )
+    value = time_value()
+  |
+    LOOKAHEAD( duration_value() )
+    value = duration_value()
+  |
+    LOOKAHEAD( real_value() )
+    d = real_value()
+    { value = new Double(d); }
+  |
+    LOOKAHEAD( integer_value() )
+    i = integer_value()
+    { value = new Integer(i); }
+  |
+    b = boolean_value()
+    { value = new Boolean(b); }
+  |
+    c = character_value()
+    { value = new Character(c); }
+  |
+    LOOKAHEAD( string_value() )
+    value = string_value()
+  )
+  { return value; }
+}
+
+List<? extends Object> simple_list_value() :
+{
+  List<? extends Object> list;
+}
+{
+  (
+    LOOKAHEAD( time_list_value() )
+    list = time_list_value()
+  |
+    LOOKAHEAD( date_list_value() )
+    list = date_list_value()
+  |
+    LOOKAHEAD( date_time_list_value() )
+    list = date_time_list_value()
+  |
+    LOOKAHEAD ( duration_list_value() )
+    list = duration_list_value()
+  |
+    LOOKAHEAD( integer_list_value() )
+    list = integer_list_value()
+  |
+    LOOKAHEAD( real_list_value() )
+    list = real_list_value()
+  |
+    list = boolean_list_value()
+  |
+    list = character_list_value()
+  |
+    list = string_list_value()
+  )
+  { return list; }
+}
+
+Interval<?> simple_interval_value() :
+{
+  Interval<?> i;
+}
+{
+  (
+    LOOKAHEAD( date_interval_value() )
+    i = date_interval_value()
+  |
+    LOOKAHEAD( time_interval_value() )
+    i = time_interval_value()
+  |
+    LOOKAHEAD( date_time_interval_value() )
+    i = date_time_interval_value()
+  |
+    LOOKAHEAD( duration_interval_value() )
+    i = duration_interval_value()
+  |
+    LOOKAHEAD( real_interval_value() )
+    i = real_interval_value()
+  |
+    LOOKAHEAD( integer_interval_value() )
+    i = integer_interval_value()
+  )
+  { return i; }
+}
+
+/* ---------------------- dADL - BASIC DATA VALUES ----------------------- */
+String string_value() :
+{
+  Token t;
+  String value;
+}
+{
+  t = <V_STRING> {
+    value = t.image;
+  }
+  {
+    return value.substring(1, value.length() - 1);
+  }
+}
+
+List<String> index_string_list() :{
+  List<String> list = new ArrayList<String>();
+  String value = null;
+}
+{
+  (
+    <SYM_L_BRACKET> string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
+      ( value = string_value())    
+      { list.add(value); }
+    <SYM_GT>
+  )*
+  { return list.isEmpty() ? null : list; }
+}
+
+List<String> string_list_value() :
+{
+  List<String> list = new ArrayList<String>();
+  String value;
+}
+{
+  value = string_value() {
+    list.add(value);
+  }
+  ( LOOKAHEAD( 2 ) "," ( value = string_value() {
+                           list.add(value);
+                         }
+                         |
+                         <SYM_LIST_CONTINUE>)
+                       )+
+  { return list; }
+}
+
+int integer_value() :
+{
+  int i;
+  boolean negative = false;
+}
+{
+  [ ( "+" | "-" { negative = true; } ) ] i = positive_int_value()
+  {
+    if(negative) {
+      i = -i;
+    }
+    return i;
+  }
+}
+
+int positive_int_value() :
+{
+  Token t;
+}
+{
+  t = <V_INTEGER>
+  {
+    try {
+      return Integer.parseInt(t.image);
+    } catch(NumberFormatException e) {
+        throw new ParseException("Wrong format of integer: " + t.image);
+    }
+  }
+}
+
+List<Integer> integer_list_value() :
+{
+  List<Integer> list = new ArrayList<Integer>();
+  int i;
+}
+{
+   i = integer_value()
+   { list.add(new Integer(i)); }
+   ("," ( i = integer_value() | <SYM_LIST_CONTINUE>)
+        { list.add(new Integer(i)); }
+   )+
+   { return list; }
+}
+
+Interval<Integer> integer_interval_value() :
+{
+  Interval<Integer> i = null;
+  int lower = 0;
+  int upper = 0;  
+}
+{
+  <SYM_INTERVAL_DELIM>
+  (
+    LOOKAHEAD( 3 )    
+    {
+      boolean lowerInclusive = true;
+	  boolean upperInclusive = true; 
+	  boolean upperSpecified = false; 	
+    }
+    [
+      <SYM_GT> { lowerInclusive = false; }
+	]
+    lower = integer_value() 
+    { upper = lower; }
+    [ 
+      <SYM_ELLIPSIS> 
+      [ 
+        <SYM_LT> {  upperInclusive = false; } 
+      ] 
+      upper = integer_value()
+      { upperSpecified =true; }       
+    ]
+    {
+      if(!lowerInclusive && !upperSpecified) {
+      	// specical case for |>100|
+      	i = new Interval<Integer>(new Integer(lower), null, false, false);
+      } else {
+      	i = new Interval<Integer>(new Integer(lower), new Integer(upper), lowerInclusive, 
+      	                 upperInclusive);
+      }	
+    }
+  |
+    <SYM_LT> upper = integer_value()
+    {
+      i = new Interval<Integer>(null, new Integer(upper), false, false);
+    }
+  |
+    <SYM_GT> lower = integer_value()
+    {
+      i = new Interval<Integer>(new Integer(lower), null, false, false);
+    }
+  |
+    <SYM_LE> upper = integer_value()
+    {
+      i = new Interval<Integer>(null, new Integer(upper), false, true);
+    }
+  |
+    <SYM_GE> lower = integer_value()
+    {
+      i = new Interval<Integer>(new Integer(lower), null, true, false);
+    }
+  )
+  <SYM_INTERVAL_DELIM>
+
+  { return i; }
+}
+
+double real_value() :
+{
+  Token t;
+  double d;
+  boolean negative = false;
+}
+{
+   [ ( "+" | "-" { negative = true; } ) ] t = <V_REAL>
+   {
+     try {
+       d = Double.parseDouble(t.image);
+     } catch(NumberFormatException e) {
+       throw new ParseException("Wrong format of double: " + t.image);
+     }
+     if(negative) {
+       d = -d;
+     }
+     return d;
+  }
+}
+
+List<Double> real_list_value() :
+{
+  List<Double> list = new ArrayList<Double>();
+  double d;
+}
+{
+  d = real_value() { list.add(new Double(d)); }
+  (
+    "," (
+          d = real_value() { list.add(new Double(d)); }
+        |
+          <SYM_LIST_CONTINUE>
+        )
+  )+
+  { return list; }
+}
+
+Interval<Double> real_interval_value() :
+{
+  Interval<Double> i = null;
+  double upper = 0;
+  double lower = 0;
+}
+{
+  <SYM_INTERVAL_DELIM>
+  (
+    LOOKAHEAD( 3 )    
+    {
+      boolean lowerInclusive = true;
+	  boolean upperInclusive = true; 
+	  boolean upperSpecified = false; 	
+    }
+    [
+      <SYM_GT> { lowerInclusive = false; }
+	]
+    lower = real_value() 
+    { upper = lower; }
+    [ 
+      <SYM_ELLIPSIS> 
+      [ 
+        <SYM_LT> {  upperInclusive = false; } 
+      ]
+      upper = real_value()       
+      { upperSpecified = true; } 
+    ]
+    {
+      if(!lowerInclusive && !upperSpecified) {
+      	// specical case for |>100.0|
+      	i = new Interval<Double>(new Double(lower), null, false, false);
+      } else {	 
+        i = new Interval<Double>(new Double(lower), new Double(upper), lowerInclusive, 
+                         upperInclusive);
+      }
+    }
+  |
+    <SYM_LT> upper = real_value()
+    {
+      i = new Interval<Double>(null, new Double(upper), false, false);
+    }
+  |
+    <SYM_LE> upper = real_value()
+    {
+      i = new Interval<Double>(null, new Double(upper), false, true);
+    }
+  |
+    <SYM_GT> lower = real_value()
+    {
+      i = new Interval<Double>(new Double(lower), null, false, false);
+    }
+  |
+    <SYM_GE> lower = real_value()
+    {
+      i = new Interval<Double>(new Double(lower), null, true, false);
+    }
+  )
+  <SYM_INTERVAL_DELIM>
+
+  { return i; }
+}
+
+boolean boolean_value() :
+{}
+{
+    <SYM_TRUE> { return true; }
+  |
+    <SYM_FALSE> { return false; }
+}
+
+List<Boolean> boolean_list_value() :
+{
+  List<Boolean> list = new ArrayList<Boolean>();
+  boolean b;
+}
+{
+  b = boolean_value()
+  {
+    list.add(new Boolean(b));
+  }
+  (
+    "," (
+          b = boolean_value() { list.add(new Boolean(b)); }
+        |
+          <SYM_LIST_CONTINUE>
+        )
+  )+
+  { return list; }
+}
+
+char character_value() :
+{
+  Token t;
+}
+{
+  t = <V_CHARACTER>
+  { return t.image.charAt(1); }
+}
+
+List<Character> character_list_value() :
+{
+  List<Character> list = new ArrayList<Character>();
+  char c;
+}
+{
+  c = character_value()
+  {
+    list.add(new Character(c));
+  }
+  (
+    "," (
+          c = character_value() { list.add(new Character(c)); }
+        |
+          <SYM_LIST_CONTINUE>
+        )
+  )+
+  { return list; }
+}
+
+DvDate date_value() :
+{
+  Token t;
+}
+{
+  t = <V_DATE>
+  {
+    try {
+      return new DvDate(t.image);
+    } catch(Exception ignored) {
+      throw new ParseException("wrong date format: " + t.image);
+    }
+  }
+}
+
+List<DvDate> date_list_value() :
+{
+  List<DvDate> list = new ArrayList<DvDate>();
+  DvDate d;
+}
+{
+  d = date_value() { list.add(d); }
+  (
+    "," (
+          d = date_value() { list.add(d); }
+        |
+          <SYM_LIST_CONTINUE>
+        )
+  )+
+  { return list; }
+}
+
+Interval<DvDate> date_interval_value() :
+{
+  Interval<DvDate> i;
+  DvDate lower = null;
+  DvDate upper = null;
+}
+{
+    <SYM_INTERVAL_DELIM>
+  (
+    lower = date_value() 
+    { upper = lower; }
+    [ <SYM_ELLIPSIS> upper = date_value() ]
+    {
+      i = new Interval<DvDate>(lower, upper, true, true);
+    }
+  |
+    <SYM_LT> upper = date_value()
+    {
+      i = new Interval<DvDate>(null, upper, false, false);
+    }
+  |
+    <SYM_LE> upper = date_value()
+    {
+      i = new Interval<DvDate>(null, upper, false, true);
+    }
+  |
+    <SYM_GT> lower = date_value()
+    {
+      i = new Interval<DvDate>(lower, null, false, false);
+    }
+  |
+    <SYM_GE> lower = date_value()
+    {
+      i = new Interval<DvDate>(lower, null, true, false);
+    }
+  )
+  <SYM_INTERVAL_DELIM>
+
+  { return i; }
+}
+
+DvTime time_value() :
+{
+  Token t;
+}
+{
+  (
+    t = <V_HHMM_TIME>
+  |
+    t = <V_HHMMSS_TIME>
+  |
+    t = <V_HHMMSSss_TIME>
+  |
+    t = <V_HHMMSSZ_TIME>
+  |
+    t = <V_HHMMSSssZ_TIME>
+  )
+  {
+    try {
+      return new DvTime(t.image);
+    } catch(Exception e) {
+      throw new ParseException("wrong date format: " + t.image);
+    }
+  }
+}
+
+List<DvTime> time_list_value() :
+{
+  List<DvTime> list = new ArrayList<DvTime>();
+  DvTime time;
+}
+{
+  time = time_value() { list.add(time); }
+  (
+    "," (
+          time = time_value()  { list.add(time); }
+        |
+          <SYM_LIST_CONTINUE>)
+   )+
+   { return list; }
+}
+
+Interval<DvTime> time_interval_value() :
+{
+  Interval<DvTime> i;
+  DvTime lower = null;
+  DvTime upper = null;
+}
+{
+    <SYM_INTERVAL_DELIM>
+  (
+    lower = time_value()
+    { upper = lower; }
+    [ <SYM_ELLIPSIS> upper = time_value() ]
+    {
+      i = new Interval<DvTime>(lower, upper, true, true);
+    }
+  |
+    <SYM_LT> upper = time_value()
+    {
+      i = new Interval<DvTime>(null, upper, false, false);
+    }
+  |
+    <SYM_LE> upper = time_value()
+    {
+      i = new Interval<DvTime>(null, upper, false, true);
+    }
+  |
+    <SYM_GT> lower = time_value()
+    {
+      i = new Interval<DvTime>(lower, null, false, false);
+    }
+  |
+    <SYM_GE> lower = time_value()
+    {
+      i = new Interval<DvTime>(lower, null, true, false);
+    }
+  )
+  <SYM_INTERVAL_DELIM>
+  { return i; }
+}
+
+DvDateTime date_time_value() :
+{
+  Token t;
+}
+{
+  (
+    t = <V_DATE_TIME>
+  |
+    t = <V_DATE_TIME_MS>
+  |
+    t = <V_DATE_TIME_Z>
+  |
+    t = <V_DATE_TIME_MSZ>
+  )
+  {
+    try {
+      return new DvDateTime(t.image);
+    } catch(Exception e) {
+      throw new ParseException("wrong datetime format: " + t.image);
+    }
+  }
+}
+
+List<DvDateTime> date_time_list_value() :
+{
+  List<DvDateTime> list = new ArrayList<DvDateTime>();
+  DvDateTime datetime;
+}
+{
+  datetime = date_time_value() { list.add(datetime); }
+  (
+    "," (
+          datetime = date_time_value() { list.add(datetime); }
+        |
+          <SYM_LIST_CONTINUE>)
+  )+
+  { return list; }
+}
+
+Interval<DvDateTime> date_time_interval_value() :
+{
+  Interval<DvDateTime> i;
+  DvDateTime lower = null;
+  DvDateTime upper = null;
+}
+{
+    <SYM_INTERVAL_DELIM>
+  (
+    lower = date_time_value() 
+    { upper = lower; }
+    [ <SYM_ELLIPSIS> upper = date_time_value() ]
+    {
+      i = new Interval<DvDateTime>(lower, upper, true, true);
+    }
+  |
+    <SYM_LT> upper = date_time_value()
+    {
+      i = new Interval<DvDateTime>(null, upper, false, false);
+    }
+  |
+    <SYM_LE> upper = date_time_value()
+    {
+      i = new Interval<DvDateTime>(null, upper, false, true);
+    }
+  |
+    <SYM_GT> lower = date_time_value()
+    {
+      i = new Interval<DvDateTime>(lower, null, false, false);
+    }
+  |
+    <SYM_GE> lower = date_time_value()
+    {
+      i = new Interval<DvDateTime>(lower, null, true, false);
+    }
+  )
+  <SYM_INTERVAL_DELIM>
+  { return i; }
+}
+
+DvDuration duration_value() :
+{
+  Token t;
+}
+{
+  t = <V_ISO8601_DURATION>
+  {
+    return new DvDuration(t.image);
+  }
+}
+
+List<DvDuration> duration_list_value() :
+{
+  List<DvDuration> list = new ArrayList<DvDuration>();
+  DvDuration d;
+}
+{
+  d = duration_value() { list.add(d); }
+  (
+    "," (
+          d = duration_value() { list.add(d); }
+        |
+          <SYM_LIST_CONTINUE>
+        )
+  )+
+  { return list; }
+}
+
+Interval<DvDuration> duration_interval_value() :
+{
+  Interval<DvDuration> i;
+  DvDuration lower = null;
+  DvDuration upper = null;
+}
+{
+  <SYM_INTERVAL_DELIM>
+  (
+    lower = duration_value() 
+    { upper = lower; }
+    [ 
+      <SYM_ELLIPSIS> upper = duration_value() 
+    ]
+    {
+      i = new Interval<DvDuration>(lower, upper, true, true);
+    }
+  |
+    <SYM_LT> upper = duration_value()
+    {
+      i = new Interval<DvDuration>(null, upper, false, false);
+    }
+  |
+    <SYM_LE> upper = duration_value()
+    {
+      i = new Interval<DvDuration>(null, upper, false, true);
+    }
+  |
+    <SYM_GT> lower = duration_value()
+    {
+      i = new Interval<DvDuration>(lower, null, false, false);
+    }
+  |
+    <SYM_GE> lower = duration_value()
+    {
+      i = new Interval<DvDuration>(lower, null, true, false);
+    }
+  )
+  <SYM_INTERVAL_DELIM>
+  { return i; }
+}
+
+String term_code() :
+{
+  CodePhrase code;
+}
+{
+  code = code_phrase()
+  { return "[" + code.getTerminologyId().getValue() + "::" + code.getCodeString() + "]"; }
+}
+
+List<String> term_code_list_value() :
+{
+  List<String> list = new ArrayList<String>();
+  String term;
+}
+{
+  term = term_code() { list.add(term); }
+  (
+    "," (
+          term = term_code()) { list.add(term); }
+        |
+          <SYM_LIST_CONTINUE>
+   )+
+   { return list; }
+}
+
+
+/*****************************************
+ * THE cADL LANGUAGE GRAMMAR STARTS HERE *
+ *****************************************/
+
+CComplexObject cadl_text() :
+{
+  CComplexObject c;
+}
+{
+  c = c_complex_object()
+  { return c; }
+}
+
+CComplexObject c_complex_object() :
+{
+  String type;
+  String nodeID = null;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  Map<String, CAttribute> attributes;
+}
+{
+  type = type_identifier()
+  [ nodeID = constraint_ref() ]
+  [ occurrences = c_occurrences() ]
+  <SYM_MATCHES> <SYM_START_CBLOCK>
+    attributes = c_complex_object_body() 
+  <SYM_END_CBLOCK>
+  {
+    return new CComplexObject(type, occurrences, nodeID, attributes);
+  }
+}
+
+Map<String, CAttribute> c_complex_object_body() :
+{
+  Map<String, CAttribute> list = null;
+  CAttribute a = null;
+}
+{
+  (
+    c_any()
+  |
+    { list = new HashMap<String, CAttribute>(); }
+    (
+      a = c_attribute()
+      {
+        list.put(a.getRmAttributeName(), a);
+      }
+    )+
+  )
+  {
+    return list;
+  }
+}
+
+CObject c_object() :
+{
+  CObject c = null;
+}
+{
+  (
+      c = c_dv_quantity()    
+    |
+      c = c_complex_object()
+    |
+      c = archetype_internal_ref()
+    |
+      c = archetype_slot()
+    |
+      c = c_code_phrase()
+    |
+      LOOKAHEAD( 3 )
+      c = c_dv_ordinal()
+    |
+      LOOKAHEAD( 3 )
+      c = c_primitive_object()
+    |
+      c = constraint_ref_obj()
+  )
+  {
+    return c;
+  }
+}
+
+ConstraintRef constraint_ref_obj() :
+{
+  String reference;
+  String rmTypeName = "CodePhrase";
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  String nodeId = null;  
+}
+{
+  reference = constraint_ref()
+  {
+ 	return new ConstraintRef(rmTypeName, occurrences, nodeId,
+    						reference);
+  }
+}
+
+ArchetypeInternalRef archetype_internal_ref() :
+{
+  String type;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  String target;
+}
+{
+  <SYM_USE_NODE> type = type_identifier() 
+   [ occurrences = c_occurrences() ]  
+  target = absolute_path()  
+  { 
+  	return new ArchetypeInternalRef(type, occurrences, null, 
+  			target); 
+  }
+}
+
+ArchetypeSlot archetype_slot() :
+{
+  String type;
+  String nodeID = null;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  List<Assertion> includes = null;
+  List<Assertion> excludes = null;
+}
+{
+  <SYM_ALLOW_ARCHETYPE> type = type_identifier()
+  
+  [ nodeID = constraint_ref() ]
+  
+  [ occurrences = c_occurrences() ] 
+  
+  <SYM_MATCHES> <SYM_START_CBLOCK>
+    [ includes = c_includes() ]
+    [ excludes = c_excludes() ]
+  <SYM_END_CBLOCK>
+  {
+    return new ArchetypeSlot(type, occurrences, nodeID, includes, 
+    		excludes);
+  }
+}
+
+CPrimitiveObject c_primitive_object() :
+{
+  CPrimitive c;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+}
+{
+  c = c_primitive()
+  {
+    CPrimitiveObject r = new CPrimitiveObject();
+    r.setOccurrences(occurrences);
+    r.setItem(c);
+    return r; 
+  }
+}
+
+CPrimitive c_primitive() :
+{
+  CPrimitive c;
+}
+{
+  (
+    LOOKAHEAD( c_boolean() )
+    c = c_boolean()
+  |
+    LOOKAHEAD( c_date() )
+    c = c_date()
+  |
+    LOOKAHEAD( c_time() )
+    c = c_time()
+  |
+    LOOKAHEAD( 3 )
+    c = c_date_time()
+  |
+    LOOKAHEAD( c_duration() )
+    c = c_duration()
+  |
+    LOOKAHEAD( c_string() )
+    c = c_string()
+  |
+    LOOKAHEAD( c_integer() )
+    c = c_integer()
+  |
+    LOOKAHEAD( c_real() )
+    c = c_real()
+  )
+  { return c; }
+}
+
+void c_any() :
+{}
+{
+  "*"
+}
+
+/* ----------------- BODY - relationships -------------------- */
+
+CAttribute c_attribute() :
+{
+  String name;
+  Interval<Integer> existence = new Interval<Integer>(1, 1);
+  Cardinality cardinality = null; // default to non-container type
+  List<CObject> children;
+  CAttribute attribute;
+}
+{
+  name = attribute_identifier()
+  [ existence = c_existence() ]
+  [ cardinality = c_cardinality() ]
+  <SYM_MATCHES> <SYM_START_CBLOCK>
+    children = c_attr_values(null) // TODO fix parent
+  <SYM_END_CBLOCK>
+  {
+  	if(cardinality == null) {
+      attribute = new CSingleAttribute(name, existence, children);
+    } else {
+      attribute = new CMultipleAttribute(name, existence, children, cardinality);
+    }
+    return attribute;
+  }
+}
+
+List<CObject> c_attr_values(CAttribute parent) :
+{
+  List<CObject> list = null;
+  CObject c = null;
+}
+{
+  (	
+    LOOKAHEAD(2)
+    c_any()
+  |
+    { list = new ArrayList<CObject>(); }
+    (
+      LOOKAHEAD(2)
+      c = c_object()
+      { list.add(c); }
+    )*
+  )
+  { return list; }
+}
+
+
+/* ----------------------- expressions ----------------------- */
+ExpressionItem boolean_expression() :
+{
+  ExpressionItem item = null;	
+}
+{  
+  LOOKAHEAD( 2 )	
+  item = boolean_leaf()
+|
+  LOOKAHEAD( 2 )
+  item = boolean_node()
+  
+  { return item; }
+}
+
+ExpressionItem boolean_node() :
+{
+  ExpressionItem ret = null;
+  ExpressionItem item = null;
+  ExpressionItem item2 = null;  
+  OperatorKind op = null;
+  String path = null;
+  boolean precedenceOverridden = false; // TODO
+  Token t = null;	
+  String attrId = null;
+  CPrimitive cp = null;
+}
+{
+(
+  <SYM_EXISTS> path = absolute_path()
+  { 
+  	item = ExpressionLeaf.pathConstant(path);
+  	ret = new ExpressionUnaryOperator(ExpressionItem.BOOLEAN,
+  		OperatorKind.OP_EXISTS, precedenceOverridden, item);
+  }
+|
+  LOOKAHEAD( 2 )
+  attrId = relative_path() <SYM_MATCHES>
+                 (
+                   <SYM_START_CBLOCK> cp = c_primitive() <SYM_END_CBLOCK>
+                   { item2 = new ExpressionLeaf(cp.getType(), cp, 
+                   				ReferenceType.CONSTANT);  }
+                 |
+                   t = <V_REGEXP>
+                   { item2 = ExpressionLeaf.stringConstant(t.image);  }
+                 )
+  { 
+  	// TODO reference type as ATTRIBUTE?
+  	item = ExpressionLeaf.stringConstant(attrId);
+  	ret = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN, 
+  					OperatorKind.OP_MATCHES, false, item, item2);
+  }	   
+|
+  <SYM_NOT> item = boolean_expression()
+  {
+  	ret = new ExpressionUnaryOperator(ExpressionItem.BOOLEAN,
+  		OperatorKind.OP_NOT, precedenceOverridden, item); 
+  }
+|
+  LOOKAHEAD( 3 )
+  item = arithmetic_expression()
+  (
+      "=" 
+      { op = OperatorKind.OP_EQ; }
+    | 
+      <SYM_NE> 
+      { op = OperatorKind.OP_NE; }
+    | 
+      <SYM_LT> 
+      { op = OperatorKind.OP_LT; }
+    | 
+      <SYM_GT> 
+      { op = OperatorKind.OP_GT; }
+    | 
+      <SYM_LE> 
+      { op = OperatorKind.OP_LE; }
+    | 
+      <SYM_GE>
+      { op = OperatorKind.OP_GE; }
+  )
+  item2 = arithmetic_expression()  
+  { 
+  	ret = new ExpressionBinaryOperator(item.getType(), op, false, item, item2);
+  }
+|
+  LOOKAHEAD( 3 ) 
+  item = boolean_leaf() 
+  (
+	  (
+	    <SYM_AND> 
+	    { op = OperatorKind.OP_AND; }
+	  | 
+	    <SYM_OR>  
+	    { op = OperatorKind.OP_OR; }
+	  |
+	    <SYM_XOR> 
+	    { op = OperatorKind.OP_XOR; }
+	  |    
+	    <SYM_IMPLIES> 
+	    { op = OperatorKind.OP_IMPLIES; }
+	  )
+	  item2 = boolean_expression()
+  )
+  { 
+  	if(item2 == null) {
+  		ret = item;
+  	} else {
+  	ret = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN, op, false, 
+  		item, item2);
+  	}
+  }
+)
+  { return ret; }
+}
+
+ExpressionItem boolean_leaf() :
+{
+  ExpressionItem item = null;
+}
+{
+ 
+  LOOKAHEAD( 3 )
+  "(" item = boolean_expression() ")"
+|
+  <SYM_TRUE>
+  { item = ExpressionLeaf.booleanConstant(true); }
+| 
+  <SYM_FALSE>
+  { item = ExpressionLeaf.booleanConstant(false); }
+ 
+  { return item; }	  
+}
+
+ExpressionItem arithmetic_expression() :
+{
+  ExpressionItem item = null;  
+}
+{
+  LOOKAHEAD( 3 )
+  item = arithmetic_leaf()
+  |
+  LOOKAHEAD( 3 )
+  item = arithmetic_node()
+  { return item; }
+}
+
+ExpressionItem arithmetic_node() :
+{
+  ExpressionItem item = null;
+  ExpressionItem left = null;
+  ExpressionItem right = null;
+  OperatorKind op = null;
+}
+{
+  left = arithmetic_leaf() 
+  (
+	(
+	    "+" 
+	    { op = OperatorKind.OP_PLUS; }
+	  | 
+	    "-" 
+	    { op = OperatorKind.OP_MINUS; }
+	  | 
+	    "*" 
+	    { op = OperatorKind.OP_MULTIPLY; }
+	  | 
+	    "/" 
+	    { op = OperatorKind.OP_DIVIDE; }
+	  | 
+	    "^" 
+	    { op = OperatorKind.OP_EXP; }  
+	)  
+	  
+	right = arithmetic_expression()	  	
+  )  
+  { 
+  	if(right == null) {
+		item = left;
+  	} else {  	
+  		item = new ExpressionBinaryOperator(right.getType(), op, false, left, 
+  				right);	 
+  	}
+  	return item; 
+  }
+}
+
+ExpressionItem arithmetic_leaf() :
+{ 
+  ExpressionItem item = null;
+  Token t = null;
+  String str = null;
+}
+{
+  "(" item = arithmetic_expression() ")"
+| 
+  t = <V_INTEGER>
+  {
+  	int i = Integer.parseInt(t.image);
+  	item = ExpressionLeaf.intConstant(i);
+  }
+| 
+  t = <V_REAL>
+  {
+  	double d = Double.parseDouble(t.image);
+  	item = ExpressionLeaf.realConstant(d);
+  }
+|
+  str = absolute_path() 
+  {
+  	item = ExpressionLeaf.stringConstant(str);
+  }  
+  {  return item; }
+}
+
+
+
+/* ---------------- existence, occurrences, cardinality ---------------- */
+
+/* return true if optional */
+Interval<Integer> c_existence() :
+{
+  Interval<Integer> interval;
+}
+{
+  <SYM_EXISTENCE> <SYM_MATCHES> <SYM_START_CBLOCK>
+    interval = occurrence_spec()
+  <SYM_END_CBLOCK>
+  {
+    return interval;
+  }
+}
+
+Cardinality c_cardinality() :
+{
+  Cardinality c;
+}
+{
+  <SYM_CARDINALITY> <SYM_MATCHES> <SYM_START_CBLOCK>
+    c = cardinality_spec()
+  <SYM_END_CBLOCK>
+  { return c; }
+}
+
+Cardinality cardinality_spec() :
+{
+  boolean ordered = true;
+  boolean unique = false;
+  Interval<Integer> interval;
+}
+{
+  interval = occurrence_spec()
+  [
+    ";"
+    (
+      <SYM_ORDERED> [ ";" <SYM_UNIQUE> { unique = true; } ]
+    |
+      <SYM_UNORDERED> { ordered = false; }
+      [ ";" <SYM_UNIQUE> { unique = true; } ]
+    |
+      <SYM_UNIQUE> { unique = true; }
+      [ ";" ( <SYM_ORDERED> | <SYM_UNORDERED> { ordered = false; } ) ]
+    )
+  ]
+  { return new Cardinality(ordered, unique, interval); }
+}
+
+Interval<Integer> c_occurrences() :
+{
+  Interval<Integer> i;
+}
+{
+  <SYM_OCCURRENCES> <SYM_MATCHES> <SYM_START_CBLOCK> i = occurrence_spec()
+  <SYM_END_CBLOCK>
+  { return i; }
+}
+
+Interval<Integer> occurrence_spec() :
+{
+  int num = 0;
+  Integer lower = null;
+  Integer upper = null;
+}
+{
+    "*"
+    { return null; }
+  |
+    num = positive_int_value()
+    {
+      lower = new Integer(num);
+      upper = new Integer(num);
+    }
+    [
+      <SYM_ELLIPSIS>
+      (
+        num = positive_int_value()
+        {
+          upper = new Integer(num);
+        }
+      |
+        "*"
+        {
+          upper = null;
+        }
+      )
+    ]
+    { return new Interval<Integer>(lower, upper); }
+}
+
+/* ---------------------- leaf constraint types ----------------------- */
+
+CDvOrdinal c_dv_ordinal() :
+{
+  Set<DvOrdinal> list = new HashSet<DvOrdinal>();
+  DvOrdinal o;
+  int assumed = -1;
+  DvOrdinal assumedValue = null;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+}
+{
+  	
+	  o = ordinal() { list.add(o); }
+	  (
+	    "," o = ordinal()
+	        { list.add(o); }
+	  )*
+	  [
+	  	";" assumed = integer_value()
+	  	{
+	  	  for(Iterator<DvOrdinal> it = list.iterator(); it.hasNext();) {
+	  	  	DvOrdinal ord = it.next();
+	  	  	if(ord.getValue() == assumed) {
+	  	  		assumedValue = ord;
+	  	  		break;
+	  	  	}
+	  	  }	  
+	  	}  	
+	  ]
+	  { 
+	  	return new CDvOrdinal(occurrences, null, assumedValue, list); 
+	  }
+  |
+      <SYM_C_DV_ORDINAL> <SYM_LT> <SYM_GT>    
+  	  {
+  	  	// any allowed
+  	    return new CDvOrdinal(occurrences, null, null, null);
+  	  }
+}
+
+br.com.zilics.archetypes.models.rm.datatypes.quantity.DvOrdinal ordinal() :
+{
+  int value;
+  CodePhrase code;
+}
+{
+  value = integer_value() "|" code = code_phrase()
+  { 
+  	return new br.com.zilics.archetypes.models.rm.datatypes.quantity.DvOrdinal(
+  		value, new DvCodedText(Integer.toString(value), code)); 
+  }
+}
+
+CCodePhrase c_code_phrase() :
+{
+  Token t;
+  String terminology = null;
+  TerminologyID terminologyId = null;
+  List<String> codeList = null;
+  String assumed = null;
+  CodePhrase assumedValue = null;
+  CodePhrase singleValue = null;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+}
+{
+  (	
+  t = <V_TERMINOLOGY_ID_BLOCK> 
+    { 
+		// remove leading "[" and trailing "::"
+    	terminology = t.image; 
+    	terminology = terminology.substring(1, terminology.length() - 2);
+    	terminologyId = new TerminologyID(terminology);
+    }
+    [
+      t = <V_TERM_CODE> 
+      { 
+      	codeList = new ArrayList<String>();
+      	codeList.add(t.image); 
+      }
+      (
+        [","] t = <V_TERM_CODE> { codeList.add(t.image); }
+      )*
+      [ 
+        ";" t = <V_TERM_CODE> 
+        { 
+          assumed = t.image; 
+          assumedValue = new CodePhrase(terminologyId, assumed);
+          
+        } 
+      ]	
+    ]
+  "]"
+    { 
+    	// leave lexical state "TERM_CODE"
+    	token_source.SwitchTo(CADL); 
+    }
+  | 
+    singleValue = code_phrase()
+    { 
+      codeList = new ArrayList<String>();
+      codeList.add(singleValue.getCodeString());
+      terminologyId = singleValue.getTerminologyId();
+    }
+  )
+  {   	
+  	return new CCodePhrase(occurrences, null, assumedValue, terminologyId, 
+  		codeList); 
+  }
+  
+  
+}
+
+CDvQuantity c_dv_quantity() :
+{
+  CodePhrase property = null;
+  List<CQuantityItem> list = null;
+  CQuantityItem item = null;  
+  DvQuantity assumedValue = null;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+}
+{
+  <SYM_C_DV_QUANTITY> "<"
+    (
+        	
+	  <SYM_PROPERTY> <SYM_EQ> "<" property = code_phrase() ">" 	 	  
+    
+    | 
+    	
+	  { list = new ArrayList<CQuantityItem>(); }
+	  <SYM_LIST> <SYM_EQ> "<"	  
+	    ( 
+	      item = c_dv_quantity_item() 
+	      { list.add(item); }
+	    )+	  	  
+	  ">"
+	  
+   |   
+    
+      <SYM_C_QUANTITY_ASSUMED_VALUE> <SYM_EQ> "<"
+        assumedValue = dv_quantity() 
+      ">"
+    
+    )*
+  ">"	   
+  { 
+  	{ token_source.SwitchTo(CADL); }
+  	
+  	return new CDvQuantity(occurrences, null, assumedValue, list, property);  		  	
+  } 
+}
+
+DvQuantity dv_quantity() :
+{
+  String units = null;
+  double magnitude = 0;
+  int  precision = 0;
+}
+{
+  (	
+    <SYM_C_QUANTITY_UNITS> <SYM_EQ> "<" units = string_value() ">"
+  |  
+    <SYM_MAGNITUDE> <SYM_EQ> "<" magnitude = real_value() ">"	  
+  |  
+    <SYM_PRECISION> <SYM_EQ> "<" precision = integer_value() ">"	
+  )*  
+  { 
+  	return new DvQuantity(units, magnitude, precision); 
+  }	
+}
+
+CQuantityItem c_dv_quantity_item() :
+{
+  Interval<Double> value = null;
+  Interval<Integer> precision = null;
+  String units;  	
+}
+{
+  "[" string_value() "]" <SYM_EQ> "<"
+    
+    (<SYM_C_QUANTITY_UNITS>|<SYM_UNITS>) <SYM_EQ> "<" 
+      units = string_value() 
+    ">"
+    
+    [
+      <SYM_MAGNITUDE> <SYM_EQ> "<" 
+        value = real_interval_value()       
+      ">"
+    ]
+    
+    [
+      <SYM_PRECISION> <SYM_EQ> "<" 
+        precision = integer_interval_value()
+      ">"
+	]
+  ">"
+  { 
+  	return new CQuantityItem(value, precision, units); 
+  } 		
+}
+
+List<String> string_list() :
+{
+  List<String> list = new ArrayList<String>();
+  String value = null;
+}
+{
+  (
+    <SYM_L_BRACKET> string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>     	
+      value = string_value()
+    <SYM_GT>    
+    { list.add(value); }  
+  )*		
+	
+  { return list; }		
+}	
+
+CInteger c_integer() :
+{
+  int i = 0;
+  List<Integer> list = null;
+  Interval<Integer> interval = null;
+  int assumed = 0;
+  Integer assumedValue = null;
+}
+{
+  (
+    LOOKAHEAD( integer_list_value() )
+    list = integer_list_value()
+  |
+    interval = integer_interval_value()
+  |
+    LOOKAHEAD( integer_value() )
+    i = integer_value()
+  |
+    LOOKAHEAD( occurrence_spec())
+    interval = occurrence_spec()
+  )
+  [ ";" assumed = integer_value() 
+		{ assumedValue = new Integer(assumed); }  
+  ]
+  {
+    if(interval != null) {
+      return new CInteger(interval, null, assumedValue);
+    }
+    List<Integer> set = new ArrayList<Integer>();
+    if(list != null) {
+      set.addAll(list);
+    } else {
+      set.add(new Integer(i));
+    }
+    return new CInteger(null, set, assumedValue);
+  }
+}
+
+CReal c_real() :
+{
+  double d = 0;
+  List<Double> list = null;
+  double assumed = 0.0;
+  Double assumedValue = null;
+  Interval<Double> interval = null;
+}
+{
+  (
+    LOOKAHEAD( real_list_value() )
+    list = real_list_value()
+  |
+    interval = real_interval_value()
+  |
+    LOOKAHEAD( real_value() )
+    d = real_value()
+  )
+  [ 
+  	";" assumed = real_value()
+  	{ assumedValue = new Double(assumed); }
+  ]
+  {
+    if(interval != null) {
+      return new CReal(interval, null, assumedValue);
+    }
+    List<Double> set = new ArrayList<Double>();
+    if(list != null) {
+      set.addAll(list);
+    } else {
+      set.add(new Double(d));
+    }
+    return new CReal(null, set, assumedValue);
+  }
+}
+
+CDate c_date() :
+{
+  Token t = null;
+  DvDate date = null;
+  String pattern = null;
+  Interval<DvDate> interval = null;
+  DvDate assumed = null;
+}
+{
+  (
+    t = <V_ISO8601_DATE_CONSTRAINT_PATTERN>
+    { pattern = t.image; }
+  |
+    date = date_value()
+  |
+    interval = date_interval_value()
+  )
+  [ 
+    ";" assumed = date_value()
+  ]
+  {
+    List<DvDate> set = null;
+    if(date != null) {
+        set = new ArrayList<DvDate>();
+        set.add(date);
+    }
+    return new CDate(pattern, interval, set, assumed);
+  }
+}
+
+CTime c_time() :
+{
+  Token t = null;
+  String pattern = null;
+  DvTime time = null;
+  Interval<DvTime> interval = null;
+  DvTime assumed = null;
+}
+{
+  (
+    t = <V_ISO8601_TIME_CONSTRAINT_PATTERN>
+    { pattern = t.image; }
+  |
+    time = time_value()
+  |
+    interval = time_interval_value()
+  )
+  [ 
+    ";" assumed = time_value()
+  ]
+  {
+    List<DvTime> set = null;
+    if(time != null) {
+      set = new ArrayList<DvTime>();
+      set.add(time);
+    }
+    return new CTime(pattern, interval, set, assumed);
+  }
+}
+
+CDateTime c_date_time() :
+{
+  Token t = null;
+  String pattern = null;
+  DvDateTime datetime = null;
+  Interval<DvDateTime> interval = null;
+  DvDateTime assumed = null;
+}
+{
+  (
+    t = <V_ISO8601_DATE_TIME_CONSTRAINT_PATTERN>
+    { pattern = t.image; }
+  |
+    datetime = date_time_value()
+  |
+    interval = date_time_interval_value()
+  )
+  [ 
+    ";" assumed = date_time_value()
+  ]
+  {
+    List<DvDateTime> set = null;
+    if(datetime != null) {
+      set = new ArrayList<DvDateTime>();
+      set.add(datetime);
+    }
+    return new CDateTime(pattern, interval, set, assumed);
+  }
+}
+
+CDuration c_duration() :
+{
+  Interval<DvDuration> interval = null;
+  DvDuration assumed = null;
+  Token t = null;
+  String pattern = null;
+}
+{
+ (
+    t = <V_ISO8601_DURATION_CONSTRAINT_PATTERN>
+    { pattern = t.image; }  
+  |
+    duration_value()
+  |
+    interval = duration_interval_value()
+  )
+  [ 
+    ";" assumed = duration_value()
+  ]
+  {
+    return new CDuration(pattern, interval, assumed);
+  }
+}
+
+CString c_string() :
+{
+  Token t = null;
+  String value = null;
+  String pattern = null;
+  String assumed = null;
+  List<String> list = null;
+}
+{
+  (
+    LOOKAHEAD( string_list_value() )
+    list = string_list_value() [ "," <SYM_LIST_CONTINUE> ]
+  |
+    LOOKAHEAD( string_value() )
+    value = string_value()
+  |
+    t = <V_REGEXP>
+    {
+      String reg = t.image;
+      pattern = reg.substring(1, reg.length() - 1);
+    }
+  )
+  [";" assumed = string_value() ]
+  {
+    if(pattern != null) {
+      return new CString(pattern, null, assumed);
+    }
+    List<String> set = new ArrayList<String>();
+    if(list != null) {
+      set.addAll(list);
+    } else if(value != null) {
+      set.add(value);
+    }
+    return new CString(pattern, set, assumed);
+  }
+}
+
+CBoolean c_boolean() :
+{
+  boolean trueAllowed = false;
+  boolean falseAllowed = false;
+  Boolean assumed = null;  
+}
+{
+  (
+    <SYM_TRUE> { trueAllowed = true; }
+    [ "," <SYM_FALSE> { falseAllowed = true; } ]
+  | <SYM_FALSE> { falseAllowed = true; }
+    [ "," <SYM_TRUE> { trueAllowed = true; } ]
+  )
+  [ 
+    ";" 
+    ( <SYM_TRUE> {assumed = true; } | <SYM_FALSE> {assumed = false;} ) 
+  ]
+  {
+    return new CBoolean(trueAllowed, falseAllowed, assumed);
+  }
+}
+
+String constraint_ref() :
+{
+  Token t;
+}
+{
+  // -- e.g. "[ac0003]"
+  t = <V_LOCAL_TERM_CODE_REF>
+  {
+    String value = t.image;
+    return value.substring(1, value.length() - 1);
+  }
+}
+
+String any_identifier() :
+{
+  String value;
+}
+{
+  ( value = type_identifier()
+    |
+    value = attribute_identifier()
+  )
+  { return value; }
+}
+
+String type_identifier() :
+{
+  Token t;
+  String type;
+}
+{
+  t = <V_TYPE_IDENTIFIER> 
+  { type = t.image; }
+  [ 
+    "<"  t = <V_TYPE_IDENTIFIER> ">" 
+    { type += "<" + t.image + ">"; }
+  ]
+  { return type; }
+}
+
+String attribute_identifier() :
+{
+  Token t;
+}
+{
+  t = <V_ATTRIBUTE_IDENTIFIER>
+  { return t.image; }
+}
+
+
+String absolute_path() :
+{ 
+  Token t;
+}
+{
+  t = <V_ABSOLUTE_PATH>
+  { return t.image; }
+}
+
+String relative_path() :
+{ 
+  Token t;
+}
+{
+  (  
+    t = <V_RELATIVE_PATH>    
+  | 
+    t = <V_ATTRIBUTE_IDENTIFIER>    
+  )
+  { return t.image; }
+}
+
+String path_segment() :
+{ 
+  Token t; 
+  StringBuffer buf = new StringBuffer();
+}
+{
+  t = <V_ATTRIBUTE_IDENTIFIER>
+  { buf.append(t.image); } 
+  [
+    LOOKAHEAD(2)
+    t = <V_LOCAL_TERM_CODE_REF>
+    { buf.append(t.image); }
+  ]  	
+  { return buf.toString(); }	
+}

@@ -1,0 +1,37 @@
+archetype
+	adl-test-ENTRY.term_binding.draft
+concept
+	[at0000]	--  empty definition test
+language
+	original_language = <[ISO_639-1::en]>
+	
+
+definition
+	ENTRY[at0000] matches {*}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
+	>
+	term_binding = <
+		["SNOMED_CT"] = <
+			items = <
+				["at0000"] = <[snomed_ct::1000339]>
+			>
+		>
+		["ICD10"] = <
+			items = <
+				["at0000"] = <[icd10::1000],[icd10::1001]>
+			>
+		>
+	>

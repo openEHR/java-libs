@@ -1,0 +1,14 @@
+(PERSON)<
+       details = (ITEM_TREE)<
+               archetype_node_id = <"at0001">
+               items = (List<ITEM>)<
+                       [1] = (ELEMENT)<
+                               archetype_node_id = <"at0002">
+                       >
+                       [2] = (ELEMENT)<
+                       >
+                       [3] = (CLUSTER)<
+                       >
+               >
+       >
+>

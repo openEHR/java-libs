@@ -35,7 +35,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>javacc-maven-plugin</artifactId>
-				<version>2.1</version>
+				<version>2.6</version>
 				<configuration>
 					<packageName>se.acode.openehr.parser</packageName>
 				</configuration>

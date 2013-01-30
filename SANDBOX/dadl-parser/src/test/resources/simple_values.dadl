@@ -1,0 +1,11 @@
+simple_values = <
+    datetime_value = <2007-10-30T09:22:00>
+    date_value = <2008-04-02>
+    time_value = <11:09:40>
+    duration_value = <PT10M>
+    string_value = <"a string value">
+    character_value = <'a'>
+    integer_value = <100>
+    real_value = <9.5>
+    boolean_value = <True>    
+>

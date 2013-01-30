@@ -19,7 +19,7 @@ import org.openehr.rm.FullConstructor;
 
 /**
  * Items which are truly boolean data, such as true/false or yes/no
- * answers. It's simpler a wrapper around java.lang.Boolean.
+ * answers. It's simply a wrapper around java.lang.Boolean.
  *
  * @author Rong Chen
  * @version 1.0
@@ -85,13 +85,20 @@ public final class DvBoolean extends DataValue {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof DvBoolean )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof DvBoolean )) {
+            return false;
+        }
 
         final DvBoolean aBoolean = (DvBoolean) o;
 
-        if (value != aBoolean.value) return false;
+        if (value != aBoolean.value) {
+            return false;
+        }
 
         return true;
     }
@@ -101,6 +108,7 @@ public final class DvBoolean extends DataValue {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return ( value ? 1 : 0 );
     }

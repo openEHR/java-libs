@@ -1,0 +1,52 @@
+archetype
+	adl-test-ENTRY.multi-language.draft
+concept
+	[at0000]	--  empty definition test
+
+language
+	original_language = <[ISO_639-1::en]> 
+	
+definition
+	ENTRY[at0000] matches {*}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", "sv">
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
+		["sv"] = <
+			items = <
+				["at0000"] = <
+					text = <"mesta minimal">; 
+					description = <"mesta minimal">
+				>
+			>
+		>
+	>
+	
+	constraint_definitions = <
+		["en"] = <
+			items = <
+				["ac0001"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
+		["sv"] = <
+			items = <
+				["ac0001"] = <
+					text = <"mesta minimal">; 
+					description = <"mesta minimal">
+				>
+			>
+		>
+	>

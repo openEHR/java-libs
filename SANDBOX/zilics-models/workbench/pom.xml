@@ -1,0 +1,87 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.com.zilics.archetypes.models</groupId>
+	<artifactId>workbench</artifactId>
+	<version>1.4.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>Zilics Models - Workbench console</name>
+	<description>Useful console for working with archetypes/templates/compositions/versions</description>
+	<scm>
+		<connection>scm:svn:https://desenvolvimento.zilics.com.br/svn/healthcomponents/trunk/archetypes/codebase/models/workbench</connection>
+		<developerConnection>scm:svn:https://desenvolvimento.zilics.com.br/svn/healthcomponents/trunk/archetypes/codebase/models/workbench</developerConnection>
+		<url>https://desenvolvimento.zilics.com.br/svn/healthcomponents/trunk</url>
+	</scm>
+	<dependencies>
+		<dependency>
+			<groupId>br.com.zilics.archetypes.models</groupId>
+			<artifactId>test</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.com.zilics.archetypes.models</groupId>
+			<artifactId>adl</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.com.zilics.archetypes.models</groupId>
+			<artifactId>rm</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-my-dependencies</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+						    <includeScope>compile</includeScope>
+						    <excludeArtifactIds>servlet-api</excludeArtifactIds>
+							<outputDirectory>${project.build.directory}/classes</outputDirectory>
+							
+							<excludes>META-INF/**</excludes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<index>true</index>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>br.com.zilics.archetypes.models.workbench.Main</mainClass>
+						</manifest>
+						<manifestEntries>
+							<mode>development</mode>
+							<url>${pom.url}</url>
+							<key>value</key>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

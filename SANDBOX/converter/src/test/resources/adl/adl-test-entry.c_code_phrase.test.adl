@@ -1,0 +1,77 @@
+archetype
+	adl-test-ENTRY.c_code_phrase.test
+
+concept
+	[at0000]
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	ENTRY[at0000] matches {	
+        types matches {
+            LIST[at0001] matches {
+                items cardinality matches {0..*} matches {
+                    ELEMENT[at10002] matches {	-- code_phrase
+                        value matches {
+                            [icd10::
+                            	F43.00, -- acute stress reaction, mild
+								F43.01, -- acute stress reaction, moderate
+								F32.02] -- acute stress reaction, severe
+                        }
+                    }	                
+                    ELEMENT[at10003] matches {	-- code_phrase
+                        value matches {
+                            [local::
+								at1311, -- Colo-colonic anastomosis
+								at1312, -- Ileo-colonic anastomosis
+								at1313, -- Colo-anal anastomosis
+								at1314, -- Ileo-anal anastomosis
+								at1315] -- Colostomy
+                        }
+                    }	
+                    ELEMENT[at10004] matches {	-- code_phrase
+                        value matches {
+                            [icd10::] -- empty code list
+                        }
+                    }	
+                    ELEMENT[at10005] matches {	-- with assumed value
+                        value matches {
+                            [icd10::
+                            	F43.00, -- acute stress reaction, mild
+								F43.01, -- acute stress reaction, moderate
+								F32.02; -- acute stress reaction, severe
+								F43.00] -- assumed value
+                        }
+                    }	
+                    ELEMENT[at10006] matches {	-- code_phrase
+                        value matches {
+                            [openehr::431] -- single code
+                        }
+                    }	
+                }
+            }
+        }
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions = < 
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"domain types test">
+					description = <"domain types test">
+				>
+				["at0001"] = <
+					text = <"items">
+					description = <"items">
+				>
+				["at0002"] = <
+					text = <"*">
+					description = <"*">
+				>
+			>
+		>
+	>

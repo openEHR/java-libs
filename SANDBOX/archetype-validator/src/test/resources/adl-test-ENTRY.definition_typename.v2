@@ -1,0 +1,23 @@
+archetype
+	adl-test-ELEMENT.definition_typename.v2
+
+concept 
+	[at0000]	--  empty definition test
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	ELEMENT[at0000] matches {*}
+
+ontology 
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
+	>
