@@ -20,12 +20,15 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public abstract class ExpressionItem {
 	
-	public final static String BOOLEAN = "BOOLEAN";
-	public final static String REAL = "REAL";
-	public final static String INTEGER = "INTEGER";
-	public final static String STRING = "STRING";
-	public final static String ARCHETYPE = "ARCHETYPE";
-	public final static String RM = "RM";	
+    //Possible type names of this item in the mathematical sense. For leaf nodes, must be the name of a
+    //primitive type, or else a reference model type. The type for any relational or boolean
+    //operator will be “Boolean”, while the type for any arithmetic operator, will be “Real” or “Integer”. (AOM spec for EXPR_ITEM)
+	public final static String BOOLEAN = "Boolean"; 
+	public final static String REAL = "Real";
+	public final static String INTEGER = "Integer";
+	public final static String STRING = "String";
+	public final static String ARCHETYPE = "Archetype"; //SG: Not sure this type makes sense?
+	public final static String RM = "RM";	//SG: Not sure this type makes sense?
 	
 	public ExpressionItem(String type) {
 		this.type = type;
@@ -50,9 +53,14 @@ public abstract class ExpressionItem {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof ExpressionItem )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof ExpressionItem )) {
+            return false;
+        }
 
         final ExpressionItem cobj = (ExpressionItem) o;
         
@@ -66,12 +74,14 @@ public abstract class ExpressionItem {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(7, 19)
                 .append(type)
                 .toHashCode();
     }
     
+    @Override
     public abstract String toString();
 	
 	private String type;

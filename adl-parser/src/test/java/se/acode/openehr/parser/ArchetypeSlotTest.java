@@ -1,10 +1,11 @@
 package se.acode.openehr.parser;
 
-import org.openehr.am.archetype.*;
+import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.assertion.Assertion;
 import org.openehr.am.archetype.assertion.ExpressionBinaryOperator;
 import org.openehr.am.archetype.assertion.ExpressionItem;
 import org.openehr.am.archetype.assertion.ExpressionLeaf;
+import org.openehr.am.archetype.assertion.ExpressionLeaf.ReferenceType;
 import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
 import org.openehr.am.archetype.constraintmodel.ArchetypeSlot;
 import org.openehr.am.archetype.constraintmodel.primitive.CString;
@@ -113,5 +114,14 @@ public class ArchetypeSlotTest extends ParserTestBase {
         	"archetype_id/value matches {/openEHR-EHR-CLUSTER\\.device\\.v1/}";
         assertEquals("stringExpression wrong, got: " + assertion.getStringExpression(),
         		expectedStringExpression, assertion.getStringExpression());
+        
+        // "archetype_id/value" refers to a string attribute
+       assertEquals("Left type inside this archetype slot is wrong", "String",  left.getType());
+       assertEquals("Left reference type inside this archetype slot is wrong", ReferenceType.ATTRIBUTE, left.getReferenceType() );
+
+       // Constraint on a C_STRING - I don't think it is really specified if it needs to be C_STRING or CString, but because this is used e.g. for xml-serialisation, it should be consistent across all programming languages, and hence probably not use the Java style here. 
+       assertEquals("Right type inside this archetype slot is wrong",  "C_STRING", right.getType());
+       assertEquals("Right reference type inside this archetype slot is wrong.", ReferenceType.CONSTRAINT, right.getReferenceType());
+
     }
 }

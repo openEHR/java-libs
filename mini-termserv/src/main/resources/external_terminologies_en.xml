@@ -344,7 +344,8 @@
 		<code value="nn" Description="Norwegian Nynorsk"/>
 		<code value="pl" Description="Polish"/>
 		<code value="pt-br" Description="Portuguese (Brazil)"/>
-		<code value="pt" Description="Portuguese (Portugal)"/>
+		<code value="pt-pt" Description="Portuguese (Portugal)"/>
+		<code value="pt" Description="Portuguese"/>
 		<code value="rm" Description="Rhaeto-Romanic"/>
 		<code value="ro" Description="Romanian"/>
 		<code value="ro-mo" Description="Romanian (Moldavia)"/>

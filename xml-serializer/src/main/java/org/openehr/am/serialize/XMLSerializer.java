@@ -352,7 +352,9 @@ public class XMLSerializer {
 
     protected void printAssertion(Assertion assertion, Element out) {
 
-        printString("tag", assertion.getTag(), out);
+        if (assertion.getTag() != null) { // must not be displayed at all if null according to spec.
+            printString("tag", assertion.getTag(), out);
+        }
         printString("string_expression", assertion.getStringExpression(), out);
         printExpressionItem("expression", assertion.getExpression(), out);
 
@@ -401,7 +403,7 @@ public class XMLSerializer {
             // That's why having the XSD type explicitly set to string fixes the problem when deserialising to a C# string instead of XmlText.
             printString("item", expLeaf.getItem().toString(), elm, true);            
         }    
-        printString("reference_type", expLeaf.getReferenceType().name(), elm);
+        printString("reference_type", expLeaf.getReferenceType().name().toLowerCase(), elm); // the Reference type is expected in lower case here as per spec examples
     }
 
     protected void printExpressionOperator(String label, ExpressionOperator expOperator, Element out) {
@@ -428,7 +430,6 @@ public class XMLSerializer {
 
         printString("type", expOperator.getType(), out);
         printString("operator", String.valueOf(expOperator.getOperator().getValue()), out);
-        // FIXME: Typo in specs, 'precedence_overriden'
         printString("precedence_overridden", 
                 expOperator.isPrecedenceOverridden() == true ? "true" : "false", out);   
     }
@@ -457,6 +458,10 @@ public class XMLSerializer {
 
         Element existence = new Element("existence", defaultNamespace);
         attributes.getChildren().add(existence);
+
+        printString("lower_included", "true", existence);
+        printString("upper_included", "true", existence);
+
         printString("lower_unbounded", "false", existence);
         printString("upper_unbounded", "false", existence);
 
@@ -964,13 +969,16 @@ public class XMLSerializer {
         final Comparable lower = interval.getLower();
         final Comparable upper = interval.getUpper();
 
-        printString("lower_included",
-                interval.isLowerIncluded() == true ? "true" : "false",
-                        out);
-        printString("upper_included",
-                interval.isUpperIncluded() == true ? "true" : "false",
-                        out);
-
+        if (!  interval.isLowerUnbounded()) { // not included is implied if unbounded
+            printString("lower_included", 
+                    interval.isLowerIncluded() == true ? "true" : "false",
+                            out);
+        }
+        if (!  interval.isUpperUnbounded()) {  // not included is implied if unbounded
+            printString("upper_included",
+                    interval.isUpperIncluded() == true ? "true" : "false",
+                            out);
+        }
 
 
         printString("lower_unbounded",

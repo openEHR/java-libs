@@ -51,7 +51,7 @@ import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.terminology.SimpleTerminologyService;
 
 /**
- * JavaCC grammer file for Archteype Definition Language (ADL)
+ * JavaCC grammer file for Archetype Definition Language (ADL)
  *
  * Targeted ADL revision 1.4
  *
@@ -2491,15 +2491,17 @@ ExpressionItem boolean_node() :
   attrId = relative_path() <SYM_MATCHES>
                  (
                    <SYM_START_CBLOCK> cp = c_primitive() <SYM_END_CBLOCK>
-                   { item2 = new ExpressionLeaf(cp.getType(), cp, 
-                   				ExpressionLeaf.ReferenceType.CONSTANT);  }
+                   { item2 = new ExpressionLeaf("C_"+cp.getType().toUpperCase(), cp,  //SG 2013-01-31: Need to add "C_" because it is a C_* constraint pattern here, with the type usually being displayed in upper case  
+                   				ExpressionLeaf.ReferenceType.CONSTRAINT);  } //SG 2013-01-31: instead of CONSTANT, which is not correct, at least not for archetype slots according to spec.
                  |
                    t = <V_REGEXP>
                    { item2 = ExpressionLeaf.stringConstant(t.image);  }
                  )
   { 
-  	// TODO reference type as ATTRIBUTE?
-  	item = ExpressionLeaf.stringConstant(attrId);
+
+  	item = new ExpressionLeaf(ExpressionItem.STRING, attrId,
+                ExpressionLeaf.ReferenceType.ATTRIBUTE); //SG 2013-01-31, needs to be  attribute according to spec (not constant), relevant for archetype slots
+  	//item = ExpressionLeaf.stringConstant(attrId);
   	ret = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN, 
   					OperatorKind.OP_MATCHES, false, item, item2);
   }	   

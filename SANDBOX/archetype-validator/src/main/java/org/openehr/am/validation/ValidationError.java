@@ -51,7 +51,7 @@ public class ValidationError {
         }
 
 
-        return ResourceBundle.getBundle("validations", locale).getString(this.type.toString());
+        return ResourceBundle.getBundle("validations", locale, new UTF8Control()).getString(this.type.toString());
     }   
 
 

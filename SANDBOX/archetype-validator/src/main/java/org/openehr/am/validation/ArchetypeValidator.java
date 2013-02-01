@@ -1545,7 +1545,7 @@ public class ArchetypeValidator {
     /* Reference Model inspector */
     protected RMInspector rmInspector;
 
-    /* simple terminolgy service */
+    /* simple terminology service */
     private TerminologyService termService;
 
     private TerminologyAccess openEHRTerminology;
