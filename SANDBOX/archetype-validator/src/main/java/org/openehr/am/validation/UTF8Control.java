@@ -14,9 +14,22 @@ import java.util.ResourceBundle.Control;
  * 
  */
 public class UTF8Control extends Control  {
+    private static UTF8Control utf8Control = null;
+
+    public synchronized static UTF8Control getInstance() {
+        if (utf8Control==null) {
+            utf8Control = new UTF8Control();
+        }
+        return utf8Control;        
+    }
+
+    private UTF8Control() {
+
+    }
+
     @Override
     public ResourceBundle newBundle
-        (String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
+    (String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
             throws IllegalAccessException, InstantiationException, IOException {
         // The below is a copy of the default implementation.
         String bundleName = toBundleName(baseName, locale);

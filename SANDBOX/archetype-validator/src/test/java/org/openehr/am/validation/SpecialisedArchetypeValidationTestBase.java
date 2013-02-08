@@ -4,20 +4,22 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.openehr.am.archetype.Archetype;
 
 import se.acode.openehr.parser.ADLParser;
 
-import junit.framework.TestCase;
-
 public class SpecialisedArchetypeValidationTestBase extends TestCase {
 
-	public void setUp() {
+	@Override
+    public void setUp() {
 		validator = new SpecialisedArchetypeValidator();	
 		errors = new ArrayList<ValidationError>();
 	}
 	
-	public void tearDown() {		
+	@Override
+    public void tearDown() {		
 		validator = null;
 		archetype = null;
 		parentArchetype=null;

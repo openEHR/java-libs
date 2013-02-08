@@ -4,20 +4,22 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.openehr.am.archetype.Archetype;
 
 import se.acode.openehr.parser.ADLParser;
 
-import junit.framework.TestCase;
-
 public class ArchetypeValidationTestBase extends TestCase {
 
-	public void setUp() {
+	@Override
+    public void setUp() {
 		validator = new ArchetypeValidator();	
 		errors = new ArrayList<ValidationError>();
 	}
 	
-	public void tearDown() {		
+	@Override
+    public void tearDown() {		
 		validator = null;
 		archetype = null;
 		errors = null;
@@ -54,10 +56,38 @@ public class ArchetypeValidationTestBase extends TestCase {
 	 * @param type
 	 */
 	protected void assertSecondErrorType(ErrorType type) {
-		assertTrue("expected at least 2 error", errors.size() >= 2);
+		assertTrue("expected at least 2 errors", errors.size() >= 2);
 		assertEquals("errorType wrong",  type, errors.get(1).getType());
 	}	
 	
+	/**
+     * Asserts the 3rd validation error is the same as the given error type
+     * 
+     * @param type
+     */
+    protected void assertThirdErrorType(ErrorType type) {
+        assertTrue("expected at least 3 errors", errors.size() >= 3);
+        assertEquals("errorType wrong",  type, errors.get(2).getType());
+    }   
+    
+    /**
+     * Asserts the 4th validation error is the same as the given error type
+     * 
+     * @param type
+     */
+    protected void assertFourthErrorType(ErrorType type) {
+        assertTrue("expected at least 4 errors", errors.size() >= 4);
+        assertEquals("errorType wrong",  type, errors.get(3).getType());
+    }   
+    /**
+     * Asserts the 5th validation error is the same as the given error type
+     * 
+     * @param type
+     */
+    protected void assertFifthErrorType(ErrorType type) {
+        assertTrue("expected at least 5 errors", errors.size() >= 5);
+        assertEquals("errorType wrong",  type, errors.get(4).getType());
+    }   
 	protected ArchetypeValidator validator;
 	protected Archetype archetype;
 	protected List<ValidationError> errors;

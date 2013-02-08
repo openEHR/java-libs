@@ -12,7 +12,6 @@ public class SpecialisedArchetypeNodeIdConformanceTest extends SpecialisedArchet
 	private void checkSpecialization(String name, String parentName) throws Exception {
 		archetype = loadArchetype(name);
 		parentArchetype = loadArchetype(parentName);
-		
 		errors = validator.validate(archetype, parentArchetype, true);
 	}	
 }

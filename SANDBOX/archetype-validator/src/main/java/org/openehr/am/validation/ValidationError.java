@@ -1,5 +1,6 @@
 package org.openehr.am.validation;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -15,23 +16,55 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 public class ValidationError {
 
 
-    public ValidationError(ErrorType type) {
-        this(type, null);
-    }
+   // public ValidationError(ErrorType type) {
+   //     this(type, null);
+   // }
 
-    public ValidationError(ErrorType type, String text) {
+    public ValidationError(ErrorType type, String subType, Object... params) {
         this.type = type;
-        this.text = text;
+        this.subType = subType;
+        this.params = params;
     }
 
     public ErrorType getType() {
         return type;
     }
 
+
+    /** Gets the error text in the default locale
+     * 
+     * @return
+     */
     public String getText() {
-        return text;
+        return getText(Locale.getDefault());
+    }   
+
+    /** Gets the description in an explicitly specified locale
+     * 
+     * @param locale
+     * @return
+     */
+    public String getText(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+
+        String errorText = ResourceBundle.getBundle("validations", locale, UTF8Control.getInstance()).getString(getTextKey());
+        if (params != null) {
+            errorText= MessageFormat.format(errorText, params);
+        }
+        return errorText;
     }
 
+    protected String getTextKey() {
+        if (subType ==null) {
+            return this.type.toString()+"_TEXT";
+        } else {
+            return this.type.toString()+"_"+subType+"_TEXT";
+        }
+        
+    }   
+    
     /** Gets the description in the default locale
      * 
      * @return
@@ -51,7 +84,7 @@ public class ValidationError {
         }
 
 
-        return ResourceBundle.getBundle("validations", locale, new UTF8Control()).getString(this.type.toString());
+        return ResourceBundle.getBundle("validations", locale, UTF8Control.getInstance()).getString(this.type.toString());
     }   
 
 
@@ -60,7 +93,7 @@ public class ValidationError {
      */
     @Override
     public String toString() {
-        return type + ", " + text + ", "+ getDescription();
+        return type + ", " + getText() + ", "+ getDescription();
     }
 
     /**
@@ -68,7 +101,7 @@ public class ValidationError {
      */
 
     public String toString(Locale locale) {
-        return type + ", " + text + ", "+ getDescription(locale);
+        return type + ", " + getText(locale) + ", "+ getDescription(locale);
     }
     
     @Override
@@ -81,7 +114,8 @@ public class ValidationError {
         ValidationError ve = (ValidationError) obj;
         return new EqualsBuilder()
         .append(type, ve.type)
-        .append(text, ve.text)
+        .append(subType, ve.subType)
+        .append(params, ve.params)
      //   .append(getDescription(), ve.getDescription())
         .isEquals();
     }
@@ -90,7 +124,8 @@ public class ValidationError {
     public int hashCode() {
         return new HashCodeBuilder(11, 47).
                 append(type).
-                append(text).
+                append(subType).
+                append(params).
        //         append(getDescription()).
                 toHashCode();
     }
@@ -99,5 +134,6 @@ public class ValidationError {
 
     // fields
     private ErrorType type;
-    private String text;
+    private String subType;
+    private Object[] params;
 }

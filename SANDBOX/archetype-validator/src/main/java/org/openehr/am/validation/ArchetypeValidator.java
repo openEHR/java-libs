@@ -131,7 +131,7 @@ public class ArchetypeValidator {
         checkArchetypeTermValidity(archetype, errors);
         checkCodeConstraintValidity(archetype, errors);
         checkOntologyTranslation(archetype, errors);
-        checkSpecializationDepth(archetype, errors);
+        checkConceptSpecializationDepth(archetype, errors);
         checkSpecializationParentIdentifierValidity(archetype, errors);
         checkOntologyCodeSpecialisationLevelValidity(archetype, errors);
         checkArchetypeTermBindingsValidity(archetype, errors);
@@ -162,24 +162,22 @@ public class ArchetypeValidator {
         // check purpose in each available language
         for (ResourceDescriptionItem detail : archetype.getDescription().getDetails()) {
             if (StringUtils.isBlank(detail.getPurpose()) ||	StringUtils.containsIgnoreCase(detail.getPurpose(),"unknown")) {
-                ValidationError error = new ValidationError(ErrorType.VDSCR, 
-                        "The mandatory description of the Purpose is null, empty or unknown for language "+ detail.getLanguage().getCodeString());
+                ValidationError error = new ValidationError(ErrorType.VDSCR, "PURPOSE", 
+                        detail.getLanguage().getCodeString());
                 errors.add(error);
-            }
+            }   
         }
 
         // check original author
         Map<String, String> originalAuthor = archetype.getDescription().getOriginalAuthor();
         if (originalAuthor == null || originalAuthor.isEmpty()) {
-            ValidationError error = new ValidationError(ErrorType.VDSCR, 
-                    "The mandatory description of the original author is null, empty or unknown");
+            ValidationError error = new ValidationError(ErrorType.VDSCR, "ORIGINALAUTHOR");
             errors.add(error);
         } else {
             for (Entry<String, String> authorItem : originalAuthor.entrySet()) {
                 if (StringUtils.isBlank(authorItem.getValue()) ||
                         StringUtils.containsIgnoreCase(authorItem.getValue(), "unknown")) {
-                    ValidationError error = new ValidationError(ErrorType.VDSCR, 
-                            "The description of parts of the original author is null, empty or unknown: "+ authorItem.getKey());
+                    ValidationError error = new ValidationError(ErrorType.VDSCR, "ORIGINALAUTHORPART", authorItem.getKey());
                     errors.add(error);
                 }
             }
@@ -190,8 +188,7 @@ public class ArchetypeValidator {
         if (StringUtils.isBlank(lifecycle) ||
                 StringUtils.containsIgnoreCase(lifecycle, "unknown") ||
                 StringUtils.isNumeric(lifecycle)) {
-            ValidationError error = new ValidationError(ErrorType.VDSCR, 
-                    "The mandatory description of the lifecycle is null, empty, unknown or a number.");
+            ValidationError error = new ValidationError(ErrorType.VDSCR, "LIFECYCLE");
             errors.add(error);
         }
     }
@@ -201,8 +198,8 @@ public class ArchetypeValidator {
         String concept = archetype.getConcept();
         String rootNodeId = archetype.getDefinition().getNodeId();
         if( ! concept.equals(rootNodeId)) {
-            ValidationError error = new ValidationError(ErrorType.VACCD, 
-                    "The concept code doesn't match the root node id of the archetype.");
+            ValidationError error = new ValidationError(ErrorType.VACCD, null); 
+                    
             errors.add(error);
         }
     }
@@ -213,17 +210,15 @@ public class ArchetypeValidator {
      * @param archetype
      * @param errors
      */
-    public void checkSpecializationDepth(Archetype archetype,
+    public void checkConceptSpecializationDepth(Archetype archetype,
             List<ValidationError> errors) {
         String concept = archetype.getConcept();
         List<String> specialization = archetype.getArchetypeId().specialisation();
         StringTokenizer tokens = new StringTokenizer(concept, ".");
 
         if(specialization.size() != tokens.countTokens() - 1) {
-            ValidationError error = new ValidationError(ErrorType.VACSD,
-                    "expected concept specialisation depth: " 
-                            + specialization.size() + ", but was: " 
-                            + (tokens.countTokens() - 1) + " instead");
+            ValidationError error = new ValidationError(ErrorType.VACSD, null, 
+               specialization.size(),  tokens.countTokens() - 1 );
             errors.add(error);
         }
     }
@@ -245,25 +240,16 @@ public class ArchetypeValidator {
 
         ArchetypeID atId = archetype.getArchetypeId();
         String base = atId.base();
-        String calculatedBaseForParent = base.substring(0, base
-                .lastIndexOf("-"));
+        String calculatedBaseForParent = base.substring(0, base.lastIndexOf("-"));
 
-        if (!calculatedBaseForParent.equals(archetype.getParentArchetypeId()
-                .base())) {
+        if (!calculatedBaseForParent.equals(archetype.getParentArchetypeId().base())) {
             ValidationError error = new ValidationError(
-                    ErrorType.VASID,
-                    "The specialised archetype id ("
-                            + archetype.getArchetypeId().toString()
-                            + ") is not based on specialisation parent archetype id: "
-                            + archetype.getParentArchetypeId().toString());
+                    ErrorType.VASID, "NORMAL", archetype.getArchetypeId().toString(), archetype.getParentArchetypeId().toString());
             errors.add(error);
         }       
         if (archetype.getParentArchetypeId().versionID().endsWith("draft")) {
             ValidationError error = new ValidationError(
-                    ErrorType.VASID,
-                    "The specialised archetype id ("
-                            + archetype.getParentArchetypeId().toString()
-                            + ") is a deprecated draft id.");
+                    ErrorType.VASID, "DEPRECATED", archetype.getParentArchetypeId().toString());
             errors.add(error);
         }	
     }
@@ -307,9 +293,7 @@ public class ArchetypeValidator {
         for(OntologyDefinitions defs : defList) {
             for(ArchetypeTerm term : defs.getDefinitions()) {
                 if(hasGreaterSpecialisationLevel(term.getCode(), level)) {
-                    error = new ValidationError(ErrorType.VONSD, 
-                            "Ontology code [" + term.getCode() + 
-                            "] has greater specialisation level than " + level);
+                    error = new ValidationError(ErrorType.VONSD, null, term.getCode(), level);
                     errors.add(error);    				
                 }
             }
@@ -397,14 +381,12 @@ public class ArchetypeValidator {
         if( ! rmAttrNames.contains(rmAttrName)) {
             // if it is a commonly constrained functional property, only show this as information according to validator setting.
             if (reportConstraintsOnCommonFunctionalPropertiesAsInfo && isCommonFunctionalProperty(rmAttrName, parent.getRmTypeName())) {
-                error = new ValidationError(ErrorType.ICARM, 
-                        "Attribute ["+rmAttrName+"] at "+cattr.path()+" (type="+parent.getRmTypeName()+") is a computed property in reference model."); 
+                error = new ValidationError(ErrorType.ICARM, null,
+                        rmAttrName, cattr.path(), parent.getRmTypeName()); 
             } else {
 
-                error = new ValidationError(ErrorType.VCARM, 
-                        "Unknown attribute [" + rmAttrName + 
-                        "] of parent RM type [" + parent.getRmTypeName() +  
-                        "], at path: " + cattr.path());
+                error = new ValidationError(ErrorType.VCARM, null, 
+                        rmAttrName, parent.getRmTypeName(), cattr.path());
             }
             errors.add(error);
             return;
@@ -439,9 +421,8 @@ public class ArchetypeValidator {
                         rmInspector.retrieveRMType(childRMTypeName);
 
                 if(childRMType == null) {
-                    error = new ValidationError(ErrorType.VCORM,
-                            "Unknown RM type: " + childRMTypeName + 
-                            " at path " + cobj.path());
+                    error = new ValidationError(ErrorType.VCORM, null, 
+                            childRMTypeName, cobj.path());
                     errors.add(error);
                     continue;
 
@@ -466,8 +447,8 @@ public class ArchetypeValidator {
                     if(cobj instanceof ArchetypeInternalRef) {
                         type = ErrorType.VUNT;
                     }	
-                    error = new ValidationError(type, "Unassignable RM type: " + 
-                            childRMTypeName + " at path " + cobj.path() +" is not assignable from type "+rmAttrType.getSimpleName()+".");
+                    error = new ValidationError(type, "NORMAL",
+                            childRMTypeName, cobj.path(), rmAttrType.getSimpleName());
                     if (!errors.contains(error)) {
                         errors.add(error);
                     }
@@ -488,7 +469,8 @@ public class ArchetypeValidator {
                         type = ErrorType.VUNT;
                     }	
 
-                    error = new ValidationError(type, "Unassignable RM Type: '"+parentGenericTypeName+"' of object node at "+parent.path()+" is not assignable from "+childRMType.getSimpleName()+" at "+cobj.path()+".");								
+                    error = new ValidationError(type, "PARENT",
+                            parentGenericTypeName, parent.path(), childRMType.getSimpleName(), cobj.path());								
                     errors.add(error);
                     continue;
 
@@ -501,10 +483,8 @@ public class ArchetypeValidator {
                 Interval<Integer> occu = cobj.getOccurrences();
                 if(occu != null && occu.isUpperIncluded() 
                         && occu.getUpper() > 1) {
-                    error = new ValidationError(ErrorType.VACSO, 
-                            "Occurrences greater than 1 for child object" +
-                                    " of single-valued attribute at path " + 
-                                    cobj.path());
+                    error = new ValidationError(ErrorType.VACSO, null, 
+                            cobj.path());
                     errors.add(error);
                 }	
                 for(CObject cobj2 : cattr.getChildren()) {
@@ -514,8 +494,7 @@ public class ArchetypeValidator {
                     // check child uniqueness						
                     if(cobj2.getRmTypeName().equals(cobj.getRmTypeName())
                             && cobj.getNodeId() == null) {
-                        error = new ValidationError(ErrorType.VACSU,
-                                "Missing id for non-unique child obj at " +
+                        error = new ValidationError(ErrorType.VACSU, null,
                                         cobj.path());
                         if( ! errors.contains(error)) {
                             errors.add(error);
@@ -524,8 +503,7 @@ public class ArchetypeValidator {
                     // check child identifier					
                     if(cobj2.getNodeId() != null 
                             && cobj2.getNodeId().equals(cobj.getNodeId())) {
-                        error = new ValidationError(ErrorType.VACSI,
-                                "Duplicated identifier for child obj at " +
+                        error = new ValidationError(ErrorType.VACSI, null,
                                         cobj.path());
                         if( ! errors.contains(error)) {
                             errors.add(error);
@@ -551,20 +529,13 @@ public class ArchetypeValidator {
                         && ( cobj.getOccurrences().isUpperUnbounded() 
                                 || cardinalityInterval.getUpper().compareTo(
                                         cobj.getOccurrences().getUpper()) <0)) {
-                    error = new ValidationError(ErrorType.VACMC,
-                            "Cannot add " + 
-                                    rmInspector.toUnderscoreSeparated(
-                                            cobj.getClass().getSimpleName()).toUpperCase()
-                                            + " ("
-                                            + cobj.getRmTypeName()
-                                            + ") object with node_id="
-                                            + cobj.getNodeId()
-                                            + " to multiply-valued attribute items because cardinality "
-                                            + getIntervalFormalString(cardinalityInterval)
-                                            + " does not contain occurrences "
-                                            + getIntervalFormalString(cobj.getOccurrences())
-                                            + " of object. Attribute Path: "
-                                            + cattr.path());
+                    error = new ValidationError(ErrorType.VACMC, "CONTAIN",
+                                    rmInspector.toUnderscoreSeparated(cobj.getClass().getSimpleName()).toUpperCase(),
+                                    cobj.getRmTypeName(),
+                                    cobj.getNodeId(),
+                                    getIntervalFormalString(cardinalityInterval),
+                                    getIntervalFormalString(cobj.getOccurrences()),
+                                    cattr.path());
 
                     if( ! errors.contains(error)) {
                         errors.add(error);
@@ -583,17 +554,15 @@ public class ArchetypeValidator {
                             }
                             if(cobj2.getNodeId()== null && cobj2 instanceof ArchetypeInternalRef &&
                                 ((ArchetypeInternalRef) cobj).getTargetPath().equals(((ArchetypeInternalRef) cobj2).getTargetPath())) {
-                                    error = new ValidationError(ErrorType.VACMM,  
-                                            "No identifier (nodeId) for more than one child object (ArchetypeInternalRef) with the same target at " +
-                                                    cobj.path());
+                                    error = new ValidationError(ErrorType.VACMM,  "INTREF", 
+                                            cobj.path());
                                     if( ! errors.contains(error)) {
                                         errors.add(error);
                                     }
                                 }
                             }
                     } else {
-                        error = new ValidationError(ErrorType.VACMI,
-                                "Missing child identification at " + 
+                        error = new ValidationError(ErrorType.VACMI, null,                                
                                         cobj.path());
                         errors.add(error);
                     }
@@ -604,8 +573,7 @@ public class ArchetypeValidator {
                             continue;
                         }
                         if(cobj.getNodeId().equals(cobj2.getNodeId())) {
-                            error = new ValidationError(ErrorType.VACMM,
-                                    "Duplicated identifier for child object at " +
+                            error = new ValidationError(ErrorType.VACMM, "NORMAL",
                                             cobj.path());
                             if( ! errors.contains(error)) {
                                 errors.add(error);
@@ -668,11 +636,8 @@ public class ArchetypeValidator {
         // check lower:
         if (! cardinalityInterval.isUpperUnbounded() && minOcc > cardinalityInterval.getUpper()) {
             // no intersection of occurrences and cardinality because the minimal sum of occurrences is greater than the maximal cardinality
-            ValidationError error = new ValidationError(ErrorType.VACMC,
-                    "Cannot add child objects of the multi-valued attribute " + cmattr.path() +
-                    " because its cardinality "+ getIntervalFormalString(cardinalityInterval)
-                    + " does not intersect with the sum of all occurrences of its children: "+ 
-                    getIntervalFormalString(minOcc, maxOcc, isOccUpperUnbounded)
+            ValidationError error = new ValidationError(ErrorType.VACMC, "INTERSECT",
+                    cmattr.path(), getIntervalFormalString(cardinalityInterval), getIntervalFormalString(minOcc, maxOcc, isOccUpperUnbounded)
                     );
             if( ! errors.contains(error)) {
                 errors.add(error);
@@ -685,11 +650,8 @@ public class ArchetypeValidator {
                 && maxOcc < cardinalityInterval.getLower()) {
 
             // no intersection of occurrences and cardinality because the maximal sum of occurrences is lower than the minimal cardinality
-            ValidationError error = new ValidationError(ErrorType.VACMC,
-                    "Cannot add child objects of the multi-valued attribute " + cmattr.path() +
-                    " because its cardinality "+ getIntervalFormalString(cardinalityInterval)
-                    + " does not intersect with the sum of all occurrences of its children: "+ 
-                    getIntervalFormalString(minOcc, maxOcc, isOccUpperUnbounded)
+            ValidationError error = new ValidationError(ErrorType.VACMC, "INTERSECT",
+                    cmattr.path(), getIntervalFormalString(cardinalityInterval), getIntervalFormalString(minOcc, maxOcc, isOccUpperUnbounded)
                     );
 
             if( ! errors.contains(error)) {
@@ -703,12 +665,8 @@ public class ArchetypeValidator {
             // Although there is an intersection, this intersection doesn't really make sense
             // because it would mean that at least one element could never fulfil its occurrence potential
             // This may not be an error, but should at least be a warning (TBD)
-            ValidationError error = new ValidationError(ErrorType.WACMC,
-                    "Cannot add all child objects of the multi-valued attribute " + cmattr.path() +
-                    " because - while its cardinality "+ getIntervalFormalString(cardinalityInterval)
-                    + " intersects with the sum of all occurrences of its children: "+ 
-                    getIntervalFormalString(minOcc, maxOcc, isOccUpperUnbounded) + 
-                    " - it would leave the occurrence potential of at least one element to be unsatisfiable, because all mandatory elements would already take up all the space in the container as defined by its cardinality."
+            ValidationError error = new ValidationError(ErrorType.WACMC, null,
+                    cmattr.path(), getIntervalFormalString(cardinalityInterval), getIntervalFormalString(minOcc, maxOcc, isOccUpperUnbounded)
                     );
 
             if( ! errors.contains(error)) {
@@ -723,8 +681,8 @@ public class ArchetypeValidator {
         Interval<Integer> actualCardinality = cattr.getCardinality().getInterval();
         if (rmCardinality.getLower().compareTo(actualCardinality.getLower()) > 0) {
             //VCACA actual lower cardinality lower than allowed
-            ValidationError error = new ValidationError(ErrorType.VCACA,
-                    "Attribute items in object node " + cattr.path()+" cardinality " +getIntervalFormalString(actualCardinality) +" does not conform to cardinality "+getIntervalFormalString(rmCardinality)+" in reference model."); 
+            ValidationError error = new ValidationError(ErrorType.VCACA, null,
+                    cattr.path(), getIntervalFormalString(actualCardinality), getIntervalFormalString(rmCardinality)); 
             errors.add(error);
 
             //attribute items in object node at /items cardinality 0..* does not conform to cardinality >=1 in reference model 
@@ -736,9 +694,9 @@ public class ArchetypeValidator {
         if (!rmCardinality.isUpperUnbounded()) {
             if (actualCardinality.isUpperUnbounded() || 
                     (rmCardinality.getUpper().compareTo(actualCardinality.getUpper()) <0)) {
-                //VCACA upper too high ... this will occur for cardinality of credentials in demographics archetypes
-                ValidationError error = new ValidationError(ErrorType.VCACA,
-                        "Attribute items in object node " + cattr.path()+" cardinality " +getIntervalFormalString(actualCardinality) +" does not conform to cardinality "+getIntervalFormalString(rmCardinality)+" in reference model."); 
+                //VCACA upper too high ... this may e.g. occur for cardinality of credentials in demographics archetypes
+                ValidationError error = new ValidationError(ErrorType.VCACA, null,
+                        cattr.path(), getIntervalFormalString(actualCardinality), getIntervalFormalString(rmCardinality)); 
                 errors.add(error);
 
             } else if (rmCardinality.getUpper().compareTo(actualCardinality.getUpper()) ==0) {
@@ -835,30 +793,29 @@ public class ArchetypeValidator {
         }
 
         // check that the first part of the id (the qualified RM Entity) contains the right number of hyphens
-        boolean containsCorrectNumberOfHyphensInQualifiedRMEntity = true; // assume it is ok, until rpoven false								
+        boolean containsCorrectNumberOfHyphensInQualifiedRMEntity = true; // assume it is ok, until proven wrong								
         String qualifiedRMEntity = oneId.substring(0, oneId.indexOf(".")); 
         if (StringUtils.countMatches(qualifiedRMEntity, "-") != 2) {
             containsCorrectNumberOfHyphensInQualifiedRMEntity = false;
         }
 
         // add all the errors
-        if (!containsCorrectNumberOfDots || !endsWithDotVNumber || !containsCorrectNumberOfHyphensInQualifiedRMEntity) {
-            String errorMessage = "Invalid Archetype Identifier ("+oneId+") used in Archetype Slot (";
             if (!containsCorrectNumberOfDots) {
-                errorMessage+="The id doesn't have the correct amount of '.'. ";
+                ValidationError error = new ValidationError(ErrorType.VDFAI, "NUMBEROFDOTS", oneId, slot.path());
+                errors.add(error);
+            
             } 
-            if (!endsWithDotVNumber) {
-                errorMessage += "The id doesn't end with .v[0..9]*. ";
+            if (!endsWithDotVNumber) {                
+                ValidationError error = new ValidationError(ErrorType.VDFAI, "DOTVNUMBER", oneId, slot.path());
+                errors.add(error);
+            
             }
-            if (!containsCorrectNumberOfHyphensInQualifiedRMEntity) {
-                errorMessage+= "The qualified RM Entity does not contain the correct number of hyphens.";
+            if (!containsCorrectNumberOfHyphensInQualifiedRMEntity) {                
+                ValidationError error = new ValidationError(ErrorType.VDFAI, "NUMBEROFHYPHENS", oneId, slot.path());
+                errors.add(error);
+            
             }
 
-            errorMessage+=") at path: "+ slot.path();
-
-            ValidationError error = new ValidationError(ErrorType.VDFAI, errorMessage);
-            errors.add(error);
-        }	
     }
 
 
@@ -877,9 +834,8 @@ public class ArchetypeValidator {
         if (cdtobj.hasAssumedValue()) {
             log.debug("validating assumed value: " +cdtobj.getAssumedValue());
             if (!cdtobj.validValue(cdtobj.getAssumedValue())) {
-                ValidationError error  = new ValidationError(ErrorType.VOBAV,
-                        "Invalid assumed value: " + cdtobj.getAssumedValue() + " for "+cdtobj.getRmTypeName() +" at path " + 
-                                cdtobj.path());
+                ValidationError error  = new ValidationError(ErrorType.VOBAV, null,
+                        cdtobj.getAssumedValue(), cdtobj.getRmTypeName(), cdtobj.path());
                 errors.add(error);
             }
         } else { 
@@ -910,9 +866,8 @@ public class ArchetypeValidator {
             }
         }
         if(codes.length() != 0) {
-            ValidationError error  = new ValidationError(ErrorType.VOTC,
-                    "Unknown openEHR terminology code(s): " + codes + 
-                    " at path " + ccodephrase.path());
+            ValidationError error  = new ValidationError(ErrorType.VOTC, null,
+                    codes, ccodephrase.path());
             errors.add(error);
         }
     }
@@ -930,9 +885,8 @@ public class ArchetypeValidator {
             log.debug("Assumed value for CPrimitiveObject: "+assumedValue);
 
             if (!item.validValue(assumedValue)) {				
-                ValidationError error  = new ValidationError(ErrorType.VOBAV,
-                        "Invalid assumed value: " + assumedValue + " at path " + 
-                                cpobj.path());
+                ValidationError error  = new ValidationError(ErrorType.VOBAV, null,
+                        assumedValue, cpobj.getRmTypeName(), cpobj.path());
                 errors.add(error);
             } else {
                 log.debug("Found valid assumed value for CPrimitiveObject: "+cpobj.getRmTypeName()+" at "+cpobj.path());			
@@ -962,9 +916,8 @@ public class ArchetypeValidator {
 
         ValidationError error = null;
         if(rmAttrNames.isEmpty()) {
-            error = new ValidationError(ErrorType.VCORM,
-                    "Unknown RM type: " + rmTypeNameWithoutGeneric + " at path " + 
-                            ccobj.path());
+            error = new ValidationError(ErrorType.VCORM, null,
+                    rmTypeNameWithoutGeneric, ccobj.path());
             errors.add(error);
             return;
         }
@@ -978,9 +931,8 @@ public class ArchetypeValidator {
             if (!attributeNames.contains(cattr.getRmAttributeName())) {
                 attributeNames.add(cattr.getRmAttributeName());
             } else {
-                error = new ValidationError(ErrorType.VCATU,
-                        "Sibling nodes are not uniquely named: " + cattr.getRmAttributeName() + " at path " + 
-                                ccobj.path());
+                error = new ValidationError(ErrorType.VCATU, null,
+                        cattr.getRmAttributeName(), ccobj.path());
                 errors.add(error);
             }
         }		
@@ -1002,15 +954,14 @@ public class ArchetypeValidator {
 
         }
         if (genericTypeName != null && genericType == null){	
-            error = new ValidationError(ErrorType.VCORM, "Unknown RM type: " + 
-                    ccobj.getRmTypeName() + " at path " + ccobj.path());			
+            error = new ValidationError(ErrorType.VCORM, null,
+                    ccobj.getRmTypeName(), ccobj.path());			
             errors.add(error);
         } else if (genericType != null) {
             // found a generic type, but we still need to know if it is assignable from here
             if (! DvOrdered.class.isAssignableFrom(genericType)) {				
-                error = new ValidationError(ErrorType.VCORMT, "Unassignable RM type: " + 
-                        ccobj.getRmTypeName() + " at path " + ccobj.path() +" is not assignable from " +genericType.getSimpleName()+".");			
-                // 					error = new ValidationError(type, "Type '"+parent.getRmTypeName()+"' of object node at "+parent.path()+" is not assignable from "+childRMType.getSimpleName()+".");	
+                error = new ValidationError(ErrorType.VCORMT, "NORMAL",
+                        ccobj.getRmTypeName(), ccobj.path(), genericType.getSimpleName());			
                 errors.add(error);
             }			
         }
@@ -1054,32 +1005,30 @@ public class ArchetypeValidator {
         Class rmType = rmInspector.retrieveRMType(ref.getRmTypeName());
         ValidationError error = null;
         if(rmType == null) {
-            error = new ValidationError(ErrorType.VUNT,
-                    "Unknown RM type: " + ref.getRmTypeName() + 
-                    " of internalRef at path " + ref.path());
+            
+            error = new ValidationError(ErrorType.VUNT, "UNKNOWN",
+                    ref.getRmTypeName(), ref.path());
             errors.add(error);
         } 
 
         // Checking the target and its consistency with the source
         CObject target = (CObject)archetype.node(ref.getTargetPath());
         if(target == null) {
-            error = new ValidationError(ErrorType.VUNP,
-                    "Invalid path: " + ref.getTargetPath() + 
-                    " of internalRef at: " + ref.path());
+            error = new ValidationError(ErrorType.VUNP, "INVALIDPATH",
+                     ref.getTargetPath(), ref.path());
             errors.add(error);
         } else {
             Class targetType = rmInspector.retrieveRMType(target.getRmTypeName());
             log.debug("Target type: "+targetType);
             log.debug("rmtype: "+rmType);
             if(targetType == null) {
-                error = new ValidationError(ErrorType.VUNP,
+                error = new ValidationError(ErrorType.VUNP, "UNKNOWNTARGETRM",
                         "Unknown target rm type at path: " + ref.getTargetPath() + 
                         " of internalRef at: " + ref.path());
                 errors.add(error);
             } else if( ! rmType.isAssignableFrom(targetType)) {
-                error = new ValidationError(ErrorType.VUNP,
-                        "Invalid target RM type: " + targetType + 
-                        " pointed by internalRef at path " + ref.path());
+                error = new ValidationError(ErrorType.VUNP, "INVALIDTARGETRM",
+                      targetType, ref.path());
                 errors.add(error);
             }			
         }
@@ -1099,7 +1048,7 @@ public class ArchetypeValidator {
         String topType = archetype.getDefinition().getRmTypeName();
         ValidationError error = null;
         if( ! conceptType.equals(topType)) {
-            error = new ValidationError(ErrorType.VARDT);
+            error = new ValidationError(ErrorType.VARDT, null, topType, conceptType);
             errors.add(error);
         }		
     }
@@ -1129,17 +1078,15 @@ public class ArchetypeValidator {
                 continue;
             }
             if( ! termDefLangs.contains(lang)) {
-                error = new ValidationError(ErrorType.VOTM, 
-                        "Archetype term definition missing for language: " 
-                                + lang);
+                error = new ValidationError(ErrorType.VOTM, "TERM",
+                        lang);
                 errors.add(error);
             }
 
             if(!constraintDefList.isEmpty() 
                     && !constraintDefLangs.contains(lang)) {
-                error = new ValidationError(ErrorType.VOTM, 
-                        "Code constraint definition missing for language: "
-                                + lang);
+                error = new ValidationError(ErrorType.VOTM, "CONSTRAINT",
+                        lang);
                 errors.add(error);
             }
         }		
@@ -1212,8 +1159,8 @@ public class ArchetypeValidator {
         Set<String> definedCodesPrimLang = new LinkedHashSet<String>();
         if(priDefs == null) {
             for(String code : codes) {
-                error = new ValidationError(ErrorType.VATDF, 
-                        "Missing term definition for " + code);
+                error = new ValidationError(ErrorType.VATDF, "NORMAL",
+                        code);
                 errors.add(error);
             }
         } else {
@@ -1224,8 +1171,8 @@ public class ArchetypeValidator {
             }
             for(String code : codes) {
                 if( ! definedCodesPrimLang.contains(code)) {
-                    error = new ValidationError(ErrorType.VATDF, 
-                            "Missing term definition for " + code);
+                    error = new ValidationError(ErrorType.VATDF, "NORMAL", 
+                            code);
                     errors.add(error);
                 }
             }
@@ -1242,8 +1189,8 @@ public class ArchetypeValidator {
             for(String code : codes) {
                 // if not present in sec lang, but present in prim lang:
                 if( ! definedCodesSecLang.contains(code) && definedCodesPrimLang.contains(code)) {
-                    error = new ValidationError(ErrorType.VONLC, 
-                            "Archetype code "+code+" not present in language "+secDefs.getLanguage()+".");
+                    error = new ValidationError(ErrorType.VONLC, "TERM",
+                            code, secDefs.getLanguage());
                     errors.add(error);
                 }
             }
@@ -1276,8 +1223,8 @@ public class ArchetypeValidator {
 
         if(priDefs == null) {
             for(String code : codes) {
-                error = new ValidationError(ErrorType.VACDF, 
-                        "Missing code constraint for " + code);
+                error = new ValidationError(ErrorType.VACDF, null,
+                        code);
                 errors.add(error);
             }
         } else {
@@ -1287,8 +1234,8 @@ public class ArchetypeValidator {
             }
             for(String code : codes) {
                 if( ! definedCodesPrimLang.contains(code)) {
-                    error = new ValidationError(ErrorType.VACDF, 
-                            "Missing code constraint for " + code);
+                    error = new ValidationError(ErrorType.VACDF, null,
+                             code);
                     errors.add(error);
                 }
             }
@@ -1305,8 +1252,8 @@ public class ArchetypeValidator {
             for(String code : codes) {
                 // if not present in sec lang, but present in prim lang:
                 if( ! definedCodesSecLang.contains(code) && definedCodesPrimLang.contains(code)) {
-                    error = new ValidationError(ErrorType.VONLC, 
-                            "Constraint code "+code+" not present in language "+secDefs.getLanguage()+".");
+                    error = new ValidationError(ErrorType.VONLC, "CONSTRAINT",
+                            code, secDefs.getLanguage());
                     errors.add(error);
                 }
             }
@@ -1338,10 +1285,8 @@ public class ArchetypeValidator {
                     // at the moment, we only want to report on unused codes 
                     // that are on the same specialisation depth as this archetype. 
                     if (specialisationDepth == StringUtils.countMatches(term.getCode(), ".")) {
-                        error = new ValidationError(ErrorType.WOUC, 
-                                "Ontology code [" + term.getCode() + 
-                                "] not used in archetype definition " +
-                                (defList.size() >0 ? "(ontology language: "+defs.getLanguage()+")" : "")+".");
+                        error = new ValidationError(ErrorType.WOUC, null,
+                                term.getCode(), defs.getLanguage());
                         errors.add(error);    				
                     }	
                 }
@@ -1366,10 +1311,8 @@ public class ArchetypeValidator {
                 if(foundCodes.contains(term.getCode())) {
                     // at the moment, we only want to report on unused codes 
                     // that are on the same specialisation depth as this archetype. 
-                    error = new ValidationError(ErrorType.VOKU, 
-                            "Ontology code [" + term.getCode() + 
-                            "] is present more than once in archetype ontology " +
-                            (defList.size() >0 ? "(ontology language: "+defs.getLanguage()+")" : "")+".");
+                    error = new ValidationError(ErrorType.VOKU, null,
+                            term.getCode(), defs.getLanguage());
                     errors.add(error);    				
                 } else {
                     foundCodes.add(term.getCode());
@@ -1388,14 +1331,14 @@ public class ArchetypeValidator {
                 for (OntologyBindingItem obi : binding.getBindingList()) {
                     if (obi.getCode().startsWith("at")) { // bound to an atcode
                         if (archetype.getOntology().termDefinition(archetype.getOriginalLanguage().getCodeString(), obi.getCode())== null) {
-                            error = new ValidationError(ErrorType.WITB, 
-                                    "The atcode " + obi.getCode() +" referenced in the term bindings doesn't exist in the archetype.");
+                            error = new ValidationError(ErrorType.WITB, "ATCODE",
+                                    obi.getCode());
                             errors.add(error);
                         }
                     } else { // bound to a complete path
                         if (!archetype.physicalPaths().contains(obi.getCode())) {
-                            error = new ValidationError(ErrorType.WITB, 
-                                    "The path of the term binding " + obi.getCode() +" doesn't exist in the archetype.");
+                            error = new ValidationError(ErrorType.WITB, "PATH",
+                                    obi.getCode());
                             errors.add(error);
                         }		
                     }
