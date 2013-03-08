@@ -157,6 +157,10 @@ public class XMLSerializer {
         printString("value", archetype.getArchetypeId().toString(), archetypeId);
 
         printString("adl_version", archetype.getAdlVersion(), out);
+        if (archetype.getUid() != null) {
+            printString("uid", archetype.getUid().toString(), out);
+        }
+            
         printString("concept", archetype.getConcept(), out);
 
         final ArchetypeID parentID = archetype.getParentArchetypeId();
@@ -180,7 +184,7 @@ public class XMLSerializer {
         printStringList("other_contributors", description.getOtherContributors(), des);
         printString("lifecycle_state", description.getLifecycleState(), des); 
 
-        if (description.getResourcePackageUri() != null && description.getResourcePackageUri().length() >0) { // only ad this tag if non-empty
+        if (description.getResourcePackageUri() != null && description.getResourcePackageUri().length() >0) { // only add this tag if non-empty
             printString("resource_package_uri", description.getResourcePackageUri(), des);
         }
         printStringMap("other_details", description.getOtherDetails(), des);

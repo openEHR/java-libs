@@ -46,7 +46,7 @@ public class ISO_OID extends UID {
             new Oid(value);
         } catch(GSSException gsse) {
             throw new IllegalArgumentException(
-                    "wrong format, " + gsse);
+                    "The provided value is not a legal format for an OID as defined by the ISO/IEC 8824. " + gsse); // root can only be 0,1,2 and for 0 and 1 then only 0..39 arcs
         }
     }
 }

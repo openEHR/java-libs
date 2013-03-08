@@ -20,7 +20,7 @@ import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 
 /**
- * Generic identifier type for identifiers whose format is othterwise unknown 
+ * Generic identifier type for identifiers whose format is otherwise unknown 
  * to openEHR. Includes an attribute for naming the identification scheme 
  * (which may well be local).
  * 
@@ -54,9 +54,14 @@ public class GenericID extends ObjectID {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof GenericID )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof GenericID )) {
+            return false;
+        }
 
         final GenericID gid = (GenericID) o;
 
@@ -71,6 +76,7 @@ public class GenericID extends ObjectID {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder()
                 .appendSuper(super.hashCode())

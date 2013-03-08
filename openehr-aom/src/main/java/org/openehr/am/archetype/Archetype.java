@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehr.am.archetype.assertion.Assertion;
@@ -36,7 +35,7 @@ import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.TranslationDetails;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.support.identification.ObjectID;
+import org.openehr.rm.support.identification.HierObjectID;
 import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
@@ -65,15 +64,16 @@ public final class Archetype extends AuthoredResource {
 	 * @param description
 	 * @param revisionHistory
 	 * @param isControlled
+	 * @param uid
 	 * @param definition
 	 * @param ontology
 	 * @throws IllegalArgumentException if description null or ontology null
 	 */
-public Archetype(String adlVersion, String id, String parentId,	String concept, 
+public Archetype(String adlVersion, String id, String parentId, String concept, 
 			CodePhrase originalLanguage,
 			Map<String, TranslationDetails> translations,
 			ResourceDescription description, RevisionHistory revisionHistory,
-			boolean isControlled, CComplexObject definition, 
+			boolean isControlled, HierObjectID uid, CComplexObject definition, 
 			ArchetypeOntology ontology,	Set<Assertion> invariants,
 			TerminologyService terminologyService) {	
 		
@@ -91,6 +91,7 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 		}
 		this.adlVersion = adlVersion;
 		this.archetypeId = new ArchetypeID(id);
+		this.uid = uid;
 		this.concept = concept;
 		this.parentArchetypeId = (parentId == null ? null : new ArchetypeID(
 				parentId));
@@ -109,7 +110,7 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 		
 		Archetype archetype = new Archetype(adlVersion, archetypeId.toString(), 
 				parentId, concept, getOriginalLanguage(), getTranslations(), 
-				null, getRevisionHistory(), isControlled(), 
+				null, getRevisionHistory(), isControlled(), uid,
 				(CComplexObject) definition.copy(),	ontology, invariants, null);
 		
 		reloadNodeMaps();
@@ -268,7 +269,7 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 	 *
 	 * @return uid
 	 */
-	public ObjectID getUid() {
+	public HierObjectID getUid() {
 		return uid;
 	}
 
@@ -456,7 +457,7 @@ public Archetype(String adlVersion, String id, String parentId,	String concept,
 
 	private final ArchetypeID archetypeId;
 
-	private final ObjectID uid = null; // todo: not yet from adl
+	private final HierObjectID uid; // added to adl in the saame way as adl_version
 
 	private final String concept;
 

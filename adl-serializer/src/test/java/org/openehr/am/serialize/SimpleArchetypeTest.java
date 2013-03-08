@@ -73,7 +73,7 @@ public class SimpleArchetypeTest extends SerializerTestBase {
 
 		Archetype archetype = new Archetype(adlVersion, id, parentId, concept,
 				originalLanguage, translations, description, revisionHistory,
-				isControlled, definition, ontology, invariants,
+				isControlled, null, definition, ontology, invariants,
 				terminologyService);
 
 		clean();

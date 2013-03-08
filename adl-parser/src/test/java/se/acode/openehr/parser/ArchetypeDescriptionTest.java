@@ -1,6 +1,8 @@
 package se.acode.openehr.parser;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.openehr.am.archetype.Archetype;
 import org.openehr.rm.common.resource.ResourceDescription;
@@ -43,7 +45,6 @@ public class ArchetypeDescriptionTest extends ParserTestBase {
 		assertEquals("lifecycleState wrong", "AuthorDraft", description
 				.getLifecycleState());
 
-		// archetype_package_uri in ADL 
 		assertEquals("resourcePackageUri",
 				"www.aihw.org.au/data_sets/diabetic_archetypes.html",
 				description.getResourcePackageUri());

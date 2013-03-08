@@ -237,6 +237,7 @@ PARSER_END(ADLParser)
 {
   <SYM_ARCHETYPE: "archetype"([" ","\t","\r","\n"])* > : DEFAULT
 | <SYM_ADL_VERSION: "adl_version"> : DEFAULT
+| <SYM_UID: "uid"> : HIER_OBJECT
 | <SYM_CONTROLLED: "controlled"> : DEFAULT
 | <SYM_UNCONTROLLED: "uncontrolled"> : DEFAULT
 | <SYM_SPECIALIZE: "speciali"["s","z"]"e"([" ","\t","\r","\n"])*"\n"> : DEFAULT
@@ -262,7 +263,7 @@ PARSER_END(ADLParser)
 {
   < SYM_ORIGINAL_AUTHOR: "original_author">
 | < SYM_LIFECYCLE_STATE: "lifecycle_state">
-| < SYM_ARCHETYPE_PACKAGE_URI: "archetype_package_uri">
+| < SYM_RESOURCE_PACKAGE_URI: "resource_package_uri">
 | < SYM_DETAILS: "details">
 | < SYM_ORIGINAL_RESOURCE_URI: "original_resource_uri">
 | < SYM_OTHER_DETAILS: "other_details">
@@ -402,15 +403,23 @@ PARSER_END(ADLParser)
   < #LET_DIG_DUDSLR: <LET_DIG_DUDS> | "(" | ")" >
 }
 
-TOKEN : /* IDENTIFIERS - ADL */
+< * > TOKEN : /* IDENTIFIERS - ADL */
 {
   <V_ARCHETYPE_ID: <LET_DIG>(<LET_DIG_DU>)+"."<LET_DIG>(<LET_DIG_DU>)+
   "."(<LET_DIG>)+>
 }
 
-/* ----------------------- TOKEN - cADL ---------------------------- */
+/* ----------------------- TOKEN - HIER_OBJECT ---------------------------- */
 
-< TERM_CODE > TOKEN: /* VALUES - cADL */
+< HIER_OBJECT > TOKEN: /* VALUES - HIER_OBJECT */
+{
+  <V_HIER_OBJECT_ID: (<LET_DIG_DUDS> | "::" )+ >
+}
+
+
+/* ----------------------- TOKEN - TERM_CODE ---------------------------- */
+
+< TERM_CODE > TOKEN: /* VALUES - TERM_CODE */
 {
   < V_TERM_CODE: (<LET_DIG_DUDS>)+ > 
 }
@@ -640,6 +649,7 @@ Archetype archetype() throws Exception :
   Token t;	
   String id;
   String adlVersion = null;
+  HierObjectID uid = null;
   boolean isControlled = false;
   String parent = null;
   String concept;
@@ -662,10 +672,13 @@ Archetype archetype() throws Exception :
   [ 
     <SYM_L_PARENTHESIS>
     adlVersion = adl_version() 
-    [ 
+    ( 
       <SYM_SEMICOLON>
-      isControlled = controlled() 
-    ]
+      (uid = uid() 
+       |    
+       isControlled = controlled()
+      ) 
+    )*
     <SYM_R_PARENTHESIS>
   ]
 
@@ -701,7 +714,7 @@ Archetype archetype() throws Exception :
   	}       	
   	
     return new Archetype(adlVersion, id, parent, concept, originalLanguage,
-    		translations, description, revisionHistory, isControlled,
+    		translations, description, revisionHistory, isControlled, uid,
     		definition, ontology, invariants, terminologyService);
   }
 }
@@ -732,7 +745,7 @@ Map<String, TranslationDetails> translations() throws Exception :
   TranslationDetails td;	
   Map<String, TranslationDetails> map = new HashMap<String, TranslationDetails>();
   Map<String, String> author = null;
-  String  accreditation = null;
+  String accreditation = null;
   Map<String, String> otherDetails = null;
   TerminologyService terminologyService = SimpleTerminologyService.getInstance();
 }
@@ -797,6 +810,18 @@ String adl_version() :
   { return t.image; }
 }
 
+HierObjectID uid() :
+{
+  Token t;
+}
+{
+  <SYM_UID> <SYM_EQ> t = <V_HIER_OBJECT_ID>
+  { 
+    HierObjectID uidAsObjectID = new HierObjectID(t.image);
+    return uidAsObjectID; 
+  }
+}
+
 boolean controlled() :
 {
   boolean ret = false;	
@@ -836,7 +861,7 @@ ResourceDescription arch_description() throws Exception :
   String lifecycleState = null;
   List details = new ArrayList();
   ResourceDescriptionItem item = null;
-  String archetypePackageURI = null;
+  String resourcePackageURI = null;
   Map otherDetails = null;
   Archetype parentArchetype = null;
   AuthoredResource parent = null; // not used  
@@ -846,8 +871,8 @@ ResourceDescription arch_description() throws Exception :
    (
      <SYM_LIFECYCLE_STATE> <SYM_EQ> "<" lifecycleState = string_value() ">"
    |
-     <SYM_ARCHETYPE_PACKAGE_URI> <SYM_EQ> "<" 
-       archetypePackageURI = string_value() 
+     <SYM_RESOURCE_PACKAGE_URI> <SYM_EQ> "<" 
+       resourcePackageURI = string_value() 
      ">"
    |
      <SYM_DETAILS> <SYM_EQ> "<"
@@ -881,7 +906,7 @@ ResourceDescription arch_description() throws Exception :
    {
      ResourceDescription resourceDescription = new ResourceDescription(
      		originalAuthor, otherContributors, lifecycleState, details,
-            archetypePackageURI, otherDetails, parent);
+            resourcePackageURI, otherDetails, parent);
 
      return resourceDescription;     
    }

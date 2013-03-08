@@ -68,6 +68,7 @@ import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.identification.ArchetypeID;
+import org.openehr.rm.support.identification.ObjectID;
 
 /**
  * ADL serializer for the openEHR Java kernel
@@ -140,7 +141,7 @@ public class ADLSerializer {
 	 */
 	public void output(Archetype archetype, Writer out) throws IOException {
 		printHeader(archetype.getAdlVersion(), archetype.getArchetypeId(), 
-				archetype.getParentArchetypeId(), archetype.getConcept(), out);
+				archetype.getParentArchetypeId(), archetype.getUid(), archetype.getConcept(), out);
 		newline(out);
 		
 		printLanguage(archetype, out);
@@ -160,15 +161,25 @@ public class ADLSerializer {
 	}
 	
 	protected void printHeader(String adlVersion,
-			ArchetypeID id, ArchetypeID parentId,
+			ArchetypeID id, ArchetypeID parentId, ObjectID uid,
 			String conceptCode, Writer out) throws IOException {
 
 		out.write("archetype");
+        if(StringUtils.isNotEmpty(adlVersion) || (uid != null && StringUtils.isNotEmpty(uid.toString()))) {
+            out.write(" (");  
+        }
+
 		if(StringUtils.isNotEmpty(adlVersion)) {
-			out.write(" (adl_version=");
+			out.write("adl_version=");
 			out.write(adlVersion);
-			out.write(")");
 		}
+		if(uid != null && StringUtils.isNotEmpty(uid.toString())) {
+            out.write("uid=");
+            out.write(uid.toString());
+        }
+	    if(StringUtils.isNotEmpty(adlVersion) || (uid!=null &&StringUtils.isNotEmpty(uid.toString()))) {
+	        out.write(")");  
+	    }
 		newline(out);
 		indent(1, out);
 		out.write(id.toString());
@@ -310,6 +321,8 @@ public class ADLSerializer {
 		out.write("\">");
 		newline(out);
 
+		printNonEmptyString("resource_package_uri", description.getResourcePackageUri(), 1, out);
+		
 		indent(1, out);
 		out.write("details = <");
 		newline(out);
@@ -338,14 +351,13 @@ public class ADLSerializer {
 		out.write("]>");
 		newline(out);
 		
-		printNoneEmptyString("purpose", item.getPurpose(), indent + 1, out);
-		printNoneEmptyStringList("keywords", item.getKeywords(), indent + 1,
+		printNonEmptyString("purpose", item.getPurpose(), indent + 1, out);
+		printNonEmptyStringList("keywords", item.getKeywords(), indent + 1,
 				out);
-		printNoneEmptyString("copyright", item.getCopyright(), indent + 1, out);
-		printNoneEmptyString("use", item.getUse(), indent + 1, out);
-		printNoneEmptyString("misuse", item.getMisuse(), indent + 1, out);
-		printNoneEmptyStringMap("original_resource_uri", item
-				.getOriginalResourceUri(), indent + 1, out);
+		printNonEmptyString("copyright", item.getCopyright(), indent + 1, out);
+		printNonEmptyString("use", item.getUse(), indent + 1, out);
+		printNonEmptyString("misuse", item.getMisuse(), indent + 1, out);
+		printNonEmptyStringMap("original_resource_uri", item.getOriginalResourceUri(), indent + 1, out);
 
 		// other details not printed
 
@@ -354,7 +366,7 @@ public class ADLSerializer {
 		newline(out);
 	}
 
-	private void printNoneEmptyString(String label, String value, int indent,
+	private void printNonEmptyString(String label, String value, int indent,
 			Writer out) throws IOException {
 
 		if (StringUtils.isEmpty(value)) {
@@ -368,7 +380,7 @@ public class ADLSerializer {
 		newline(out);
 	}
 
-	private void printNoneEmptyStringList(String label, List<String> list,
+	private void printNonEmptyStringList(String label, List<String> list,
 			int indent, Writer out) throws IOException {
 
 		if (list == null || list.isEmpty()) {
@@ -389,7 +401,7 @@ public class ADLSerializer {
 		newline(out);
 	}
 
-	private void printNoneEmptyStringMap(String label, Map<String, String> map,
+	private void printNonEmptyStringMap(String label, Map<String, String> map,
 			int indent, Writer out) throws IOException {
 		if (map == null || map.isEmpty()) {
 			return;

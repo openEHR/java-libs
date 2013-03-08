@@ -24,11 +24,8 @@ package org.openehr.am.serialize;
 
 import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.Cardinality;
-import org.openehr.am.archetype.constraintmodel.primitive.CString;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.identification.ArchetypeID;
-
-import java.util.*;
 
 public class CommonTest extends SerializerTestBase {
 
@@ -43,7 +40,7 @@ public class CommonTest extends SerializerTestBase {
 
 		clean();
 		outputter.printHeader(null,	new ArchetypeID(id), 
-				new ArchetypeID(parentId), conceptCode, out);
+				new ArchetypeID(parentId), null, conceptCode, out);
 
 		verify("archetype\r\n" + "    " + id + "\r\n" + "specialize\r\n"
 				+ "    " + parentId + "\r\n\r\n" + "concept\r\n" + "    ["

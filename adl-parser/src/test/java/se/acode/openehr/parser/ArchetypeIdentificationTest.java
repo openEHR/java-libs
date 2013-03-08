@@ -26,6 +26,27 @@ public class ArchetypeIdentificationTest extends ParserTestBase {
         Archetype archetype = parser.parse();
         assertNotNull(archetype);
         assertEquals("adl_version wrong", "1.4", archetype.getAdlVersion());
+        assertEquals("uid wrong", null, archetype.getUid());
     }
+    
+    public void testWithUid() throws Exception {
+        ADLParser parser = new ADLParser(loadFromClasspath(
+                "openEHR-EHR-ELEMENT.uid_test.v1.adl"));
+        Archetype archetype = parser.parse();
+        assertNotNull(archetype);
+        assertEquals("adl_version wrong", "1.4", archetype.getAdlVersion());
+        assertEquals("uid wrong", "1.2.456", archetype.getUid().toString());
+    }
+
+    public void testWithUidAndControlledFlag() throws Exception {
+        ADLParser parser = new ADLParser(loadFromClasspath(
+                "openEHR-EHR-ELEMENT.uid_test.v2.adl"));
+        Archetype archetype = parser.parse();
+        assertNotNull(archetype);
+        assertEquals("adl_version wrong", "1.4", archetype.getAdlVersion());
+        assertEquals("uid wrong", "1.2.456::22", archetype.getUid().toString());
+        assertEquals("controlled flag wrong", false, archetype.isControlled());
+    }
+
 }
 

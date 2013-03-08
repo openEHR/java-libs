@@ -24,7 +24,7 @@ description
 		>
 	>
 	lifecycle_state = <"AuthorDraft">
-	archetype_package_uri = <"www.aihw.org.au/data_sets/diabetic_archetypes.html">
+	resource_package_uri = <"www.aihw.org.au/data_sets/diabetic_archetypes.html">
 	
 definition
 	ENTRY[at0000] matches {*}

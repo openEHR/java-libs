@@ -1,0 +1,44 @@
+archetype (adl_version=1.4; uid=1.2.456)
+	openEHR-EHR-ELEMENT.uid_test.v1
+
+concept
+	[at0000]	-- Uid test
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"test">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"826347FFD4FDDD289CB364144AB51BFB">
+	>
+
+definition
+	ELEMENT[at0000] matches {	-- Uid test
+		value matches {
+			DV_TEXT matches {*}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Uid test">
+					description = <"unknown">
+				>
+			>
+		>
+	>

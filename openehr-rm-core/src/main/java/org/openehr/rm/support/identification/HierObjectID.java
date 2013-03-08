@@ -19,7 +19,7 @@ import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 
 /**
- * Hierarhical object identifiers.
+ * Hierarchical object identifiers.
  * <p/>
  * The syntax of the value attribute is as follows:
  * <blockquote>root::extension</blockquote>
@@ -117,6 +117,7 @@ public class HierObjectID extends UIDBasedID {
      * 
      * @return root
      */
+    @Override
     public UID root() {
     	return root;
     }
@@ -127,11 +128,13 @@ public class HierObjectID extends UIDBasedID {
      * 
      * @return extension
      */
+    @Override
     public String extension() {
     	return extension;
     }
     
     // POJO start
+    @Override
     protected void setValue(String value) {
         loadValue(value);
         super.setValue(value);
