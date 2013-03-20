@@ -148,6 +148,16 @@ public final class DvParsable extends DvEncapsulated {
     /* fields */
     private String value;
     private String formalism;	
+	@Override
+	public String getReferenceModelName() {
+		return "DV_PARSABLE";
+	}
+
+	@Override
+	public String serialise() {
+		// TODO Auto-generated method stub
+		return null;
+	}	
 }
 
 /*

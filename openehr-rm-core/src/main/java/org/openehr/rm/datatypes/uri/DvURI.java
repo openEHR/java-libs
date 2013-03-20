@@ -157,6 +157,17 @@ public class DvURI extends DataValue {
 
     /* fields */
     private java.net.URI value;
+
+	@Override
+	public String getReferenceModelName() {
+		return "DV_URI";
+	}
+
+	@Override
+	public String serialise() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 /*

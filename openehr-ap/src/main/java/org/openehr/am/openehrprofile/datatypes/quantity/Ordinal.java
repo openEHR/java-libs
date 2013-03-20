@@ -16,6 +16,8 @@
 package org.openehr.am.openehrprofile.datatypes.quantity;
 
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.datatypes.text.CodePhrase;
@@ -26,7 +28,7 @@ import org.openehr.rm.datatypes.text.CodePhrase;
  * @author Rong Chen
  * @version 1.0
  */
-public final class Ordinal implements Comparable {
+public final class Ordinal implements Comparable, Serializable {
 
     /**
      * Constructs an ordinal

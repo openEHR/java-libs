@@ -13,6 +13,9 @@
  */
 package org.openehr.rm.datatypes.quantity;
 
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
+
 /**
  * Class of enumeration constants defining types of proportion for the
  * DV_PROPORTION class.
@@ -53,7 +56,9 @@ public enum ProportionKind {
 	 * 
 	 * @param value
 	 */
-	private ProportionKind(int value) {
+	@FullConstructor
+	private ProportionKind(
+			@Attribute(name = "value", required=true) int value) {
 		this.value = value;
 	}
 	

@@ -1,0 +1,8 @@
+items = <
+	[[ISO_639-1::en]] = <
+    	name = <"systolic">
+    >
+    [[ISO_639-1::es]] = <
+    	name = <"diastolic">
+    >
+>

@@ -77,6 +77,18 @@ public final class Archetyped extends RMObject {
     public Archetyped(ArchetypeID archetypeId, String rmVersion) {
         this(archetypeId, null, rmVersion);
     }
+    
+    /**
+     * Creates an Archetyped without a templateId
+     *
+     * @param archetypeId
+     * @param rmVersion
+     * @throws IllegalArgumentException if archetypeId null
+     *                                  or rmVersion empty
+     */
+    public Archetyped(String archetypeId, String rmVersion) {
+        this(new ArchetypeID(archetypeId), null, rmVersion);
+    }
 
     /**
      * Globally unique archetype identifier

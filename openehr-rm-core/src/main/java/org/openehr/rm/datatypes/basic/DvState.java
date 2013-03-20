@@ -127,6 +127,16 @@ public final class DvState extends DataValue {
     /* fields */
     private DvCodedText value;
     private boolean terminal;
+	@Override
+	public String getReferenceModelName() {
+		return "DV_STATE";
+	}
+
+	@Override
+	public String serialise() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 /*

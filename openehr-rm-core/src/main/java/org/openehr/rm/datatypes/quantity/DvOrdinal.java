@@ -14,12 +14,16 @@
  */
 package org.openehr.rm.datatypes.quantity;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
+import org.openehr.rm.datatypes.basic.DataValue;
+import org.openehr.rm.datatypes.basic.ReferenceModelName;
 import org.openehr.rm.datatypes.text.DvCodedText;
 
 /**
@@ -84,12 +88,23 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
     }
 
     /**
+     * Constructs an Ordinal by value and symbol
+     *
+     * @param value
+     * @param symbol
+     * @throws IllegalArgumentException
+     */
+    public DvOrdinal(int value, String dvCodedTextvalue, String dvCodedTextTerminology, String dvCodedTextCode) {
+	this(null, null, value, new DvCodedText(dvCodedTextvalue, dvCodedTextTerminology, dvCodedTextCode));
+    }
+
+    /**
      * string form displayable for humans
      *
      * @return string presentation
      */
     public String toString() {
-        return symbol.toString();
+	return value + "|" + symbol.toString();
     }
 
     /**
@@ -187,6 +202,18 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
         return true;
     }
 
+    public String getTerminologyId(){
+	return getSymbol().getTerminologyId();
+    }
+
+    public String getCode(){
+	return getSymbol().getCode();
+    }
+    
+    public String getSymbolValue(){
+	return getSymbol().getValue();
+    }
+    
     // POJO start
     private DvOrdinal() {
     }
@@ -208,6 +235,33 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
     private int value;
     private DvCodedText symbol;
     private int limitsIndex;
+    @Override
+    public String getReferenceModelName() {
+	return "DV_ORDINAL";
+    }
+
+
+
+    @Override
+    public String serialise() {
+	return getReferenceModelName() + "," + toString();
+    }
+
+    @Override
+    public DataValue parse(String value) {
+	int i = value.indexOf("|");
+	if (i<0){
+	    throw new IllegalArgumentException("failed to parse DvOrdinal '"+value+"', wrong number of tokens.");
+	}
+	int ordinalValue = 0;
+	try{
+	    ordinalValue = Integer.parseInt(value.substring(0,i));
+	}catch(NumberFormatException e){
+	    throw new IllegalArgumentException("failed to parse DvOrdinal '"+value+"', invalid integer value.");
+	}
+	String str = ReferenceModelName.DV_CODED_TEXT.getName() + "," +  value.substring(i+1);
+	return new DvOrdinal(ordinalValue, (DvCodedText)DataValue.parseValue(str));
+    }
 }
 
 /*

@@ -15,6 +15,7 @@
  
 package org.openehr.am.archetype.assertion;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -27,7 +28,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * 
  * @author Rong Chen
  */
-public class Assertion {
+public class Assertion implements Serializable{
 
 	/**
 	 * Creates an Assertion with tag and expression

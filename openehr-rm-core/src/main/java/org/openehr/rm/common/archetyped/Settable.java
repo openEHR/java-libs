@@ -35,6 +35,15 @@ public interface Settable {
 	 * @exception IllegalArgumentException if the parent attribute is not a container attribute
 	 */
 	public void removeChild(String path);
+	
+	/**
+	 * Adds a child to a container attributed identified by the path
+	 * 
+	 * @param path the path to locate the container
+	 * @param child the child object to add to the container
+	 * @exception IllegalArgumentException if the parent attribute is not a container attribute
+	 */
+	public void addChild(String path, Object child);
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

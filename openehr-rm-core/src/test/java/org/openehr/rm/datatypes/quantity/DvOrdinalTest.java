@@ -1,5 +1,6 @@
 package org.openehr.rm.datatypes.quantity;
 
+import org.openehr.rm.datatypes.basic.DataValue;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 
@@ -23,6 +24,12 @@ public class DvOrdinalTest extends TestCase {
         	fail("failed to create dvOrdinal with negative value");
         }
     } 
+    
+    public void testParseDvOrdinal() throws Exception {
+    	String value = "DV_ORDINAL,1|SNOMED-CT::313267000|Stroke|";
+    	DataValue dv = DataValue.parseValue(value);
+    	assertTrue(dv instanceof DvOrdinal);
+    }
     
     public void testEquals() {
     	DvOrdinal ord1 = new DvOrdinal(1, new DvCodedText("text",

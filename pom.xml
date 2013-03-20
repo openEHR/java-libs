@@ -3,11 +3,37 @@
   <groupId>openehr</groupId>
   <artifactId>ref_impl_java</artifactId>
   <packaging>pom</packaging>
-  <version>1.0.2-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
   <name>The openEHR Reference Java Implementation</name>
   <organization>
-    <name>The openEHR Foundataion</name>
+		<name>The openEHR Foundation</name>
   </organization>
+	<properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+	<build>
+		<plugins>
+            <plugin>
+                 <artifactId>maven-compiler-plugin</artifactId>
+                 <version>2.3.2</version>
+                 <configuration>
+                     <source>1.6</source>
+                     <target>1.6</target>
+					 <encoding>UTF-8</encoding>
+                     <compilerArgument></compilerArgument>
+                 </configuration>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<scmCommentPrefix>(CDS)</scmCommentPrefix>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
   <modules>
     <module>openehr-rm-core</module>
     <module>openehr-rm-domain</module>
@@ -15,14 +41,14 @@
     <module>openehr-ap</module>
     <module>adl-parser</module>
     <module>dadl-parser</module>
-    <module>oet-parser</module>        
+	<module>oet-parser</module>
     <module>adl-serializer</module>
     <module>xml-serializer</module>
     <module>measure-serv</module>
     <module>mini-termserv</module>
     <module>rm-builder</module>
-    <module>rm-skeleton</module>
     <module>xml-binding</module>
     <module>dadl-binding</module>
+	<module>rm-skeleton</module>
   </modules>  
 </project>

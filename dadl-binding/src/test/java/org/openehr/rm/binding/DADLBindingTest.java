@@ -14,7 +14,9 @@
 package org.openehr.rm.binding;
 
 import java.io.InputStream;
+import java.util.TimeZone;
 
+import org.joda.time.DateTime;
 import org.openehr.am.parser.*;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.generic.PartySelf;
@@ -35,7 +37,7 @@ import org.openehr.rm.support.identification.*;
 
 import junit.framework.TestCase;
 
-public class DADLBindingTest extends TestCase {
+public class DADLBindingTest extends DADLBindingTestBase {
 	
 	public void setUp() throws Exception {
 		binding = new DADLBinding();
@@ -340,28 +342,7 @@ public class DADLBindingTest extends TestCase {
 		
 	}
 	
-	/*
-	 * Loads dadl from file and binds data to RM object
-	 */
-	Object bind(String filename) throws Exception {
-		DADLParser parser = new DADLParser(fromClasspath(filename));
-		ContentObject contentObj = parser.parse();
-		return binding.bind(contentObj);
-	}
 	
-	/* 
-	 * Loads given resource from classpath
-	 * 
-	 * @param adl
-	 * @return
-	 * @throws Exception
-	 */
-	InputStream fromClasspath(String res) throws Exception {
-    	return this.getClass().getClassLoader().getResourceAsStream(res);
-    }
-	
-	private Object rmObj;
-	private DADLBinding binding;
 }
 /*
  * ***** BEGIN LICENSE BLOCK ***** Version: MPL 1.1/GPL 2.0/LGPL 2.1

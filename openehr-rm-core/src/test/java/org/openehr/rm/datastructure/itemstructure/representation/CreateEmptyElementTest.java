@@ -1,6 +1,5 @@
 package org.openehr.rm.datastructure.itemstructure.representation;
 
-import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.terminology.TerminologyService;

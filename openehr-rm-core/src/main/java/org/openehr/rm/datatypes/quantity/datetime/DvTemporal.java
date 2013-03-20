@@ -51,7 +51,7 @@ public abstract class DvTemporal<T extends DvTemporal> extends
 		super(otherReferenceRanges, normalRange, normalStatus, accuracy,
 				magnitudeStatus);
 
-		this.dateTime = parseValue(value);
+		this.dateTime = parseStringValue(value);
 		this.value = value;
 		setBooleans(value);
 	}
@@ -79,7 +79,7 @@ public abstract class DvTemporal<T extends DvTemporal> extends
 		return DvDuration.getDifference(this, other);
 	}
 
-	abstract DateTime parseValue(String value);
+	abstract DateTime parseStringValue(String value);
 
 	abstract void setBooleans(String value);
 

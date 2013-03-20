@@ -18,6 +18,7 @@ import org.openehr.rm.support.basic.Interval;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -27,7 +28,7 @@ import java.util.*;
  * @author Rong Chen
  * @version 1.0
  */
-public final class CComplexObject extends CDefinedObject {
+public final class CComplexObject extends CDefinedObject implements Serializable{
 	
 	/**
      * Constructs a complexObjectConstraint

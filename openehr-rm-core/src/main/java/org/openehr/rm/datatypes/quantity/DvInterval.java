@@ -160,6 +160,17 @@ public final class DvInterval <T extends DvOrdered> extends DataValue {
 
     /* fields */
     private Interval<T> interval;
+
+	@Override
+	public String getReferenceModelName() {
+		return "DV_INTERVAL";
+	}
+
+	@Override
+	public String serialise() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 /*

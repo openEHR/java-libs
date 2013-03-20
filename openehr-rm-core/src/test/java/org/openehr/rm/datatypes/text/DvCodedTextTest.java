@@ -35,5 +35,11 @@ public class DvCodedTextTest extends TestCase {
         CodePhrase definingCode = new CodePhrase("test terms", "12345");
         new DvCodedText("coded text", definingCode);
     }
+    
+    public void testEquals() throws Exception {
+    	DvCodedText t1 = new DvCodedText("some text", "icd10", "123");
+    	DvCodedText t2 = new DvCodedText("some text", "icd10", "123");
+    	assertEquals(t1, t2);
+    }
 
 }

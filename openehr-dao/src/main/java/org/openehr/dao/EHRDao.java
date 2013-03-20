@@ -15,7 +15,7 @@
 package org.openehr.dao;
 
 import org.openehr.rm.ehr.EHR;
-import org.openehr.rm.support.identification.PartyReference;
+import org.openehr.rm.support.identification.PartyRef;
 
 /**
  * Data access object for EHR
@@ -31,7 +31,7 @@ public interface EHRDao {
      * @param subject
      * @return ehr or null if not found
      */
-    public EHR findBySubject(PartyReference subject);
+    public EHR findBySubject(PartyRef subject);
 
     /**
      * Save a new EHR object

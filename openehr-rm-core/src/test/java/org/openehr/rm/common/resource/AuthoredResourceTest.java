@@ -22,19 +22,12 @@
 
 package org.openehr.rm.common.resource;
 
-import java.util.ArrayList;
-import java.util.List;
 import junit.framework.*;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.rm.RMObject;
 import org.openehr.rm.common.generic.RevisionHistory;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.TestTerminologyID;
-import org.openehr.rm.support.terminology.CodeSetAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 

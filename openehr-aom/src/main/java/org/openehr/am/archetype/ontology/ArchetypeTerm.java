@@ -15,13 +15,14 @@
 
 package org.openehr.am.archetype.ontology;
 
+import java.io.Serializable;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public class ArchetypeTerm {
+public class ArchetypeTerm  implements Serializable{
 
 	/**
 	 * Constant added for convenience for commonly occuring key value in

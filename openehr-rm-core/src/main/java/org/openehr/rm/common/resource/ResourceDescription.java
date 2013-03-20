@@ -14,7 +14,10 @@
  */
 package org.openehr.rm.common.resource;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.Attribute;
@@ -25,8 +28,12 @@ import org.openehr.rm.Attribute;
  * @author Yin Su Lim
  * @version 1.0
  */
-public class ResourceDescription {
+public class ResourceDescription implements Serializable{
 
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 	/**
 	 * Construct ResourceDescription
 	 */
@@ -39,7 +46,8 @@ public class ResourceDescription {
 			@Attribute(name = "otherDetails") Map<String, String> otherDetails,
 			@Attribute(name = "parentResource") AuthoredResource parentResource ){
 		if (originalAuthor == null || originalAuthor.size() == 0 ) {
-			throw new IllegalArgumentException("null or empty originalAuthor");
+			// throw new IllegalArgumentException("null or empty originalAuthor");
+			System.out.println("Warning...parsing archetype with null or empty original author");
 		}
 		if (StringUtils.isEmpty(lifecycleState) ) {
 			throw new IllegalArgumentException("null or empty lifecycleState");
@@ -125,7 +133,7 @@ public class ResourceDescription {
 	}
 
 	//POJO start
-	ResourceDescription() {
+	public ResourceDescription() {
 	}
 	
 	void setDetails(List<ResourceDescriptionItem> details) {
@@ -184,6 +192,82 @@ public class ResourceDescription {
 	private String resourcePackageUri;
 	private Map<String, String> otherDetails;
 	private AuthoredResource parentResource;
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((details == null) ? 0 : details.hashCode());
+		result = prime * result
+				+ ((lifecycleState == null) ? 0 : lifecycleState.hashCode());
+		result = prime * result
+				+ ((originalAuthor == null) ? 0 : originalAuthor.hashCode());
+		result = prime
+				* result
+				+ ((otherContributors == null) ? 0 : otherContributors
+						.hashCode());
+		result = prime * result
+				+ ((otherDetails == null) ? 0 : otherDetails.hashCode());
+		result = prime * result
+				+ ((parentResource == null) ? 0 : parentResource.hashCode());
+		result = prime
+				* result
+				+ ((resourcePackageUri == null) ? 0 : resourcePackageUri
+						.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ResourceDescription other = (ResourceDescription) obj;
+		if (details == null) {
+			if (other.details != null)
+				return false;
+		} else if (!details.equals(other.details))
+			return false;
+		if (lifecycleState == null) {
+			if (other.lifecycleState != null)
+				return false;
+		} else if (!lifecycleState.equals(other.lifecycleState))
+			return false;
+		if (originalAuthor == null) {
+			if (other.originalAuthor != null)
+				return false;
+		} else if (!originalAuthor.equals(other.originalAuthor))
+			return false;
+		if (otherContributors == null) {
+			if (other.otherContributors != null)
+				return false;
+		} else if (!otherContributors.equals(other.otherContributors))
+			return false;
+		if (otherDetails == null) {
+			if (other.otherDetails != null)
+				return false;
+		} else if (!otherDetails.equals(other.otherDetails))
+			return false;
+		if (parentResource == null) {
+			if (other.parentResource != null)
+				return false;
+		} else if (!parentResource.equals(other.parentResource))
+			return false;
+		if (resourcePackageUri == null) {
+			if (other.resourcePackageUri != null)
+				return false;
+		} else if (!resourcePackageUri.equals(other.resourcePackageUri))
+			return false;
+		return true;
+	}
 }
 
 /*

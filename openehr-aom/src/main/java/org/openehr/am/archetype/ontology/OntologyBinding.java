@@ -21,6 +21,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import java.io.Serializable;
 /**
  * This class represents a list of binding within a terminology using either
  * term binding or query binding
@@ -28,8 +29,12 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author Rong Chen
  * @version 1.0
  */
-public class OntologyBinding {
+public class OntologyBinding implements Serializable{
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     public OntologyBinding(String terminology,
                            List<OntologyBindingItem> bindingList) {
         this.terminology = terminology;

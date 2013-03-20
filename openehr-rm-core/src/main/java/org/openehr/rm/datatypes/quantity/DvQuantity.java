@@ -19,10 +19,14 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
+import org.openehr.rm.datatypes.basic.ReferenceModelName;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.measurement.MeasurementService;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -69,10 +73,15 @@ public class DvQuantity extends DvAmount<DvQuantity> {
         if (precision < -1) {
             throw new IllegalArgumentException("negative precision");
         }
+        
+        
+        /* Relaxed in order to create quantity without measurementService.
+         * One possibility is to use the mixin class ExternalEnvironmentAccess
         if (StringUtils.isNotEmpty(units)
                 && measurementService == null) {
             throw new IllegalArgumentException("null measurementService");
         }
+        */
         this.magnitude = magnitude;
         this.precision = precision;
         this.measurementService = measurementService;
@@ -127,6 +136,17 @@ public class DvQuantity extends DvAmount<DvQuantity> {
     }
 
     /**
+     * New construct that does not require a measurementService
+     * 
+     * @param units
+     * @param magnitude
+     * @param precision
+     */
+    public DvQuantity(String units, double magnitude, int precision) {
+    	this(units, magnitude, precision, null);
+    }
+
+    /**
      * True if precision = 0; quantity represents an integral number
      *
      * @return ture if integral
@@ -151,6 +171,27 @@ public class DvQuantity extends DvAmount<DvQuantity> {
      */
     public String getUnits() {
     	return units;
+    }
+    
+    public DvQuantity parse(String value) {
+    	int i = value.indexOf(",");
+    	if(i < 0 || i == value.length()) {
+    		throw new IllegalArgumentException("failed to parse quantity, wrong format [" + value + "]");
+    	}
+    	String num = value.substring(0, i);
+    	String units = value.substring(i + 1);
+    	int precision = 0;
+    	i = num.indexOf(DECIMAL_SEPARATOR);
+    	if(i >= 0) {
+    		precision = num.length() - i - 1;
+    	}
+    	try {
+    		double magnitude = Double.parseDouble(num);
+    		return new DvQuantity(units, magnitude, precision);
+    	} catch(NumberFormatException nfe) {
+    		throw new IllegalArgumentException("failed to parse quantity[" 
+    					+ num + "]", nfe);
+    	}
     }
     
     /**
@@ -226,12 +267,16 @@ public class DvQuantity extends DvAmount<DvQuantity> {
      * @return string presentation
      */
     public String toString() {
-        NumberFormat format = NumberFormat.getInstance();
+        DecimalFormat format = new DecimalFormat();
         format.setMinimumFractionDigits(precision);
         format.setMaximumFractionDigits(precision);
-        return format.format(magnitude)
-                + ( StringUtils.isEmpty(getUnits()) ? "" : " " +
+        DecimalFormatSymbols dfs = format.getDecimalFormatSymbols();
+        dfs.setDecimalSeparator(DECIMAL_SEPARATOR);
+        format.setDecimalFormatSymbols(dfs);
+        format.setGroupingUsed(false);
+        String tmp = format.format(magnitude) + ( StringUtils.isEmpty(getUnits()) ? "" : "," +
                 getUnits() );
+        return tmp;
     }
 
     /**
@@ -315,6 +360,18 @@ public class DvQuantity extends DvAmount<DvQuantity> {
     private int precision;    // add final
     private final String units;
     private MeasurementService measurementService; // add final
+    
+    public static final char DECIMAL_SEPARATOR = '.';
+    
+	@Override
+	public String getReferenceModelName() {
+		return ReferenceModelName.DV_QUANTITY.getName();
+	}
+
+	@Override
+	public String serialise() {
+		return getReferenceModelName() + "," + toString();
+	}
 }
 
 /*

@@ -15,11 +15,17 @@
  
 package org.openehr.am.archetype.assertion;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-public abstract class ExpressionItem {
+public abstract class ExpressionItem implements Serializable{
 	
+	/**
+     * 
+     */
+	private static final long serialVersionUID = 1L;
     //Possible type names of this item in the mathematical sense. For leaf nodes, must be the name of a
     //primitive type, or else a reference model type. The type for any relational or boolean
     //operator will be “Boolean”, while the type for any arithmetic operator, will be “Real” or “Integer”. (AOM spec for EXPR_ITEM)

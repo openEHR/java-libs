@@ -20,7 +20,7 @@
  */
 package org.openehr.rm.datastructure.itemstructure;
 
-import org.openehr.rm.common.archetyped.Locatable;
+
 import org.openehr.rm.datastructure.DataStructureTestBase;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datatypes.text.DvText;

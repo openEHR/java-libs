@@ -15,6 +15,7 @@
 package org.openehr.rm.datastructure.itemstructure;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.Archetyped;
@@ -155,6 +156,25 @@ public final class ItemList extends ItemStructure {
      */
     public String pathOfItem(Pathable item) {
         return null;  // todo: implement this method
+    }
+    
+    /**
+     * Return true if value equals
+     *
+     * @param o
+     * @return true if equals
+     */
+    public boolean equals(Object obj) {
+    	if (obj == null) { return false; }
+    	   if (obj == this) { return true; }
+    	   if (obj.getClass() != getClass()) {
+    	     return false;
+    	   }
+    	   ItemList list = (ItemList) obj;
+    	   return new EqualsBuilder()
+    	                 .appendSuper(super.equals(obj))
+    	                 .append(items, list.items)
+    	                 .isEquals();
     }
 
     @Override

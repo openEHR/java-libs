@@ -156,6 +156,11 @@ public class DvTime extends DvTemporal<DvTime> {
 		setBooleans(pattern);
 	}
 
+	@Override
+	public String getReferenceModelName() {
+		return "DV_TIME";
+	}
+
 	/**
 	 * Hour in day
 	 *
@@ -313,7 +318,7 @@ public class DvTime extends DvTemporal<DvTime> {
 	}
 
 	@Override
-	DateTime parseValue(String value) {
+	DateTime parseStringValue(String value) {
 		return DvDateTimeParser.parseTime(value);
 	}
 
@@ -364,6 +369,10 @@ public class DvTime extends DvTemporal<DvTime> {
 	private boolean minuteKnown;
 	private boolean secondKnown;
 	private boolean fractionalSecKnown;	
+	@Override
+	public String serialise() {
+		return getReferenceModelName() + "," + toString(true);
+	}	
 }
 
 /*

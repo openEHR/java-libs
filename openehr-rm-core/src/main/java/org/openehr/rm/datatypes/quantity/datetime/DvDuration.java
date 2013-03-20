@@ -14,6 +14,8 @@
  */
 package org.openehr.rm.datatypes.quantity.datetime;
 
+import java.util.List;
+
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Instant;
@@ -23,10 +25,14 @@ import org.joda.time.format.ISOPeriodFormat;
 import org.joda.time.format.PeriodFormatter;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
-import org.openehr.rm.datatypes.quantity.*;
+import org.openehr.rm.datatypes.basic.ReferenceModelName;
+import org.openehr.rm.datatypes.quantity.DvAmount;
+import org.openehr.rm.datatypes.quantity.DvInterval;
+import org.openehr.rm.datatypes.quantity.DvOrdered;
+import org.openehr.rm.datatypes.quantity.DvQuantified;
+import org.openehr.rm.datatypes.quantity.DvQuantity;
+import org.openehr.rm.datatypes.quantity.ReferenceRange;
 import org.openehr.rm.datatypes.text.CodePhrase;
-
-import java.util.List;
 
 /**
  * Represents a period of time with respect to a notional point in time, which
@@ -154,6 +160,11 @@ public final class DvDuration extends DvAmount<DvDuration> {
 				d.toPeriodFrom(start.getDateTime()));
 	}
 
+	@Override
+	public String getReferenceModelName() {
+		return ReferenceModelName.DV_DURATION.getName();
+	}
+
 	/**
 	 * Create a Duration from a ISO8601 string presentation
 	 * 
@@ -165,6 +176,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 		if (value == null) {
 			throw new IllegalArgumentException("null value");
 		}
+
 		if (!value.matches(PATTERN)) {
 			throw new IllegalArgumentException("Wrong duration format: "
 					+ value);
@@ -179,6 +191,11 @@ public final class DvDuration extends DvAmount<DvDuration> {
 		}
 
 		return new DvDuration(null, null, null, 0.0, false, null, period);
+	}
+
+	@Override
+    public DvDuration parse(String value) {
+		return getInstance(value);
 	}
 
 	/**
@@ -215,7 +232,8 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	 * 
 	 * @return getMagnitude
 	 */
-	public Number getMagnitude() {
+	@Override
+    public Number getMagnitude() {
 		return new Double(toDouble());
 	}
 
@@ -233,7 +251,8 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	 * @return production of addition
 	 * @throws ClassCastException
 	 */
-	public DvQuantified<DvDuration> add(DvQuantified q) {
+	@Override
+    public DvQuantified<DvDuration> add(DvQuantified q) {
 		final DvDuration d = (DvDuration) q;
 
 		DateTime dt = new DateTime(0);
@@ -265,7 +284,8 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	 * @return product of substraction
 	 * @throws ClassCastException
 	 */
-	public DvQuantified<DvDuration> subtract(DvQuantified q) {
+	@Override
+    public DvQuantified<DvDuration> subtract(DvQuantified q) {
 		final DvDuration d = (DvDuration) q;
 
 		DateTime dt = new DateTime(0);
@@ -285,7 +305,8 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	 * 
 	 * @return diff type
 	 */
-	public Class<DvDuration> getDiffType() {
+	@Override
+    public Class<DvDuration> getDiffType() {
 		return DvDuration.class;
 	}
 
@@ -296,7 +317,8 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	 * 
 	 * @return string presentation
 	 */
-	public String toString() {
+	@Override
+    public String toString() {
 		String str = value == null ? formatter.print(period) : value;
 		// No DvDuration will be constructed in P-1y3M24W format, it's either
 		// all negative or all positive values for each element. The only time
@@ -479,17 +501,22 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	 * @param ordered
 	 * @return true if two instances are strictly comparable
 	 */
-	public boolean isStrictlyComparableTo(DvOrdered ordered) {
+	@Override
+    public boolean isStrictlyComparableTo(DvOrdered ordered) {
 		return (ordered instanceof DvDuration);
 	}
 
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (!(o instanceof DvDuration))
-			return false;
-		if (!super.equals(o))
-			return false;
+	@Override
+    public boolean equals(Object o) {
+		if (this == o) {
+            return true;
+        }
+		if (!(o instanceof DvDuration)) {
+            return false;
+        }
+		if (!super.equals(o)) {
+            return false;
+        }
 
 		final DvDuration dvDuration = (DvDuration) o;
 
@@ -505,7 +532,8 @@ public final class DvDuration extends DvAmount<DvDuration> {
 		return period.equals(dvDuration.period);
 	}
 
-	public int hashCode() {
+	@Override
+    public int hashCode() {
 		int result = super.hashCode();
 		long temp;
 		result = 29 * result + period.getYears();
@@ -555,6 +583,11 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	// private static String PATTERN_DATE =
 	// "(-)?P((\\d)*(y|Y))?((\\d)*(m|M))?((\\d)*(d|D))";
 	private static PeriodFormatter formatter = ISOPeriodFormat.standard();
+
+	@Override
+	public String serialise() {
+		return getReferenceModelName() + "," + toString();
+	}
 }
 
 /*

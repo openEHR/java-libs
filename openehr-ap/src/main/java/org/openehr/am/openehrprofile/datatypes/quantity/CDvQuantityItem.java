@@ -15,6 +15,8 @@
 
 package org.openehr.am.openehrprofile.datatypes.quantity;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -26,7 +28,7 @@ import org.openehr.rm.support.basic.Interval;
  * 
  * @author Rong Chen
  */
-public class CDvQuantityItem {	
+public class CDvQuantityItem implements Serializable{	
 	
 	/**
 	 * Constructor 

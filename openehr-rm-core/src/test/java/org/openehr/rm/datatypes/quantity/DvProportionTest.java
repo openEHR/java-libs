@@ -100,6 +100,20 @@ public class DvProportionTest extends TestCase {
 		DvProportion dp = DvProportion.createUnitaryProportion(1.2, 1);
 		assertEquals(1.2, dp.getNumerator(), 0);
 	}
+	
+	public void testParsingDvProportion() {
+		DvProportion dp = new DvProportion(25.3, 100, ProportionKind.PERCENT, 1);
+		assertEquals(DvProportion.parseValue("DV_PROPORTION,25.3,100,2"), dp);
+	}
+	
+	public void testParsingDvProportion2() {
+		DvProportion dp = new DvProportion(21, 24, ProportionKind.FRACTION, 0);
+		assertEquals(DvProportion.parseValue("DV_PROPORTION,21,24,3"), dp);
+	}
+	public void testParsingDvProportion3() {
+		DvProportion dp = new DvProportion(29, 24, ProportionKind.INTEGER_FRACTION, 0);
+		assertEquals(DvProportion.parseValue("DV_PROPORTION,29,24,3"), dp);
+	}
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

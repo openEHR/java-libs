@@ -54,14 +54,14 @@ public final class DvMultimedia extends DvEncapsulated {
     public DvMultimedia(@Attribute (name = "charset") CodePhrase charset, 
 						@Attribute (name = "language") CodePhrase language,
 						@Attribute (name = "alternateText") String alternateText,
-                        @Attribute (name = "mediaType") CodePhrase mediaType,
-                        @Attribute (name = "compressionAlgorithm") CodePhrase compressionAlgorithm,
+                        @Attribute (name = "mediaType", required = true) CodePhrase mediaType,
+                        @Attribute (name = "compressionAlgorithm", required = true) CodePhrase compressionAlgorithm,
                         @Attribute (name = "integrityCheck") byte[] integrityCheck,
-                        @Attribute (name = "integrityCheckAlgorithm") CodePhrase integrityCheckAlgorithm,
+                        @Attribute (name = "integrityCheckAlgorithm", required = true) CodePhrase integrityCheckAlgorithm,
                         @Attribute (name = "thumbnail") DvMultimedia thumbnail, 
 						@Attribute (name = "uri") DvURI uri,
                         @Attribute (name = "data") byte[] data,
-                        @Attribute (name = "terminologyService") TerminologyService terminologyService) {
+                        @Attribute (name = "terminologyService", system = true) TerminologyService terminologyService) {
         
 		super(charset, language, terminologyService);
         
@@ -284,6 +284,16 @@ public final class DvMultimedia extends DvEncapsulated {
     private DvMultimedia thumbnail;
     private DvURI uri;
     private byte[] data;	
+	@Override
+	public String getReferenceModelName() {
+		return "DV_MULTIMEDIA";
+	}
+
+	@Override
+	public String serialise() {
+		// TODO Auto-generated method stub
+		return null;
+	}	
 }
 
 /*

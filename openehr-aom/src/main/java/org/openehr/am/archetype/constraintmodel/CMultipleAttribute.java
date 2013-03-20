@@ -14,6 +14,7 @@
  */
 package org.openehr.am.archetype.constraintmodel;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -23,7 +24,7 @@ import java.util.*;
  * @author Rong Chen
  * @version 1.0
  */
-public final class CMultipleAttribute extends CAttribute {
+public final class CMultipleAttribute extends CAttribute implements Serializable{
 
     /**
      * Create a constraint for mulple-valued attribute node

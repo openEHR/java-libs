@@ -54,6 +54,10 @@ public final class DvBoolean extends DataValue {
         return value;
     }
 
+    public DvBoolean parse(String value) throws IllegalArgumentException {
+		return valueOf(value);		
+	}
+
     /**
      * Returns an <code>Boolean</code> object holding the value of
      * the specified String. String not equals to "true" will get
@@ -113,6 +117,10 @@ public final class DvBoolean extends DataValue {
         return ( value ? 1 : 0 );
     }
 
+    public String toString() {
+    	return value ? Boolean.TRUE.toString() : Boolean.FALSE.toString(); 
+    }
+    
     // POJO start
     private DvBoolean() {
     }
@@ -134,6 +142,16 @@ public final class DvBoolean extends DataValue {
      * False value
      */
     public static final DvBoolean FALSE = new DvBoolean(false);
+
+	@Override
+	public String getReferenceModelName() {
+		return ReferenceModelName.DV_BOOLEAN.getName();
+	}
+
+	@Override
+	public String serialise() {
+		return getReferenceModelName() + "," + toString();
+	}
 }
 
 /*

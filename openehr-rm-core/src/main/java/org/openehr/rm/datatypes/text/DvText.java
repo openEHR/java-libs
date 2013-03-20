@@ -20,6 +20,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.datatypes.basic.DataValue;
+import org.openehr.rm.datatypes.basic.ReferenceModelName;
 import org.openehr.rm.datatypes.uri.DvURI;
 import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
 import org.openehr.rm.support.terminology.TerminologyService;
@@ -119,6 +120,10 @@ public class DvText extends DataValue {
     static boolean validValue(String value) {
         return StringUtils.isNotEmpty(value)
                 && StringUtils.containsNone(value, "\n\r");
+    }
+
+    public DvText parse(String value) {
+    	return new DvText(value);
     }
 
     /**
@@ -259,6 +264,15 @@ public class DvText extends DataValue {
     private DvURI hyperlink;
     private CodePhrase language;
     private CodePhrase encoding;
+	@Override
+	public String getReferenceModelName() {
+		return ReferenceModelName.DV_TEXT.getName();
+	}
+
+	@Override
+	public String serialise() {
+		return getReferenceModelName() + "," + toString();
+	} 
 }
 
 /*

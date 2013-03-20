@@ -17,6 +17,7 @@ package org.openehr.rm.datatypes.quantity;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
+import org.openehr.rm.datatypes.basic.ReferenceModelName;
 import org.openehr.rm.datatypes.text.CodePhrase;
 
 import java.util.List;
@@ -172,6 +173,19 @@ public final class DvCount extends DvAmount<DvCount> {
 		return new HashCodeBuilder(13, 37).append(magnitude).toHashCode();
 	}
 
+	public String toString() {
+		return Integer.toString(magnitude);
+	}
+	
+	public DvCount parse(String value) throws IllegalArgumentException {
+		try {
+			int i = Integer.parseInt(value);
+			return new DvCount(i);
+		} catch(NumberFormatException nfe) {
+			throw new IllegalArgumentException("Wrong format", nfe);
+		}
+	}
+
 	// POJO start
 	DvCount() {
 	}
@@ -184,6 +198,16 @@ public final class DvCount extends DvAmount<DvCount> {
 
 	/* fields */
 	private int magnitude;
+
+	@Override
+	public String getReferenceModelName() {
+		return ReferenceModelName.DV_COUNT.getName();
+	}
+
+	@Override
+	public String serialise() {
+		return getReferenceModelName() + "," + toString();
+	}
 }
 
 /*

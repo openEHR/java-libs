@@ -156,7 +156,7 @@ public class SkeletonGeneratorTestBase extends TestCase {
 		adlSerializer.output(toPrint, System.out);
 	}
 	
-	private DADLBinding dadlBinding; 	
+	protected DADLBinding dadlBinding; 	
 	private XMLBinding xmlBinding;
 	private OETParser oetParser;
 	private Flattener flattener;

@@ -13,19 +13,42 @@
  */
 package org.openehr.rm.binding;
 
-import org.openehr.am.parser.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.openehr.am.parser.AttributeValue;
+import org.openehr.am.parser.ComplexObjectBlock;
+import org.openehr.am.parser.ContentObject;
+import org.openehr.am.parser.KeyedObject;
+import org.openehr.am.parser.MultipleAttributeObjectBlock;
+import org.openehr.am.parser.ObjectBlock;
+import org.openehr.am.parser.PrimitiveObjectBlock;
+import org.openehr.am.parser.SimpleValue;
+import org.openehr.am.parser.SingleAttributeObjectBlock;
 import org.openehr.build.RMObjectBuilder;
 import org.openehr.build.RMObjectBuildingException;
 import org.openehr.build.SystemValue;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
+import org.openehr.rm.datatypes.quantity.ProportionKind;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.measurement.MeasurementService;
 import org.openehr.rm.support.measurement.SimpleMeasurementService;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.terminology.SimpleTerminologyService;
-
-import java.util.*;
 
 /**
  * Utility class that binds data in DADL format to openEHR RM
@@ -162,8 +185,199 @@ public class DADLBinding {
 			return valueList;
 		}
 	}
+	
+	public List<String> toDADL(Object obj) throws Exception {
+		List<String> lines = new ArrayList<String>();
+		return toDADL(obj, 1, lines);
+	}
+	
+	public List<String> toDADL(Object obj, int indent, List<String> lines) throws Exception {		
+		
+		
+		log.debug("toDADL on obj.getClass: " + obj.getClass().getCanonicalName()
+				+ ", indent: " + indent + ", line.size: "  + lines.size());
+		
+		Class klass = obj.getClass();		
+		
+		String className = klass.getSimpleName();
+		String rmName = toUnderscoreSeparated(className).toUpperCase();
+	
+		String typeHeader = "(" + rmName + ") <";
+		int size = lines.size();
+		if(size == 0) {
+			lines.add(typeHeader); 
+		} else {
+			String l = lines.get(size - 1);
+			l += typeHeader;
+			lines.set(size -1, l);
+		}	
+		
+		SortedMap<String, Attribute> attributes = attributeMap(obj.getClass());
+		String name = null;
+		Object value = null;
+		StringBuffer buf = null;
+		for(Iterator<String> names = attributes.keySet().iterator(); names.hasNext();) {	
+			name = names.next();
+			
+			Attribute attribute = attributes.get(name);
+			if(attribute.system()) {
+				continue;
+			}
+			
+			if("parent".equals(attribute.name())) {
+				continue; // causing dead-loops
+			}
+			
+			Method getter = getter(name, obj.getClass());
+			if(getter != null) { 
+				value = getter.invoke(obj, null);
+				buf = new StringBuffer();
+				if(value != null ) {
+					for(int i = 0; i < indent; i++) {
+						buf.append("\t");
+					}
+					buf.append(toUnderscoreSeparated(name));
+					buf.append(" = ");
+					
+					if(isOpenEHRRMClass(value) && !(value instanceof ProportionKind)) {
+					
+						lines.add(buf.toString());
+						
+						log.debug("fetching attribute: " + name);
+						
+						toDADL(value, indent + 1, lines);						
+				
+					} else if(value instanceof List) {
+						
+						buf.append("<");
+						lines.add(buf.toString());
+						
+						List list = (List) value;
+						for(int i = 0, j = list.size(); i < j; i++) {
+							buf = new StringBuffer();
+							for(int k = 0; k < indent + 1; k++) {
+								buf.append("\t");
+							}
+							lines.add(buf.toString() + "[" + (i+1) + "] = ");
+							toDADL(list.get(i), indent + 2, lines);
+						}
+						
+						buf = new StringBuffer();
+						for(int i = 0; i < indent; i++) {
+							buf.append("\t");
+						}
+						buf.append(">");
+						lines.add(buf.toString());
+						
+					} else {
+						
+						buf.append("<");
+						if(value instanceof String || value instanceof Boolean) {							
+							buf.append("\"");
+							buf.append(value);
+							buf.append("\"");						
+						} else {
+							buf.append(value.toString());
+						}
+						buf.append(">");
+						lines.add(buf.toString());
+					}
+					
+				}
+			}
+		}
+		buf = new StringBuffer();
+		for(int i = 0; i < indent - 1; i++) {
+			buf.append("\t");
+		}
+		buf.append(">");
+		lines.add(buf.toString());		
+		return lines;
+	}
+	
+	private Method getter(String attributeName, Class klass) {
+		Method[] methods = klass.getMethods();
+		String name = "get" + attributeName.substring(0, 1).toUpperCase() +
+						attributeName.substring(1);
+
+		log.debug("search getter method of name '" + name + "'");
+
+		for(Method method : methods) {
+			if(method.getName().equals(name)) {
+				Type[] paras = method.getParameterTypes();
+				if(paras.length == 0) {
+					return method;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Return a map with name as the key and index of position as the value for
+	 * all parameters of the full constructor in the RMObject
+	 * 
+	 * @param rmClass
+	 * @return
+	 */
+	private SortedMap<String, Attribute> attributeMap(Class rmClass) {
+		SortedMap<String, Attribute> map = new TreeMap<String, Attribute>();
+		Constructor constructor = fullConstructor(rmClass);
+		
+		if(constructor == null) {
+			throw new IllegalArgumentException("Unknown RM Class: " + 
+					rmClass.getClass().getCanonicalName());
+		}
+		
+		Annotation[][] annotations = constructor.getParameterAnnotations();
+
+		for (int i = 0; i < annotations.length; i++) {
+			if (annotations[i].length == 0) {
+				throw new IllegalArgumentException(
+						"missing annotation at position " + i);
+			}
+			Attribute attribute = (Attribute) annotations[i][0];
+			map.put(attribute.name(), attribute);
+		}
+		return map;
+	}
+
+	private static Constructor fullConstructor(Class klass) {
+		if(klass == null) {
+			return null;
+		}
+		Constructor[] array = klass.getConstructors();
+		for (Constructor constructor : array) {
+			if (constructor.isAnnotationPresent(FullConstructor.class)) {
+				return constructor;
+			}
+		}
+		return null;
+	}	
+	
+	public String toUnderscoreSeparated(String camelCase) {
+		String[] array = StringUtils.splitByCharacterTypeCamelCase(camelCase);
+		StringBuffer buf = new StringBuffer();
+		for (int i = 0; i < array.length; i++) {
+			String s = array[i];
+			buf.append(s.substring(0, 1).toLowerCase());
+			buf.append(s.substring(1));
+			if (i != array.length - 1) {
+				buf.append("_");
+			}
+		}
+		return buf.toString();
+	}
+
+	private boolean isOpenEHRRMClass(Object obj) {
+		return obj.getClass().getName().contains(OPENEHR_RM_PACKAGE);
+	}
+	
 
 	private RMObjectBuilder builder;
+	private static Logger log = Logger.getLogger(DADLBinding.class);
+	private static final String OPENEHR_RM_PACKAGE = "org.openehr.rm.";
+	private static final String LINE_RETURN = "\r\n";
 
 }
 /*

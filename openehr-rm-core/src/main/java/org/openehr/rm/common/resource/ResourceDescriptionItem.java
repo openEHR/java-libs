@@ -42,10 +42,13 @@ public class ResourceDescriptionItem extends RMObject {
 			Map<String, String> originalResourceUri, Map<String, String> otherDetails,
 			TerminologyService terminologyService) {
 		if (language == null) {
-			throw new IllegalArgumentException("null language");
+			//throw new IllegalArgumentException("null language");
+			System.out.println("WARNING: Archetype parsed that has wrong language handling...language set to ISO_639-1::en");
+		    language = new CodePhrase("ISO_639-1","en"); 
 		}
 		if (StringUtils.isEmpty(purpose)) {
-			throw new IllegalArgumentException("null or empty purpose");
+		//	throw new IllegalArgumentException("null or empty purpose");
+		System.out.println("WARNING: Archetype parsed that has null or empty purpose...");
 		}
 		if (use != null && StringUtils.isEmpty(use)) {
 			throw new IllegalArgumentException("empty use");
@@ -196,6 +199,85 @@ public class ResourceDescriptionItem extends RMObject {
 	private String copyright;
 	private Map<String, String> originalResourceUri;
 	private Map<String, String> otherDetails;
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((copyright == null) ? 0 : copyright.hashCode());
+		result = prime * result
+				+ ((keywords == null) ? 0 : keywords.hashCode());
+		result = prime * result
+				+ ((language == null) ? 0 : language.hashCode());
+		result = prime * result + ((misuse == null) ? 0 : misuse.hashCode());
+		result = prime
+				* result
+				+ ((originalResourceUri == null) ? 0 : originalResourceUri
+						.hashCode());
+		result = prime * result
+				+ ((otherDetails == null) ? 0 : otherDetails.hashCode());
+		result = prime * result + ((purpose == null) ? 0 : purpose.hashCode());
+		result = prime * result + ((use == null) ? 0 : use.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ResourceDescriptionItem other = (ResourceDescriptionItem) obj;
+		if (copyright == null) {
+			if (other.copyright != null)
+				return false;
+		} else if (!copyright.equals(other.copyright))
+			return false;
+		if (keywords == null) {
+			if (other.keywords != null)
+				return false;
+		} else if (!keywords.equals(other.keywords))
+			return false;
+		if (language == null) {
+			if (other.language != null)
+				return false;
+		} else if (!language.equals(other.language))
+			return false;
+		if (misuse == null) {
+			if (other.misuse != null)
+				return false;
+		} else if (!misuse.equals(other.misuse))
+			return false;
+		if (originalResourceUri == null) {
+			if (other.originalResourceUri != null)
+				return false;
+		} else if (!originalResourceUri.equals(other.originalResourceUri))
+			return false;
+		if (otherDetails == null) {
+			if (other.otherDetails != null)
+				return false;
+		} else if (!otherDetails.equals(other.otherDetails))
+			return false;
+		if (purpose == null) {
+			if (other.purpose != null)
+				return false;
+		} else if (!purpose.equals(other.purpose))
+			return false;
+		if (use == null) {
+			if (other.use != null)
+				return false;
+		} else if (!use.equals(other.use))
+			return false;
+		return true;
+	}
 		
 }
 

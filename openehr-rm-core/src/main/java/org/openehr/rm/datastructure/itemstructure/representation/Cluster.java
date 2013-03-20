@@ -55,15 +55,17 @@ public final class Cluster extends Item {
                            @Attribute(name = "feederAudit") FeederAudit feederAudit,
                            @Attribute(name = "links") Set<Link> links,
                            @Attribute(name = "parent") Pathable parent, 
-                           @Attribute(name = "items", required=true) List<Item> items) {
+	    @Attribute(name = "items") List<Item> items) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
                 links, parent);
 
-        if (items == null || items.isEmpty()) {
+	if (items != null && items.isEmpty()) { //Skip items==null check to facilitate item skeleton generation
             throw new IllegalArgumentException("null or empty items");
         }
+	if (items!=null){
         this.items = new ArrayList<Item>(items);
+    }
     }
 
     /**

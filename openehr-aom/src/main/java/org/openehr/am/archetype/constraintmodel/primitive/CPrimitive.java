@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.constraintmodel.primitive;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -23,7 +25,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author Rong Chen
  * @version 1.0
  */
-public abstract class CPrimitive {
+public abstract class CPrimitive  implements Serializable{
 
     /**
      * Return the primitive type this constraint is applied on

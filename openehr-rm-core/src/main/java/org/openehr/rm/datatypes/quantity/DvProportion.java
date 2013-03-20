@@ -13,6 +13,8 @@
  */
 package org.openehr.rm.datatypes.quantity;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
 
 import org.openehr.rm.Attribute;
@@ -183,8 +185,13 @@ public class DvProportion extends DvAmount<DvProportion> {
 		return false;
 	}
 	public int compareTo(DvOrdered arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	DvProportion p = (DvProportion) arg0;
+	if (getDenominator()==0 || p.getDenominator()==0){
+	    throw new IllegalArgumentException("Cannot compare proportions with denominator==0");
+	}
+	Double result = (getNumerator()/getDenominator());
+	Double resultB = (p.getNumerator()/p.getDenominator());
+	return result.compareTo(resultB);
 	}
 	
 	
@@ -205,11 +212,73 @@ public class DvProportion extends DvAmount<DvProportion> {
 		this.precision = precision;
 	}
 
+    @Override
+    public String serialise() {
+	return getReferenceModelName() + "," + toString();
+    }
+
+    public DvProportion parse(String value) {
+	int iNumerator = value.indexOf(",");
+	if(iNumerator < 0 || iNumerator == value.length()) {
+	    throw new IllegalArgumentException("failed to parse proportion, wrong format [" + value + "]");
+	}
+	String numeratorStr = value.substring(0, iNumerator);
+	int iDenominator = value.indexOf(",", iNumerator+1);
+	if(iDenominator < 0 || iDenominator == value.length()) {
+	    throw new IllegalArgumentException("failed to parse proportion, wrong format [" + value + "]");
+	}
+	String denominatorStr = value.substring(iNumerator+1, iDenominator);
+
+	String propTypeStr = value.substring(iDenominator+1);
+	Integer propTypeInt = null; 
+	try {
+	    propTypeInt = Integer.parseInt(propTypeStr);
+	} catch(NumberFormatException nfe) {
+	    throw new IllegalArgumentException("failed to parse proportion type ["+propTypeStr+"]", nfe);
+	}
+	ProportionKind propType = ProportionKind.valueOf(propTypeInt);
+
+	//Precision is calculated from numerator
+	int precision = 0;
+	int i = numeratorStr.indexOf(DvQuantity.DECIMAL_SEPARATOR);
+	if(i >= 0) {
+	    precision = numeratorStr.length() - i - 1;
+	}
+	try {
+	    double numerator = Double.parseDouble(numeratorStr);
+	    double denominator = Double.parseDouble(denominatorStr);
+	    return new DvProportion(numerator, denominator, propType, precision);
+	} catch(NumberFormatException nfe) {
+	    throw new IllegalArgumentException("failed to parse quantity[" 
+		    + numeratorStr + "/" + denominatorStr+ "]", nfe);
+	}
+    }
+
+    /**
+     * string form displayable for humans
+     *
+     * @return string presentation
+     */
+    public String toString() {
+	DecimalFormat format = new DecimalFormat();
+	format.setMinimumFractionDigits(precision);
+	format.setMaximumFractionDigits(precision);
+	DecimalFormatSymbols dfs = format.getDecimalFormatSymbols();
+	dfs.setDecimalSeparator(DvQuantity.DECIMAL_SEPARATOR);
+	format.setDecimalFormatSymbols(dfs);
+	format.setGroupingUsed(false);
+	return format.format(numerator) + "," + format.format(denominator) + "," + type;
+    }
+    
 	/* fields */
 	private double numerator;
 	private double denominator;
 	private ProportionKind type;
 	private Integer precision;
+    @Override
+    public String getReferenceModelName() {
+	return "DV_PROPORTION";
+    }
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

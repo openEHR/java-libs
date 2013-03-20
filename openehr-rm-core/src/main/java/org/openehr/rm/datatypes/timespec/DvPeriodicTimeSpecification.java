@@ -90,6 +90,18 @@ public final class DvPeriodicTimeSpecification
     public boolean institutionSpecified() {
         return false;  // todo: implement this
     }
+
+	@Override
+	public String getReferenceModelName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String serialise() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 /*

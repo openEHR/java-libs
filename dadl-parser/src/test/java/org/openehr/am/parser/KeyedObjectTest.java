@@ -37,6 +37,14 @@ public class KeyedObjectTest extends ParserTestBase {
 		assertKeyedObject(keyedObjects.get(1), 2, "name", "diastolic");
 	}
 	
+	public void testParseCodePhraseAsKey() throws Exception {
+		DADLParser parser = new DADLParser(loadFromClasspath(
+			"keyed_objects2.dadl"));
+		ContentObject content = parser.parse();
+		
+		assertNotNull("contentObject is null", content);
+	}
+	
 	private void assertKeyedObject(KeyedObject ko, int key, 
 			String attribute, String value) {
 		SimpleValue keyValue = ko.getKey();

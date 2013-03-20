@@ -19,6 +19,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ import java.util.Map;
  * @author Rong Chen
  * @version 1.0
  */
-public class ArchetypeOntology {
+public class ArchetypeOntology  implements Serializable{
 
     /**
      * Creates an ArchetypeOntology

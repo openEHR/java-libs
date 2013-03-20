@@ -14,11 +14,9 @@
  */
 package org.openehr.am.archetype;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehr.am.archetype.assertion.Assertion;
@@ -101,6 +99,7 @@ public Archetype(String adlVersion, String id, String parentId, String concept,
 		this.pathNodeMap = new HashMap<String, CObject>();
 		this.pathInputMap = new HashMap<String, String>();
 		this.inputPathMap = new HashMap<String, String>();
+		this.nodeIdPathMap = new HashMap<String, String>();
 		reloadNodeMaps();
 	}
 
@@ -128,6 +127,7 @@ public Archetype(String adlVersion, String id, String parentId, String concept,
 		pathNodeMap.clear();
 		pathInputMap.clear();
 		inputPathMap.clear();
+		nodeIdPathMap.clear();
 		loadMaps(definition, true);
 		loadInternalRefs(definition, true, null, null);
 	}
@@ -163,7 +163,8 @@ public Archetype(String adlVersion, String id, String parentId, String concept,
 	private void loadMaps(CObject node, boolean required) {
 		
 		if(node != null && node.path() != null) {
-		pathNodeMap.put(node.path(), node);
+			pathNodeMap.put(node.path(), node);
+			nodeIdPathMap.put(node.getNodeId(), node.path());
 		}
 		if (!(node instanceof CComplexObject)) {
 			return; // other types of cobject
@@ -195,6 +196,11 @@ public Archetype(String adlVersion, String id, String parentId, String concept,
 	public Map<String, CObject> getPathNodeMap() {
 		return pathNodeMap;
 	}
+
+	public String getPathByNodeId(String nodeId) {
+		return nodeIdPathMap.get(nodeId);
+	}
+
 	private void loadInternalRefs(CObject node, boolean required, String refPath, String baseTargetPath ) {
 
 	    if (node == null) {
@@ -457,7 +463,7 @@ public Archetype(String adlVersion, String id, String parentId, String concept,
 
 	private final ArchetypeID archetypeId;
 
-	private final HierObjectID uid; // added to adl in the saame way as adl_version
+	private final HierObjectID uid; // added to adl in the same way as adl_version
 
 	private final String concept;
 
@@ -475,6 +481,8 @@ public Archetype(String adlVersion, String id, String parentId, String concept,
 	private final Map<String, String> pathInputMap;
 
 	private final Map<String, String> inputPathMap;
+	
+	private final Map<String, String> nodeIdPathMap;
 }
 
 /*

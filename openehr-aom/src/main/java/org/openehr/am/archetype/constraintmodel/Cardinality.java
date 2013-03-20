@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.constraintmodel;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.openehr.rm.support.basic.Interval;
@@ -25,7 +27,7 @@ import org.openehr.rm.support.basic.Interval;
  * @author Rong Chen
  * @version 1.0
  */
-public final class Cardinality {
+public final class Cardinality  implements Serializable{
 
     /**
      * Creates a cardinality

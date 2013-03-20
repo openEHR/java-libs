@@ -1,10 +1,10 @@
-<
+(HISTORY) <
     archetype_node_id = <"at0001">
     name = <
     	value = <"history">
     >
     origin = <2007-10-30T09:22:00>
-    events = <
+    events = (POINT_EVENT) <
         [1] = <
             archetype_node_id = <"at0006">
             name = <

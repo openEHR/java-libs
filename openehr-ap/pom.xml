@@ -1,12 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
 	<groupId>openehr</groupId>
+		<artifactId>ref_impl_java</artifactId>
+		<version>1.0.3-SNAPSHOT</version>
+	</parent>
 	<artifactId>openehr-ap</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
 	<name>openEHR Archetype Profile</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
     <scm>
@@ -21,19 +22,6 @@
 	<inceptionYear>2004</inceptionYear>
 	
 	<description>Java implementation of the openEHR Archetype Profile</description>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 	
 	<dependencies>		
 		<dependency>

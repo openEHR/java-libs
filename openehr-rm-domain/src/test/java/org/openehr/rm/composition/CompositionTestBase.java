@@ -23,7 +23,7 @@ import org.openehr.rm.common.generic.PartySelf;
 import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.composition.content.entry.Observation;
 import org.openehr.rm.composition.content.navigation.Section;
-import org.openehr.rm.datastructure.DataStructureTestBase;
+import org.openehr.rm.datastructure.DataStructureTestBase2;
 import org.openehr.rm.datastructure.history.Event;
 import org.openehr.rm.datastructure.history.History;
 import org.openehr.rm.datastructure.history.PointEvent;
@@ -49,7 +49,7 @@ import org.openehr.rm.support.terminology.TestTerminologyService;
  * @author Rong Chen
  * @version 1.0
  */
-public class CompositionTestBase extends DataStructureTestBase {
+public class CompositionTestBase extends DataStructureTestBase2 {
 
 	public CompositionTestBase(String test) {
 		super(test);

@@ -16,7 +16,10 @@ package org.openehr.rm.datatypes.quantity.datetime;
 
 import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
-
+import org.joda.time.DateTime;
+import org.joda.time.MutableDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.datatypes.quantity.DvInterval;
@@ -24,10 +27,6 @@ import org.openehr.rm.datatypes.quantity.DvOrdered;
 import org.openehr.rm.datatypes.quantity.ReferenceRange;
 import org.openehr.rm.datatypes.text.CodePhrase;
 
-import org.joda.time.DateTime;
-import org.joda.time.MutableDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 /**
  * Represents a point in time, as measured on the Gregorian calendar,
@@ -195,7 +194,7 @@ public class DvDate extends DvTemporal<DvDate> {
 	}
 
 	@Override
-	DateTime parseValue(String value) {
+	DateTime parseStringValue(String value) {
 		return DvDateTimeParser.parseDate(value);
 	}
 
@@ -306,6 +305,15 @@ public class DvDate extends DvTemporal<DvDate> {
 	private boolean dayKnown;
 	private boolean monthKnown;
 	private boolean isPartial;
+	@Override
+	public String getReferenceModelName() {
+		return "DV_DATE";
+	}
+
+	@Override
+	public String serialise() {
+		return getReferenceModelName() + "," +toString(true);
+	}
 }
 
 /*

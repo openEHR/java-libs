@@ -140,6 +140,17 @@ public final class ReferenceRange <T extends DvOrdered> extends DataValue {
     /* fields */
     private final DvText meaning;
     private final DvInterval<T> range;
+	@Override
+	public String getReferenceModelName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String serialise() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 /*

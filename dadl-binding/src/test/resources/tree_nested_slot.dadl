@@ -1,0 +1,146 @@
+(ITEM_TREE) <
+	archetype_details = (ARCHETYPED) <
+		archetype_id = (ARCHETYPE_ID) <
+			value = <"adl-test-ITEM_TREE.test_tree.v1">
+		>
+		rm_version = <"1.0.1">
+	>
+	archetype_node_id = <"adl-test-ITEM_TREE.test_tree.v1">
+	items = <
+		[1] = (ELEMENT) <
+			archetype_node_id = <"at0001">
+			name = (DV_TEXT) <
+				value = <"sample">
+			>
+			value = (DV_CODED_TEXT) <
+				defining_code = (CODE_PHRASE) <
+					code_string = <"111">
+					terminology_id = (TERMINOLOGY_ID) <
+						value = <"terminology">
+					>
+				>
+				value = <"serum">
+			>
+		>
+		[2] = (CLUSTER) <
+			archetype_node_id = <"at0005">
+			items = <
+				[1] = (ELEMENT) <
+					archetype_node_id = <"at0002">
+					name = (DV_TEXT) <
+						value = <"total cholesterol">
+					>
+					value = (DV_QUANTITY) <
+						accuracy = <0.0>
+						magnitude = <6.1>
+						precision = <0>
+						units = <"mmol/L">
+					>
+				>
+				[2] = (ELEMENT) <
+					archetype_node_id = <"at0003">
+					name = (DV_TEXT) <
+						value = <"LDL cholesterol">
+					>
+					value = (DV_QUANTITY) <
+						accuracy = <0.0>
+						magnitude = <0.9>
+						precision = <0>
+						units = <"mmol/L">
+					>
+				>
+				[3] = (ELEMENT) <
+					archetype_node_id = <"at0004">
+					name = (DV_TEXT) <
+						value = <"HDL cholesterol">
+					>
+					value = (DV_QUANTITY) <
+						accuracy = <0.0>
+						magnitude = <5.2>
+						precision = <0>
+						units = <"mmol/L">
+					>
+				>
+			>
+			name = (DV_TEXT) <
+				value = <"lipid studies">
+			>
+		>
+		[3] = (ELEMENT) <
+			archetype_node_id = <"at0006">
+			name = (DV_TEXT) <
+				value = <"comment">
+			>
+			value = (DV_TEXT) <
+				value = <"high cardiac risk">
+			>
+		>
+		[4] = (CLUSTER) <
+			archetype_details = (ARCHETYPED) <
+				archetype_id = (ARCHETYPE_ID) <
+					value = <"adl-test-CLUSTER.test_cluster.v1">
+				>
+				rm_version = <"1.0.1">
+			>
+			archetype_node_id = <"adl-test-CLUSTER.test_cluster.v1">
+			items = <
+				[1] = (ELEMENT) <
+					archetype_node_id = <"at0002">
+					name = (DV_TEXT) <
+						value = <"element 1">
+					>
+					value = (DV_TEXT) <
+						value = <"element 1">
+					>
+				>
+				[2] = (CLUSTER) <
+					archetype_details = (ARCHETYPED) <
+						archetype_id = (ARCHETYPE_ID) <
+							value = <"adl-test-CLUSTER.test_cluster.v1">
+						>
+						rm_version = <"1.0.1">
+					>
+					archetype_node_id = <"adl-test-CLUSTER.test_cluster.v1">
+					items = <
+						[1] = (ELEMENT) <
+							archetype_node_id = <"at0002">
+							name = (DV_TEXT) <
+								value = <"element 1">
+							>
+							value = (DV_TEXT) <
+								value = <"element 1">
+							>
+						>
+						[2] = (ELEMENT) <
+							archetype_node_id = <"at0003">
+							name = (DV_TEXT) <
+								value = <"element 2">
+							>
+							value = (DV_TEXT) <
+								value = <"element 2">
+							>
+						>
+						[3] = (ELEMENT) <
+							archetype_node_id = <"at0004">
+							name = (DV_TEXT) <
+								value = <"element 3">
+							>
+							value = (DV_TEXT) <
+								value = <"element 3">
+							>
+						>
+					>
+					name = (DV_TEXT) <
+						value = <"test cluster">
+					>
+				>
+			>
+			name = (DV_TEXT) <
+				value = <"test cluster">
+			>
+		>
+	>
+	name = (DV_TEXT) <
+		value = <"biochemstry result">
+	>
+>

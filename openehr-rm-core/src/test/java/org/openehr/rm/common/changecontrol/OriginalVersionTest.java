@@ -23,9 +23,7 @@ package org.openehr.rm.common.changecontrol;
 
 import java.util.HashSet;
 import junit.framework.*;
-import java.util.List;
 import java.util.Set;
-import org.openehr.rm.common.generic.Attestation;
 import org.openehr.rm.common.generic.AuditDetails;
 import org.openehr.rm.common.generic.PartyIdentified;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
@@ -38,7 +36,6 @@ import org.openehr.rm.support.identification.ObjectRef;
 import org.openehr.rm.support.identification.ObjectVersionID;
 import org.openehr.rm.support.identification.PartyRef;
 import org.openehr.rm.support.identification.TestTerminologyID;
-import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 
 public class OriginalVersionTest extends TestCase {
@@ -78,30 +75,8 @@ public class OriginalVersionTest extends TestCase {
 		OriginalVersion<String> ov2 = new OriginalVersion<String>(uid, null,
 				"A Party Info", codedText, audit1, lr, null, otherUids, null, //true, 
 				TestTerminologyService.getInstance());
-//		assertContructorError(uid, null, "A Party Info", codedText, audit1, lr,
-//				null, otherUids, null, false, TestTerminologyService
-//						.getInstance());
-//		assertContructorError(uid, null, "A Party Info", codedText, audit1, lr,
-//				null, null, null, true, TestTerminologyService.getInstance());
 
 	}
-
-//	private void assertContructorError(ObjectVersionID uid,
-//			ObjectVersionID pVersionID, String data, DvCodedText codedText,
-//			AuditDetails audit, ObjectRef contribution, String signature,
-//			Set<ObjectVersionID> otherUids, List<Attestation> attestations,
-//			boolean isMerged, TerminologyService terminologyService) {
-//
-//		try {
-//			OriginalVersion<String> ov = new OriginalVersion<String>(uid,
-//					pVersionID, data, codedText, audit, contribution,
-//					signature, otherUids, attestations, // isMerged,
-//					TestTerminologyService.getInstance());
-//			fail("should throw exception, breach of isMerged validity");
-//		} catch (IllegalArgumentException iae) {
-//
-//		}
-//	}
 }
 
 /*

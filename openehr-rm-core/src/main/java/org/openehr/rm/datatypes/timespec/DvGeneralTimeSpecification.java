@@ -73,6 +73,18 @@ public class DvGeneralTimeSpecification extends DvTimeSpecification {
     public boolean institutionSpecified() {
         return false;  // todo: implement this method
     }
+
+	@Override
+	public String getReferenceModelName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String serialise() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 /*

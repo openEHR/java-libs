@@ -1,26 +1,19 @@
-<
+(POINT_EVENT) <
     archetype_node_id = <"at0006">
-    name = <
-    	value = <"sitting">
-    >
-    time = <2005-12-03T09:22:00>
-    data = <
+	data = (ITEM_LIST) <
         archetype_node_id = <"at0003">
-        name = <
-	    	value = <"item list">
-	    >  
         items = <
-            [1] = <
-                name = <
+            [1] = (ELEMENT) <
+                archetype_node_id = <"at0004">
+				name = (DV_TEXT) <
                 	value = <"systolic">
                 >
-                archetype_node_id = <"at0004">
                 value = <
                     magnitude = <120.0>
                     units = <"mmHg">
                 >
             >
-            [2] = <
+            [2] = (ELEMENT) <
                 name = <
                 	value = <"diastolic">
                 >
@@ -31,5 +24,12 @@
                 >
             >
         >
+		name = <
+	    	value = <"item list">
+	    >
     >
+    name = <
+    	value = <"sitting">
+    >
+    time = <2005-12-03T09:22:00>    
 >

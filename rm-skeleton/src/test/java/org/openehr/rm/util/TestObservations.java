@@ -30,4 +30,9 @@ public class TestObservations extends SkeletonGeneratorTestBase {
 		archetype = loadArchetype("openEHR-EHR-OBSERVATION.heart_rate.v2.adl");
 		instance = generator.create(archetype);
 	}
+	
+	public void testWithLabArchetype() throws Exception {
+		archetype = loadArchetype("openEHR-EHR-OBSERVATION.lab_test.v1.adl");
+		instance = generator.create(archetype, GenerationStrategy.MAXIMUM_EMPTY);
+	}
 }

@@ -14,12 +14,14 @@
  */
 package org.openehr.rm.datatypes.text;
 
+import java.util.List;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
+import org.openehr.rm.datatypes.basic.ReferenceModelName;
 import org.openehr.rm.datatypes.uri.DvURI;
 import org.openehr.rm.support.terminology.TerminologyService;
-
-import java.util.List;
 
 /**
  * A text item whose value must be the rubric from a controlled
@@ -90,6 +92,10 @@ public final class DvCodedText extends DvText {
         this(value, null, null, definingCode, null);
     }
 
+    public DvCodedText(String value, String terminology, String code) {
+    	this(value, new CodePhrase(terminology, code));
+    }
+
     /**
      * Return defining code
      *
@@ -99,6 +105,11 @@ public final class DvCodedText extends DvText {
         return definingCode;
     }
 
+    @Override
+	public String getReferenceModelName() {
+		return ReferenceModelName.DV_CODED_TEXT.getName();
+	}
+    
     /**
      * Two CodedText euqual if super class equals and has same value
      * for defining code
@@ -113,9 +124,9 @@ public final class DvCodedText extends DvText {
 
         final DvCodedText codedText = (DvCodedText) o;
 
-        if (!definingCode.equals(codedText.definingCode)) return false;
-
-        return true;
+        return new EqualsBuilder()
+        .append(definingCode, codedText.definingCode)
+        .isEquals();
     }
 
     /**
@@ -135,7 +146,31 @@ public final class DvCodedText extends DvText {
      * @return string presentation
      */
     public String toString() {
-        return super.toString() + ", " + definingCode;
+        return definingCode.toString() + "|" + getValue() + "|";
+    }
+    
+    public String serialise() {
+    	return getReferenceModelName() + "," + toString();
+    }
+    
+    public DvCodedText parse(String value){
+		String[] tokens = value.split("::");
+		if (tokens.length!=2){
+		    throw new IllegalArgumentException("failed to parse DvCodedText '"+value+"', wrong number of tokens.");
+		}
+		String[] tokens2 = tokens[1].split("\\|");
+		if (tokens2.length!=2){
+		    throw new IllegalArgumentException("failed to parse DvCodedText '"+value+"', wrong number of tokens.");
+		}
+		return new DvCodedText(tokens2[1], tokens[0], tokens2[0]);
+    }
+
+    public String getTerminologyId(){
+	return getDefiningCode().getTerminologyId().getValue();
+    }
+    
+    public String getCode(){
+	return getDefiningCode().getCodeString();
     }
 
     // POJO start

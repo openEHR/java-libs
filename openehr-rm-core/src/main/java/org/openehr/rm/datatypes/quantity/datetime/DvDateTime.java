@@ -18,16 +18,16 @@ package org.openehr.rm.datatypes.quantity.datetime;
 import java.util.List;
 import java.util.TimeZone;
 import org.apache.commons.lang.builder.EqualsBuilder;
-
-import org.openehr.rm.Attribute;
-import org.openehr.rm.FullConstructor;
-import org.openehr.rm.datatypes.quantity.DvInterval;
-import org.openehr.rm.datatypes.quantity.DvOrdered;
-
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
+import org.openehr.rm.datatypes.basic.ReferenceModelName;
+import org.openehr.rm.datatypes.quantity.DvInterval;
+import org.openehr.rm.datatypes.quantity.DvOrdered;
+
 import org.openehr.rm.datatypes.quantity.ReferenceRange;
 import org.openehr.rm.datatypes.text.CodePhrase;
 
@@ -79,6 +79,13 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 		setBooleans(pattern);
 	}
 
+	/*
+	 * Convenience constructor
+	 */
+	private DvDateTime(DateTime datetime) {
+		this(null, null, null, null, null, datetime, "yyyy-MM-dd'T'HH:mm:ssZZ");
+	}
+
 	/**
 	 * Construct a DvDateTime by current date and time
 	 * 
@@ -114,8 +121,8 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 			int second, double fractionalSec, TimeZone timezone) {
 		super(DvDateTimeParser.convertDateTime(year, month, day, hour, minute, 
 				second,	fractionalSec, timezone));
-		String format = timezone == null ? "yyyyMMdd'T'HH:mm:ss,SSS"
-				: "yyyyMMdd'T'HH:mm:ss,SSSZZ";
+		String format = timezone == null ? "yyyy-MM-dd'T'HH:mm:ss,SSS"
+				: "yyyy-MM-dd'T'HH:mm:ss,SSSZZ";
 		setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
 		setBooleans(false, true, true, true);
 	}
@@ -124,8 +131,8 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 			int second, TimeZone timezone) {
 		super(DvDateTimeParser.convertDateTime(
 				year, month, day, hour, minute, second, 0.0, timezone));
-		String format = timezone == null ? "yyyyMMdd'T'HH:mm:ss"
-				: "yyyyMMdd'T'HH:mm:ssZZ";
+		String format = timezone == null ? "yyyy-MM-dd'T'HH:mm:ss"
+				: "yyyy-MM-dd'T'HH:mm:ssZZ";
 		setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
 		setBooleans(false, true, true, false);
 	}
@@ -134,8 +141,8 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 			TimeZone timezone) {
 		super(DvDateTimeParser.convertDateTime(
 				year, month, day, hour, minute, 0, 0.0, timezone));
-		String format = timezone == null ? "yyyyMMdd'T'HH:mm"
-				: "yyyyMMdd'T'HH:mmZZ";
+		String format = timezone == null ? "yyyy-MM-dd'T'HH:mm"
+				: "yyyy-MM-dd'T'HH:mmZZ";
 		setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
 		setBooleans(true, true, false, false);
 	}
@@ -143,7 +150,7 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 	public DvDateTime(int year, int month, int day, int hour, TimeZone timezone) {
 		super(DvDateTimeParser.convertDateTime(
 				year, month, day, hour, 0, 0, 0.0, timezone));
-		String format = timezone == null ? "yyyyMMdd'T'HH" : "yyyyMMdd'T'HHZZ";
+		String format = timezone == null ? "yyyy-MM-dd'T'HH" : "yyyy-MM-dd'T'HHZZ";
 		setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
 		setBooleans(true, false, false, false);
 	}
@@ -152,8 +159,16 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 	 * @see org.openehr.rm.datatypes.quantity.datetime.NDvWorldTime#parseValue(java.lang.String)
 	 */
 	@Override
-	DateTime parseValue(String value) {
+	DateTime parseStringValue(String value) {
 		return DvDateTimeParser.parseDateTime(value);
+	}
+
+	/**
+	 * Parses a string value and return a DvDateTime
+	 */
+	public DvDateTime parse(String value) {
+		DateTime datetime = DvDateTimeParser.parseDateTime(value);
+		return new DvDateTime(datetime);
 	}
 
 	public static boolean isValidISO8601DateTime(String value) {
@@ -164,6 +179,11 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 			return false;
 		}
 		return dt != null;
+	}
+
+	@Override
+	public String getReferenceModelName() {
+		return ReferenceModelName.DV_DATE_TIME.getName();
 	}
 
 	/**
@@ -384,6 +404,11 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 	private boolean minuteKnown;
 	private boolean secondKnown;
 	private boolean fractionalSecKnown;
+
+	@Override
+	public String serialise() {
+		return getReferenceModelName() + "," + toString(true);
+	}
 }
 
 /*

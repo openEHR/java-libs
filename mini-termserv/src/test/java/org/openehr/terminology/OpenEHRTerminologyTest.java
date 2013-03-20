@@ -9,8 +9,12 @@ import junit.framework.TestCase;
 
 public class OpenEHRTerminologyTest extends TestCase {
 	
-	public void setUp() throws Exception {
+	public OpenEHRTerminologyTest() throws Exception {
 		service = SimpleTerminologyService.getInstance();
+	}
+	
+	public void setUp() throws Exception {
+		
 	}
 	
 	public void testHasOpenEHRSettingCode() {
@@ -55,11 +59,26 @@ public class OpenEHRTerminologyTest extends TestCase {
 				codeSet.hasCode(new CodePhrase("ISO_3166-1", "FR")));
 	}
 	
-	public void testHasCode() throws Exception {
+	public void testHasOpenEHRCode() throws Exception {
 		TerminologyAccess terminology = service.terminology(
 				TerminologyService.OPENEHR);
 		assertTrue("code for signed missing", terminology.allCodes().contains(
 				new CodePhrase(TerminologyService.OPENEHR, "240")));
+	}
+	
+	// TODO some test isolation issue here.. 
+	public void _testHasPlainTextMediaType() throws Exception {
+		CodeSetAccess codeSet = service.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.MEDIA_TYPES);
+		CodePhrase mediaType = new CodePhrase("IANA_media-types", "text/plain");
+		assertTrue("media type: text/plain is missing", codeSet.hasCode(mediaType));
+	}
+	
+	public void __testHasCompressionAlgorithmsOther() throws Exception {
+		CodeSetAccess codeSet = service.codeSetForId(
+        		OpenEHRCodeSetIdentifiers.COMPRESSION_ALGORITHMS);
+		CodePhrase mediaType = new CodePhrase("openehr_compression_algorithms", "others");
+		assertTrue("openehr_compression_algorithms is missing", codeSet.hasCode(mediaType));
 	}
 	
 	TerminologyService service;

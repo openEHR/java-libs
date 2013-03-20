@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.constraintmodel;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -28,7 +30,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author Rong Chen
  * @version 1.0
  */
-public abstract class ArchetypeConstraint {
+public abstract class ArchetypeConstraint  implements Serializable{
 
     /**
      * Path separator in archetype path

@@ -8,4 +8,5 @@ simple_values = <
     integer_value = <100>
     real_value = <9.5>
     boolean_value = <True>    
+	code_value = <[ISO_639-1::en]>
 >

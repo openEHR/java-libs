@@ -30,7 +30,7 @@ import java.util.*;
  * @author Rong Chen
  * @version 1.0
  */
-public abstract class Locatable extends Pathable implements Settable {
+public abstract class Locatable extends Pathable implements Settable, Cloneable {
 
     /**
      * Constructs a Locatable
@@ -100,6 +100,14 @@ public abstract class Locatable extends Pathable implements Settable {
      */
     public String getArchetypeNodeId() {
         return archetypeNodeId;
+    }
+
+    public String getOriginalArchetypeNodeId() {
+        return originalArchetypeNodeId;
+    }
+    
+    public String setOriginalArchetypeNodeId(String originalArchetypeNodeId) {
+        return this.originalArchetypeNodeId = originalArchetypeNodeId;
     }
 
     /**
@@ -448,6 +456,39 @@ public abstract class Locatable extends Pathable implements Settable {
     	return buf.toString();
     }
     
+    public void addChild(String path, Object child) {    	
+    	List<String> list = dividePathIntoSegments(path);
+    	int pathLevel = list.size();
+    	String objPath = PATH_SEPARATOR;
+    	
+    	if(pathLevel > 1) {
+    		StringBuffer buf = new StringBuffer();
+    		for(int j = 0; j < pathLevel - 1; j++) {
+    			buf.append(PATH_SEPARATOR);
+    			buf.append(list.get(j));
+    		}
+    		objPath = buf.toString();
+    	}    	
+    	
+    	Object obj = itemAtPath(objPath);
+    	if(obj == null) {
+    		throw new IllegalArgumentException("Item not found on path: " + path);
+    	}   	
+    	
+    	String attributeName = list.get(list.size() - 1);
+    	Object attributeValue = getAttributeValue(obj, attributeName);    	
+    	if(attributeValue == null) {
+    		attributeValue = new ArrayList();
+    	}
+    	if(attributeValue instanceof List) {    		
+    		List parent = (List) attributeValue;
+    		parent.add(child);    		
+    	} else {
+    		throw new IllegalArgumentException(
+    				"non-container parent attribute on path: " + path);
+    	}    	    	
+    }
+    
     public void removeChild(String path) {
     	int i = path.lastIndexOf(PATH_SEPARATOR);
     	if(i < 0 || i == path.length()) {
@@ -455,7 +496,6 @@ public abstract class Locatable extends Pathable implements Settable {
     				"invalid path for setting value: " + path);
     	}
     	String objPath = PATH_SEPARATOR;
-    	
     	List<String> list = dividePathIntoSegments(path);
     	int pathLevel = list.size();
     	if(pathLevel > 1) {
@@ -562,6 +602,14 @@ public abstract class Locatable extends Pathable implements Settable {
                 .toHashCode();
     }
 
+    @Override public Locatable clone() {
+    	try {
+    		return (Locatable) super.clone();
+    	} catch(CloneNotSupportedException e) {
+    		throw new AssertionError();
+    	}
+    }
+
     /**
      * Return path of current whole node
      */
@@ -615,6 +663,7 @@ public abstract class Locatable extends Pathable implements Settable {
     /* fields */
     private UIDBasedID uid;
     private String archetypeNodeId;
+    private String originalArchetypeNodeId;
     private DvText name;
     private Archetyped archetypeDetails;
     private FeederAudit feederAudit;

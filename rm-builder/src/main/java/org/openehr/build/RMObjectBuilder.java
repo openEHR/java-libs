@@ -134,9 +134,10 @@ public class RMObjectBuilder {
 				DvDateTime.class,
 				DvTime.class,
 				DvDuration.class,
-				DvParsable.class, // TODO "DvMultimedia" excluded for now
+				DvParsable.class, 
 				DvURI.class,
 				DvEHRURI.class,
+				DvMultimedia.class,
 
 				// datastructure classes
 				Element.class, 
@@ -400,7 +401,8 @@ public class RMObjectBuilder {
 				try {
 					type.cast(value);
 				} catch (ClassCastException e) {
-					throw new RMObjectBuildingException("value for attribute '"
+					throw new RMObjectBuildingException("Failed to construct: " 
+							+ rmClassName + ", value for attribute '"
 							+ name + "' has wrong type, expected \"" + type
 							+ "\", but got \"" + value.getClass() + "\"");
 				}
@@ -471,6 +473,10 @@ public class RMObjectBuilder {
 	 */
 	public Class retrieveRMType(String rmClassName)
 			throws RMObjectBuildingException {
+		int index = rmClassName.indexOf("<");
+		if (index>0){
+		    rmClassName = rmClassName.substring(0,index);
+		}
 		Class rmClass = typeMap.get(rmClassName);
 		if (rmClass == null) {
 			rmClass = upperCaseMap.get(rmClassName.replace("_", ""));

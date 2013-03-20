@@ -1,0 +1,136 @@
+(EVALUATION) <
+	archetype_details = (ARCHETYPED) <
+		archetype_id = (ARCHETYPE_ID) <
+			value = <"openEHR-EHR-EVALUATION.hypersensitivity.v1">
+		>
+		rm_version = <"1.0.1">
+	>
+	archetype_node_id = <"openEHR-EHR-EVALUATION.hypersensitivity.v1">
+	data = (ITEM_TREE) <
+		archetype_node_id = <"at0001">
+		items = <
+			[1] = (ELEMENT) <
+				archetype_node_id = <"at0002">
+				name = (DV_TEXT) <
+					value = <"Type">
+				>
+				value = (DV_CODED_TEXT) <
+					defining_code = (CODE_PHRASE) <
+						code_string = <"at0004">
+						terminology_id = (TERMINOLOGY_ID) <
+							value = <"local">
+						>
+					>
+					value = <"Drug">
+				>
+			>
+			[2] = (ELEMENT) <
+				archetype_node_id = <"at0003">
+				name = (DV_TEXT) <
+					value = <"Heading">
+				>
+				value = (DV_TEXT) <
+					value = <"text value">
+				>
+			>
+			[3] = (ELEMENT) <
+				archetype_node_id = <"at0009">
+				name = (DV_TEXT) <
+					value = <"Agent">
+				>
+				value = (DV_TEXT) <
+					value = <"text value">
+				>
+			>
+			[4] = (ELEMENT) <
+				archetype_node_id = <"at0010">
+				name = (DV_TEXT) <
+					value = <"Comment">
+				>
+				value = (DV_TEXT) <
+					value = <"text value">
+				>
+			>
+			[5] = (ELEMENT) <
+				archetype_node_id = <"at0011">
+				name = (DV_TEXT) <
+					value = <"Severity level">
+				>
+				value = (DV_ORDINAL) <
+					symbol = (DV_CODED_TEXT) <
+						defining_code = (CODE_PHRASE) <
+							code_string = <"at0012">
+							terminology_id = (TERMINOLOGY_ID) <
+								value = <"local">
+							>
+						>
+						value = <"Life threatening">
+					>
+					value = <1>
+				>
+			>
+			[6] = (ELEMENT) <
+				archetype_node_id = <"at0015">
+				name = (DV_TEXT) <
+					value = <"Assertion level">
+				>
+				value = (DV_ORDINAL) <
+					symbol = (DV_CODED_TEXT) <
+						defining_code = (CODE_PHRASE) <
+							code_string = <"at0016">
+							terminology_id = (TERMINOLOGY_ID) <
+								value = <"local">
+							>
+						>
+						value = <"Confirmed">
+					>
+					value = <1>
+				>
+			>
+			[7] = (ELEMENT) <
+				archetype_node_id = <"at0019">
+				name = (DV_TEXT) <
+					value = <"Is reassessment required">
+				>
+				value = (DV_BOOLEAN) <
+					value = <"true">
+				>
+			>
+			[8] = (ELEMENT) <
+				archetype_node_id = <"at0020">
+				name = (DV_TEXT) <
+					value = <"Reassessment date">
+				>
+				value = (DV_DATE_TIME) <
+					value = <"2010-01-01T10:00:00">
+				>
+			>
+		>
+		name = (DV_TEXT) <
+			value = <"Träd">
+		>
+	>
+	encoding = (CODE_PHRASE) <
+		code_string = <"UTF-8">
+		terminology_id = (TERMINOLOGY_ID) <
+			value = <"IANA_character-sets">
+		>
+	>
+	language = (CODE_PHRASE) <
+		code_string = <"en">
+		terminology_id = (TERMINOLOGY_ID) <
+			value = <"ISO_639-1">
+		>
+	>
+	name = (DV_TEXT) <
+		value = <"Hypersensitivity">
+	>
+	subject = (PARTY_SELF) <
+		external_ref = (PARTY_REF) <
+			id = (HIER_OBJECT_ID) <
+				value = <"1.2.4.5.6.12.1">
+			>
+			type = <"PARTY">
+		>
+	>
+>

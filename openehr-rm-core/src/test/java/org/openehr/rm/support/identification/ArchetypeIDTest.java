@@ -139,7 +139,7 @@ public class ArchetypeIDTest extends TestCase {
     public void testWithConceptInSwedish() {
     	ArchetypeID aid = null;
     	try {
-    		// Omvårdnadsanteckning
+    		// Omvrdnadsanteckning
     		aid = new ArchetypeID(
     				"openEHR-EHR-CLUSTER.Omv\u00E5rdnadsanteckning.v1");
     		

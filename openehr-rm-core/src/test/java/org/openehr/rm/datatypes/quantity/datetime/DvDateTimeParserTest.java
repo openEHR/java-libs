@@ -101,8 +101,8 @@ public class DvDateTimeParserTest extends TestCase {
             DateTime result = DvDateTimeParser.parseDateTime(values[i]);
             assertNotNull(result);
         } 
-        
     }
+        
     /**
      * Test of padTimeValue method, of class org.openehr.rm.datatypes.quantity.datetime.DvDateTimeParser.
      */

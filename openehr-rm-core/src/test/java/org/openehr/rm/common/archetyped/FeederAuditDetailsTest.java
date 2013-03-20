@@ -23,11 +23,6 @@ package org.openehr.rm.common.archetyped;
 import org.openehr.rm.common.generic.PartyIdentified;
 import org.openehr.rm.common.generic.PartyProxy;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
-import org.openehr.rm.datatypes.text.DvCodedText;
-import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.support.terminology.TerminologyService;
-import org.openehr.rm.support.terminology.TestCodeSetAccess;
-import org.openehr.rm.support.terminology.TestTerminologyService;
 
 import junit.framework.TestCase;
 

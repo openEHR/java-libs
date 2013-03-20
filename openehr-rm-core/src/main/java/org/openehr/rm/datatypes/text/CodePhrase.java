@@ -21,6 +21,7 @@ import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.support.identification.TerminologyID;
 import org.openehr.rm.datatypes.basic.DataValue;
+import org.openehr.rm.datatypes.basic.ReferenceModelName;
 
 /**
  * A fully coordinated (all coordination  has been performed)
@@ -80,7 +81,21 @@ public final class CodePhrase extends DataValue {
      * @return <code>String</code>
      */
     public String toString() {
-        return terminologyId + ", " + codeString;
+        return terminologyId + "::" + codeString;
+    }
+    
+    public CodePhrase parse(String value) {
+    	if(value == null) {
+    		throw new IllegalArgumentException("null value");
+    	}
+    	int i = value.indexOf("::");
+    	if(i <= 0 || i >= value.length() -1) {
+    		throw new IllegalArgumentException("wrong format of code phrase");
+    	}
+    	
+    	String t = value.substring(0, i);
+    	String c = value.substring(i + 2);
+    	return new CodePhrase(t, c);
     }
 
     /**
@@ -152,6 +167,15 @@ public final class CodePhrase extends DataValue {
     /* fields */
     private TerminologyID terminologyId;
     private String codeString;
+	@Override
+	public String getReferenceModelName() {
+		return ReferenceModelName.CODE_PHRASE.getName();
+	}
+
+	@Override
+	public String serialise() {
+		return getReferenceModelName() + "," + toString();
+	}
 }
 
 /*

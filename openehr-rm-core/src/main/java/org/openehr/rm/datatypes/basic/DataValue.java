@@ -14,9 +14,22 @@
  */
 package org.openehr.rm.datatypes.basic;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehr.rm.RMObject;
+import org.openehr.rm.datatypes.quantity.DvCount;
+import org.openehr.rm.datatypes.quantity.DvOrdinal;
+import org.openehr.rm.datatypes.quantity.DvProportion;
+import org.openehr.rm.datatypes.quantity.DvQuantity;
+import org.openehr.rm.datatypes.quantity.ProportionKind;
+import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
+import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
+import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.datatypes.text.DvCodedText;
+import org.openehr.rm.datatypes.text.DvText;
 
 /**
  * Abstract parent type of all concrete data value types
@@ -40,6 +53,75 @@ public abstract class DataValue extends RMObject {
         return ToStringBuilder.reflectionToString(this,
                 ToStringStyle.MULTI_LINE_STYLE);
     }
+    
+    public abstract String getReferenceModelName();
+    
+    /**
+     * Serialise the value in string format.
+     * 
+     * @return
+     */
+    public abstract String serialise();
+    
+    /**
+     * Parse a serialised dataValue and returns a concrete DataValue class
+     * 
+     * The format is the following:
+     * [REFERENCE_MODEL_CLASS_NAME],[SERIALIZED FORMAT]
+     * 
+     * @param value
+     * @return instance of DataValue
+     */
+    public static DataValue parseValue(String value) {
+    	if(value == null) {
+    		throw new IllegalArgumentException("null value");
+    	}
+    	
+    	int i = value.indexOf(",");
+    	if(i < 0 || i == value.length()) {
+    		throw new IllegalArgumentException("wrong string format");
+    	}
+    	
+    	String rmName = value.substring(0, i);
+    	DataValue dv = dataValueMap.get(rmName);
+    	
+    	if(dv == null) {
+    		throw new IllegalArgumentException("unsupported RM class[" + rmName + "]");
+    	}
+    	
+    	String v = value.substring(i + 1).trim();    	
+    	return dv.parse(v);
+    }
+    
+    /**
+     * Parse a serialised dataValue. Implemented by subclasses.
+     * 
+     * @param value
+     * @return instance of DataValue
+     */
+    public DataValue parse(String value) {
+    	throw new RuntimeException("no implementation");
+    }
+    
+    private final static Map<String, DataValue> dataValueMap;
+    
+    /*
+     * Initiate the mapping between ReferenceModelName and concrete dataValue 
+     */
+    static {
+    	dataValueMap = new HashMap<String, DataValue>();
+    	dataValueMap.put(ReferenceModelName.DV_COUNT.getName(), new DvCount(0));
+    	dataValueMap.put(ReferenceModelName.DV_BOOLEAN.getName(), new DvBoolean(false));
+    	dataValueMap.put(ReferenceModelName.DV_QUANTITY.getName(), new DvQuantity(1));
+    	dataValueMap.put(ReferenceModelName.DV_PROPORTION.getName(), new DvProportion(1,1,ProportionKind.FRACTION, 0));
+    	dataValueMap.put(ReferenceModelName.DV_TEXT.getName(), new DvText("text"));
+    	dataValueMap.put(ReferenceModelName.DV_CODED_TEXT.getName(), new DvCodedText("text", new CodePhrase("tm", "cd")));
+    	dataValueMap.put(ReferenceModelName.CODE_PHRASE.getName(), new CodePhrase("tm","cd"));
+    	dataValueMap.put(ReferenceModelName.DV_ORDINAL.getName(), new DvOrdinal(0,"text","tm","cd"));
+    	dataValueMap.put(ReferenceModelName.DV_DATE_TIME.getName(), new DvDateTime("2001-02-11T00"));
+    	dataValueMap.put(ReferenceModelName.DV_DURATION.getName(), new DvDuration("P10D"));
+    }  
+    
 }
 
 /*

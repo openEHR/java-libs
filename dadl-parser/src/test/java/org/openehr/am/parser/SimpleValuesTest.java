@@ -38,7 +38,7 @@ public class SimpleValuesTest extends ParserTestBase {
 		
 		List<AttributeValue> values = single.getAttributeValues();
 		
-		assertEquals("total number of simple values wrong", 9, values.size());
+		assertEquals("total number of simple values wrong", 10, values.size());
 		
 		assertDateTimeValue(values.get(0), "2007-10-30T09:22:00");
 		
@@ -57,6 +57,14 @@ public class SimpleValuesTest extends ParserTestBase {
 		assertRealValue(values.get(7), 9.5);
 		
 		assertBooleanValue(values.get(8), true);
+	}	
+	
+	public void testParseValueList() throws Exception {
+		DADLParser parser = new DADLParser(loadFromClasspath(
+			"simple_values_list.dadl"));
+		ContentObject content = parser.parse();
+		
+		assertNotNull("contentObject is null", content);
 	}
 	
 	private void assertDateTimeValue(AttributeValue attr, String value) {

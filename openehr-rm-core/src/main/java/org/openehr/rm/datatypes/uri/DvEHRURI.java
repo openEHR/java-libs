@@ -46,6 +46,11 @@ public final class DvEHRURI extends DvURI {
     }
     // POJO end
 
+    @Override
+	public String getReferenceModelName() {
+		return "DV_EHR_URI";
+	}
+    
     /* fields */
     private static final String EHR_SCHEM = "ehr";
 }

@@ -159,6 +159,16 @@ public class DvIdentifier extends DataValue {
     private String assigner;
     private String id;
     private String type;
+	@Override
+	public String getReferenceModelName() {
+		return "DV_IDENTIFIER";
+	}
+
+	@Override
+	public String serialise() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 /*

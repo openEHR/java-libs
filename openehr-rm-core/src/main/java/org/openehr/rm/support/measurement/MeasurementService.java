@@ -14,6 +14,8 @@
  */
 package org.openehr.rm.support.measurement;
 
+import java.io.Serializable;
+
 /**
  * Defines an interfaceto a measurement information service
  *
@@ -21,7 +23,7 @@ package org.openehr.rm.support.measurement;
  * @version 1.0
  *
  */
-public interface MeasurementService {
+public interface MeasurementService extends Serializable{
 
     /**
      * Returns True if the units string according to

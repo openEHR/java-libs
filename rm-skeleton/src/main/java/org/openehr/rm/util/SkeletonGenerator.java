@@ -10,7 +10,8 @@
  * file:        "$URL$"
  * revision:    "$LastChangedRevision$"
  * last_change: "$LastChangedDate$"
- */package org.openehr.rm.util;
+ */
+package org.openehr.rm.util;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -30,6 +31,7 @@ import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.generic.PartyIdentified;
 import org.openehr.rm.common.generic.PartySelf;
 import org.openehr.rm.datastructure.itemstructure.ItemTree;
+import org.openehr.rm.datatypes.encapsulated.DvMultimedia;
 import org.openehr.rm.datatypes.encapsulated.DvParsable;
 import org.openehr.rm.datatypes.quantity.DvOrdinal;
 import org.openehr.rm.datatypes.quantity.DvQuantity;
@@ -38,6 +40,7 @@ import org.openehr.rm.datatypes.quantity.datetime.*;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
+import org.openehr.rm.datatypes.uri.DvURI;
 import org.openehr.rm.support.identification.*;
 import org.openehr.rm.support.measurement.*;
 import org.openehr.rm.support.terminology.TerminologyAccess;
@@ -103,14 +106,21 @@ public class SkeletonGenerator {
 	 * @throws Exception
 	 */
 	public Object create(Archetype archetype) throws Exception {
-		return create(archetype, null, null, GenerationStrategy.MINIMUM);		
+	return create(archetype, null, null, null, GenerationStrategy.MINIMUM);		
 	}
 	
 	public Object create(Archetype archetype, 
 			GenerationStrategy strategy) throws Exception {
-		return create(archetype, null, null, strategy);		
+	return create(archetype, null, null, null, strategy);		
 	}
 	
+    //Only used for adding slots
+    public Object create(Archetype archetype, Map<String, Object> extraValues, 
+	    GenerationStrategy strategy) throws Exception {
+	return create(archetype, null, null, extraValues, strategy);		
+    }
+
+
 	/**
 	 * Create RM object tree based on given main the archetype and 
 	 * associated archetypes in the archetypeMap
@@ -125,7 +135,7 @@ public class SkeletonGenerator {
 	public Object create(Archetype archetype, 
 			Map<String, Archetype> archetypeMap) throws Exception {
 		
-		return create(archetype, null, archetypeMap, GenerationStrategy.MINIMUM);		
+	return create(archetype, null, archetypeMap, null, GenerationStrategy.MINIMUM);		
 	}
 	
 	/**
@@ -134,16 +144,26 @@ public class SkeletonGenerator {
 	 * @param archetype
 	 * @param templateId
 	 * @param archetypeMap
+     * @param extraValues extra values indexed by path
 	 * @param strategy
 	 * @return
 	 * @throws Exception
 	 */
 	public Object create(Archetype archetype, String templateId,
 			Map<String, Archetype> archetypeMap,
+	    Map<String, Object> extraValues,
+	    GenerationStrategy strategy) throws Exception {
+
+	return createComplexObject(archetype.getDefinition(), archetype,
+		templateId, archetypeMap, extraValues, strategy);		
+    }
+
+    public Object create(Archetype archetype, String templateId,
+	    Map<String, Archetype> archetypeMap, 
 			GenerationStrategy strategy) throws Exception {
 		
 		return createComplexObject(archetype.getDefinition(), archetype,
-				templateId, archetypeMap, strategy);		
+		templateId, archetypeMap, null, strategy);		
 	}
 	
 	/*
@@ -152,6 +172,7 @@ public class SkeletonGenerator {
 	public Object createComplexObject(CComplexObject ccobj, 
 			Archetype archetype, String templateId,
 			Map<String,Archetype> archetypeMap, 
+	    Map<String, Object> extraValues,
 			GenerationStrategy strategy) throws Exception {
 		
 		log.debug("create complex object " + ccobj.getRmTypeName());
@@ -194,15 +215,20 @@ public class SkeletonGenerator {
 								|| GenerationStrategy.MAXIMUM_EMPTY.equals(strategy)
 								|| (GenerationStrategy.MINIMUM.equals(strategy) 
 										&& cattr.isRequired()))) {					
-					Object attrValue = createAttribute(cattr, archetype,
-							archetypeMap, strategy);
+		    Object attrValue;
+		    String path = cattr.path();
+
+		    if(extraValues != null && extraValues.containsKey(path)) {
+			attrValue = extraValues.get(path);
+		    } else {
+			attrValue = createAttribute(cattr, archetype, archetypeMap, extraValues, strategy);
+		    }
 					valueMap.put(cattr.getRmAttributeName(), attrValue);
-				
 				
 				} else if("CLUSTER".equals(rmTypeName)) { // TODO quickfix
 					
 					Object attrValue = createAttribute(cattr, archetype,
-							archetypeMap, strategy);
+			    archetypeMap, extraValues, strategy);
 					valueMap.put(cattr.getRmAttributeName(), attrValue);
 				}
 			}
@@ -283,11 +309,47 @@ public class SkeletonGenerator {
 				valueMap.put(VALUE, DEFAULT_TIME);
 			}
 		
+	} else if("DV_MULTIMEDIA".equals(rmTypeName)) {
+
+	    CodePhrase charset = new CodePhrase("IANA_character-sets", "UTF-8"); 
+	    CodePhrase language = new CodePhrase("ISO_639-1","en");
+	    String alternateText = "alternative text";
+	    CodePhrase mediaType = new CodePhrase("IANA_media-types", "text/plain");
+	    CodePhrase compressionAlgorithm = new CodePhrase("openehr_compression_algorithms", "other");
+	    //byte[] integrityCheck = new byte[0];
+	    CodePhrase integrityCheckAlgorithm = new CodePhrase("openehr_integrity_check_algorithms", "SHA-1");
+	    DvMultimedia thumbnail = null;
+	    DvURI uri = new DvURI("www.iana.org");
+	    //byte[] data = new byte[0];
+	    TerminologyService terminologyService = SimpleTerminologyService.getInstance();
+	    DvMultimedia dm = new DvMultimedia(charset, language, alternateText,
+		    mediaType, compressionAlgorithm, null, 
+		    integrityCheckAlgorithm, thumbnail, uri, null, terminologyService);
+
+	    return dm;
+
 		} else if("DV_COUNT".equals(rmTypeName)) {
 			
 			if(valueMap.get(MAGNITUDE) == null) {
 				valueMap.put(MAGNITUDE, DEFAULT_COUNT);
 			}
+	}else if("DV_DURATION".equals(rmTypeName)) {
+	    if(valueMap.get(VALUE) == null) {
+		valueMap.put(VALUE, DEFAULT_DURATION);
+	    }
+	}else if("DV_IDENTIFIER".equals(rmTypeName)) {
+		    if(valueMap.get(ID) == null) {
+			valueMap.put(ID, DEFAULT_ID);
+		    }
+		    if(valueMap.get(ASSIGNER) == null) {
+			valueMap.put(ASSIGNER, DEFAULT_ASSIGNER);
+		    }
+		    if(valueMap.get(ISSUER) == null) {
+			valueMap.put(ISSUER, DEFAULT_ISSUER);
+		    }
+		    if(valueMap.get(TYPE) == null) {
+			valueMap.put(TYPE, DEFAULT_TYPE);
+		    }
 		} else if("DV_PROPORTION".equals(rmTypeName)) {
 		
 			// default dv_proportion
@@ -298,7 +360,7 @@ public class SkeletonGenerator {
             //     precision = <2>
 			// >
 			
-			if( ! valueMap.containsKey("numerator")) {
+	    if( ! valueMap.containsKey("numerator") || ! valueMap.containsKey("denominator")) {
 				valueMap.put("numerator", "0.5");
 				valueMap.put("denominator", "1.0");
 				valueMap.put("precision", "1");				
@@ -351,7 +413,9 @@ public class SkeletonGenerator {
 			if( ! valueMap.containsKey(TIMING)) {
 				valueMap.put(TIMING, new DvParsable("activity timing", "txt"));
 			}
-			
+	    if( ! valueMap.containsKey("action_archetype_id")) {
+		valueMap.put("action_archetype_id", "string value");
+	    }
 		} else if("COMPOSITION".equals(rmTypeName)) {
 			CodePhrase country = new CodePhrase("ISO_3166-1", "SE");
 			DvCodedText category = new DvCodedText("event", 
@@ -374,7 +438,8 @@ public class SkeletonGenerator {
 		} else if("ELEMENT".equals(rmTypeName)) {
 			
 			if(GenerationStrategy.MAXIMUM_EMPTY.equals(strategy)
-					&& "INPUT".equals(ccobj.getAnnotation())) {
+		    && (("INPUT".equals(ccobj.getAnnotation()) ||
+			    ccobj.isAnyAllowed()))) {
 				
 				// TODO input annotation needs to be standardized
 				valueMap.put(VALUE, null);
@@ -415,6 +480,19 @@ public class SkeletonGenerator {
 			if(list != null && list.isEmpty()) {
 				valueMap.remove("items");
 			}
+	} else if("INTERVAL_EVENT".equals(rmTypeName)) {
+	    /*if( ! valueMap.containsKey("width")) {
+				valueMap.put("width", new DvDuration("P1d"));
+			}
+			if( ! valueMap.containsKey("time")) {
+				valueMap.put("time", new DvDateTime());
+			} */
+	    return null;
+
+	} else if("POINT_EVENT".equals(rmTypeName)) {
+	    if( ! valueMap.containsKey("time")) {
+		valueMap.put("time", new DvDateTime());
+	    }
 		}
 		
 		// special fix for event		
@@ -470,7 +548,8 @@ public class SkeletonGenerator {
 	}
 	
 	public Object createAttribute(CAttribute cattribute, Archetype archetype,
-			Map<String, Archetype> archetypeMap, GenerationStrategy strategy)
+	    Map<String, Archetype> archetypeMap, Map<String, Object> extraValues,
+	    GenerationStrategy strategy)
 			throws Exception {	
 		
 		log.debug("create attribute " + cattribute.getRmAttributeName());
@@ -483,7 +562,7 @@ public class SkeletonGenerator {
 			if(children != null && children.size() > 0) {
 				// TODO first child is used for rm generation
 				CObject cobj = children.get(0);
-				return createObject(cobj, archetype, archetypeMap, strategy);
+		return createObject(cobj, archetype, archetypeMap, extraValues, strategy);
 			} else {
 				throw new Exception ("no child object..");
 			}			
@@ -513,7 +592,8 @@ public class SkeletonGenerator {
 					
 					log.debug("required child");
 					
-					Object obj = createObject(cobj, archetype, archetypeMap, strategy);
+		    Object obj = createObject(cobj, archetype, archetypeMap, 
+			    extraValues, strategy);
 					if(obj != null) {
 						container.add(obj);
 					}
@@ -528,7 +608,7 @@ public class SkeletonGenerator {
 					log.debug("mandatory events attribute fix");
 					
 					container.add(createObject(cobj, archetype, archetypeMap, 
-							strategy));
+			    extraValues, strategy));
 				}				
 			}
 			
@@ -539,6 +619,7 @@ public class SkeletonGenerator {
 				
 				// disabled
 				// container.add(createObject(children.get(0), archetype));				
+		return null;
 			}
 				
 			return container;
@@ -546,8 +627,8 @@ public class SkeletonGenerator {
 	}
 	
 	public Object createObject(CObject cobj, Archetype archetype,
-			Map<String, Archetype> archetypeMap, GenerationStrategy strategy) 
-			throws Exception {
+	    Map<String, Archetype> archetypeMap, Map<String, Object> extraValues,
+	    GenerationStrategy strategy) throws Exception {
 		
 		log.debug("create object with constraint " + cobj.getClass());
 		
@@ -555,7 +636,7 @@ public class SkeletonGenerator {
 		
 			// no need for templateId at this level
 			return createComplexObject((CComplexObject) cobj, 
-					archetype, null, archetypeMap, strategy);
+		    archetype, null, archetypeMap, extraValues, strategy);
 		
 		} else if(cobj instanceof CPrimitiveObject) {
 			
@@ -786,6 +867,10 @@ public class SkeletonGenerator {
 	private static final String DESCRIPTION = "description";
 	private static final String MAGNITUDE = "magnitude";
 	private static final String TEMPLATE_ID = "template_id";
+    private static final String ID = "id";
+    private static final String ASSIGNER = "assigner";
+    private static final String ISSUER = "issuer";
+    private static final String TYPE = "type";
 		
 	// default values
 	private static final String DEFAULT_DATE = "2010-01-01";
@@ -796,6 +881,10 @@ public class SkeletonGenerator {
 	private static final String DEFAULT_CODED_TEXT = "coded text value";
 	private static final String DEFAULT_COUNT = "1";
 	private static final String DEFAULT_URI = "http://www.google.com/";
+    private static final String DEFAULT_ID = "1";
+    private static final String DEFAULT_ISSUER = "1";
+    private static final String DEFAULT_ASSIGNER = "1";
+    private static final String DEFAULT_TYPE = "1";
 	
 	private static final DvCodedText NULL_FLAVOUR_VALUE = new DvCodedText(
 			"no information", new CodePhrase(TerminologyService.OPENEHR, "271"));
