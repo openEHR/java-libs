@@ -106,21 +106,24 @@ public class  SimpleMeasurementService implements MeasurementService {
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public int compare(String units1, Double value1, String units2, Double value2) {
-	if(units1 == null) {
-	    throw new IllegalArgumentException("units1 null");
+	if(value1 == null) {
+	    throw new IllegalArgumentException("value1 null");
 	}
-	if(units2 == null) {
-	    throw new IllegalArgumentException("units2 null");
+	if(value2 == null) {
+	    throw new IllegalArgumentException("value2 null");
 	}
-	Unit<?> unit1 = Unit.valueOf(units1);
-	Unit<?> unit2 = Unit.valueOf(units2);
-	if (!unit1.isCompatible(unit2)){
-	    throw new IllegalArgumentException("units '"+units1+"' is not comparable to '"+units2+"'");
+	if (unitsEquivalent(units1, units2)){
+	    return value1.compareTo(value2);
+	}else{
+	    Unit<?> unit1 = Unit.valueOf(units1);
+	    Unit<?> unit2 = Unit.valueOf(units2);
+	    if (!unit1.isCompatible(unit2)){
+		throw new IllegalArgumentException("units '"+units1+"' is not comparable to '"+units2+"'");
+	    }
+	    Measure measure1 = Measure.valueOf(value1, unit1);
+	    Measure measure2 = Measure.valueOf(value2, unit2);
+	    return measure1.compareTo(measure2);
 	}
-	Measure measure1 = Measure.valueOf(value1, unit1);
-	Measure measure2 = Measure.valueOf(value2, unit2);
-	return measure1.compareTo(measure2);
-    }
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
