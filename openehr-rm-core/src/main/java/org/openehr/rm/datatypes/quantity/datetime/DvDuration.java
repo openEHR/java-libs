@@ -119,7 +119,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 
 		period = new Period(years, months, weeks, days, hours, minutes,
 				seconds, (int) (fractionalSeconds * 1000));
-		setValue(formatter.print(period).replace(".", ","));
+		setValue(ISOPeriodFormat.standard().print(period).replace(".", ","));
 	}
 
 	/**
@@ -144,7 +144,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 		super(referenceRanges, normalRange, normalStatus, accuracy,
 				accuracyPercent, magnitudeStatus);
 		this.period = period;
-		setValue(formatter.print(period).replace(".", ","));
+		setValue(ISOPeriodFormat.standard().print(period).replace(".", ","));
 	}
 
 	/**
@@ -184,10 +184,10 @@ public final class DvDuration extends DvAmount<DvDuration> {
 		Period period = null;
 		if (value.startsWith("-")) {
 			value = value.substring(1, value.length()); // skip '-'
-			period = formatter.parsePeriod(value);
+			period = ISOPeriodFormat.standard().parsePeriod(value);
 			period = negatePeriod(period);
 		} else {
-			period = formatter.parsePeriod(value);
+			period = ISOPeriodFormat.standard().parsePeriod(value);
 		}
 
 		return new DvDuration(null, null, null, 0.0, false, null, period);
@@ -319,7 +319,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	 */
 	@Override
     public String toString() {
-		String str = value == null ? formatter.print(period) : value;
+		String str = value == null ? ISOPeriodFormat.standard().print(period) : value;
 		// No DvDuration will be constructed in P-1y3M24W format, it's either
 		// all negative or all positive values for each element. The only time
 		// this format will exist is after addition or subtraction. However,
@@ -577,12 +577,12 @@ public final class DvDuration extends DvAmount<DvDuration> {
 	private Period period;
 
 	/* static value */
-	private static String PATTERN = "(-)?P((\\d)+(y|Y))?((\\d)+(m|M))?((\\d)+(w|W))?((\\d)+(d|D))?"
+	private static final String PATTERN = "(-)?P((\\d)+(y|Y))?((\\d)+(m|M))?((\\d)+(w|W))?((\\d)+(d|D))?"
 			+ "(T((\\d)+(h|H))?((\\d)+(m|M))?((\\d)+((,|\\.)(\\d){1,3})?(s|S))?)?";
 
 	// private static String PATTERN_DATE =
 	// "(-)?P((\\d)*(y|Y))?((\\d)*(m|M))?((\\d)*(d|D))";
-	private static PeriodFormatter formatter = ISOPeriodFormat.standard();
+	//private static PeriodFormatter formatter = ISOPeriodFormat.standard();
 
 	@Override
 	public String serialise() {

@@ -10,11 +10,11 @@
 	<packaging>jar</packaging>
 	<name>openEHR Reference Model Domain</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
-	<scm>
-		<connection>scm:svn:http://openehr.cambio.se/svn/openehr/TRUNK/openehr-rm-domain</connection>
-		<developerConnection>scm:svn:http://openehr.cambio.se/svn/openehr/TRUNK/openehr-rm-domain</developerConnection>
-		<url>http://openehr.cambio.se/svn/openehr/TRUNK/openehr-rm-domain</url>
-	</scm>
+	 <scm>
+        <connection>smc:git:${parent.smc.url}/openehr-rm-domain</connection>
+        <developerConnection>smc:git:${parent.smc.url}/openehr-rm-domain</developerConnection>
+        <url>${parent.smc.url}/openehr-rm-domain</url>
+    </scm>
 	<organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>

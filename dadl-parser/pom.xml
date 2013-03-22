@@ -17,11 +17,11 @@
 	<inceptionYear>2007</inceptionYear>
 	
 	<description>java dADL Parser</description>
-	<scm>
-		<connection>scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/dadl-parser</connection>
-		<developerConnection>scm:svn:http://svn.openehr.org/ref_impl_java/TRUNK/dadl-parser</developerConnection>
-		<url>http://svn.openehr.org/ref_impl_java/TRUNK/dadl-parser</url>
-	</scm>
+	 <scm>
+        <connection>smc:git:${parent.smc.url}/dadl-parser</connection>
+        <developerConnection>smc:git:${parent.smc.url}/dadl-parser</developerConnection>
+        <url>${parent.smc.url}/dadl-parser</url>
+    </scm>
 	<build>
 		<plugins>
 			<plugin>

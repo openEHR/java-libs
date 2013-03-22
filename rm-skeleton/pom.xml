@@ -9,13 +9,11 @@
 	<artifactId>rm-skeleton</artifactId>
 	<packaging>jar</packaging>
 	<name>openEHR RM Skeleton Instance Generator</name>
-	
 	<scm>
-		<connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/rm-skeleton</connection>
-		<developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/rm-skeleton</developerConnection>
-		<url>http://www.openehr.org/svn/ref_impl_java/TRUNK/rm-skeleton</url>
-	</scm>
-
+        <connection>smc:git:${parent.smc.url}/rm-skeleton</connection>
+        <developerConnection>smc:git:${parent.smc.url}/rm-skeleton</developerConnection>
+        <url>${parent.smc.url}/rm-skeleton</url>
+    </scm>
 	<dependencies>
 		<dependency>
 			<groupId>openehr</groupId>

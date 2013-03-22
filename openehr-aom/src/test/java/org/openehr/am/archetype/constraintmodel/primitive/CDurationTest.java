@@ -46,12 +46,6 @@ public class CDurationTest extends TestCase {
     }
 
     public void testAssignedValue() throws Exception {
-        
-        /* Note: The following tests don't work at present. 20-03-2013 after merging with the changes for GDL. 
-         *  Doesn't work in the GDLs either.
-         * 
-         *  DvDuration.getInstance("PT1h");
-
         CDuration cd = new CDuration(null,
                 new Interval<DvDuration>(DvDuration.getInstance("PT1h"),
                         DvDuration.getInstance("PT3h")));
@@ -61,17 +55,13 @@ public class CDurationTest extends TestCase {
        
         cd = new CDuration(DvDuration.getInstance("PT1h"), null);
         assertTrue(cd.hasAssignedValue());
-        assertEquals(DvDuration.getInstance("PT1h"),
-                cd.assignedValue());
-       
-       */
+        assertEquals(DvDuration.getInstance("PT1h"), cd.assignedValue());
     }
     
     public void testCreateCDurationByPattern() {
     	CDuration cd = new CDuration(null, null, null, "PDTH");
     	assertEquals("pattern wrong", "PDTH", cd.getPattern());
     }
-
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

@@ -10,10 +10,10 @@
 	<packaging>jar</packaging>
 	<name>openEHR Reference Model Object Builder</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
-    <scm>
-        <connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/rm-builder</connection>
-        <developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/rm-builder</developerConnection>
-        <url>http://www.openehr.org/svn/ref_impl_java/TRUNK/builder</url>
+	 <scm>
+        <connection>smc:git:${parent.smc.url}/rm-builder</connection>
+        <developerConnection>smc:git:${parent.smc.url}/rm-builder</developerConnection>
+        <url>${parent.smc.url}/rm-builder</url>
     </scm>
     <organization>
 		<name>openEHR</name>

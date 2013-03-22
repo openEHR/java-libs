@@ -9,10 +9,10 @@
 	<packaging>jar</packaging>
 	<name>ADL Serializer</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
-    <scm>
-        <connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/adl-serializer</connection>
-        <developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/adl-serializer</developerConnection>
-        <url>http://www.openehr.org/svn/ref_impl_java/TRUNK/adl-serializer/</url>
+	 <scm>
+        <connection>smc:git:${parent.smc.url}/adl-serializer</connection>
+        <developerConnection>smc:git:${parent.smc.url}/adl-serializer</developerConnection>
+        <url>${parent.smc.url}/adl-serializer</url>
     </scm>
 	<organization>
 		<name>openEHR</name>

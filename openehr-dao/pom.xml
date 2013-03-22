@@ -11,6 +11,11 @@
 	<packaging>jar</packaging>
 	<name>Data Access Object interfaces for openEHR</name>
 	<url>http://maven.apache.org</url>
+	<scm>
+        <connection>smc:git:${parent.smc.url}/openehr-dao</connection>
+        <developerConnection>smc:git:${parent.smc.url}/openehr-dao</developerConnection>
+        <url>${parent.smc.url}/openehr-dao</url>
+    </scm>
 	<build>
 		<plugins>
 			<plugin>

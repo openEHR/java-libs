@@ -16,11 +16,11 @@
 			<email>rong.acode@gmail.com</email>
 		</developer>
 	</developers>	
-	<scm>
-		<connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/oet-parser</connection>
-		<developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/oet-parser</developerConnection>
-		<url>http://www.openehr.org/svn/ref_impl_java/TRUNK/oet-parser</url>
-	</scm>	
+	 <scm>
+        <connection>smc:git:${parent.smc.url}/oet-parser</connection>
+        <developerConnection>smc:git:${parent.smc.url}/oet-parser</developerConnection>
+        <url>${parent.smc.url}/oet-parser</url>
+    </scm>
 	<organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>

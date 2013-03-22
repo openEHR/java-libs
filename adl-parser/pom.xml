@@ -10,10 +10,10 @@
 	<packaging>jar</packaging>
 	<name>java ADL Parser</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
-    <scm>
-        <connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/adl-parser</connection>
-        <developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/adl-parser</developerConnection>
-        <url>http://www.openehr.org/svn/ref_impl_java/TRUNK/adl-parser/</url>
+	 <scm>
+        <connection>smc:git:${parent.smc.url}/adl-parser</connection>
+        <developerConnection>smc:git:${parent.smc.url}/adl-parser</developerConnection>
+        <url>${parent.smc.url}/adl-parser</url>
     </scm>
 	<organization>
 		<name>openEHR</name>

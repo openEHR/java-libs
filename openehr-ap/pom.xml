@@ -10,10 +10,10 @@
 	<packaging>jar</packaging>
 	<name>openEHR Archetype Profile</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
-    <scm>
-        <connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/openehr-ap</connection>
-        <developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/openehr-ap</developerConnection>
-        <url>http://www.openehr.org/svn/ref_impl_java/TRUNK/openehr-ap/</url>
+	 <scm>
+        <connection>smc:git:${parent.smc.url}/openehr-ap</connection>
+        <developerConnection>smc:git:${parent.smc.url}/openehr-ap</developerConnection>
+        <url>${parent.smc.url}/openehr-ap</url>
     </scm>
 	<organization>
 		<name>openEHR</name>

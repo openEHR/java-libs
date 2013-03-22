@@ -10,13 +10,11 @@
 	<packaging>jar</packaging>
 	<name>openEHR RM XML Data Binding Component</name>
 	<url>http://www.openehr.org/svn/ref_impl_java/TRUNK/project_page.htm</url>
-	
 	<scm>
-		<connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/xml-binding</connection>
-		<developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/xml-binding</developerConnection>
-		<url>http://www.openehr.org/svn/ref_impl_java/TRUNK/xml-binding</url>
-	</scm>
-	
+        <connection>smc:git:${parent.smc.url}/xml-binding</connection>
+        <developerConnection>smc:git:${parent.smc.url}/xml-binding</developerConnection>
+        <url>${parent.smc.url}/xml-binding</url>
+    </scm>
 	<developers>
 		<developer>
 			<id>rong.chen</id>

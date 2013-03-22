@@ -15,11 +15,11 @@
 		<url>http://www.openehr.org/</url>
 	</organization>
 	<inceptionYear>2008</inceptionYear>
-	<scm>
-		<connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/dadl-binding</connection>
-		<developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/dadl-binding</developerConnection>
-		<url>http://www.openehr.org/svn/ref_impl_java/TRUNK/dadl-binding</url>
-	</scm>
+	 <scm>
+        <connection>smc:git:${parent.smc.url}/dadl-binding</connection>
+        <developerConnection>smc:git:${parent.smc.url}/dadl-binding</developerConnection>
+        <url>${parent.smc.url}/dadl-binding</url>
+    </scm>
 	<description>java openEHR RM and dADL Binding Component</description>
 	
 	<dependencies>

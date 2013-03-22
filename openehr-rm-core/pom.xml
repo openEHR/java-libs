@@ -10,11 +10,11 @@
 	<packaging>jar</packaging>
 	<name>openEHR Reference Model Core</name>
 	<url>http://www.openehr.org/projects/java.html</url>	
-	<scm>
-		<connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/openehr-rm-core</connection>
-		<developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/openehr-rm-core</developerConnection>
-		<url>http://www.openehr.org/svn/ref_impl_java/TRUNK/openehr-rm-core/</url>
-	</scm>
+	 <scm>
+        <connection>smc:git:${parent.smc.url}/openehr-rm-core</connection>
+        <developerConnection>smc:git:${parent.smc.url}/openehr-rm-core</developerConnection>
+        <url>${parent.smc.url}/openehr-rm-core</url>
+    </scm>
 	
 	<organization>
 		<name>openEHR</name>
@@ -39,6 +39,12 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>measure-serv</artifactId>
+			<version>1.0.3-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

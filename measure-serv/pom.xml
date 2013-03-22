@@ -10,10 +10,10 @@
 	<packaging>jar</packaging>
 	<name>openEHR Measurement Service Implementation</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
-    <scm>
-        <connection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/measure-serv</connection>
-        <developerConnection>scm:svn:http://www.openehr.org/svn/ref_impl_java/TRUNK/measure-serv</developerConnection>
-        <url>http://www.openehr.org/svn/ref_impl_java/TRUNK/measure-serv/</url>
+	 <scm>
+        <connection>smc:git:${parent.smc.url}/measure-serv</connection>
+        <developerConnection>smc:git:${parent.smc.url}/measure-serv</developerConnection>
+        <url>${parent.smc.url}/measure-serv</url>
     </scm>
     <organization>
 		<name>openEHR</name>
@@ -23,12 +23,7 @@
 	
 	<description>Java implementation of the openEHR Measurement Service</description>
 	
-	<dependencies>
-		<dependency>
-			<groupId>openehr</groupId>
-			<artifactId>openehr-rm-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>		
+	<dependencies>		
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
@@ -39,6 +34,11 @@
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.measure</groupId>
+			<artifactId>jsr-275</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 </project>
