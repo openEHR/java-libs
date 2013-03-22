@@ -45,6 +45,28 @@ public interface MeasurementService extends Serializable{
      * @throws IllegalArgumentException if units1 or units2 null
      */
     public boolean unitsEquivalent(String units1, String units2);
+    
+    /**
+     * Return True if two units strings are comparable.
+     * 
+     * @param units1
+     * @param units2
+     * @return true if two units comparable
+     * @throws IllegalArgumentException if units1 or units2 null
+     */
+    public boolean unitsComparable(String units1, String units2);
+    
+    /**
+     * Comparison between two measures.
+     * 
+     * @param units1
+     * @param units2
+     * @return a negative integer, zero, or a positive integer as this measure
+     *         is less than, equal to, or greater than the specified measurable
+     *         quantity.
+     * @throws IllegalArgumentException if units1, units2 null or not comparable
+     */
+    public int compare(String units1, Double value1, String units2, Double value2);
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

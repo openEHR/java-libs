@@ -22,6 +22,7 @@ import org.openehr.rm.FullConstructor;
 import org.openehr.rm.datatypes.basic.ReferenceModelName;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.measurement.MeasurementService;
+import org.openehr.rm.support.measurement.SimpleMeasurementService;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -290,12 +291,7 @@ public class DvQuantity extends DvAmount<DvQuantity> {
      */
     public int compareTo(DvOrdered o) {
         DvQuantity q = (DvQuantity) o;
-        if (magnitude > q.magnitude) {
-            return 1;
-        } else if (magnitude < q.magnitude) {
-            return -1;
-        }
-        return 0;
+        return SimpleMeasurementService.getInstance().compare(getUnits(), getMagnitude(), q.getUnits(), q.getMagnitude());
     }
 
     /**
@@ -310,8 +306,7 @@ public class DvQuantity extends DvAmount<DvQuantity> {
             throw new IllegalArgumentException("other not Quantity");
         }
         final DvQuantity dvQuantity = (DvQuantity) other;
-        return measurementService.unitsEquivalent(getUnits(),
-                dvQuantity.getUnits());
+        return measurementService.unitsEquivalent(getUnits(), dvQuantity.getUnits());
     }
 
     /**

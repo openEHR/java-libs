@@ -32,7 +32,7 @@ public class TestMeasurementService implements MeasurementService {
      * @throws IllegalArgumentException if units null
      */
     public boolean isValidUnitsString(String units) {
-        return true;
+	return true;
     }
 
     /**
@@ -45,7 +45,7 @@ public class TestMeasurementService implements MeasurementService {
      * @throws IllegalArgumentException if units1 or units2 null
      */
     public boolean unitsEquivalent(String units1, String units2) {
-        return true;
+	return true;
     }
 
     /**
@@ -54,7 +54,18 @@ public class TestMeasurementService implements MeasurementService {
      * @return
      */
     public static MeasurementService getInstance() {
-        return new TestMeasurementService();
+	return new TestMeasurementService();
+    }
+
+    @Override
+    public boolean unitsComparable(String units1, String units2) {
+	return true;
+    }
+
+    @Override
+    public int compare(String units1, Double value1, String units2,
+	    Double value2) {
+	return 0;
     }
 }
 

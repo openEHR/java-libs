@@ -14,6 +14,9 @@
  */
 package org.openehr.rm.support.measurement;
 
+import javax.measure.Measure;
+import javax.measure.unit.Unit;
+
 /**
  * Simple implementation of measurement information service
  *
@@ -21,17 +24,22 @@ package org.openehr.rm.support.measurement;
  * @version 1.0
  *
  */
-public class SimpleMeasurementService implements MeasurementService {
-	
-	public static MeasurementService getInstance() {
-		return soleInstance;
-	}
-	
-	private static final SimpleMeasurementService soleInstance = 
-		new SimpleMeasurementService();
-	
-	private SimpleMeasurementService() {		
-	}
+public class  SimpleMeasurementService implements MeasurementService {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+    public static MeasurementService getInstance() {
+	return soleInstance;
+    }
+
+    private static final SimpleMeasurementService soleInstance = 
+	    new SimpleMeasurementService();
+
+    private SimpleMeasurementService() {		
+    }
 
     /**
      * Returns True if the units string according to
@@ -42,11 +50,11 @@ public class SimpleMeasurementService implements MeasurementService {
      * @throws IllegalArgumentException if units null
      */
     public boolean isValidUnitsString(String units) {
-    	if(units == null) {
-    		throw new IllegalArgumentException("units null");
-    	} 
-    	// TODO fix it    	
-    	return true;
+	if(units == null) {
+	    throw new IllegalArgumentException("units null");
+	} 
+	// TODO fix it
+	return true;
     }
 
     /**
@@ -59,13 +67,59 @@ public class SimpleMeasurementService implements MeasurementService {
      * @throws IllegalArgumentException if units1 or units2 null
      */
     public boolean unitsEquivalent(String units1, String units2) {
-    	if(units1 == null) {
-    		throw new IllegalArgumentException("units1 null");
-    	}
-    	if(units2 == null) {
-    		throw new IllegalArgumentException("units2 null");
-    	}
-    	return units1.equalsIgnoreCase(units2);    	
+	if(units1 == null) {
+	    throw new IllegalArgumentException("units1 null");
+	}
+	if(units2 == null) {
+	    throw new IllegalArgumentException("units2 null");
+	}
+	return units1.equalsIgnoreCase(units2);    	
+    }
+
+    /**
+     * Return True if two units strings are comparable.
+     * 
+     * @param units1
+     * @param units2
+     * @return true if two units comparable
+     * @throws IllegalArgumentException if units1 or units2 null
+     */
+    public boolean unitsComparable(String units1, String units2) {
+	if(units1 == null) {
+	    throw new IllegalArgumentException("units1 null");
+	}
+	if(units2 == null) {
+	    throw new IllegalArgumentException("units2 null");
+	}
+	return Unit.valueOf(units1).isCompatible(Unit.valueOf(units2));
+    }
+
+    /**
+     * Comparison between two measures.
+     * 
+     * @param units1
+     * @param units2
+     * @return a negative integer, zero, or a positive integer as this measure
+     *         is less than, equal to, or greater than the specified measurable
+     *         quantity.
+     * @throws IllegalArgumentException if units1, units2 null or not comparable
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public int compare(String units1, Double value1, String units2, Double value2) {
+	if(units1 == null) {
+	    throw new IllegalArgumentException("units1 null");
+	}
+	if(units2 == null) {
+	    throw new IllegalArgumentException("units2 null");
+	}
+	Unit<?> unit1 = Unit.valueOf(units1);
+	Unit<?> unit2 = Unit.valueOf(units2);
+	if (!unit1.isCompatible(unit2)){
+	    throw new IllegalArgumentException("units '"+units1+"' is not comparable to '"+units2+"'");
+	}
+	Measure measure1 = Measure.valueOf(value1, unit1);
+	Measure measure2 = Measure.valueOf(value2, unit2);
+	return measure1.compareTo(measure2);
     }
 }
 /*

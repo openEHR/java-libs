@@ -561,5 +561,16 @@ public class XPathTest extends DADLBindingTestBase {
 		public static MeasurementService getInstance() {
 			return new TestMeasurementService();
 		}
+
+		@Override
+		public boolean unitsComparable(String units1, String units2) {
+		    return true;
+		}
+
+		@Override
+		public int compare(String units1, Double value1, String units2,
+			Double value2) {
+		    return 0;
+		}
 	}
 }
