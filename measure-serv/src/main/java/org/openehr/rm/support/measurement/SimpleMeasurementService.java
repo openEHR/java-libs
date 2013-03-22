@@ -85,13 +85,11 @@ public class  SimpleMeasurementService implements MeasurementService {
      * @throws IllegalArgumentException if units1 or units2 null
      */
     public boolean unitsComparable(String units1, String units2) {
-	if(units1 == null) {
-	    throw new IllegalArgumentException("units1 null");
+	if (unitsEquivalent(units1, units2)){
+	    return true;
+	}else{
+	    return Unit.valueOf(units1).isCompatible(Unit.valueOf(units2));
 	}
-	if(units2 == null) {
-	    throw new IllegalArgumentException("units2 null");
-	}
-	return Unit.valueOf(units1).isCompatible(Unit.valueOf(units2));
     }
 
     /**
