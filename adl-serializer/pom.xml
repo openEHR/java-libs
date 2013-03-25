@@ -10,9 +10,9 @@
 	<name>ADL Serializer</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
 	 <scm>
-        <connection>smc:git:${parent.smc.url}/adl-serializer</connection>
-        <developerConnection>smc:git:${parent.smc.url}/adl-serializer</developerConnection>
-        <url>${parent.smc.url}/adl-serializer</url>
+        <connection>scm:git:${parent.scm.url}/adl-serializer</connection>
+        <developerConnection>scm:git:${parent.scm.url}/adl-serializer</developerConnection>
+        <url>${parent.scm.url}/adl-serializer</url>
     </scm>
 	<organization>
 		<name>openEHR</name>

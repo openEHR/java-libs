@@ -11,9 +11,9 @@
 	<name>openEHR Reference Model Core</name>
 	<url>http://www.openehr.org/projects/java.html</url>	
 	 <scm>
-        <connection>smc:git:${parent.smc.url}/openehr-rm-core</connection>
-        <developerConnection>smc:git:${parent.smc.url}/openehr-rm-core</developerConnection>
-        <url>${parent.smc.url}/openehr-rm-core</url>
+        <connection>scm:git:${parent.scm.url}/openehr-rm-core</connection>
+        <developerConnection>scm:git:${parent.scm.url}/openehr-rm-core</developerConnection>
+        <url>${parent.scm.url}/openehr-rm-core</url>
     </scm>
 	
 	<organization>

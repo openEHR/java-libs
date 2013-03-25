@@ -17,9 +17,9 @@
 		</developer>
 	</developers>	
 	 <scm>
-        <connection>smc:git:${parent.smc.url}/oet-parser</connection>
-        <developerConnection>smc:git:${parent.smc.url}/oet-parser</developerConnection>
-        <url>${parent.smc.url}/oet-parser</url>
+        <connection>scm:git:${parent.scm.url}/oet-parser</connection>
+        <developerConnection>scm:git:${parent.scm.url}/oet-parser</developerConnection>
+        <url>${parent.scm.url}/oet-parser</url>
     </scm>
 	<organization>
 		<name>openEHR</name>

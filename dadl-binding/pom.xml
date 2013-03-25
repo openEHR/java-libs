@@ -16,9 +16,9 @@
 	</organization>
 	<inceptionYear>2008</inceptionYear>
 	 <scm>
-        <connection>smc:git:${parent.smc.url}/dadl-binding</connection>
-        <developerConnection>smc:git:${parent.smc.url}/dadl-binding</developerConnection>
-        <url>${parent.smc.url}/dadl-binding</url>
+        <connection>scm:git:${parent.scm.url}/dadl-binding</connection>
+        <developerConnection>scm:git:${parent.scm.url}/dadl-binding</developerConnection>
+        <url>${parent.scm.url}/dadl-binding</url>
     </scm>
 	<description>java openEHR RM and dADL Binding Component</description>
 	

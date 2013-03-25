@@ -13,9 +13,9 @@
 	<name>openEHR Archetype Object Model</name>	
 	<url>http://www.openehr.org/projects/java.html</url>   
 	 <scm>
-        <connection>smc:git:${parent.smc.url}/openehr-aom</connection>
-        <developerConnection>smc:git:${parent.smc.url}/openehr-aom</developerConnection>
-        <url>${parent.smc.url}/openehr-aom</url>
+        <connection>scm:git:${parent.scm.url}/openehr-aom</connection>
+        <developerConnection>scm:git:${parent.scm.url}/openehr-aom</developerConnection>
+        <url>${parent.scm.url}/openehr-aom</url>
     </scm>
 	<organization>
 		<name>openEHR</name>

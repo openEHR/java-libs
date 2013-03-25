@@ -11,9 +11,9 @@
 	<name>openEHR RM XML Data Binding Component</name>
 	<url>http://www.openehr.org/svn/ref_impl_java/TRUNK/project_page.htm</url>
 	<scm>
-        <connection>smc:git:${parent.smc.url}/xml-binding</connection>
-        <developerConnection>smc:git:${parent.smc.url}/xml-binding</developerConnection>
-        <url>${parent.smc.url}/xml-binding</url>
+        <connection>scm:git:${parent.scm.url}/xml-binding</connection>
+        <developerConnection>scm:git:${parent.scm.url}/xml-binding</developerConnection>
+        <url>${parent.scm.url}/xml-binding</url>
     </scm>
 	<developers>
 		<developer>

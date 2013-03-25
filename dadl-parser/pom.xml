@@ -18,9 +18,9 @@
 	
 	<description>java dADL Parser</description>
 	 <scm>
-        <connection>smc:git:${parent.smc.url}/dadl-parser</connection>
-        <developerConnection>smc:git:${parent.smc.url}/dadl-parser</developerConnection>
-        <url>${parent.smc.url}/dadl-parser</url>
+        <connection>scm:git:${parent.scm.url}/dadl-parser</connection>
+        <developerConnection>scm:git:${parent.scm.url}/dadl-parser</developerConnection>
+        <url>${parent.scm.url}/dadl-parser</url>
     </scm>
 	<build>
 		<plugins>

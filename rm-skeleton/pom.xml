@@ -10,9 +10,9 @@
 	<packaging>jar</packaging>
 	<name>openEHR RM Skeleton Instance Generator</name>
 	<scm>
-        <connection>smc:git:${parent.smc.url}/rm-skeleton</connection>
-        <developerConnection>smc:git:${parent.smc.url}/rm-skeleton</developerConnection>
-        <url>${parent.smc.url}/rm-skeleton</url>
+        <connection>scm:git:${parent.scm.url}/rm-skeleton</connection>
+        <developerConnection>scm:git:${parent.scm.url}/rm-skeleton</developerConnection>
+        <url>${parent.scm.url}/rm-skeleton</url>
     </scm>
 	<dependencies>
 		<dependency>

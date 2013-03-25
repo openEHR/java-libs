@@ -12,9 +12,9 @@
 	<name>Data Access Object interfaces for openEHR</name>
 	<url>http://maven.apache.org</url>
 	<scm>
-        <connection>smc:git:${parent.smc.url}/openehr-dao</connection>
-        <developerConnection>smc:git:${parent.smc.url}/openehr-dao</developerConnection>
-        <url>${parent.smc.url}/openehr-dao</url>
+        <connection>scm:git:${parent.scm.url}/openehr-dao</connection>
+        <developerConnection>scm:git:${parent.scm.url}/openehr-dao</developerConnection>
+        <url>${parent.scm.url}/openehr-dao</url>
     </scm>
 	<build>
 		<plugins>

@@ -11,9 +11,9 @@
 	<name>openEHR Minimum Terminology Service</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
 	 <scm>
-        <connection>smc:git:${parent.smc.url}/mini-termserv</connection>
-        <developerConnection>smc:git:${parent.smc.url}/mini-termserv</developerConnection>
-        <url>${parent.smc.url}/mini-termserv</url>
+        <connection>scm:git:${parent.scm.url}/mini-termserv</connection>
+        <developerConnection>scm:git:${parent.scm.url}/mini-termserv</developerConnection>
+        <url>${parent.scm.url}/mini-termserv</url>
     </scm>
 	<organization>
 		<name>openEHR</name>
