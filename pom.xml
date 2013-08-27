@@ -3,7 +3,7 @@
 	<groupId>openehr</groupId>
 	<artifactId>ref_impl_java</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.4</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<name>The openEHR Reference Java Implementation</name>
 	<organization>
 		<name>The openEHR Foundation</name>

@@ -4,7 +4,7 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.4</version>
+		<version>1.0.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>xml-binding</artifactId>
 	<packaging>jar</packaging>
@@ -121,7 +121,7 @@
         <dependency>
             <groupId>openehr</groupId>
             <artifactId>oet-parser</artifactId>
-            <version>1.0.4</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
