@@ -2,7 +2,7 @@ Java openEHR Implementation project
 -----------------------------------
 
 VERSION
-        Release-1.0.1 RC
+        Release-1.0.4
 
 STATUS
         Based on openEHR release 1.0.1 RC and implemented Reference Model -
