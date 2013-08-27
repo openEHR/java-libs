@@ -61,12 +61,12 @@ public class ParseDataValueTest extends TestCase {
 	}
 	
 	public void testParseDvDateTime() {
-		dv = DataValue.parseValue("DV_DATE_TIME,2004-10-31T20:10:55");
-		assertEquals(dv, new DvDateTime("2004-10-31T20:10:55"));
+		dv = DataValue.parseValue("DV_DATE_TIME,2004-10-31T20:10:55.000+01:00");
+		assertEquals(dv, new DvDateTime("2004-10-31T20:10:55.000+01:00"));
 	}
 	
 	public void testDvDateTimeRoundTrip() {
-		DvDateTime datetime = new DvDateTime("2004-10-31T20:10:55");
+		DvDateTime datetime = new DvDateTime("2004-10-31T20:10:55.000+01:00");
 		String s = datetime.serialise();
 		assertEquals("DvDateTime round trip failed", datetime, DataValue.parseValue(s));
 	}

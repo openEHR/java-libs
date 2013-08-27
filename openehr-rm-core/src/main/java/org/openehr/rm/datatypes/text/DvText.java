@@ -39,6 +39,10 @@ import java.util.List;
 public class DvText extends DataValue {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -5474907649298777278L;
+    /**
      * Constructs a Text from the given components.
      *
      * @param value              not null or empty or contains

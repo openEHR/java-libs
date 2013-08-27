@@ -14,6 +14,8 @@
  */
 package org.openehr.am.archetype.ontology;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -25,9 +27,15 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author Rong Chen
  * @version 1.1
  */
-public class Query {
+public class Query implements Serializable {
 
    /**
+     * 
+     */
+    private static final long serialVersionUID = -4485822596246262897L;
+
+
+/**
      * Constructor
      * 
      * @param url

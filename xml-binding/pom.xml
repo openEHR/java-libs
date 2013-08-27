@@ -4,17 +4,13 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4</version>
 	</parent>
 	<artifactId>xml-binding</artifactId>
 	<packaging>jar</packaging>
 	<name>openEHR RM XML Data Binding Component</name>
 	<url>http://www.openehr.org/svn/ref_impl_java/TRUNK/project_page.htm</url>
-	<scm>
-        <connection>scm:git:${parent.scm.url}/xml-binding</connection>
-        <developerConnection>scm:git:${parent.scm.url}/xml-binding</developerConnection>
-        <url>${parent.scm.url}/xml-binding</url>
-    </scm>
+
 	<developers>
 		<developer>
 			<id>rong.chen</id>
@@ -122,5 +118,10 @@
             <version>2.3.0</version>
             <scope>test</scope>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>openehr</groupId>
+            <artifactId>oet-parser</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+    </dependencies>
 </project>

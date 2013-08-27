@@ -42,6 +42,10 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 public class DvTime extends DvTemporal<DvTime> {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = -6203478492778373210L;
+	/**
 	 * Construct a DvTime
 	 *
 	 * @param otherReferenceRanges null if not specified

@@ -4,7 +4,7 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4</version>
 	</parent>
 	<artifactId>dadl-parser</artifactId>
 	<packaging>jar</packaging>
@@ -17,11 +17,7 @@
 	<inceptionYear>2007</inceptionYear>
 	
 	<description>java dADL Parser</description>
-	 <scm>
-        <connection>scm:git:${parent.scm.url}/dadl-parser</connection>
-        <developerConnection>scm:git:${parent.scm.url}/dadl-parser</developerConnection>
-        <url>${parent.scm.url}/dadl-parser</url>
-    </scm>
+
 	<build>
 		<plugins>
 			<plugin>

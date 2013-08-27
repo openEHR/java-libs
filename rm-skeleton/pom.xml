@@ -4,16 +4,12 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4</version>
 	</parent>
 	<artifactId>rm-skeleton</artifactId>
 	<packaging>jar</packaging>
 	<name>openEHR RM Skeleton Instance Generator</name>
-	<scm>
-        <connection>scm:git:${parent.scm.url}/rm-skeleton</connection>
-        <developerConnection>scm:git:${parent.scm.url}/rm-skeleton</developerConnection>
-        <url>${parent.scm.url}/rm-skeleton</url>
-    </scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>openehr</groupId>

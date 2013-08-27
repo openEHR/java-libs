@@ -51,6 +51,11 @@ import org.openehr.rm.support.terminology.TerminologyService;
 public final class Archetype extends AuthoredResource {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
+	/**
 	 * Constructs an Archetype
 	 *
 	 * @param adlVersion null if unspecified

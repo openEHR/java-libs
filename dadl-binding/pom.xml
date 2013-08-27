@@ -4,7 +4,7 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4</version>
 	</parent>
 	<artifactId>dadl-binding</artifactId>
 	<packaging>jar</packaging>
@@ -15,11 +15,6 @@
 		<url>http://www.openehr.org/</url>
 	</organization>
 	<inceptionYear>2008</inceptionYear>
-	 <scm>
-        <connection>scm:git:${parent.scm.url}/dadl-binding</connection>
-        <developerConnection>scm:git:${parent.scm.url}/dadl-binding</developerConnection>
-        <url>${parent.scm.url}/dadl-binding</url>
-    </scm>
 	<description>java openEHR RM and dADL Binding Component</description>
 	
 	<dependencies>

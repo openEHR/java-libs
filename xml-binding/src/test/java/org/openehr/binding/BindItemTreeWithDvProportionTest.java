@@ -1,11 +1,11 @@
 package org.openehr.binding;
 
-import java.math.BigInteger;
-
 import org.openehr.schemas.v1.DVPROPORTION;
 import org.openehr.schemas.v1.ELEMENT;
 import org.openehr.schemas.v1.ITEMTREE;
 import org.openehr.schemas.v1.ItemsDocument;
+
+import java.math.BigInteger;
 
 public class BindItemTreeWithDvProportionTest extends XMLBindingTestBase {
 	

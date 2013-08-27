@@ -4,17 +4,12 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4</version>
 	</parent>
 	<artifactId>openehr-rm-core</artifactId>
 	<packaging>jar</packaging>
 	<name>openEHR Reference Model Core</name>
-	<url>http://www.openehr.org/projects/java.html</url>	
-	 <scm>
-        <connection>scm:git:${parent.scm.url}/openehr-rm-core</connection>
-        <developerConnection>scm:git:${parent.scm.url}/openehr-rm-core</developerConnection>
-        <url>${parent.scm.url}/openehr-rm-core</url>
-    </scm>
+	<url>http://www.openehr.org/projects/java.html</url>
 	
 	<organization>
 		<name>openEHR</name>
@@ -44,7 +39,7 @@
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>measure-serv</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>1.0.4</version>
 		</dependency>
 	</dependencies>
 </project>

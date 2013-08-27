@@ -4,17 +4,13 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4</version>
 	</parent>
 	<artifactId>measure-serv</artifactId>
 	<packaging>jar</packaging>
 	<name>openEHR Measurement Service Implementation</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
-	 <scm>
-        <connection>scm:git:${parent.scm.url}/measure-serv</connection>
-        <developerConnection>scm:git:${parent.scm.url}/measure-serv</developerConnection>
-        <url>${parent.scm.url}/measure-serv</url>
-    </scm>
+
     <organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>

@@ -30,6 +30,10 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 public class DvProportion extends DvAmount<DvProportion> {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = -6974879608546465410L;
+	/**
      * Constructs a DvAmount with referenceRanges and accuracy
      *
      * @param otherReferenceRanges   null if not specified

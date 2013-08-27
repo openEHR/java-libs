@@ -38,6 +38,10 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 public class DvDate extends DvTemporal<DvDate> {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 4412140604570981489L;
+	/**
 	 * Construct a DvDate
 	 *
 	 * @param otherReferenceRanges null if not specified

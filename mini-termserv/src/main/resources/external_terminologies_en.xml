@@ -340,6 +340,7 @@
 		<code value="lt" Description="Lithuanian"/>
 		<code value="mk" Description="FYRO Macedonian ms Malaysian"/>
 		<code value="mt" Description="Maltese"/>
+		<code value="no" Description="Norwegian"/>
 		<code value="nb" Description="Norwegian Bokmal"/>
 		<code value="nn" Description="Norwegian Nynorsk"/>
 		<code value="pl" Description="Polish"/>

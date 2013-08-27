@@ -1,22 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4</version>
 	</parent>
 	<artifactId>openehr-aom</artifactId>
 	<packaging>jar</packaging>
 	<name>openEHR Archetype Object Model</name>	
 	<url>http://www.openehr.org/projects/java.html</url>   
-	 <scm>
-        <connection>scm:git:${parent.scm.url}/openehr-aom</connection>
-        <developerConnection>scm:git:${parent.scm.url}/openehr-aom</developerConnection>
-        <url>${parent.scm.url}/openehr-aom</url>
-    </scm>
+
 	<organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>

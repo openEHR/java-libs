@@ -31,6 +31,11 @@ import java.util.List;
 public final class DvCount extends DvAmount<DvCount> {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 1800575426332796870L;
+
+	/**
 	 * Constructs a Countable by all components
 	 *
 	 * @param otherReferenceRanges

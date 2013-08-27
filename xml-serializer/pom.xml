@@ -3,17 +3,13 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4</version>
 	</parent>
 	<artifactId>xml-serializer</artifactId>
 	<packaging>jar</packaging>
 	<name>XML Serializer</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
-	<scm>
-        <connection>scm:git:${parent.scm.url}/xml-serializer</connection>
-        <developerConnection>scm:git:${parent.scm.url}/xml-serializer</developerConnection>
-        <url>${parent.scm.url}/xml-serializer</url>
-    </scm>
+
 	<organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>

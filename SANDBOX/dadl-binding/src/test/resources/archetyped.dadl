@@ -1,6 +1,0 @@
-<
-    archetype_id = (ARCHETYPE_ID) <
-		value = <"openEHR-EHR-OBSERVATION.blood_pressure.v1">
-	>
-    rm_version = <"1.0.1">
->

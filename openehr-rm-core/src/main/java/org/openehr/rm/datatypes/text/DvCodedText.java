@@ -35,6 +35,14 @@ import org.openehr.rm.support.terminology.TerminologyService;
 public final class DvCodedText extends DvText {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 5514325220408145036L;
+
+    /**
+     * 
+     */
+    /**
      * Constructs a CodedText of given components
      *
      * @param value

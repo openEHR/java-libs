@@ -14,8 +14,6 @@
  */
 package org.openehr.rm.datatypes.quantity;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -37,6 +35,10 @@ import org.openehr.rm.datatypes.text.DvCodedText;
  */
 public final class DvOrdinal extends DvOrdered<DvOrdinal> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 4901266284988836885L;
     /**
      * Constructs an Ordinal by referenceRanges, value and symbol
      *

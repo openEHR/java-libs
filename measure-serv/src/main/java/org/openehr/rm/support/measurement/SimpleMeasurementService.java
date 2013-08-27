@@ -88,7 +88,9 @@ public class  SimpleMeasurementService implements MeasurementService {
 	if (unitsEquivalent(units1, units2)){
 	    return true;
 	}else{
-	    return Unit.valueOf(units1).isCompatible(Unit.valueOf(units2));
+	    Unit<?> u1 = Unit.valueOf(units1);
+	    Unit<?> u2 = Unit.valueOf(units2);
+	    return u1.isCompatible(u2);
 	}
     }
 
@@ -122,7 +124,7 @@ public class  SimpleMeasurementService implements MeasurementService {
 	    Measure measure2 = Measure.valueOf(value2, unit2);
 	    return measure1.compareTo(measure2);
 	}
-}
+    }
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

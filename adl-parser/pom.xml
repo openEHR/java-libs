@@ -4,17 +4,12 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4</version>
 	</parent>
 	<artifactId>adl-parser</artifactId>
 	<packaging>jar</packaging>
 	<name>java ADL Parser</name>
-	<url>http://www.openehr.org/projects/java.html</url>   
-	 <scm>
-        <connection>scm:git:${parent.scm.url}/adl-parser</connection>
-        <developerConnection>scm:git:${parent.scm.url}/adl-parser</developerConnection>
-        <url>${parent.scm.url}/adl-parser</url>
-    </scm>
+	<url>http://www.openehr.org/projects/java.html</url>
 	<organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>
@@ -53,6 +48,14 @@
                         </manifest>
                     </archive>
                 </configuration>
+				<!-- executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>assembly</goal>
+						</goals>
+					</execution>
+				</executions-->
             </plugin>
 		</plugins>
 		<pluginManagement>

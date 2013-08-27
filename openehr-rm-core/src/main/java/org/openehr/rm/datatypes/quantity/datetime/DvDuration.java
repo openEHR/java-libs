@@ -45,6 +45,11 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 public final class DvDuration extends DvAmount<DvDuration> {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = -8172997416937095330L;
+
+	/**
 	 * Constructs a Duration with referenceRange and accuracy
 	 * 
 	 * @param otherReferenceRanges

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
@@ -79,7 +80,9 @@ public class XPathUtil {
 		Object o = list.get(i);
 
 		assert (o instanceof Locatable);
-
+		if (o == null){
+		    Logger.getLogger(XPathUtil.class).warn("Null locatable at "+obj+" index="+i);
+		}
 		String nodeId = ((Locatable) o).getArchetypeNodeId();
 
 		assert (nodeId != null && !nodeId.isEmpty());

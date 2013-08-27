@@ -39,6 +39,11 @@ import org.openehr.rm.datatypes.text.CodePhrase;
  */
 public class DvDateTime extends DvTemporal<DvDateTime> {
 
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -84308270373625815L;
+
 	/* static fields */
 	static final DateTimeFormatter eDTimeFormatter = ISODateTimeFormat
 			.dateTime(); //extended formatter
@@ -83,7 +88,7 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 	 * Convenience constructor
 	 */
 	private DvDateTime(DateTime datetime) {
-		this(null, null, null, null, null, datetime, "yyyy-MM-dd'T'HH:mm:ssZZ");
+		this(null, null, null, null, null, datetime, "yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
 	}
 
 	/**
@@ -93,7 +98,7 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 	public DvDateTime() {
 		super(DvDateTimeParser.defaultDateTime());
 		setValue(DvDateTimeParser.toDateTimeString(getDateTime(),
-				"yyyy-MM-dd'T'HH:mm:ss,SSS"));
+				"yyyy-MM-dd'T'HH:mm:ss.SSSZZ"));
 		setBooleans(false, true, true, true);
 	}
 
@@ -121,8 +126,8 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 			int second, double fractionalSec, TimeZone timezone) {
 		super(DvDateTimeParser.convertDateTime(year, month, day, hour, minute, 
 				second,	fractionalSec, timezone));
-		String format = timezone == null ? "yyyy-MM-dd'T'HH:mm:ss,SSS"
-				: "yyyy-MM-dd'T'HH:mm:ss,SSSZZ";
+		String format = timezone == null ? "yyyy-MM-dd'T'HH:mm:ss.SSS"
+				: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ";
 		setValue(DvDateTimeParser.toDateTimeString(getDateTime(), format));
 		setBooleans(false, true, true, true);
 	}

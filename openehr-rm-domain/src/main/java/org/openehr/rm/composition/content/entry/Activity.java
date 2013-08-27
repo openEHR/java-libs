@@ -145,6 +145,9 @@ public class Activity extends Locatable {
 	void setTiming(DvParsable timing) {
 		this.timing = timing;
 	}
+	public void setActionArchetypeId(String actionArchetypeId){
+	    this.actionArchetypeId = actionArchetypeId;
+	}
 
 	//POJO end	
 

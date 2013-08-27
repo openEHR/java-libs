@@ -4,17 +4,13 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4</version>
 	</parent>
 	<artifactId>openehr-ap</artifactId>
 	<packaging>jar</packaging>
 	<name>openEHR Archetype Profile</name>
 	<url>http://www.openehr.org/projects/java.html</url>   
-	 <scm>
-        <connection>scm:git:${parent.scm.url}/openehr-ap</connection>
-        <developerConnection>scm:git:${parent.scm.url}/openehr-ap</developerConnection>
-        <url>${parent.scm.url}/openehr-ap</url>
-    </scm>
+
 	<organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>

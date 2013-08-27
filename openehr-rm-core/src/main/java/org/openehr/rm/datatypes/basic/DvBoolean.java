@@ -27,6 +27,11 @@ import org.openehr.rm.FullConstructor;
 public final class DvBoolean extends DataValue {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = -5827013068177253709L;
+
+    /**
      * Constructs a DvBoolean from a boolean value
      *
      * @param value
