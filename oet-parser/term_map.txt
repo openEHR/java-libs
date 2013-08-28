@@ -1,3 +1,0 @@
-SNOMED-CT::10035::Ja::/items[at0001 and name/value='status']/value
-SNOMED-CT::10036::Nej::/items[at0001 and name/value='status']/value
-SNOMED-CT::10037::Okönt::/items[at0001 and name/value='status']/value

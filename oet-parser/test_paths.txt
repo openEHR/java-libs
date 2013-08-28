@@ -1,3 +1,0 @@
-# Generated path map on 2013-aug-27 19:29:12
-key2=path2
-key1=path1
