@@ -2443,6 +2443,13 @@ CAttribute c_attribute(String path) :
       attribute = new CMultipleAttribute(path, name, existence, cardinality,
                                          children);
     }
+    
+    // Set children parent to the attribute
+    for(Iterator it = children.iterator(); it.hasNext();) {
+      CObject co = (CObject) it.next();
+      co.setParent(attribute);
+    }
+    
     return attribute;
   }
 }
