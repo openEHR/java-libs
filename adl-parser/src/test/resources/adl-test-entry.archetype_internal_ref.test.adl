@@ -19,6 +19,10 @@ definition
 			use_node COMPLEX_OBJECT /items[at0001]
 			use_node COMPLEX_OBJECT /items[at0002]			
 		}
+		attribute4 matches {
+			use_node SECTION[at0005] /items[at0001]
+			use_node SECTION[at0006] /items[at0002]
+		}
 	}	
 
 ontology

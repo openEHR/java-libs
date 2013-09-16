@@ -339,7 +339,6 @@ PARSER_END(ADLParser)
 | < SYM_START_CBLOCK: "{">
 | < SYM_END_CBLOCK: "}">
 | < SYM_C_DV_QUANTITY: "c_dv_quantity" >: DOMAIN_TYPE_C_QUANTITY
-| < SYM_UNITS: "units">: DOMAIN_TYPE_C_QUANTITY 
 | < SYM_ASSUMED_VALUE: "assumed_value">
 }
 
@@ -2317,20 +2316,23 @@ ConstraintRef constraint_ref_obj(String path, CAttribute parent) :
   }
 }
 
-ArchetypeInternalRef archetype_internal_ref(String path, CAttribute parent) :
+ArchetypeInternalRef archetype_internal_ref(String path, CAttribute
+parent) :
 {
-  String type;
-  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
-  String target;
+    String type;
+    Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+    String target;
+    String nodeID = null;
 }
 {
-  <SYM_USE_NODE> type = type_identifier() 
-   [ occurrences = c_occurrences() ]  
-  target = absolute_path()  
-  { 
-  	return new ArchetypeInternalRef(path, type, occurrences, null, parent, 
-  			target); 
-  }
+    <SYM_USE_NODE> type = type_identifier()
+     [ nodeID = constraint_ref() ]
+     [ occurrences = c_occurrences() ]
+    target = absolute_path()
+    {
+        return new ArchetypeInternalRef(path, type, occurrences, nodeID, parent,
+                target);
+    }
 }
 
 ArchetypeSlot archetype_slot(String path, CAttribute parent) :
@@ -2988,7 +2990,7 @@ CDvQuantityItem c_dv_quantity_item() :
 {
   "[" string_value() "]" <SYM_EQ> "<"
     
-    (<SYM_C_QUANTITY_UNITS>|<SYM_UNITS>) <SYM_EQ> "<" 
+     (<SYM_C_QUANTITY_UNITS>) <SYM_EQ> "<" 
       units = string_value() 
     ">"
     
@@ -3217,9 +3219,11 @@ CDuration c_duration() :
 }
 
 String duration_pattern() :
-{  Token t = null;  
+{
+  Token t = null;  
 }
-{  t = <V_ISO8601_DURATION_CONSTRAINT_PATTERN>
+{
+  t = <V_ISO8601_DURATION_CONSTRAINT_PATTERN>
   { return t.image; }
 }
 
