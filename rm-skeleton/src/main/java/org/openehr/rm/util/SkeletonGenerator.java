@@ -13,16 +13,15 @@
  */
 package org.openehr.rm.util;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.*;
-
 import org.apache.log4j.Logger;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.constraintmodel.*;
 import org.openehr.am.archetype.constraintmodel.primitive.*;
 import org.openehr.am.archetype.ontology.ArchetypeTerm;
-import org.openehr.am.openehrprofile.datatypes.quantity.*;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
+import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.am.template.TermMap;
 import org.openehr.build.RMObjectBuilder;
@@ -36,16 +35,25 @@ import org.openehr.rm.datatypes.encapsulated.DvParsable;
 import org.openehr.rm.datatypes.quantity.DvOrdinal;
 import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.quantity.ProportionKind;
-import org.openehr.rm.datatypes.quantity.datetime.*;
+import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
+import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.uri.DvURI;
-import org.openehr.rm.support.identification.*;
-import org.openehr.rm.support.measurement.*;
+import org.openehr.rm.support.identification.HierObjectID;
+import org.openehr.rm.support.identification.PartyRef;
+import org.openehr.rm.support.identification.TemplateID;
+import org.openehr.rm.support.identification.TerminologyID;
+import org.openehr.rm.support.measurement.MeasurementService;
+import org.openehr.rm.support.measurement.SimpleMeasurementService;
 import org.openehr.rm.support.terminology.TerminologyAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.terminology.SimpleTerminologyService;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.*;
 
 public class SkeletonGenerator {
 	
@@ -645,7 +653,7 @@ public class SkeletonGenerator {
 		} else if(cobj instanceof CDomainType) {
 		
 			return createDomainTypeObject((CDomainType) cobj, archetype);
-		
+
 		} else {
 			// TODO skip archetype_slot etc, log.warn?
 			return null;

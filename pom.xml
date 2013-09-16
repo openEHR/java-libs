@@ -58,7 +58,6 @@
 					<useStandardDocletOptions>true</useStandardDocletOptions>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 
