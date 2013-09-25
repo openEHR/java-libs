@@ -1,0 +1,29 @@
+archetype
+    adl-test-ELEMENT.assumed_value_boolean.v1
+
+concept 
+    [at0000]    --  wrong assumed value for Boolean test
+
+language
+    original_language = <[ISO_639-1::en]>   
+    
+definition
+	ELEMENT[at0000] occurrences matches {0..1} matches {	-- most minimal
+		value matches {
+			DV_BOOLEAN matches {
+				value matches {True; False}
+			}
+		}
+	}                     
+
+ontology 
+    term_definitions = <
+        ["en"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"most minimal">; 
+                    description = <"most minimal">
+                >
+            >
+        >
+    >   

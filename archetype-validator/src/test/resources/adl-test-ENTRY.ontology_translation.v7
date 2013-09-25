@@ -1,0 +1,46 @@
+archetype
+    adl-test-ENTRY.ontology_translation.v7
+
+concept 
+    [at0000]    --  empty definition test
+
+language
+    original_language = <[ISO_639-1::en]>
+    translations = <
+        ["de"] = <
+            language = <[ISO_639-1::de]>
+            author = <
+                ["name"] = <"Jasmin Buck, Sebastian Garde">
+                ["organisation"] = <"University of Heidelberg, Central Queensland University">
+            >
+        >
+    >
+    
+definition
+    ELEMENT[at0000] matches {    -- Diagnosis
+        value matches {
+            DV_CODED_TEXT matches {
+                defining_code matches {*}
+            }
+        }
+    }                           
+
+ontology 
+    term_definitions = <
+        ["en"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"most minimal">; 
+                    description = <"most minimal">
+                >
+            >
+        >
+        ["de"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"most minimal">; 
+                    description = <"most minimal">
+                >
+            >
+        >
+    >

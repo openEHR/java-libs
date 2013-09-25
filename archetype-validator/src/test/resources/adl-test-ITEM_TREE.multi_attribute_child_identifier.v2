@@ -1,0 +1,52 @@
+archetype
+    adl-test-ITEM_TREE.multi_attribute_child_identifier.v2
+
+concept 
+    [at0000]    --  empty definition test
+
+language
+    original_language = <[ISO_639-1::en]>   
+    
+definition
+    ITEM_TREE[at0001] matches {    -- structure
+        items cardinality matches {0..*; ordered} matches {
+            ELEMENT[at0002] matches { -- Diagnosis
+                value matches {
+                    DV_CODED_TEXT matches {
+                        defining_code matches {*}
+                    }
+                }
+            }
+            ELEMENT matches { -- Diagnosis
+                value matches {
+                    DV_CODED_TEXT matches {
+                        defining_code matches {*}
+                    }
+                }
+            }
+        }
+    }                           
+
+ontology 
+    term_definitions = <
+        ["en"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"most minimal">; 
+                    description = <"most minimal">
+                >
+                ["at0001"] = <
+                    text = <"most minimal">; 
+                    description = <"most minimal">
+                >
+                ["at0002"] = <
+                    text = <"most minimal">; 
+                    description = <"most minimal">
+                >
+                ["at0003"] = <
+                    text = <"most minimal">; 
+                    description = <"most minimal">
+                >
+            >
+        >
+    >

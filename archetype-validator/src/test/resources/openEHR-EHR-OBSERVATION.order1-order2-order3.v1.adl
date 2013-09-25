@@ -1,0 +1,112 @@
+﻿archetype (adl_version=1.4)
+	openEHR-EHR-OBSERVATION.order1-order2-order3.v1
+specialize
+	openEHR-EHR-OBSERVATION.order1-order2.v1
+
+concept
+	[at0000.1.1]	-- order3
+language
+	original_language = <[ISO_639-1::de]>
+description
+	original_author = <
+		["name"] = <"sg">
+	>
+	details = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			purpose = <"none">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <>
+	other_details = <
+		["references"] = <"">
+		["MD5-CAM-1.0.1"] = <"D7436FBED48E9D0106C55B398E634B93">
+	>
+
+definition
+	OBSERVATION[at0000.1.1] matches {	-- order3
+		data matches {
+			HISTORY[at0001] matches {	-- Event Series
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[at0002] occurrences matches {0..1} matches {	-- Jedes Ereignis
+						data matches {
+							ITEM_TREE[at0003] matches {	-- Baum
+								items cardinality matches {0..*; unordered} matches {
+									ELEMENT[at0004] occurrences matches {0..1} matches {	-- Neues Element
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+									CLUSTER[at0.5] occurrences matches {0..1} matches {	-- Neues Cluster
+										items cardinality matches {1..*; unordered} matches {
+											ELEMENT[at0.6] occurrences matches {0..1} matches {	-- Neues Element
+												value matches {
+													DV_TEXT matches {*}
+												}
+											}
+											ELEMENT[at0.0.7] occurrences matches {0..1} matches {	-- Neues Element2
+												value matches {
+													DV_TEXT matches {*}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["de"] = <
+			items = <
+				["at0.0.7"] = <
+					text = <"Neues Element2">
+					description = <"*">
+				>
+				["at0.5"] = <
+					text = <"Neues Cluster">
+					description = <"*">
+				>
+				["at0.6"] = <
+					text = <"Neues Element">
+					description = <"*">
+				>
+				["at0000"] = <
+					text = <"order1">
+					description = <"unknown">
+				>
+				["at0000.1"] = <
+					text = <"order2">
+					description = <"unknown!">
+				>
+				["at0000.1.1"] = <
+					text = <"order3">
+					description = <"unknown!!">
+				>
+				["at0001"] = <
+					text = <"Event Series">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"Jedes Ereignis">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"Baum">
+					description = <"@ internal @">
+				>
+				["at0004"] = <
+					text = <"Neues Element">
+					description = <"*">
+				>
+			>
+		>
+	>

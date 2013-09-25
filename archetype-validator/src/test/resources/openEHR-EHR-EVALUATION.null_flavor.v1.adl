@@ -1,0 +1,90 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-EVALUATION.null_flavor.v1
+
+concept
+	[at0000]	-- nf test
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"SG">
+	>
+	details = <
+		["de"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Test if null_flavor is detected as a NON-valid attribute">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+		["references"] = <"">
+		["MD5-CAM-1.0.1"] = <"A3858DD30CE8F41648F44E07C3C06D1F">
+	>
+
+definition
+	EVALUATION[at0000] matches {	-- nf test
+		data matches {
+			ITEM_TREE[at0001] matches {	-- Baum
+				items cardinality matches {0..*; unordered} matches {
+					ELEMENT[at0002] occurrences matches {0..1} matches {	-- Neues Element
+						value matches {
+							C_DV_ORDINAL <
+							>
+						}
+						null_flavor existence matches {0..1} matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {
+									[openehr::
+									253, 
+									272]
+								}
+							}
+						}
+					}
+					ELEMENT[at0003] occurrences matches {0..1} matches {	-- Neues Element
+						value matches {
+							DV_COUNT matches {
+								magnitude matches {*}
+							}
+						}
+						null_flavor existence matches {0..1} matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {
+									[openehr::
+									271, 
+									273]
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["de"] = <
+			items = <
+				["at0000"] = <
+					text = <"nf test">
+					description = <"unknown">
+				>
+				["at0001"] = <
+					text = <"Baum">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"Neues Element">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"Neues Element">
+					description = <"*">
+				>
+			>
+		>
+	>
