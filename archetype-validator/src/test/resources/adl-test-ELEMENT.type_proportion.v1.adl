@@ -1,0 +1,31 @@
+archetype
+    adl-test-ELEMENT.type_proportion.v1
+
+concept 
+    [at0000]    --  empty definition test
+
+language
+    original_language = <[ISO_639-1::en]>   
+    
+definition
+    ELEMENT[at0000] matches { 
+        value matches {
+            DV_PROPORTION matches {
+                numerator matches {|>=1.0|}
+                denominator matches {|1.0..4.0|}
+                type matches {1, 2, 4}
+            }
+        }
+    }                           
+
+ontology 
+    term_definitions = <
+        ["en"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"most minimal">; 
+                    description = <"most minimal">
+                >
+            >
+        >
+    >   

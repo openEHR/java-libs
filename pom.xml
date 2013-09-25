@@ -77,5 +77,6 @@
 		<module>xml-binding</module>
 		<module>dadl-binding</module>
 		<module>rm-skeleton</module>
+        <module>archetype-validator</module>
 	</modules>
 </project>
