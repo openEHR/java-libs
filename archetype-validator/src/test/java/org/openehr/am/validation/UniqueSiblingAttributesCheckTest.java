@@ -7,7 +7,7 @@ public class UniqueSiblingAttributesCheckTest extends ArchetypeValidationTestBas
 		assertEquals("encountered unexpected validation error", 0, 
 				errors.size());		
 	}
-	/* TODO 1.0.5-SNAPSHOT
+	
 	public void testCheckNonUniqueSiblingAttributes() throws Exception {
 		checkSiblings("adl-test-ENTRY.sibling_nodes.v2");
 		assertEquals("wrong number of validation error in sibling node checking", 1, 
@@ -17,7 +17,7 @@ public class UniqueSiblingAttributesCheckTest extends ArchetypeValidationTestBas
 					error.getType());
 		}
 	}
-	*/
+	
 	private void checkSiblings(String name) throws Exception {
 		archetype = loadArchetype(name);
 		validator.checkObjectConstraints(archetype, errors);

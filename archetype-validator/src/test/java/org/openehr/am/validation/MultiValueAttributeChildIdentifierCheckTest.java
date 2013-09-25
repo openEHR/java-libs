@@ -1,11 +1,8 @@
 package org.openehr.am.validation;
 
-public class MultiValueAttributeChildIdentifierCheckTest
+public class MultiValueAttributeChildIdentifierCheckTest 
 		extends ArchetypeValidationTestBase {
-    //TODO 1.0.5-SNAPSHOT - REMOVE
-    public void testDummy(){ }
 
-    /* TODO 1.0.5-SNAPSHOT
 	public void testCheckMultiAttributeChildIdentifierWithGoodIds() throws Exception {
 		checkAttribute("adl-test-ITEM_TREE.multi_attribute_child_identifier.v1");
 		assertEquals("expected no validation error", 0,	errors.size());	
@@ -22,7 +19,7 @@ public class MultiValueAttributeChildIdentifierCheckTest
 		assertEquals("expected validation error", 1, errors.size());
 		assertFirstErrorType(ErrorType.VACMM);
 	}
-    */
+	
 	private void checkAttribute(String name) throws Exception {
 		archetype = loadArchetype(name);
 		validator.checkObjectConstraints(archetype, errors);

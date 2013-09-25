@@ -1,15 +1,27 @@
 package org.openehr.am.validation;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.openehr.am.archetype.Archetype;
-import org.openehr.am.archetype.constraintmodel.*;
+import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
+import org.openehr.am.archetype.constraintmodel.ArchetypeInternalRef;
+import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.CAttribute.Existence;
+import org.openehr.am.archetype.constraintmodel.CComplexObject;
+import org.openehr.am.archetype.constraintmodel.CMultipleAttribute;
+import org.openehr.am.archetype.constraintmodel.CObject;
+import org.openehr.am.archetype.constraintmodel.Cardinality;
+import org.openehr.am.archetype.constraintmodel.ConstraintRef;
 import org.openehr.am.archetype.ontology.ArchetypeTerm;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
 import org.openehr.rm.common.resource.TranslationDetails;
-
-import java.util.*;
-import java.util.Map.Entry;
 
 
 public class SpecialisedArchetypeValidator extends ArchetypeValidator {

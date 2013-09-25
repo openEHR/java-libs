@@ -6,12 +6,12 @@ public class OntologyTranslationCheckTest extends ArchetypeValidationTestBase {
 		checkTranslation("adl-test-ENTRY.ontology_translation.v1");		
 		assertEquals("expected no validation error", 0,	errors.size());	
 	}
-    /*TODO 1.0.5-SNAPSHOT
+	
 	public void testTranslationCheckWithoutConstraintDef() throws Exception {		
 		checkTranslation("adl-test-ENTRY.ontology_translation.v7");		
 		assertEquals("expected no validation error", 0,	errors.size());	
 	}
-    */
+	
 	public void testTranslationCheckWithMissingTermAndConstraintTranslation() 
 			throws Exception {		
 		checkTranslation("adl-test-ENTRY.ontology_translation.v2");		

@@ -531,12 +531,12 @@ public class RMInspector {
 				log.debug("--> >=1");				
 				return new Interval<Integer>(1,null);				
 			}
-		}  else if (cattr.getRmAttributeName().equals("activities")) {
+	/*	}  else if (cattr.getRmAttributeName().equals("activities")) { // This seems to be incorrect 
 			if (parentObj.getRmTypeName().equalsIgnoreCase("INSTRUCTION")) {
 				log.debug("--> >=1");				
 				return new Interval<Integer>(1,null);				
 			}
-		}  else if (cattr.getRmAttributeName().equals("events")) {
+	*/	}  else if (cattr.getRmAttributeName().equals("events")) {
 			if (parentObj.getRmTypeName().equalsIgnoreCase("HISTORY")) {
 				log.debug("--> >=1");				
 				return new Interval<Integer>(1,null);				

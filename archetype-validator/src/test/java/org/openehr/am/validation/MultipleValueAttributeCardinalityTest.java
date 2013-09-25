@@ -8,21 +8,20 @@ public class MultipleValueAttributeCardinalityTest
 		assertEquals("expected validation error", 1, errors.size());	
 		assertFirstErrorType(ErrorType.VACMC);
 	}
+	
+	public void testCheckMultiAttributeCardinalityNotConformingToReferenceModel() throws Exception {
+		// testing that a cardinality constraint from the reference model is honoured in the actual archetype
+		checkAttribute("adl-test-ITEM_TREE.attribute_cardinality.v2");
+		assertEquals("expected validation error", 1, errors.size());	
+		assertFirstErrorType(ErrorType.VCACA);
+	}
 
-    public void testCheckMultiAttributeCardinalityNotConformingToReferenceModel() throws Exception {
-        // testing that a cardinality constraint from the reference model is honoured in the actual archetype
-        checkAttribute("adl-test-ITEM_TREE.attribute_cardinality.v2");
-        assertEquals("expected validation error", 1, errors.size());
-        assertFirstErrorType(ErrorType.VCACA);
-    }
-    /* TODO 1.0.5-SNAPSHOT
 	public void testCheckMultiAttributeCardinalityCredentialsNotConformingToReferenceModel() throws Exception {
 		// testing that a cardinality constraint from the reference model is honoured in the actual archetype
 		checkAttribute("adl-test-ITEM_TREE.attribute_cardinality.v3");
 		assertEquals("expected validation error", 1, errors.size());	
 		assertFirstErrorType(ErrorType.VCACA);
 	}
-	*/
 	
 	public void testCheckSumOfOccurrencesNotIntersectingWithCardinality () throws Exception {
 		// testing whether sum of occurrences intersects with cardinality

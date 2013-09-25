@@ -1,8 +1,7 @@
 package org.openehr.am.validation;
 
 public class SpecializationArchetypeIdTest extends ArchetypeValidationTestBase{
-
-	/*TODO 1.0.5-SNAPSHOT
+	
 	public void testCheckArchetypeWithCorrectParentIdentifier() throws Exception {
 		checkSpecializationParentIdentifierValidity("adl-test-ELEMENT.specialization-archetypeid.v1.adl");
 		assertEquals("expected no validation error", 0,	errors.size());	
@@ -19,7 +18,7 @@ public class SpecializationArchetypeIdTest extends ArchetypeValidationTestBase{
 		assertEquals("expected validation error", 1, errors.size());
 		assertFirstErrorType(ErrorType.VASID);
 	}
-	*/
+	
 	public void testCheckArchetypeWithoutSpecialization() throws Exception {
 		checkSpecializationParentIdentifierValidity("openEHR-EHR-EVALUATION.adverse.v1.adl");
 		assertEquals("expected no validation error", 0,	errors.size());	

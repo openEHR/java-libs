@@ -1,12 +1,16 @@
 package org.openehr.am.validation;
 
+import org.openehr.rm.datatypes.basic.DataValue;
+import org.openehr.rm.datatypes.quantity.DvCount;
+import org.openehr.rm.datatypes.quantity.DvInterval;
+
 public class TypeNameCheckTest extends ArchetypeValidationTestBase {
-	/*TODO 1.0.5-SNAPSHOT
+	
 	public void testCheckTypeNameWithRightName() throws Exception {
 		CheckTypeName("adl-test-ELEMENT.type_name.v1");
 		assertEquals("expected no validation error", 0,	errors.size());	
 	}
-	*/
+	
 	public void testCheckTypeNameWithEvent() throws Exception {
 		CheckTypeName("openEHR-EHR-OBSERVATION.type_name.v4.adl");
 		assertEquals("unexpected validation error: " + errors, 0,	
@@ -24,25 +28,25 @@ public class TypeNameCheckTest extends ArchetypeValidationTestBase {
 		assertEquals("unexpected validation error(s): " + errors, 0,
 				errors.size());	
 	}
-	/*TODO 1.0.5-SNAPSHOT
+	
 	public void testCheckTypeNameWithUnknownName() throws Exception {
 		CheckTypeName("adl-test-ELEMENT.type_name.v2");
 		assertEquals("expected validation error", 1, errors.size());
 		assertFirstErrorType(ErrorType.VCORM);
 	}
-	*/
+	
 	public void testCheckTypeNameWithExplicitPartyProxy() throws Exception {
 		CheckTypeName("adl-test-PARTY_PROXY.type_name.v1");
 		assertEquals("unexpected validation error(s): " + errors, 0,
 				errors.size());	
 	}
-	/*TODO 1.0.5-SNAPSHOT
+	
 	public void testCheckTypeNameWithUnassignableName() throws Exception {
 		CheckTypeName("adl-test-ELEMENT.type_name.v3");
 		assertEquals("expected validation error", 1, errors.size());
 		assertFirstErrorType(ErrorType.VCORMT);
 	}
-	*/
+	
 	public void testCheckTypeNameExplicitDvDate() throws Exception {
 		CheckTypeName("adl-test-ELEMENT.type_date.v1.adl");
 		assertEquals("unexpected validation error(s): " + errors, 0,

@@ -3,10 +3,7 @@ package org.openehr.am.validation;
 import org.openehr.am.archetype.Archetype;
 
 public class SpecializationDepthCheckTest extends ArchetypeValidationTestBase{
-    //TODO 1.0.5-SNAPSHOT - REMOVE
-    public void testDummy(){ }
-
-	/*TODO 1.0.5-SNAPSHOT
+	
 	public void testCheckAttributeNameWithRightLevel() throws Exception {
 	    checkConceptNameSpecializationDepth("adl-test-ELEMENT.specialization-depth.v1.adl");
 		assertEquals("expected no validation error", 0,	errors.size());	
@@ -48,12 +45,12 @@ public class SpecializationDepthCheckTest extends ArchetypeValidationTestBase{
         assertSecondErrorType(ErrorType.VATCD); // an error for the ac code in the definition part of the archetype which is generally too high for the archetype.
 
     }
-	*/
+	
 	private void checkConceptNameSpecializationDepth(String name) throws Exception {
 		archetype = loadArchetype(name);
 		validator.checkConceptSpecializationDepth(archetype, errors);
 	}
-
+	
 	private void checkAll(String name, String parentName) throws Exception {
         archetype = loadArchetype(name);
         Archetype parentArchetype = loadArchetype(parentName);
