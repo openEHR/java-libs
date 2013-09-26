@@ -3,10 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.openehr</groupId>
+    <parent>
+        <groupId>openehr</groupId>
+        <artifactId>ref_impl_java</artifactId>
+        <version>1.0.5-SNAPSHOT</version>
+    </parent>
 	<artifactId>archetype-validator</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1-SNAPSHOT</version>
 	<name>Archetype Validator</name>
 	<url>http://svn.openehr.org/ref_impl_java/TRUNK/project_page.htm</url>	
 	<organization>
@@ -44,37 +47,37 @@
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-rm-core</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-rm-domain</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-aom</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>openehr-ap</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>mini-termserv</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>measure-serv</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>openehr</groupId>
 			<artifactId>adl-parser</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>test</scope>			
 		</dependency>
 		<dependency>
