@@ -50,13 +50,13 @@ public class FindMatchingRMClassTest extends TestCase {
 	public void testMatchDvQuantityValues() {
 		valueMap.put("units", "mmHg");
 		valueMap.put("magnitude", 120.0);
-		assertMatchedRMClass("DvQuantity");
+		assertMatchedRMClass("DvQuantity"); // This is the Java class, not the rm_type_name
 	}
 	
 	public void testMatchCodePhrase() {
 		valueMap.put("terminologyId", new TerminologyID("openehr"));
 		valueMap.put("codeString", "234");
-		assertMatchedRMClass("CodePhrase");
+		assertMatchedRMClass("CodePhrase"); // This is the Java class, not the rm_type_name
 	}
 	
 	public void testMatchElement() {

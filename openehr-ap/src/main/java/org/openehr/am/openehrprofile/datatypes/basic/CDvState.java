@@ -45,7 +45,7 @@ public class CDvState extends CDomainType<DvState> {
 	public CDvState(String path, Interval<Integer> occurrences, String nodeId,
             CAttribute parent, StateMachine value) {
 		
-		super(false, path, "DvState", occurrences, nodeId, parent);
+		super(false, path, "DV_STATE", occurrences, nodeId, parent);
 		
 		if(value == null) {
 			throw new IllegalArgumentException("value null");

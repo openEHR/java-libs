@@ -37,7 +37,7 @@ public class DataTypesBuildTest extends BuildTestBase {
 	
 	 // test classes from datatypes.basic package
     public void testBuildDvBoolean() throws Exception {
-        String type = "DvBoolean";
+        String type = "DV_BOOLEAN";
         Map<String, Object> values = new HashMap<String, Object>();
 
         // true value
@@ -57,7 +57,7 @@ public class DataTypesBuildTest extends BuildTestBase {
     }
 
     public void testBuildDvState() throws Exception {
-        String type = "DvState";
+        String type = "DV_STATE";
         Map<String, Object> values = new HashMap<String, Object>();
         DvCodedText codedText = new DvCodedText("some text", lang, charset,
                 new CodePhrase("test terms", "00001"), ts);
@@ -81,7 +81,7 @@ public class DataTypesBuildTest extends BuildTestBase {
 
     // test classes from datatypes.text package
     public void testBuildDvText() throws Exception {
-        String type = "DvText";
+        String type = "DV_TEXT";
         Map<String, Object> values = new HashMap<String, Object>();
         String value = "test text value";
         values.put("value", value);
@@ -93,7 +93,7 @@ public class DataTypesBuildTest extends BuildTestBase {
     }
     
     public void testBuildCodePhrase() throws Exception {
-        String type = "CodePhrase";
+        String type = "CODE_PHRASE";
         Map<String, Object> values = new HashMap<String, Object>();
         TerminologyID id = new TerminologyID("openehr");
         values.put("terminologyId", id);
@@ -108,7 +108,7 @@ public class DataTypesBuildTest extends BuildTestBase {
     }
 
     public void testBuildDvCodeText() throws Exception {
-        String type = "DvCodedText";
+        String type = "DV_CODED_TEXT";
         Map<String, Object> values = new HashMap<String, Object>();
         String value = "test text value";
         CodePhrase definingCode = new CodePhrase("local", "at0001");
@@ -124,7 +124,7 @@ public class DataTypesBuildTest extends BuildTestBase {
     }
 
     public void testBuildDvParagraph() throws Exception {
-        String type = "DvParagraph";
+        String type = "DV_PARAGRAPH";
         Map<String, Object> values = new HashMap<String, Object>();
         List<DvText> items = new ArrayList<DvText>();
         CodePhrase definingCode = new CodePhrase("local", "at0001");
@@ -145,7 +145,7 @@ public class DataTypesBuildTest extends BuildTestBase {
     }
 
     public void testBuildOrdinal() throws Exception {
-        String type = "DvOrdinal";
+        String type = "DV_ORDINAL";
         Map<String, Object> values = new HashMap<String, Object>();
         DvCodedText symbol = new DvCodedText("test text", lang,
                 charset, new CodePhrase("test terms", "00001"),
@@ -160,7 +160,7 @@ public class DataTypesBuildTest extends BuildTestBase {
     }
 
     public void testBuildQuantity() throws Exception {
-        String type = "DvQuantity";
+        String type = "DV_QUANTITY";
         Map<String, Object> values = new HashMap<String, Object>();
         values.put("units", "kg/L");
         values.put("magnitude", new Double(100.0));
@@ -191,7 +191,7 @@ public class DataTypesBuildTest extends BuildTestBase {
 
     // test datatypes.quantity.datetime classes
     public void testBuildDvDate() throws Exception {
-        String type = "DvDate";
+        String type = "DV_DATE";
 
         // with good string value and no referenceRanges
         Map<String, Object> values = new HashMap<String, Object>();
@@ -211,6 +211,9 @@ public class DataTypesBuildTest extends BuildTestBase {
             obj = builder.construct(type, values);
             fail("attribute format exception should be thrown here");
         } catch (Exception e) {
+        
+            System.err.println("testBuildDvDate exception: "+ e.getClass().toString() +" "+ e.getMessage());
+        
             assertTrue(e instanceof AttributeFormatException);
         }
 
@@ -225,7 +228,7 @@ public class DataTypesBuildTest extends BuildTestBase {
     }
 
     public void testBuildDvDateTime() throws Exception {
-        String type = "DvDateTime";
+        String type = "DV_DATE_TIME";
 
         // without referenceRanges
         Map<String, Object> values = new HashMap<String, Object>();
@@ -243,7 +246,7 @@ public class DataTypesBuildTest extends BuildTestBase {
     }
 
     public void testBuildDvTime() throws Exception {
-        String type = "DvTime";
+        String type = "DV_TIME";
 
         // without referenceRanges
         Map<String, Object> values = new HashMap<String, Object>();
@@ -258,7 +261,7 @@ public class DataTypesBuildTest extends BuildTestBase {
     }
 
     public void testBuildDvDuration() throws Exception {
-        String type = "DvDuration";
+        String type = "DV_DURATION";
 
         // without referenceRanges
         Map<String, Object> values = new HashMap<String, Object>();
@@ -276,7 +279,7 @@ public class DataTypesBuildTest extends BuildTestBase {
 
     // test datatypes.encapsulated classes
     public void testBuildParsable() throws Exception {
-        String type = "DvParsable";
+        String type = "DV_PARSABLE";
         Map<String, Object> values = new HashMap<String, Object>();
         values.put("formalism", "GLIF3");
         values.put("value", "guideline text");
