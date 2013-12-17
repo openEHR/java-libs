@@ -90,7 +90,7 @@ public final class CDateTime extends CPrimitive {
      * @return name of the type
      */
     public String getType() {
-        return "DvDateTime";
+        return "DV_DATE_TIME";
     }
 
     /**
