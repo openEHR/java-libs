@@ -48,6 +48,7 @@ public enum ErrorType {
 	VDSCR, // null, empty or unknown mandatory description item such as purpose or original_author
 	VSONT, // different dynamic types of parent and child node (e.g. not both CComplexObjects)
 	VOKU, // dADL object key must be unique. A code in the ontology is present more than once for a language	
+	VUI, // Additional Validation: Units of a DV_QUANTITY must be expressed in UCUM syntax, e.g. kg/m2, mm[Hg], ms-1, km 
 	WOUC, // Warning: A code in the ontology is not used.
 	WACMC, //Not an official warning ... cardinality/occurrences validity edge case: where occurrences and cardinality are stated, the interval represented by: (sum of all occurrences minimum values) .. (sum of all occurrences maximum values) must intersect with the interval stated by the cardinality. This is fulfilled, but none of the optional elements could ever be added.
 	

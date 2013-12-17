@@ -47,6 +47,8 @@ import org.openehr.am.archetype.ontology.OntologyBinding;
 import org.openehr.am.archetype.ontology.OntologyBindingItem;
 import org.openehr.am.archetype.ontology.OntologyDefinitions;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
 import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
@@ -54,6 +56,8 @@ import org.openehr.rm.datatypes.quantity.DvOrdered;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.identification.ArchetypeID;
+import org.openehr.rm.support.measurement.MeasurementService;
+import org.openehr.rm.support.measurement.SimpleMeasurementService;
 import org.openehr.rm.support.terminology.TerminologyAccess;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.terminology.SimpleTerminologyService;
@@ -199,9 +203,22 @@ public class ArchetypeValidator {
         String rootNodeId = archetype.getDefinition().getNodeId();
         if( ! concept.equals(rootNodeId)) {
             ValidationError error = new ValidationError(ErrorType.VACCD, null); 
-                    
+
             errors.add(error);
         }
+    }
+
+    public void checkArchetypeUnitsValidity(CDvQuantity cDvQuantity, List<ValidationError> errors) {
+        List<CDvQuantityItem> qis = cDvQuantity.getList();
+        if (qis != null && qis.size() > 0) {
+            MeasurementService sms = SimpleMeasurementService.getInstance();
+            for (CDvQuantityItem qi : qis) {
+                if (!sms.isValidUnitsString(qi.getUnits())) {
+                    ValidationError error = new ValidationError(ErrorType.VUI, null, qi.getUnits());
+                    errors.add(error);
+                }
+            }            
+        }        
     }
 
     /**
@@ -218,7 +235,7 @@ public class ArchetypeValidator {
 
         if(specialization.size() != tokens.countTokens() - 1) {
             ValidationError error = new ValidationError(ErrorType.VACSD, null, 
-               specialization.size(),  tokens.countTokens() - 1 );
+                    specialization.size(),  tokens.countTokens() - 1 );
             errors.add(error);
         }
     }
@@ -433,7 +450,7 @@ public class ArchetypeValidator {
                     log.debug("skipping unnecessary additional checks on " + parentRmClass);
                     continue; // otherwise this is done twice
                 } else if( parentRmClass.equals(childRMType)){       
-                    
+
                     log.debug("skipping unnecessary check on " + parentRmClass);
                     continue;
                 } else if(!rmAttrType.isEnum() 
@@ -495,7 +512,7 @@ public class ArchetypeValidator {
                     if(cobj2.getRmTypeName().equals(cobj.getRmTypeName())
                             && cobj.getNodeId() == null) {
                         error = new ValidationError(ErrorType.VACSU, null,
-                                        cobj.path());
+                                cobj.path());
                         if( ! errors.contains(error)) {
                             errors.add(error);
                         }
@@ -504,7 +521,7 @@ public class ArchetypeValidator {
                     if(cobj2.getNodeId() != null 
                             && cobj2.getNodeId().equals(cobj.getNodeId())) {
                         error = new ValidationError(ErrorType.VACSI, null,
-                                        cobj.path());
+                                cobj.path());
                         if( ! errors.contains(error)) {
                             errors.add(error);
                         }
@@ -530,12 +547,12 @@ public class ArchetypeValidator {
                                 || cardinalityInterval.getUpper().compareTo(
                                         cobj.getOccurrences().getUpper()) <0)) {
                     error = new ValidationError(ErrorType.VACMC, "CONTAIN",
-                                    rmInspector.toUnderscoreSeparated(cobj.getClass().getSimpleName()).toUpperCase(),
-                                    cobj.getRmTypeName(),
-                                    cobj.getNodeId(),
-                                    getIntervalFormalString(cardinalityInterval),
-                                    getIntervalFormalString(cobj.getOccurrences()),
-                                    cattr.path());
+                            rmInspector.toUnderscoreSeparated(cobj.getClass().getSimpleName()).toUpperCase(),
+                            cobj.getRmTypeName(),
+                            cobj.getNodeId(),
+                            getIntervalFormalString(cardinalityInterval),
+                            getIntervalFormalString(cobj.getOccurrences()),
+                            cattr.path());
 
                     if( ! errors.contains(error)) {
                         errors.add(error);
@@ -553,17 +570,17 @@ public class ArchetypeValidator {
                                 continue;
                             }
                             if(cobj2.getNodeId()== null && cobj2 instanceof ArchetypeInternalRef &&
-                                ((ArchetypeInternalRef) cobj).getTargetPath().equals(((ArchetypeInternalRef) cobj2).getTargetPath())) {
-                                    error = new ValidationError(ErrorType.VACMM,  "INTREF", 
-                                            cobj.path());
-                                    if( ! errors.contains(error)) {
-                                        errors.add(error);
-                                    }
+                                    ((ArchetypeInternalRef) cobj).getTargetPath().equals(((ArchetypeInternalRef) cobj2).getTargetPath())) {
+                                error = new ValidationError(ErrorType.VACMM,  "INTREF", 
+                                        cobj.path());
+                                if( ! errors.contains(error)) {
+                                    errors.add(error);
                                 }
                             }
+                        }
                     } else {
                         error = new ValidationError(ErrorType.VACMI, null,                                
-                                        cobj.path());
+                                cobj.path());
                         errors.add(error);
                     }
                 } else {
@@ -574,7 +591,7 @@ public class ArchetypeValidator {
                         }
                         if(cobj.getNodeId().equals(cobj2.getNodeId())) {
                             error = new ValidationError(ErrorType.VACMM, "NORMAL",
-                                            cobj.path());
+                                    cobj.path());
                             if( ! errors.contains(error)) {
                                 errors.add(error);
                             }
@@ -585,7 +602,7 @@ public class ArchetypeValidator {
                 // how about rmType check for multi-valued attributes?
             }
 
-            if (cobj instanceof CDomainType) {
+            if (cobj instanceof CDomainType) { // also includes CDVQuantity!
                 log.debug("validating CDomainType of node_id: "+ cobj.getNodeId());
                 validateCDomainType((CDomainType) cobj, archetype, errors);
             } else if (cobj instanceof CPrimitiveObject) {
@@ -594,7 +611,6 @@ public class ArchetypeValidator {
             } else if(cobj instanceof CComplexObject) {
                 log.debug("validating ccobj at: "+ cobj.getNodeId());
                 validateCComplexObject((CComplexObject) cobj, archetype, errors);
-
             } else if(cobj instanceof ArchetypeInternalRef) {
                 log.debug("validating Internal Reference: "+ cobj.path());
                 checkArchetypeInternalRef((ArchetypeInternalRef) cobj, archetype, errors);
@@ -800,21 +816,21 @@ public class ArchetypeValidator {
         }
 
         // add all the errors
-            if (!containsCorrectNumberOfDots) {
-                ValidationError error = new ValidationError(ErrorType.VDFAI, "NUMBEROFDOTS", oneId, slot.path());
-                errors.add(error);
-            
-            } 
-            if (!endsWithDotVNumber) {                
-                ValidationError error = new ValidationError(ErrorType.VDFAI, "DOTVNUMBER", oneId, slot.path());
-                errors.add(error);
-            
-            }
-            if (!containsCorrectNumberOfHyphensInQualifiedRMEntity) {                
-                ValidationError error = new ValidationError(ErrorType.VDFAI, "NUMBEROFHYPHENS", oneId, slot.path());
-                errors.add(error);
-            
-            }
+        if (!containsCorrectNumberOfDots) {
+            ValidationError error = new ValidationError(ErrorType.VDFAI, "NUMBEROFDOTS", oneId, slot.path());
+            errors.add(error);
+
+        } 
+        if (!endsWithDotVNumber) {                
+            ValidationError error = new ValidationError(ErrorType.VDFAI, "DOTVNUMBER", oneId, slot.path());
+            errors.add(error);
+
+        }
+        if (!containsCorrectNumberOfHyphensInQualifiedRMEntity) {                
+            ValidationError error = new ValidationError(ErrorType.VDFAI, "NUMBEROFHYPHENS", oneId, slot.path());
+            errors.add(error);
+
+        }
 
     }
 
@@ -844,7 +860,11 @@ public class ArchetypeValidator {
 
         if(cdtobj instanceof CCodePhrase) {
             validateCCodePhrase((CCodePhrase) cdtobj, errors);
-        }
+        } else if (cdtobj instanceof CDvQuantity) {
+            log.debug("validating CDVQuantity object at "+cdtobj.path());
+            checkArchetypeUnitsValidity((CDvQuantity)cdtobj, errors);
+        } 
+        
     }
 
     /*
@@ -901,7 +921,6 @@ public class ArchetypeValidator {
             List<ValidationError> errors) throws RMInspectionException {
 
         checkGenericTypeName(ccobj, errors);		
-
         if(ccobj.getAttributes() == null) {
             return;
         }
@@ -1005,7 +1024,7 @@ public class ArchetypeValidator {
         Class rmType = rmInspector.retrieveRMType(ref.getRmTypeName());
         ValidationError error = null;
         if(rmType == null) {
-            
+
             error = new ValidationError(ErrorType.VUNT, "UNKNOWN",
                     ref.getRmTypeName(), ref.path());
             errors.add(error);
@@ -1015,7 +1034,7 @@ public class ArchetypeValidator {
         CObject target = (CObject)archetype.node(ref.getTargetPath());
         if(target == null) {
             error = new ValidationError(ErrorType.VUNP, "INVALIDPATH",
-                     ref.getTargetPath(), ref.path());
+                    ref.getTargetPath(), ref.path());
             errors.add(error);
         } else {
             Class targetType = rmInspector.retrieveRMType(target.getRmTypeName());
@@ -1028,7 +1047,7 @@ public class ArchetypeValidator {
                 errors.add(error);
             } else if( ! rmType.isAssignableFrom(targetType)) {
                 error = new ValidationError(ErrorType.VUNP, "INVALIDTARGETRM",
-                      targetType, ref.path());
+                        targetType, ref.path());
                 errors.add(error);
             }			
         }
@@ -1235,7 +1254,7 @@ public class ArchetypeValidator {
             for(String code : codes) {
                 if( ! definedCodesPrimLang.contains(code)) {
                     error = new ValidationError(ErrorType.VACDF, null,
-                             code);
+                            code);
                     errors.add(error);
                 }
             }

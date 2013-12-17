@@ -48,14 +48,14 @@
                         </manifest>
                     </archive>
                 </configuration>
-				<!-- executions>
+				<executions>
 					<execution>
 						<phase>package</phase>
 						<goals>
 							<goal>assembly</goal>
 						</goals>
 					</execution>
-				</executions-->
+				</executions>
             </plugin>
 		</plugins>
 		<pluginManagement>

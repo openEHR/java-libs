@@ -14,13 +14,13 @@ definition
 				property = <[openehr::381]>
 				list = <
 					["1"] = <
-						units = <"Eq">
+						units = <"eq">
 						magnitude = <|0.0..2.0|>
 					>
 				>
 				assumed_value = <
 					magnitude = <3.0>
-					units = <"Eq">
+					units = <"eq">
 					precision = <-1>
 				>
 			>
