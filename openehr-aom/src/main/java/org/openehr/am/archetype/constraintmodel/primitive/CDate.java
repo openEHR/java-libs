@@ -31,9 +31,11 @@ import java.util.List;
  * @author Rong Chen
  * @version 1.0
  */
-public final class CDate extends CPrimitive {
-
-    /**
+public final class CDate extends CPrimitive implements ICDateTime<DvDate> {
+    /**	 */
+	private static final long serialVersionUID = 1L;
+	
+	/**
      * Constructs a DateConstraint with an assumed value
      *
      * @param pattern

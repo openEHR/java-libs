@@ -27,9 +27,11 @@ import java.util.*;
  * @author Rong Chen
  * @version 1.0
  */
-public final class CTime extends CPrimitive {
-
-    /**
+public final class CTime extends CPrimitive implements ICDateTime<DvTime> {
+    /** */
+	private static final long serialVersionUID = 1L;
+	
+	/**
      * Construct a TimeConstraint with an assumed value
      *
      * @param pattern
