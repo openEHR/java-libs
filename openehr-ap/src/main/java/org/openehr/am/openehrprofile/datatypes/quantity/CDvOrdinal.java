@@ -49,7 +49,7 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 			String nodeID, CAttribute parent, Set<Ordinal> list,
 			Ordinal defaultValue, Ordinal assumedValue) {
 
-		super(list == null, path, "DvOrdinal", occurrences, nodeID, defaultValue,
+		super(list == null, path, "DV_ORDINAL", occurrences, nodeID, defaultValue,
 				assumedValue, parent);
 
 		if (list != null && list.isEmpty()) {

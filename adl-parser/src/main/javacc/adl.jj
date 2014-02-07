@@ -2304,7 +2304,7 @@ CObject c_object(String path, CAttribute parent) :
 ConstraintRef constraint_ref_obj(String path, CAttribute parent) :
 {
   String reference;
-  String rmTypeName = "CodePhrase";
+  String rmTypeName = "CODE_PHRASE";
   Interval<Integer> occurrences = new Interval<Integer>(1, 1);
   String nodeId = null;  
 }

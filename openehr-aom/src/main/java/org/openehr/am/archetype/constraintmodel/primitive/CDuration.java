@@ -76,7 +76,7 @@ public final class CDuration extends CPrimitive {
 	 * @return name of the type
 	 */
 	public String getType() {
-		return "DvDuration";
+		return "DV_DURATION";
 	}
 
 	/**

@@ -204,7 +204,7 @@ public class CCodePhrase extends CDomainType<CodePhrase> {
 		return null;
 	}
 	
-	private static final String CODE_PHRASE = "CodePhrase";
+	private static final String CODE_PHRASE = "CODE_PHRASE";
 	
 	private TerminologyID terminologyId;
 	private List<String> codeList;

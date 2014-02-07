@@ -50,7 +50,7 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 			CodePhrase property, DvQuantity defaultValue, 
 			DvQuantity assumedValue) {
 
-		super(list == null && property == null, path, "DvQuantity",
+		super(list == null && property == null, path, "DV_QUANTITY",
 				occurrences, nodeId, defaultValue, assumedValue, parent);
 
 		if (list != null && list.isEmpty()) {
