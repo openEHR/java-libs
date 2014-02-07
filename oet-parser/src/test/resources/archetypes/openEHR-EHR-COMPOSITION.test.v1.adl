@@ -1,0 +1,31 @@
+﻿archetype (adl_version=1.4)
+	openEHR-EHR-COMPOSITION.test.v1
+
+concept
+	[at0000]	-- test
+language
+	original_language = <[ISO_639-1::en]>
+
+definition
+	COMPOSITION[at0000] matches {	-- template test
+		content cardinality matches {0..*; unordered} matches {
+			allow_archetype SECTION matches {
+				include
+					archetype_id/value matches {/medications\.v1/}
+				exclude
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test">
+					description = <"test">
+				>
+			>
+		>
+	>

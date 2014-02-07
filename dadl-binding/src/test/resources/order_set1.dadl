@@ -1,0 +1,826 @@
+(COMPOSITION) <
+	archetype_details = (ARCHETYPED) <
+		archetype_id = (ARCHETYPE_ID) <
+			value = <"openEHR-EHR-COMPOSITION.referral.v1">
+		>
+		rm_version = <"1.0.1">
+		template_id = (TEMPLATE_ID) <
+			value = <"referral_sample">
+		>
+	>
+	archetype_node_id = <"openEHR-EHR-COMPOSITION.referral.v1">
+	category = (DV_CODED_TEXT) <
+		defining_code = (CODE_PHRASE) <
+			code_string = <"433">
+			terminology_id = (TERMINOLOGY_ID) <
+				value = <"openehr">
+			>
+		>
+		value = <"event">
+	>
+	composer = (PARTY_IDENTIFIED) <
+		name = <"Doctor">
+	>
+	content = <
+		[1] = (INSTRUCTION) <
+			activities = <
+				[1] = (ACTIVITY) <
+					action_archetype_id = <"string value">
+					archetype_node_id = <"at0001">
+					description = (ITEM_TREE) <
+						archetype_node_id = <"at0009">
+						items = <
+							[1] = (ELEMENT) <
+								archetype_node_id = <"at0121">
+								name = (DV_TEXT) <
+									value = <"Test requested">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[2] = (ELEMENT) <
+								archetype_node_id = <"at0135">
+								name = (DV_TEXT) <
+									value = <"Description of test">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[3] = (ELEMENT) <
+								archetype_node_id = <"at0062">
+								name = (DV_TEXT) <
+									value = <"Reason for request">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[4] = (ELEMENT) <
+								archetype_node_id = <"at0064">
+								name = (DV_TEXT) <
+									value = <"Reason description">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[5] = (ELEMENT) <
+								archetype_node_id = <"at0065">
+								name = (DV_TEXT) <
+									value = <"Intent">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[6] = (ELEMENT) <
+								archetype_node_id = <"at0068">
+								name = (DV_TEXT) <
+									value = <"Urgency">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[7] = (ELEMENT) <
+								archetype_node_id = <"at0040.1">
+								name = (DV_TEXT) <
+									value = <"DateTime test preferred">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[8] = (ELEMENT) <
+								archetype_node_id = <"at0144.1">
+								name = (DV_TEXT) <
+									value = <"Latest DateTime test required">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[9] = (ELEMENT) <
+								archetype_node_id = <"at0076">
+								name = (DV_TEXT) <
+									value = <"Supplementary information to follow">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[10] = (ELEMENT) <
+								archetype_node_id = <"at0078">
+								name = (DV_TEXT) <
+									value = <"Supplementary information expected">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+						>
+						name = (DV_TEXT) <
+							value = <"Tree">
+						>
+					>
+					name = (DV_TEXT) <
+						value = <"Request">
+					>
+					timing = (DV_PARSABLE) <
+						formalism = <"txt">
+						value = <"activity timing">
+					>
+				>
+			>
+			archetype_details = (ARCHETYPED) <
+				archetype_id = (ARCHETYPE_ID) <
+					value = <"openEHR-EHR-INSTRUCTION.request-lab_test.v1">
+				>
+				rm_version = <"1.0.1">
+			>
+			archetype_node_id = <"openEHR-EHR-INSTRUCTION.request-lab_test.v1">
+			encoding = (CODE_PHRASE) <
+				code_string = <"UTF-8">
+				terminology_id = (TERMINOLOGY_ID) <
+					value = <"IANA_character-sets">
+				>
+			>
+			language = (CODE_PHRASE) <
+				code_string = <"en">
+				terminology_id = (TERMINOLOGY_ID) <
+					value = <"ISO_639-1">
+				>
+			>
+			name = (DV_TEXT) <
+				value = <"Laboratory Test request">
+			>
+			narrative = (DV_TEXT) <
+				value = <"instruction narrative">
+			>
+			protocol = (ITEM_TREE) <
+				archetype_node_id = <"at0008">
+				items = <
+					[1] = (ELEMENT) <
+						archetype_node_id = <"at0010">
+						name = (DV_TEXT) <
+							value = <"Requestor Identifier">
+						>
+						null_flavour = (DV_CODED_TEXT) <
+							defining_code = (CODE_PHRASE) <
+								code_string = <"271">
+								terminology_id = (TERMINOLOGY_ID) <
+									value = <"openehr">
+								>
+							>
+							value = <"no information">
+						>
+					>
+					[2] = (ELEMENT) <
+						archetype_node_id = <"at0011">
+						name = (DV_TEXT) <
+							value = <"Receiver identifier">
+						>
+						null_flavour = (DV_CODED_TEXT) <
+							defining_code = (CODE_PHRASE) <
+								code_string = <"271">
+								terminology_id = (TERMINOLOGY_ID) <
+									value = <"openehr">
+								>
+							>
+							value = <"no information">
+						>
+					>
+					[3] = (ELEMENT) <
+						archetype_node_id = <"at0127">
+						name = (DV_TEXT) <
+							value = <"Request status">
+						>
+						null_flavour = (DV_CODED_TEXT) <
+							defining_code = (CODE_PHRASE) <
+								code_string = <"271">
+								terminology_id = (TERMINOLOGY_ID) <
+									value = <"openehr">
+								>
+							>
+							value = <"no information">
+						>
+					>
+				>
+				name = (DV_TEXT) <
+					value = <"Tree">
+				>
+			>
+			subject = (PARTY_SELF) <
+				external_ref = (PARTY_REF) <
+					id = (HIER_OBJECT_ID) <
+						value = <"1.2.4.5.6.12.1">
+					>
+					type = <"PARTY">
+				>
+			>
+		>
+		[2] = (INSTRUCTION) <
+			activities = <
+				[1] = (ACTIVITY) <
+					action_archetype_id = <"string value">
+					archetype_node_id = <"at0001">
+					description = (ITEM_TREE) <
+						archetype_node_id = <"at0009">
+						items = <
+							[1] = (ELEMENT) <
+								archetype_node_id = <"at0121">
+								name = (DV_TEXT) <
+									value = <"Procedure requested">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[2] = (ELEMENT) <
+								archetype_node_id = <"at0.146">
+								name = (DV_TEXT) <
+									value = <"Type of procedure">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[3] = (ELEMENT) <
+								archetype_node_id = <"at0135">
+								name = (DV_TEXT) <
+									value = <"Description of Procedure">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[4] = (ELEMENT) <
+								archetype_node_id = <"at0062">
+								name = (DV_TEXT) <
+									value = <"Reason for request">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[5] = (ELEMENT) <
+								archetype_node_id = <"at0064">
+								name = (DV_TEXT) <
+									value = <"Reason description">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[6] = (ELEMENT) <
+								archetype_node_id = <"at0.145">
+								name = (DV_TEXT) <
+									value = <"Objective">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[7] = (ELEMENT) <
+								archetype_node_id = <"at0065">
+								name = (DV_TEXT) <
+									value = <"Intent">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[8] = (ELEMENT) <
+								archetype_node_id = <"at0068">
+								name = (DV_TEXT) <
+									value = <"Urgency">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[9] = (ELEMENT) <
+								archetype_node_id = <"at0040">
+								name = (DV_TEXT) <
+									value = <"Date &/or time service required">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[10] = (ELEMENT) <
+								archetype_node_id = <"at0144">
+								name = (DV_TEXT) <
+									value = <"Latest date service required">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[11] = (ELEMENT) <
+								archetype_node_id = <"at0076">
+								name = (DV_TEXT) <
+									value = <"Supplementary information to follow">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+							[12] = (ELEMENT) <
+								archetype_node_id = <"at0078">
+								name = (DV_TEXT) <
+									value = <"Supplementary information expected">
+								>
+								null_flavour = (DV_CODED_TEXT) <
+									defining_code = (CODE_PHRASE) <
+										code_string = <"271">
+										terminology_id = (TERMINOLOGY_ID) <
+											value = <"openehr">
+										>
+									>
+									value = <"no information">
+								>
+							>
+						>
+						name = (DV_TEXT) <
+							value = <"Tree">
+						>
+					>
+					name = (DV_TEXT) <
+						value = <"Request">
+					>
+					timing = (DV_PARSABLE) <
+						formalism = <"txt">
+						value = <"activity timing">
+					>
+				>
+			>
+			archetype_details = (ARCHETYPED) <
+				archetype_id = (ARCHETYPE_ID) <
+					value = <"openEHR-EHR-INSTRUCTION.request-procedure.v1">
+				>
+				rm_version = <"1.0.1">
+			>
+			archetype_node_id = <"openEHR-EHR-INSTRUCTION.request-procedure.v1">
+			encoding = (CODE_PHRASE) <
+				code_string = <"UTF-8">
+				terminology_id = (TERMINOLOGY_ID) <
+					value = <"IANA_character-sets">
+				>
+			>
+			language = (CODE_PHRASE) <
+				code_string = <"en">
+				terminology_id = (TERMINOLOGY_ID) <
+					value = <"ISO_639-1">
+				>
+			>
+			name = (DV_TEXT) <
+				value = <"Procedure request">
+			>
+			narrative = (DV_TEXT) <
+				value = <"instruction narrative">
+			>
+			protocol = (ITEM_TREE) <
+				archetype_node_id = <"at0008">
+				items = <
+					[1] = (ELEMENT) <
+						archetype_node_id = <"at0010">
+						name = (DV_TEXT) <
+							value = <"Requestor Identifier">
+						>
+						null_flavour = (DV_CODED_TEXT) <
+							defining_code = (CODE_PHRASE) <
+								code_string = <"271">
+								terminology_id = (TERMINOLOGY_ID) <
+									value = <"openehr">
+								>
+							>
+							value = <"no information">
+						>
+					>
+					[2] = (ELEMENT) <
+						archetype_node_id = <"at0011">
+						name = (DV_TEXT) <
+							value = <"Receiver identifier">
+						>
+						null_flavour = (DV_CODED_TEXT) <
+							defining_code = (CODE_PHRASE) <
+								code_string = <"271">
+								terminology_id = (TERMINOLOGY_ID) <
+									value = <"openehr">
+								>
+							>
+							value = <"no information">
+						>
+					>
+					[3] = (ELEMENT) <
+						archetype_node_id = <"at0127">
+						name = (DV_TEXT) <
+							value = <"Request status">
+						>
+						null_flavour = (DV_CODED_TEXT) <
+							defining_code = (CODE_PHRASE) <
+								code_string = <"271">
+								terminology_id = (TERMINOLOGY_ID) <
+									value = <"openehr">
+								>
+							>
+							value = <"no information">
+						>
+					>
+				>
+				name = (DV_TEXT) <
+					value = <"Tree">
+				>
+			>
+			subject = (PARTY_SELF) <
+				external_ref = (PARTY_REF) <
+					id = (HIER_OBJECT_ID) <
+						value = <"1.2.4.5.6.12.1">
+					>
+					type = <"PARTY">
+				>
+			>
+		>
+		[3] = (INSTRUCTION) <
+			activities = <
+				[1] = (ACTIVITY) <
+					action_archetype_id = <"string value">
+					archetype_node_id = <"at0001">
+					description = (ITEM_TREE) <
+						archetype_node_id = <"openEHR-EHR-ITEM_TREE.imaging.v1">
+						items = <
+							[1] = (CLUSTER) <
+								archetype_node_id = <"at0002">
+								items = <
+									[1] = (ELEMENT) <
+										archetype_node_id = <"at0003">
+										name = (DV_TEXT) <
+											value = <"Findings">
+										>
+										null_flavour = (DV_CODED_TEXT) <
+											defining_code = (CODE_PHRASE) <
+												code_string = <"271">
+												terminology_id = (TERMINOLOGY_ID) <
+													value = <"openehr">
+												>
+											>
+											value = <"no information">
+										>
+									>
+								>
+								name = (DV_TEXT) <
+									value = <"Clinical information">
+								>
+							>
+							[2] = (CLUSTER) <
+								archetype_node_id = <"at0004">
+								items = <
+									[1] = (ELEMENT) <
+										archetype_node_id = <"at0005">
+										name = (DV_TEXT) <
+											value = <"Imaging procedure">
+										>
+										null_flavour = (DV_CODED_TEXT) <
+											defining_code = (CODE_PHRASE) <
+												code_string = <"271">
+												terminology_id = (TERMINOLOGY_ID) <
+													value = <"openehr">
+												>
+											>
+											value = <"no information">
+										>
+									>
+									[2] = (ELEMENT) <
+										archetype_node_id = <"at0007">
+										name = (DV_TEXT) <
+											value = <"Anatomical site">
+										>
+										null_flavour = (DV_CODED_TEXT) <
+											defining_code = (CODE_PHRASE) <
+												code_string = <"271">
+												terminology_id = (TERMINOLOGY_ID) <
+													value = <"openehr">
+												>
+											>
+											value = <"no information">
+										>
+									>
+									[3] = (ELEMENT) <
+										archetype_node_id = <"at0006">
+										name = (DV_TEXT) <
+											value = <"Views">
+										>
+										null_flavour = (DV_CODED_TEXT) <
+											defining_code = (CODE_PHRASE) <
+												code_string = <"271">
+												terminology_id = (TERMINOLOGY_ID) <
+													value = <"openehr">
+												>
+											>
+											value = <"no information">
+										>
+									>
+								>
+								name = (DV_TEXT) <
+									value = <"Imaging">
+								>
+							>
+							[3] = (CLUSTER) <
+								archetype_node_id = <"at0008">
+								items = <
+									[1] = (ELEMENT) <
+										archetype_node_id = <"at0009">
+										name = (DV_TEXT) <
+											value = <"Date of imaging">
+										>
+										null_flavour = (DV_CODED_TEXT) <
+											defining_code = (CODE_PHRASE) <
+												code_string = <"271">
+												terminology_id = (TERMINOLOGY_ID) <
+													value = <"openehr">
+												>
+											>
+											value = <"no information">
+										>
+									>
+									[2] = (ELEMENT) <
+										archetype_node_id = <"at0010">
+										name = (DV_TEXT) <
+											value = <"Location">
+										>
+										null_flavour = (DV_CODED_TEXT) <
+											defining_code = (CODE_PHRASE) <
+												code_string = <"271">
+												terminology_id = (TERMINOLOGY_ID) <
+													value = <"openehr">
+												>
+											>
+											value = <"no information">
+										>
+									>
+								>
+								name = (DV_TEXT) <
+									value = <"Process">
+								>
+							>
+						>
+						name = (DV_TEXT) <
+							value = <"Imaging data">
+						>
+					>
+					name = (DV_TEXT) <
+						value = <"Imaging activity">
+					>
+					timing = (DV_PARSABLE) <
+						formalism = <"txt">
+						value = <"activity timing">
+					>
+				>
+			>
+			archetype_details = (ARCHETYPED) <
+				archetype_id = (ARCHETYPE_ID) <
+					value = <"openEHR-EHR-INSTRUCTION.imaging.v1">
+				>
+				rm_version = <"1.0.1">
+			>
+			archetype_node_id = <"openEHR-EHR-INSTRUCTION.imaging.v1">
+			encoding = (CODE_PHRASE) <
+				code_string = <"UTF-8">
+				terminology_id = (TERMINOLOGY_ID) <
+					value = <"IANA_character-sets">
+				>
+			>
+			language = (CODE_PHRASE) <
+				code_string = <"en">
+				terminology_id = (TERMINOLOGY_ID) <
+					value = <"ISO_639-1">
+				>
+			>
+			name = (DV_TEXT) <
+				value = <"Imaging request">
+			>
+			narrative = (DV_TEXT) <
+				value = <"instruction narrative">
+			>
+			subject = (PARTY_SELF) <
+				external_ref = (PARTY_REF) <
+					id = (HIER_OBJECT_ID) <
+						value = <"1.2.4.5.6.12.1">
+					>
+					type = <"PARTY">
+				>
+			>
+		>
+	>
+	context = (EVENT_CONTEXT) <
+		other_context = (ITEM_TREE) <
+			archetype_node_id = <"at0001">
+			items = <
+				[1] = (ELEMENT) <
+					archetype_node_id = <"at0028">
+					name = (DV_TEXT) <
+						value = <"Requestor Identifier">
+					>
+					null_flavour = (DV_CODED_TEXT) <
+						defining_code = (CODE_PHRASE) <
+							code_string = <"271">
+							terminology_id = (TERMINOLOGY_ID) <
+								value = <"openehr">
+							>
+						>
+						value = <"no information">
+					>
+				>
+				[2] = (ELEMENT) <
+					archetype_node_id = <"at0039">
+					name = (DV_TEXT) <
+						value = <"DateTime attested">
+					>
+					null_flavour = (DV_CODED_TEXT) <
+						defining_code = (CODE_PHRASE) <
+							code_string = <"271">
+							terminology_id = (TERMINOLOGY_ID) <
+								value = <"openehr">
+							>
+						>
+						value = <"no information">
+					>
+				>
+				[3] = (ELEMENT) <
+					archetype_node_id = <"at0040">
+					name = (DV_TEXT) <
+						value = <"Document Status">
+					>
+					null_flavour = (DV_CODED_TEXT) <
+						defining_code = (CODE_PHRASE) <
+							code_string = <"271">
+							terminology_id = (TERMINOLOGY_ID) <
+								value = <"openehr">
+							>
+						>
+						value = <"no information">
+					>
+				>
+			>
+			name = (DV_TEXT) <
+				value = <"Tree">
+			>
+		>
+		setting = (DV_CODED_TEXT) <
+			defining_code = (CODE_PHRASE) <
+				code_string = <"227">
+				terminology_id = (TERMINOLOGY_ID) <
+					value = <"openehr">
+				>
+			>
+			value = <"emergency care">
+		>
+		start_time = (DV_DATE_TIME) <
+			value = <"2012-07-10T12:07:51,653">
+		>
+	>
+	language = (CODE_PHRASE) <
+		code_string = <"en">
+		terminology_id = (TERMINOLOGY_ID) <
+			value = <"ISO_639-1">
+		>
+	>
+	name = (DV_TEXT) <
+		value = <"Referral document">
+	>
+	territory = (CODE_PHRASE) <
+		code_string = <"SE">
+		terminology_id = (TERMINOLOGY_ID) <
+			value = <"ISO_3166-1">
+		>
+	>
+>

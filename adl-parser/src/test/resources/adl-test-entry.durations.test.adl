@@ -1,0 +1,111 @@
+archetype 	
+	adl-test-ENTRY.test.draft
+
+concept 
+	[at0000]	--  basic data types test 1
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	ENTRY[at0000] matches {	
+        types matches {
+            LIST[at0001] matches {
+                items cardinality matches {0..*} matches {
+                    ELEMENT[at1001] matches {	-- duration
+                		value matches {PT0s}
+                	}
+                	ELEMENT[at1002] matches {	-- duration
+                		value matches {P1d}
+                	}
+                	ELEMENT[at1003] matches {	-- duration
+                		value matches {PT2h5m0s}
+                	}
+                	ELEMENT[at1004] matches {	-- duration
+                		value matches {|PT1h55m0s..PT2h5m0s|}
+                	}
+                	ELEMENT[at1005] matches {	-- duration
+                		value matches {|<=PT1h|}
+                	}
+                	ELEMENT[at1006] matches {	-- duration
+                		value matches {P1DT1H2M3S}
+                	}
+                	ELEMENT[at1007] matches {	-- duration
+                		value matches {P1W2DT1H2M3S}
+                	}
+                	ELEMENT[at1008] matches {	-- duration
+                		value matches {P3M1W2DT1H2M3S}
+                	}
+                	ELEMENT[at1009] matches {	-- duration pattern
+                		value matches {PDTH}
+                	}
+                	ELEMENT[at1010] matches {	-- duration interval
+                		value matches {|PT10M|}
+                	}
+                	ELEMENT[at1011] matches {	-- duration ISO8601 pattern
+                		value matches {PYMWDTHMS} 
+                	}
+					ELEMENT[at1011] matches {	-- duration with fractional seconds
+                		value matches {|PT0.004s|}
+                	}
+					ELEMENT[at1012] matches {	-- duration with fractional seconds
+                		value matches {|PT10.01s|}
+                	}
+					ELEMENT[at1013] matches {	-- duration with fractional seconds
+                		value matches {|PT1.1s|}
+                	}
+                	ELEMENT[at1014] matches {	-- duration with mixed Pattern and Interval 
+						value matches {PTS/|PT0S..PT120S|}
+					}				
+                	-- matches {PT30s, PT45s, PT1m0s, PT2m0s} -- Not currently in ADL syntax
+                	-- matches {|P1d +/PT4h|}
+                }           	
+            }     	
+                	
+			LIST[at0002] matches {
+                items cardinality matches {0..*} matches {                		
+					ELEMENT[at1001] matches {	-- duration with assumed values
+                		value matches {PT0s; P1d}
+                	}
+                	ELEMENT[at1002] matches {	-- duration with assumed values
+                		value matches {P1d; P1d}
+                	}
+                	ELEMENT[at1003] matches {	-- duration with assumed values
+                		value matches {PT2h5m0s; P1d}
+                	}
+                	ELEMENT[at1004] matches {	-- duration with assumed values
+                		value matches {|PT1h55m0s..PT2h5m0s|; P1d}
+                	}
+                	ELEMENT[at1005] matches {	-- duration with assumed values
+                		value matches {|<=PT1h|; P1d}
+                	}
+                	ELEMENT[at1006] matches {	-- duration
+                		value matches {PDTH; P1d}
+                	}
+                	
+                	ELEMENT[at1010] matches {	-- duration interval
+                		value matches {|PT10M|; PT12M}
+                	}
+                }
+            }
+        }        
+    }
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	terminologies_available = <"adl_test", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test entry">; 
+					description = <"test entry">
+				>
+				["at0001"] = <
+					text = <"test list">; 
+					description = <"test list">
+				>
+			>
+		>
+	>

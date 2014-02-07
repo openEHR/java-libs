@@ -1,0 +1,23 @@
+archetype
+	adl-test-ENTRY.missing_term_definition.v3
+
+concept 
+	[at0000]	--  empty definition test
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	term_definitions = <
+		["de"] = <
+			items = <
+				["at0000"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
+	>

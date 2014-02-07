@@ -1,0 +1,32 @@
+archetype
+	adl-test-ENTRY.term_binding.draft
+concept
+	[at0000]	--  path-based binding test
+language
+	original_language = <[ISO_639-1::en]>
+	
+
+definition
+	ENTRY[at0000] matches {*}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
+	>
+	term_binding = <
+		["LNC205"] = <
+			items = <
+				["/data[at0002]/events[at0003]/data[at0001]/item[at0004]"] = <[LNC205::8310-5]>				
+			>
+		>
+	>

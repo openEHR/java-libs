@@ -1,0 +1,12 @@
+single_values = <
+    datetime = <2007-10-30T09:22:00,...>
+    date = <2008-04-02,...>
+    time = <11:09:40,...>
+    duration = <PT10M,...>
+    string = <"a string value",...>
+    char = <'a',...>
+    integer = <100,...>
+    real = <9.5,...>
+    boolean = <True,...>    
+	code_phrase = <[ISO_639-1::en],...>	
+>

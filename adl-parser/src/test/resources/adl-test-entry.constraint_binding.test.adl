@@ -1,0 +1,37 @@
+archetype
+	adl-test-ENTRY.constraint_binding.draft
+concept
+	[at0000]	--  empty definition test
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	ENTRY[at0000] matches {*}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
+	>
+	constraint_binding = <
+		["SNOMED_CT"] = <
+			items = <
+				["ac0001"] = <http://terminology.org?terminology_id=snomed_ct&&has_relation=102002;with_target=128004>
+			>
+		>
+		["ICD10"] = <
+			items = <
+				["ac0001"] = <http://terminology.org?terminology_id=icd10&&has_relation=a2;with_target=b19>
+			>
+		>
+	>

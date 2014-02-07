@@ -1,0 +1,41 @@
+archetype
+	adl-test-ENTRY.unicode_support.draft
+concept 
+	[at0000]	--  empty definition test
+language
+	original_language = <[ISO_639-1::en]> 
+	
+
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", "zh", "sv">
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"concept">; 
+					description = <"description">
+				>
+			>
+		>
+		["zh"] = <
+			items = <
+				["at0000"] = <
+					text = <"概念">;			-- "concept" in Chinese 
+					description = <"描述">   -- "description" in Chinese
+				>
+			>
+		>
+		["sv"] = <
+			items = <
+				["at0000"] = <
+					text = <"språk">; 		-- "language" in Swedish
+					description = <"Hjälp">   -- "help" in Swedish
+				>
+			>
+		>
+	>

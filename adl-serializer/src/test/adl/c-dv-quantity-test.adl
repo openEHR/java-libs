@@ -1,0 +1,14 @@
+C_DV_QUANTITY <
+    property = <[openehr::128]>
+    list = <
+        ["1"] = <
+            units = <"year">
+            magnitude = <|0.0..200.0|>
+            precision = <|2|>
+        >
+        ["2"] = <
+            units = <"month">
+            magnitude = <|1.0..36.0|>
+        >
+    >
+>

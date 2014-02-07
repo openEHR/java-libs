@@ -1,0 +1,38 @@
+(ITEM_TREE) <
+    archetype_node_id = <"openEHR-EHR-ITEM_TREE.medication_test_four.v1">
+    name = <
+    	value = <"Medication description">
+    >            
+    items = <
+        [1] = (ELEMENT) <
+            name = <
+            	value = <"Medication name">
+            >
+            archetype_node_id = <"at0001">    
+            null_flavour = <
+                value = <"no information">
+                defining_code = <
+                    terminology_id = (TERMINOLOGY_ID) <
+                        value = <"openehr">
+                    >
+                    code_string = <"271">
+                >
+            >
+        >
+        [2] = (ELEMENT) <
+            name = <
+            	value = <"Medication status">
+            >
+            archetype_node_id = <"at0002">  
+            null_flavour = <
+                value = <"no information">
+                defining_code = <
+                    terminology_id = (TERMINOLOGY_ID) <
+                        value = <"openehr">
+                    >
+                    code_string = <"271">
+                >
+            >            
+        >
+    >
+>

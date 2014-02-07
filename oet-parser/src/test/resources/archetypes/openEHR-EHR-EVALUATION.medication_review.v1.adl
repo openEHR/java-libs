@@ -1,0 +1,136 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-EVALUATION.medication_review.v1
+
+concept
+	[at0000]	-- Medication Review
+language
+	original_language = <[ISO_639-1::sv]>
+description
+	original_author = <
+		["name"] = <"Rong Chen">
+		["organisation"] = <"Cambio Healthcare Systems">
+		["email"] = <"rong.chen@cambio.se">
+		["date"] = <"4/22/2010">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::sv]>
+			purpose = <"Used for review of medications">
+			use = <"">
+			misuse = <"">
+		>
+		["sv"] = <
+			language = <[ISO_639-1::sv]>
+			purpose = <"This archetype should be used to record a structure summary of a given medication in the source EHR system">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	lifecycle_state = <"AuthorDraft">
+	other_contributors = <>
+	other_details = <
+		["references"] = <"">
+		["MD5-CAM-1.0.1"] = <"6408A16C059024B883AEC44670A78DBE">
+	>
+
+definition
+	EVALUATION[at0000] matches {	-- Medication Review
+		data matches {
+			ITEM_TREE[at0001] matches {	-- Tree
+				items cardinality matches {0..*; ordered} matches {
+					ELEMENT[at0002] occurrences matches {0..1} matches {	-- Name
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0005] occurrences matches {0..1} matches {	-- Status
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0003] occurrences matches {0..1} matches {	-- Generic
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0004] occurrences matches {0..1} matches {	-- Total dose
+						value matches {
+							C_DV_QUANTITY <
+								property = <[openehr::118]>
+							>
+						}
+					}
+					ELEMENT[at0006] occurrences matches {0..1} matches {	-- Reason target dose not reached
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0007] occurrences matches {0..1} matches {	-- Reason medicine not given
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0008] occurrences matches {0..1} matches {	-- Base daily dose
+						value matches {
+							C_DV_QUANTITY <
+							>
+						}
+					}
+					ELEMENT[at0009] occurrences matches {0..1} matches {	-- Extra dose when needed
+						value matches {
+							C_DV_QUANTITY <
+							>
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["sv"] = <
+			items = <
+				["at0000"] = <
+					text = <"Medication Review">
+					description = <"Used to represent review of a medication">
+				>
+				["at0001"] = <
+					text = <"Tree">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"Name">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"Generic">
+					description = <"*">
+				>
+				["at0004"] = <
+					text = <"Total dose">
+					description = <"*">
+				>
+				["at0005"] = <
+					text = <"Status">
+					description = <"*">
+				>
+				["at0006"] = <
+					text = <"Reason target dose not reached">
+					description = <"*">
+				>
+				["at0007"] = <
+					text = <"Reason medicine not given">
+					description = <"*">
+				>
+				["at0008"] = <
+					text = <"Base daily dose">
+					description = <"*">
+				>
+				["at0009"] = <
+					text = <"Extra dose when needed">
+					description = <"*">
+				>
+			>
+		>
+	>

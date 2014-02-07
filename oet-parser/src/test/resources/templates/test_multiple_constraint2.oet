@@ -1,0 +1,14 @@
+﻿<?xml version="1.0"?>
+<template xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="openEHR/v1/Template">
+  <id>56acd032-79e1-4a98-90f5-9c190c95dc32</id>
+  <name>Text Value Test Template</name>  
+  <definition xsi:type="ACTION" archetype_id="openEHR-EHR-ACTION.medication.v1" name="ACE-hämmare">
+	<description xsi:type="ITEM_TREE" archetype_id="openEHR-EHR-ITEM_TREE.medication.v1" path="/description">
+      <Rule path="/items[at0033]/items[at0034]/items[at0005]">
+		<constraint xsi:type="multipleConstraint">
+		  <includedTypes>Count</includedTypes>
+        </constraint>
+      </Rule>
+	</description>  
+  </definition>
+</template>

@@ -1,0 +1,78 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>openehr</groupId>
+		<artifactId>ref_impl_java</artifactId>
+		<version>1.0.5-SNAPSHOT</version>
+	</parent>
+	<artifactId>adl-serializer</artifactId>
+	<packaging>jar</packaging>
+	<name>ADL Serializer</name>
+	<url>http://www.openehr.org/projects/java.html</url>
+	<organization>
+		<name>openEHR</name>
+		<url>http://www.openehr.org/</url>
+	</organization>
+	<inceptionYear>2004</inceptionYear>
+	
+	<description>java ADL Serializer for Archetype Object Model</description>
+	
+	<build>
+		<testResources>
+			<testResource>
+				<directory>src/test/adl</directory>
+			</testResource>
+		</testResources>
+	</build>
+	
+	<dependencies>
+		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>openehr-rm-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>openehr-rm-domain</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>openehr-aom</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>openehr</groupId>
+			<artifactId>openehr-ap</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+            <groupId>openehr</groupId>
+            <artifactId>mini-termserv</artifactId>
+            <version>${project.version}</version>
+        </dependency>       
+        <dependency>
+            <groupId>openehr</groupId>
+            <artifactId>adl-parser</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>         
+        </dependency>
+        <dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

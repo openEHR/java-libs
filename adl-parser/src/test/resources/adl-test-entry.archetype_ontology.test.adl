@@ -1,0 +1,25 @@
+archetype
+	adl-test-ENTRY.archetype_ontology.draft
+concept 
+	[at0000]	--  empty definition test
+language
+	original_language = <[ISO_639-1::en]> 	
+
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"some text">; 
+					description = <"some description">
+					comment = <"some comment">
+				>
+			>
+		>
+	>

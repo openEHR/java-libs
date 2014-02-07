@@ -1,0 +1,56 @@
+archetype (adl_version=1.4)
+	adl-test-SOME_TYPE.generic_type_basic.draft
+
+concept
+	[at0000]	-- root item
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Thomas Beale">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Illustrates the use of generic types">
+			keywords = <"ADL", "test">
+			copyright = <"copyright (c) 2006 The openEHR Foundation">
+		>
+	>
+	lifecycle_state = <"draft">
+
+definition
+	SOME_TYPE[at0000] matches {	-- root item
+		interval_attr matches {
+			INTERVAL<QUANTITY> matches {
+				lower matches {
+					QUANTITY matches {
+						property matches {"temperature"}
+						unit matches {"C"}
+						magnitude matches {|>= 37.0|}
+					}
+				}
+				upper matches {
+					QUANTITY matches {
+						property matches {"temperature"}
+						unit matches {"C"}
+						magnitude matches {|>= 39.0|}
+					}
+				}
+				lower_included matches {True}
+				upper_included matches {True}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"xxxx">
+					text = <"root item">
+				>
+			>
+		>
+	>

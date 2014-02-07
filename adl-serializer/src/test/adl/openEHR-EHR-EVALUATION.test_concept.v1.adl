@@ -1,0 +1,47 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-EVALUATION.test_concept.v1
+
+concept
+	[at0000]	-- unknown
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"????">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"testing archetype conversion">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+		["references"] = <"">
+	>
+
+definition
+	EVALUATION[at0000] matches {	-- unknown
+		data matches {
+			ITEM_TREE[at0001] matches {*}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"unknown">
+					description = <"unknown">
+				>
+				["at0001"] = <
+					text = <"Tree">
+					description = <"@ internal @">
+				>
+			>
+		>
+	>

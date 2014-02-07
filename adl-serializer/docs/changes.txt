@@ -1,0 +1,28 @@
+2007/02/14
+.better interval output for same lower and upper limit
+.added precision in CDvQuantity output
+.added ConstraintRef output
+
+2007/02/13
+.added support for translations
+.fixed archetypeInternalRef output bug
+.fixed unclosed brace when code list is empty
+
+2007/02/11
+.archetype language support
+
+2007/01/24
+.added assumedValue in all CPrimitive types
+.added assumedValue in CDvOrdinal output
+.added pattern in CDuration output
+
+2007/01/20
+.bug fix related to null includes or excludes in printArchetypeSlot
+.added support for assumedValue in CCodePhrase
+
+2007/01/14
+.added support for CCodePhrase
+.added support for archetype language
+
+2006/12/16
+.updated support for ArchetypeSlot

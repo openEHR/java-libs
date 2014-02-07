@@ -1,0 +1,36 @@
+archetype
+    adl-test-ELEMENT.specialization-depth.v4
+
+specialize
+    adl-test-ELEMENT.specialization.v1
+
+concept 
+    [at0000.1]    --  empty definition test
+
+language
+    original_language = <[ISO_639-1::en]>   
+    
+definition
+    ELEMENT[at0000.1] matches {    -- Diagnosis
+        value matches {
+             DV_CODED_TEXT matches {
+                defining_code matches {[local::at0002.2.2]}     -- t1
+             }
+        }
+    }                           
+
+ontology 
+    term_definitions = <
+        ["en"] = <
+            items = <
+                ["at0000.1"] = <
+                    text = <"most minimal">; 
+                    description = <"most minimal">
+                >
+                ["at0002.2.2"] = <
+                    text = <"Specialisation hierarchy to high for this archetype">
+                    description = <"*">
+                >    
+            >
+        >
+    >   

@@ -1,0 +1,10 @@
+REQUIREMENTS:
+
+Java 1.6 or higher
+Maven 3.0.4 or higher
+
+INSTALATION INSTRUCTIONS:
+
+INSTALLATION:
+
+java-libs/mvn clean install

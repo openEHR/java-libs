@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<v1:composition archetype_node_id="openEHR-EHR-COMPOSITION.quality_report.v1" xmlns:v1="http://schemas.openehr.org/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <v1:name>
+    <v1:value>quality-report</v1:value>
+  </v1:name>
+  <v1:archetype_details>
+    <v1:archetype_id>
+      <v1:value>openEHR-EHR-COMPOSITION.quality_report.v1</v1:value>
+    </v1:archetype_id>
+    <v1:rm_version>1.0.1</v1:rm_version>
+  </v1:archetype_details>
+  <v1:language>
+    <v1:terminology_id>
+      <v1:value>ISO_639-1</v1:value>
+    </v1:terminology_id>
+    <v1:code_string>en</v1:code_string>
+  </v1:language>
+  <v1:territory>
+    <v1:terminology_id>
+      <v1:value>ISO_3166-1</v1:value>
+    </v1:terminology_id>
+    <v1:code_string>SE</v1:code_string>
+  </v1:territory>
+  <v1:category>
+    <v1:value>event</v1:value>
+    <v1:defining_code>
+      <v1:terminology_id>
+        <v1:value>openehr</v1:value>
+      </v1:terminology_id>
+      <v1:code_string>433</v1:code_string>
+    </v1:defining_code>
+  </v1:category>
+  <v1:composer xsi:type="v1:PARTY_IDENTIFIED">
+    <v1:name>Doctor</v1:name>
+  </v1:composer>
+  <v1:content archetype_node_id="openEHR-EHR-SECTION.ad_hoc_heading.v1" xsi:type="v1:SECTION">
+    <v1:name>
+      <v1:value>non-empty section</v1:value>
+    </v1:name>
+    <v1:items archetype_node_id="openEHR-EHR-OBSERVATION.heart_failure_stage.v2" xsi:type="v1:OBSERVATION">
+      <v1:name>
+        <v1:value>hjärtsvikt-allvarlighetsgrad</v1:value>
+      </v1:name>
+      <v1:archetype_details>
+        <v1:archetype_id>
+          <v1:value>openEHR-EHR-OBSERVATION.heart_failure_stage.v2</v1:value>
+        </v1:archetype_id>
+        <v1:rm_version>1.0.1</v1:rm_version>
+      </v1:archetype_details>
+      <v1:language>
+        <v1:terminology_id>
+          <v1:value>ISO_639-1</v1:value>
+        </v1:terminology_id>
+        <v1:code_string>en</v1:code_string>
+      </v1:language>
+      <v1:encoding>
+        <v1:terminology_id>
+          <v1:value>IANA_character-sets</v1:value>
+        </v1:terminology_id>
+        <v1:code_string>UTF-8</v1:code_string>
+      </v1:encoding>
+      <v1:subject xsi:type="v1:PARTY_SELF">
+        <v1:external_ref>
+          <v1:id xsi:type="v1:HIER_OBJECT_ID">
+            <v1:value>1.2.4.5.6.12.1</v1:value>
+          </v1:id>
+          <v1:type>PARTY</v1:type>
+        </v1:external_ref>
+      </v1:subject>
+      <v1:data archetype_node_id="at0001">
+        <v1:name>
+          <v1:value>*Event Series(en)</v1:value>
+        </v1:name>
+        <v1:origin>
+          <v1:value>2010-09-02T20:15:53,829</v1:value>
+        </v1:origin>
+        <v1:events archetype_node_id="at0002" xsi:type="v1:POINT_EVENT">
+          <v1:name>
+            <v1:value>*Any event(en)</v1:value>
+          </v1:name>
+          <v1:time>
+            <v1:value>2010-09-02T20:15:53,829</v1:value>
+          </v1:time>
+          <v1:data archetype_node_id="at0003" xsi:type="v1:ITEM_LIST">
+            <v1:name>
+              <v1:value>*List(en)</v1:value>
+            </v1:name>
+			<v1:items archetype_node_id="at0010">
+              <v1:name>
+                <v1:value>Trötthet</v1:value>
+              </v1:name>
+              <v1:value xsi:type="v1:DV_ORDINAL">
+                <v1:value>1</v1:value>
+                <v1:symbol>
+                  <v1:value>Helt opåverkad</v1:value>
+                  <v1:defining_code>
+                    <v1:terminology_id>
+                      <v1:value>local</v1:value>
+                    </v1:terminology_id>
+                    <v1:code_string>at0005</v1:code_string>
+                  </v1:defining_code>
+                </v1:symbol>
+              </v1:value>
+            </v1:items>
+          </v1:data>
+        </v1:events>
+      </v1:data>
+    </v1:items>
+    <v1:items archetype_node_id="openEHR-EHR-OBSERVATION.eq_5d.v2" xsi:type="v1:OBSERVATION">
+      <v1:name>
+        <v1:value>Health Status</v1:value>
+      </v1:name>
+      <v1:archetype_details>
+        <v1:archetype_id>
+          <v1:value>openEHR-EHR-OBSERVATION.eq_5d.v2</v1:value>
+        </v1:archetype_id>
+        <v1:rm_version>1.0.1</v1:rm_version>
+      </v1:archetype_details>
+      <v1:language>
+        <v1:terminology_id>
+          <v1:value>ISO_639-1</v1:value>
+        </v1:terminology_id>
+        <v1:code_string>en</v1:code_string>
+      </v1:language>
+      <v1:encoding>
+        <v1:terminology_id>
+          <v1:value>IANA_character-sets</v1:value>
+        </v1:terminology_id>
+        <v1:code_string>UTF-8</v1:code_string>
+      </v1:encoding>
+      <v1:subject xsi:type="v1:PARTY_SELF">
+        <v1:external_ref>
+          <v1:id xsi:type="v1:HIER_OBJECT_ID">
+            <v1:value>1.2.4.5.6.12.1</v1:value>
+          </v1:id>
+          <v1:type>PARTY</v1:type>
+        </v1:external_ref>
+      </v1:subject>
+      <v1:data archetype_node_id="at0001">
+        <v1:name>
+          <v1:value>*Event Series(en)</v1:value>
+        </v1:name>
+        <v1:origin>
+          <v1:value>2010-09-02T20:15:53,829</v1:value>
+        </v1:origin>
+        <v1:events archetype_node_id="at0002" xsi:type="v1:POINT_EVENT">
+          <v1:name>
+            <v1:value>*Any event(en)</v1:value>
+          </v1:name>
+          <v1:time>
+            <v1:value>2010-09-02T20:15:53,829</v1:value>
+          </v1:time>
+          <v1:data archetype_node_id="at0003" xsi:type="v1:ITEM_LIST">
+            <v1:name>
+              <v1:value>*List(en)</v1:value>
+            </v1:name>
+          </v1:data>
+        </v1:events>
+      </v1:data>
+    </v1:items>
+  </v1:content>    
+  <v1:content archetype_node_id="openEHR-EHR-SECTION.ad_hoc_heading.v1" xsi:type="v1:SECTION">
+    <v1:name>
+      <v1:value>empty section</v1:value>
+    </v1:name>
+    <v1:items archetype_node_id="openEHR-EHR-OBSERVATION.heart_failure_stage.v2" xsi:type="v1:OBSERVATION">
+      <v1:name>
+        <v1:value>hjärtsvikt-allvarlighetsgrad</v1:value>
+      </v1:name>
+      <v1:archetype_details>
+        <v1:archetype_id>
+          <v1:value>openEHR-EHR-OBSERVATION.heart_failure_stage.v2</v1:value>
+        </v1:archetype_id>
+        <v1:rm_version>1.0.1</v1:rm_version>
+      </v1:archetype_details>
+      <v1:language>
+        <v1:terminology_id>
+          <v1:value>ISO_639-1</v1:value>
+        </v1:terminology_id>
+        <v1:code_string>en</v1:code_string>
+      </v1:language>
+      <v1:encoding>
+        <v1:terminology_id>
+          <v1:value>IANA_character-sets</v1:value>
+        </v1:terminology_id>
+        <v1:code_string>UTF-8</v1:code_string>
+      </v1:encoding>
+      <v1:subject xsi:type="v1:PARTY_SELF">
+        <v1:external_ref>
+          <v1:id xsi:type="v1:HIER_OBJECT_ID">
+            <v1:value>1.2.4.5.6.12.1</v1:value>
+          </v1:id>
+          <v1:type>PARTY</v1:type>
+        </v1:external_ref>
+      </v1:subject>
+      <v1:data archetype_node_id="at0001">
+        <v1:name>
+          <v1:value>*Event Series(en)</v1:value>
+        </v1:name>
+        <v1:origin>
+          <v1:value>2010-09-02T20:15:53,829</v1:value>
+        </v1:origin>
+        <v1:events archetype_node_id="at0002" xsi:type="v1:POINT_EVENT">
+          <v1:name>
+            <v1:value>*Any event(en)</v1:value>
+          </v1:name>
+          <v1:time>
+            <v1:value>2010-09-02T20:15:53,829</v1:value>
+          </v1:time>
+          <v1:data archetype_node_id="at0003" xsi:type="v1:ITEM_LIST">
+            <v1:name>
+              <v1:value>*List(en)</v1:value>
+            </v1:name>
+          </v1:data>
+        </v1:events>
+      </v1:data>
+    </v1:items>
+    <v1:items archetype_node_id="openEHR-EHR-OBSERVATION.eq_5d.v2" xsi:type="v1:OBSERVATION">
+      <v1:name>
+        <v1:value>Health Status</v1:value>
+      </v1:name>
+      <v1:archetype_details>
+        <v1:archetype_id>
+          <v1:value>openEHR-EHR-OBSERVATION.eq_5d.v2</v1:value>
+        </v1:archetype_id>
+        <v1:rm_version>1.0.1</v1:rm_version>
+      </v1:archetype_details>
+      <v1:language>
+        <v1:terminology_id>
+          <v1:value>ISO_639-1</v1:value>
+        </v1:terminology_id>
+        <v1:code_string>en</v1:code_string>
+      </v1:language>
+      <v1:encoding>
+        <v1:terminology_id>
+          <v1:value>IANA_character-sets</v1:value>
+        </v1:terminology_id>
+        <v1:code_string>UTF-8</v1:code_string>
+      </v1:encoding>
+      <v1:subject xsi:type="v1:PARTY_SELF">
+        <v1:external_ref>
+          <v1:id xsi:type="v1:HIER_OBJECT_ID">
+            <v1:value>1.2.4.5.6.12.1</v1:value>
+          </v1:id>
+          <v1:type>PARTY</v1:type>
+        </v1:external_ref>
+      </v1:subject>
+      <v1:data archetype_node_id="at0001">
+        <v1:name>
+          <v1:value>*Event Series(en)</v1:value>
+        </v1:name>
+        <v1:origin>
+          <v1:value>2010-09-02T20:15:53,829</v1:value>
+        </v1:origin>
+        <v1:events archetype_node_id="at0002" xsi:type="v1:POINT_EVENT">
+          <v1:name>
+            <v1:value>*Any event(en)</v1:value>
+          </v1:name>
+          <v1:time>
+            <v1:value>2010-09-02T20:15:53,829</v1:value>
+          </v1:time>
+          <v1:data archetype_node_id="at0003" xsi:type="v1:ITEM_LIST">
+            <v1:name>
+              <v1:value>*List(en)</v1:value>
+            </v1:name>
+          </v1:data>
+        </v1:events>
+      </v1:data>
+    </v1:items>
+  </v1:content>    
+</v1:composition>

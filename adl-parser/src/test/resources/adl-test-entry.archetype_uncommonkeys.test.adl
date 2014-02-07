@@ -1,0 +1,29 @@
+archetype (adl_version=1.4)
+	adl-test-ENTRY.archetype_uncommonkeys.v1
+
+concept 
+	[at0000]	--  test
+
+language
+	original_language = <[ISO_639-1::en]> 
+		
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test text">; 
+					description = <"test description">
+					anotherkey = <"another key value">
+					status = <"status value">
+					revision = <"revision value">
+				>
+			>
+		>
+	>

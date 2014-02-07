@@ -1,0 +1,250 @@
+﻿archetype (adl_version=1.4)
+	openEHR-EHR-OBSERVATION.lab_test.v1
+
+concept
+	[at0000]	-- Laboratory test result
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"Dr Ian McNicoll">
+		["organisation"] = <"openEHR Archetype Editorial Group / Ocean Informatics">
+		["email"] = <"ian.mcnicoll@oceaninformatics.com">
+		["date"] = <"27/01/2009">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"Generic entry to contain a laboratory test. This is abstract archetype which will normally be specialised but may be used for very simple reporting formats.
+
+
+
+">
+			use = <"Normally used only as the basis for further specialisation but is suitable for very simple tests with only a free text conclusion. Will generally be used in combination with archetypes representing other parts of the laboratory test ordering and processing process to form a full lab test report.">
+			keywords = <"lab", "pathology", "biochemistry", "haematology", "microbiology", "immunology", "laboratory">
+			misuse = <"Do not use for standard value-driven lab tests such as haematology and biochemistry tests. OBSERVATION.lab_test-itemised.v1. Other specialisations may be more appropriate for structured reports such as for microbiology or histopathology.">
+			copyright = <"copyright (c) 2009 openEHR Foundation">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <"Heather Leslie AEG / Ocean Infomatics", "Sam Heard Ocean Informatics">
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"3F7F820218B30C49034A1974FBE85505">
+		["references"] = <"">
+	>
+
+definition
+	OBSERVATION[at0000] matches {	-- Laboratory test result
+		data matches {
+			HISTORY[at0001] matches {	-- Event Series
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[at0002] occurrences matches {0..1} matches {	-- Any event
+						data matches {
+							ITEM_TREE[at0003] matches {	-- Tree
+								items cardinality matches {0..*; unordered} matches {
+									ELEMENT[at0005] occurrences matches {0..1} matches {	-- Test name
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+									ELEMENT[at0077] occurrences matches {0..1} matches {	-- Diagnostic service
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+									ELEMENT[at0073] occurrences matches {0..1} matches {	-- Test status
+										value matches {
+											DV_CODED_TEXT matches {
+												defining_code matches {
+													[local::
+													at0037, 	-- Interim
+													at0038, 	-- Final
+													at0039, 	-- Supplementary
+													at0040, 	-- Corrected (amended)
+													at0074]	-- Aborted
+												}
+											}
+										}
+									}
+									allow_archetype CLUSTER[at0065] occurrences matches {0..*} matches {	-- Test specimen detail  
+										include
+											archetype_id/value matches {/openEHR-EHR-CLUSTER\.specimen\.v1/}
+										exclude
+											archetype_id/value matches {/.*/}
+									}
+									ELEMENT[at0078] occurrences matches {0..*} matches {*}
+									ELEMENT[at0076] occurrences matches {0..1} matches {	-- Additional comment
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+									ELEMENT[at0057] occurrences matches {0..1} matches {	-- Overall conclusion
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+									ELEMENT[at0010] occurrences matches {0..*} matches {	-- Multimedia representation
+										value matches {
+											DV_MULTIMEDIA matches {
+												media_type matches {[openEHR::]}
+											}
+										}
+									}
+									ELEMENT[at0070] occurrences matches {0..1} matches {*}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[at0004] matches {	-- Tree
+				items cardinality matches {0..*; unordered} matches {
+					CLUSTER[at0013] occurrences matches {0..1} matches {	-- Test identification
+						items cardinality matches {0..*; unordered} matches {
+							ELEMENT[at0062] occurrences matches {0..1} matches {	-- Requester order ID
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+							ELEMENT[at0063] occurrences matches {0..1} matches {	-- Provider order ID
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+							ELEMENT[at0068] occurrences matches {0..1} matches {	-- Laboratory test ID
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+							allow_archetype CLUSTER[at0017] occurrences matches {0..*} matches {	-- Laboratory details  
+								include
+									archetype_id/value matches {/openEHR-EHR-CLUSTER\.organisation\.v1/}
+								exclude
+									archetype_id/value matches {/.*/}
+							}
+						}
+					}
+					ELEMENT[at0075] occurrences matches {0..1} matches {	-- Datetime result issued
+						value matches {
+							DV_DATE_TIME matches {*}
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Laboratory test result">
+					description = <"Abstract laboratory test archetype which should not generally be used directly but acts as a parent for a number of specialised archetypes to represent typical test types e.g histopathology, microbiology and generic itemised test results such as haematology and biochemistry. ">
+				>
+				["at0001"] = <
+					text = <"Event Series">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"Any event">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"Tree">
+					description = <"@ internal @">
+				>
+				["at0004"] = <
+					text = <"Tree">
+					description = <"@ internal @">
+				>
+				["at0005"] = <
+					text = <"Test name">
+					description = <"A specific identifier for this result - often a coded term e.g from LOINC or SNOMED">
+				>
+				["at0010"] = <
+					text = <"Multimedia representation">
+					description = <"Representations of the whole test in mutlimedia e.g image, audio, video.">
+				>
+				["at0013"] = <
+					text = <"Test identification">
+					description = <"Unique identifiers used in delivery of the care process.">
+				>
+				["at0017"] = <
+					text = <"Laboratory details  ">
+					description = <"Demographic details of the laboratory with responsibility for the test. Details of secondary laboratories may also be included.">
+				>
+				["at0037"] = <
+					text = <"Interim">
+					description = <"This is an initial or interim result - further updates are anticipated">
+				>
+				["at0038"] = <
+					text = <"Final">
+					description = <"This is the final result. No further alterations are anticipated">
+				>
+				["at0039"] = <
+					text = <"Supplementary">
+					description = <"This is a supplememtary result in addition to the Interim result">
+				>
+				["at0040"] = <
+					text = <"Corrected (amended)">
+					description = <"This is a Correction which should replace any previous results">
+				>
+				["at0057"] = <
+					text = <"Overall conclusion">
+					description = <"An overall interpretative comment on this test.">
+				>
+				["at0062"] = <
+					text = <"Requester order ID">
+					description = <"The ID assigned to the test order by the order filler, usually by the (LIS) Laboratory Information System. Equivalent to the DICOM Accession Number and NEHTA Laboratory Request Identifier.">
+				>
+				["at0063"] = <
+					text = <"Provider order ID">
+					description = <"The ID assigned to the order by the order requester. Equivalent to the NEHTA Requester Order Identifier">
+				>
+				["at0065"] = <
+					text = <"Test specimen detail  ">
+					description = <"Details of the specimen being reported where all individual results are derived from the same specimen">
+				>
+				["at0068"] = <
+					text = <"Laboratory test ID">
+					description = <"The identifier given to the laboratory test result of a pathology
+investigation.">
+				>
+				["at0070"] = <
+					text = <"Structured narrative representation">
+					description = <"A parsable representation of the entire test result. Equvalent to the NEHTA report or CDA narrative block,, and may contain references to paths within the archetype">
+				>
+				["at0073"] = <
+					text = <"Test status">
+					description = <"The status of the test as a whole.">
+				>
+				["at0074"] = <
+					text = <"Aborted">
+					description = <"*">
+				>
+				["at0075"] = <
+					text = <"Datetime result issued">
+					description = <"The date or date and time that the result was issued for the current
+‘results status’. ">
+					comment = <"The date and time related to the results status is
+useful for version control and cumulative results for the report.">
+				>
+				["at0076"] = <
+					text = <"Additional comment">
+					description = <"General comments on the test e.g. complicating factors. Any 'diagnostic' or interpretive commetns should be recorded under ' Overall Conclusion'.">
+				>
+				["at0077"] = <
+					text = <"Diagnostic service">
+					description = <"The type of diagnostic service">
+				>
+				["at0078"] = <
+					text = <"Test result">
+					description = <"The result of the test.">
+				>
+			>
+		>
+	>

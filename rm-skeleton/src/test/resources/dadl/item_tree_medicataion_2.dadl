@@ -1,0 +1,23 @@
+(ITEM_TREE) <
+    archetype_node_id = <"openEHR-EHR-ITEM_TREE.medication_test_two.v1">
+    name = <
+    	value = <"Medication description">
+    >            
+    items = <
+        [1] = (ELEMENT) <
+            name = <
+            	value = <"Status">
+            >
+            archetype_node_id = <"at0001">
+            value = <
+                defining_code = <
+                    terminology_id = (TERMINOLOGY_ID) <
+                        value = <"SNOMED-CT">
+                    >
+                    code_string = <"1201000053901">
+                >
+                value = <"coded text value">                        
+            >
+        >
+    >
+>

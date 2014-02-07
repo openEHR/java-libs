@@ -1,0 +1,88 @@
+archetype 	
+	adl-test-ENTRY.test.draft
+
+concept 
+	[at0000]	--  basic data types test 1
+
+language
+	original_language = <[ISO_639-1::en]> 
+	
+definition
+	ENTRY[at0000] matches {
+	    string_attributes matches {
+	        LIST matches {
+	        
+                -- escaped double quote
+                string_attr10 matches {"some\"thing"}
+                
+                -- escaped backslash
+                string_attr11 matches {"any\\thing"}                
+                 
+                -- three-lines string
+                string_attr21 matches {"this is what it is used for, this could be a really long line or even
+multiple lines, just like
+what you are reading now"}
+
+				-- nine-lines string with leading and trailing spaces
+                string_attr21 matches {"this is what it is used for, this could 
+                be a really long line or even multiple lines, just like what you
+                string_attr21 matches this is what it is used for, this could 
+                be a really long line or even multiple lines, just like what you
+                string_attr21 matches this is what it is used for, this could 
+                be a really long line or even multiple lines, just like what you
+                string_attr21 matches this is what it is used for, this could 
+                be a really long line or even multiple lines, just like what you
+                are reading now "}
+
+				-- multi-line string with empty lines in the middle
+                string_attr22 matches {"this is what it is used for, this could be a really long line or even
+
+
+multiple lines, just like"}
+
+				                           
+				-- another multi-line string starting with empty line                                                                         
+                string_attr23 matches {"
+                
+                this is what it is used 
+                
+                for, this could 
+                
+                be a really long line or even
+				
+				multiple lines, just like
+				
+				multiple lines, just like
+				
+				multiple lines, just like
+				
+				multiple lines, just like
+				
+				multiple lines, just like
+				
+				"}
+				
+				-- units = <"/min">, possibile confict with path syntax
+				units_1 matches {"/min"}
+				
+				-- units = 
+				units_2 matches {"km/h"}
+
+            }
+        }                
+    }
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	terminologies_available = <"adl_test", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test entry">; 
+					description = <"test entry">
+				>
+			>
+		>
+	>

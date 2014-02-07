@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="openEHR/v1/Template">
+	<id>34ef693f-a02b-4e32-a34e-33113b49b324</id>
+	<name>TestComposition</name>
+	<definition xsi:type="COMPOSITION" archetype_id="openEHR-EHR-COMPOSITION.test.v1">
+		<Content xsi:type="SECTION" archetype_id="openEHR-EHR-SECTION.ad_hoc_heading.v1" path="/content" name="header">
+		</Content>
+	</definition>
+</template>

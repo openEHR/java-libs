@@ -1,0 +1,36 @@
+ontology
+    terminologies_available = <"SNOMED_CT", "ICD10", ...>
+    term_definitions = <
+        ["en"] = <
+            items = <
+                ["at0001"] = <
+                    text = <"text at0001">
+                    description = <"desc at0001">
+                >
+            >
+        >
+    >
+    term_binding = <
+        ["SNOMED_CT"] = <
+            items = <
+                ["at0001"] = <[snomed_ct::1000339]>
+            >
+        >
+        ["ICD10"] = <
+            items = <
+                ["at0001"] = <[icd10::1000],[icd10::1001]>
+            >
+        >
+    >
+    constraint_binding = <
+        ["SNOMED_CT"] = <
+            items = <
+                ["ac0001"] = <http://terminology.org?terminology_id=snomed_ct&&has_relation=[102002];with_target=[128004]>
+            >
+        >
+        ["ICD10"] = <
+            items = <
+                ["ac0001"] = <http://terminology.org?terminology_id=icd10&&has_relation=[102002];with_target=[128004]>
+            >
+        >
+    >

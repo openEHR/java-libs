@@ -1,0 +1,61 @@
+﻿archetype (adl_version=1.4)
+	openEHR-EHR-EVALUATION.adjusted_node_ids.v1
+
+concept
+	[at0000]	-- summary
+language
+	original_language = <[ISO_639-1::sv]>
+
+definition
+	EVALUATION[at0011] matches {	-- summary
+		data matches {
+			ITEM_TREE[at0012] matches {	-- Träd
+				items cardinality matches {0..*; unordered} matches {
+					ELEMENT[at0013] occurrences matches {0..1} matches {	-- summary
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0014] occurrences matches {0..1} matches {	-- total
+						value matches {
+							C_DV_QUANTITY <
+							>
+						}
+					}
+					ELEMENT[at0015] occurrences matches {0..1} matches {	-- comment
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["sv"] = <
+			items = <
+				["at0000"] = <
+					text = <"summary">
+					description = <"Structured summary">
+				>
+				["at0001"] = <
+					text = <"Träd">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"summary">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"comment">
+					description = <"*">
+				>
+				["at0005"] = <
+					text = <"total">
+					description = <"*">
+				>
+			>
+		>
+	>

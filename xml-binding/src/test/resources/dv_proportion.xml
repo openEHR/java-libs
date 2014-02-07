@@ -1,0 +1,7 @@
+<xml-fragment xmlns:v1="http://schemas.openehr.org/v1">
+  <v1:accuracy>0.0</v1:accuracy>
+  <v1:numerator>0.5</v1:numerator>
+  <v1:denominator>1.0</v1:denominator>
+  <v1:type>0</v1:type>
+  <v1:precision>1</v1:precision>
+</xml-fragment>

@@ -1,0 +1,281 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ADMIN_ENTRY.heart_failure_contact.v1
+
+concept
+	[at0000]	-- Heart Failure Contact
+language
+	original_language = <[ISO_639-1::sv]>
+description
+	original_author = <
+		["name"] = <"Rong Chen">
+		["date"] = <"10/18/2009">
+	>
+	details = <
+		["sv"] = <
+			language = <[ISO_639-1::sv]>
+			purpose = <"Heart Failure Contact">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	lifecycle_state = <"AuthorDraft">
+	other_contributors = <>
+	other_details = <
+		["references"] = <"">
+		["MD5-CAM-1.0.1"] = <"B3F75F27B4DC94A69659DBAF31F92C03">
+	>
+
+definition
+	ADMIN_ENTRY[at0000] matches {	-- Heart Failure Contact
+		data matches {
+			ITEM_TREE[at0001] matches {	-- Tree
+				items cardinality matches {2..*; ordered} matches {
+					CLUSTER[at0009] matches {	-- Inskrivning
+						items cardinality matches {8; ordered} matches {
+							ELEMENT[at0010] matches {	-- Vårdgivare
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {
+											[local::
+											at0020, 	-- Slutenvård
+											at0021, 	-- Enskilt öppenvårdbesök hos läkare
+											at0022]	-- Sviktmottagning (besök vårdteam)
+										}
+									}
+								}
+							}
+							ELEMENT[at0040] occurrences matches {0..1} matches {	-- Klinik
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {
+											[local::
+											at0041, 	-- Medicinklinik
+											at0042, 	-- Kardiologklinik
+											at0043]	-- Geriatrisk klinik
+										}
+									}
+								}
+							}
+							ELEMENT[at0011] matches {	-- Orsak till inläggning / besök
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {
+											[local::
+											at0044, 	-- Förvärrad hjärtsvikt
+											at0045, 	-- Nydebuterad hjärtsvikt
+											at0046]	-- Oförändrad hjärtsvikt (rutinbesök)
+										}
+									}
+								}
+							}
+							ELEMENT[at0012] matches {	-- Utlösande faktorer
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {
+											[local::
+											at0047, 	-- Ischemi
+											at0048, 	-- Arytmi
+											at0049, 	-- Annan kardiovaskulär orsak
+											at0050, 	-- Annat
+											at0051]	-- Okänt
+										}
+									}
+								}
+							}
+							ELEMENT[at0013] matches {	-- Tidigare vårdtillfälle/inläggning för hjärtsvikt
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {
+											[local::
+											at0034, 	-- Ja >= 6 mån
+											at0035, 	-- Ja < 6 mån
+											at0036, 	-- Nej
+											at0037]	-- Okänt
+										}
+									}
+								}
+							}
+							ELEMENT[at0014] matches {	-- Duration av hjärtsvikt
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {
+											[local::
+											at0038, 	-- < 6mån
+											at0039]	-- >= 6mån
+										}
+									}
+								}
+							}
+							ELEMENT[at0015] matches {	-- Inskrivnings-/besöksdatum
+								value matches {
+									DV_DATE matches {
+										value matches {yyyy-mm-dd}
+									}
+								}
+							}
+							ELEMENT[at0016] occurrences matches {0..1} matches {	-- Utskrivningsdatum
+								value matches {
+									DV_DATE matches {
+										value matches {yyyy-mm-dd}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	terminologies_available = <"SNOMED-CT", ...>
+	term_definitions = <
+		["sv"] = <
+			items = <
+				["at0000"] = <
+					text = <"Heart Failure Contact">
+					description = <"Administrative and demographic information required by the quality report">
+				>
+				["at0001"] = <
+					text = <"Tree">
+					description = <"@ internal @">
+				>
+				["at0009"] = <
+					text = <"Inskrivning">
+					description = <"Inskrivning">
+				>
+				["at0010"] = <
+					text = <"Vårdgivare">
+					description = <"Vårdgivare">
+				>
+				["at0011"] = <
+					text = <"Orsak till inläggning / besök">
+					description = <"Orsak till inläggning / besök">
+				>
+				["at0012"] = <
+					text = <"Utlösande faktorer">
+					description = <"Utlösande faktorer">
+				>
+				["at0013"] = <
+					text = <"Tidigare vårdtillfälle/inläggning för hjärtsvikt">
+					description = <"Tidigare vårdtillfälle/inläggning för hjärtsvikt">
+				>
+				["at0014"] = <
+					text = <"Duration av hjärtsvikt">
+					description = <"Duration av hjärtsvikt">
+				>
+				["at0015"] = <
+					text = <"Inskrivnings-/besöksdatum">
+					description = <"Inskrivnings-/besöksdatum">
+				>
+				["at0016"] = <
+					text = <"Utskrivningsdatum">
+					description = <"Utskrivningsdatum">
+				>
+				["at0020"] = <
+					text = <"Slutenvård">
+					description = <"Slutenvård">
+				>
+				["at0021"] = <
+					text = <"Enskilt öppenvårdbesök hos läkare">
+					description = <"Enskilt öppenvårdbesök hos läkare">
+				>
+				["at0022"] = <
+					text = <"Sviktmottagning (besök vårdteam)">
+					description = <"Sviktmottagning (besök vårdteam)">
+				>
+				["at0034"] = <
+					text = <"Ja >= 6 mån">
+					description = <"Ja >= 6 mån">
+				>
+				["at0035"] = <
+					text = <"Ja < 6 mån">
+					description = <"Ja < 6 mån">
+				>
+				["at0036"] = <
+					text = <"Nej">
+					description = <"Nej">
+				>
+				["at0037"] = <
+					text = <"Okänt">
+					description = <"Okänt">
+				>
+				["at0038"] = <
+					text = <"< 6mån">
+					description = <"< 6mån">
+				>
+				["at0039"] = <
+					text = <">= 6mån">
+					description = <">= 6mån">
+				>
+				["at0040"] = <
+					text = <"Klinik">
+					description = <"Klinik">
+				>
+				["at0041"] = <
+					text = <"Medicinklinik">
+					description = <"Medicinklinik">
+				>
+				["at0042"] = <
+					text = <"Kardiologklinik">
+					description = <"Kardiologklinik">
+				>
+				["at0043"] = <
+					text = <"Geriatrisk klinik">
+					description = <"Geriatrisk klinik">
+				>
+				["at0044"] = <
+					text = <"Förvärrad hjärtsvikt">
+					description = <"Förvärrad hjärtsvikt">
+				>
+				["at0045"] = <
+					text = <"Nydebuterad hjärtsvikt">
+					description = <"Nydebuterad hjärtsvikt">
+				>
+				["at0046"] = <
+					text = <"Oförändrad hjärtsvikt (rutinbesök)">
+					description = <"Oförändrad hjärtsvikt (rutinbesök)">
+				>
+				["at0047"] = <
+					text = <"Ischemi">
+					description = <"Ischemi">
+				>
+				["at0048"] = <
+					text = <"Arytmi">
+					description = <"Arytmi">
+				>
+				["at0049"] = <
+					text = <"Annan kardiovaskulär orsak">
+					description = <"Annan kardiovaskulär orsak">
+				>
+				["at0050"] = <
+					text = <"Annat">
+					description = <"Annat">
+				>
+				["at0051"] = <
+					text = <"Okänt">
+					description = <"Okänt">
+				>
+			>
+		>
+	>
+	term_bindings = <
+		["SNOMED-CT"] = <
+			items = <
+				["at0020"] = <[SNOMED-CT::10118]>
+				["at0021"] = <[SNOMED-CT::10119]>
+				["at0022"] = <[SNOMED-CT::10120]>
+				["at0041"] = <[SNOMED-CT::309912009]>
+				["at0042"] = <[SNOMED-CT::309915006]>
+				["at0043"] = <[SNOMED-CT::309933000]>
+				["at0044"] = <[SNOMED-CT::10078]>
+				["at0045"] = <[SNOMED-CT::10079]>
+				["at0046"] = <[SNOMED-CT::10080]>
+				["at0047"] = <[SNOMED-CT::414795007]>
+				["at0048"] = <[SNOMED-CT::44808001]>
+				["at0049"] = <[SNOMED-CT::10116]>
+				["at0050"] = <[SNOMED-CT::10117]>
+				["at0051"] = <[SNOMED-CT::3219008]>
+			>
+		>
+	>

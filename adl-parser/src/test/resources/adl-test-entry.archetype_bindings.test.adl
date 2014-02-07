@@ -1,0 +1,47 @@
+archetype 
+	adl-test-entry.archetype_language_order_of_translation_details.test
+	
+concept 
+	[at0000]	--  test
+	
+language
+	original_language = <[ISO_639-1::en]>	
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	terminologies_available = <"SNOMED-CT", ...>
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test">; 
+					description = <"test">
+				>
+			>
+		>
+	>
+	constraint_definitions = <
+		["en"] = <
+			items = <
+				["ac0001"] = <
+					text = <"test constraint">
+					description = <"*">
+				>
+			>
+		>
+	>
+	term_bindings = <
+		["SNOMED-CT"] = <
+			items = <
+				["at0002"] = <[SNOMED-CT::123456]>
+			>
+		>
+	>
+	constraint_bindings = <
+		["SNOMED-CT"] = <
+			items = <
+				["ac0001"] = <http://openEHR.org/testconstraintbinding>
+			>
+		>
+	>

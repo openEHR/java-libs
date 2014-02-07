@@ -1,0 +1,140 @@
+/*
+ * component:   "openEHR Reference Implementation"
+ * description: "Class InstructionDetails"
+ * keywords:    "composition"
+ *
+ * author:      "Yin Su Lim <y.lim@chime.ucl.ac.uk>"
+ * support:     "CHIME, UCL"
+ * copyright:   "Copyright (c) 2006 UCL, UK"
+ * license:     "See notice at bottom of class"
+ *
+ * file:        "$URL: http://svn.openehr.org/ref_impl_java/TRUNK/libraries/src/java/org/openehr/rm/composition/content/entry/InstructionDetails.java $"
+ * revision:    "$LastChangedRevision: 53 $"
+ * last_change: "$LastChangedDate: 2006-08-11 13:20:08 +0100 (Fri, 11 Aug 2006) $"
+ */
+package org.openehr.rm.composition.content.entry;
+
+import org.apache.commons.lang.StringUtils;
+import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
+import org.openehr.rm.RMObject;
+import org.openehr.rm.datastructure.itemstructure.ItemStructure;
+import org.openehr.rm.support.identification.LocatableRef;
+
+/**
+ * Used to record details of the Instruction causing an Action.
+ *
+ * @author Yin Su Lim
+ * @version 1.0
+ */
+public class InstructionDetails extends RMObject {
+
+	/**
+	 * @param uid
+	 * @param archetypeNodeId
+	 * @param name
+	 * @param archetypeDetails
+	 * @param feederAudit
+	 * @param links
+	 * @param parent
+	 */
+	@FullConstructor
+	public InstructionDetails(
+            @Attribute(name = "instructionId", required = true) LocatableRef instructionId,
+            @Attribute(name = "activityId", required = true) String activityId,
+            @Attribute(name = "wfDetails") ItemStructure wfDetails) {
+		if (instructionId == null) {
+			throw new IllegalArgumentException("null instructionId");
+		}
+		if (StringUtils.isEmpty(activityId)) {
+			throw new IllegalArgumentException("null or empty activityId");
+		}
+		this.instructionId =instructionId;
+		this.activityId = activityId;
+		this.wfDetails = wfDetails;
+	}
+
+	/**
+	 * Identifier of Activity within Instruction, in the form of its archetype 
+	 * path.
+	 * 
+	 * @return activityId
+	 */
+	public String getActivityId() {
+		return activityId;
+	}
+
+	/**
+	 * Id of causing Instruction
+	 * 
+	 * @return instructionId
+	 */
+	public LocatableRef getInstructionId() {
+		return instructionId;
+	}
+
+	/**
+	 * Various workflow engine state details, potentially including such things as:
+	 * -condition that fired to cause this Action to be done
+	 * -list of notifications which actually occured
+	 * -other workflow engine state
+	 * 
+	 * @return wfDetails
+	 */
+	public ItemStructure getWfDetails() {
+		return wfDetails;
+	}
+
+	//POJO start
+	InstructionDetails() {
+	}
+
+	void setActivityID(String activityId) {
+		this.activityId = activityId;
+	}
+
+	void setInstructionId(LocatableRef instructionId) {
+		this.instructionId = instructionId;
+	}
+
+	void setWfDetails(ItemStructure wfDetails) {
+		this.wfDetails = wfDetails;
+	}
+	//POJO end
+	
+	/* fields */
+	private LocatableRef instructionId;
+	private String activityId;
+	private ItemStructure wfDetails;
+
+}
+
+/*
+ *  ***** BEGIN LICENSE BLOCK *****
+ *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ *  The contents of this file are subject to the Mozilla Public License Version
+ *  1.1 (the 'License'); you may not use this file except in compliance with
+ *  the License. You may obtain a copy of the License at
+ *  http://www.mozilla.org/MPL/
+ *
+ *  Software distributed under the License is distributed on an 'AS IS' basis,
+ *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing rights and limitations under the
+ *  License.
+ *
+ *  The Original Code is InstructionDetails.java
+ *
+ *  The Initial Developer of the Original Code is Yin Su Lim.
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2004
+ *  the Initial Developer. All Rights Reserved.
+ *
+ *  Contributor(s):
+ *
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ *  ***** END LICENSE BLOCK *****
+ */

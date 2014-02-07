@@ -1,0 +1,88 @@
+archetype
+	adl-test-CLUSTER.test_cluster.v1
+
+concept 
+	[at0000]	--  test cluster
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	CLUSTER[at0001] occurrences matches {0..1} matches {
+		items cardinality matches {0..*; unordered} matches {
+			ELEMENT[at0002] matches {	-- element 1
+				value matches {
+					C_DV_QUANTITY <
+						property = <[openehr::128]>
+						list = <									
+							["1"] = <
+								units = <"yr">
+								magnitude = <|0.0..200.0|>
+								precision = <|2|>
+							>								
+						>	
+					>
+				}
+			}
+			ELEMENT[at0003] matches {	-- element 2
+				value matches {
+					C_DV_QUANTITY <
+						property = <[openehr::128]>
+						list = <									
+							["1"] = <
+								units = <"yr">
+								magnitude = <|0.0..200.0|>
+								precision = <|2|>
+							>								
+						>	
+					>
+				}
+			}
+			ELEMENT[at0004] matches {	-- element 3
+				value matches {
+					C_DV_QUANTITY <
+						property = <[openehr::128]>
+						list = <									
+							["1"] = <
+								units = <"yr">
+								magnitude = <|0.0..200.0|>
+								precision = <|2|>
+							>								
+						>	
+					>
+				}
+			}
+			allow_archetype CLUSTER[at2012] occurrences matches {0..1} matches {	-- test cluster slot
+				include
+					archetype_id/value matches {/adl-test-CLUSTER.test_cluster.v1/}
+			}
+		}
+	}
+
+ontology 
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test cluster">; 
+					description = <"most minimal">
+				>
+				["at0001"] = <
+					text = <"cluster">; 
+					description = <"most minimal">
+				>
+				["at0002"] = <
+					text = <"element 1">; 
+					description = <"most minimal">
+				>
+				["at0003"] = <
+					text = <"element 2">; 
+					description = <"most minimal">
+				>
+				["at0004"] = <
+					text = <"element 3">; 
+					description = <"most minimal">
+				>
+			>
+		>
+	>

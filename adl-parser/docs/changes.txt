@@ -1,0 +1,99 @@
+2007/04/28
+.fixed the issue with parsing units with slash, e.g. "/min"
+
+2007/04/26
+.updated parsing path-based term binding
+
+2007/04/18
+.added support for comment in term/constraint definitions
+.updated parser due to AOM changes
+.added support for empty C_DV_ORDINAL
+
+2007/03/18
+.non-inclusive integer and real interval parsing
+
+2007/03/16
+.fixed missing upper bound for duration interval
+
+2007/02/26
+.improved special string parsing
+
+2007/02/23
+.updated assumed value parsing for CDvQuantity
+.added support for CDvQuantity starts with assumed value
+.added support for generics in type_identifier
+
+2007/02/20
+.added support for empty purpose
+.fixed parsing c_code_phrase with single code
+.fixed parsing other_details, original_resource_uri, other_contributors
+.fixed parsing c_dv_quantity_item only with units
+.fixed parsing generic types
+.fixed c_duration pattern
+
+2007/02/19
+.made ontology primary_language and languages optional
+.use code_phrase for language parsing in translations and descriptions
+
+2007/02/18
+.improved assertion and archetype_slot parsing
+
+2007/02/15
+.fixed parsing translations without accreditation
+
+2007/02/14
+.improved c_dv_quantity parsing
+
+2007/02/10
+.corrected parsing constraint_ref
+
+2007/02/08
+.added support for assumed_value in c_dv_quantity
+.the command line parser is created with missingLanguageCompatible falg set
+.added support for single value interval for primitive types
+.updated C_DV_QUANTITY parsing
+
+2007/02/07
+.fixed parsing issue caused by the order of description attributes
+
+2007/02/03
+.testcase verifies node paths after parsing
+.backwards compatibility of archetypes without language section
+
+2007/02/02
+.added missing language attribute in translation details
+
+2007/02/01
+.added support for translations in language part
+
+2007/01/24
+.added support for assumedValue parsing in CDvOrdinal
+
+2007/01/20
+.added overwritting occurrences for ArchetypeInternalRef
+.improved ArchetypeSlotTest
+.added support for assumedValue in CCodePhrase
+
+2007/01/14
+.removed RoundTripTest and adl-serializer dependency
+
+2007/01/07
+.added archetype language part parsing
+.AuthoredResource is used for archetype description
+
+2006/12/30
+.updated other CDomainTypes support
+.replaced CDvCodedText with CCodePhrase
+
+2006/12/16
+.updated CDvCodedText support regarding query
+
+2006/12/18
+.separated CDurationTest from BasicTypesTest
+.updated CDuration parsing regarding months and weeks in ISO8601 DURATION format
+
+2006/12/20
+.added support for CDuration string pattern
+
+2006/12/24
+.added support for duration interval in CDuration parsing

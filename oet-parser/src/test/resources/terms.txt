@@ -1,0 +1,7 @@
+ATC::C07AA03::Pindolol
+ATC::C07AA05::Propranolol
+ATC::C07AA06::Timolol
+ATC::C07AA07::Sotalol
+ATC::C07AA28::Karvedilol
+SNOMED-CT::10018::Loopdiuretika
+SNOMED-CT::10019::Thiazider

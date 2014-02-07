@@ -1,0 +1,252 @@
+﻿archetype (adl_version=1.4)
+	openEHR-EHR-OBSERVATION.height.v2
+
+concept
+	[at0000]	-- Height/Length
+language
+	original_language = <[ISO_639-1::en]>
+	translations = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			author = <
+				["organisation"] = <"University of Heidelberg, Central Queensland University">
+				["name"] = <"Jasmin Buck, Sebastian Garde">
+			>
+		>
+	>
+description
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["email"] = <"sam.heard@oceaninformatics.com">
+		["date"] = <"9/03/2006">
+	>
+	details = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			purpose = <"Zur Dokumentation der Körpergröße in einer gestreckten Position, von Scheitel bis Sohle">
+			use = <"">
+			keywords = <"Größe", "Länge">
+			misuse = <"Nicht zur Dokumentation anderer Größen und Längen (siehe OBSERVATION.dimensions.v1)">
+			copyright = <"copyright (c) 2009 openEHR Foundation">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"To record the length of the body from crown of head to sole of foot of an individual - both actual and approximate, and either in a standing or recumbent position.">
+			use = <"To be used for recording the actual height or body length of an individual at any point in time.  A statement identifying the physical incompleteness of the body can be recorded in the 'Confounding factors' protocol element, if required.  This is the usual archetype to be used for a typical measurement of height or body length, independent of the clinical setting.
+Can also be used for recording an approximation of height or body length measurement in a clinical scenario where it is not possible to measure an accurate height or length - for example, measuring an uncooperative child.  This is not modelled explicitly in the archetype as the openEHR Reference model allows the attribute of Approximation for any Quantity data type.  At implementation, for example, an application user interface could allow clinicians to select an appropriately labelled check box adjacent to the Height data field to indicate that the recorded height is an approximation, rather than actual.
+In general, length measurements are recommended for children under 2 years of age and individuals who cannot stand; height measurements for all others.
+Ideally, height is measured standing on both feet with weight distributed evenly, heels together and both buttocks and heels in contact with a vertical back board; body length is measured in a fully extended, supine position with the pelvis flat, legs extended and feet flexed. 
+Use to record growth and loss of height.  This can currently be modelled by constraining the 'any event' to an interval in a template with associated mathematical function of increase or decrease, as appropriate. ">
+			keywords = <"shrinkage", "increase", "decrease", "height loss", "height", "length", "growth">
+			misuse = <"Not to be used to record the first length of an infant soon after birth which is designated as their 'birth length' - use the specialisation of this archetype - see OBSERVATION.height-birth.
+Not to be used to record the adjusted height or body length eg a calculation of the estimated full height of a person with limb contractures, based on other body part measurements and/or an algorithm - use OBSERVATION.height-adjusted.
+Not to be used to record growth velocity.
+Not to be used to record the length of an object or specific body part.">
+			copyright = <"copyright (c) 2009 openEHR Foundation">
+		>
+	>
+	lifecycle_state = <"AuthorDraft">
+	other_contributors = <"Jeroen Meintjen, Medisch Centrum Alkmaar, Netherlands", "Sebastian Garde, Ocean Informatics, Germany", "Heather Leslie, Ocean Informatics, Australia", "Omer Hotomaroglu, Turkey", "Andrew James, University of Toronto, Canada", "Anne Harbison, Australia", "Thilo Schuler, Germany", "Anneke Goossen, Results 4 Care, Netherlands", "Rikard Lovstrom, Swedish Medical Association, Sweden", "Heather Grain, Llewelyn Informatics, Australia", "Hans Demski, Helmholtz Zentrum München, Germany", "Soon Ghee Yap, Singapore Health Services Pte Ltd, Singapore", "Paul Donaldson, Nursing Informatics Australia, Australia", "Rong Chen, Cambio Healthcare Systems, Sweden", "Sundaresan Jagannathan, Scottish NHS, United Kingdom", "Ian McNicoll, Ocean Informatics, United Kingdom", "Marja Buur, Medisch Centrum Alkmaar, Netherlands">
+	other_details = <
+		["references"] = <"Wilks Z, Bryan S, Mead V and Davies EH. Clinical guideline: Height, measuring a child [Internet]. London, United Kingdom: UCL Institute of Child Health; 2008 Apr 01 [cited 2009 Jul 28 ]. Available from: http://www.ich.ucl.ac.uk/clinical_information/clinical_guidelines/cpg_guideline_00060">
+		["MD5-CAM-1.0.1"] = <"C8557596E1A6FDD4EE76D31D66251382">
+	>
+
+definition
+	OBSERVATION[at0000] matches {	-- Height/Length
+		data matches {
+			HISTORY[at0001] matches {	-- history
+				events cardinality matches {1..*; unordered} matches {
+					EVENT[at0002] occurrences matches {1..*} matches {	-- Any event
+						data matches {
+							ITEM_TREE[at0003] matches {	-- Simple
+								items cardinality matches {1..*; unordered} matches {
+									ELEMENT[at0004] matches {	-- Height/Length
+										value matches {
+											C_DV_QUANTITY <
+												property = <[openehr::122]>
+												list = <
+													["1"] = <
+														units = <"cm">
+														magnitude = <|0.0..1000.0|>
+													>
+													["2"] = <
+														units = <"in">
+														magnitude = <|0.0..250.0|>
+													>
+												>
+											>
+										}
+									}
+									ELEMENT[at0018] occurrences matches {0..1} matches {	-- Comment
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+								}
+							}
+						}
+						state matches {
+							ITEM_TREE[at0013] matches {	-- Tree
+								items cardinality matches {0..*; unordered} matches {
+									ELEMENT[at0014] occurrences matches {0..1} matches {	-- Position
+										value matches {
+											DV_CODED_TEXT matches {
+												defining_code matches {
+													[local::
+													at0016, 	-- Standing
+													at0020; 	-- Lying
+													at0016]	-- assumed value
+												}
+											}
+										}
+									}
+									ELEMENT[at0019] occurrences matches {0..1} matches {	-- Confounding factors
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[at0007] matches {	-- List
+				items cardinality matches {0..*; ordered} matches {
+					allow_archetype CLUSTER[at0011] occurrences matches {0..1} matches {	-- Device
+						include
+							archetype_id/value matches {/openEHR-EHR-CLUSTER\.device(-[a-zA-Z0-9_]+)*\.v1/}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	terminologies_available = <"SNOMED-CT", ...>
+	term_definitions = <
+		["de"] = <
+			items = <
+				["at0000"] = <
+					text = <"*Height/Length(en)">
+					description = <"*Height, or body length, is measured from crown of head to sole of foot.  Height is measured with the individual in a standing position and body length in a recumbent position. (en)">
+				>
+				["at0001"] = <
+					text = <"History">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"Any event">
+					description = <"Jede zu einem Zeitpunkt gemessene Körpergröße">
+				>
+				["at0003"] = <
+					text = <"Simple">
+					description = <"@ internal @">
+				>
+				["at0004"] = <
+					text = <"*Height/Length(en)">
+					description = <"*The length of the body from crown of head to sole of foot.(en)">
+				>
+				["at0007"] = <
+					text = <"List">
+					description = <"@ internal ">
+				>
+				["at0011"] = <
+					text = <"*CLUSTER(en)">
+					description = <"**(en)">
+				>
+				["at0013"] = <
+					text = <"*Tree(en)">
+					description = <"*@ internal @(en)">
+				>
+				["at0014"] = <
+					text = <"*New element(en)">
+					description = <"**(en)">
+				>
+				["at0016"] = <
+					text = <"*Standing(en)">
+					description = <"*Height is measured standing erect, feet flat on the ground and against a backboard(en)">
+				>
+				["at0018"] = <
+					text = <"*Comment(en)">
+					description = <"*Comment about the measurement of body height/length.(en)">
+				>
+				["at0019"] = <
+					text = <"*Confounding factors(en)">
+					description = <"*Record any issues or factors that may impact on the measurement of body height/length eg noting of amputation.(en)">
+				>
+				["at0020"] = <
+					text = <"*Lying(en)">
+					description = <"*Length is measured in a fully extended, recumbent position with the pelvis flat, legs extended and feet flexed. (en)">
+				>
+			>
+		>
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Height/Length">
+					description = <"Height, or body length, is measured from crown of head to sole of foot.  Height is measured with the individual in a standing position and body length in a recumbent position. ">
+				>
+				["at0001"] = <
+					text = <"history">
+					description = <"@ internal @">
+				>
+				["at0002"] = <
+					text = <"Any event">
+					description = <"Any timed measurement of height or body length.">
+				>
+				["at0003"] = <
+					text = <"Simple">
+					description = <"@ internal @">
+				>
+				["at0004"] = <
+					text = <"Height/Length">
+					description = <"The length of the body from crown of head to sole of foot.">
+				>
+				["at0007"] = <
+					text = <"List">
+					description = <"@ internal @">
+				>
+				["at0011"] = <
+					text = <"Device">
+					description = <"Description of the device used to measure height or body length.">
+				>
+				["at0013"] = <
+					text = <"Tree">
+					description = <"@ internal @">
+				>
+				["at0014"] = <
+					text = <"Position">
+					description = <"Position of individual when measured.  
+">
+				>
+				["at0016"] = <
+					text = <"Standing">
+					description = <"Height is measured standing on both feet with weight distributed evenly, heels together and both buttocks and heels in contact with a vertical back board.">
+				>
+				["at0018"] = <
+					text = <"Comment">
+					description = <"Comment about the measurement of body height/length.">
+				>
+				["at0019"] = <
+					text = <"Confounding factors">
+					description = <"Record any issues or factors that may impact on the measurement of body height/length eg noting of amputation.">
+				>
+				["at0020"] = <
+					text = <"Lying">
+					description = <"Length is measured in a fully extended, recumbent position with the pelvis flat, legs extended and feet flexed. ">
+				>
+			>
+		>
+	>
+	term_bindings = <
+		["SNOMED-CT"] = <
+			items = <
+				["at0004"] = <[SNOMED-CT::50373000]>
+			>
+		>
+	>

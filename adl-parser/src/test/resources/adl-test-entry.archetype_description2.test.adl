@@ -1,0 +1,45 @@
+archetype (adl_version=1.4)
+    openEHR-EHR-OBSERVATION.body_mass_index.v1
+
+concept
+    [at0000]    -- Body mass index
+
+language
+	original_language = <[ISO_639-1::en]>
+
+description
+    details = <
+        ["en"] = <
+            language = <[ISO_639-1::en]>
+            purpose = <"To record the body mass index. This is index is calculated by dividing the weight in kg by the height in metres squared.">
+            use = <"To record BMI">
+            keywords = <"obesity", "index">
+            misuse = <"">
+        >
+    >
+    lifecycle_state = <"Initial">
+    other_contributors = <>
+    original_author = <
+        ["name"] = <"Sam Heard">
+        ["organisation"] = <"Ocean Informatics">
+        ["date"] = <"22/03/2006">
+        ["email"] = <"sam.heard@oceaninformatics.biz">
+    >
+    
+definition
+	ENTRY[at0000] matches {*}
+
+ontology 
+	primary_language = <"en">
+	languages_available = <"en", ...>
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"test">; 
+					description = <"test">
+				>
+			>
+		>
+	>

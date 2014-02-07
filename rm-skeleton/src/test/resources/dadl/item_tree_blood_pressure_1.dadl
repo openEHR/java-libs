@@ -1,0 +1,28 @@
+(ITEM_TREE) <
+    archetype_node_id = <"openEHR-EHR-ITEM_TREE.blood_pressure.v1">
+    name = <
+    	value = <"Blood pressure">
+    >            
+    items = <
+        [1] = <
+            name = <
+            	value = <"Systolic">
+            >
+            archetype_node_id = <"at0001">
+            value = <
+                magnitude = <0.0>
+                units = <"mm[Hg]">
+            >
+        >
+        [2] = <
+            name = <
+            	value = <"Diastolic">
+            >
+            archetype_node_id = <"at0002">
+            value = <
+                magnitude = <0.0>
+                units = <"mm[Hg]">
+            >
+        >
+    >
+>

@@ -1,0 +1,10 @@
+<
+    name = <
+    	value = <"systolic">
+    >
+    archetype_node_id = <"at0004">
+    value = <
+        magnitude = <120.0>
+        units = <"mmHg">
+    >
+>

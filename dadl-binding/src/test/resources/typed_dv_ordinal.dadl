@@ -1,0 +1,12 @@
+(DV_ORDINAL) <
+	symbol = (DV_CODED_TEXT) <
+		defining_code = (CODE_PHRASE) <
+			code_string = <"12345678">
+            terminology_id = (TERMINOLOGY_ID) <
+                value = <"SNOMED-CT">
+            >
+        >
+        value = <"Sitting">
+    >
+	value = <1>	
+>

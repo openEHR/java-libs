@@ -1,0 +1,4 @@
+allow_archetype OBSERVATION[at0001] occurrences matches {1..*} matches {
+	exclude
+	    domain_concept matches {/.*/}
+}

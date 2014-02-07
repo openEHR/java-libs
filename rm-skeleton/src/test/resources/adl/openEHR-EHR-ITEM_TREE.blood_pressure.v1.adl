@@ -1,0 +1,63 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-ITEM_TREE.blood_pressure.v1
+
+concept
+	[at0000]	-- blood pressure
+	
+language
+	original_language = <[ISO_639-1::en]>
+
+definition
+	ITEM_TREE[at0000] matches {	
+		items cardinality matches {2..*; ordered} matches {
+			ELEMENT[at0001] occurrences matches {1..1} matches {	-- Systolic
+                value matches {
+                    C_DV_QUANTITY <
+                        property = <[openehr::125]>
+                        list = <
+                            ["1"] = <
+                                units = <"mm[Hg]">
+                                magnitude = <|0.0..<1000.0|>
+                                precision = <|0|>
+                            >
+                        >
+                    >
+                }
+            }
+            ELEMENT[at0002] occurrences matches {1..1} matches {	-- Diastolic
+                value matches {
+                    C_DV_QUANTITY <
+                        property = <[openehr::125]>
+                        list = <
+                            ["1"] = <
+                                units = <"mm[Hg]">
+                                magnitude = <|0.0..<1000.0|>
+                                precision = <|0|>
+                            >
+                        >
+                    >
+                }
+            }
+		}
+	}	
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Blood pressure">
+					description = <"blood pressure">
+				>	
+                ["at0001"] = <
+					text = <"Systolic">
+					description = <"Systolic pressure">
+				>
+                ["at0002"] = <
+					text = <"Diastolic">
+					description = <"Diastolic pressure">
+				>	                
+			>
+            
+		>
+	>

@@ -1,0 +1,40 @@
+﻿archetype (adl_version=1.4)
+	openEHR-EHR-SECTION.ad_hoc_heading.v1
+
+concept
+	[at0000]	-- Heading
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"ad hoc heading">
+			use = <"">
+			misuse = <"">
+		>
+	>
+	lifecycle_state = <"0">
+	other_contributors = <>
+	other_details = <
+		["references"] = <"">
+		["MD5-CAM-1.0.1"] = <"6211E600D00A019604319C19B8303CF6">
+	>
+
+definition
+	SECTION[at0000] matches {*}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Heading">
+					description = <"An ad-hoc heading">
+				>
+			>
+		>
+	>

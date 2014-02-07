@@ -1,0 +1,110 @@
+archetype
+	adl-test-ITEM_TREE.test_tree.v1
+
+concept 
+	[at0000]	--  empty definition test
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	ItemTree[at0000] matches {
+		items cardinality matches {0..*; unordered} matches { 
+			ELEMENT[at0001] occurrences matches {0..1} matches { -- sample
+				value matches {
+					DV_TEXT matches {*}
+				}
+			}
+			CLUSTER[at0005] occurrences matches {0..1} matches {
+				items cardinality matches {0..*; unordered} matches {
+					ELEMENT[at0002] matches {	-- total cholesterol
+	                    value matches {
+							C_DV_QUANTITY <
+								property = <[openehr::128]>
+								list = <									
+									["1"] = <
+										units = <"yr">
+										magnitude = <|0.0..200.0|>
+										precision = <|2|>
+									>								
+								>	
+							>
+						}
+                    }
+                    ELEMENT[at0003] matches {	-- LDL cholesterol     
+	                    value matches {
+							C_DV_QUANTITY <
+								property = <[openehr::128]>
+								list = <									
+									["1"] = <
+										units = <"yr">
+										magnitude = <|0.0..200.0|>
+										precision = <|2|>
+									>								
+								>	
+							>
+						}
+                    }
+                    ELEMENT[at0004] matches {	-- HDL cholesterol     
+	                    value matches {
+							C_DV_QUANTITY <
+								property = <[openehr::128]>
+								list = <									
+									["1"] = <
+										units = <"yr">
+										magnitude = <|0.0..200.0|>
+										precision = <|2|>
+									>								
+								>	
+							>
+						}
+                    }
+				}				
+			}
+			ELEMENT[at0006] occurrences matches {0..1} matches { -- commnet
+				value matches {
+					DV_TEXT matches {*}
+				}
+			}
+			allow_archetype CLUSTER[at1025] occurrences matches {0..1} matches {	-- test cluster slot
+				include
+					archetype_id/value matches {/adl-test-CLUSTER.test_cluster.v1/}
+			}
+		}
+	}
+
+ontology 
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+				["at0001"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+				["at0002"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+				["at0003"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+				["at0004"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+				["at0005"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+				["at0006"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
+	>

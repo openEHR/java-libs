@@ -1,0 +1,15 @@
+(ELEMENT) <
+    name = <
+    	value = <"systolic">
+    >
+    archetype_node_id = <"at0004">    
+    null_flavour = <
+        defining_code = <
+            terminology_id = (TERMINOLOGY_ID) <
+                value = <"openehr">
+            >
+            code_string = <"271">          
+        >
+        value = <"no information">
+    >
+>

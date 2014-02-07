@@ -1,0 +1,16 @@
+language
+	original_language = <[ISO_639-1::en]> 
+	translations = <
+        ["de"] = <
+        	language = <[ISO_639-1::de]>
+            author = <
+            	["email"] = <"harry@something.somewhere.co.uk">            	
+            	["name"] = <"Harry Potter">            	
+            >
+            accreditation = <"British Medical Translator id 00400595">
+            other_details = <
+            	["reviewer 1"] = <"Ron Weasley">
+            	["reviewer 2"] = <"Rubeus Hagrid">            	
+            >
+        >
+    >	

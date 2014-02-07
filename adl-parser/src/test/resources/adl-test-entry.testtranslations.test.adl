@@ -1,0 +1,83 @@
+archetype
+	adl-test-ENTRY.testtranslations.draft
+concept
+	[at0000]	--  empty definition test
+
+language
+	original_language = <[ISO_639-1::en]> 
+	translations = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			author = <
+				["organisation"] = <"test organisation">
+				["name"] = <"test author">
+			>
+			accreditation = <"test Accreditation!">
+		>
+		["es"] = <
+			language = <[ISO_639-1::es]>
+			author = <
+				["name"] = <"Another test author">
+			> -- no organisation or accreditation here to test that the parser won't take the old accreditation/organisation!
+		>
+	>
+definition
+	ENTRY[at0000] matches {*}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", "de", "es">
+
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
+		["de"] = <
+			items = <
+				["at0000"] = <
+					text = <"sehr minimal">; 
+					description = <"sehr minimal">
+				>
+			>
+		>
+		["es"] = <
+			items = <
+				["at0000"] = <
+					text = <"mesta minimal">; 
+					description = <"mesta minimal">
+				>
+			>
+		>
+	>
+	
+	constraint_definitions = <
+		["en"] = <
+			items = <
+				["ac0001"] = <
+					text = <"most minimal">; 
+					description = <"most minimal">
+				>
+			>
+		>
+		["de"] = <
+			items = <
+				["ac0001"] = <
+					text = <"sehr minimal">; 
+					description = <"sehr minimal">
+				>
+			>
+		>
+		["es"] = <
+			items = <
+				["ac0001"] = <
+					text = <"mesta minimal">; 
+					description = <"mesta minimal">
+				>
+			>
+		>
+	>
