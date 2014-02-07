@@ -98,4 +98,17 @@
 		<module>rm-skeleton</module>
         <module>archetype-validator</module>
 	</modules>
+  <distributionManagement>
+    <repository>
+      <id>repo.cambio.se_releases</id>
+      <name>releases</name>
+      <url>http://repo.cambio.se/content/repositories/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>repo.cambio.se_snapshots</id>
+      <name>snapshots</name>
+      <url>http://repo.cambio.se/content/repositories/snapshots</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+  </distributionManagement>      
 </project>
