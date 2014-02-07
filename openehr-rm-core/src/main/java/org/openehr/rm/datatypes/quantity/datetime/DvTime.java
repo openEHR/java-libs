@@ -14,9 +14,7 @@
  */
 package org.openehr.rm.datatypes.quantity.datetime;
 
-import java.util.List;
-import java.util.TimeZone;
-
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 import org.openehr.rm.Attribute;
@@ -25,7 +23,9 @@ import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.datatypes.quantity.DvOrdered;
 import org.openehr.rm.datatypes.quantity.ReferenceRange;
 import org.openehr.rm.datatypes.text.CodePhrase;
-import org.apache.commons.lang.builder.EqualsBuilder;
+
+import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Represents an absolute point in time from an origin usually
@@ -325,6 +325,14 @@ public class DvTime extends DvTemporal<DvTime> {
 	DateTime parseStringValue(String value) {
 		return DvDateTimeParser.parseTime(value);
 	}
+
+    /**
+     * Parses a string value and return a DvTime
+     */
+    public DvTime parse(String value) {
+        DateTime time = DvDateTimeParser.parseTime(value);
+        return new DvTime(time.getHourOfDay(), time.getMinuteOfHour(), time.getSecondOfMinute(), time.getMillisOfSecond(), time.getZone().toTimeZone());
+    }
 
 	void setBooleans(String value) {
 		int ele = DvDateTimeParser.analyseTimeString(value);

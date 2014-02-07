@@ -202,6 +202,14 @@ public class DvDate extends DvTemporal<DvDate> {
 		return DvDateTimeParser.parseDate(value);
 	}
 
+    /**
+     * Parses a string value and return a DvDate
+     */
+    public DvDate parse(String value) {
+        DateTime date = DvDateTimeParser.parseDate(value);
+        return new DvDate(date.getYear(), date.getMonthOfYear(), date.getDayOfMonth());
+    }
+
 	@Override
 	public Double getMagnitude() {
 		// TODO

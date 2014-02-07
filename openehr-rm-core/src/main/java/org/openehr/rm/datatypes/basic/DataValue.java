@@ -14,22 +14,20 @@
  */
 package org.openehr.rm.datatypes.basic;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehr.rm.RMObject;
-import org.openehr.rm.datatypes.quantity.DvCount;
-import org.openehr.rm.datatypes.quantity.DvOrdinal;
-import org.openehr.rm.datatypes.quantity.DvProportion;
-import org.openehr.rm.datatypes.quantity.DvQuantity;
-import org.openehr.rm.datatypes.quantity.ProportionKind;
+import org.openehr.rm.datatypes.quantity.*;
+import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
+import org.openehr.rm.datatypes.quantity.datetime.DvTime;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Abstract parent type of all concrete data value types
@@ -119,6 +117,8 @@ public abstract class DataValue extends RMObject {
     	dataValueMap.put(ReferenceModelName.CODE_PHRASE.getName(), new CodePhrase("tm","cd"));
     	dataValueMap.put(ReferenceModelName.DV_ORDINAL.getName(), new DvOrdinal(0,"text","tm","cd"));
     	dataValueMap.put(ReferenceModelName.DV_DATE_TIME.getName(), new DvDateTime("2001-02-11T00"));
+        dataValueMap.put(ReferenceModelName.DV_DATE.getName(), new DvDate("2001-02-11"));
+        dataValueMap.put(ReferenceModelName.DV__TIME.getName(), new DvTime("00:00:00.000Z"));
     	dataValueMap.put(ReferenceModelName.DV_DURATION.getName(), new DvDuration("P10D"));
     }  
     

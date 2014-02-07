@@ -11,7 +11,9 @@ public enum ReferenceModelName {
 	DV_ORDINAL("DV_ORDINAL"),
 	CODE_PHRASE("CODE_PHRASE"),
 	DV_DATE_TIME("DV_DATE_TIME"),
-	DV_DURATION("DV_DURATION");
+    DV_DATE("DV_DATE"),
+    DV__TIME("DV_TIME"),
+    DV_DURATION("DV_DURATION");
 	
 	
 	private final String name;
