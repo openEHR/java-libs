@@ -3,7 +3,7 @@
 	<groupId>openehr</groupId>
 	<artifactId>ref_impl_java</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.7</version>
+	<version>1.0.8-SNAPSHOT</version>
 	<name>The openEHR Reference Java Implementation</name>
 	<organization>
 		<name>The openEHR Foundation</name>
@@ -12,9 +12,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<scm>
-        <connection>scm:svn:https://subversion.cambio.se/PC/Standard/CDS/openehr/java-libs/tags/ref_impl_java-1.0.7</connection>
-		<developerConnection>scm:svn:https://subversion.cambio.se/PC/Standard/CDS/openehr/java-libs/tags/ref_impl_java-1.0.7</developerConnection>
-		<url>https://subversion.cambio.se/PC/Standard/CDS/openehr/java-libs/tags/ref_impl_java-1.0.7</url>
+        <connection>scm:svn:https://subversion.cambio.se/PC/Standard/CDS/openehr/java-libs/trunk/</connection>
+		<developerConnection>scm:svn:https://subversion.cambio.se/PC/Standard/CDS/openehr/java-libs/trunk/</developerConnection>
+		<url>https://subversion.cambio.se/PC/Standard/CDS/openehr/java-libs/trunk/</url>
 	</scm>
 	<build>
 		<plugins>

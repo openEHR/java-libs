@@ -4,7 +4,7 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.7</version>
+		<version>1.0.8-SNAPSHOT</version>
 	</parent>
 	<artifactId>openehr-ap</artifactId>
 	<packaging>jar</packaging>
