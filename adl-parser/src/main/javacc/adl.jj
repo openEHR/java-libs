@@ -2316,23 +2316,29 @@ ConstraintRef constraint_ref_obj(String path, CAttribute parent) :
   }
 }
 
-ArchetypeInternalRef archetype_internal_ref(String path, CAttribute
-parent) :
+ArchetypeInternalRef archetype_internal_ref(String path, CAttribute parent) :
 {
-    String type;
-    Interval<Integer> occurrences = new Interval<Integer>(1, 1);
-    String target;
-    String nodeID = null;
+  String type;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  String target;
+  String nodeID = null;
 }
 {
-    <SYM_USE_NODE> type = type_identifier()
-     [ nodeID = constraint_ref() ]
-     [ occurrences = c_occurrences() ]
-    target = absolute_path()
-    {
-        return new ArchetypeInternalRef(path, type, occurrences, nodeID, parent,
-                target);
-    }
+  <SYM_USE_NODE> type = type_identifier()
+   [ nodeID = constraint_ref() ]
+   [ occurrences = c_occurrences() ]  
+  {
+  	if(path == null) {
+      path = "/";
+    } else {
+      path += (nodeID == null ? "" : "[" + nodeID + "]");
+    }    
+  }
+  target = absolute_path()  
+  { 
+  	return new ArchetypeInternalRef(path, type, occurrences, nodeID, parent, 
+  			target); 
+  }
 }
 
 ArchetypeSlot archetype_slot(String path, CAttribute parent) :
