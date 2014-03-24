@@ -12,9 +12,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<scm>
-        <connection>scm:svn:https://subversion.cambio.se/PC/Standard/CDS/openehr/java-libs/trunk/</connection>
-		<developerConnection>scm:svn:https://subversion.cambio.se/PC/Standard/CDS/openehr/java-libs/trunk/</developerConnection>
-		<url>https://subversion.cambio.se/PC/Standard/CDS/openehr/java-libs/trunk/</url>
+        <connection>scm:svn:https://subversion.cambio.se/PC/Standard/CDS/openehr/ref_impl_java/trunk/</connection>
+		<developerConnection>scm:svn:https://subversion.cambio.se/PC/Standard/CDS/openehr/ref_impl_java/trunk/</developerConnection>
+		<url>https://subversion.cambio.se/PC/Standard/CDS/openehr/ref_impl_java/trunk/</url>
 	</scm>
 	<build>
 		<plugins>
