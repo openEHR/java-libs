@@ -16,7 +16,7 @@
  * QuantityTest
  *
  * @author Rong Chen
- * @version 1.0 
+ * @version 1.0
  */
 package org.openehr.rm.datatypes.quantity;
 
@@ -103,36 +103,43 @@ public class DvQuantityTest extends TestCase {
         expected = "78.500";
         assertEquals(expected, q.toString());
     }
-    
+
     public void testParseQuantityWithPrecision() throws Exception {
     	String value = "78.500,kg";
     	DvQuantity expected = new DvQuantity("kg", 78.5, 3);
     	DvQuantity q = expected.parse(value);
     	assertEquals("failed to parse quantity with precision", expected, q);
     }
-    
+
     public void testParseQuantityWithoutPrecision() throws Exception {
     	String value = "78,kg";
     	DvQuantity expected = new DvQuantity("kg", 78, 0);
     	DvQuantity q = expected.parse(value);
-    	assertEquals("failed to parse quantity with precision", expected, q);
+    	assertEquals("failed to parse quantity without precision", expected, q);
     }
-    
+
+    public void testParseQuantityWithoutUnit() throws Exception {
+      String value = "78";
+      DvQuantity expected = new DvQuantity(78);
+      DataValue q = expected.parse(value);
+      assertEquals("failed to parse quantity without unit", expected, q);
+    }
+
     public void testDataValueParseQuantityWithoutPrecision() throws Exception {
     	String value = "78,kg";
     	DvQuantity expected = new DvQuantity("kg", 78, 0);
     	DataValue q = DataValue.parseValue("DV_QUANTITY," + value);
-    	assertEquals("failed to parse quantity with precision", expected, q);
+    	assertEquals("failed to parse quantity as DataValue without precision", expected, q);
     }
-    
+
     public void testCreateWithUnlimitedPrecision() {
-    	try { 
+    	try {
     		new DvQuantity("mg", 12, -1, ms);
     	} catch(Exception e) {
     		fail("failed to create DvQuantity with unlimited precision");
     	}
     }
-    
+
     private MeasurementService ms = new TestMeasurementService();
 }
 /*
