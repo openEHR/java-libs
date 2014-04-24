@@ -1,3 +1,6 @@
+1.0.8 
+
+(CDS) SWE-4332 Correctly parse DvQuantity values with no unit. It was possible to serialise DvQuantity values into a format that caused InvalidArgumentException when parsed.
 (CDS) CDS-254 Updated SCM paths to match renamed folder.
 (CDS) CDS-254 Renaming foldre to match artifact.
 
