@@ -645,9 +645,13 @@ public class XMLSerializer {
                 children.getChildren().add(list);
                 printString("value", String.valueOf(ordinal.getValue()), list);
                 Element symbol = new Element("symbol", defaultNamespace);
-                list.getChildren().add(symbol);
+                list.getChildren().add(symbol); 
+
+                printString("value", null, symbol); // this is the mandatory(!) value of a DV_CODED_TEXT symbol.
                 Element definingCode = new Element("defining_code", defaultNamespace);
                 symbol.getChildren().add(definingCode);
+
+                                
                 printCodePhrase(ordinal.getSymbol(), definingCode);
             }
         }        
