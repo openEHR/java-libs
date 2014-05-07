@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jdom.Document;
@@ -55,6 +56,7 @@ import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
+import org.openehr.rm.common.resource.TranslationDetails;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.identification.ArchetypeID;
@@ -150,7 +152,7 @@ public class XMLSerializer {
 
         printDescription(archetype.getDescription(), out);
 
-        //TODO printTranslations
+        printTranslations(archetype.getTranslations(), out);
 
         Element archetypeId = new Element("archetype_id", defaultNamespace);
         out.getChildren().add(archetypeId);
@@ -160,7 +162,7 @@ public class XMLSerializer {
         if (archetype.getUid() != null) {
             printString("uid", archetype.getUid().toString(), out);
         }
-            
+
         printString("concept", archetype.getConcept(), out);
 
         final ArchetypeID parentID = archetype.getParentArchetypeId();
@@ -170,6 +172,33 @@ public class XMLSerializer {
             printString("value", parentID.toString(), parentArchetypeId);
         }
 
+    }
+
+    private void printTranslations(Map<String, TranslationDetails> translations, Element out) {
+        if (translations == null) {
+            return;
+        }
+
+        for (Entry<String, TranslationDetails> translation : translations.entrySet()) {
+            // Note that each translation is serialised to one translations (note the plural!) element
+            Element translationsElement = new Element("translations", defaultNamespace);
+            out.getChildren().add(translationsElement);
+            
+            Element languageElement = new Element("language", defaultNamespace);
+            translationsElement.getChildren().add(languageElement);            
+            
+            printCodePhrase(translation.getValue().getLanguage(), languageElement);
+
+            TranslationDetails transDetails = translation.getValue();
+            printStringMap("author", transDetails.getAuthor(), translationsElement);
+
+
+            if (transDetails.getAccreditation() != null) {
+                printString("accreditation", transDetails.getAccreditation(), translationsElement);
+            }
+
+            printStringMap("other_details", transDetails.getOtherDetails(), translationsElement);
+        }  
     }
 
     protected void printDescription(ResourceDescription description, Element out) {
