@@ -634,27 +634,37 @@ public class XMLSerializer {
         children.setAttribute("type", "C_DV_ORDINAL", xsiNamespace);
 
         printCObjectElements(cordinal, children);
+        if (cordinal.hasAssumedValue()) {
+            Ordinal assumedValue = cordinal.getAssumedValue();
+            Element assumedValueEl = new Element("assumed_value", defaultNamespace);
+            children.getChildren().add(assumedValueEl);
+            printString("value", String.valueOf(assumedValue.getValue()), assumedValueEl);
+            printSymbolOfOrdinal(assumedValue, assumedValueEl);
 
+        }
         if(cordinal.getList() != null) {
             final Set<Ordinal> ordinals = cordinal.getList();
 
             Ordinal ordinal;
             for (Iterator<Ordinal> it = ordinals.iterator(); it.hasNext();) {
-                ordinal = it.next();
+                ordinal = it.next(); 
                 Element list = new Element("list", defaultNamespace);
                 children.getChildren().add(list);
                 printString("value", String.valueOf(ordinal.getValue()), list);
-                Element symbol = new Element("symbol", defaultNamespace);
-                list.getChildren().add(symbol); 
-
-                printString("value", null, symbol); // this is the mandatory(!) value of a DV_CODED_TEXT symbol.
-                Element definingCode = new Element("defining_code", defaultNamespace);
-                symbol.getChildren().add(definingCode);
-
-                                
-                printCodePhrase(ordinal.getSymbol(), definingCode);
+                printSymbolOfOrdinal(ordinal, list);
             }
         }        
+    }
+
+    private void printSymbolOfOrdinal(Ordinal ordinal, Element list) {
+        Element symbol = new Element("symbol", defaultNamespace);
+        list.getChildren().add(symbol); 
+
+        printString("value", null, symbol); // this is the mandatory(!) value of a DV_CODED_TEXT symbol.
+        Element definingCode = new Element("defining_code", defaultNamespace);
+        symbol.getChildren().add(definingCode);
+                        
+        printCodePhrase(ordinal.getSymbol(), definingCode);
     }
 
     protected void printCDvQuantity(CDvQuantity cquantity, Element out) {
@@ -684,6 +694,11 @@ public class XMLSerializer {
                     Element magnitude = new Element("magnitude", defaultNamespace);
                     lst.getChildren().add(magnitude);
                     printInterval(item.getMagnitude(), magnitude);
+                }
+                if(item.getPrecision() != null) {
+                    Element precision = new Element("precision", defaultNamespace);
+                    lst.getChildren().add(precision);
+                    printInterval(item.getPrecision(), precision);
                 }
 
                 printString("units", item.getUnits(), lst);
@@ -918,14 +933,17 @@ public class XMLSerializer {
 
     protected void printCDuration(CDuration cduration, Element out) {
 
-        if (cduration.getValue() != null) {
-            printString("pattern", cduration.getValue().toString(), out);
+        if (cduration.getPattern() != null) {
+            printString("pattern", cduration.getPattern().toString(), out);
         } 
-
-        if(cduration.getInterval() != null) {
-            Element range = new Element("range", defaultNamespace);
-            out.getChildren().add(range);
+        Element range = new Element("range", defaultNamespace);
+        out.getChildren().add(range);
+        if(cduration.getInterval() != null) {        
             printInterval(cduration.getInterval(), range);
+        } else {
+            // these should be supplied even for a null range
+            printString("lower_unbounded", "true", range);
+            printString("upper_unbounded", "true", range);
         }
 
         if(cduration.hasAssumedValue()) {
@@ -1047,7 +1065,8 @@ public class XMLSerializer {
          */
         for( int i = 0; i < str.length(); i++ ) {
             char c = str.charAt( i );
-            if(! Character.isUpperCase(prevChar) && 
+            if(! Character.isUpperCase(prevChar) &&  
+                    !(prevChar=='<') && // without this DV_INTERVAL<DV_QUANTITY>    -->    DV_INTERVAL<_DV_QUANTITY> 
                     !(prevChar=='_') && 
                     Character.isLetter(c) &&
                     Character.isUpperCase(c))
