@@ -118,7 +118,7 @@ public class RMInspector {
 				Integer.class,
 				String.class,
 				Boolean.class,
-				Double.class,
+				Double.class, // Also the corresponding class for the Real assumed type. 
 
 				// common classes
 				PartySelf.class,
@@ -196,6 +196,9 @@ public class RMInspector {
 		upperCaseMap = new HashMap<String, Class>();
 		for (Class klass : classes) {
 			String name = klass.getSimpleName();
+			if (klass.getSimpleName().equalsIgnoreCase("Double")) {
+                name = "Real"; // For the assumed type Double the corresponding rm type name is Real, not Double 
+            }
 			typeMap.put(name, klass);
 			upperCaseMap.put(name.toUpperCase(), klass);
 		}
