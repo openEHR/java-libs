@@ -31,12 +31,14 @@ public class DvDurationTest extends TestCase {
     /**
      * The fixture set up called before every test method.
      */
+    @Override
     protected void setUp() throws Exception {
     }
 
     /**
      * The fixture clean up called after every test method.
      */
+    @Override
     protected void tearDown() throws Exception {
     }
 
@@ -209,11 +211,14 @@ public class DvDurationTest extends TestCase {
         
         String[] strValues = {
            "P10DT20H30M40.66S", "P16M45DT60M2S", "P13M56W33DT2H6M5.0S",
-           "-P1M2WT9H", "PT0S", "P11M23W10DT9H5M0,123S", "P"
+           "-P1M2WT9H", "PT0S", "P11M23W10DT9H5M0,123S", "P", "P0Y"
         };
         for(int i = 0; i < strValues.length; i++) {
             DvDuration d = new DvDuration(strValues[i]);
             assertEquals(strValues[i], d.toString());
+            
+            DvDuration fromInstanceD = DvDuration.getInstance(strValues[i]); // This may be slightly different therefore we should test this as well.
+            assertEquals(strValues[i], fromInstanceD.toString());
         }
     }
 

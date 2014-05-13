@@ -57,6 +57,7 @@ import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
 import org.openehr.rm.common.resource.TranslationDetails;
+import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.identification.ArchetypeID;
@@ -183,10 +184,10 @@ public class XMLSerializer {
             // Note that each translation is serialised to one translations (note the plural!) element
             Element translationsElement = new Element("translations", defaultNamespace);
             out.getChildren().add(translationsElement);
-            
+
             Element languageElement = new Element("language", defaultNamespace);
             translationsElement.getChildren().add(languageElement);            
-            
+
             printCodePhrase(translation.getValue().getLanguage(), languageElement);
 
             TranslationDetails transDetails = translation.getValue();
@@ -611,6 +612,14 @@ public class XMLSerializer {
 
         printCObjectElements(ccp, children);
 
+        if (ccp.hasAssumedValue()) {
+            CodePhrase assumedValue=  ccp.getAssumedValue();
+
+            Element assumedValueEl = new Element("assumed_value", defaultNamespace);
+            children.getChildren().add(assumedValueEl);
+            printCodePhrase(assumedValue, assumedValueEl);
+        }
+
         if(ccp.getTerminologyId() != null) {
             Element terminologyId = new Element("terminology_id", defaultNamespace);
             children.getChildren().add(terminologyId);            
@@ -663,7 +672,7 @@ public class XMLSerializer {
         printString("value", null, symbol); // this is the mandatory(!) value of a DV_CODED_TEXT symbol.
         Element definingCode = new Element("defining_code", defaultNamespace);
         symbol.getChildren().add(definingCode);
-                        
+
         printCodePhrase(ordinal.getSymbol(), definingCode);
     }
 
@@ -675,6 +684,23 @@ public class XMLSerializer {
 
         printCObjectElements(cquantity, children);
 
+        if (cquantity.hasAssumedValue()) {
+
+            Element assumedValueEl = new Element("assumed_value", defaultNamespace);
+            children.getChildren().add(assumedValueEl);
+
+            DvQuantity assumedValue = cquantity.getAssumedValue();
+
+            if(assumedValue.getMagnitude() != null) {
+                printString("magnitude", ""+assumedValue.getMagnitude(), assumedValueEl);
+            }
+            if(assumedValue.getUnits() != null) {             
+                printString("units", assumedValue.getUnits(), assumedValueEl);
+            }
+            printString("precision", ""+assumedValue.getPrecision(), assumedValueEl);
+
+          
+        }
 
         CodePhrase property = cquantity.getProperty();
         if (property != null) {
@@ -690,20 +716,24 @@ public class XMLSerializer {
                 Element lst = new Element("list", defaultNamespace);
                 children.getChildren().add(lst);
 
-                if(item.getMagnitude() != null) {
-                    Element magnitude = new Element("magnitude", defaultNamespace);
-                    lst.getChildren().add(magnitude);
-                    printInterval(item.getMagnitude(), magnitude);
-                }
-                if(item.getPrecision() != null) {
-                    Element precision = new Element("precision", defaultNamespace);
-                    lst.getChildren().add(precision);
-                    printInterval(item.getPrecision(), precision);
-                }
-
-                printString("units", item.getUnits(), lst);
+                printMagnitudePrecisionUnitsOfCDVQuantityItem(item, lst);
             }
         }
+    }
+
+    private void printMagnitudePrecisionUnitsOfCDVQuantityItem(CDvQuantityItem item, Element lst) {
+        if(item.getMagnitude() != null) {
+            Element magnitude = new Element("magnitude", defaultNamespace);
+            lst.getChildren().add(magnitude);
+            printInterval(item.getMagnitude(), magnitude);
+        }
+        if(item.getPrecision() != null) {
+            Element precision = new Element("precision", defaultNamespace);
+            lst.getChildren().add(precision);
+            printInterval(item.getPrecision(), precision);
+        }
+
+        printString("units", item.getUnits(), lst);
     }
 
     protected void printOntology(ArchetypeOntology ontology, String concept, Element out) {
