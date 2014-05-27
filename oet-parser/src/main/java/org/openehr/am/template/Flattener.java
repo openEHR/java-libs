@@ -1586,7 +1586,7 @@ public class Flattener {
 			throws FlatteningException {
 		TEMPLATE template = templateMap.get(templateId);
 		if(template == null) {
-			throw new FlatteningException("Unknown template: " + templateId);
+			throw new UnknownTemplateException(templateId);
 		}
 		return template;
 	}
@@ -1596,7 +1596,7 @@ public class Flattener {
 		
 		Archetype archetype = archetypeMap.get(archetypeId);
 		if(archetype == null) {
-			throw new FlatteningException("Unknown archetype: " + archetypeId);			
+			throw new UnknownArchetypeException(archetypeId);
 		}
 		// make a deep copy
 		archetype = archetype.copy();
