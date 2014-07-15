@@ -46,10 +46,10 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
      *                                  or links not null and empty
      */
     protected Locatable(UIDBasedID uid, String archetypeNodeId, DvText name,
-                        Archetyped archetypeDetails,FeederAudit feederAudit, 
-                        Set<Link> links, Pathable parent) {    	
+                        Archetyped archetypeDetails,FeederAudit feederAudit,
+                        Set<Link> links, Pathable parent) {
     	super(parent);
-    	
+
         if (archetypeNodeId == null) {
             throw new IllegalArgumentException("null archetypeNodeId");
         }
@@ -105,7 +105,7 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     public String getOriginalArchetypeNodeId() {
         return originalArchetypeNodeId;
     }
-    
+
     public String setOriginalArchetypeNodeId(String originalArchetypeNodeId) {
         return this.originalArchetypeNodeId = originalArchetypeNodeId;
     }
@@ -152,8 +152,8 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
      */
     public Set<Link> getLinks() {
         return links;
-    }    
-	
+    }
+
     /**
      * True if this node is the root of an archetyped structure
      *
@@ -172,32 +172,32 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
      */
     public abstract String pathOfItem(Pathable item);
 
-    
+
 
     /*
      * Simple fix doesn't take care of "/" inside predicates
      * e.g. data/events[at0006 and name/value='any event']
      * 
      * OG - 2010-03-15: Added fix that seems to solve this problem.
-     */ 
+     */
     public static List<String> dividePathIntoSegments(String path) {
     	List<String> segments = new ArrayList<String>();
     	StringTokenizer tokens = new StringTokenizer(path, "/");
     	while(tokens.hasMoreTokens()) {
     		String next = tokens.nextToken();
     		if (next.matches(".+\\[.+[^\\]]$")) {
-    			do { 
+    			do {
     				next = next + "/" + tokens.nextToken();
-    			} while (!next.matches(".*]$"));    			
+    			} while (!next.matches(".*]$"));
     		}
     		segments.add(next);
     	}
     	return segments;
     }
-    
+
     /*
      * generic path evaluation covers all rmClass
-     */ 
+     */
     private Object genericPathEvaluator(String path, Object object) {
     	if(path == null || object == null) {
     		return null;
@@ -205,44 +205,50 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     	List<String> segments = dividePathIntoSegments(path);
     	return evaluatePathSegment(segments, object);
     }
-    
+
     /*
      * Evaluate recursively the path segments 
      */
-    private Object evaluatePathSegment(List<String> pathSegments, 
+    private Object evaluatePathSegment(List<String> pathSegments,
     		Object object) {
     	if(pathSegments.isEmpty()) {
     		return object;
     	}
     	String pathSegment = pathSegments.remove(0);
     	Object value =  null;
-    	
+
     	int index = pathSegment.indexOf("[");
     	String expression = null;
     	String attributeName = null;
-    	
+
     	// has [....] predicate expression
     	if(index > 0) {
-    		
+
     		assert(pathSegment.indexOf("]") > index);
-    		
-    		attributeName = pathSegment.substring(0, index);   
-    		expression = pathSegment.substring(index + 1, 
-    				pathSegment.indexOf("]")); 
+
+    		attributeName = pathSegment.substring(0, index);
+    		expression = pathSegment.substring(index + 1,
+    				pathSegment.indexOf("]"));
     	} else {
     		attributeName = pathSegment;
     	}
-    		
+
     	value = getAttributeValue(object, attributeName);
     	if(expression != null && value != null ) {
     		value = processPredicate(expression, value);
-    	}    	
+    	}
+        if(expression == null && value instanceof ArrayList && !pathSegments.isEmpty()) {
+            ArrayList arrayList = ((ArrayList)value);
+            if (!arrayList.isEmpty()){
+                value = arrayList.get(0);
+            }
+        }
     	if(value != null) {
     		return evaluatePathSegment(pathSegments, value);
     	}
     	return null;
     }
-    
+
     public String toCamelCase(String underscoreSeparated) {
     	if( ! underscoreSeparated.contains("_")) {
     		return underscoreSeparated;
@@ -259,22 +265,22 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
 			}
 		}
 		return buf.toString();
-	}	
-    
+	}
+
     public String toFirstUpperCaseCamelCase(String name) {
     	name = toCamelCase(name);
-    	return name.substring(0, 1).toUpperCase() 
+    	return name.substring(0, 1).toUpperCase()
 		+ name.substring(1);
     }
-    
+
     /**
      * Processes the predicate expression on given object
      * 1. if the object is a container, select the _first_ matching one
      * 2. only return the object if itself meets the predicate
-     * 
+     *
      * only shortcut expressions for at0000 and name are supported
      * for example: [at0001, 'node name']
-     * 
+     *
      * @param expression
      * @param value
      * @return null if there is no match
@@ -284,7 +290,7 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     	String archetypeNodeId = null;
     	expression = expression.trim();
     	int index;
-    	
+
     	// shortcut syntax, [at0001, 'standing']
     	if(expression.contains(",")
     			// avoid [at0001 and/value='status, 2nd']
@@ -293,14 +299,14 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     		archetypeNodeId = expression.substring(0, index).trim();
     		name = expression.substring(expression.indexOf("'") + 1,
     				expression.lastIndexOf("'"));
-    		
+
     	// [at0006 and name/value='any event']
     	// [at0006 AND name/value='any event']
     	} else if(expression.contains(" AND ")
     			|| expression.contains(" and ")) {
-    		
+
     		// OG - 20100401: Fixed bug where the name contained 'AND' or 'and',
-    		// i.e. 'MEDICINSK BEHANDLING'. 
+    		// i.e. 'MEDICINSK BEHANDLING'.
     		if(expression.contains(" AND ")) {
     			index = expression.indexOf(" AND ");
     		} else {
@@ -308,17 +314,17 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     		}
     		archetypeNodeId = expression.substring(0, index).trim();
     		name = expression.substring(expression.indexOf("'") + 1,
-    				expression.lastIndexOf("'"));    		
-    	// just name, ['standing']	
+    				expression.lastIndexOf("'"));
+    	// just name, ['standing']
     	} else if (expression.startsWith("'") && expression.endsWith("'")) {
     		name = expression.substring(1, expression.length() - 1);
-    	
+
     	// archetyped root node id or at-coded node
-    	// [at0006] or [openEHR-EHR-OBSERVATION.laboratory-lipids.v1]	
+    	// [at0006] or [openEHR-EHR-OBSERVATION.laboratory-lipids.v1]
     	} else {
     		archetypeNodeId = expression;
     	}
-    	
+
     	Iterable collection = null;
     	if(object instanceof Iterable) {
     		collection = (Iterable) object;
@@ -327,24 +333,24 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     		list.add(object);
     		collection = list;
     	}
-    	
+
     	for(Object item : collection) {
     		if(item instanceof Locatable) {
     			Locatable locatable = (Locatable) item;
-        		if(archetypeNodeId != null 
+        		if(archetypeNodeId != null
         				&& !locatable.archetypeNodeId.equals(archetypeNodeId)) {
         			continue;
         		}
         		if(name != null && !locatable.name.getValue().equals(name)) {
         			continue;
-        		}        		
+        		}
     		}
     		// TODO other non-locatable predicates!!
     		// e.g. time > 10:20:15
     		return item; // found a match!
     	}
     	return null;
-    }    
+    }
 
     /**
      * The item at a path that is relative to this item.
@@ -362,7 +368,7 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
         }
         return genericPathEvaluator(path, this);
     }
-    
+
     /*
      * Retrieves the value of named attribute of given object
      */
@@ -371,7 +377,7 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     	Object value = null;
     	Method getter = null;
     	String getterName = "get" + toFirstUpperCaseCamelCase(attribute);
-    	
+
     	try {
 			getter = rmClass.getMethod(getterName, null);
 			value = getter.invoke(obj, null);
@@ -382,7 +388,7 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
 		}
 		return value;
     }
-    
+
     /*
      * Sets the value of named attribute of given object
      */
@@ -395,14 +401,14 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
 			if(setter == null) {
 				throw new IllegalArgumentException("unkown setter method: " + setterName + " for rmClass=" + rmClass);
 			}
-			setter.invoke(obj, value);			
-		
-    	} catch(Exception e) {		
+			setter.invoke(obj, value);
+
+    	} catch(Exception e) {
     		// TODO log as kernel warning
-			e.printStackTrace();			
+			e.printStackTrace();
 		}
     }
-    
+
     private Method getMethodByName(Class klass, String method) {
     	Method[] methods = klass.getMethods();
     	for(Method m : methods) {
@@ -412,8 +418,8 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     	}
     	return null;
     }
-    
-    
+
+
     public void set(String path, Object value) {
     	int i = path.lastIndexOf("/");
     	if(i < 0 || i == path.length()) {
@@ -425,17 +431,17 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     		objPath = path.substring(0, i);
     	}
     	String attributeName = path.substring(i + 1);
-    	
+
     	Object obj = itemAtPath(objPath);
     	if(obj == null) {
     		throw new IllegalArgumentException("Item not found on path: " + path);
     	}
     	setAttributeValue(obj, attributeName, value);
     }
-    
+
     /**
      * Computes the path of parent object
-     * 
+     *
      * @param path
      * @return
      */
@@ -455,12 +461,12 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     	}
     	return buf.toString();
     }
-    
-    public void addChild(String path, Object child) {    	
+
+    public void addChild(String path, Object child) {
     	List<String> list = dividePathIntoSegments(path);
     	int pathLevel = list.size();
     	String objPath = PATH_SEPARATOR;
-    	
+
     	if(pathLevel > 1) {
     		StringBuffer buf = new StringBuffer();
     		for(int j = 0; j < pathLevel - 1; j++) {
@@ -468,27 +474,27 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     			buf.append(list.get(j));
     		}
     		objPath = buf.toString();
-    	}    	
-    	
+    	}
+
     	Object obj = itemAtPath(objPath);
     	if(obj == null) {
     		throw new IllegalArgumentException("Item not found on path: " + path);
-    	}   	
-    	
+    	}
+
     	String attributeName = list.get(list.size() - 1);
-    	Object attributeValue = getAttributeValue(obj, attributeName);    	
+    	Object attributeValue = getAttributeValue(obj, attributeName);
     	if(attributeValue == null) {
     		attributeValue = new ArrayList();
     	}
-    	if(attributeValue instanceof List) {    		
+    	if(attributeValue instanceof List) {
     		List parent = (List) attributeValue;
-    		parent.add(child);    		
+    		parent.add(child);
     	} else {
     		throw new IllegalArgumentException(
     				"non-container parent attribute on path: " + path);
-    	}    	    	
+    	}
     }
-    
+
     public void removeChild(String path) {
     	int i = path.lastIndexOf(PATH_SEPARATOR);
     	if(i < 0 || i == path.length()) {
@@ -506,37 +512,37 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     		}
     		objPath = buf.toString();
     	}
-    	
+
     	Object obj = itemAtPath(objPath);
     	if(obj == null) {
     		throw new IllegalArgumentException("Item not found on path: " + path);
     	}
-    	
+
     	Object child = itemAtPath(path);
     	if(child == null) {
     		throw new IllegalArgumentException("Unknown child on path: " + path);
     	}
-		
-    	String attributeName = list.get(list.size() - 1);    	
+
+    	String attributeName = list.get(list.size() - 1);
     	int predicateIndex = attributeName.indexOf("[");
     	if(predicateIndex > 0) {
     		attributeName = attributeName.substring(0, predicateIndex);
     	}
     	Object attributeValue = getAttributeValue(obj, attributeName);
-    	
+
     	if(attributeValue == null) {
     		throw new IllegalArgumentException(
     				"parent attribute not found on path: " + path);
     	}
     	if(attributeValue instanceof List) {
-    		
+
     		List parent = (List) attributeValue;
     		parent.remove(child);
-    		
+
     	} else {
     		throw new IllegalArgumentException(
     				"non-container parent attribute on path: " + path);
-    	}    	
+    	}
 	}
 
 	/**
@@ -572,7 +578,7 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!( o instanceof Locatable )) return false;
-        
+
         final Locatable loc = (Locatable) o;
         return new EqualsBuilder()
         		.appendSuper(super.equals(o))
@@ -620,13 +626,13 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     public String nodeName() {
         return "[" + getName().getValue() + "]";
     }
-    
+
     public String atNode() {
     		return ROOT + "[" + getArchetypeNodeId() + "]";
     }
-    
+
     // POJO start
-    protected Locatable() {    	
+    protected Locatable() {
     }
 
     protected void setUid(UIDBasedID uid) {
@@ -651,7 +657,7 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
 
     protected void setLinks(Set<Link> links) {
         this.links = links;
-    }    
+    }
     // POJO end
 
     /**
@@ -659,7 +665,7 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
      */
     public static final String PATH_SEPARATOR = "/";
     public static final String ROOT = PATH_SEPARATOR;
-    
+
     /* fields */
     private UIDBasedID uid;
     private String archetypeNodeId;
@@ -668,7 +674,7 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     private Archetyped archetypeDetails;
     private FeederAudit feederAudit;
     private Set<Link> links;
-   
+
 }
 
 /*
