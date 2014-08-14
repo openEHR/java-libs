@@ -39,7 +39,6 @@
             <groupId>openehr</groupId>
             <artifactId>measure-serv</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
 			<groupId>commons-lang</groupId>
