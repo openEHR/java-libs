@@ -1,12 +1,7 @@
 package org.openehr.rm.binding;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.*;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.jxpath.JXPathContext;
-import org.openehr.am.archetype.Archetype;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.composition.Composition;
@@ -19,6 +14,13 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.measurement.MeasurementService;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class XPathTest extends DADLBindingTestBase {
 	
@@ -562,12 +564,10 @@ public class XPathTest extends DADLBindingTestBase {
 			return new TestMeasurementService();
 		}
 
-		@Override
 		public boolean unitsComparable(String units1, String units2) {
 		    return true;
 		}
 
-		@Override
 		public int compare(String units1, Double value1, String units2,
 			Double value2) {
 		    return 0;
