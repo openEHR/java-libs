@@ -521,8 +521,7 @@ public class RMInspector {
 		log.debug("Checking: "+ cattr.getRmAttributeName() +"; "+ parentObj.getRmTypeName() +" at "+cattr.path() +" parent path: "+parentObj.path());
 		
 		if (cattr.getRmAttributeName().equals("items")) {
-			if (parentObj.getRmTypeName().equalsIgnoreCase("CLUSTER") ||
-					parentObj.getRmTypeName().equalsIgnoreCase("SECTION")) {
+			if (parentObj.getRmTypeName().equalsIgnoreCase("CLUSTER") ) { // Note: For SECTION items, the intention seems to be cardinality = 0 
 				log.debug("--> >=1");				
 				return new Interval<Integer>(1,null);				
 			}
