@@ -118,7 +118,7 @@ public class RMInspector {
 				Integer.class,
 				String.class,
 				Boolean.class,
-				Double.class,
+				Double.class, // Also the corresponding class for the Real assumed type. 
 
 				// common classes
 				PartySelf.class,
@@ -196,6 +196,9 @@ public class RMInspector {
 		upperCaseMap = new HashMap<String, Class>();
 		for (Class klass : classes) {
 			String name = klass.getSimpleName();
+			if (klass.getSimpleName().equalsIgnoreCase("Double")) {
+                name = "Real"; // For the assumed type Double the corresponding rm type name is Real, not Double 
+            }
 			typeMap.put(name, klass);
 			upperCaseMap.put(name.toUpperCase(), klass);
 		}
@@ -521,8 +524,7 @@ public class RMInspector {
 		log.debug("Checking: "+ cattr.getRmAttributeName() +"; "+ parentObj.getRmTypeName() +" at "+cattr.path() +" parent path: "+parentObj.path());
 		
 		if (cattr.getRmAttributeName().equals("items")) {
-			if (parentObj.getRmTypeName().equalsIgnoreCase("CLUSTER") ||
-					parentObj.getRmTypeName().equalsIgnoreCase("SECTION")) {
+			if (parentObj.getRmTypeName().equalsIgnoreCase("CLUSTER") ) { // Note: For SECTION items, the intention seems to be cardinality = 0 
 				log.debug("--> >=1");				
 				return new Interval<Integer>(1,null);				
 			}

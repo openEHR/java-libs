@@ -6,6 +6,18 @@ import org.openehr.am.archetype.constraintmodel.ArchetypeInternalRef;
 import org.openehr.rm.support.basic.Interval;
 
 public class ArchetypeInternalRefTest extends ParserTestBase {
+	public void testParseCheckIfNodeIsIsTakenIntoAccount() throws Exception{
+		ADLParser parser = new ADLParser(loadFromClasspath(
+				"adl-test-entry.archetype_internal_ref.test.adl"));
+		Archetype archetype = parser.parse();
+		assertNotNull(archetype);
+		
+		assertNotNull(archetype.node("/attribute3"));
+		assertNotNull(archetype.node("/attribute4[at0005]"));
+		assertNotNull(archetype.node("/attribute4[at0006]"));
+	}
+
+
 	public void testParseInternalRefWithOverwrittingOccurrences() 
 			throws Exception {
 		ADLParser parser = new ADLParser(loadFromClasspath(

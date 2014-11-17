@@ -22,7 +22,6 @@ import org.joda.time.Instant;
 import org.joda.time.MutablePeriod;
 import org.joda.time.Period;
 import org.joda.time.format.ISOPeriodFormat;
-import org.joda.time.format.PeriodFormatter;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.datatypes.basic.ReferenceModelName;
@@ -187,6 +186,8 @@ public final class DvDuration extends DvAmount<DvDuration> {
 					+ value);
 		}
 		Period period = null;
+		final String suppliedValue = value;
+		
 		if (value.startsWith("-")) {
 			value = value.substring(1, value.length()); // skip '-'
 			period = ISOPeriodFormat.standard().parsePeriod(value);
@@ -195,7 +196,9 @@ public final class DvDuration extends DvAmount<DvDuration> {
 			period = ISOPeriodFormat.standard().parsePeriod(value);
 		}
 
-		return new DvDuration(null, null, null, 0.0, false, null, period);
+		DvDuration duration = new DvDuration(null, null, null, 0.0, false, null, period);
+		duration.setValue(suppliedValue); // If we don't set this we cannot reconstruct the original constraint if 0s or 0h etc if all the same period, but the constraint in the ADL / XML serialisation still looks different
+		return duration;
 	}
 
 	@Override

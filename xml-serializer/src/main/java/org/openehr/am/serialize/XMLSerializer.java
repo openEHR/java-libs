@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jdom.Document;
@@ -55,6 +56,8 @@ import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
+import org.openehr.rm.common.resource.TranslationDetails;
+import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.identification.ArchetypeID;
@@ -150,7 +153,7 @@ public class XMLSerializer {
 
         printDescription(archetype.getDescription(), out);
 
-        //TODO printTranslations
+        printTranslations(archetype.getTranslations(), out);
 
         Element archetypeId = new Element("archetype_id", defaultNamespace);
         out.getChildren().add(archetypeId);
@@ -160,7 +163,7 @@ public class XMLSerializer {
         if (archetype.getUid() != null) {
             printString("uid", archetype.getUid().toString(), out);
         }
-            
+
         printString("concept", archetype.getConcept(), out);
 
         final ArchetypeID parentID = archetype.getParentArchetypeId();
@@ -170,6 +173,33 @@ public class XMLSerializer {
             printString("value", parentID.toString(), parentArchetypeId);
         }
 
+    }
+
+    private void printTranslations(Map<String, TranslationDetails> translations, Element out) {
+        if (translations == null) {
+            return;
+        }
+
+        for (Entry<String, TranslationDetails> translation : translations.entrySet()) {
+            // Note that each translation is serialised to one translations (note the plural!) element
+            Element translationsElement = new Element("translations", defaultNamespace);
+            out.getChildren().add(translationsElement);
+
+            Element languageElement = new Element("language", defaultNamespace);
+            translationsElement.getChildren().add(languageElement);            
+
+            printCodePhrase(translation.getValue().getLanguage(), languageElement);
+
+            TranslationDetails transDetails = translation.getValue();
+            printStringMap("author", transDetails.getAuthor(), translationsElement);
+
+
+            if (transDetails.getAccreditation() != null) {
+                printString("accreditation", transDetails.getAccreditation(), translationsElement);
+            }
+
+            printStringMap("other_details", transDetails.getOtherDetails(), translationsElement);
+        }  
     }
 
     protected void printDescription(ResourceDescription description, Element out) {
@@ -582,6 +612,14 @@ public class XMLSerializer {
 
         printCObjectElements(ccp, children);
 
+        if (ccp.hasAssumedValue()) {
+            CodePhrase assumedValue=  ccp.getAssumedValue();
+
+            Element assumedValueEl = new Element("assumed_value", defaultNamespace);
+            children.getChildren().add(assumedValueEl);
+            printCodePhrase(assumedValue, assumedValueEl);
+        }
+
         if(ccp.getTerminologyId() != null) {
             Element terminologyId = new Element("terminology_id", defaultNamespace);
             children.getChildren().add(terminologyId);            
@@ -605,23 +643,37 @@ public class XMLSerializer {
         children.setAttribute("type", "C_DV_ORDINAL", xsiNamespace);
 
         printCObjectElements(cordinal, children);
+        if (cordinal.hasAssumedValue()) {
+            Ordinal assumedValue = cordinal.getAssumedValue();
+            Element assumedValueEl = new Element("assumed_value", defaultNamespace);
+            children.getChildren().add(assumedValueEl);
+            printString("value", String.valueOf(assumedValue.getValue()), assumedValueEl);
+            printSymbolOfOrdinal(assumedValue, assumedValueEl);
 
+        }
         if(cordinal.getList() != null) {
             final Set<Ordinal> ordinals = cordinal.getList();
 
             Ordinal ordinal;
             for (Iterator<Ordinal> it = ordinals.iterator(); it.hasNext();) {
-                ordinal = it.next();
+                ordinal = it.next(); 
                 Element list = new Element("list", defaultNamespace);
                 children.getChildren().add(list);
                 printString("value", String.valueOf(ordinal.getValue()), list);
-                Element symbol = new Element("symbol", defaultNamespace);
-                list.getChildren().add(symbol);
-                Element definingCode = new Element("defining_code", defaultNamespace);
-                symbol.getChildren().add(definingCode);
-                printCodePhrase(ordinal.getSymbol(), definingCode);
+                printSymbolOfOrdinal(ordinal, list);
             }
         }        
+    }
+
+    private void printSymbolOfOrdinal(Ordinal ordinal, Element list) {
+        Element symbol = new Element("symbol", defaultNamespace);
+        list.getChildren().add(symbol); 
+
+        printString("value", null, symbol); // this is the mandatory(!) value of a DV_CODED_TEXT symbol.
+        Element definingCode = new Element("defining_code", defaultNamespace);
+        symbol.getChildren().add(definingCode);
+
+        printCodePhrase(ordinal.getSymbol(), definingCode);
     }
 
     protected void printCDvQuantity(CDvQuantity cquantity, Element out) {
@@ -632,6 +684,23 @@ public class XMLSerializer {
 
         printCObjectElements(cquantity, children);
 
+        if (cquantity.hasAssumedValue()) {
+
+            Element assumedValueEl = new Element("assumed_value", defaultNamespace);
+            children.getChildren().add(assumedValueEl);
+
+            DvQuantity assumedValue = cquantity.getAssumedValue();
+
+            if(assumedValue.getMagnitude() != null) {
+                printString("magnitude", ""+assumedValue.getMagnitude(), assumedValueEl);
+            }
+            if(assumedValue.getUnits() != null) {             
+                printString("units", assumedValue.getUnits(), assumedValueEl);
+            }
+            printString("precision", ""+assumedValue.getPrecision(), assumedValueEl);
+
+          
+        }
 
         CodePhrase property = cquantity.getProperty();
         if (property != null) {
@@ -647,15 +716,24 @@ public class XMLSerializer {
                 Element lst = new Element("list", defaultNamespace);
                 children.getChildren().add(lst);
 
-                if(item.getMagnitude() != null) {
-                    Element magnitude = new Element("magnitude", defaultNamespace);
-                    lst.getChildren().add(magnitude);
-                    printInterval(item.getMagnitude(), magnitude);
-                }
-
-                printString("units", item.getUnits(), lst);
+                printMagnitudePrecisionUnitsOfCDVQuantityItem(item, lst);
             }
         }
+    }
+
+    private void printMagnitudePrecisionUnitsOfCDVQuantityItem(CDvQuantityItem item, Element lst) {
+        if(item.getMagnitude() != null) {
+            Element magnitude = new Element("magnitude", defaultNamespace);
+            lst.getChildren().add(magnitude);
+            printInterval(item.getMagnitude(), magnitude);
+        }
+        if(item.getPrecision() != null) {
+            Element precision = new Element("precision", defaultNamespace);
+            lst.getChildren().add(precision);
+            printInterval(item.getPrecision(), precision);
+        }
+
+        printString("units", item.getUnits(), lst);
     }
 
     protected void printOntology(ArchetypeOntology ontology, String concept, Element out) {
@@ -885,14 +963,17 @@ public class XMLSerializer {
 
     protected void printCDuration(CDuration cduration, Element out) {
 
-        if (cduration.getValue() != null) {
-            printString("pattern", cduration.getValue().toString(), out);
+        if (cduration.getPattern() != null) {
+            printString("pattern", cduration.getPattern().toString(), out);
         } 
-
-        if(cduration.getInterval() != null) {
-            Element range = new Element("range", defaultNamespace);
-            out.getChildren().add(range);
+        Element range = new Element("range", defaultNamespace);
+        out.getChildren().add(range);
+        if(cduration.getInterval() != null) {        
             printInterval(cduration.getInterval(), range);
+        } else {
+            // these should be supplied even for a null range
+            printString("lower_unbounded", "true", range);
+            printString("upper_unbounded", "true", range);
         }
 
         if(cduration.hasAssumedValue()) {
@@ -1014,7 +1095,8 @@ public class XMLSerializer {
          */
         for( int i = 0; i < str.length(); i++ ) {
             char c = str.charAt( i );
-            if(! Character.isUpperCase(prevChar) && 
+            if(! Character.isUpperCase(prevChar) &&  
+                    !(prevChar=='<') && // without this DV_INTERVAL<DV_QUANTITY>    -->    DV_INTERVAL<_DV_QUANTITY> 
                     !(prevChar=='_') && 
                     Character.isLetter(c) &&
                     Character.isUpperCase(c))
