@@ -21,7 +21,7 @@ package org.openehr.rm;
  * @version 1.0
  */
 public abstract class RMObject implements java.io.Serializable {
-    private static final long serialVersionUID = 1L;    
+    private static final long serialVersionUID = 1L;
 }
 
 /*

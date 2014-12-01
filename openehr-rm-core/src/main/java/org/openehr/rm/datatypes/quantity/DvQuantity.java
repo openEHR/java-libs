@@ -26,8 +26,6 @@ import org.openehr.rm.support.measurement.SimpleMeasurementService;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -39,6 +37,9 @@ import java.util.List;
  * @version 1.0
  */
 public class DvQuantity extends DvAmount<DvQuantity> {
+
+
+    private static final long serialVersionUID = 8334654589100981576L;
 
     /**
      * Constructs a Quantity by all components
@@ -347,6 +348,10 @@ public class DvQuantity extends DvAmount<DvQuantity> {
         this.magnitude = magnitude;
     }
 
+    public void setUnits(String units) {
+        this.units = units;
+    }
+
     public void setPrecision(int precision) {
         this.precision = precision;
     }
@@ -355,7 +360,7 @@ public class DvQuantity extends DvAmount<DvQuantity> {
     /* fields */
     private double magnitude; // add final
     private int precision;    // add final
-    private final String units;
+    private String units;
     private MeasurementService measurementService; // add final
 
     public static final char DECIMAL_SEPARATOR = '.';
