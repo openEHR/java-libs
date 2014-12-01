@@ -27,7 +27,7 @@ import org.openehr.rm.FullConstructor;
 public final class DvBoolean extends DataValue {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -5827013068177253709L;
 
@@ -59,9 +59,11 @@ public final class DvBoolean extends DataValue {
         return value;
     }
 
+
+
     public DvBoolean parse(String value) throws IllegalArgumentException {
-		return valueOf(value);		
-	}
+        return valueOf(value);
+    }
 
     /**
      * Returns an <code>Boolean</code> object holding the value of
@@ -123,18 +125,18 @@ public final class DvBoolean extends DataValue {
     }
 
     public String toString() {
-    	return value ? Boolean.TRUE.toString() : Boolean.FALSE.toString(); 
+        return value ? Boolean.TRUE.toString() : Boolean.FALSE.toString();
     }
-    
+
     // POJO start
     private DvBoolean() {
     }
 
-    private void setValue(boolean value) {
+    public void setValue(boolean value) {
         this.value = value;
     }
     // POJO end
-    
+
     /* fields */
     private boolean value;
 
@@ -148,15 +150,15 @@ public final class DvBoolean extends DataValue {
      */
     public static final DvBoolean FALSE = new DvBoolean(false);
 
-	@Override
-	public String getReferenceModelName() {
-		return ReferenceModelName.DV_BOOLEAN.getName();
-	}
+    @Override
+    public String getReferenceModelName() {
+        return ReferenceModelName.DV_BOOLEAN.getName();
+    }
 
-	@Override
-	public String serialise() {
-		return getReferenceModelName() + "," + toString();
-	}
+    @Override
+    public String serialise() {
+        return getReferenceModelName() + "," + toString();
+    }
 }
 
 /*
