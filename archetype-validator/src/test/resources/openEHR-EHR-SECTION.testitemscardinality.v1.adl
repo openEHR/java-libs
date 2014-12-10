@@ -1,0 +1,51 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-SECTION.testitemscardinality.v1
+
+concept
+	[at0000]	-- Test items cardinality
+language
+	original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"">
+	>
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"test">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"Initial">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"128F104BCE4BCD635A070BF1185FB184">
+	>
+
+definition
+	SECTION[at0000] matches {	-- Test items cardinality
+		items cardinality matches {0..*; unordered} matches {
+			allow_archetype SECTION[at0001] occurrences matches {0..*} matches {	-- SECTION
+				include
+					archetype_id/value matches {/.*/}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"Test items cardinality">
+					description = <"test">
+				>
+				["at0001"] = <
+					text = <"SECTION">
+					description = <"*">
+				>
+			>
+		>
+	>
