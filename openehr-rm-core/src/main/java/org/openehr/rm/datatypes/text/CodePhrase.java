@@ -33,6 +33,8 @@ import org.openehr.rm.datatypes.basic.ReferenceModelName;
  */
 public final class CodePhrase extends DataValue {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Constructs a CodePhrase by terminologyId and codeString
      *
