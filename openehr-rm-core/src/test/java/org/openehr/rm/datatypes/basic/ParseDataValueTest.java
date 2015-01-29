@@ -1,5 +1,6 @@
 package org.openehr.rm.datatypes.basic;
 
+import org.openehr.rm.datatypes.encapsulated.DvParsable;
 import org.openehr.rm.datatypes.quantity.DvCount;
 import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
@@ -86,6 +87,12 @@ public class ParseDataValueTest extends TestCase {
 		DvCodedText coded = new DvCodedText("coded text", "snomed", "123456");
 		String s = coded.serialise();
 		assertEquals("DvCodedText round trip failed", coded, DataValue.parseValue(s));
+	}
+
+	public void testParsableRoundTrip() {
+		DvParsable parsable = new DvParsable("text", "txt");
+		String s = parsable.serialise();
+		assertEquals("DvCodedText round trip failed", parsable, DataValue.parseValue(s));
 	}
 
 	// test instance

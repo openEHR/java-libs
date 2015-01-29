@@ -17,6 +17,7 @@ package org.openehr.rm.datatypes.basic;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openehr.rm.RMObject;
+import org.openehr.rm.datatypes.encapsulated.DvParsable;
 import org.openehr.rm.datatypes.quantity.*;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
@@ -119,8 +120,9 @@ public abstract class DataValue extends RMObject {
     	dataValueMap.put(ReferenceModelName.DV_DATE_TIME.getName(), new DvDateTime("2001-02-11T00"));
         dataValueMap.put(ReferenceModelName.DV_DATE.getName(), new DvDate("2001-02-11"));
         dataValueMap.put(ReferenceModelName.DV__TIME.getName(), new DvTime("00:00:00.000Z"));
-    	dataValueMap.put(ReferenceModelName.DV_DURATION.getName(), new DvDuration("P10D"));
-    }  
+		dataValueMap.put(ReferenceModelName.DV_DURATION.getName(), new DvDuration("P10D"));
+		dataValueMap.put(ReferenceModelName.DV_PARSABLE.getName(), new DvParsable("text", "txt"));
+    }
     
 }
 

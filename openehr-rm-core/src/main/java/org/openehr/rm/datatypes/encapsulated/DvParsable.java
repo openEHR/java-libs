@@ -19,6 +19,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
+import org.openehr.rm.datatypes.basic.DataValue;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.terminology.TerminologyService;
 
@@ -153,10 +154,18 @@ public final class DvParsable extends DvEncapsulated {
 		return "DV_PARSABLE";
 	}
 
+    public DataValue parse(String value) {
+        if (!value.contains(",")){
+            throw new IllegalArgumentException("failed to parse parsable["+ value + "]");
+        }
+        String parsableValue = StringUtils.substringBeforeLast(value, ",").trim();
+        String formalism = StringUtils.substringAfterLast(value, ",").trim();
+        return new DvParsable(parsableValue, formalism);
+    }
+
 	@Override
 	public String serialise() {
-		// TODO Auto-generated method stub
-		return null;
+		return getReferenceModelName() + "," + value + "," + formalism;
 	}	
 }
 

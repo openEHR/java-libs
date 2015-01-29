@@ -13,8 +13,8 @@ public enum ReferenceModelName {
 	DV_DATE_TIME("DV_DATE_TIME"),
     DV_DATE("DV_DATE"),
     DV__TIME("DV_TIME"),
-    DV_DURATION("DV_DURATION");
-	
+    DV_DURATION("DV_DURATION"),
+	DV_PARSABLE("DV_PARSABLE");
 	
 	private final String name;
 	
