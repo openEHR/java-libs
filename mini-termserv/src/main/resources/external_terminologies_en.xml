@@ -389,6 +389,9 @@
 		<code value="ur" Description="Urdu"/>
 		<code value="ve" Description="Venda"/>
 		<code value="vi" Description="Vietnamese"/>
+		<code value="cy" Description="Welsh"/>
+		<code value="cy-gb" Description="Welsh (United Kingdom)"/>
+		<code value="cy-ar" Description="Welsh (Argentina)"/>
 		<code value="xh" Description="Xhosa"/>
 		<code value="ji" Description="Yiddish"/>
 		<code value="zu" Description="Zulu"/>
