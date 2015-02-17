@@ -62,6 +62,11 @@ public class ArchetypeOntology  implements Serializable{
         termDefinitionMap = new HashMap<String, Map<String, ArchetypeTerm>>();
         constraintDefinitionMap = new HashMap<String, Map<String, ArchetypeTerm>>();
         loadDefs(termDefinitionMap, termDefinitionsList);
+
+        // make sure the languages list is consistent
+        languages.clear();
+        languages.addAll(termDefinitionMap.keySet());
+
         loadDefs(constraintDefinitionMap, constDefinitionsList);
     }
 

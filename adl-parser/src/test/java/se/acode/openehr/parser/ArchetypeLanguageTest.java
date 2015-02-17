@@ -131,4 +131,13 @@ public class ArchetypeLanguageTest extends ParserTestBase {
 		Map<String, String> map = td.getAuthor();
 		assertNotNull("author null", map);	
 	}
+
+    public void testParseMultipleLanguageTerms() throws Exception {
+        ADLParser parser = new ADLParser(loadFromClasspath(
+                "adl-test-entry.archetype_language.test2.adl"));
+        Archetype archetype = parser.parse();
+        assertNotNull(archetype);
+
+        assertEquals(2, archetype.getOntology().getLanguages().size());
+    }
 }
