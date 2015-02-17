@@ -53,7 +53,6 @@ public class ArchetypeOntology  implements Serializable{
                              List<OntologyBinding> termBindingList,
                              List<OntologyBinding> constraintBindingList) {
         this.primaryLanguage = primaryLanguage;
-        this.languages = languages;
         this.terminologies = terminologies;
         this.termDefinitionsList = termDefinitionsList;
         this.constraintDefinitionsList = constDefinitionsList;
@@ -66,10 +65,8 @@ public class ArchetypeOntology  implements Serializable{
         loadDefs(termDefinitionMap, termDefinitionsList);
 
         // make sure the languages list is consistent
-        if (this.languages != null) {
-            this.languages.clear();
-            this.languages.addAll(termDefinitionMap.keySet());
-        }
+        this.languages = new ArrayList<String>();
+        this.languages.addAll(termDefinitionMap.keySet());
 
         loadDefs(constraintDefinitionMap, constDefinitionsList);
     }
@@ -97,7 +94,7 @@ public class ArchetypeOntology  implements Serializable{
     }
 
     public List<String> getLanguages() {
-        return languages != null ? new ArrayList<String>(languages) : null;
+        return languages;
     }
 
     public List<String> getTerminologies() {
