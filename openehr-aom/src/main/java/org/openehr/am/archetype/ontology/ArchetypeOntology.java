@@ -35,6 +35,7 @@ public class ArchetypeOntology  implements Serializable{
 
     /**
      * Creates an ArchetypeOntology
+     * //TODO Can we add param validation? Any param can be null and it makes things brittle.
      *
      * @param primaryLanguage
      * @param languages
@@ -96,7 +97,7 @@ public class ArchetypeOntology  implements Serializable{
     }
 
     public List<String> getLanguages() {
-        return new ArrayList<String>(languages);
+        return languages != null ? new ArrayList<String>(languages) : null;
     }
 
     public List<String> getTerminologies() {
