@@ -20,6 +20,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +96,7 @@ public class ArchetypeOntology  implements Serializable{
     }
 
     public List<String> getLanguages() {
-        return languages;
+        return new ArrayList<String>(languages);
     }
 
     public List<String> getTerminologies() {
