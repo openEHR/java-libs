@@ -88,7 +88,7 @@ public class OntologyTest extends SerializerTestBase {
 			new ArrayList<OntologyBinding>();
 		constraintBindingList.add(ontologyBind);
 
-		ArchetypeOntology ontology = new ArchetypeOntology("en", null,
+		ArchetypeOntology ontology = new ArchetypeOntology("en",
 				terminologies, termDefinitionsList, constraintDefinitionsList,
 				termBindingList, constraintBindingList);
 		clean();
