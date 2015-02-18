@@ -59,8 +59,6 @@ public class OntologyTest extends SerializerTestBase {
 			new ArrayList<OntologyDefinitions>();
 		constraintDefinitionsList.add(definitions);
 
-		List<String> languages = new ArrayList<String>();
-		languages.add("en");
 		List<String> terminologies = new ArrayList<String>();
 		terminologies.add("local");
 
@@ -90,7 +88,7 @@ public class OntologyTest extends SerializerTestBase {
 			new ArrayList<OntologyBinding>();
 		constraintBindingList.add(ontologyBind);
 
-		ArchetypeOntology ontology = new ArchetypeOntology("en", languages,
+		ArchetypeOntology ontology = new ArchetypeOntology("en",
 				terminologies, termDefinitionsList, constraintDefinitionsList,
 				termBindingList, constraintBindingList);
 		clean();

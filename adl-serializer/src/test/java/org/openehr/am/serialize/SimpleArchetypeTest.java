@@ -57,13 +57,12 @@ public class SimpleArchetypeTest extends SerializerTestBase {
 		termDefinitionsList.add(definitions);
 
 		List<OntologyDefinitions> constraintDefinitionsList = null;
-		List<String> languages = new ArrayList<String>();
-		languages.add("en");
+
 		List<String> terminologies = null;
 		List<OntologyBinding> termBindingList = null;
 		List<OntologyBinding> constraintBindingList = null;
 
-		ArchetypeOntology ontology = new ArchetypeOntology("en", languages,
+		ArchetypeOntology ontology = new ArchetypeOntology("en",
 				terminologies, termDefinitionsList, constraintDefinitionsList,
 				termBindingList, constraintBindingList);
 

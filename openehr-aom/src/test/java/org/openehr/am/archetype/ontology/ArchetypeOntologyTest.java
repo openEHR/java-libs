@@ -42,7 +42,7 @@ public class ArchetypeOntologyTest extends TestCase {
 		items.add(item0002);
 		constDefinitionsList.add(new OntologyDefinitions("sv", items));
 		
-		ontology = new ArchetypeOntology(primaryLanguage, languages,
+		ontology = new ArchetypeOntology(primaryLanguage,
 				terminologies, termDefinitionsList, constDefinitionsList, null, null);
 	}
 	

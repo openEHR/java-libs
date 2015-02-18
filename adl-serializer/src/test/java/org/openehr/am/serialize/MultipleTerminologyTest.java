@@ -47,8 +47,6 @@ public class MultipleTerminologyTest extends SerializerTestBase {
                 new ArrayList<OntologyDefinitions>();
         termDefinitionsList.add(definitions);
 
-        List<String> languages = new ArrayList<String>();
-        languages.add("en");
         List<String> terminologies = new ArrayList<String>();
         terminologies.add("SNOMED_CT");
         terminologies.add("ICD10");
@@ -86,7 +84,7 @@ public class MultipleTerminologyTest extends SerializerTestBase {
         ontologyBind = new OntologyBinding("ICD10",constraintBindList);
         constraintBindingList.add(ontologyBind);
         
-        ArchetypeOntology ontology = new ArchetypeOntology("en", languages,
+        ArchetypeOntology ontology = new ArchetypeOntology("en",
                 terminologies, termDefinitionsList, null, termBindingList, constraintBindingList);
         clean();
         outputter.printOntology(ontology, out);

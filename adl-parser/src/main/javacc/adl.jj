@@ -1007,7 +1007,6 @@ CComplexObject arch_definition() :
 ArchetypeOntology arch_ontology() :
 {
   String primaryLanguage = null;
-  List languages = null;
   List terminologies = null;
   List termDefinitionsList = new ArrayList();
   List constraintDefinitionsList = new ArrayList();
@@ -1023,7 +1022,7 @@ ArchetypeOntology arch_ontology() :
 {
   <SYM_ONTOLOGY>
   [primaryLanguage = primary_language()]
-  [languages = languages_available()]
+  [languages_available()]
   [ terminologies = terminologies_available() ]
 
   termDefinitionsList = term_definitions_list()
@@ -1044,7 +1043,7 @@ ArchetypeOntology arch_ontology() :
   )*
 
   {
-    return new ArchetypeOntology(primaryLanguage, languages, terminologies,
+    return new ArchetypeOntology(primaryLanguage, terminologies,
                                  termDefinitionsList, constraintDefinitionsList,
                                  termBindingList, constraintBindingList);
   }
