@@ -62,7 +62,7 @@ public class SimpleArchetypeTest extends SerializerTestBase {
 		List<OntologyBinding> termBindingList = null;
 		List<OntologyBinding> constraintBindingList = null;
 
-		ArchetypeOntology ontology = new ArchetypeOntology("en",
+		ArchetypeOntology ontology = new ArchetypeOntology("en", null,
 				terminologies, termDefinitionsList, constraintDefinitionsList,
 				termBindingList, constraintBindingList);
 

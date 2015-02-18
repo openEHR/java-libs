@@ -38,6 +38,7 @@ public class ArchetypeOntology  implements Serializable{
      * //TODO Can we add param validation? Any param can be null and it makes things brittle.
      *
      * @param primaryLanguage
+     * @param languages
      * @param terminologies
      * @param termDefinitionsList
      * @param constDefinitionsList
@@ -45,6 +46,7 @@ public class ArchetypeOntology  implements Serializable{
      * @param constraintBindingList
      */
     public ArchetypeOntology(String primaryLanguage,
+                             List<String> languages,
                              List<String> terminologies,
                              List<OntologyDefinitions> termDefinitionsList,
                              List<OntologyDefinitions> constDefinitionsList,

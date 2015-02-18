@@ -98,7 +98,7 @@ public class MultipleLanguageTest extends SerializerTestBase {
         definitions = new OntologyDefinitions("zh", items);
         constraintDefinitionsList.add(definitions);
 
-        ArchetypeOntology ontology = new ArchetypeOntology("en",
+        ArchetypeOntology ontology = new ArchetypeOntology("en", null,
                 null, termDefinitionsList, constraintDefinitionsList, 
                 null, null);
         
