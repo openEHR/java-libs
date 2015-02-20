@@ -357,7 +357,8 @@
 		<code value="sr" Description="Serbian (Latin)"/>
 		<code value="sk" Description="Slovak"/>
 		<code value="sl" Description="Slovenian"/>
-		<code value="sb" Description="Sorbian"/>
+		<code value="si" Description="Sinhala"/>
+		<code value="sb" Description="Serbian"/>
 		<code value="es" Description="Spanish (Spain ? Traditional)"/>
 		<code value="es-mx" Description="Spanish (Mexico)"/>
 		<code value="es" Description="Spanish (Spain ? Modern)"/>
