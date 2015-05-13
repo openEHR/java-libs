@@ -427,12 +427,7 @@ public class RMObjectBuilder {
 			ret = constructor.newInstance(valueArray);
 		} catch (Exception e) {
       
-			if (log.isDebugEnabled()) {
-				e.printStackTrace();
-			}
-
-			log.debug("failed in constructor.newInstance()", e);
-
+			
 			if (stringParsingTypes.contains(rmClassName)) {
 				throw new AttributeFormatException("wrong format for type "
 						+ rmClassName);
@@ -441,14 +436,16 @@ public class RMObjectBuilder {
 			throw new RMObjectBuildingException(
 					"failed to create new instance of  " + rmClassName
 							+ " with valueMap: " + toString(valueMap) + ", cause: "
-							+ e.getMessage());
+							+ e.getMessage(), e);
 		}
 		return (RMObject) ret;
 	}
 
 	private String toString(Map<String,Object> map) {
 		StringBuffer buf = new StringBuffer();
+		buf.append("\n");
 		for(String key : map.keySet()) {
+			buf.append("    ");
 			buf.append(key);
 			buf.append("=");
 			Object value = map.get(key);
@@ -459,8 +456,10 @@ public class RMObjectBuilder {
 			} else {
 				buf.append("null");
 			}
-			buf.append(", ");
-		}		
+			buf.append(",\n");
+		}
+		buf.deleteCharAt(buf.length()-1);
+		buf.deleteCharAt(buf.length()-1);
 		return buf.toString();
 	}
 	
