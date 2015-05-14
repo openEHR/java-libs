@@ -210,8 +210,9 @@ public class ResourceDescription implements Serializable{
 						.hashCode());
 		result = prime * result
 				+ ((otherDetails == null) ? 0 : otherDetails.hashCode());
+        /* this can cause infinite recursion and a stack overflow
 		result = prime * result
-				+ ((parentResource == null) ? 0 : parentResource.hashCode());
+				+ ((parentResource == null) ? 0 : parentResource.hashCode());*/
 		result = prime
 				* result
 				+ ((resourcePackageUri == null) ? 0 : resourcePackageUri
@@ -259,8 +260,9 @@ public class ResourceDescription implements Serializable{
 		if (parentResource == null) {
 			if (other.parentResource != null)
 				return false;
-		} else if (!parentResource.equals(other.parentResource))
-			return false;
+		} /* this can cause infinite recursion and a stack overflow
+		else if (!parentResource.equals(other.parentResource))
+			return false; */
 		if (resourcePackageUri == null) {
 			if (other.resourcePackageUri != null)
 				return false;
