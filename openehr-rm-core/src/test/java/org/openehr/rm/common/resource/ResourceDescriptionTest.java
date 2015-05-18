@@ -64,7 +64,14 @@ public class ResourceDescriptionTest extends ResourceTestBase {
                 TestTerminologyService.getInstance());
         rd = new ResourceDescription(hashMap("Sam Heard", "Dr. Sam Heard"),
                 null, "initial", details(en, purpose), null, null, ar);
-        
+
+        AuthoredResource ar2 = new AuthoredResourceImpl(orgLang, null, null, null, false,
+                TestTerminologyService.getInstance());
+        ResourceDescription rd2 = new ResourceDescription(hashMap("Sam Heard", "Dr. Sam Heard"),
+                null, "initial", details(en, purpose), null, null, ar2);
+        assertEquals(rd, rd2);
+
+        ar.toString();
     }
     
     public void testFails() {
@@ -102,7 +109,6 @@ public class ResourceDescriptionTest extends ResourceTestBase {
         }
     }    
 }
-
 /*
  *  ***** BEGIN LICENSE BLOCK *****
  *  Version: MPL 1.1/GPL 2.0/LGPL 2.1

@@ -23,6 +23,11 @@ package org.openehr.build;
 
 public class RMObjectBuildingException extends Exception {
 
+    public RMObjectBuildingException(String message, Throwable cause) {
+        super(message, cause);
+        this.errorType = ErrorType.UNKNOWN;
+    }
+
     public RMObjectBuildingException(String msg, ErrorType errorType) {
         super(msg);
         this.errorType = errorType;

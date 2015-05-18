@@ -79,14 +79,19 @@ public class XMLBinding {
 		}
 	}
 
+	public Object bindToXML(Object obj) throws XMLBindingException {
+		return bindToXML(obj, false);
+	}
+
 	/**
 	 * Binds data from reference model instance to XML binding classes
 	 *
 	 * @param obj
+	 * @param asDocument
 	 * @return
 	 * @throws XMLBindingException
 	 */
-	public Object bindToXML(Object obj) throws XMLBindingException {
+	public Object bindToXML(Object obj, boolean asDocument) throws XMLBindingException {
 		if(obj == null) {
 			return null;
 		}
@@ -94,34 +99,68 @@ public class XMLBinding {
 		Method[] methods = obj.getClass().getMethods();
 
 		try {
-			Class xmlClass = Class.forName(XML_BINDING_PACKAGE +
-					className.toUpperCase());
-
-			// debug code only
-			if(xmlClass.getClasses().length != 1) {
-				log.debug("XMLBinding: bindToXML(): xmlClass.getClass()=" + xmlClass.getClass());
-				log.debug("XMLBinding: bindToXML(): xmlClass.toString()=" + xmlClass.toString());
-				for(Class clazz : xmlClass.getClasses()) {
-                    log.debug("\t clazz.getClass()=" + clazz.getClass());
-                    log.debug("\t clazz.toString()=" + clazz.toString());
-                }
-			}
-
-			Class factoryClass = xmlClass.getClasses()[0];
-
-			// ES modification: Add xmlOptions containing openehr (default) and xsi namespaces
-						
-			// Method factoryMethod = factoryClass.getMethod(NEW_INSTANCE, null);
-			// Changed to pick the method with an XmlOptions parameter instead
-			Method factoryMethod = factoryClass.getMethod(NEW_INSTANCE, XmlOptions.class);
+			Class xmlClass = null;
+			Object xmlObj = null;
 			
-			// First prameter null because it's a static method, see:
-			// http://java.sun.com/docs/books/tutorial/reflect/member/methodInvocation.html
-			// Second parameter should be the parameter of XmlObject.Factory.newInstance(XmlOptions options) 
-			// see: http://xmlbeans.apache.org/docs/2.2.0/reference/org/apache/xmlbeans/XmlObject.Factory.html
-			//
-			// Previous code was: Object xmlObj = factoryMethod.invoke(null, null);
-			Object xmlObj = factoryMethod.invoke(null, xopt);
+			if (asDocument) {
+				// when serializing back to XML strings, XMLBeans needs a Document wrapper to be able to write a 
+				// proper root element. If it doesn't have one, it will output an <xml-fragment/>
+				Class factoryClass;
+				try {
+					factoryClass = Class.forName(XML_BINDING_PACKAGE +
+				 					className + "Document$Factory");
+				} catch (ClassNotFoundException e) {
+					factoryClass = Class.forName(XML_BINDING_PACKAGE +
+				 					className.toUpperCase() + "Document$Factory");
+				}
+
+				Method factoryMethod = factoryClass.getMethod(NEW_INSTANCE, XmlOptions.class);
+				Object documentObj = factoryMethod.invoke(null, xopt);
+				Class documentClass = documentObj.getClass();
+				Method[] documentMethods = documentClass.getMethods();
+				boolean found = false;
+				for (int i = 0; i < documentMethods.length; i++) {
+					Method documentMethod = documentMethods[i];
+					if (documentMethod.getName().startsWith("addNew")) {
+						xmlObj = documentMethod.invoke(documentObj);
+						xmlClass = xmlObj.getClass();
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					throw new XMLBindingException("Could not find XXXDocument.addNewXXX() method to invoke");
+				}
+			} else {
+				xmlClass = Class.forName(XML_BINDING_PACKAGE +
+								className.toUpperCase());
+
+				// debug code only
+				if(xmlClass.getClasses().length != 1) {
+					log.debug("XMLBinding: bindToXML(): xmlClass.getClass()=" + xmlClass.getClass());
+					log.debug("XMLBinding: bindToXML(): xmlClass.toString()=" + xmlClass.toString());
+					for(Class clazz : xmlClass.getClasses()) {
+						log.debug("\t clazz.getClass()=" + clazz.getClass());
+						log.debug("\t clazz.toString()=" + clazz.toString());
+					}
+				}
+
+				Class factoryClass = xmlClass.getClasses()[0];
+		
+				// ES modification: Add xmlOptions containing openehr (default) and xsi namespaces
+				
+				// Method factoryMethod = factoryClass.getMethod(NEW_INSTANCE, null);
+				// Changed to pick the method with an XmlOptions parameter instead
+				Method factoryMethod = factoryClass.getMethod(NEW_INSTANCE, XmlOptions.class);
+				
+				// First prameter null because it's a static method, see:
+				// http://java.sun.com/docs/books/tutorial/reflect/member/methodInvocation.html
+				// Second parameter should be the parameter of XmlObject.Factory.newInstance(XmlOptions options) 
+				// see: http://xmlbeans.apache.org/docs/2.2.0/reference/org/apache/xmlbeans/XmlObject.Factory.html
+				//
+				// Previous code was: Object xmlObj = factoryMethod.invoke(null, null);
+				xmlObj = factoryMethod.invoke(null, xopt);
+			}
 
 			Map<String, Class> attributes = builder.retrieveAttribute(className);
 			Set<String> attributeNames = attributes.keySet();
@@ -397,15 +436,8 @@ public class XMLBinding {
 
 		Object rmObj = null;
 
-		try {
+		rmObj = builder.construct(className, valueMap);
 
-			rmObj = builder.construct(className, valueMap);
-
-		} catch (RMObjectBuildingException e) {
-
-			log.warn(">>> FAILED to build instance of " + className
-					+ ", exception: " + e.getMessage());
-		}
 		return rmObj;
 	}
 
@@ -456,8 +488,7 @@ public class XMLBinding {
 		try {
 			builder = new RMObjectBuilder(values);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("failed to start XMLBinding...");
+			throw new RuntimeException("failed to start XMLBinding...", e);
 		}		
 	}
 
@@ -499,7 +530,7 @@ public class XMLBinding {
  * the Initial Developer are Copyright (C) 2003-2010 the Initial Developer. All
  * Rights Reserved.
  *
- * Contributor(s): Erik Sundvall
+ * Contributor(s): Erik Sundvall, Leo Simons
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
