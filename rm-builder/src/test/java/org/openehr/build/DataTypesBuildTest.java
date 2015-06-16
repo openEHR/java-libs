@@ -15,8 +15,6 @@
 
 package org.openehr.build;
 
-import java.util.*;
-
 import org.openehr.rm.RMObject;
 import org.openehr.rm.datatypes.basic.DvBoolean;
 import org.openehr.rm.datatypes.basic.DvState;
@@ -32,6 +30,11 @@ import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvParagraph;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.TerminologyID;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DataTypesBuildTest extends BuildTestBase {
 	
@@ -50,6 +53,21 @@ public class DataTypesBuildTest extends BuildTestBase {
         // false value
         values.clear();
         values.put("value", "false");
+        obj = builder.construct(type, values);
+        assertTrue(obj instanceof DvBoolean);
+        booleanObj = (DvBoolean) obj;
+        assertEquals("value", false, booleanObj.getValue());
+
+        // true value
+        values.put("value", true);
+        obj = builder.construct(type, values);
+        assertTrue(obj instanceof DvBoolean);
+        booleanObj = (DvBoolean) obj;
+        assertEquals("value", true, booleanObj.getValue());
+
+        // false value
+        values.clear();
+        values.put("value", false);
         obj = builder.construct(type, values);
         assertTrue(obj instanceof DvBoolean);
         booleanObj = (DvBoolean) obj;

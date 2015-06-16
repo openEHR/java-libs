@@ -36,7 +36,8 @@ public final class DvBoolean extends DataValue {
      *
      * @param value
      */
-    public DvBoolean(boolean value) {
+    @FullConstructor public DvBoolean(@Attribute (name = "value",
+            required = true) boolean value) {
         this.value = value;
     }
 
@@ -45,8 +46,7 @@ public final class DvBoolean extends DataValue {
      *
      * @param value
      */
-    @FullConstructor public DvBoolean(@Attribute (name = "value",
-            required = true) String value) {
+    public DvBoolean(String value) {
         this(Boolean.TRUE.toString().equals(value));
     }
 
