@@ -75,6 +75,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -728,7 +729,7 @@ public class RMObjectBuilder {
     private Map<String, Class> typeMap;
     private Map<String, Class> upperCaseMap;
     private static final Set<String> stringParsingTypes; // These should be rm_type_names not Java class names.
-    private final Map<Class, Constructor> constructorMap = new HashMap<Class, Constructor>();
+    private final Map<Class, Constructor> constructorMap = Collections.synchronizedMap(new HashMap<Class, Constructor>());
 
     static {
         // so far only types from quantity.datetime
