@@ -186,6 +186,60 @@ public final class Observation extends CareEntry {
     private History<? extends ItemStructure> data;
     private History<? extends ItemStructure> state;
     
+    @Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+
+		Observation other = (Observation) obj;
+		if (data == null) {
+			if (other.data != null) {
+				return false;
+			}
+		} else if (other.data == null) {
+			return false;
+		} else if (!data.equals(other.data)) {
+			return false;
+		}
+		if (state == null) {
+			if (other.state != null) {
+				return false;
+			}
+		} else if (other.state == null) {
+			return false;
+		} else if (!state.equals(other.state)) {
+			return false;
+		}
+		if (getProtocol() == null) {
+			if (other.getProtocol() != null) {
+				return false;
+			}
+		} else if (other.getProtocol() == null) {
+			return false;
+		} else if (!getProtocol().equals(other.getProtocol())) {
+			return false;
+		}
+		return true;
+	}
+    
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		result = prime * result
+				+ ((getProtocol() == null) ? 0 : getProtocol().hashCode());
+		return result;
+	}
+    
     /* static fields */
     public static final String DATA = "data";
     public static final String STATE = "state";	

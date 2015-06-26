@@ -21,10 +21,12 @@ import org.openehr.rm.datastructure.history.Event;
 import org.openehr.rm.datastructure.history.History;
 import org.openehr.rm.datastructure.history.PointEvent;
 import org.openehr.rm.datastructure.itemstructure.ItemList;
+import org.openehr.rm.datastructure.itemstructure.ItemSingle;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
+import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.composition.CompositionTestBase;
@@ -220,6 +222,148 @@ public class ObservationTest extends CompositionTestBase {
     	assertEquals("unexpected resutl for path: " + path, 
     			observation.getProtocol(), value);
     }
+    
+    public void testEquals() throws Exception
+    {
+    	ItemStructure protocol = list("list protocol");
+        History<ItemStructure> data = event("data");
+        History<ItemStructure> state = event("state");
+        Archetyped arch = new Archetyped(
+                new ArchetypeID("openehr-ehr_rm-observation.physical_examination.v3"),
+                "1.1");
+        TerminologyService termServ = SimpleTerminologyService.getInstance();    	
+    	
+        CodePhrase language = new CodePhrase("ISO_639-1", "en");
+		CodePhrase encoding = new CodePhrase("IANA_character-sets", "UTF-8");
+		
+    	Observation observationOne = new Observation(null, "at000", text("observation"),
+                arch, null, null, null, language, encoding, subject(), 
+                provider(), null, null, protocol, null, data, state, termServ);
+    	
+    	Observation observationTwo = new Observation(null, "at000", text("observation"),
+                arch, null, null, null, language, encoding, subject(), 
+                provider(), null, null, protocol, null, data, state, termServ);
+    	
+    	assertTrue(observationOne.equals(observationTwo));
+    }
+    
+    public void testNotEquals() throws Exception
+    {
+    	ItemStructure protocol = list("list protocol");
+        History<ItemStructure> data = event("data");
+        History<ItemStructure> state = event("state");
+        Archetyped arch = new Archetyped(
+                new ArchetypeID("openehr-ehr_rm-observation.physical_examination.v3"),
+                "1.1");
+        TerminologyService termServ = SimpleTerminologyService.getInstance();    	
+    	
+        CodePhrase language = new CodePhrase("ISO_639-1", "en");
+		CodePhrase encoding = new CodePhrase("IANA_character-sets", "UTF-8");
+		
+    	Observation observationOne = new Observation(null, "at001", text("observation"),
+                arch, null, null, null, language, encoding, subject(), 
+                provider(), null, null, protocol, null, data, state, termServ);
+    	
+    	Observation observationTwo = new Observation(null, "at000", text("observation"),
+                arch, null, null, null, language, encoding, subject(), 
+                provider(), null, null, protocol, null, data, state, termServ);
+    	
+    	assertFalse(observationOne.equals(observationTwo));
+    }
+    
+    public void testNotEqualsProtocol() throws Exception
+    {
+    	ItemStructure protocol = list("list protocol");
+        History<ItemStructure> data = event("data");
+        History<ItemStructure> state = event("state");
+        Archetyped arch = new Archetyped(
+                new ArchetypeID("openehr-ehr_rm-observation.physical_examination.v3"),
+                "1.1");
+        TerminologyService termServ = SimpleTerminologyService.getInstance();    	
+    	
+        CodePhrase language = new CodePhrase("ISO_639-1", "en");
+		CodePhrase encoding = new CodePhrase("IANA_character-sets", "UTF-8");
+		
+    	Observation observationOne = new Observation(null, "at001", text("observation"),
+                arch, null, null, null, language, encoding, subject(), 
+                provider(), null, null, protocol, null, data, state, termServ);
+    	
+    	Observation observationTwo = new Observation(null, "at000", text("observation"),
+                arch, null, null, null, language, encoding, subject(), 
+                provider(), null, null, null, null, data, state, termServ);
+    	
+    	assertFalse(observationOne.equals(observationTwo));
+    }
+    
+    public void testNotEqualsState() throws Exception
+    {
+    	ItemStructure protocol = list("list protocol");
+        History<ItemStructure> data = event("data");
+        History<ItemStructure> state = event("state");
+        Archetyped arch = new Archetyped(
+                new ArchetypeID("openehr-ehr_rm-observation.physical_examination.v3"),
+                "1.1");
+        TerminologyService termServ = SimpleTerminologyService.getInstance();    	
+    	
+        CodePhrase language = new CodePhrase("ISO_639-1", "en");
+		CodePhrase encoding = new CodePhrase("IANA_character-sets", "UTF-8");
+		
+    	Observation observationOne = new Observation(null, "at001", text("observation"),
+                arch, null, null, null, language, encoding, subject(), 
+                provider(), null, null, protocol, null, data, state, termServ);
+    	
+    	Observation observationTwo = new Observation(null, "at000", text("observation"),
+                arch, null, null, null, language, encoding, subject(), 
+                provider(), null, null, protocol, null, data, null, termServ);
+    	
+    	assertFalse(observationOne.equals(observationTwo));
+    }
+    
+    public void testNotEqualsData() throws Exception
+    {
+    	ItemStructure protocol = list("list protocol");
+        History<ItemStructure> data = event("data");
+        History<ItemStructure> state = event("state");
+        Archetyped arch = new Archetyped(
+                new ArchetypeID("openehr-ehr_rm-observation.physical_examination.v3"),
+                "1.1");
+        TerminologyService termServ = SimpleTerminologyService.getInstance();    	
+    	
+        CodePhrase language = new CodePhrase("ISO_639-1", "en");
+		CodePhrase encoding = new CodePhrase("IANA_character-sets", "UTF-8");
+		
+    	Observation observationOne = new Observation(null, "at001", text("observation"),
+                arch, null, null, null, language, encoding, subject(), 
+                provider(), null, null, protocol, null, data, state, termServ);
+    	
+    	Observation observationTwo = new Observation(null, "at000", text("observation"),
+                arch, null, null, null, language, encoding, subject(), 
+                provider(), null, null, protocol, null, eventDiff("data"), state, termServ);
+    	
+    	assertFalse(observationOne.equals(observationTwo));
+    }
+    
+    
+	protected History<ItemStructure> eventDiff(String name) {
+		// element = element("element name", "value");
+		String[] ITEMS = { "event one" };
+		String[] CODES = { "code one" };
+		List<Event<ItemStructure>> items = new ArrayList<Event<ItemStructure>>();
+		for (int i = 0; i < ITEMS.length; i++) {
+			Element element = element("element " + i, CODES[i]);
+			ItemSingle item = new ItemSingle(null, "at0001", text(ITEMS[i]),
+					null, null, null, null, element);
+			items.add(new PointEvent<ItemStructure>(null, "at0003",
+					text("point event"), null, null, null, null,
+					new DvDateTime("2006-06-25T23:11:11"), item, null));
+			// uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
+			// parent, time, data, state
+		}
+		return new History<ItemStructure>(null, "at0002", text("history"),
+				null, null, null, null, new DvDateTime("2006-06-25T23:11:11"),
+				items, DvDuration.getInstance("PT1h"), DvDuration
+						.getInstance("PT3h"), null);
+	}
     
     /* field */
     private ItemList itemList;
