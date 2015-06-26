@@ -301,6 +301,68 @@ public class ItemTableTest extends DataStructureTestBase {
         		itemTable.itemAtPath("/rows['3']/items['visual acuity']"));
     }
 
+	public void testEquals() {
+		List<Cluster> rows = new ArrayList<Cluster>();
+
+		// 1st row
+		Element eyes = new Element("at0001", new DvText("eye(s)"), new DvText(
+				"right"));
+		Element acuity = new Element("at0002", new DvText("visual acuity"),
+				new DvProportion(6, 6, ProportionKind.RATIO, 0));
+		List<Item> itemsOne = new ArrayList<Item>();
+		itemsOne.add(eyes);
+		itemsOne.add(acuity);
+
+		// 2nd row
+		eyes = new Element("at0004", new DvText("eye(s)"), new DvText("left"));
+		acuity = new Element("at0005", new DvText("visual acuity"),
+				new DvProportion(6, 18, ProportionKind.RATIO, 0));
+		List<Item> itemsTwo = new ArrayList<Item>();
+		itemsTwo.add(eyes);
+		itemsTwo.add(acuity);
+
+		rows.add(new Cluster("at0003", new DvText("1"), itemsOne));
+		rows.add(new Cluster("at0006", new DvText("2"), itemsTwo));
+
+		ItemTable itemTableOne = new ItemTable("at0010", new DvText("vision"),
+				rows);
+		ItemTable itemTableTwo = new ItemTable("at0010", new DvText("vision"),
+				rows);
+
+		assertTrue(itemTableOne.equals(itemTableTwo));
+	}
+	
+	public void testNotEqualsDifferentNodeId() {
+		List<Cluster> rows = new ArrayList<Cluster>();
+
+		// 1st row
+		Element eyes = new Element("at0001", new DvText("eye(s)"), new DvText(
+				"right"));
+		Element acuity = new Element("at0002", new DvText("visual acuity"),
+				new DvProportion(6, 6, ProportionKind.RATIO, 0));
+		List<Item> itemsOne = new ArrayList<Item>();
+		itemsOne.add(eyes);
+		itemsOne.add(acuity);
+
+		// 2nd row
+		eyes = new Element("at0004", new DvText("eye(s)"), new DvText("left"));
+		acuity = new Element("at0005", new DvText("visual acuity"),
+				new DvProportion(6, 18, ProportionKind.RATIO, 0));
+		List<Item> itemsTwo = new ArrayList<Item>();
+		itemsTwo.add(eyes);
+		itemsTwo.add(acuity);
+
+		rows.add(new Cluster("at0003", new DvText("1"), itemsOne));
+		rows.add(new Cluster("at0006", new DvText("2"), itemsTwo));
+
+		ItemTable itemTableOne = new ItemTable("at0010", new DvText("vision"),
+				rows);
+		ItemTable itemTableTwo = new ItemTable("at0011", new DvText("vision"),
+				rows);
+
+		assertFalse(itemTableOne.equals(itemTableTwo));
+	}
+    
     /* field */
     private List<Cluster> rows;
     private ItemTable itemTable;

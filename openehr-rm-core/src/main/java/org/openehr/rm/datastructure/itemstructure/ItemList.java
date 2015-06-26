@@ -23,11 +23,13 @@ import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.UIDBasedID;
+import org.openehr.rm.util.ItemUtil;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.text.DvText;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Logical list data structure, where each item has a value and can
@@ -158,26 +160,40 @@ public final class ItemList extends ItemStructure {
         return null;  // todo: implement this method
     }
     
-    /**
-     * Return true if value equals
-     *
-     * @param o
-     * @return true if equals
-     */
-    public boolean equals(Object obj) {
-    	if (obj == null) { return false; }
-    	   if (obj == this) { return true; }
-    	   if (obj.getClass() != getClass()) {
-    	     return false;
-    	   }
-    	   ItemList list = (ItemList) obj;
-    	   return new EqualsBuilder()
-    	                 .appendSuper(super.equals(obj))
-    	                 .append(items, list.items)
-    	                 .isEquals();
-    }
-
     @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((items == null) ? 0 : items.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		ItemList other = (ItemList) obj;
+		if (items == null) {
+			if (other.items != null) {
+				return false;
+			}
+		} else if (other.items == null) {
+			return false;
+		} else if (!ItemUtil.getInstance().compareElements(this.items,
+				other.getItems())) {
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
 	public List<Object> itemsAtPath(String path) {
 		// TODO Auto-generated method stub
 		return null;
@@ -200,6 +216,8 @@ public final class ItemList extends ItemStructure {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
 	
     /* calculated field */
     private List<Element> items;

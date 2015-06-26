@@ -129,6 +129,36 @@ public class ItemSingleTest extends DataStructureTestBase {
     	assertEquals("unexpected whole", itemSingle, value);
     }
     
+	public void testEquals() {
+		Element elementOne = new Element("at0002", new DvText("test element"),
+				new DvText("text value"));
+		ItemSingle itemSingleOne = new ItemSingle(null, "at0001",
+				text("single item"), null, null, null, null, elementOne);
+
+		Element elementTwo = new Element("at0002", new DvText("test element"),
+				new DvText("text value"));
+		ItemSingle itemSingleTwo = new ItemSingle(null, "at0001",
+				text("single item"), null, null, null, null, elementTwo);
+
+		assertTrue(itemSingleOne.equals(itemSingleTwo));
+	}
+
+	public void testNotEquals() {
+		Element elementOne = new Element("at0002", new DvText("test element"),
+				new DvText("text value"));
+		ItemSingle itemSingleOne = new ItemSingle(null, "at0001",
+				text("single item"), null, null, null, null, elementOne);
+
+		Element elementTwo = new Element("at0003", new DvText("test element"),
+				new DvText("text value"));
+		ItemSingle itemSingleTwo = new ItemSingle(null, "at0001",
+				text("single item"), null, null, null, null, elementTwo);
+
+		assertFalse(itemSingleOne.equals(itemSingleTwo));
+	}
+    
+    
+    
     private String path;
     private Object value;
     private Element element;

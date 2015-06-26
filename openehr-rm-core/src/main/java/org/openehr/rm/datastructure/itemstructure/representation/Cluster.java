@@ -21,9 +21,11 @@ import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.support.identification.UIDBasedID;
+import org.openehr.rm.util.ItemUtil;
 import org.openehr.rm.datatypes.text.DvText;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * The grouping variant of Item, which may contain further instances
@@ -144,6 +146,40 @@ public final class Cluster extends Item {
 
 	/* fields */
     private List<Item> items;
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((items == null) ? 0 : items.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		Cluster other = (Cluster) obj;
+		if (items == null) {
+			if (other.items != null) {
+				return false;
+			}
+		} else if (other.items == null) {
+			return false;
+		} else if (!ItemUtil.getInstance()
+				.compareItems(items, other.getItems())) {
+			return false;
+		}
+		return true;
+	}
+	
 }
 
 /*
