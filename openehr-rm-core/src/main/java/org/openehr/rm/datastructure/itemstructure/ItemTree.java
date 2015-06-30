@@ -37,97 +37,97 @@ import org.openehr.rm.util.ItemUtil;
  */
 public final class ItemTree extends ItemStructure {
 
+    /**
+     * Constructs an ItemTree
+     *
+     * @param uid
+     * @param archetypeNodeId
+     * @param name
+     * @param archetypeDetails
+     * @param feederAudit
+     * @param links
+     * @param items null if unspecified
+     */
+    @FullConstructor
+    	public ItemTree(@Attribute(name = "uid") UIDBasedID uid,
+    			@Attribute(name = "archetypeNodeId", required=true) String archetypeNodeId,
+                @Attribute(name = "name", required=true) DvText name,
+                @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
+                @Attribute(name = "feederAudit") FeederAudit feederAudit,
+                @Attribute(name = "links") Set<Link> links,
+                @Attribute(name = "parent") Pathable parent,
+                @Attribute(name = "items") List<Item> items) {
+        super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
+                links, parent);
+        this.items = items;
+    }
+
+    /**
+     * Constructs a ItemStructure
+     *
+     * @param archetypeNodeId
+     * @param name
+     * @param items null if unspecified
+     */
+    public ItemTree(String archetypeNodeId, DvText name, List<Item> items) {
+        this(null, archetypeNodeId, name, null, null, null, null, items);
+    }
+    
+    /**
+     * Constructs a ItemStructure
+     *
+     * @param archetypeNodeId
+     * @param name
+     * @param items null if unspecified
+     */
+    public ItemTree(String archetypeNodeId, String name, List<Item> items) {
+        this(archetypeNodeId, new DvText(name), items);
+    }
+
+    /**
+     * True if given path is a valid leaf path
+     *
+     * @param path
+     * @return ture if path is valid
+     * @throws IllegalArgumentException if path null or empty
+     */
+    public boolean hasElementPath(String path) {
+    	Object value = itemAtPath(path);
+    	return value != null;
+    
+    }
+
+    /**
+     * Return the leaf element at the path
+     *
+     * @param path
+     * @return element found
+     * @throws IllegalArgumentException if path is not valid
+     *                                  or element doesn't exist at given path
+     */
+    public Element elementAtPath(String path) {
+        Object node = itemAtPath(path);
+        if(node instanceof Element) {
+        	return (Element) node;
+        }
+        throw new IllegalArgumentException("Invalid path: " + path);
+    }
+
+    /**
+     * Gets the items
+     * 
+     * @return null if unspecified
+     */
+    public List<Item> getItems() {
+    	return items;
+    }
+    
 	/**
-	 * Constructs an ItemTree
+	 * Equals if two item_tree has same values
 	 *
-	 * @param uid
-	 * @param archetypeNodeId
-	 * @param name
-	 * @param archetypeDetails
-	 * @param feederAudit
-	 * @param links
-	 * @param items
-	 *            null if unspecified
+	 * @param o
+	 * @return equals if true
 	 */
-	@FullConstructor
-	public ItemTree(
-			@Attribute(name = "uid") UIDBasedID uid,
-			@Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
-			@Attribute(name = "name", required = true) DvText name,
-			@Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
-			@Attribute(name = "feederAudit") FeederAudit feederAudit,
-			@Attribute(name = "links") Set<Link> links,
-			@Attribute(name = "parent") Pathable parent,
-			@Attribute(name = "items") List<Item> items) {
-		super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
-				parent);
-		this.items = items;
-	}
-
-	/**
-	 * Constructs a ItemStructure
-	 *
-	 * @param archetypeNodeId
-	 * @param name
-	 * @param items
-	 *            null if unspecified
-	 */
-	public ItemTree(String archetypeNodeId, DvText name, List<Item> items) {
-		this(null, archetypeNodeId, name, null, null, null, null, items);
-	}
-
-	/**
-	 * Constructs a ItemStructure
-	 *
-	 * @param archetypeNodeId
-	 * @param name
-	 * @param items
-	 *            null if unspecified
-	 */
-	public ItemTree(String archetypeNodeId, String name, List<Item> items) {
-		this(archetypeNodeId, new DvText(name), items);
-	}
-
-	/**
-	 * True if given path is a valid leaf path
-	 *
-	 * @param path
-	 * @return ture if path is valid
-	 * @throws IllegalArgumentException
-	 *             if path null or empty
-	 */
-	public boolean hasElementPath(String path) {
-		Object value = itemAtPath(path);
-		return value != null;
-
-	}
-
-	/**
-	 * Return the leaf element at the path
-	 *
-	 * @param path
-	 * @return element found
-	 * @throws IllegalArgumentException
-	 *             if path is not valid or element doesn't exist at given path
-	 */
-	public Element elementAtPath(String path) {
-		Object node = itemAtPath(path);
-		if (node instanceof Element) {
-			return (Element) node;
-		}
-		throw new IllegalArgumentException("Invalid path: " + path);
-	}
-
-	/**
-	 * Gets the items
-	 * 
-	 * @return null if unspecified
-	 */
-	public List<Item> getItems() {
-		return items;
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -163,24 +163,24 @@ public final class ItemTree extends ItemStructure {
 		result = prime * result + ((items == null) ? 0 : items.hashCode());
 		return result;
 	}
+    
+    /**
+     * Return the path to an item relative to the root of this
+     * archetyped structure.
+     *
+     * @param item
+     * @return path of given item
+     */
+    public String pathOfItem(Pathable item) {
+        return null;  // todo: implement this method
+    }
 
-	/**
-	 * Return the path to an item relative to the root of this archetyped
-	 * structure.
-	 *
-	 * @param item
-	 * @return path of given item
-	 */
-	public String pathOfItem(Pathable item) {
-		return null; // todo: implement this method
-	}
-
-	@Override
+    @Override
 	public Item asHierarchy() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+    
 	@Override
 	public List<Object> itemsAtPath(String path) {
 		// TODO Auto-generated method stub
@@ -199,37 +199,40 @@ public final class ItemTree extends ItemStructure {
 		return false;
 	}
 
-	// POJO start
-	ItemTree() {
-	}
-
-	// POJO end
+    // POJO start
+    ItemTree() { 
+    }
+    // POJO end
 
 	private List<Item> items;
 }
 
 /*
- * ***** BEGIN LICENSE BLOCK ***** Version: MPL 1.1/GPL 2.0/LGPL 2.1
- * 
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the 'License'); you may not use this file except in compliance with the
- * License. You may obtain a copy of the License at http://www.mozilla.org/MPL/
- * 
+ *  ***** BEGIN LICENSE BLOCK *****
+ *  Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ *  The contents of this file are subject to the Mozilla Public License Version
+ *  1.1 (the 'License'); you may not use this file except in compliance with
+ *  the License. You may obtain a copy of the License at
+ *  http://www.mozilla.org/MPL/
+ *
+ *  Software distributed under the License is distributed on an 'AS IS' basis,
+ *  WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing rights and limitations under the
+ *  License.
+ *
+ *  The Original Code is ItemTree.java
+ *
+ *  The Initial Developer of the Original Code is Rong Chen.
+ *  Portions created by the Initial Developer are Copyright (C) 2003-2008
+ *  the Initial Developer. All Rights Reserved.
+ *
+ *  Contributor(s):
+ *
  * Software distributed under the License is distributed on an 'AS IS' basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * 
- * The Original Code is ItemTree.java
- * 
- * The Initial Developer of the Original Code is Rong Chen. Portions created by
- * the Initial Developer are Copyright (C) 2003-2008 the Initial Developer. All
- * Rights Reserved.
- * 
- * Contributor(s):
- * 
- * Software distributed under the License is distributed on an 'AS IS' basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
- * the specific language governing rights and limitations under the License.
- * 
- * ***** END LICENSE BLOCK *****
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ *  ***** END LICENSE BLOCK *****
  */
