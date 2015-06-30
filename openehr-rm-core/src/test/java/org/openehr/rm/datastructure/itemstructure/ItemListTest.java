@@ -97,9 +97,8 @@ public class ItemListTest extends DataStructureTestBase {
 
 		assertTrue(itemListOne.equals(itemListTwo));
 	}
-	
-	public void testEqualsElementsInMixedOrder()
-	{
+
+	public void testEqualsElementsInMixedOrder() {
 		List<Element> elementsOne = new ArrayList<Element>();
 
 		elementsOne.add(element(NAMES[0], VALUES[0]));
@@ -120,9 +119,8 @@ public class ItemListTest extends DataStructureTestBase {
 
 		assertTrue(itemListOne.equals(itemListTwo));
 	}
-	
-	public void testNotEqualSize()
-	{
+
+	public void testNotEqualSize() {
 		List<Element> elementsOne = new ArrayList<Element>();
 
 		elementsOne.add(element(NAMES[0], VALUES[0]));
@@ -142,9 +140,8 @@ public class ItemListTest extends DataStructureTestBase {
 
 		assertFalse(itemListOne.equals(itemListTwo));
 	}
-	
-	public void testNotEqual()
-	{
+
+	public void testNotEqual() {
 		List<Element> elementsOne = new ArrayList<Element>();
 
 		elementsOne.add(element(NAMES[0], VALUES[0]));
