@@ -14,15 +14,15 @@
  */
 package org.openehr.rm.datastructure.itemstructure.representation;
 
-import java.util.Set;
-
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Locatable;
 import org.openehr.rm.common.archetyped.Pathable;
-import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.UIDBasedID;
+import org.openehr.rm.datatypes.text.DvText;
+
+import java.util.Set;
 
 /**
  * The abstract parent of CLUSTER and ELEMENT representation classes.
@@ -30,7 +30,7 @@ import org.openehr.rm.support.identification.UIDBasedID;
  * @author Rong Chen
  * @version 1.0
  */
-public abstract class Item extends Locatable{
+public abstract class Item extends Locatable {
 
     /**
      * Constructs an Item
@@ -65,7 +65,6 @@ public abstract class Item extends Locatable{
     protected Item() {
     }
     // POJO end
-
 }
 
 /*
