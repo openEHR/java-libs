@@ -257,7 +257,7 @@ public final class Action extends CareEntry {
 
     /* fields */
     private DvDateTime time;
-	private ItemStructure description;
+    private ItemStructure description;
     private ISMTransition ismTransition;
     private InstructionDetails instructionDetails;
     
