@@ -291,9 +291,9 @@ public final class Instruction extends CareEntry {
 		return true;
 	}
 
-	/* fields */
-	private DvText narrative;
-	private List<Activity> activities;
+    /* fields */
+    private DvText narrative;
+    private List<Activity> activities;
     private DvDateTime expiryTime;
     private DvParsable wfDefinition;
 }
