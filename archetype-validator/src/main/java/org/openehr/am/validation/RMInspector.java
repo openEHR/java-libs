@@ -118,7 +118,7 @@ public class RMInspector {
 				Integer.class,
 				String.class,
 				Boolean.class,
-				Double.class,
+				Double.class, // Also the corresponding class for the Real assumed type.
 
 				// common classes
 				PartySelf.class,
@@ -169,7 +169,7 @@ public class RMInspector {
 				DvDateTime.class,
 				DvTime.class,
 				DvDuration.class,
-				DvParsable.class, 
+				DvParsable.class,
 				DvMultimedia.class,
 
 				// datastructure classes
@@ -180,7 +180,7 @@ public class RMInspector {
 				Event.class,
 				IntervalEvent.class,
 				PointEvent.class,
-			
+
 				// ehr classes
 				Action.class, Activity.class, Evaluation.class,
 				Instruction.class, InstructionDetails.class, Observation.class, AdminEntry.class,
@@ -196,6 +196,9 @@ public class RMInspector {
 		upperCaseMap = new HashMap<String, Class>();
 		for (Class klass : classes) {
 			String name = klass.getSimpleName();
+			if (klass.getSimpleName().equalsIgnoreCase("Double")) {
+                name = "Real"; // For the assumed type Double the corresponding rm type name is Real, not Double
+            }
 			typeMap.put(name, klass);
 			upperCaseMap.put(name.toUpperCase(), klass);
 		}
@@ -205,8 +208,8 @@ public class RMInspector {
 	/*
 	 * Return a map with name as the key and index of position as the value for
 	 * required parameters of the full constructor in the RMObject
-	 * 
-	 * @param rmClass 
+	 *
+	 * @param rmClass
 	 * @return empty map if not found rm class
 	 */
 	private Map<String, Class> attributeType(Class rmClass) {
@@ -236,7 +239,7 @@ public class RMInspector {
 	/**
 	 * Return a map with name as the key and index of position as the value for
 	 * all parameters of the full constructor in the RMObject
-	 * 
+	 *
 	 * @param rmClass
 	 * @return
 	 */
@@ -259,7 +262,7 @@ public class RMInspector {
 	/**
 	 * Return a map with name as the key and index of position as the value for
 	 * all parameters of the full constructor in the RMObject
-	 * 
+	 *
 	 * @param rmClass
 	 * @return
 	 */
@@ -290,12 +293,12 @@ public class RMInspector {
 			}
 		}
 		return null;
-	}	
+	}
 
 	/**
 	 * Retrieves RM type using given name try both the CamelCase and
 	 * Underscore-separated ways
-	 * 
+	 *
 	 * @param rmClassName
 	 * @return null if not found
 	 */
@@ -309,51 +312,51 @@ public class RMInspector {
 		log.debug("Retrieved rmClass is: "+ rmClass);
 		return rmClass;
 	}
-	
+
 	/**
 	 * Retrieves Map of attribute classes indexed by names of given class
-	 * 
+	 *
 	 * @param rmClassName
 	 * @return
 	 * @throws RMObjectBuildingException
 	 */
 	public Map<String, Class> retrieveRMAttributes(String rmClassName) {
 		Class rmClass = retrieveRMType(rmClassName);
-	
+
 		log.debug("----- rmClassName: "+ rmClassName);
 		log.debug("rmClass: "+ rmClass.getSimpleName());
-		
-		
+
+
 		Map<String, Class> map = attributeType(rmClass);
 		Map<String, Class> ret = new HashMap<String, Class>();
 		for(String name : map.keySet()) {
 			ret.put(toUnderscoreSeparated(name), map.get(name));
-			
-			log.debug("rmattribute: " +name +": "+ map.get(name));			
+
+			log.debug("rmattribute: " +name +": "+ map.get(name));
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * Retrieves list of attribute names of given class; each name is converted
 	 * from camel case to underscore delimited form
-	 * 
+	 *
 	 * @param rmClassName
 	 * @return
 	 * @throws RMObjectBuildingException
 	 */
 	public Set<String> retrieveRMAttributeNames(String rmClassName) {
 		Class rmClass = retrieveRMType(rmClassName);
-		
+
 		// WHAT TO DO HERE IF not found (e.g. CODED_TEXT would not be found...)
 		log.debug("----- rmClassName: "+ rmClassName);
 		log.debug("rmClass: "+ rmClass.getSimpleName());
-		
+
 		Map<String, Class> map = attributeType(rmClass);
 		Set<String> names = new LinkedHashSet<String>();
 		for(String name : map.keySet()) {
 			names.add(toUnderscoreSeparated(name));
-			
+
 			log.debug("name: " +name);
 		}
 		return names;
@@ -391,7 +394,7 @@ public class RMInspector {
 	/**
 	 * Finds the matching RM class that can be used to create RM object for
 	 * given value map
-	 * 
+	 *
 	 * @param valueMap
 	 * @return null if no match RM class is found
 	 */
@@ -477,9 +480,9 @@ public class RMInspector {
 			// matching found
 			if (matched) {
 				String className = rmClass.getSimpleName();
-				
+
 				log.debug(">>> MATCHING FOUND: " + className);
-				
+
 				return className;
 			}
 		}
@@ -507,21 +510,21 @@ public class RMInspector {
 		}
 		return null;
 	}
-	
+
 	/** gets the default cardinality interval as specified by the reference model.
 	 *  In most cases this is 0..*, only in very few cases this has been constrained to 1..*
-	 *  RECONSIDER: This could be done using annotations as well, however for the couple of constraints from the RM, 
-	 *  the approach taken here seems to be simple and sufficient. 
-	 * 
+	 *  RECONSIDER: This could be done using annotations as well, however for the couple of constraints from the RM,
+	 *  the approach taken here seems to be simple and sufficient.
+	 *
 	 * @param cattr
 	 * @param parentObj
 	 * @return
 	 */
 	Interval<Integer> defaultCardinalityInterval(CMultipleAttribute cattr, CObject parentObj) {
 		log.debug("Checking: "+ cattr.getRmAttributeName() +"; "+ parentObj.getRmTypeName() +" at "+cattr.path() +" parent path: "+parentObj.path());
-		
+
 		if (cattr.getRmAttributeName().equals("items")) {
-			if (parentObj.getRmTypeName().equalsIgnoreCase("CLUSTER") ) { // Note: For SECTION items, the intention seems to be cardinality = 0 
+			if (parentObj.getRmTypeName().equalsIgnoreCase("CLUSTER") ) { // Note: For SECTION items, the intention seems to be cardinality = 0
 				log.debug("--> >=1");				
 				return new Interval<Integer>(1,null);				
 			}

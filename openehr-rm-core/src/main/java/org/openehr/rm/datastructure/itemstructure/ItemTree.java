@@ -14,20 +14,20 @@
  */
 package org.openehr.rm.datastructure.itemstructure;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import java.util.List;
+import java.util.Set;
+
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.common.archetyped.FeederAudit;
 import org.openehr.rm.common.archetyped.Link;
 import org.openehr.rm.common.archetyped.Pathable;
-import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.datastructure.itemstructure.representation.Item;
 import org.openehr.rm.datatypes.text.DvText;
-
-import java.util.*;
+import org.openehr.rm.support.identification.UIDBasedID;
+import org.openehr.rm.util.ItemUtil;
 
 /**
  * Logical tree data structure.
@@ -122,34 +122,47 @@ public final class ItemTree extends ItemStructure {
     	return items;
     }
     
-    /**
-     * Equals if two item_tree has same values
-     *
-     * @param o
-     * @return equals if true
-     */
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof ItemTree )) return false;
-        
-        final ItemTree tree = (ItemTree) o;
-        return new EqualsBuilder()
-        		.appendSuper(super.equals(o))
-                .append(items, tree.items)
-                .isEquals();
-    }
+	/**
+	 * Equals if two item_tree has same values
+	 *
+	 * @param o
+	 * @return equals if true
+	 */
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		ItemTree other = (ItemTree) obj;
+		if (items == null) {
+			if (other.items != null) {
+				return false;
+			}
+		} else if (other.items == null) {
+			return false;
+		} else if (!ItemUtil.getInstance().compareItems(this.items,
+				other.getItems())) {
+			return false;
+		}
+		return true;
+	}
 
-    /**
-     * Return a hash code of this actor
-     *
-     * @return hash code
-     */
-    public int hashCode() {
-        return new HashCodeBuilder(17, 23)
-                .appendSuper(super.hashCode())
-                .append(items)
-                .toHashCode();
-    }
+	/**
+	 * Return a hash code of this actor
+	 *
+	 * @return hash code
+	 */
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((items == null) ? 0 : items.hashCode());
+		return result;
+	}
     
     /**
      * Return the path to an item relative to the root of this

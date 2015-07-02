@@ -8,16 +8,16 @@
 	<artifactId>xml-serializer</artifactId>
 	<packaging>jar</packaging>
 	<name>XML Serializer</name>
-	<url>http://www.openehr.org/projects/java.html</url>   
+	<url>http://www.openehr.org/projects/java.html</url>
 
 	<organization>
 		<name>openEHR</name>
 		<url>http://www.openehr.org/</url>
 	</organization>
 	<inceptionYear>2004</inceptionYear>
-	
+
 	<description>Java XML Serializer of the Archetype Object Model</description>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>openehr</groupId>

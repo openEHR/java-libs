@@ -50,6 +50,7 @@ public class CRealTest extends TestCase {
         assertTrue(cr.validValue(new Double(-10)));
         assertTrue(!cr.validValue(new Double(10)));
         assertTrue(!cr.validValue(new Double(11)));
+        assertTrue(cr.getType().equals("Real")); // Must not equal Double beause this is the RM type
 
         cr = new CReal(new Interval<Double>(new Double(1),
                 null, true, false), null);

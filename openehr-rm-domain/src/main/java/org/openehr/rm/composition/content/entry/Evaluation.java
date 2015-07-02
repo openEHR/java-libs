@@ -138,6 +138,51 @@ public final class Evaluation extends CareEntry {
     }
     // POJO end
 
+
+    @Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		Evaluation other = (Evaluation) obj;
+		if (data == null) {
+			if (other.data != null) {
+				return false;
+			}
+		} else if (other.data == null) {
+			return false;
+		} else if (!data.equals(other.data)) {
+			return false;
+		}
+		if (getProtocol() == null) {
+			if (other.getProtocol() != null) {
+				return false;
+			}
+		} else if (other.getProtocol() == null) {
+			return false;
+		} else if (!getProtocol().equals(other.getProtocol())) {
+			return false;
+		}
+		return true;
+	}
+    
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result
+				+ ((getProtocol() == null) ? 0 : getProtocol().hashCode());
+		return result;
+	}
+    
+    
     /* fields */
     private ItemStructure data;
     

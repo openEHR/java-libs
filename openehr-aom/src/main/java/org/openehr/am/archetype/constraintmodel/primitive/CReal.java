@@ -14,6 +14,10 @@
  */
 package org.openehr.am.archetype.constraintmodel.primitive;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.openehr.rm.support.basic.Interval;
@@ -47,7 +51,7 @@ public final class CReal extends CPrimitive {
         this.assumedValue = assumedValue;
         this.defaultValue = defaultValue;
     }
-    
+
     public CReal(Interval<Double> interval, List<Double> list,
     		Double assumedValue) {
     	this(interval, list, assumedValue, null);
@@ -67,8 +71,9 @@ public final class CReal extends CPrimitive {
      *
      * @return name of the type
      */
+    @Override
     public String getType() {
-        return "Double";
+        return "Real"; // Note: This must be the RM type name, not the name of the Java datatype (otherwise e.g. the xml output will be wrong)
     }
 
     /**
@@ -86,11 +91,12 @@ public final class CReal extends CPrimitive {
      * @param value
      * @return true if valid
      */
+    @Override
     public boolean validValue(Object value) {
         Double d = (Double) value;
         return ( interval != null && interval.has(d)
                 || list != null && list.contains(d) );
-    }    
+    }
 
     /**
      * Interval of Dates specifying constraint
@@ -100,7 +106,7 @@ public final class CReal extends CPrimitive {
     public Interval<Double> getInterval() {
         return interval;
     }
-    
+
 	@Override
 	public boolean hasAssumedValue() {
 		return assumedValue != null;
@@ -110,7 +116,7 @@ public final class CReal extends CPrimitive {
 	public Object assumedValue() {
 		return assumedValue;
 	}
-	
+
 	@Override
 	public boolean hasDefaultValue() {
 		return defaultValue != null;
@@ -127,9 +133,14 @@ public final class CReal extends CPrimitive {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof CReal )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof CReal )) {
+            return false;
+        }
 
         final CReal cobj = (CReal) o;
 
@@ -146,6 +157,7 @@ public final class CReal extends CPrimitive {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(5, 23)
                 .append(list)

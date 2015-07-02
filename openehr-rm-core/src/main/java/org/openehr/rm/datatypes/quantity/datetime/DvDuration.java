@@ -38,20 +38,20 @@ import org.openehr.rm.datatypes.text.CodePhrase;
  * Represents a period of time with respect to a notional point in time, which
  * is not specified. A sign may be used to indicate the duration is "backwards"
  * in time rather than forwards.
- * 
+ *
  * @author Rong Chen
  * @version 1.0
  */
 public final class DvDuration extends DvAmount<DvDuration> {
 
 	/**
-     * 
+     *
      */
     private static final long serialVersionUID = -8172997416937095330L;
 
 	/**
 	 * Constructs a Duration with referenceRange and accuracy
-	 * 
+	 *
 	 * @param otherReferenceRanges
 	 * @param normalRange
 	 * @param normalStatus
@@ -84,7 +84,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 
 	/**
 	 * Creates a simple DvDuration with string value
-	 * 
+	 *
 	 * @param value
 	 */
 	public DvDuration(String value) {
@@ -93,7 +93,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 
 	/**
 	 * Constructs a Duration with referenceRange and accuracy
-	 * 
+	 *
 	 * @param referenceRanges
 	 * @param accuracy
 	 * @param accuracyPercent
@@ -129,7 +129,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 
 	/**
 	 * Constructs a Duration without referenceRange and accuracy
-	 * 
+	 *
 	 * @param days
 	 * @param hours
 	 * @param minutes
@@ -154,7 +154,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 
 	/**
 	 * Create a Duration from two instances of DvWorldTime
-	 * 
+	 *
 	 * @param start
 	 * @param end
 	 */
@@ -172,7 +172,7 @@ public final class DvDuration extends DvAmount<DvDuration> {
 
 	/**
 	 * Create a Duration from a ISO8601 string presentation
-	 * 
+	 *
 	 * @param value
 	 * @throws IllegalArgumentException
 	 *             if value null or wrong format
@@ -187,6 +187,8 @@ public final class DvDuration extends DvAmount<DvDuration> {
 					+ value);
 		}
 		Period period = null;
+		final String suppliedValue = value;
+
 		if (value.startsWith("-")) {
 			value = value.substring(1, value.length()); // skip '-'
 			period = ISOPeriodFormat.standard().parsePeriod(value);
@@ -195,7 +197,9 @@ public final class DvDuration extends DvAmount<DvDuration> {
 			period = ISOPeriodFormat.standard().parsePeriod(value);
 		}
 
-		return new DvDuration(null, null, null, 0.0, false, null, period);
+		DvDuration duration = new DvDuration(null, null, null, 0.0, false, null, period);
+		duration.setValue(suppliedValue); // If we don't set this we cannot reconstruct the original constraint if 0s or 0h etc if all the same period, but the constraint in the ADL / XML serialisation still looks different
+		return duration;
 	}
 
 	@Override

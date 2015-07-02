@@ -185,6 +185,86 @@ public class ItemTreeTest extends DataStructureTestBase {
     	ItemTree empty = new ItemTree("at0001", new DvText("tree"), null);
     	assertNotNull(empty);
     }
+
+	public void testEquals() {
+		assertTrue(getItemTreeOne().equals(getItemTreeOne()));
+	}
+
+	public void testEqualsMixedItemOrder() {
+		assertTrue(getItemTreeOne().equals(getItemTreeOneMixedOrder()));
+	}
+
+	public void testNotEquals() {
+		assertFalse(getItemTreeOne().equals(getItemTreeTwo()));
+	}
+
+	private ItemTree getItemTreeOne() {
+		List<Item> itemsOne = new ArrayList<Item>();
+		itemsOne.add(totalCholesterol);
+		itemsOne.add(ldlCholesterol);
+		itemsOne.add(hdlCholesterol);
+		lipidStudies = new Cluster("at0005", new DvText("lipid studies"),
+				itemsOne);
+		// comment
+		comment = new Element("at0006", new DvText("comment"), new DvText(
+				"high cardiac risk"));
+
+		itemsOne = new ArrayList<Item>();
+		itemsOne.add(sample);
+		itemsOne.add(lipidStudies);
+		itemsOne.add(comment);
+		ItemTree itemTreeOne = new ItemTree("at0007", new DvText(
+				"biochemstry result"), itemsOne);
+		return itemTreeOne;
+	}
+
+	private ItemTree getItemTreeOneMixedOrder() {
+		// Item list contains the same as the item tree one but added to the
+		// list in different order
+
+		List<Item> itemsOne = new ArrayList<Item>();
+		itemsOne.add(totalCholesterol);
+		itemsOne.add(ldlCholesterol);
+		itemsOne.add(hdlCholesterol);
+		lipidStudies = new Cluster("at0005", new DvText("lipid studies"),
+				itemsOne);
+
+		// comment
+		comment = new Element("at0006", new DvText("comment"), new DvText(
+				"high cardiac risk"));
+
+		itemsOne = new ArrayList<Item>();
+		itemsOne.add(lipidStudies);
+		itemsOne.add(sample);
+		itemsOne.add(comment);
+		ItemTree itemTreeOne = new ItemTree("at0007", new DvText(
+				"biochemstry result"), itemsOne);
+		return itemTreeOne;
+	}
+
+	private ItemTree getItemTreeTwo() {
+		// same as the item tree one but sample is removed from the item list
+
+		List<Item> itemsTwo = new ArrayList<Item>();
+		itemsTwo.add(totalCholesterol);
+		itemsTwo.add(ldlCholesterol);
+		itemsTwo.add(hdlCholesterol);
+		lipidStudies = new Cluster("at0005", new DvText("lipid studies"),
+				itemsTwo);
+
+		// comment
+		comment = new Element("at0006", new DvText("commentingng"), new DvText(
+				"high cardiac risk"));
+
+		itemsTwo = new ArrayList<Item>();
+
+		itemsTwo.add(lipidStudies);
+		itemsTwo.add(sample);
+		itemsTwo.add(comment);
+		ItemTree itemTreeTwo = new ItemTree("at0007", new DvText(
+				"biochemstry result"), itemsTwo);
+		return itemTreeTwo;
+	}
     
     /* fields */
     private ItemTree itemTree;

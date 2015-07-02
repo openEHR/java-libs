@@ -137,6 +137,37 @@ public final class ItemSingle extends ItemStructure {
 		return null;
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((item == null) ? 0 : item.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+
+		ItemSingle other = (ItemSingle) obj;
+		if (item == null) {
+			if (other.item != null) {
+				return false;
+			}
+		} else if (!item.equals(other.item)) {
+			return false;
+		}
+		return true;
+	}
+
 	private Element item;
 }
 

@@ -86,9 +86,16 @@ public final class CInteger extends CPrimitive {
 	 */
 	@Override
     public boolean validValue(Object value) {
-		Integer integer = (Integer) value;
-		return (interval != null && interval.has(integer) || list != null
-				&& list.contains(integer));
+		Integer integer = null;
+		if ((value instanceof Integer))
+			integer = (Integer) value;
+		else {
+			String strValue = value.toString();
+			if (!strValue.isEmpty())
+				integer = Integer.valueOf(strValue);
+		}
+		return ((this.interval != null) && (this.interval.has(integer)))
+				|| ((this.list != null) && (this.list.contains(integer)));
 	}
 
 	/**

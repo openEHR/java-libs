@@ -31,17 +31,19 @@ public class DvDurationTest extends TestCase {
     /**
      * The fixture set up called before every test method.
      */
+    @Override
     protected void setUp() throws Exception {
     }
 
     /**
      * The fixture clean up called after every test method.
      */
+    @Override
     protected void tearDown() throws Exception {
     }
 
     public void testConstructorTakesString() throws Exception {
-        
+
         // test with wrong format
         String[] value = {
             null, "P10D9H8m7s", "10", "", "P10D11WT9h8M7s", "P10a8m7s", "T9H8m0,000s",
@@ -64,10 +66,10 @@ public class DvDurationTest extends TestCase {
         };
         int[][] data = {
             {0, 12, 32, 10, 9, 8, 7, 898}, {0, 0, 0, 10, 9, 8, 7, 0},
-            {0, 0, 0, 10, 0, 0, 0, 0}, {0, 0, 0, 0, 9, 0, 0, 0}, {0, 0, 0, 0, 0, 8, 0, 0}, 
+            {0, 0, 0, 10, 0, 0, 0, 0}, {0, 0, 0, 0, 9, 0, 0, 0}, {0, 0, 0, 0, 0, 8, 0, 0},
             {0, 0, 0, 0, 0, 0, 7, 0}, {0, 0, 0, 10, 9, 0, 0, 0},
-            {0, 0, 0, 0, 9, 8, 0, 0}, {0, 0, 0, 0, 0, 8, 7, 0}, 
-            {0, 0, 0, 10, 0, 0, 7, 0}, {0, 0, 0, 10, 9, 0, 7, 0}, 
+            {0, 0, 0, 0, 9, 8, 0, 0}, {0, 0, 0, 0, 0, 8, 7, 0},
+            {0, 0, 0, 10, 0, 0, 7, 0}, {0, 0, 0, 10, 9, 0, 7, 0},
             {0, 0, 0, 0, 9, 0, 8, 0}, {1, 2, 3, 4, 0, 0, 0, 0},
             {9, 0, 0, 6, 0, 0, 2, 990}, {0, 0, 35, 0, 45, 0, 0, 0},
             {0, 20, 0, 33, 0, 79, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 190},
@@ -105,7 +107,7 @@ public class DvDurationTest extends TestCase {
     public void testConstructorTakesIntegers() throws Exception {
         int[][] data = {
             {0, 10, 3, 1, 19, 8, 37, 857}, {0, 0, 0, 1, 0, 14, 2, 0},
-            {0, 13, 56, 33, 25, 67, 77, 0}, {0, -1, -2, 0, -9, 0, 0, 0}, 
+            {0, 13, 56, 33, 25, 67, 77, 0}, {0, -1, -2, 0, -9, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 10, 9, 0, 0, 0},
         };
         for(int i = 0; i < data.length; i++) {
@@ -120,7 +122,7 @@ public class DvDurationTest extends TestCase {
             assertEquals("fseconds", data[i][ 7 ], (int)(d.getFractionalSeconds()*1000.0));
         }
         int[][] fData = {
-            {0, 0, 3, 1, 0, 8, 37, 1857}, {0, 0, 0, -1, 0, 14, 2, 0},      
+            {0, 0, 3, 1, 0, 8, 37, 1857}, {0, 0, 0, -1, 0, 14, 2, 0},
         };
         for(int i = 0; i < fData.length; i++) {
             try {
@@ -136,7 +138,7 @@ public class DvDurationTest extends TestCase {
         DvDuration one = new DvDuration(0, 0, 0, 10, 20, 30, 40, .5);
         DvDuration two = new DvDuration(0, 0, 1, 1, 2, 3, 4, .05);
         DvDuration d = (DvDuration) one.add(two);
-        
+
         assertEquals("years", 0, d.getYears());
         assertEquals("months", 0, d.getMonths());
         assertEquals("weeks", 2, d.getWeeks()); //10d + 1W1d = 18d
@@ -146,7 +148,7 @@ public class DvDurationTest extends TestCase {
         assertEquals("seconds", 44, d.getSeconds());
         assertEquals("fractionalSeconds", .55,
                 d.getFractionalSeconds());
-        
+
         DvDuration three = new DvDuration("P1y2WT2H10m1,60S");
         d = (DvDuration)d.add(three);
         assertEquals("years", 1, d.getYears());
@@ -195,7 +197,7 @@ public class DvDurationTest extends TestCase {
         //TODO!!!
         int[][] data = {
             {0, 0, 0, 10, 20, 30, 40, 0}, {0, 0, 0, 1, 0, 14, 2, 0},
-            {0, 13, 56, 33, 25, 67, 77, 0}, {0, -1, -2, 0, -9, 0, 0, 0}, 
+            {0, 13, 56, 33, 25, 67, 77, 0}, {0, -1, -2, 0, -9, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0}, {0, 11, 23, 10, 9, 5, 0, 123}
         };
         String[] strings = {
@@ -206,14 +208,17 @@ public class DvDurationTest extends TestCase {
             DvDuration d = toDuration(data[i]);
             assertEquals(strings[i], d.toString());
         }
-        
+
         String[] strValues = {
            "P10DT20H30M40.66S", "P16M45DT60M2S", "P13M56W33DT2H6M5.0S",
-           "-P1M2WT9H", "PT0S", "P11M23W10DT9H5M0,123S", "P"
+           "-P1M2WT9H", "PT0S", "P11M23W10DT9H5M0,123S", "P", "P0Y"
         };
         for(int i = 0; i < strValues.length; i++) {
             DvDuration d = new DvDuration(strValues[i]);
             assertEquals(strValues[i], d.toString());
+
+            DvDuration fromInstanceD = DvDuration.getInstance(strValues[i]); // This may be slightly different therefore we should test this as well.
+            assertEquals(strValues[i], fromInstanceD.toString());
         }
     }
 

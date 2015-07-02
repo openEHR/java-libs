@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jdom.Document;
@@ -55,6 +56,8 @@ import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
+import org.openehr.rm.common.resource.TranslationDetails;
+import org.openehr.rm.datatypes.quantity.DvQuantity;
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.identification.ArchetypeID;
@@ -62,7 +65,7 @@ import org.openehr.rm.support.identification.ArchetypeID;
 
 /**
  * XML serializer of the openEHR Archetype Object Model.
- * 
+ *
  * @author Mattias Forss
  */
 public class XMLSerializer {
@@ -77,7 +80,7 @@ public class XMLSerializer {
     }
 
     /**
-     * Create an outputter which can use a JDOM formatter of choice, e.g. 
+     * Create an outputter which can use a JDOM formatter of choice, e.g.
      * Format.getPrettyFormat().setEncoding(encoding.name()).setTextMode(TextMode.PRESERVE)
      */
     public XMLSerializer(Format format) {
@@ -89,7 +92,7 @@ public class XMLSerializer {
 
     /**
      * Output given archetype as string in XML format
-     * 
+     *
      * @param archetype
      * @return a string in XML format
      * @throws IOException
@@ -102,7 +105,7 @@ public class XMLSerializer {
 
     /**
      * Output given archetype to outputStream
-     * 
+     *
      * @param archetype
      * @param out
      * @throws IOException
@@ -115,7 +118,7 @@ public class XMLSerializer {
 
     /**
      * Output given archetype to Document
-     * 
+     *
      * @param archetype
      * @param out
      * @throws IOException
@@ -131,7 +134,7 @@ public class XMLSerializer {
 
     /**
      * Output given archetype to writer
-     * 
+     *
      * @param archetype
      * @param out
      * @throws IOException
@@ -150,7 +153,7 @@ public class XMLSerializer {
 
         printDescription(archetype.getDescription(), out);
 
-        //TODO printTranslations
+        printTranslations(archetype.getTranslations(), out);
 
         Element archetypeId = new Element("archetype_id", defaultNamespace);
         out.getChildren().add(archetypeId);
@@ -160,7 +163,7 @@ public class XMLSerializer {
         if (archetype.getUid() != null) {
             printString("uid", archetype.getUid().toString(), out);
         }
-            
+
         printString("concept", archetype.getConcept(), out);
 
         final ArchetypeID parentID = archetype.getParentArchetypeId();
@@ -170,6 +173,33 @@ public class XMLSerializer {
             printString("value", parentID.toString(), parentArchetypeId);
         }
 
+    }
+
+    private void printTranslations(Map<String, TranslationDetails> translations, Element out) {
+        if (translations == null) {
+            return;
+        }
+
+        for (Entry<String, TranslationDetails> translation : translations.entrySet()) {
+            // Note that each translation is serialised to one translations (note the plural!) element
+            Element translationsElement = new Element("translations", defaultNamespace);
+            out.getChildren().add(translationsElement);
+
+            Element languageElement = new Element("language", defaultNamespace);
+            translationsElement.getChildren().add(languageElement);
+
+            printCodePhrase(translation.getValue().getLanguage(), languageElement);
+
+            TranslationDetails transDetails = translation.getValue();
+            printStringMap("author", transDetails.getAuthor(), translationsElement);
+
+
+            if (transDetails.getAccreditation() != null) {
+                printString("accreditation", transDetails.getAccreditation(), translationsElement);
+            }
+
+            printStringMap("other_details", transDetails.getOtherDetails(), translationsElement);
+        }
     }
 
     protected void printDescription(ResourceDescription description, Element out) {
@@ -182,7 +212,7 @@ public class XMLSerializer {
         out.getChildren().add(des);
         printStringMap("original_author", description.getOriginalAuthor(), des);
         printStringList("other_contributors", description.getOtherContributors(), des);
-        printString("lifecycle_state", description.getLifecycleState(), des); 
+        printString("lifecycle_state", description.getLifecycleState(), des);
 
         if (description.getResourcePackageUri() != null && description.getResourcePackageUri().length() >0) { // only add this tag if non-empty
             printString("resource_package_uri", description.getResourcePackageUri(), des);
@@ -202,12 +232,12 @@ public class XMLSerializer {
         out.getChildren().add(language);
         printCodePhrase(item.getLanguage(), language);
 
-        printString("purpose", item.getPurpose(), out); // Mandatory     
+        printString("purpose", item.getPurpose(), out); // Mandatory
         printStringList("keywords", item.getKeywords(), out);
-        printString("use", item.getUse(), out); // Mandatory 
-        printString("misuse", item.getMisuse(), out); // Mandatory 
+        printString("use", item.getUse(), out); // Mandatory
+        printString("misuse", item.getMisuse(), out); // Mandatory
         printString("copyright", item.getCopyright(), out);
-        printStringMap("original_resource_uri", 
+        printStringMap("original_resource_uri",
                 item.getOriginalResourceUri(), out);
 
         printStringMap("other_details", item.getOtherDetails(), out);
@@ -222,7 +252,7 @@ public class XMLSerializer {
         out.getChildren().add(terminologyId);
         printString("value", cp.getTerminologyId().getValue(), terminologyId);
 
-        printString("code_string", cp.getCodeString(), out);    
+        printString("code_string", cp.getCodeString(), out);
     }
 
 
@@ -241,11 +271,11 @@ public class XMLSerializer {
     }
 
 
-    private void printString(String label, String value, Element out) {        
+    private void printString(String label, String value, Element out) {
         printString(label, value, out, false);
     }
 
-    private void printString(String label, String value, Element out, boolean addXSDStringType) {        
+    private void printString(String label, String value, Element out, boolean addXSDStringType) {
         Element elm = new Element(label, defaultNamespace);
         if (addXSDStringType) {
             elm.setAttribute("type", "xsd:string", xsiNamespace); // the type is expected here.
@@ -266,7 +296,7 @@ public class XMLSerializer {
             Element elm = new Element(label, defaultNamespace);
             out.getChildren().add(elm);
             elm.setText(list.get(i));
-        }         
+        }
     }
 
     protected void printDefinition(CComplexObject definition, Element out) {
@@ -401,12 +431,12 @@ public class XMLSerializer {
             Element item = new Element("item", defaultNamespace);
             elm.getChildren().add(item);
             printCPrimitive((CPrimitive) expLeaf.getItem(), item);
-        } else {          
+        } else {
             //EXPR_LEAF.item is defined as xs:any in the AM schema (the reason for which is unclear)
-            //and consequently of type object in C# land. 
+            //and consequently of type object in C# land.
             // That's why having the XSD type explicitly set to string fixes the problem when deserialising to a C# string instead of XmlText.
-            printString("item", expLeaf.getItem().toString(), elm, true);            
-        }    
+            printString("item", expLeaf.getItem().toString(), elm, true);
+        }
         printString("reference_type", expLeaf.getReferenceType().name().toLowerCase(), elm); // the Reference type is expected in lower case here as per spec examples
     }
 
@@ -434,8 +464,8 @@ public class XMLSerializer {
 
         printString("type", expOperator.getType(), out);
         printString("operator", String.valueOf(expOperator.getOperator().getValue()), out);
-        printString("precedence_overridden", 
-                expOperator.isPrecedenceOverridden() == true ? "true" : "false", out);   
+        printString("precedence_overridden",
+                expOperator.isPrecedenceOverridden() == true ? "true" : "false", out);
     }
 
     protected void printCAttribute(CAttribute cattribute, Element out) {
@@ -481,7 +511,7 @@ public class XMLSerializer {
         printString("lower", Integer.toString(lower), existence);
         printString("upper", Integer.toString(upper), existence);
 
-        if(!cattribute.isAnyAllowed()) { 
+        if(!cattribute.isAnyAllowed()) {
             List<CObject> children = cattribute.getChildren();
 
             if (children.size() > 1
@@ -500,7 +530,7 @@ public class XMLSerializer {
             attributes.getChildren().add(cardinality);
             printCardinality(
                     ((CMultipleAttribute) cattribute).getCardinality(), cardinality);
-        }     
+        }
 
     }
 
@@ -516,7 +546,7 @@ public class XMLSerializer {
         } else if (cobj instanceof ArchetypeInternalRef) {
             printArchetypeInternalRef((ArchetypeInternalRef) cobj, out);
         } else if (cobj instanceof ConstraintRef) { // FIXME: Add in ADLSerializer as well
-            printConstraintRef((ConstraintRef) cobj, out); 
+            printConstraintRef((ConstraintRef) cobj, out);
         } else if (cobj instanceof ArchetypeSlot) {
             printArchetypeSlot((ArchetypeSlot) cobj, out);
         }
@@ -582,9 +612,17 @@ public class XMLSerializer {
 
         printCObjectElements(ccp, children);
 
+        if (ccp.hasAssumedValue()) {
+            CodePhrase assumedValue=  ccp.getAssumedValue();
+
+            Element assumedValueEl = new Element("assumed_value", defaultNamespace);
+            children.getChildren().add(assumedValueEl);
+            printCodePhrase(assumedValue, assumedValueEl);
+        }
+
         if(ccp.getTerminologyId() != null) {
             Element terminologyId = new Element("terminology_id", defaultNamespace);
-            children.getChildren().add(terminologyId);            
+            children.getChildren().add(terminologyId);
             printString("value", ccp.getTerminologyId().getValue(), terminologyId);
         }
 
@@ -605,7 +643,14 @@ public class XMLSerializer {
         children.setAttribute("type", "C_DV_ORDINAL", xsiNamespace);
 
         printCObjectElements(cordinal, children);
+        if (cordinal.hasAssumedValue()) {
+            Ordinal assumedValue = cordinal.getAssumedValue();
+            Element assumedValueEl = new Element("assumed_value", defaultNamespace);
+            children.getChildren().add(assumedValueEl);
+            printString("value", String.valueOf(assumedValue.getValue()), assumedValueEl);
+            printSymbolOfOrdinal(assumedValue, assumedValueEl);
 
+        }
         if(cordinal.getList() != null) {
             final Set<Ordinal> ordinals = cordinal.getList();
 
@@ -615,13 +660,20 @@ public class XMLSerializer {
                 Element list = new Element("list", defaultNamespace);
                 children.getChildren().add(list);
                 printString("value", String.valueOf(ordinal.getValue()), list);
-                Element symbol = new Element("symbol", defaultNamespace);
-                list.getChildren().add(symbol);
-                Element definingCode = new Element("defining_code", defaultNamespace);
-                symbol.getChildren().add(definingCode);
-                printCodePhrase(ordinal.getSymbol(), definingCode);
+                printSymbolOfOrdinal(ordinal, list);
             }
-        }        
+        }
+    }
+
+    private void printSymbolOfOrdinal(Ordinal ordinal, Element list) {
+        Element symbol = new Element("symbol", defaultNamespace);
+        list.getChildren().add(symbol);
+
+        printString("value", null, symbol); // this is the mandatory(!) value of a DV_CODED_TEXT symbol.
+        Element definingCode = new Element("defining_code", defaultNamespace);
+        symbol.getChildren().add(definingCode);
+
+        printCodePhrase(ordinal.getSymbol(), definingCode);
     }
 
     protected void printCDvQuantity(CDvQuantity cquantity, Element out) {
@@ -632,6 +684,23 @@ public class XMLSerializer {
 
         printCObjectElements(cquantity, children);
 
+        if (cquantity.hasAssumedValue()) {
+
+            Element assumedValueEl = new Element("assumed_value", defaultNamespace);
+            children.getChildren().add(assumedValueEl);
+
+            DvQuantity assumedValue = cquantity.getAssumedValue();
+
+            if(assumedValue.getMagnitude() != null) {
+                printString("magnitude", ""+assumedValue.getMagnitude(), assumedValueEl);
+            }
+            if(assumedValue.getUnits() != null) {
+                printString("units", assumedValue.getUnits(), assumedValueEl);
+            }
+            printString("precision", ""+assumedValue.getPrecision(), assumedValueEl);
+
+
+        }
 
         CodePhrase property = cquantity.getProperty();
         if (property != null) {
@@ -647,15 +716,24 @@ public class XMLSerializer {
                 Element lst = new Element("list", defaultNamespace);
                 children.getChildren().add(lst);
 
-                if(item.getMagnitude() != null) {
-                    Element magnitude = new Element("magnitude", defaultNamespace);
-                    lst.getChildren().add(magnitude);
-                    printInterval(item.getMagnitude(), magnitude);
-                }
-
-                printString("units", item.getUnits(), lst);
+                printMagnitudePrecisionUnitsOfCDVQuantityItem(item, lst);
             }
         }
+    }
+
+    private void printMagnitudePrecisionUnitsOfCDVQuantityItem(CDvQuantityItem item, Element lst) {
+        if(item.getMagnitude() != null) {
+            Element magnitude = new Element("magnitude", defaultNamespace);
+            lst.getChildren().add(magnitude);
+            printInterval(item.getMagnitude(), magnitude);
+        }
+        if(item.getPrecision() != null) {
+            Element precision = new Element("precision", defaultNamespace);
+            lst.getChildren().add(precision);
+            printInterval(item.getPrecision(), precision);
+        }
+
+        printString("units", item.getUnits(), lst);
     }
 
     protected void printOntology(ArchetypeOntology ontology, String concept, Element out) {
@@ -710,7 +788,7 @@ public class XMLSerializer {
                     items.setAttribute("code", term.getCode());
 
                     printStringMap("items", term.getItems(), items);
-                }                
+                }
             }
         }
 
@@ -740,7 +818,7 @@ public class XMLSerializer {
                         printString("value", terminologyId, termId);
                         printString("code_string", codeString, vl);
                     }
-                }                
+                }
             }
         }
 
@@ -762,7 +840,7 @@ public class XMLSerializer {
                 }
 
             }
-        }        
+        }
     }
 
     protected void printCPrimitiveObject(CPrimitiveObject cpo, Element out) {
@@ -832,7 +910,7 @@ public class XMLSerializer {
 
         if (cdate.getPattern() != null) {
             printString("pattern", cdate.getPattern(), out);
-        } 
+        }
 
         if(cdate.getInterval() != null) {
             Element range = new Element("range", defaultNamespace);
@@ -841,7 +919,7 @@ public class XMLSerializer {
         }
 
         if(cdate.hasAssumedValue()) {
-            printString("assumed_value", cdate.assumedValue().toString(), out); 
+            printString("assumed_value", cdate.assumedValue().toString(), out);
         }
     }
 
@@ -855,7 +933,7 @@ public class XMLSerializer {
 
         if(cdatetime.getInterval() != null) {
             Element range = new Element("range", defaultNamespace);
-            out.getChildren().add(range);            
+            out.getChildren().add(range);
             printInterval(cdatetime.getInterval(), range);
         }
 
@@ -879,20 +957,23 @@ public class XMLSerializer {
         }
 
         if(ctime.hasAssumedValue()) {
-            printString("assumed_value", ctime.assumedValue().toString(), out); 
+            printString("assumed_value", ctime.assumedValue().toString(), out);
         }
     }
 
     protected void printCDuration(CDuration cduration, Element out) {
 
-        if (cduration.getValue() != null) {
-            printString("pattern", cduration.getValue().toString(), out);
-        } 
-
+        if (cduration.getPattern() != null) {
+            printString("pattern", cduration.getPattern().toString(), out);
+        }
+        Element range = new Element("range", defaultNamespace);
+        out.getChildren().add(range);
         if(cduration.getInterval() != null) {
-            Element range = new Element("range", defaultNamespace);
-            out.getChildren().add(range);
             printInterval(cduration.getInterval(), range);
+        } else {
+            // these should be supplied even for a null range
+            printString("lower_unbounded", "true", range);
+            printString("upper_unbounded", "true", range);
         }
 
         if(cduration.hasAssumedValue()) {
@@ -904,7 +985,7 @@ public class XMLSerializer {
 
         if(cinteger.getList() != null) {
             printList(cinteger.getList(), out);
-        } 
+        }
 
         if(cinteger.getInterval() != null) {
             Element range = new Element("range", defaultNamespace);
@@ -923,7 +1004,7 @@ public class XMLSerializer {
 
         if (creal.getList() != null) {
             printList(creal.getList(), out);
-        } 
+        }
 
         if(creal.getInterval() != null) {
             Element range = new Element("range", defaultNamespace);
@@ -974,7 +1055,7 @@ public class XMLSerializer {
         final Comparable upper = interval.getUpper();
 
         if (!  interval.isLowerUnbounded()) { // not included is implied if unbounded
-            printString("lower_included", 
+            printString("lower_included",
                     interval.isLowerIncluded() == true ? "true" : "false",
                             out);
         }
@@ -1008,13 +1089,14 @@ public class XMLSerializer {
 
         StringBuffer result = new StringBuffer();
 
-        char prevChar = 'A'; // init with an upper case letter 
+        char prevChar = 'A'; // init with an upper case letter
         /*
          * Change underscore to space, insert space before capitals
          */
         for( int i = 0; i < str.length(); i++ ) {
             char c = str.charAt( i );
-            if(! Character.isUpperCase(prevChar) && 
+            if(! Character.isUpperCase(prevChar) &&
+                    !(prevChar=='<') && // without this DV_INTERVAL<DV_QUANTITY>    -->    DV_INTERVAL<_DV_QUANTITY>
                     !(prevChar=='_') && 
                     Character.isLetter(c) &&
                     Character.isUpperCase(c))

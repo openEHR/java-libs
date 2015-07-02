@@ -1026,13 +1026,13 @@ ArchetypeOntology arch_ontology() :
   [ terminologies = terminologies_available() ]
 
   termDefinitionsList = term_definitions_list()
-  
+
   [ constraintDefinitionsList = constraint_definitions_list() ]
-  
-  [ termBindingList = term_binding_list() ]	  
-   
+
+  [ termBindingList = term_binding_list() ]
+
   [ constraintBindingList = constraint_binding_list() ]
-    
+
   (
     t = <V_IDENTIFIER> { key = t.image; }
     <SYM_EQ> "<" value = dadl_text() ">"
@@ -1082,8 +1082,8 @@ List term_definitions_list() :
   OntologyDefinitions definitions = null;
 }
 {
-  <SYM_TERM_DEFINITIONS> <SYM_EQ> "<"    
-  ( 
+  <SYM_TERM_DEFINITIONS> <SYM_EQ> "<"
+  (
     definitions = definitions_body()
     { list.add(definitions); }
   )+
@@ -1093,12 +1093,12 @@ List term_definitions_list() :
 
 List constraint_definitions_list() :
 {
-  List list = new ArrayList();	
+  List list = new ArrayList();
   OntologyDefinitions definitions = null;
 }
 {
-  <SYM_CONSTRAINT_DEFINITIONS> <SYM_EQ> "<" 
-  ( 
+  <SYM_CONSTRAINT_DEFINITIONS> <SYM_EQ> "<"
+  (
     definitions = definitions_body()
     { list.add(definitions); }
   )*
@@ -1138,14 +1138,14 @@ DefinitionItem definition_item() :
 }
 {
   "[" code = local_code_value() "]" <SYM_EQ> "<"
-    ( 
+    (
       <SYM_TEXT> <SYM_EQ> "<" text = string_value() ">"
       [ ";" ]
       <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" description = string_value() ">"
     |
       <SYM_DESCRIPTION_WORD> <SYM_EQ> "<" description = string_value() ">"
       [ ";" ]
-      <SYM_TEXT> <SYM_EQ> "<" text = string_value() ">"      
+      <SYM_TEXT> <SYM_EQ> "<" text = string_value() ">"
     )
   ">"
   { return new DefinitionItem(code, text, description); }
@@ -1192,13 +1192,13 @@ ArchetypeTerm archetype_term() :
 
 List term_binding_list() :
 {
-  List list = new ArrayList();	
+  List list = new ArrayList();
   OntologyBinding binding = null;
 }
 {
   <SYM_TERM_BINDING> <SYM_EQ> "<"
-  ( 
-    binding = ontology_binding_body() 
+  (
+    binding = ontology_binding_body()
     { list.add(binding); }
    )*
   ">"
@@ -1207,12 +1207,12 @@ List term_binding_list() :
 
 List constraint_binding_list() :
 {
-  List list = new ArrayList();	 
+  List list = new ArrayList();
   OntologyBinding binding = null;
 }
 {
    <SYM_CONSTRAINT_BINDING> <SYM_EQ> "<"
-   ( 
+   (
      binding = ontology_binding_body()
      { list.add(binding); }
    )*
@@ -1229,7 +1229,7 @@ OntologyBinding ontology_binding_body() :
 }
 {
    "[" terminology = string_value() "]" <SYM_EQ> "<"
-     
+
      <SYM_ITEMS> <SYM_EQ> "<"
 
 	    (
@@ -1300,7 +1300,7 @@ String local_code_path_value() :
 }
 {
   t = <V_ABSOLUTE_PATH_WQ>
-  { 
+  {
     String value = t.image;
     return value.substring(1, value.length() - 1);
   }
@@ -1408,21 +1408,21 @@ Set assertions() :
 
 Assertion assertion() :
 {
-  String tag = null; 
+  String tag = null;
   ExpressionItem expression;
-  String stringExpression = null; 
-  List<AssertionVariable> variables = null;	
+  String stringExpression = null;
+  List<AssertionVariable> variables = null;
 }
 {
-  [ 
+  [
     LOOKAHEAD(2)
-    tag = any_identifier() ":" 
-  ] 
-  expression = boolean_expression()  
-  
+    tag = any_identifier() ":"
+  ]
+  expression = boolean_expression()
+
   {
     stringExpression = expression.toString();
-    return new Assertion(tag, expression, stringExpression, variables); 
+    return new Assertion(tag, expression, stringExpression, variables);
   }
 }
 
@@ -1445,7 +1445,7 @@ Object basic_object_val() :
   |
     LOOKAHEAD( term_code() )
     value = term_code()
-  )  
+  )
   { return value; }
 }
 
@@ -1564,10 +1564,10 @@ String string_value() :
   {
   	// remove escape, \" -> "
   	value = value.replace("\\\"","\"");
-  	
+
   	// remove escape, \\ -> \
   	value = value.replace("\\\\","\\");
-  	    
+
     return value.substring(1, value.length() - 1);
   }
 }
@@ -1580,7 +1580,7 @@ List index_string_list() :{
 {
   (
     <SYM_L_BRACKET> index = string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
-      ( value = string_value())    
+      ( value = string_value())
       { list.add(value); }
     <SYM_GT>
   )*
@@ -1653,38 +1653,38 @@ Interval integer_interval_value() :
 {
   Interval i = null;
   int lower = 0;
-  int upper = 0;  
+  int upper = 0;
 }
 {
   <SYM_INTERVAL_DELIM>
   (
-    LOOKAHEAD( 3 )    
+    LOOKAHEAD( 3 )
     {
       boolean lowerInclusive = true;
-	  boolean upperInclusive = true; 
-	  boolean upperSpecified = false; 	
+	  boolean upperInclusive = true;
+	  boolean upperSpecified = false;
     }
     [
       <SYM_GT> { lowerInclusive = false; }
 	]
-    lower = integer_value() 
+    lower = integer_value()
     { upper = lower; }
-    [ 
-      <SYM_ELLIPSIS> 
-      [ 
-        <SYM_LT> {  upperInclusive = false; } 
-      ] 
+    [
+      <SYM_ELLIPSIS>
+      [
+        <SYM_LT> {  upperInclusive = false; }
+      ]
       upper = integer_value()
-      { upperSpecified =true; }       
+      { upperSpecified =true; }
     ]
     {
       if(!lowerInclusive && !upperSpecified) {
       	// specical case for |>100|
       	i = new Interval(new Integer(lower), null, false, false);
       } else {
-      	i = new Interval(new Integer(lower), new Integer(upper), lowerInclusive, 
+      	i = new Interval(new Integer(lower), new Integer(upper), lowerInclusive,
       	                 upperInclusive);
-      }	
+      }
     }
   |
     <SYM_LT> upper = integer_value()
@@ -1759,31 +1759,31 @@ Interval real_interval_value() :
 {
   <SYM_INTERVAL_DELIM>
   (
-    LOOKAHEAD( 3 )    
+    LOOKAHEAD( 3 )
     {
       boolean lowerInclusive = true;
-	  boolean upperInclusive = true; 
-	  boolean upperSpecified = false; 	
+	  boolean upperInclusive = true;
+	  boolean upperSpecified = false;
     }
     [
       <SYM_GT> { lowerInclusive = false; }
 	]
-    lower = real_value() 
+    lower = real_value()
     { upper = lower; }
-    [ 
-      <SYM_ELLIPSIS> 
-      [ 
-        <SYM_LT> {  upperInclusive = false; } 
+    [
+      <SYM_ELLIPSIS>
+      [
+        <SYM_LT> {  upperInclusive = false; }
       ]
-      upper = real_value()       
-      { upperSpecified = true; } 
+      upper = real_value()
+      { upperSpecified = true; }
     ]
     {
       if(!lowerInclusive && !upperSpecified) {
       	// specical case for |>100.0|
       	i = new Interval(new Double(lower), null, false, false);
-      } else {	 
-        i = new Interval(new Double(lower), new Double(upper), lowerInclusive, 
+      } else {
+        i = new Interval(new Double(lower), new Double(upper), lowerInclusive,
                          upperInclusive);
       }
     }
@@ -1911,7 +1911,7 @@ Interval date_interval_value() :
 {
     <SYM_INTERVAL_DELIM>
   (
-    lower = date_value() 
+    lower = date_value()
     { upper = lower; }
     [ <SYM_ELLIPSIS> upper = date_value() ]
     {
@@ -2083,7 +2083,7 @@ Interval date_time_interval_value() :
 {
     <SYM_INTERVAL_DELIM>
   (
-    lower = date_time_value() 
+    lower = date_time_value()
     { upper = lower; }
     [ <SYM_ELLIPSIS> upper = date_time_value() ]
     {
@@ -2151,10 +2151,10 @@ Interval duration_interval_value() :
 {
   <SYM_INTERVAL_DELIM>
   (
-    lower = duration_value() 
+    lower = duration_value()
     { upper = lower; }
-    [ 
-      <SYM_ELLIPSIS> upper = duration_value() 
+    [
+      <SYM_ELLIPSIS> upper = duration_value()
     ]
     {
       i = new Interval(lower, upper, true, true);
@@ -2239,10 +2239,10 @@ CComplexObject c_complex_object(String path, CAttribute parent) :
       path = "/";
     } else {
       path += (nodeID == null ? "" : "[" + nodeID + "]");
-    }    
+    }
   }
   <SYM_MATCHES> <SYM_START_CBLOCK>
-    attributes = c_complex_object_body(path) 
+    attributes = c_complex_object_body(path)
   <SYM_END_CBLOCK>
   {
     return new CComplexObject(path, type, occurrences, nodeID, attributes, parent);
@@ -2277,7 +2277,7 @@ CObject c_object(String path, CAttribute parent) :
 }
 {
   (
-      c = c_dv_quantity(path, parent)    
+      c = c_dv_quantity(path, parent)
     |
       c = c_complex_object(path, parent)
     |
@@ -2305,7 +2305,7 @@ ConstraintRef constraint_ref_obj(String path, CAttribute parent) :
   String reference;
   String rmTypeName = "CODE_PHRASE";
   Interval<Integer> occurrences = new Interval<Integer>(1, 1);
-  String nodeId = null;  
+  String nodeId = null;
 }
 {
   reference = constraint_ref()
@@ -2315,23 +2315,29 @@ ConstraintRef constraint_ref_obj(String path, CAttribute parent) :
   }
 }
 
-ArchetypeInternalRef archetype_internal_ref(String path, CAttribute
-parent) :
+ArchetypeInternalRef archetype_internal_ref(String path, CAttribute parent) :
 {
-    String type;
-    Interval<Integer> occurrences = new Interval<Integer>(1, 1);
-    String target;
-    String nodeID = null;
+  String type;
+  Interval<Integer> occurrences = new Interval<Integer>(1, 1);
+  String target;
+  String nodeID = null;
 }
 {
-    <SYM_USE_NODE> type = type_identifier()
-     [ nodeID = constraint_ref() ]
-     [ occurrences = c_occurrences() ]
-    target = absolute_path()
-    {
-        return new ArchetypeInternalRef(path, type, occurrences, nodeID, parent,
-                target);
+  <SYM_USE_NODE> type = type_identifier()
+   [ nodeID = constraint_ref() ]
+   [ occurrences = c_occurrences() ]
+  {
+  	if(path == null) {
+      path = "/";
+    } else {
+      path += (nodeID == null ? "" : "[" + nodeID + "]");
     }
+  }
+  target = absolute_path()
+  {
+  	return new ArchetypeInternalRef(path, type, occurrences, nodeID, parent,
+  			target);
+  }
 }
 
 ArchetypeSlot archetype_slot(String path, CAttribute parent) :
@@ -2344,11 +2350,11 @@ ArchetypeSlot archetype_slot(String path, CAttribute parent) :
 }
 {
   <SYM_ALLOW_ARCHETYPE> type = type_identifier()
-  
+
   [ nodeID = constraint_ref() ]
-  
-  [ occurrences = c_occurrences() ] 
-  
+
+  [ occurrences = c_occurrences() ]
+
   <SYM_MATCHES> <SYM_START_CBLOCK>
     [ includes = c_includes() ]
     [ excludes = c_excludes() ]
@@ -2358,8 +2364,8 @@ ArchetypeSlot archetype_slot(String path, CAttribute parent) :
         path = "/";
     } else {
         path += (nodeID == null ? "" : "[" + nodeID + "]");
-    }   
-    return new ArchetypeSlot(path, type, occurrences, nodeID, parent, includes, 
+    }
+    return new ArchetypeSlot(path, type, occurrences, nodeID, parent, includes,
     		excludes);
   }
 }
@@ -2428,7 +2434,7 @@ CAttribute c_attribute(String path) :
   	if( ! path.endsWith("/")) {
 	    path += "/";
   	}
-  }	
+  }
   name = attribute_identifier()
   [ existence = c_existence() ]
   [ cardinality = c_cardinality() ]
@@ -2437,14 +2443,14 @@ CAttribute c_attribute(String path) :
   <SYM_END_CBLOCK>
   {
   	path += name;
-  	
+
   	if(cardinality == null) {
       attribute = new CSingleAttribute(path, name, existence, children);
     } else {
       attribute = new CMultipleAttribute(path, name, existence, cardinality,
                                          children);
     }
-    
+
     // Set children parent to the attribute
     if (children!=null){
         for(Iterator it = children.iterator(); it.hasNext();) {
@@ -2452,7 +2458,7 @@ CAttribute c_attribute(String path) :
           co.setParent(attribute);
         }
     }
-    
+
     return attribute;
   }
 }
@@ -2463,7 +2469,7 @@ List c_attr_values(String path, CAttribute parent) :
   CObject c = null;
 }
 {
-  (	
+  (
     LOOKAHEAD(2)
     c_any()
   |
@@ -2489,15 +2495,15 @@ Set c_invariants() :
 /* ----------------------- expressions ----------------------- */
 ExpressionItem boolean_expression() :
 {
-  ExpressionItem item = null;	
+  ExpressionItem item = null;
 }
-{  
-  LOOKAHEAD( 2 )	
+{
+  LOOKAHEAD( 2 )
   item = boolean_leaf()
 |
   LOOKAHEAD( 2 )
   item = boolean_node()
-  
+
   { return item; }
 }
 
@@ -2505,18 +2511,18 @@ ExpressionItem boolean_node() :
 {
   ExpressionItem ret = null;
   ExpressionItem item = null;
-  ExpressionItem item2 = null;  
+  ExpressionItem item2 = null;
   OperatorKind op = null;
   String path = null;
   boolean precedenceOverridden = false; // TODO
-  Token t = null;	
+  Token t = null;
   String attrId = null;
   CPrimitive cp = null;
 }
 {
 (
   <SYM_EXISTS> path = absolute_path()
-  { 
+  {
   	item = ExpressionLeaf.pathConstant(path);
   	ret = new ExpressionUnaryOperator(ExpressionItem.BOOLEAN,
   		OperatorKind.OP_EXISTS, precedenceOverridden, item);
@@ -2526,76 +2532,76 @@ ExpressionItem boolean_node() :
   attrId = relative_path() <SYM_MATCHES>
                  (
                    <SYM_START_CBLOCK> cp = c_primitive() <SYM_END_CBLOCK>
-                   { item2 = new ExpressionLeaf("C_"+cp.getType().toUpperCase(), cp,  //SG 2013-01-31: Need to add "C_" because it is a C_* constraint pattern here, with the type usually being displayed in upper case  
+                   { item2 = new ExpressionLeaf("C_"+cp.getType().toUpperCase(), cp,  //SG 2013-01-31: Need to add "C_" because it is a C_* constraint pattern here, with the type usually being displayed in upper case
                    				ExpressionLeaf.ReferenceType.CONSTRAINT);  } //SG 2013-01-31: instead of CONSTANT, which is not correct, at least not for archetype slots according to spec.
                  |
                    t = <V_REGEXP>
                    { item2 = ExpressionLeaf.stringConstant(t.image);  }
                  )
-  { 
+  {
 
   	item = new ExpressionLeaf(ExpressionItem.STRING, attrId,
                 ExpressionLeaf.ReferenceType.ATTRIBUTE); //SG 2013-01-31, needs to be  attribute according to spec (not constant), relevant for archetype slots
   	//item = ExpressionLeaf.stringConstant(attrId);
-  	ret = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN, 
+  	ret = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN,
   					OperatorKind.OP_MATCHES, false, item, item2);
-  }	   
+  }
 |
   <SYM_NOT> item = boolean_expression()
   {
   	ret = new ExpressionUnaryOperator(ExpressionItem.BOOLEAN,
-  		OperatorKind.OP_NOT, precedenceOverridden, item); 
+  		OperatorKind.OP_NOT, precedenceOverridden, item);
   }
 |
   LOOKAHEAD( 3 )
   item = arithmetic_expression()
   (
-      "=" 
+      "="
       { op = OperatorKind.OP_EQ; }
-    | 
-      <SYM_NE> 
+    |
+      <SYM_NE>
       { op = OperatorKind.OP_NE; }
-    | 
-      <SYM_LT> 
+    |
+      <SYM_LT>
       { op = OperatorKind.OP_LT; }
-    | 
-      <SYM_GT> 
+    |
+      <SYM_GT>
       { op = OperatorKind.OP_GT; }
-    | 
-      <SYM_LE> 
+    |
+      <SYM_LE>
       { op = OperatorKind.OP_LE; }
-    | 
+    |
       <SYM_GE>
       { op = OperatorKind.OP_GE; }
   )
-  item2 = arithmetic_expression()  
-  { 
+  item2 = arithmetic_expression()
+  {
   	ret = new ExpressionBinaryOperator(item.getType(), op, false, item, item2);
   }
 |
-  LOOKAHEAD( 3 ) 
-  item = boolean_leaf() 
+  LOOKAHEAD( 3 )
+  item = boolean_leaf()
   (
 	  (
-	    <SYM_AND> 
+	    <SYM_AND>
 	    { op = OperatorKind.OP_AND; }
-	  | 
-	    <SYM_OR>  
+	  |
+	    <SYM_OR>
 	    { op = OperatorKind.OP_OR; }
 	  |
-	    <SYM_XOR> 
+	    <SYM_XOR>
 	    { op = OperatorKind.OP_XOR; }
-	  |    
-	    <SYM_IMPLIES> 
+	  |
+	    <SYM_IMPLIES>
 	    { op = OperatorKind.OP_IMPLIES; }
 	  )
 	  item2 = boolean_expression()
   )
-  { 
+  {
   	if(item2 == null) {
   		ret = item;
   	} else {
-  	ret = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN, op, false, 
+  	ret = new ExpressionBinaryOperator(ExpressionItem.BOOLEAN, op, false,
   		item, item2);
   	}
   }
@@ -2608,22 +2614,22 @@ ExpressionItem boolean_leaf() :
   ExpressionItem item = null;
 }
 {
- 
+
   LOOKAHEAD( 3 )
   "(" item = boolean_expression() ")"
 |
   <SYM_TRUE>
   { item = ExpressionLeaf.booleanConstant(true); }
-| 
+|
   <SYM_FALSE>
   { item = ExpressionLeaf.booleanConstant(false); }
- 
-  { return item; }	  
+
+  { return item; }
 }
 
 ExpressionItem arithmetic_expression() :
 {
-  ExpressionItem item = null;  
+  ExpressionItem item = null;
 }
 {
   LOOKAHEAD( 3 )
@@ -2642,63 +2648,63 @@ ExpressionItem arithmetic_node() :
   OperatorKind op = null;
 }
 {
-  left = arithmetic_leaf() 
+  left = arithmetic_leaf()
   (
 	(
-	    "+" 
+	    "+"
 	    { op = OperatorKind.OP_PLUS; }
-	  | 
-	    "-" 
+	  |
+	    "-"
 	    { op = OperatorKind.OP_MINUS; }
-	  | 
-	    "*" 
+	  |
+	    "*"
 	    { op = OperatorKind.OP_MULTIPLY; }
-	  | 
-	    "/" 
+	  |
+	    "/"
 	    { op = OperatorKind.OP_DIVIDE; }
-	  | 
-	    "^" 
-	    { op = OperatorKind.OP_EXP; }  
-	)  
-	  
-	right = arithmetic_expression()	  	
-  )  
-  { 
+	  |
+	    "^"
+	    { op = OperatorKind.OP_EXP; }
+	)
+
+	right = arithmetic_expression()
+  )
+  {
   	if(right == null) {
 		item = left;
-  	} else {  	
-  		item = new ExpressionBinaryOperator(right.getType(), op, false, left, 
-  				right);	 
+  	} else {
+  		item = new ExpressionBinaryOperator(right.getType(), op, false, left,
+  				right);
   	}
-  	return item; 
+  	return item;
   }
 }
 
 ExpressionItem arithmetic_leaf() :
-{ 
+{
   ExpressionItem item = null;
   Token t = null;
   String str = null;
 }
 {
   "(" item = arithmetic_expression() ")"
-| 
+|
   t = <V_INTEGER>
   {
   	int i = Integer.parseInt(t.image);
   	item = ExpressionLeaf.intConstant(i);
   }
-| 
+|
   t = <V_REAL>
   {
   	double d = Double.parseDouble(t.image);
   	item = ExpressionLeaf.realConstant(d);
   }
 |
-  str = absolute_path() 
+  str = absolute_path()
   {
   	item = ExpressionLeaf.stringConstant(str);
-  }  
+  }
   {  return item; }
 }
 
@@ -2816,7 +2822,7 @@ CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
   Interval<Integer> occurrences = new Interval<Integer>(1, 1);
 }
 {
-  	
+
 	  o = ordinal() { list.add(o); }
 	  (
 	    "," o = ordinal()
@@ -2831,15 +2837,15 @@ CDvOrdinal c_dv_ordinal(String path, CAttribute parent) :
 	  	  		assumedValue = ord;
 	  	  		break;
 	  	  	}
-	  	  }	  
-	  	}  	
+	  	  }
+	  	}
 	  ]
-	  { 
+	  {
 	  	return new CDvOrdinal(path, occurrences, null, parent, list, defaultValue,
-	  		assumedValue); 
+	  		assumedValue);
 	  }
   |
-      <SYM_C_DV_ORDINAL> <SYM_LT> <SYM_GT>    
+      <SYM_C_DV_ORDINAL> <SYM_LT> <SYM_GT>
   	  {
   	  	// any allowed
   	    return new CDvOrdinal(path, occurrences, null, parent, null, null, null);
@@ -2854,9 +2860,9 @@ org.openehr.am.openehrprofile.datatypes.quantity.Ordinal ordinal() :
 }
 {
   value = integer_value() "|" code = code_phrase()
-  { 
+  {
   	return new org.openehr.am.openehrprofile.datatypes.quantity.Ordinal(
-  		value, code); 
+  		value, code);
   }
 }
 
@@ -2868,55 +2874,55 @@ CCodePhrase c_code_phrase(String path, CAttribute parent) :
   List codeList = null;
   String assumed = null;
   CodePhrase assumedValue = null;
-  CodePhrase defaultValue = null; // not used 
+  CodePhrase defaultValue = null; // not used
   CodePhrase singleValue = null;
   Interval<Integer> occurrences = new Interval<Integer>(1, 1);
 }
 {
-  (	
-  t = <V_TERMINOLOGY_ID_BLOCK> 
-    { 
+  (
+  t = <V_TERMINOLOGY_ID_BLOCK>
+    {
 		// remove leading "[" and trailing "::"
-    	terminology = t.image; 
+    	terminology = t.image;
     	terminology = terminology.substring(1, terminology.length() - 2);
     	terminologyId = new TerminologyID(terminology);
     }
     [
-      t = <V_TERM_CODE> 
-      { 
+      t = <V_TERM_CODE>
+      {
       	codeList = new ArrayList();
-      	codeList.add(t.image); 
+      	codeList.add(t.image);
       }
       (
         [","] t = <V_TERM_CODE> { codeList.add(t.image); }
       )*
-      [ 
-        ";" t = <V_TERM_CODE> 
-        { 
-          assumed = t.image; 
+      [
+        ";" t = <V_TERM_CODE>
+        {
+          assumed = t.image;
           assumedValue = new CodePhrase(terminologyId, assumed);
-        } 
-      ]	
+        }
+      ]
     ]
   "]"
-    { 
+    {
     	// leave lexical state "TERM_CODE"
-    	token_source.SwitchTo(CADL); 
+    	token_source.SwitchTo(CADL);
     }
-  | 
+  |
     singleValue = code_phrase()
-    { 
+    {
       codeList = new ArrayList();
       codeList.add(singleValue.getCodeString());
       terminologyId = singleValue.getTerminologyId();
     }
   )
-  {   	
-  	return new CCodePhrase(path, occurrences, null, parent, terminologyId, 
-  		codeList, defaultValue, assumedValue); 
+  {
+  	return new CCodePhrase(path, occurrences, null, parent, terminologyId,
+  		codeList, defaultValue, assumedValue);
   }
-  
-  
+
+
 }
 
 CDvQuantity c_dv_quantity(String path, CAttribute parent) :
@@ -2925,7 +2931,7 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
   String terminology = null;
   String code = null;
   List list = null;
-  CDvQuantityItem item = null;  
+  CDvQuantityItem item = null;
   Token t = null;
   DvQuantity defaultValue = null;
   DvQuantity assumedValue = null;
@@ -2934,33 +2940,33 @@ CDvQuantity c_dv_quantity(String path, CAttribute parent) :
 {
   <SYM_C_DV_QUANTITY> "<"
     (
-        	
-	  <SYM_PROPERTY> <SYM_EQ> "<" property = code_phrase() ">" 	 	  
-    
-    | 
-    	
+
+	  <SYM_PROPERTY> <SYM_EQ> "<" property = code_phrase() ">"
+
+    |
+
 	  { list = new ArrayList(); }
-	  <SYM_LIST> <SYM_EQ> "<"	  
-	    ( 
-	      item = c_dv_quantity_item() 
+	  <SYM_LIST> <SYM_EQ> "<"
+	    (
+	      item = c_dv_quantity_item()
 	      { list.add(item); }
-	    )+	  	  
+	    )+
 	  ">"
-	  
-   |   
-    
+
+   |
+
       <SYM_C_QUANTITY_ASSUMED_VALUE> <SYM_EQ> "<"
-        assumedValue = dv_quantity() 
+        assumedValue = dv_quantity()
       ">"
-    
+
     )*
-  ">"	   
-  { 
+  ">"
+  {
   	{ token_source.SwitchTo(CADL); }
-  	
-  	return new CDvQuantity(path, occurrences, null, parent, list, property, 
-  		defaultValue, assumedValue);  		  	
-  } 
+
+  	return new CDvQuantity(path, occurrences, null, parent, list, property,
+  		defaultValue, assumedValue);
+  }
 }
 
 DvQuantity dv_quantity() :
@@ -2970,46 +2976,46 @@ DvQuantity dv_quantity() :
   int  precision = 0;
 }
 {
-  (	
+  (
     <SYM_C_QUANTITY_UNITS> <SYM_EQ> "<" units = string_value() ">"
-  |  
-    <SYM_MAGNITUDE> <SYM_EQ> "<" magnitude = real_value() ">"	  
-  |  
-    <SYM_PRECISION> <SYM_EQ> "<" precision = integer_value() ">"	
-  )*  
-  { 
-  	return new DvQuantity(units, magnitude, precision, measureServ); 
-  }	
+  |
+    <SYM_MAGNITUDE> <SYM_EQ> "<" magnitude = real_value() ">"
+  |
+    <SYM_PRECISION> <SYM_EQ> "<" precision = integer_value() ">"
+  )*
+  {
+  	return new DvQuantity(units, magnitude, precision, measureServ);
+  }
 }
 
 CDvQuantityItem c_dv_quantity_item() :
 {
   Interval value = null;
   Interval precision = null;
-  String units;  	
+  String units;
 }
 {
   "[" string_value() "]" <SYM_EQ> "<"
-    
-     (<SYM_C_QUANTITY_UNITS>) <SYM_EQ> "<" 
-      units = string_value() 
+
+     (<SYM_C_QUANTITY_UNITS>) <SYM_EQ> "<"
+      units = string_value()
     ">"
-    
+
     [
-      <SYM_MAGNITUDE> <SYM_EQ> "<" 
-        value = real_interval_value()       
+      <SYM_MAGNITUDE> <SYM_EQ> "<"
+        value = real_interval_value()
       ">"
     ]
-    
+
     [
-      <SYM_PRECISION> <SYM_EQ> "<" 
+      <SYM_PRECISION> <SYM_EQ> "<"
         precision = integer_interval_value()
       ">"
 	]
   ">"
-  { 
-  	return new CDvQuantityItem(value, precision, units); 
-  } 		
+  {
+  	return new CDvQuantityItem(value, precision, units);
+  }
 }
 
 List<String> string_list() :
@@ -3019,14 +3025,14 @@ List<String> string_list() :
 }
 {
   (
-    <SYM_L_BRACKET> string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>     	
+    <SYM_L_BRACKET> string_value() <SYM_R_BRACKET> <SYM_EQ> <SYM_LT>
       value = string_value()
-    <SYM_GT>    
-    { list.add(value); }  
-  )*		
-	
-  { return list; }		
-}	
+    <SYM_GT>
+    { list.add(value); }
+  )*
+
+  { return list; }
+}
 
 CInteger c_integer() :
 {
@@ -3049,8 +3055,8 @@ CInteger c_integer() :
     LOOKAHEAD( occurrence_spec())
     interval = occurrence_spec()
   )
-  [ ";" assumed = integer_value() 
-		{ assumedValue = new Integer(assumed); }  
+  [ ";" assumed = integer_value()
+		{ assumedValue = new Integer(assumed); }
   ]
   {
     if(interval != null) {
@@ -3084,7 +3090,7 @@ CReal c_real() :
     LOOKAHEAD( real_value() )
     d = real_value()
   )
-  [ 
+  [
   	";" assumed = real_value()
   	{ assumedValue = new Double(assumed); }
   ]
@@ -3119,7 +3125,7 @@ CDate c_date() :
   |
     interval = date_interval_value()
   )
-  [ 
+  [
     ";" assumed = date_value()
   ]
   {
@@ -3149,7 +3155,7 @@ CTime c_time() :
   |
     interval = time_interval_value()
   )
-  [ 
+  [
     ";" assumed = time_value()
   ]
   {
@@ -3179,7 +3185,7 @@ CDateTime c_date_time() :
   |
     interval = date_time_interval_value()
   )
-  [ 
+  [
     ";" assumed = date_time_value()
   ]
   {
@@ -3201,17 +3207,17 @@ CDuration c_duration() :
 }
 {
  (
-    pattern = duration_pattern() 
+    pattern = duration_pattern()
     [
        "/" interval = duration_interval_value()
-    ]    
+    ]
   |
     interval = duration_interval_value()
   |
-    value = duration_value()  
+    value = duration_value()
   )
-  	 
-  [ 
+
+  [
     ";" assumed = duration_value()
   ]
   {
@@ -3221,7 +3227,7 @@ CDuration c_duration() :
 
 String duration_pattern() :
 {
-  Token t = null;  
+  Token t = null;
 }
 {
   t = <V_ISO8601_DURATION_CONSTRAINT_PATTERN>
@@ -3269,7 +3275,7 @@ CBoolean c_boolean() :
 {
   boolean trueAllowed = false;
   boolean falseAllowed = false;
-  boolean assumed = false;  
+  boolean assumed = false;
   boolean hasAssumed = false;
 }
 {
@@ -3279,9 +3285,9 @@ CBoolean c_boolean() :
   | <SYM_FALSE> { falseAllowed = true; }
     [ "," <SYM_TRUE> { trueAllowed = true; } ]
   )
-  [ 
-    ";" 
-    ( <SYM_TRUE> {assumed = true; } | <SYM_FALSE> {assumed = false;} ) 
+  [
+    ";"
+    ( <SYM_TRUE> {assumed = true; } | <SYM_FALSE> {assumed = false;} )
     { hasAssumed = true; }
   ]
   {
@@ -3320,10 +3326,10 @@ String type_identifier() :
   String type;
 }
 {
-  t = <V_TYPE_IDENTIFIER> 
+  t = <V_TYPE_IDENTIFIER>
   { type = t.image; }
-  [ 
-    "<"  t = <V_TYPE_IDENTIFIER> ">" 
+  [
+    "<"  t = <V_TYPE_IDENTIFIER> ">"
     { type += "<" + t.image + ">"; }
   ]
   { return type; }
@@ -3340,8 +3346,8 @@ String attribute_identifier() :
 
 
 String absolute_path() :
-{ 
-  String path; 
+{
+  String path;
   StringBuffer buf;
   Token t;
 }
@@ -3351,57 +3357,57 @@ String absolute_path() :
 }
 
 String relative_path() :
-{ 
+{
   StringBuffer buf;
-  String path;	
+  String path;
   Token t;
 }
 {
-  (  
-    t = <V_RELATIVE_PATH>    
-  | 
-    t = <V_ATTRIBUTE_IDENTIFIER>    
+  (
+    t = <V_RELATIVE_PATH>
+  |
+    t = <V_ATTRIBUTE_IDENTIFIER>
   )
   { return t.image; }
 }
 
 String path_segment() :
-{ 
-  Token t; 
+{
+  Token t;
   StringBuffer buf = new StringBuffer();
 }
 {
   t = <V_ATTRIBUTE_IDENTIFIER>
-  { buf.append(t.image); } 
+  { buf.append(t.image); }
   [
     LOOKAHEAD(2)
     t = <V_LOCAL_TERM_CODE_REF>
     { buf.append(t.image); }
-  ]  	
-  { return buf.toString(); }	
+  ]
+  { return buf.toString(); }
 }
 /*
  * ***** BEGIN LICENSE BLOCK ***** Version: MPL 1.1/GPL 2.0/LGPL 2.1
- * 
+ *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the 'License'); you may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.mozilla.org/MPL/
- * 
+ *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
- * 
+ *
  * The Original Code is ADLParser.java
- * 
+ *
  * The Initial Developer of the Original Code is Rong Chen. Portions created by
  * the Initial Developer are Copyright (C) 2003-2009 the Initial Developer. All
  * Rights Reserved.
- * 
+ *
  * Contributor(s): Sebastian Garde
- * 
+ *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
- * 
+ *
  * ***** END LICENSE BLOCK *****
  */

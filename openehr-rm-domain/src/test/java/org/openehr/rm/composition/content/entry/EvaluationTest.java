@@ -20,9 +20,14 @@
  */
 package org.openehr.rm.composition.content.entry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.composition.CompositionTestBase;
+import org.openehr.rm.datastructure.itemstructure.ItemList;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
+import org.openehr.rm.datastructure.itemstructure.representation.Element;
 import org.openehr.rm.support.identification.ArchetypeID;
 
 public class EvaluationTest extends CompositionTestBase {
@@ -57,7 +62,105 @@ public class EvaluationTest extends CompositionTestBase {
     	value = evaluation.itemAtPath(path);
     	assertEquals(evaluation, value);
     }
+    
+	public void testEquals() throws Exception {
+		ItemStructure protocolOne = list("list protocol");
+		ItemStructure dataOne = list("list data");
+		Archetyped archOne = new Archetyped(new ArchetypeID(
+				"openehr-ehr_rm-evaluation.physical_examination.v3"), "1.1");
+		Evaluation evaluationOne = new Evaluation(null, "at000",
+				text("evaluation"), archOne, null, null, null, language("en"),
+				language("en"), subject(), provider(), null, null, protocolOne,
+				null, dataOne, ts);
 
+		Evaluation evaluationTwo = new Evaluation(null, "at000",
+				text("evaluation"), archOne, null, null, null, language("en"),
+				language("en"), subject(), provider(), null, null, protocolOne,
+				null, dataOne, ts);
+
+		assertTrue(evaluationOne.equals(evaluationTwo));
+	}
+
+	public void testNotEqualsProtocol() throws Exception {
+		ItemStructure protocolOne = list("list protocol");
+		ItemStructure dataOne = list("list data");
+		Archetyped archOne = new Archetyped(new ArchetypeID(
+				"openehr-ehr_rm-evaluation.physical_examination.v3"), "1.1");
+		Evaluation evaluationOne = new Evaluation(null, "at000",
+				text("evaluation"), archOne, null, null, null, language("en"),
+				language("en"), subject(), provider(), null, null, protocolOne,
+				null, dataOne, ts);
+
+		ItemStructure protocolTwo = buildItem("list protocol");
+
+		Evaluation evaluationTwo = new Evaluation(null, "at000",
+				text("evaluation"), archOne, null, null, null, language("en"),
+				language("en"), subject(), provider(), null, null, protocolTwo,
+				null, dataOne, ts);
+
+		assertFalse(evaluationOne.equals(evaluationTwo));
+	}
+
+	public void testNotEqualsData() throws Exception {
+		ItemStructure protocolOne = list("list protocol");
+		ItemStructure dataOne = list("list data");
+		Archetyped archOne = new Archetyped(new ArchetypeID(
+				"openehr-ehr_rm-evaluation.physical_examination.v3"), "1.1");
+		Evaluation evaluationOne = new Evaluation(null, "at000",
+				text("evaluation"), archOne, null, null, null, language("en"),
+				language("en"), subject(), provider(), null, null, protocolOne,
+				null, dataOne, ts);
+
+		ItemStructure dataTwo = buildItem("list protocol");
+
+		Evaluation evaluationTwo = new Evaluation(null, "at000",
+				text("evaluation"), archOne, null, null, null, language("en"),
+				language("en"), subject(), provider(), null, null, protocolOne,
+				null, dataTwo, ts);
+
+		assertFalse(evaluationOne.equals(evaluationTwo));
+	}
+
+	public void testEqualsMixedData() throws Exception {
+		ItemStructure protocolOne = list("list protocol");
+		ItemStructure dataOne = list("list data");
+		Archetyped archOne = new Archetyped(new ArchetypeID(
+				"openehr-ehr_rm-evaluation.physical_examination.v3"), "1.1");
+		Evaluation evaluationOne = new Evaluation(null, "at000",
+				text("evaluation"), archOne, null, null, null, language("en"),
+				language("en"), subject(), provider(), null, null, protocolOne,
+				null, dataOne, ts);
+
+		ItemStructure dataTwo = buildMixedItem("list data");
+
+		Evaluation evaluationTwo = new Evaluation(null, "at000",
+				text("evaluation"), archOne, null, null, null, language("en"),
+				language("en"), subject(), provider(), null, null, protocolOne,
+				null, dataTwo, ts);
+
+		assertTrue(evaluationOne.equals(evaluationTwo));
+	}
+
+	private ItemList buildItem(String name) {
+		String[] names = { "field 1" };
+		String[] values = { "value 1" };
+		List<Element> items = new ArrayList<Element>();
+		for (int i = 0; i < names.length; i++) {
+			items.add(element(names[i], values[i]));
+		}
+		return new ItemList("at0100", text(name), items);
+	}
+
+	private ItemList buildMixedItem(String name) {
+		String[] names = { "field 2", "field 1", "field 3" };
+		String[] values = { "value 2", "value 1", "value 3" };
+		List<Element> items = new ArrayList<Element>();
+		for (int i = 0; i < names.length; i++) {
+			items.add(element(names[i], values[i]));
+		}
+		return new ItemList("at0100", text(name), items);
+	}
+	
     /* field */
     private Evaluation evaluation;
 

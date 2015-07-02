@@ -38,6 +38,8 @@ import org.openehr.terminology.SimpleTerminologyService;
  */
 public class XMLBinding {
 
+	private final Map<String, Map<String, Class>> classAttributeMap = new HashMap<String, Map<String, Class>>();
+	 
 	/**
 	 * Constructor allowing use of a custom SystemValue Map
 	 */
@@ -123,7 +125,7 @@ public class XMLBinding {
 			// Previous code was: Object xmlObj = factoryMethod.invoke(null, null);
 			Object xmlObj = factoryMethod.invoke(null, xopt);
 
-			Map<String, Class> attributes = builder.retrieveAttribute(className);
+			Map<String, Class> attributes = getClassAttributes(className);
 			Set<String> attributeNames = attributes.keySet();
 			Object attributeValue = null;
 			Method setterMethod = null;
@@ -314,6 +316,15 @@ public class XMLBinding {
 		return abstractClass;
 	}
 
+	private Map<String, Class> getClassAttributes(final String className)
+			throws Exception {
+		Map<String, Class> classMap = classAttributeMap.get(className);
+		if (classMap == null) {
+			classMap = builder.retrieveAttribute(className);
+			classAttributeMap.put(className, classMap);
+		}
+		return classMap;
+	}
 
 	/**
 	 * Binds data from XML binding classes to RM classes using reflection
@@ -332,7 +343,7 @@ public class XMLBinding {
 			className = className.substring(0, className.length() - 4);
 		}
 
-		Map<String, Class> attributes = builder.retrieveAttribute(className);
+		Map<String, Class> attributes = getClassAttributes(className);
 		Set<String> attributeNames = attributes.keySet();
 
 		log.debug("attributeNames: " + attributeNames);

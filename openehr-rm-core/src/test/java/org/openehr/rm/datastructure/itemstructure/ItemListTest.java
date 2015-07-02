@@ -75,6 +75,93 @@ public class ItemListTest extends DataStructureTestBase {
         }
         assertTrue(itemList.namedItem("unknown name") == null);
     }
+    
+	public void testEquals() {
+		List<Element> elementsOne = new ArrayList<Element>();
+
+		elementsOne.add(element(NAMES[0], VALUES[0]));
+		elementsOne.add(element(NAMES[1], VALUES[1]));
+		elementsOne.add(element(NAMES[2], VALUES[2]));
+
+		ItemList itemListOne = new ItemList(null, "at001", text(NAME), null,
+				null, null, null, elementsOne);
+
+		List<Element> elementsTwo = new ArrayList<Element>();
+
+		elementsTwo.add(element(NAMES[0], VALUES[0]));
+		elementsTwo.add(element(NAMES[1], VALUES[1]));
+		elementsTwo.add(element(NAMES[2], VALUES[2]));
+
+		ItemList itemListTwo = new ItemList(null, "at001", text(NAME), null,
+				null, null, null, elementsTwo);
+
+		assertTrue(itemListOne.equals(itemListTwo));
+	}
+
+	public void testEqualsElementsInMixedOrder() {
+		List<Element> elementsOne = new ArrayList<Element>();
+
+		elementsOne.add(element(NAMES[0], VALUES[0]));
+		elementsOne.add(element(NAMES[1], VALUES[1]));
+		elementsOne.add(element(NAMES[2], VALUES[2]));
+
+		ItemList itemListOne = new ItemList(null, "at001", text(NAME), null,
+				null, null, null, elementsOne);
+
+		List<Element> elementsTwo = new ArrayList<Element>();
+
+		elementsTwo.add(element(NAMES[0], VALUES[0]));
+		elementsTwo.add(element(NAMES[2], VALUES[2]));
+		elementsTwo.add(element(NAMES[1], VALUES[1]));
+
+		ItemList itemListTwo = new ItemList(null, "at001", text(NAME), null,
+				null, null, null, elementsTwo);
+
+		assertTrue(itemListOne.equals(itemListTwo));
+	}
+
+	public void testNotEqualSize() {
+		List<Element> elementsOne = new ArrayList<Element>();
+
+		elementsOne.add(element(NAMES[0], VALUES[0]));
+		elementsOne.add(element(NAMES[1], VALUES[1]));
+		elementsOne.add(element(NAMES[2], VALUES[2]));
+
+		ItemList itemListOne = new ItemList(null, "at001", text(NAME), null,
+				null, null, null, elementsOne);
+
+		List<Element> elementsTwo = new ArrayList<Element>();
+
+		elementsTwo.add(element(NAMES[0], VALUES[0]));
+		elementsTwo.add(element(NAMES[1], VALUES[1]));
+
+		ItemList itemListTwo = new ItemList(null, "at001", text(NAME), null,
+				null, null, null, elementsTwo);
+
+		assertFalse(itemListOne.equals(itemListTwo));
+	}
+
+	public void testNotEqual() {
+		List<Element> elementsOne = new ArrayList<Element>();
+
+		elementsOne.add(element(NAMES[0], VALUES[0]));
+		elementsOne.add(element(NAMES[1], VALUES[1]));
+		elementsOne.add(element(NAMES[2], VALUES[2]));
+
+		ItemList itemListOne = new ItemList(null, "at001", text(NAME), null,
+				null, null, null, elementsOne);
+
+		List<Element> elementsTwo = new ArrayList<Element>();
+
+		elementsTwo.add(element(NAMES[0], VALUES[0]));
+		elementsTwo.add(element(NAMES[1], VALUES[1]));
+		elementsTwo.add(element("Location", "LocationValue"));
+
+		ItemList itemListTwo = new ItemList(null, "at001", text(NAME), null,
+				null, null, null, elementsTwo);
+
+		assertFalse(itemListOne.equals(itemListTwo));
+	}
 
     // create a itemList as the example in the spec doc
     private ItemList init() {
