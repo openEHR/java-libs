@@ -68,6 +68,10 @@ public class CIntegerTest extends TestCase {
         assertTrue(ci.validValue(new Integer(0)));
         assertTrue(!ci.validValue(new Integer(-1)));
         assertTrue(!ci.validValue(new Integer(1)));
+        
+		assertTrue(ci.validValue("2"));
+		assertFalse(ci.validValue(""));
+		assertFalse(ci.validValue("-1"));
     }    
 }
 

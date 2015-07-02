@@ -15,6 +15,18 @@ public class BindDataTypesTest extends XMLBindingTestBase {
 		assertTrue("XML class wrong", obj instanceof DVPROPORTION);	
 	}	
 	
+	public void testBindtoXMLMultipleClassAtribute() throws Exception {
+		
+		//Validates it uses the map to when calling getClassAttributes(final String className) in XMLBinding
+		DvProportion bp = new DvProportion(0.5, 1.0, ProportionKind.RATIO, null);
+		Object obj = binding.bindToXML(bp);
+		assertTrue("XML class wrong", obj instanceof DVPROPORTION);	
+		Object obj1 = binding.bindToXML(bp);
+		assertTrue("XML class wrong", obj instanceof DVPROPORTION);	
+	}	
+	
+	
+	
 	public void testBindXMLDvProportionToRM() throws Exception {
 		DVPROPORTION xobj = DVPROPORTION.Factory.parse(
 				fromClasspath("dv_proportion.xml"));

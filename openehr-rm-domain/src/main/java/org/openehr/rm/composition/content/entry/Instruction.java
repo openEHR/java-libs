@@ -220,8 +220,76 @@ public final class Instruction extends CareEntry {
 
 	void setWfDefinition(DvParsable wfDefinition) {
 		this.wfDefinition = wfDefinition;
-	}      
+	}
+	
     // POJO end
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result
+				+ ((activities == null) ? 0 : activities.hashCode());
+		result = prime * result
+				+ ((expiryTime == null) ? 0 : expiryTime.hashCode());
+		result = prime * result
+				+ ((narrative == null) ? 0 : narrative.hashCode());
+		result = prime * result
+				+ ((wfDefinition == null) ? 0 : wfDefinition.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Instruction other = (Instruction) obj;
+		if (activities == null) {
+			if (other.activities != null) {
+				return false;
+			}
+		} else if (!activities.equals(other.activities)) {
+			return false;
+		}
+		if (expiryTime == null) {
+			if (other.expiryTime != null) {
+				return false;
+			}
+		} else if (!expiryTime.equals(other.expiryTime)) {
+			return false;
+		}
+		if (narrative == null) {
+			if (other.narrative != null) {
+				return false;
+			}
+		} else if (!narrative.equals(other.narrative)) {
+			return false;
+		}
+		if (wfDefinition == null) {
+			if (other.wfDefinition != null) {
+				return false;
+			}
+		} else if (!wfDefinition.equals(other.wfDefinition)) {
+			return false;
+		}
+		if (getProtocol() == null) {
+			if (other.getProtocol() != null) {
+				return false;
+			}
+		} else if (other.getProtocol() == null) {
+			return false;
+		} else if (!getProtocol().equals(other.getProtocol())) {
+			return false;
+		}
+		return true;
+	}
 
     /* fields */
     private DvText narrative;
