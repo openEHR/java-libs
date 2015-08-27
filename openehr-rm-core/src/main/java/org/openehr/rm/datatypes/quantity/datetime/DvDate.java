@@ -16,6 +16,7 @@ package org.openehr.rm.datatypes.quantity.datetime;
 
 import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -222,6 +223,7 @@ public class DvDate extends DvTemporal<DvDate> {
 		return false;
 	}
 
+	@Override
 	public boolean equals(Object o) {
 		if (!super.equals(o))
 			return false;
@@ -233,6 +235,14 @@ public class DvDate extends DvTemporal<DvDate> {
 					.append(monthKnown, dDate.monthKnown)
 					.append(dayKnown, dDate.dayKnown)
 					.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(isPartial)
+				.append(monthKnown)
+				.append(dayKnown).hashCode();
 	}
 
 	/**
