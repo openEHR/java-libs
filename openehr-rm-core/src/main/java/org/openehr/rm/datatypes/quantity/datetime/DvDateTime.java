@@ -332,14 +332,10 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 
 	public String toString(boolean isExtended) {
 		String dt = super.toString();
-		if (dt == null) {
-			dt = "";
+		if (isExtended) {
+			dt = DvDateTimeParser.basicToExtendedDateTime(dt);
 		} else {
-			if (isExtended) {
-				dt = DvDateTimeParser.basicToExtendedDateTime(dt);
-			} else {
-				dt = dt.replace(":", "").replace("-", "");
-			}
+			dt = dt.replace(":", "").replace("-", "");
 		}
 		return dt;
 	}

@@ -209,9 +209,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
 
             if (parentNodeInParentArchetype == null) {
                 log.debug("PARENT NODE IN PARENT ARCHETYPE IS NULL");
-            }
-
-            if (parentNodeInParentArchetype instanceof CComplexObject) {			   
+            } else if (parentNodeInParentArchetype instanceof CComplexObject) {
                 attrInParentArchetype = ((CComplexObject) parentNodeInParentArchetype).getAttribute(cattr.getRmAttributeName());
             } else {
                 // Can we really simply ignore this case where the parent node in the parent archetype is not a CComplexObject or do we need to introduce other handling here for _DV_QUANTITY and the like?
@@ -608,10 +606,11 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
 
             if (!assignable) {
                 log.debug("VSONCT error: at "+child.path());
-                String parentRefTypes = "";
+                StringBuffer buf = new StringBuffer();
                 for (Entry<CObject,Class> parentToRMTypeWithoutGenerics: parentObjectsToRMTypesWithoutGenerics.entrySet()) {
-                    parentRefTypes += parentToRMTypeWithoutGenerics.getValue().getSimpleName() +", ";
+                    buf.append(parentToRMTypeWithoutGenerics.getValue().getSimpleName() +", ");
                 }
+                String parentRefTypes = buf.toString();
                 parentRefTypes = parentRefTypes.substring(0,parentRefTypes.length()-2);
 
                 if (parentObjectsToRMTypesWithoutGenerics.size() ==1) {
@@ -674,6 +673,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
         String sep=ArchetypeConstraint.PATH_SEPARATOR;
         String expectedPath=path.startsWith(sep) ? sep :""; // only add the separator to the beginning if it is there in the original path (which may also be a simple node id...
         ArrayList<String> pathParts = new ArrayList<String>(Arrays.asList(StringUtils.split(path, sep)));
+        StringBuffer buffer = new StringBuffer(expectedPath);
 
         for (String pathPart : pathParts) {
             String pathEnd = "";
@@ -691,11 +691,12 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
                 pathPart = pathPart.substring(0, pathPart.length()-2); // need to get the non-redefined node then, going up in the hierarchy as much as possible
             }
             if (pathPart.endsWith("at0")) { // newly introduced node
-                log.debug("Path ends with at0: "+ pathPart +" "+expectedPath);
+                log.debug("Path ends with at0: "+ pathPart +" "+ buffer.toString());
                 return null;
             }
-            expectedPath += pathPart + pathEnd+sep; 
+            buffer.append(pathPart + pathEnd+sep);
         }
+        expectedPath = buffer.toString();
         if (expectedPath.length() >1 && expectedPath.endsWith(sep)) {
             expectedPath = expectedPath.substring(0,expectedPath.length()-1); // get rid of tailing separator
         }

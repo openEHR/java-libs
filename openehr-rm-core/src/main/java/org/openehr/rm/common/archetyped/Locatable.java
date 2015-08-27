@@ -185,9 +185,11 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
     	StringTokenizer tokens = new StringTokenizer(path, "/");
     	while(tokens.hasMoreTokens()) {
     		String next = tokens.nextToken();
+            StringBuffer buffer = new StringBuffer();
     		if (next.matches(".+\\[.+[^\\]]$")) {
     			do {
-    				next = next + "/" + tokens.nextToken();
+                    buffer.append(next + "/" + tokens.nextToken());
+                    next = buffer.toString();
     			} while (!next.matches(".*]$"));
     		}
     		segments.add(next);
@@ -282,7 +284,6 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
      * for example: [at0001, 'node name']
      *
      * @param expression
-     * @param value
      * @return null if there is no match
      */
     Object processPredicate(String expression, Object object) {
@@ -361,7 +362,7 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
      */
     public Object itemAtPath(String path) {
     	if (path == null) {
-            throw new IllegalArgumentException("invalid path: " + path);
+            throw new IllegalArgumentException("invalid path: null");
         }
         if (Locatable.ROOT.equals(path) || path.equals(whole())) {
             return this;
@@ -565,7 +566,7 @@ public abstract class Locatable extends Pathable implements Settable, Cloneable 
      * @return string presentation
      */
     public String toString() {
-        return archetypeNodeId.equals(name) ?
+        return archetypeNodeId.equals(name.getValue()) ?
                 archetypeNodeId.toString() : archetypeNodeId + ", " + name;
     }
 

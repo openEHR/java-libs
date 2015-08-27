@@ -140,8 +140,6 @@ public class DADLBinding {
 			}
 			return list;
 		} else if (block.getSimpleIntervalValue() != null) {
-			Interval<Comparable> values = block.getSimpleIntervalValue();
-			// TODO
 			return null;
 		} else if (block.getTermCode() != null) {
 			return block.getTermCode();
@@ -173,7 +171,6 @@ public class DADLBinding {
 		} else {
 			MultipleAttributeObjectBlock multiBlock = 
 				(MultipleAttributeObjectBlock) block;
-			String type = multiBlock.getTypeIdentifier();
 			List<KeyedObject> list = multiBlock.getKeyObjects();
 			// TODO assume list?
 			List<Object> valueList = new ArrayList<Object>();
@@ -216,10 +213,9 @@ public class DADLBinding {
 		String name = null;
 		Object value = null;
 		StringBuffer buf = null;
-		for(Iterator<String> names = attributes.keySet().iterator(); names.hasNext();) {	
-			name = names.next();
-			
-			Attribute attribute = attributes.get(name);
+		for(Map.Entry<String, Attribute> entry : attributes.entrySet()) {
+			name = entry.getKey();
+			Attribute attribute = entry.getValue();
 			if(attribute.system()) {
 				continue;
 			}

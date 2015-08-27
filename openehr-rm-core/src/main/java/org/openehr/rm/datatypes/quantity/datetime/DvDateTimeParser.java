@@ -122,11 +122,12 @@ public class DvDateTimeParser {
             }
         } else {
             int size = analyseDateString(value);
-            DateTimeFormatter formatter = null;
+            DateTimeFormatter formatter;
             switch (size) {
                 case 1: formatter = ISODateTimeFormat.year().withOffsetParsed(); break;
                 case 2: formatter = DateTimeFormat.forPattern("yyyyMM").withOffsetParsed(); break;
                 case 3: formatter = ISODateTimeFormat.basicDate().withOffsetParsed();break;
+                default: formatter = ISODateTimeFormat.basicDate().withOffsetParsed();break;
             }
             try {
                 dt = formatter.parseDateTime(value);

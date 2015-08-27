@@ -76,7 +76,7 @@ public final class DvCount extends DvAmount<DvCount> {
 	 * @return getMagnitude
 	 */
 	public Integer getMagnitude() {
-		return new Integer(this.magnitude);
+		return Integer.valueOf(this.magnitude);
 	}
 
 	/**

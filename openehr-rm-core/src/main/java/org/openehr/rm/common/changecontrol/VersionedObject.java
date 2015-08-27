@@ -103,7 +103,7 @@ public class VersionedObject<T> extends RMObject {
      * @param contribution
      * @param item
      */
-    public synchronized void commitImportedVersion(OriginalVersion<T> item, AuditDetails commitAudit, 
+    public void commitImportedVersion(OriginalVersion<T> item, AuditDetails commitAudit,
             ObjectRef contribution, String signature) {
 
         commitVersionCheck(item.getUid(), item.getPrecedingVersionUid());
@@ -111,7 +111,7 @@ public class VersionedObject<T> extends RMObject {
         addVersion(version);
     }
 
-    private synchronized void commitVersionCheck(ObjectVersionID vUid, ObjectVersionID precedingVUid) {
+    private void commitVersionCheck(ObjectVersionID vUid, ObjectVersionID precedingVUid) {
         if (versionCount() > 0 && !hasVersionID(precedingVUid)) {
             throw new IllegalArgumentException("precedingVersionID not found");
         }
@@ -120,7 +120,7 @@ public class VersionedObject<T> extends RMObject {
         }        
     }
     
-    private synchronized void addVersion(Version<T> version) {
+    private void addVersion(Version<T> version) {
         if (!version.getUid().versionTreeID().isBranch()) {
             int trunkNo = Integer.parseInt(version.getUid().versionTreeID().trunkVersion());
             if (trunkNo != trunkCounter + 1) {
@@ -144,7 +144,7 @@ public class VersionedObject<T> extends RMObject {
      * @param lifecycleState
      * @param terminologyService
      */
-    public synchronized void commitOriginalVersion(ObjectVersionID versionID,
+    public void commitOriginalVersion(ObjectVersionID versionID,
             ObjectVersionID precedingVersionID, T data, AuditDetails commitAudit,
             ObjectRef contribution, DvCodedText lifecycleState, String signature, 
             TerminologyService terminologyService) {
@@ -167,7 +167,7 @@ public class VersionedObject<T> extends RMObject {
      * @param lifecycleState
      * @param terminologyService
      */
-    public synchronized void commitOriginalMergedVersion(ObjectVersionID versionID,
+    public void commitOriginalMergedVersion(ObjectVersionID versionID,
             ObjectVersionID precedingVersionID, T data, DvCodedText lifecycleState, 
             AuditDetails commitAudit, ObjectRef contribution,
             Set<ObjectVersionID> otherInputVersionUids, String signature,
@@ -215,7 +215,7 @@ public class VersionedObject<T> extends RMObject {
      *
      * @return all versions
      */
-    public synchronized List<Version<T>> allVersions() {
+    public List<Version<T>> allVersions() {
         // todo: fix the order of this list
         return new ArrayList<Version<T>>(idVersionMap.values());
     }
@@ -225,7 +225,7 @@ public class VersionedObject<T> extends RMObject {
      *
      * @return List<String>
      */
-    public synchronized List<ObjectVersionID> allVersionIDs() {
+    public List<ObjectVersionID> allVersionIDs() {
         // todo: fix the order of list
         return new ArrayList<ObjectVersionID>(idVersionMap.keySet());
     }
@@ -235,7 +235,7 @@ public class VersionedObject<T> extends RMObject {
      *
      * @return version count
      */
-    public synchronized int versionCount() {
+    public int versionCount() {
         return idVersionMap.size();
     }
     
@@ -246,7 +246,7 @@ public class VersionedObject<T> extends RMObject {
      * @return true if has
      * @throws IllegalArgumentException
      */
-    public synchronized boolean hasVersionID(ObjectVersionID id) {
+    public boolean hasVersionID(ObjectVersionID id) {
         if (id == null) {
             throw new IllegalArgumentException("null id");
         }        
@@ -261,7 +261,7 @@ public class VersionedObject<T> extends RMObject {
      * @return true if has version
      * @throws IllegalArgumentException if time null
      */
-    public synchronized boolean hasVersionAtTime(DvDateTime time) {
+    public boolean hasVersionAtTime(DvDateTime time) {
         if (time == null) {
             throw new IllegalArgumentException("null time");
         }
@@ -288,7 +288,7 @@ public class VersionedObject<T> extends RMObject {
      * @return null if not found
      * @throws IllegalArgumentException if id null
      */
-    public synchronized Version<T> versionWithID(ObjectVersionID id) {
+    public Version<T> versionWithID(ObjectVersionID id) {
         if (id == null) {
             throw new IllegalArgumentException("null id");
         }
@@ -302,7 +302,7 @@ public class VersionedObject<T> extends RMObject {
      * @return null if not found
      * @throws IllegalArgumentException if time null
      */
-    public synchronized Version<T> versionAtTime(DvDateTime time) {
+    public Version<T> versionAtTime(DvDateTime time) {
         if (time == null) {
             throw new IllegalArgumentException("null time");
         }
@@ -314,7 +314,7 @@ public class VersionedObject<T> extends RMObject {
      *
      * @return lastest version
      */
-    public synchronized Version<T> latestVersion() {
+    public Version<T> latestVersion() {
         return (Version<T>) timeVersionMap.get(timeVersionMap.lastKey());
         
     }
@@ -323,7 +323,7 @@ public class VersionedObject<T> extends RMObject {
      * Return the most recetly added trunk version
      *
      */
-    public synchronized Version<T> latestTrunkVersion() {
+    public Version<T> latestTrunkVersion() {
         return (Version<T>) idVersionMap.get(latestTrunkUid);
         
     }
@@ -333,7 +333,6 @@ public class VersionedObject<T> extends RMObject {
      *
      */
     public DvCodedText latestTrunkLifeCycleSate() {
-        Version<T> trunk = latestTrunkVersion();
         return latestTrunkVersion().getLifecycleState();
     }
     
@@ -365,7 +364,7 @@ public class VersionedObject<T> extends RMObject {
      * @param attestation
      * @param versionID
      */
-    public synchronized void commitAttestation(Attestation attestation,
+    public void commitAttestation(Attestation attestation,
             ObjectVersionID versionID) {
         if (attestation == null) {
             throw new IllegalArgumentException("null attestation");
