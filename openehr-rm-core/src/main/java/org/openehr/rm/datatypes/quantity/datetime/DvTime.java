@@ -295,14 +295,10 @@ public class DvTime extends DvTemporal<DvTime> {
 
 	public String toString(boolean isExtended) {
 		String time = super.toString();
-		if (time == null) {
-			time = "";
+		if (isExtended) {
+			time = DvDateTimeParser.basicToExtendedTime(time);
 		} else {
-			if (isExtended) {
-				time = DvDateTimeParser.basicToExtendedTime(time);
-			} else {
-				time = time.replace(":", "");
-			}
+			time = time.replace(":", "");
 		}
 		return time;
 	}

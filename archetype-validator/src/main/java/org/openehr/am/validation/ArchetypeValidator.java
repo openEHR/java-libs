@@ -878,13 +878,14 @@ public class ArchetypeValidator {
                         ccodephrase.getTerminologyId().toString())) {
             return;
         }
-        String codes = "";
+        StringBuffer buf = new StringBuffer();
         for(String code : ccodephrase.getCodeList()) {
             if( ! openEHRTerminology.allCodes().contains(
                     new CodePhrase(TerminologyService.OPENEHR, code))) {
-                codes += code + ", ";
+                buf.append(code + ", ");
             }
         }
+        String codes = buf.toString();
         if(codes.length() != 0) {
             ValidationError error  = new ValidationError(ErrorType.VOTC, null,
                     codes, ccodephrase.path());
@@ -893,7 +894,7 @@ public class ArchetypeValidator {
     }
 
     /**
-     * @param cobj
+     * @param cpobj
      * @param archetype
      * @param errors
      */
@@ -1490,7 +1491,7 @@ public class ArchetypeValidator {
 
     protected String getIntervalFormalString(Integer lower, Integer upper, boolean isUpperUnbounded) {
         if (lower == null) {
-            lower = new Integer(0);
+            lower = Integer.valueOf(0);
         }
 
         String formal= ""+lower.intValue() +"..";

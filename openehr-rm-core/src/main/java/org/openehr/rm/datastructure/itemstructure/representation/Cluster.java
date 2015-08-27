@@ -157,6 +157,10 @@ public final class Cluster extends Item {
 
 	@Override
 	public boolean equals(Object obj) {
+		if(obj == null) {
+			return false;
+		}
+
 		if (this == obj) {
 			return true;
 		}

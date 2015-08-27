@@ -251,14 +251,10 @@ public class DvDate extends DvTemporal<DvDate> {
 	 */
 	public String toString(boolean isExtended) {
 		String date = super.toString();
-		if (date == null) {
-			date = "";
+		if (isExtended) {
+			date = DvDateTimeParser.basicToExtendedDate(date);
 		} else {
-			if (isExtended) {
-				date = DvDateTimeParser.basicToExtendedDate(date);
-			} else {
-				date = date.replace("-", "");
-			}
+			date = date.replace("-", "");
 		}
 		return date;
 	}

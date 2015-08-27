@@ -38,10 +38,10 @@ public class XPathUtil {
 
             inspector.retrieveRMAttributes(obj.getClass().getSimpleName());
             Class klass = obj.getClass();
-            String className = klass.getSimpleName();
             Map<String, Attribute> attributeMap = inspector.attributeMap(klass);
-            for(String attributeName : attributeMap.keySet()) {
-                Attribute attribute = attributeMap.get(attributeName);
+            for(Map.Entry<String, Attribute> entry : attributeMap.entrySet()) {
+                String attributeName = entry.getKey();
+                Attribute attribute = entry.getValue();
 
                 if(attribute.system()) {
                     continue;
@@ -78,9 +78,9 @@ public class XPathUtil {
                 Object o = list.get(i);
 
                 assert (o instanceof Locatable);
-                if (o == null){
-                    Logger.getLogger(XPathUtil.class).warn("Null locatable at "+obj+" index="+i);
-                }
+
+                Logger.getLogger(XPathUtil.class).warn("Null locatable at "+obj+" index="+i);
+
                 Locatable loc = ((Locatable) o);
                 String nodeId = loc.getArchetypeNodeId();
 
@@ -106,16 +106,11 @@ public class XPathUtil {
 
             inspector.retrieveRMAttributes(obj.getClass().getSimpleName());
             Class klass = obj.getClass();
-            String className = klass.getSimpleName();
-
-            //System.out.println(">>> className: " + className);
-
             Map<String, Attribute> attributeMap = inspector.attributeMap(klass);
-            for(String attributeName : attributeMap.keySet()) {
 
-                //System.out.println("Attribute name: " + attributeName);
-
-                Attribute attribute = attributeMap.get(attributeName);
+            for(Map.Entry<String, Attribute> entry : attributeMap.entrySet()) {
+                String attributeName = entry.getKey();
+                Attribute attribute = entry.getValue();
 
                 if(attribute.system()) {
                     continue;
@@ -125,8 +120,6 @@ public class XPathUtil {
                         attributeName.substring(0, 1).toUpperCase() +
                         attributeName.substring(1);
 
-                //System.out.println("method name: " + methodName);
-
                 Method method = klass.getMethod(methodName, null);
 
                 assert(method != null);
@@ -135,19 +128,15 @@ public class XPathUtil {
 
                 if(value != null && !methodName.equals("getParent")) {
 
-                    //System.out.println("has value..");
                     String nodeIdStr = "";
                     if (value instanceof Locatable){
                         nodeIdStr = "[" + ((Locatable)value).getArchetypeNodeId() + "]";
                     }
                     String currentAPath = apath + "/" + attributeName+nodeIdStr;
                     String currentXPath = xpath + "/" + attributeName;
-                    //System.out.println(methodName+"> "+currentAPath);
                     buildPaths(value, currentAPath, currentXPath, paths);
                 }
             }
-        } else {
-            //System.out.println("---- skip class: " + obj.getClass().getSimpleName());
         }
     }
 
@@ -168,8 +157,6 @@ public class XPathUtil {
 
     private void buildRootPath(Object obj, String path, Set<String> paths) throws Exception {
 
-        //System.out.println("class: " + obj.getClass().getSimpleName() + ", path: " + path);
-
         if(obj instanceof List) {
             List list = (List) obj;
             for(int i = 0, j = list.size(); i<j; i++) {
@@ -187,10 +174,10 @@ public class XPathUtil {
             }
             inspector.retrieveRMAttributes(obj.getClass().getSimpleName());
             Class klass = obj.getClass();
-            String className = klass.getSimpleName();
             Map<String, Attribute> attributeMap = inspector.attributeMap(klass);
-            for(String attributeName : attributeMap.keySet()) {
-                Attribute attribute = attributeMap.get(attributeName);
+            for(Map.Entry<String, Attribute> entry : attributeMap.entrySet()) {
+                String attributeName = entry.getKey();
+                Attribute attribute = entry.getValue();
 
                 if(attribute.system()) {
                     continue; // skip system attributes
