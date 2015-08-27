@@ -199,7 +199,7 @@ public class XMLBinding {
 
 							addNew.invoke(xmlObj, null);
 
-							array[0] = new Integer(i);
+							array[0] = Integer.valueOf(i);
 							array[1] = bindToXML(value);
 							setterMethod.invoke(xmlObj, array);
 

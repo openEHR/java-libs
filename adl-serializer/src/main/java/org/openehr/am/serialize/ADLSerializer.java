@@ -282,12 +282,12 @@ public class ADLSerializer {
 		if(map == null || map.size() == 0) {
 			return;
 		}
-		for(String key : map.keySet()) {
+		for(Map.Entry<String, String> entry: map.entrySet()) {
 			indent(indent, out);
 			out.write("[\"");
-			out.write(key);
+			out.write(entry.getKey());
 			out.write("\"] = <\"");
-			out.write(map.get(key));
+			out.write(entry.getValue());
 			out.write("\">");			
 			newline(out);
 		}
@@ -307,9 +307,9 @@ public class ADLSerializer {
 		out.write("original_author = <");
 		newline(out);
 		Map<String, String> map = description.getOriginalAuthor();
-		for (String key : map.keySet()) {
+		for (Map.Entry<String, String> entry: map.entrySet()) {
 			indent(2, out);
-			out.write("[\"" + key + "\"] = <\"" + map.get(key) + "\">");
+			out.write("[\"" + entry.getKey() + "\"] = <\"" + entry.getValue() + "\">");
 			newline(out);
 		}
 		indent(1, out);
@@ -413,9 +413,9 @@ public class ADLSerializer {
 		out.write(" = <");
 		newline(out);
 
-		for (String key : map.keySet()) {
+		for (Map.Entry<String, String> entry: map.entrySet()) {
 			indent(2, out);
-			out.write("[\"" + key + "\"] = <\"" + map.get(key) + "\">");
+			out.write("[\"" + entry.getKey() + "\"] = <\"" + entry.getValue() + "\">");
 			newline(out);
 		}
 
