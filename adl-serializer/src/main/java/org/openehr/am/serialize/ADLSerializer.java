@@ -197,9 +197,10 @@ public class ADLSerializer {
 			newline(out);
 			Map<String, TranslationDetails> translations = 
 				authored.getTranslations();
-			for(String lang : translations.keySet()) {
-				TranslationDetails td = translations.get(lang);
-				
+			for(Map.Entry<String,TranslationDetails> entry: translations.entrySet()) {
+				String lang = entry.getKey();
+				TranslationDetails td = entry.getValue();
+
 				indent(2, out);
 				out.write("[");
 				out.write(quoteString(lang));
