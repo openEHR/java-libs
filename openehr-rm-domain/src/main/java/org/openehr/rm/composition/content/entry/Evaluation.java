@@ -141,6 +141,9 @@ public final class Evaluation extends CareEntry {
 
     @Override
 	public boolean equals(Object obj) {
+		if(obj == null) {
+			return false;
+		}
 		if (this == obj) {
 			return true;
 		}

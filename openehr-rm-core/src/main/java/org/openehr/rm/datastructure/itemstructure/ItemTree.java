@@ -129,6 +129,10 @@ public final class ItemTree extends ItemStructure {
 	 * @return equals if true
 	 */
 	public boolean equals(Object obj) {
+		if(obj == null) {
+			return false;
+		}
+
 		if (this == obj) {
 			return true;
 		}

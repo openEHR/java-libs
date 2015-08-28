@@ -18,6 +18,7 @@ package org.openehr.rm.datatypes.quantity.datetime;
 import java.util.List;
 import java.util.TimeZone;
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 import org.joda.time.format.DateTimeFormatter;
@@ -305,12 +306,7 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 		return dt != null;
 	}
 
-	/**
-	 * Two DvDateTime equal if both have same year, month, day and timezone
-	 *
-	 * @param o
-	 * @return true if equals
-	 */
+	@Override
 	public boolean equals(Object o) {
 		if (!super.equals(o))
 			return false;
@@ -325,16 +321,21 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 				dt.fractionalSecKnown).isEquals();
 	}
 
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(isPartial)
+				.append(minuteKnown)
+				.append(secondKnown)
+				.append(fractionalSecKnown).hashCode();
+	}
+
 	public String toString(boolean isExtended) {
 		String dt = super.toString();
-		if (dt == null) {
-			dt = "";
+		if (isExtended) {
+			dt = DvDateTimeParser.basicToExtendedDateTime(dt);
 		} else {
-			if (isExtended) {
-				dt = DvDateTimeParser.basicToExtendedDateTime(dt);
-			} else {
-				dt = dt.replace(":", "").replace("-", "");
-			}
+			dt = dt.replace(":", "").replace("-", "");
 		}
 		return dt;
 	}

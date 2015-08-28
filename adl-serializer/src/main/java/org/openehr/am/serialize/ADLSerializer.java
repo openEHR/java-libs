@@ -221,9 +221,10 @@ public class ADLSerializer {
 			newline(out);
 			Map<String, TranslationDetails> translations = 
 				authored.getTranslations();
-			for(String lang : translations.keySet()) {
-				TranslationDetails td = translations.get(lang);
-				
+			for(Map.Entry<String,TranslationDetails> entry: translations.entrySet()) {
+				String lang = entry.getKey();
+				TranslationDetails td = entry.getValue();
+
 				indent(2, out);
 				out.write("[\"");
 				out.write(lang);
@@ -281,12 +282,12 @@ public class ADLSerializer {
 		if(map == null || map.size() == 0) {
 			return;
 		}
-		for(String key : map.keySet()) {
+		for(Map.Entry<String, String> entry: map.entrySet()) {
 			indent(indent, out);
 			out.write("[\"");
-			out.write(key);
+			out.write(entry.getKey());
 			out.write("\"] = <\"");
-			out.write(map.get(key));
+			out.write(entry.getValue());
 			out.write("\">");			
 			newline(out);
 		}
@@ -306,9 +307,9 @@ public class ADLSerializer {
 		out.write("original_author = <");
 		newline(out);
 		Map<String, String> map = description.getOriginalAuthor();
-		for (String key : map.keySet()) {
+		for (Map.Entry<String, String> entry: map.entrySet()) {
 			indent(2, out);
-			out.write("[\"" + key + "\"] = <\"" + map.get(key) + "\">");
+			out.write("[\"" + entry.getKey() + "\"] = <\"" + entry.getValue() + "\">");
 			newline(out);
 		}
 		indent(1, out);
@@ -412,9 +413,9 @@ public class ADLSerializer {
 		out.write(" = <");
 		newline(out);
 
-		for (String key : map.keySet()) {
+		for (Map.Entry<String, String> entry: map.entrySet()) {
 			indent(2, out);
-			out.write("[\"" + key + "\"] = <\"" + map.get(key) + "\">");
+			out.write("[\"" + entry.getKey() + "\"] = <\"" + entry.getValue() + "\">");
 			newline(out);
 		}
 
@@ -476,21 +477,20 @@ public class ADLSerializer {
 		if(occurrences == null || defaultOccurrences.equals(occurrences)) {
 			return;
 		}
-		if (occurrences != null) {
-			out.write(" occurrences matches {");
-			if (occurrences.getLower() == null) {
-				out.write("*");
-			} else {
-				out.write(Integer.toString(occurrences.getLower()));
-			}
-			out.write("..");
-			if (occurrences.getUpper() == null) {
-				out.write("*");
-			} else {
-				out.write(Integer.toString(occurrences.getUpper()));
-			}
-			out.write("}");
+
+		out.write(" occurrences matches {");
+		if (occurrences.getLower() == null) {
+			out.write("*");
+		} else {
+			out.write(Integer.toString(occurrences.getLower()));
 		}
+		out.write("..");
+		if (occurrences.getUpper() == null) {
+			out.write("*");
+		} else {
+			out.write(Integer.toString(occurrences.getUpper()));
+		}
+		out.write("}");
 	}
 
 	protected void printArchetypeInternalRef(ArchetypeInternalRef ref,

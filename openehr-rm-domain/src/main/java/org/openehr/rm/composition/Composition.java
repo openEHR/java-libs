@@ -83,6 +83,11 @@ public final class Composition extends Locatable {
             throw new IllegalArgumentException("empty content");
         }
 
+        if (category == null) {
+            throw new IllegalArgumentException("null category");
+        }
+
+        // Is_persistent_validity: is_persistent implies context = Void
         if (isPersistent(category) && context != null) {
             throw new IllegalArgumentException("invalid persistent category");
         }
@@ -94,11 +99,6 @@ public final class Composition extends Locatable {
         }
         if (parent != null) {
             throw new IllegalArgumentException("parent must be null");
-        }
-
-        // Is_persistent_validity: is_persistent implies context = Void
-        if (category == null) {
-            throw new IllegalArgumentException("null cateogry");
         }
 
         // todo: implement this invariant check

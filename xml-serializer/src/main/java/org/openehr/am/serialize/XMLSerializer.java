@@ -259,12 +259,12 @@ public class XMLSerializer {
     private void printStringMap(String label, Map<String, String> map, Element out) {
 
         if(map != null && !map.isEmpty()) {
-            for(String key : map.keySet()) {
+            for(Map.Entry <String, String> entry : map.entrySet()) {
                 Element elm = new Element(label, defaultNamespace);
                 out.getChildren().add(elm);
-                elm.setAttribute("id", key);
-                if (map.get(key) != null) {
-                    elm.setText(map.get(key));
+                elm.setAttribute("id", entry.getKey());
+                if (entry.getValue() != null) {
+                    elm.setText(map.get(entry.getValue()));
                 }
             }
         }

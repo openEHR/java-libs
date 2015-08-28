@@ -15,6 +15,7 @@
 package org.openehr.rm.datatypes.quantity.datetime;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 import org.openehr.rm.Attribute;
@@ -269,23 +270,12 @@ public class DvTime extends DvTemporal<DvTime> {
 		return false;
 	}
 
-	/**
-	 * Two DvTime equal if both have same value for hour, minute, second
-	 * and timezone
-	 *
-	 * @param o
-	 * @return true if equals
-	 */
+	@Override
 	public boolean equals(Object o) {
 		if (!super.equals(o))
 			return false;
 
 		final DvTime dtime = (DvTime) o;
-		//TODO: check if the following line still necessary
-		//if(this.getDateTime().getZone().hashCode()!= this.getDateTime().getZone().hashCode()) {
-		//    return false;
-		//}
-
 		return new EqualsBuilder().append(
 				this.getDateTime().getZone().hashCode(),
 				this.getDateTime().getZone().hashCode()).append(isPartial,
@@ -294,16 +284,21 @@ public class DvTime extends DvTemporal<DvTime> {
 				dtime.fractionalSecKnown).isEquals();
 	}
 
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.append(isPartial)
+				.append(minuteKnown)
+				.append(secondKnown)
+				.append(fractionalSecKnown).hashCode();
+	}
+
 	public String toString(boolean isExtended) {
 		String time = super.toString();
-		if (time == null) {
-			time = "";
+		if (isExtended) {
+			time = DvDateTimeParser.basicToExtendedTime(time);
 		} else {
-			if (isExtended) {
-				time = DvDateTimeParser.basicToExtendedTime(time);
-			} else {
-				time = time.replace(":", "");
-			}
+			time = time.replace(":", "");
 		}
 		return time;
 	}

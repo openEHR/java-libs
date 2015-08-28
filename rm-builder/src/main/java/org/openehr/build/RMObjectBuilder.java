@@ -339,8 +339,8 @@ public class RMObjectBuilder {
 
         // replace underscore separated names with camel case
         Map<String, Object> filteredMap = new HashMap<String, Object>();
-        for (String name : valueMap.keySet()) {
-            filteredMap.put(toCamelCase(name), valueMap.get(name));
+        for (Map.Entry<String,Object> entry : valueMap.entrySet()) {
+            filteredMap.put(toCamelCase(entry.getKey()), entry.getValue());
         }
         Constructor constructor = fullConstructor(rmClass);
         Map<String, Class> typeMap = attributeType(rmClass);
@@ -348,7 +348,8 @@ public class RMObjectBuilder {
         Map<String, Attribute> attributeMap = attributeMap(rmClass);
         Object[] valueArray = new Object[indexMap.size()];
 
-        for (String name : typeMap.keySet()) {
+        for (Map.Entry<String, Class> entry : typeMap.entrySet()) {
+            String name = entry.getKey();
 
             Object value = filteredMap.get(name);
 
@@ -356,7 +357,7 @@ public class RMObjectBuilder {
                 throw new RMObjectBuildingException("unknown attribute " + name);
             }
 
-            Class type = typeMap.get(name);
+            Class type = entry.getValue();
             Integer index = indexMap.get(name);
 
             Attribute attribute = attributeMap.get(name);
@@ -417,7 +418,7 @@ public class RMObjectBuilder {
 
                         // for DvProportion.precision
                     } else if (type.equals(Integer.class)) {
-                        value = new Integer(str);
+                        value = Integer.valueOf(str);
 
                         // for DvBoolean.value
                     } else if (type.equals(boolean.class)) {
@@ -451,7 +452,7 @@ public class RMObjectBuilder {
                 value = set;
             }
             // check type
-            else if (value != null && !type.isPrimitive()) {
+            else if (!type.isPrimitive()) {
                 try {
                     type.cast(value);
                 } catch (ClassCastException e) {
@@ -503,10 +504,10 @@ public class RMObjectBuilder {
 
     private String toString(Map<String, Object> map) {
         StringBuffer buf = new StringBuffer();
-        for (String key : map.keySet()) {
-            buf.append(key);
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            buf.append(entry.getKey());
             buf.append("=");
-            Object value = map.get(key);
+            Object value = entry.getValue();
             if (value != null) {
                 buf.append(value.getClass().getName());
                 buf.append(":");
@@ -607,8 +608,8 @@ public class RMObjectBuilder {
 
             // replace underscore separated names with camel case
             Map<String, Object> filteredMap = new HashMap<String, Object>();
-            for (String name : valueMap.keySet()) {
-                filteredMap.put(toCamelCase(name), valueMap.get(name));
+            for (Map.Entry<String, Object> entry : valueMap.entrySet()) {
+                filteredMap.put(toCamelCase(entry.getKey()), entry.getValue());
             }
 
             Constructor constructor = fullConstructor(rmClass);
@@ -694,15 +695,15 @@ public class RMObjectBuilder {
         } else if (type == float.class) {
             return new Float(0);
         } else if (type == int.class) {
-            return new Integer(0);
+            return Integer.valueOf(0);
         } else if (type == short.class) {
-            return new Short((short) 0);
+            return Short.valueOf((short) 0);
         } else if (type == long.class) {
-            return new Long(0);
+            return Long.valueOf(0);
         } else if (type == char.class) {
-            return new Character((char) 0);
+            return Character.valueOf((char) 0);
         } else if (type == byte.class) {
-            return new Byte((byte) 0);
+            return Byte.valueOf((byte) 0);
         }
         return null;
     }

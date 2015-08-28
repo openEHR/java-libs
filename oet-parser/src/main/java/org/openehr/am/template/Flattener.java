@@ -104,14 +104,13 @@ public class Flattener {
 		
 		// make a internal copy of archetypeMap
 		this.archetypeMap.clear();
-		for(String id : archetypeMap.keySet()) {
-			Archetype a = archetypeMap.get(id);
+		for(Map.Entry<String, Archetype> entry : archetypeMap.entrySet()) {
+			Archetype a = entry.getValue();
 			if(a != null) {
 				a = a.copy();
-				this.archetypeMap.put(id, a);
+				this.archetypeMap.put(entry.getKey(), a);
 			}
 		}
-		// no need to copy templateMap
 		this.templateMap = templateMap;
 		
 		log.debug("Loaded archetype/template maps, total archetypes: " + 
@@ -182,10 +181,10 @@ public class Flattener {
 	 */
 	private Archetype flattenItem(Archetype parentArchetype, ITEM item) 
 		throws FlatteningException {
+
+		String aid = parentArchetype == null ? "null" : parentArchetype.getArchetypeId().toString();
 		
-		log.debug("flattening item on parentArchetype " + 
-				parentArchetype.getArchetypeId() + " at path " + 
-				item.getPath());
+		log.debug("flattening item on parentArchetype " + aid + " at path " + item.getPath());
 		
 		Archetype archetype = retrieveArchetype(item.getArchetypeId());
 		
@@ -580,7 +579,6 @@ public class Flattener {
 			// TODO handle description item
 			ACTION action = (ACTION) definition;
 			
-			parentArchetype = retrieveArchetype(action.getArchetypeId());
 			ITEMSTRUCTURE description = action.getDescription();
 			if(description != null) {
 				flattenItemStructure(archetype, description);
@@ -816,11 +814,6 @@ public class Flattener {
 		applyValueConstraint(archetype, constraint, rule);	
 		
 		archetype.updatePathNodeMap((CObject) constraint);
-		
-		if(constraint instanceof CObject) {
-			log.debug("newly set Occurrences: " + ((CObject) constraint).getOccurrences() );
-		}	
-		
 	}	
 	
 	// TODO 
@@ -900,7 +893,7 @@ public class Flattener {
 			cattr = new CSingleAttribute(ccobj.path() + "/" + VALUE, 
 			VALUE, Existence.REQUIRED); 
 		
-		} else if (cattr != null && cattr.getChildren().size() == 1) {					
+		} else if (cattr.getChildren().size() == 1) {
 			CObject child = cattr.getChildren().get(0);
 			
 			if(child instanceof CComplexObject) {
@@ -1219,8 +1212,7 @@ public class Flattener {
 		log.debug("applying value constraint on path: " + constraint.path());
 		
 		if( ! (constraint instanceof CComplexObject)) {
-			throw new FlatteningException("Unexpected constraint type: " + 
-					(constraint == null ? "null" : constraint.getClass()));
+			throw new FlatteningException("Unexpected constraint type: " + constraint.getClass());
 		}
 		
 		CComplexObject ccobj = (CComplexObject) constraint;
