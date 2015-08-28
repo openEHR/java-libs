@@ -181,7 +181,7 @@ public class DataTypesBuildTest extends BuildTestBase {
         String type = "DV_QUANTITY";
         Map<String, Object> values = new HashMap<String, Object>();
         values.put("units", "kg/L");
-        values.put("magnitude", new Double(100.0));
+        values.put("magnitude", 100.0);
         RMObject obj = builder.construct(type, values);
         assertTrue(obj instanceof DvQuantity);
         DvQuantity quantity = (DvQuantity) obj;
@@ -199,7 +199,7 @@ public class DataTypesBuildTest extends BuildTestBase {
         values.put("units", "mg");
         values.put("magnitude", "wrong type");
         try {
-            obj = builder.construct(type, values);
+            builder.construct(type, values);
             fail("attribute format exception should be thrown here");
         } catch (Exception e) {
             assertTrue(e instanceof AttributeFormatException);
@@ -226,19 +226,16 @@ public class DataTypesBuildTest extends BuildTestBase {
         values.clear();
         values.put("value", "bad values");
         try {
-            obj = builder.construct(type, values);
+            builder.construct(type, values);
             fail("attribute format exception should be thrown here");
         } catch (Exception e) {
-        
-            System.err.println("testBuildDvDate exception: "+ e.getClass().toString() +" "+ e.getMessage());
-        
             assertTrue(e instanceof AttributeFormatException);
         }
 
         // with missing required value
         values.clear();
         try {
-            obj = builder.construct(type, values);
+            builder.construct(type, values);
             fail("attribute missing exception should be thrown here");
         } catch (Exception e) {
             assertTrue(e instanceof AttributeMissingException);
