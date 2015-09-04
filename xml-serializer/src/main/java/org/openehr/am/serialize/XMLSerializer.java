@@ -155,14 +155,18 @@ public class XMLSerializer {
 
         printTranslations(archetype.getTranslations(), out);
 
+        if (archetype.getUid() != null) {
+            Element uid = new Element("uid", defaultNamespace);
+            out.getChildren().add(uid);
+            printString("value", archetype.getUid().toString(), uid);
+        }
+
         Element archetypeId = new Element("archetype_id", defaultNamespace);
         out.getChildren().add(archetypeId);
         printString("value", archetype.getArchetypeId().toString(), archetypeId);
 
         printString("adl_version", archetype.getAdlVersion(), out);
-        if (archetype.getUid() != null) {
-            printString("uid", archetype.getUid().toString(), out);
-        }
+      
 
         printString("concept", archetype.getConcept(), out);
 
