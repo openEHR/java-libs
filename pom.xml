@@ -110,12 +110,12 @@
     <repository>
       <id>repo.cambio.se_releases</id>
       <name>releases</name>
-      <url>http://repo.cambio.se/content/repositories/releases</url>
+      <url>http://css-cds-3:8081/nexus/content/repositories/releases</url>
     </repository>
     <snapshotRepository>
       <id>repo.cambio.se_snapshots</id>
       <name>snapshots</name>
-      <url>http://repo.cambio.se/content/repositories/snapshots</url>
+      <url>http://css-cds-3:8081/nexus/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 </project>
