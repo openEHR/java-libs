@@ -4,7 +4,7 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.17</version>
+		<version>1.0.18-SNAPSHOT</version>
 	</parent>
 	<artifactId>oet-parser</artifactId>
 	<packaging>jar</packaging>
