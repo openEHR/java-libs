@@ -4,7 +4,7 @@
 	<parent>
 	<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.14</version>
+		<version>1.0.15-SNAPSHOT</version>
 	</parent>
 	<artifactId>openehr-rm-domain</artifactId>
 	<packaging>jar</packaging>
