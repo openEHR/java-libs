@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>openehr</groupId>
 		<artifactId>ref_impl_java</artifactId>
-		<version>1.0.15-SNAPSHOT</version>
+		<version>1.0.15</version>
 	</parent>
 	<artifactId>adl-serializer</artifactId>
 	<packaging>jar</packaging>
