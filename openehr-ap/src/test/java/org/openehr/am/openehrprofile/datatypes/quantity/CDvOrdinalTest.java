@@ -15,7 +15,7 @@ public class CDvOrdinalTest extends TestCase {
 		Interval<Integer> occurrences = new Interval<Integer>(1,1);
 		String nodeId = "at0010";
 		CAttribute parent = null;
-		Set<Ordinal> list = null;
+		List<Ordinal> list = null;
 		
 		CDvOrdinal c = new CDvOrdinal(path, occurrences, nodeId, parent, list,
 				null, null);
@@ -37,11 +37,11 @@ public class CDvOrdinalTest extends TestCase {
 	
 	public void testEqualsWithDifferentOrdinal() {
 		Interval<Integer> occurrences = new Interval<Integer>(1,1);
-		Set<Ordinal> set1 = new HashSet<Ordinal>();
+		List<Ordinal> set1 = new ArrayList<Ordinal>();
 		Ordinal ord1 = new Ordinal(1, new CodePhrase("local", "at0001"));
 		set1.add(ord1);
 		
-		Set<Ordinal> set2 = new HashSet<Ordinal>();
+		List<Ordinal> set2 = new ArrayList<Ordinal>();
 		Ordinal ord2 = new Ordinal(1, new CodePhrase("local", "at0003"));
 		set2.add(ord2);
 		
@@ -56,11 +56,11 @@ public class CDvOrdinalTest extends TestCase {
 	
 	public void testEqualsWithSameOrdinal() {
 		Interval<Integer> occurrences = new Interval<Integer>(1,1);
-		Set<Ordinal> set1 = new HashSet<Ordinal>();
+		List<Ordinal> set1 = new ArrayList<Ordinal>();
 		Ordinal ord1 = new Ordinal(1, new CodePhrase("local", "at0001"));
 		set1.add(ord1);
 		
-		Set<Ordinal> set2 = new HashSet<Ordinal>();
+		List<Ordinal> set2 = new ArrayList<Ordinal>();
 		Ordinal ord2 = new Ordinal(1, new CodePhrase("local", "at0001"));
 		set2.add(ord2);
 		

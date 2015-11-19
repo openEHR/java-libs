@@ -656,7 +656,7 @@ public class XMLSerializer {
 
         }
         if(cordinal.getList() != null) {
-            final Set<Ordinal> ordinals = cordinal.getList();
+            final List<Ordinal> ordinals = cordinal.getList();
 
             Ordinal ordinal;
             for (Iterator<Ordinal> it = ordinals.iterator(); it.hasNext();) {
