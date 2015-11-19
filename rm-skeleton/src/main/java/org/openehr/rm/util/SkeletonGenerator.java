@@ -777,7 +777,7 @@ public class SkeletonGenerator {
 			return new DvOrdinal(o.getValue(), 
 					new DvCodedText(DEFAULT_CODED_TEXT, o.getSymbol()));
 		} 
-		Set<Ordinal> list = cdo.getList();
+		List<Ordinal> list = cdo.getList();
 		if(list == null || list.size() == 0) {
 			throw new Exception("empty list of ordinal");
 		}

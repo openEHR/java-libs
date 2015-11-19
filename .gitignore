@@ -6,3 +6,4 @@ oet-parser/term_map.txt
 oet-parser/test_paths.txt
 rm-skeleton/hypersensitivity_max.dadl
 rm-skeleton/hypersensitivity_min.dadl
+build.sh

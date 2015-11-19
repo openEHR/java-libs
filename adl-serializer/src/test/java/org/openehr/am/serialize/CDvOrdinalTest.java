@@ -1,7 +1,6 @@
 package org.openehr.am.serialize;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
@@ -11,7 +10,7 @@ import org.openehr.rm.support.basic.Interval;
 public class CDvOrdinalTest extends SerializerTestBase {
 
 	public void testPrintCDvOrdinalWithAssumedValue() throws Exception {
-		Set<Ordinal> list = new LinkedHashSet<Ordinal>();
+		List<Ordinal> list = new ArrayList<Ordinal>();
 		for (int i = 1; i <= 4; i++) {
 			list.add(new Ordinal(i, new CodePhrase("local", "at200" + i)));
 		}
@@ -25,7 +24,7 @@ public class CDvOrdinalTest extends SerializerTestBase {
 	}
 	
 	public void testPrintCDvOrdinal() throws Exception {
-		Set<Ordinal> list = new LinkedHashSet<Ordinal>();
+		List<Ordinal> list = new ArrayList<Ordinal>();
 		for (int i = 1; i <= 4; i++) {
 			list.add(new Ordinal(i, new CodePhrase("local", "at200" + i)));
 		}
@@ -38,10 +37,8 @@ public class CDvOrdinalTest extends SerializerTestBase {
 	}
 
 	public void testPrintEmptyCDvOrdinal() throws Exception {
-		Set<Ordinal> list = null;
-		
 		Interval<Integer> occurrences = new Interval<Integer>(1, 1);
-		cordinal = new CDvOrdinal("/path", occurrences, null, null, list, 
+		cordinal = new CDvOrdinal("/path", occurrences, null, null, null,
 				null, null);
 		clean();
 		outputter.printCDvOrdinal(cordinal, 0, out);

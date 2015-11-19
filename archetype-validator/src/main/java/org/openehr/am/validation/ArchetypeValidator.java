@@ -119,7 +119,7 @@ public class ArchetypeValidator {
      * Validates the given archetype 
      * 
      * @param archetype
-     * @param reportConstraintsOnFunctionalPropertiesAsInfo if set to true, constraintson functional properties such as "is_integral" as part of DV_PROPORTION and "offset" in EVENT are reported as info only. If set to false (default), they are reported as errors.  
+     * @param reportConstraintsOnCommonFunctionalPropertiesAsInfo if set to true, constraintson functional properties such as "is_integral" as part of DV_PROPORTION and "offset" in EVENT are reported as info only. If set to false (default), they are reported as errors.
      * @return list of validation errors or empty list if valid
      */
 
@@ -725,7 +725,7 @@ public class ArchetypeValidator {
 
 
     /** Checks the assertions of an archetype for validity
-     * @param cobj
+     * @param slot
      * @param rmAttrType
      * @param archetype
      * @param errors
@@ -840,7 +840,7 @@ public class ArchetypeValidator {
      * 
      * TODO: does not report a problem on values that have a higher precision than specified		
      * 
-     * @param cobj
+     * @param cdtobj
      * @param archetype
      * @param errors
      */	
@@ -1407,7 +1407,7 @@ public class ArchetypeValidator {
             }
         } else if(cobj instanceof CDvOrdinal) {
             CDvOrdinal cord = (CDvOrdinal) cobj;
-            Set<Ordinal> list = cord.getList();
+            List<Ordinal> list = cord.getList();
             if(list != null) {
                 for(Ordinal ord : list) {
                     CodePhrase code = ord.getSymbol();
@@ -1479,7 +1479,7 @@ public class ArchetypeValidator {
     }
 
     /** Constructs a formal String for representing this Interval
-     * @param Interval
+     * @param interval
      * @return
      */
     protected String getIntervalFormalString(Interval<Integer> interval) {

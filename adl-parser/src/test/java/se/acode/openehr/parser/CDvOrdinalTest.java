@@ -43,12 +43,27 @@ public class CDvOrdinalTest extends ParserTestBase {
         String[] codes = {
             "at0003.0", "at0003.1", "at0003.2", "at0003.3", "at0003.4"
         };
+        int[] values = { 0, 1, 2, 3, 4 };
         String terminology = "local";
         
         assertFalse("unexpected assumed value",  
         		((CDvOrdinal) node).hasAssumedValue());       
         
-        assertCDvOrdinal(node, terminology, codes, null);
+        assertCDvOrdinal(node, terminology, codes, values, null);
+    }
+
+    public void testCDvOrdinalWithDuplicatedValues() throws Exception {
+        node = archetype.node("/types[at0001]/items[at10004]/value");
+        String[] codes = {
+                "at0003.0", "at0003.1", "at0003.2", "at0003.3", "at0003.4"
+        };
+        int[] values = { 0, 1, 1, 3, 4 };
+        String terminology = "local";
+
+        assertFalse("unexpected assumed value",
+                ((CDvOrdinal) node).hasAssumedValue());
+
+        assertCDvOrdinal(node, terminology, codes, values, null);
     }
     
     public void testCDvOrdinalWithAssumedValue() throws Exception {
@@ -56,13 +71,14 @@ public class CDvOrdinalTest extends ParserTestBase {
         String[] codes = {
             "at0003.0", "at0003.1", "at0003.2", "at0003.3", "at0003.4"
         };
+        int[] values = { 0, 1, 2, 3, 4 };
         String terminology = "local";
         Ordinal assumed = new Ordinal(0, new CodePhrase(terminology, codes[0]));     
         
         assertTrue("expected to have assumed value",  
         		((CDvOrdinal) node).hasAssumedValue());
         
-        assertCDvOrdinal(node, terminology, codes, assumed);
+        assertCDvOrdinal(node, terminology, codes, values, assumed);
     }
     
     public void testEmptyCDvOrdinal() throws Exception {
@@ -73,22 +89,21 @@ public class CDvOrdinalTest extends ParserTestBase {
     }
     
     private void assertCDvOrdinal(ArchetypeConstraint node, String terminoloy,
-    		String[] codes,	Ordinal assumedValue) {
-    	
-    	assertTrue("CDvOrdinal expected", node instanceof CDvOrdinal);
+                                  String[] codes, int[] values, Ordinal assumedValue) {
+
+        assertTrue("CDvOrdinal expected", node instanceof CDvOrdinal);
         CDvOrdinal cordinal = (CDvOrdinal) node;
-        
-        List codeList = Arrays.asList(codes);
-        Set<Ordinal> list = cordinal.getList();
+
+        List<Ordinal> list = cordinal.getList();
         assertEquals("codes.size", codes.length, list.size());
-        for(Ordinal ordinal : list) {
-            assertEquals("terminology", "local", 
-            		ordinal.getSymbol().getTerminologyId().getValue());
-            assertTrue("code missing", 
-            		codeList.contains(ordinal.getSymbol().getCodeString()));
+        for(int i = 0; i < codes.length; i++) {
+            assertEquals("terminology", terminoloy,
+                    list.get(i).getSymbol().getTerminologyId().getValue());
+            assertEquals("code missing", codes[i], list.get(i).getSymbol().getCodeString());
+            assertEquals("value wrong", values[i], list.get(i).getValue());
         }
-        assertEquals("assumedValue wrong", assumedValue, 
-        		cordinal.getAssumedValue());        
+        assertEquals("assumedValue wrong", assumedValue,
+                cordinal.getAssumedValue());
     }
 
     private Archetype archetype;

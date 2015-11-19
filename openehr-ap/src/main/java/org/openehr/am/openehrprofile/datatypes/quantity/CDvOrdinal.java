@@ -15,9 +15,7 @@
 
 package org.openehr.am.openehrprofile.datatypes.quantity;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -29,7 +27,7 @@ import org.openehr.rm.support.basic.Interval;
 
 /**
  * Class specifying constraints on instances of DV_ORDINAL. Custom 
- * constrainer type for instances of DV_ORDINAL.
+ * constraint type for instances of DV_ORDINAL.
  * 
  * @author Rong Chen
  * @version 1.0
@@ -43,19 +41,16 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 	 * @param occurrences
 	 * @param nodeID
 	 * @param list
-	 * @throws IllegalArgument if list null or empty
 	 */
 	public CDvOrdinal(String path, Interval<Integer> occurrences,
-			String nodeID, CAttribute parent, Set<Ordinal> list,
+			String nodeID, CAttribute parent, List<Ordinal> list,
 			Ordinal defaultValue, Ordinal assumedValue) {
-
 		super(list == null, path, "DV_ORDINAL", occurrences, nodeID, defaultValue,
 				assumedValue, parent);
-
 		if (list != null && list.isEmpty()) {
 			throw new IllegalArgumentException("list is empty");
 		}
-		this.list = list == null ? null : new LinkedHashSet(list);
+		this.list = list == null ? null : new ArrayList<Ordinal>(list);
 	}
 	
 	@Override
@@ -69,12 +64,10 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 	 * 
 	 * @param path
 	 * @param occurrences
-	 * @param nodeID
 	 * @param list
-	 * @throws IllegalArgument if list null or empty
 	 */
 	public CDvOrdinal(String path, Interval<Integer> occurrences, 
-			Set<Ordinal> list) {
+			List<Ordinal> list) {
 		this(path, occurrences, null, null, list, null, null);
 	}
 
@@ -101,11 +94,11 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 	 * 
 	 * @return unmodifiable set of Ordinal
 	 */
-	public Set<Ordinal> getList() {
+	public List<Ordinal> getList() {
 		if (list == null) {
 			return null;
 		}
-		return Collections.unmodifiableSet(list);
+		return Collections.unmodifiableList(list);
 	}
 	
 	/**
@@ -153,7 +146,7 @@ public class CDvOrdinal extends CDomainType<Ordinal> {
 		return null;
 	}
 
-	private Set<Ordinal> list;
+	private List<Ordinal> list;
 }
 
 /*
