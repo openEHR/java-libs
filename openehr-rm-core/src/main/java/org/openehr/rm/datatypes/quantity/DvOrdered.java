@@ -203,7 +203,7 @@ public abstract class DvOrdered<T extends DvOrdered> extends DataValue
 	}
 
 	/**
-	 * @param otherReferenceRanges The otherReferenceRanges to set.
+	 * @param referenceRanges The otherReferenceRanges to set.
 	 */
 	public void setOtherReferenceRanges(List<ReferenceRange<T>> referenceRanges) {
 		this.otherReferenceRanges = referenceRanges;
