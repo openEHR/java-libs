@@ -93,11 +93,13 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
      * Constructs an Ordinal by value and symbol
      *
      * @param value
-     * @param symbol
+     * @param dvCodedTextValue
+     * @param dvCodedTextTerminology
+     * @param dvCodedTextCode
      * @throws IllegalArgumentException
      */
-    public DvOrdinal(int value, String dvCodedTextvalue, String dvCodedTextTerminology, String dvCodedTextCode) {
-	this(null, null, value, new DvCodedText(dvCodedTextvalue, dvCodedTextTerminology, dvCodedTextCode));
+    public DvOrdinal(int value, String dvCodedTextValue, String dvCodedTextTerminology, String dvCodedTextCode) {
+	this(null, null, value, new DvCodedText(dvCodedTextValue, dvCodedTextTerminology, dvCodedTextCode));
     }
 
     /**
