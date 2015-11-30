@@ -8,12 +8,7 @@ import junit.framework.TestCase;
 
 public class DvOrdinalTest extends TestCase {
 	
-	/**
-     * Tests creating a dvOrdinal with negative value
-     *
-     * @throws Exception
-     */
-    public void testCreateDvOrdinalWithNegativeValue() {
+	public void testCreateDvOrdinalWithNegativeValue() {
         CodePhrase definingCode = new CodePhrase("test", "123");
         DvCodedText coded = new DvCodedText("coded text", definingCode);        
         
