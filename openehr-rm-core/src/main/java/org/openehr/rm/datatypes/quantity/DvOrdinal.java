@@ -36,9 +36,10 @@ import org.openehr.rm.datatypes.text.DvCodedText;
 public final class DvOrdinal extends DvOrdered<DvOrdinal> {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 4901266284988836885L;
+
     /**
      * Constructs an Ordinal by referenceRanges, value and symbol
      *
@@ -49,11 +50,11 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
      * @throws IllegalArgumentException
      */
     @FullConstructor
-            public DvOrdinal(
-            @Attribute (name = "otherReferenceRanges") List<ReferenceRange<DvOrdinal>> otherReferenceRanges,
-            @Attribute (name = "normalRange") DvInterval<DvOrdinal> normalRange,
-            @Attribute (name = "value", required = true) int value,
-            @Attribute (name = "symbol", required = true) DvCodedText symbol) {
+    public DvOrdinal(
+            @Attribute(name = "otherReferenceRanges") List<ReferenceRange<DvOrdinal>> otherReferenceRanges,
+            @Attribute(name = "normalRange") DvInterval<DvOrdinal> normalRange,
+            @Attribute(name = "value", required = true) int value,
+            @Attribute(name = "symbol", required = true) DvCodedText symbol) {
         super(otherReferenceRanges, normalRange);
         if (symbol == null) {
             throw new IllegalArgumentException("null symbol");
@@ -99,7 +100,7 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
      * @throws IllegalArgumentException
      */
     public DvOrdinal(int value, String dvCodedTextValue, String dvCodedTextTerminology, String dvCodedTextCode) {
-	this(null, null, value, new DvCodedText(dvCodedTextValue, dvCodedTextTerminology, dvCodedTextCode));
+        this(null, null, value, new DvCodedText(dvCodedTextValue, dvCodedTextTerminology, dvCodedTextCode));
     }
 
     /**
@@ -108,13 +109,13 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
      * @return string presentation
      */
     public String toString() {
-	return value + "|" + symbol.toString();
+        return value + "|" + symbol.toString();
     }
 
     /**
      * @param o the Object to be compared.
      * @return a negative integer, zero, or a positive integer as this object
-     *         is less than, equal to, or greater than the specified object.
+     * is less than, equal to, or greater than the specified object.
      * @throws ClassCastException if the specified object's type prevents it
      *                            from being compared to this Object.
      */
@@ -155,7 +156,7 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
     public ReferenceRange<DvOrdinal> limits() {
         return getOtherReferenceRanges().get(limitsIndex);
     }
-    
+
     /**
      * Equals if value and symbol equal in value
      *
@@ -164,7 +165,7 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
      */
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!( o instanceof DvOrdinal )) return false;
+        if (!(o instanceof DvOrdinal)) return false;
 
         final DvOrdinal ord = (DvOrdinal) o;
 
@@ -193,7 +194,7 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
      * @return true if two instances are strictly comparable
      */
     public boolean isStrictlyComparableTo(DvOrdered ordered) {
-        if (!( ordered instanceof DvOrdinal )) {
+        if (!(ordered instanceof DvOrdinal)) {
             return false;
         }
         final DvOrdinal dvOrdinal = (DvOrdinal) ordered;
@@ -206,27 +207,27 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
         return true;
     }
 
-    public String getTerminologyId(){
-	return getSymbol().getTerminologyId();
+    public String getTerminologyId() {
+        return getSymbol().getTerminologyId();
     }
 
-    public String getCode(){
-	return getSymbol().getCode();
+    public String getCode() {
+        return getSymbol().getCode();
     }
-    
-    public String getSymbolValue(){
-	return getSymbol().getValue();
+
+    public String getSymbolValue() {
+        return getSymbol().getValue();
     }
-    
+
     // POJO start
     private DvOrdinal() {
     }
 
-    public  void setValue(int value) {
+    public void setValue(int value) {
         this.value = value;
     }
 
-    public  void setSymbol(DvCodedText symbol) {
+    public void setSymbol(DvCodedText symbol) {
         this.symbol = symbol;
     }
 
@@ -239,32 +240,36 @@ public final class DvOrdinal extends DvOrdered<DvOrdinal> {
     private int value;
     private DvCodedText symbol;
     private int limitsIndex;
+
     @Override
     public String getReferenceModelName() {
-	return "DV_ORDINAL";
+        return "DV_ORDINAL";
     }
-
 
 
     @Override
     public String serialise() {
-	return getReferenceModelName() + "," + toString();
+        return getReferenceModelName() + "," + toString();
     }
 
     @Override
     public DataValue parse(String value) {
-	int i = value.indexOf("|");
-	if (i<0){
-	    throw new IllegalArgumentException("failed to parse DvOrdinal '"+value+"', wrong number of tokens.");
-	}
-	int ordinalValue = 0;
-	try{
-	    ordinalValue = Integer.parseInt(value.substring(0,i));
-	}catch(NumberFormatException e){
-	    throw new IllegalArgumentException("failed to parse DvOrdinal '"+value+"', invalid integer value.");
-	}
-	String str = ReferenceModelName.DV_CODED_TEXT.getName() + "," +  value.substring(i+1);
-	return new DvOrdinal(ordinalValue, (DvCodedText)DataValue.parseValue(str));
+        return valueOf(value);
+    }
+
+    public static DvOrdinal valueOf(String value) {
+        int i = value.indexOf("|");
+        if (i < 0) {
+            throw new IllegalArgumentException("failed to parse DvOrdinal '" + value + "', wrong number of tokens.");
+        }
+        int ordinalValue = 0;
+        try {
+            ordinalValue = Integer.parseInt(value.substring(0, i));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("failed to parse DvOrdinal '" + value + "', invalid integer value.");
+        }
+        String str = ReferenceModelName.DV_CODED_TEXT.getName() + "," + value.substring(i + 1);
+        return new DvOrdinal(ordinalValue, (DvCodedText) DataValue.parseValue(str));
     }
 }
 

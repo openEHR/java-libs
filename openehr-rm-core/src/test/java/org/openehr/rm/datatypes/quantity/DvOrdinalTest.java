@@ -25,6 +25,14 @@ public class DvOrdinalTest extends TestCase {
     	DataValue dv = DataValue.parseValue(value);
     	assertTrue(dv instanceof DvOrdinal);
     }
+
+	public void testValueOf() throws Exception {
+		DvOrdinal dvOrdinal = DvOrdinal.valueOf("1|SNOMED-CT::313267000|Stroke|");
+		assertEquals(1, dvOrdinal.getValue());
+		assertEquals("SNOMED-CT", dvOrdinal.getTerminologyId());
+		assertEquals("313267000", dvOrdinal.getCode());
+		assertEquals("Stroke", dvOrdinal.getSymbolValue());
+	}
     
     public void testEquals() {
     	DvOrdinal ord1 = new DvOrdinal(1, new DvCodedText("text",
