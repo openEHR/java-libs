@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openehr.rm.datatypes.text.DvCodedText;
 import org.openehr.rm.datatypes.text.DvText;
 
 import junit.framework.TestCase;
@@ -89,6 +90,11 @@ public class DvCountTest extends TestCase {
         
         assertEquals("otherReferenceRanges wrong", otherReferenceRanges,
         				count.getOtherReferenceRanges());
+    }
+
+    public void testValueOf() {
+        DvCount dvCount = DvCount.valueOf("5");
+        assertEquals(5, dvCount.getMagnitude().intValue());
     }
 }
 /*

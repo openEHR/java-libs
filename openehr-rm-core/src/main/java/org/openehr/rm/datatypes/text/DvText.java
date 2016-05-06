@@ -50,7 +50,7 @@ public class DvText extends DataValue {
      * @param formatting         null if unspecified
      * @param hyperlink          null if unspecified
      * @param language           not null and valid language code
-     * @param encoding            not null and valid encoding code
+     * @param charset            not null and valid encoding code
      * @param terminologyService not null
      * @throws IllegalArgumentException if any of the components
      *                                  is invalid
@@ -101,7 +101,6 @@ public class DvText extends DataValue {
      *
      * @param value
      * @param language
-     * @param encoding
      * @param terminologyService
      * @throws IllegalArgumentException if value, language or encoding
      *                                  are empty or invalid
@@ -128,6 +127,10 @@ public class DvText extends DataValue {
 
     public DvText parse(String value) {
     	return new DvText(value);
+    }
+
+    public static DvText valueOf(String value) {
+        return new DvText(value);
     }
 
     /**

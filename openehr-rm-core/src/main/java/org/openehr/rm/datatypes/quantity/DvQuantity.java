@@ -51,26 +51,26 @@ public class DvQuantity extends DvAmount<DvQuantity> {
      * @param accuracyPercent
      * @param units
      * @param magnitude
-     * @param precision          >= -1
-     * @magnitudeStatus
-     * @param measurementService null if not specified only if units
-     *                           not specified as well
+     * @param precision            >= -1
+     * @param measurementService   null if not specified only if units
+     *                             not specified as well
      * @throws IllegalArgumentException
+     * @magnitudeStatus
      */
     @FullConstructor
-            public DvQuantity(@Attribute (name = "otherReferenceRanges") List<ReferenceRange<DvQuantity>> otherReferenceRanges,
-                              @Attribute (name = "normalRange") DvInterval<DvQuantity> normalRange,
-                              @Attribute (name= "normalStatus") CodePhrase normalStatus,
-                              @Attribute (name = "accuracy") double accuracy,
-                              @Attribute (name = "accuracyPercent") boolean accuracyPercent,
-                              @Attribute (name= "magnitudeStatus") String magnitudeStatus,
-                              @Attribute (name = "units", required = true) String units,
-                              @Attribute (name = "magnitude", required = true) double magnitude,
-                              @Attribute (name = "precision") int precision,
-                              @Attribute (name = "measurementService", system = true) MeasurementService measurementService) {
+    public DvQuantity(@Attribute(name = "otherReferenceRanges") List<ReferenceRange<DvQuantity>> otherReferenceRanges,
+                      @Attribute(name = "normalRange") DvInterval<DvQuantity> normalRange,
+                      @Attribute(name = "normalStatus") CodePhrase normalStatus,
+                      @Attribute(name = "accuracy") double accuracy,
+                      @Attribute(name = "accuracyPercent") boolean accuracyPercent,
+                      @Attribute(name = "magnitudeStatus") String magnitudeStatus,
+                      @Attribute(name = "units", required = true) String units,
+                      @Attribute(name = "magnitude", required = true) double magnitude,
+                      @Attribute(name = "precision") int precision,
+                      @Attribute(name = "measurementService", system = true) MeasurementService measurementService) {
 
         super(otherReferenceRanges, normalRange, normalStatus, accuracy,
-        		accuracyPercent, magnitudeStatus);
+                accuracyPercent, magnitudeStatus);
 
         if (precision < -1) {
             throw new IllegalArgumentException("negative precision");
@@ -145,7 +145,7 @@ public class DvQuantity extends DvAmount<DvQuantity> {
      * @param precision
      */
     public DvQuantity(String units, double magnitude, int precision) {
-    	this(units, magnitude, precision, null);
+        this(units, magnitude, precision, null);
     }
 
     /**
@@ -172,30 +172,34 @@ public class DvQuantity extends DvAmount<DvQuantity> {
      * @return units
      */
     public String getUnits() {
-    	return units;
+        return units;
     }
 
     public DvQuantity parse(String value) {
-    	int i = value.indexOf(",");
-      String num = value;
-      String units = "";
+        return valueOf(value);
+    }
 
-    	if(i >= 0) {
-        num = value.substring(0, i);
-        units = value.substring(i + 1);
-      }
-    	int precision = 0;
-    	i = num.indexOf(DECIMAL_SEPARATOR);
-    	if(i >= 0) {
-    		precision = num.length() - i - 1;
-    	}
-    	try {
-    		double magnitude = Double.parseDouble(num);
-    		return new DvQuantity(units, magnitude, precision);
-    	} catch(NumberFormatException nfe) {
-    		throw new IllegalArgumentException("failed to parse quantity["
-    					+ num + "]", nfe);
-    	}
+    public static DvQuantity valueOf(String value) {
+        int i = value.indexOf(",");
+        String num = value;
+        String units = "";
+
+        if (i >= 0) {
+            num = value.substring(0, i);
+            units = value.substring(i + 1);
+        }
+        int precision = 0;
+        i = num.indexOf(DECIMAL_SEPARATOR);
+        if (i >= 0) {
+            precision = num.length() - i - 1;
+        }
+        try {
+            double magnitude = Double.parseDouble(num);
+            return new DvQuantity(units, magnitude, precision);
+        } catch (NumberFormatException nfe) {
+            throw new IllegalArgumentException("failed to parse quantity["
+                    + num + "]", nfe);
+        }
     }
 
     /**
@@ -210,9 +214,9 @@ public class DvQuantity extends DvAmount<DvQuantity> {
     public DvQuantified<DvQuantity> add(DvQuantified<DvQuantity> q) {
         DvQuantity qt = (DvQuantity) q;
         return new DvQuantity(getOtherReferenceRanges(), getNormalRange(),
-        		getNormalStatus(), 	getAccuracy(), isAccuracyPercent(),
-        		getMagnitudeStatus(), getUnits(), magnitude + qt.magnitude,
-        		precision, measurementService);
+                getNormalStatus(), getAccuracy(), isAccuracyPercent(),
+                getMagnitudeStatus(), getUnits(), magnitude + qt.magnitude,
+                precision, measurementService);
     }
 
     /**
@@ -227,9 +231,9 @@ public class DvQuantity extends DvAmount<DvQuantity> {
     public DvQuantified<DvQuantity> subtract(DvQuantified<DvQuantity> q) {
         DvQuantity qt = (DvQuantity) q;
         return new DvQuantity(getOtherReferenceRanges(), getNormalRange(),
-        		getNormalStatus(), getAccuracy(), isAccuracyPercent(),
-        		getMagnitudeStatus(), getUnits(), magnitude - qt.magnitude,
-        		precision, measurementService);
+                getNormalStatus(), getAccuracy(), isAccuracyPercent(),
+                getMagnitudeStatus(), getUnits(), magnitude - qt.magnitude,
+                precision, measurementService);
     }
 
     /**
@@ -251,8 +255,8 @@ public class DvQuantity extends DvAmount<DvQuantity> {
      */
     public DvQuantity negate() {
         return new DvQuantity(getOtherReferenceRanges(), getNormalRange(),
-        		getNormalStatus(), getAccuracy(), isAccuracyPercent(),
-        		getMagnitudeStatus(), getUnits(), -magnitude,
+                getNormalStatus(), getAccuracy(), isAccuracyPercent(),
+                getMagnitudeStatus(), getUnits(), -magnitude,
                 precision, measurementService);
     }
 
@@ -278,8 +282,8 @@ public class DvQuantity extends DvAmount<DvQuantity> {
         dfs.setDecimalSeparator(DECIMAL_SEPARATOR);
         format.setDecimalFormatSymbols(dfs);
         format.setGroupingUsed(false);
-        String tmp = format.format(magnitude) + ( StringUtils.isEmpty(getUnits()) ? "" : "," +
-                getUnits() );
+        String tmp = format.format(magnitude) + (StringUtils.isEmpty(getUnits()) ? "" : "," +
+                getUnits());
         return tmp;
     }
 
@@ -287,8 +291,8 @@ public class DvQuantity extends DvAmount<DvQuantity> {
      * Compares this object with the specified object for order.
      *
      * @return a negative integer, zero, or a positive integer as
-     *         this object is less than, equal to, or greater than
-     *         the specified object
+     * this object is less than, equal to, or greater than
+     * the specified object
      * @throws ClassCastException if the specified object's type
      *                            prevents it from being compared to this Object.
      */
@@ -305,7 +309,7 @@ public class DvQuantity extends DvAmount<DvQuantity> {
      * @throws IllegalArgumentException if other null or wrong type
      */
     public boolean isStrictlyComparableTo(DvOrdered other) {
-        if (!( other instanceof DvQuantity )) {
+        if (!(other instanceof DvQuantity)) {
             throw new IllegalArgumentException("other not Quantity");
         }
         final DvQuantity dvQuantity = (DvQuantity) other;
@@ -320,7 +324,7 @@ public class DvQuantity extends DvAmount<DvQuantity> {
      */
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!( o instanceof DvQuantity )) return false;
+        if (!(o instanceof DvQuantity)) return false;
 
         final DvQuantity dvQuantity = (DvQuantity) o;
 
@@ -365,15 +369,15 @@ public class DvQuantity extends DvAmount<DvQuantity> {
 
     public static final char DECIMAL_SEPARATOR = '.';
 
-	@Override
-	public String getReferenceModelName() {
-		return ReferenceModelName.DV_QUANTITY.getName();
-	}
+    @Override
+    public String getReferenceModelName() {
+        return ReferenceModelName.DV_QUANTITY.getName();
+    }
 
-	@Override
-	public String serialise() {
-		return getReferenceModelName() + "," + toString();
-	}
+    @Override
+    public String serialise() {
+        return getReferenceModelName() + "," + toString();
+    }
 }
 
 /*

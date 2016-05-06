@@ -111,6 +111,19 @@ public class DvQuantityTest extends TestCase {
     	assertEquals("failed to parse quantity with precision", expected, q);
     }
 
+    public void testValueOfWithIntegerValue() {
+        DvQuantity dvQuantity = DvQuantity.valueOf("113,min/wk");
+        assertEquals(113.0, dvQuantity.getMagnitude());
+        assertEquals("min/wk", dvQuantity.getUnits());
+    }
+
+    public void testValueOfWithDecimalValue() {
+        DvQuantity dvQuantity = DvQuantity.valueOf("78.500,kg");
+        assertEquals(78.5, dvQuantity.getMagnitude());
+        assertEquals("kg", dvQuantity.getUnits());
+        assertEquals(3, dvQuantity.getPrecision());
+    }
+
     public void testParseQuantityWithoutPrecision() throws Exception {
     	String value = "78,kg";
     	DvQuantity expected = new DvQuantity("kg", 78, 0);

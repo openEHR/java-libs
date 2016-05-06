@@ -173,6 +173,10 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 	 * Parses a string value and return a DvDateTime
 	 */
 	public DvDateTime parse(String value) {
+		return valueOf(value);
+	}
+
+	public static DvDateTime valueOf(String value) {
 		DateTime datetime = DvDateTimeParser.parseDateTime(value);
 		return new DvDateTime(datetime);
 	}
@@ -291,9 +295,6 @@ public class DvDateTime extends DvTemporal<DvDateTime> {
 	/**
 	 * If date is valid ISO8601 format
 	 *
-	 * @param year
-	 * @param month
-	 * @param day
 	 * @return true if valid
 	 */
 	public static boolean isValidISO8601Time(String value) {

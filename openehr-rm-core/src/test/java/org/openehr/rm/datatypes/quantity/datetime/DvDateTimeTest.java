@@ -122,6 +122,16 @@ public class DvDateTimeTest extends TestCase {
         DvDateTime datetime = new DvDateTime("2003-12-15T09:30:00Z");
         assertEquals(new DvDateTime("2002-12-13T18:45:00Z"), datetime.subtract(new DvDuration("P1Y1DT14H45m")));
     }
+
+    public void testValueOf() {
+        DvDateTime datetime = DvDateTime.valueOf("2014-07-09T12:13:05");
+        assertEquals("year", 2014, datetime.getYear());
+        assertEquals("month", 7, datetime.getMonth());
+        assertEquals("day", 9, datetime.getDay());
+        assertEquals("hour", 12, datetime.getHour());
+        assertEquals("minute", 13, datetime.getMinute());
+        assertEquals("second", 05, datetime.getSecond());
+    }
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
