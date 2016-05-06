@@ -183,6 +183,10 @@ public final class DvCount extends DvAmount<DvCount> {
 	}
 	
 	public DvCount parse(String value) throws IllegalArgumentException {
+		return valueOf(value);
+	}
+
+	public static DvCount valueOf(String value) {
 		try {
 			int i = Integer.parseInt(value);
 			return new DvCount(i);
