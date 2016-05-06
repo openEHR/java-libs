@@ -42,4 +42,10 @@ public class DvCodedTextTest extends TestCase {
     	assertEquals(t1, t2);
     }
 
+    public void testValueOf() {
+        DvCodedText dvCodedText = DvCodedText.valueOf("ATC::B01AC05|ticlopidine|");
+        assertEquals("ATC", dvCodedText.getTerminologyId());
+        assertEquals("B01AC05", dvCodedText.getCode());
+        assertEquals("ticlopidine", dvCodedText.getValue());
+    }
 }

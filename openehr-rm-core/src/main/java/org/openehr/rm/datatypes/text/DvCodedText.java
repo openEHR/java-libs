@@ -162,15 +162,19 @@ public final class DvCodedText extends DvText {
     }
     
     public DvCodedText parse(String value){
-		String[] tokens = value.split("::");
-		if (tokens.length!=2){
-		    throw new IllegalArgumentException("failed to parse DvCodedText '"+value+"', wrong number of tokens.");
-		}
-		String[] tokens2 = tokens[1].split("\\|");
-		if (tokens2.length!=2){
-		    throw new IllegalArgumentException("failed to parse DvCodedText '"+value+"', wrong number of tokens.");
-		}
-		return new DvCodedText(tokens2[1], tokens[0], tokens2[0]);
+		return valueOf(value);
+    }
+
+    public static DvCodedText valueOf(String value) {
+        String[] tokens = value.split("::");
+        if (tokens.length!=2){
+            throw new IllegalArgumentException("failed to parse DvCodedText '"+value+"', wrong number of tokens.");
+        }
+        String[] tokens2 = tokens[1].split("\\|");
+        if (tokens2.length!=2){
+            throw new IllegalArgumentException("failed to parse DvCodedText '"+value+"', wrong number of tokens.");
+        }
+        return new DvCodedText(tokens2[1], tokens[0], tokens2[0]);
     }
 
     public String getTerminologyId(){
