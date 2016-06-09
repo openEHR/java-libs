@@ -163,8 +163,15 @@ public class ArchetypeValidator {
             return;
         }
 
+        ArrayList<String> checkedLanguages = new ArrayList<String>();
         // check purpose in each available language
         for (ResourceDescriptionItem detail : archetype.getDescription().getDetails()) {
+            if (!checkedLanguages.contains(detail.getLanguage().getCodeString())) {
+                checkedLanguages.add(detail.getLanguage().getCodeString());
+            } else {
+                errors.add(new ValidationError(ErrorType.VDL, null, detail.getLanguage().getCodeString()));
+            }
+
             if (StringUtils.isBlank(detail.getPurpose()) ||	StringUtils.containsIgnoreCase(detail.getPurpose(),"unknown")) {
                 ValidationError error = new ValidationError(ErrorType.VDSCR, "PURPOSE", 
                         detail.getLanguage().getCodeString());
@@ -680,16 +687,24 @@ public class ArchetypeValidator {
                 cardinalityInterval.getUpper().intValue() == minOcc) {
             // Although there is an intersection, this intersection doesn't really make sense
             // because it would mean that at least one element could never fulfil its occurrence potential
-            // This may not be an error, but should at least be a warning (TBD)
+            // This may not be an error, but should at least be a warning.
             ValidationError error = new ValidationError(ErrorType.WACMC, null,
-                    cmattr.path(), getIntervalFormalString(cardinalityInterval), getIntervalFormalString(minOcc, maxOcc, isOccUpperUnbounded)
-                    );
-
+                    cmattr.path(), getIntervalFormalString(cardinalityInterval), getIntervalFormalString(minOcc, maxOcc, isOccUpperUnbounded));
             if( ! errors.contains(error)) {
                 errors.add(error);
             }	
         }
 
+
+        // "Sum of minimal occurrences of elements < minimal cardinality of container"?
+        /*        if (!cardinalityInterval.isLowerUnbounded() && minOcc < cardinalityInterval.getLower().intValue()) {
+            // While it is perfectly legal to do this (and might even be used as a way to force a selection of various items)
+            // in practice this most often happens if a mandatory element was removed, but the min. cardinality hasn't been decreased.
+            // This results in ugly problems for implementers downstream and therefore we warn here.
+            ValidationError error = new ValidationError(ErrorType.W, null,
+                    cmattr.path(), getIntervalFormalString(cardinalityInterval), getIntervalFormalString(minOcc, maxOcc, isOccUpperUnbounded));
+        }
+         */    
     }
 
     private void checkCardinalityConformsToRMCardinality(CMultipleAttribute cattr, CObject cobj, List<ValidationError> errors) {
@@ -864,7 +879,7 @@ public class ArchetypeValidator {
             log.debug("validating CDVQuantity object at "+cdtobj.path());
             checkArchetypeUnitsValidity((CDvQuantity)cdtobj, errors);
         } 
-        
+
     }
 
     /*
@@ -1085,10 +1100,12 @@ public class ArchetypeValidator {
             List<ValidationError> errors) {
         Set<String> languages = archetype.languagesAvailable();
         String primaryLang = archetype.getOriginalLanguage().getCodeString();
-        List<OntologyDefinitions> termDefList = 
-                archetype.getOntology().getTermDefinitionsList();
-        List<OntologyDefinitions> constraintDefList = 
-                archetype.getOntology().getConstraintDefinitionsList();
+        List<OntologyDefinitions> termDefList = archetype.getOntology().getTermDefinitionsList();
+        checkDuplicateLanguage(errors, termDefList);
+
+        List<OntologyDefinitions> constraintDefList = archetype.getOntology().getConstraintDefinitionsList();
+        checkDuplicateLanguage(errors, constraintDefList);
+
         Set<String> termDefLangs = retrieveLanguageSet(termDefList);
         Set<String> constraintDefLangs = retrieveLanguageSet(constraintDefList);
         ValidationError error = null;
@@ -1096,7 +1113,7 @@ public class ArchetypeValidator {
             if(primaryLang.equals(lang)) {
                 continue;
             }
-            if( ! termDefLangs.contains(lang)) {
+            if(!termDefLangs.contains(lang)) {
                 error = new ValidationError(ErrorType.VOTM, "TERM",
                         lang);
                 errors.add(error);
@@ -1109,6 +1126,17 @@ public class ArchetypeValidator {
                 errors.add(error);
             }
         }		
+    }
+
+    private void checkDuplicateLanguage(List<ValidationError> errors, List<OntologyDefinitions> ontDefsList) {
+        ArrayList<String> checkedLanguages = new ArrayList<String>();
+        for (OntologyDefinitions ontDefs : ontDefsList) {
+            if (!checkedLanguages.contains(ontDefs.getLanguage())) {
+                checkedLanguages.add(ontDefs.getLanguage());
+            } else {
+                errors.add(new ValidationError(ErrorType.VDL, null, ontDefs.getLanguage()));
+            }
+        }
     }
 
     private Set<String> retrieveLanguageSet(List<OntologyDefinitions> list) {
