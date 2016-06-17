@@ -1,0 +1,47 @@
+archetype
+    adl-test-ENTRY.term_definition.v5
+
+concept 
+    [at0000]    --  empty definition test
+
+language
+    original_language = <[ISO_639-1::en]>
+description
+	original_author = <
+		["name"] = <"test">
+	>
+	lifecycle_state = <"published">
+	details = <
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"test">
+			use = <"test">
+			misuse = <"test">
+		>
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			purpose = <"test">
+			use = <"test">
+			misuse = <"test">
+		>
+		["en"] = <
+			language = <[ISO_639-1::en]>
+			purpose = <"test">
+			use = <"test">
+			misuse = <"test">
+		>
+	>
+definition
+    ENTRY[at0001] matches {*}
+
+ontology 
+    term_definitions = <
+        ["en"] = <
+            items = <
+            >
+        >
+		["de"] = <
+            items = <
+            >
+        >
+    >

@@ -92,13 +92,15 @@ public class  SimpleMeasurementService implements MeasurementService {
             "fmol/ml", "pmol/ml", "nmol/ml", "umol/ml", "mol/ml", "pmol/dl", "nmol/dl", "umol/dl", "mmol/dl", "mmol/l", "pmol/l", "nmol/l", "umol/l", "mol/l", 
             "ueq/ml", "meq/ml", "eq/ml", "{AHG}eq/ml", "10*6.eq/ml", "ueq/l", "meq/l", "eq/l", "meq/dl", "mosm/l", "osm/l", "u[iU]/ml", "m[iU]/ml",
             "{IgGPhospholipid}U/ml", "{IgMPhospholipid}U/ml", "{ComplementCh50}U/ml", "{IgAPhospholipid}U/ml", "{Elisa_U}/ml", "[iU]/ml", "k[iU]/ml", "[iU]/dl", 
-            "{Ehrlich_U}/dl", "m[iU]/l", "[iU]/l"            
+            "{Ehrlich_U}/dl", "m[iU]/l", "[iU]/l",
+            "1/wk", "[oz_av]/wk"
+            
             
         ));    
     /**
      * Returns True if the units string according to
      * the HL7 UCUM specification.
-     * Note that this implementation currrently assumes case-sensitive UCUM format.
+     * Note that this implementation currently assumes case-sensitive UCUM format.
      *
      * @param units
      * @return true if units valid
@@ -109,9 +111,16 @@ public class  SimpleMeasurementService implements MeasurementService {
             throw new IllegalArgumentException("units null");
         }
         
+        SimpleUCUMValidator ucumVal = new SimpleUCUMValidator();
+        if (ucumVal.isValidUnitsString(units)) {
+            return true;
+        } else {
+            return false;
+        }
+     
         // Unfortunately the UCUM support in the library javax.measure.unit uses a very outdated version of UCUM.
         // E.g. mm[Hg], osm, eq are missing in there. Therefore we first check if the unit is a UCUM unit commonly used in health care. 
-        if (commonUCUMCodes.contains(units)) {
+/*        if (commonUCUMCodes.contains(units)) {
             return true;
         }
 
@@ -124,7 +133,7 @@ public class  SimpleMeasurementService implements MeasurementService {
         } catch(java.lang.IllegalArgumentException e) {
 
         }
-       
+   */    
         // If we want to support the case-insensitive UCUM variant as well, we can do so via this:
         // Unit unitCI = UCUMFormat.getCaseInsensitiveInstance().parseObject(units, new ParsePosition(0));
 
@@ -141,7 +150,7 @@ public class  SimpleMeasurementService implements MeasurementService {
             System.out.println("Unit NOT parsed CI: "+ units);
         }
 */
-        return unit!= null;
+    //    return unit!= null;
     }
 
     /**
