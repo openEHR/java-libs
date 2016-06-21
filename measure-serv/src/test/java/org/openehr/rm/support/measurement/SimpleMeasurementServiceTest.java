@@ -73,7 +73,9 @@ public class SimpleMeasurementServiceTest extends TestCase {
 
         assertTrue(service.isValidUnitsString("m"));
         assertFalse(service.isValidUnitsString("m/")); // / is not followed by a term
-        assertTrue(service.isValidUnitsString(""));
+        
+        //assertFalse(service.isValidUnitsString("")); strictly, "" is not a valid unit expression. But e.g. v3 data types say it is the default to use if not units are provided.        
+        
         assertTrue(service.isValidUnitsString("/m"));
         assertTrue(service.isValidUnitsString("10*3/ul"));
         assertTrue(service.isValidUnitsString("10*-3/ul"));
@@ -88,10 +90,10 @@ public class SimpleMeasurementServiceTest extends TestCase {
         /** test that the parser supports both {} inserts, but not unicode characters too, while we're at it */
         assertTrue(service.isValidUnitsString("rad2{a}"));
         assertFalse(service.isValidUnitsString("rad2{錠}")); // no unicode chars allowed.
-        assertTrue(service.isValidUnitsString("{a}.rad2{b}"));
-        assertFalse(service.isValidUnitsString("{a}rad2{b}"));
+        assertTrue(service.isValidUnitsString("{a}.rad2{b}")); 
+        assertFalse(service.isValidUnitsString("{a}rad2{b}")); //Cannot start a symbol with an annodation
         assertTrue(service.isValidUnitsString("1{c}"));
-        assertFalse(service.isValidUnitsString("{|}1"));
+        assertFalse(service.isValidUnitsString("{|}1")); // Cannot start a symbol with an annotation
         assertTrue(service.isValidUnitsString("{e}"));
         assertTrue(service.isValidUnitsString("%"));
 
@@ -391,9 +393,8 @@ public class SimpleMeasurementServiceTest extends TestCase {
         assertTrue(service.isValidUnitsString("osm"));
         assertTrue(service.isValidUnitsString("[mclg'U]"));
  
-        // According to the UCUM test cases, this is valid, but not sure why. "g.m/{hb}.m2" could be valid, but "g.m/{hb}m2" ?        
-        // The Bacus-Naur at http://unitsofmeasure.org/ucum.html seems to suggest it is not valid 
-        //assertTrue(service.isValidUnitsString("g.m/{hb}m2"));
+        assertFalse(service.isValidUnitsString("g.m/{hb}m2")); // This test is set to true in UcumFunctionalTests2.xml, but is later (in UcumFunctionalTests.xml!) corrected to the one below, which is correct.
+        assertTrue(service.isValidUnitsString("g.m/m2{hb}")); 
         
         assertTrue(service.isValidUnitsString("meq/(8.h.kg)"));
         assertTrue(service.isValidUnitsString("osm/kg"));
