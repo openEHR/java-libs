@@ -78,7 +78,7 @@ public abstract class DataValue extends RMObject {
     	
     	int i = value.indexOf(",");
     	if(i < 0 || i == value.length()) {
-    		throw new IllegalArgumentException("wrong string format");
+    		throw new IllegalArgumentException("wrong string format (" + value + ")");
     	}
     	
     	String rmName = value.substring(0, i);
