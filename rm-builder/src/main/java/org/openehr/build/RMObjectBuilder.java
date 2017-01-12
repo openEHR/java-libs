@@ -78,6 +78,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -205,8 +206,8 @@ public class RMObjectBuilder {
                 Organisation.class, Person.class, Contact.class,
                 PartyRelationship.class, Role.class, Capability.class};
 
-        typeMap = new HashMap<String, Class>();
-        upperCaseMap = new HashMap<String, Class>();
+        typeMap = new LinkedHashMap<String, Class>();
+        upperCaseMap = new LinkedHashMap<String, Class>();
         for (Class klass : classes) {
             String name = klass.getSimpleName();
             typeMap.put(name, klass);
