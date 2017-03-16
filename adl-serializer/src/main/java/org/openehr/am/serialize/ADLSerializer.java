@@ -147,7 +147,10 @@ public class ADLSerializer {
 			out.write(adlVersion);
 		}
 		if(uid != null && StringUtils.isNotEmpty(uid.toString())) {
-            out.write("uid=");
+			if (StringUtils.isNotEmpty(adlVersion)) {
+				out.write("; ");
+			}
+			out.write("uid=");
             out.write(uid.toString());
         }
 	    if(StringUtils.isNotEmpty(adlVersion) || (uid!=null &&StringUtils.isNotEmpty(uid.toString()))) {

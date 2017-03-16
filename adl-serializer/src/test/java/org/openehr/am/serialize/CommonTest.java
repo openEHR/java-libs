@@ -26,6 +26,7 @@ import org.openehr.am.archetype.constraintmodel.CAttribute;
 import org.openehr.am.archetype.constraintmodel.Cardinality;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.identification.ArchetypeID;
+import org.openehr.rm.support.identification.HierObjectID;
 
 public class CommonTest extends SerializerTestBase {
 
@@ -45,6 +46,22 @@ public class CommonTest extends SerializerTestBase {
 		verify("archetype\r\n" + "    " + id + "\r\n" + "specialize\r\n"
 				+ "    " + parentId + "\r\n\r\n" + "concept\r\n" + "    ["
 				+ conceptCode + "]\r\n");
+	}
+
+	public void testPrintHeaderAttributes() throws Exception {
+		String id = "openEHR-EHR-EVALUATION.adverse_reaction-medication.v1";
+
+		clean();
+		HierObjectID uid = new HierObjectID("23e1c56c-0a44-11e7-93ae-92361f002671");
+		outputter.printHeader("1.4", new ArchetypeID(id),
+				null, uid, "at0000", out);
+
+		verify("" +
+				"archetype (adl_version=1.4; uid=23e1c56c-0a44-11e7-93ae-92361f002671)\r\n" +
+				"    openEHR-EHR-EVALUATION.adverse_reaction-medication.v1\r\n" +
+				"\r\n" +
+				"concept\r\n" +
+				"    [at0000]\r\n");
 	}
 
 	public void testPrintExistence() throws Exception {
