@@ -14,47 +14,13 @@
  */
 package org.openehr.am.serialize;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.archetype.assertion.Assertion;
-import org.openehr.am.archetype.constraintmodel.ArchetypeInternalRef;
-import org.openehr.am.archetype.constraintmodel.ArchetypeSlot;
-import org.openehr.am.archetype.constraintmodel.CAttribute;
-import org.openehr.am.archetype.constraintmodel.CComplexObject;
-import org.openehr.am.archetype.constraintmodel.CDomainType;
-import org.openehr.am.archetype.constraintmodel.CMultipleAttribute;
-import org.openehr.am.archetype.constraintmodel.CObject;
-import org.openehr.am.archetype.constraintmodel.CPrimitiveObject;
-import org.openehr.am.archetype.constraintmodel.Cardinality;
-import org.openehr.am.archetype.constraintmodel.ConstraintRef;
-import org.openehr.am.archetype.constraintmodel.primitive.CBoolean;
-import org.openehr.am.archetype.constraintmodel.primitive.CDate;
-import org.openehr.am.archetype.constraintmodel.primitive.CDateTime;
-import org.openehr.am.archetype.constraintmodel.primitive.CDuration;
-import org.openehr.am.archetype.constraintmodel.primitive.CInteger;
-import org.openehr.am.archetype.constraintmodel.primitive.CPrimitive;
-import org.openehr.am.archetype.constraintmodel.primitive.CReal;
-import org.openehr.am.archetype.constraintmodel.primitive.CString;
-import org.openehr.am.archetype.constraintmodel.primitive.CTime;
-import org.openehr.am.archetype.ontology.ArchetypeOntology;
-import org.openehr.am.archetype.ontology.ArchetypeTerm;
-import org.openehr.am.archetype.ontology.OntologyBinding;
-import org.openehr.am.archetype.ontology.OntologyDefinitions;
-import org.openehr.am.archetype.ontology.QueryBindingItem;
-import org.openehr.am.archetype.ontology.TermBindingItem;
+import org.openehr.am.archetype.constraintmodel.*;
+import org.openehr.am.archetype.constraintmodel.primitive.*;
+import org.openehr.am.archetype.ontology.*;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
@@ -69,6 +35,13 @@ import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.basic.Interval;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.identification.ObjectID;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * ADL serializer for the openEHR Java kernel
@@ -174,7 +147,10 @@ public class ADLSerializer {
 			out.write(adlVersion);
 		}
 		if(uid != null && StringUtils.isNotEmpty(uid.toString())) {
-            out.write("uid=");
+			if (StringUtils.isNotEmpty(adlVersion)) {
+				out.write("; ");
+			}
+			out.write("uid=");
             out.write(uid.toString());
         }
 	    if(StringUtils.isNotEmpty(adlVersion) || (uid!=null &&StringUtils.isNotEmpty(uid.toString()))) {
@@ -225,9 +201,9 @@ public class ADLSerializer {
 				TranslationDetails td = translations.get(lang);
 				
 				indent(2, out);
-				out.write("[\"");
-				out.write(lang);
-				out.write("\"] = <");				
+				out.write("[");
+				out.write(quoteString(lang));
+				out.write("] = <");
 				newline(out);
 				
 				indent(3, out);
@@ -250,9 +226,9 @@ public class ADLSerializer {
 				
 				if(td.getAccreditation() != null) {
 					indent(3, out);
-					out.write("accreditation = <\"");	
-					out.write(td.getAccreditation());
-					out.write("\">");
+					out.write("accreditation = <");
+					out.write(quoteString(td.getAccreditation()));
+					out.write(">");
 					newline(out);
 				}
 				
@@ -283,11 +259,11 @@ public class ADLSerializer {
 		}
 		for(String key : map.keySet()) {
 			indent(indent, out);
-			out.write("[\"");
-			out.write(key);
-			out.write("\"] = <\"");
-			out.write(map.get(key));
-			out.write("\">");			
+			out.write("[");
+			out.write(quoteString(key));
+			out.write("] = <");
+			out.write(quoteString(map.get(key)));
+			out.write(">");
 			newline(out);
 		}
 	}
@@ -308,7 +284,7 @@ public class ADLSerializer {
 		Map<String, String> map = description.getOriginalAuthor();
 		for (String key : map.keySet()) {
 			indent(2, out);
-			out.write("[\"" + key + "\"] = <\"" + map.get(key) + "\">");
+			out.write("[" + quoteString(key) + "] = <" + quoteString(map.get(key)) + ">");
 			newline(out);
 		}
 		indent(1, out);
@@ -316,9 +292,9 @@ public class ADLSerializer {
 		newline(out);
 
 		indent(1, out);
-		out.write("lifecycle_state = <\"");
-		out.write(description.getLifecycleState());
-		out.write("\">");
+		out.write("lifecycle_state = <");
+		out.write(quoteString(description.getLifecycleState()));
+		out.write(">");
 		newline(out);
 
 		printNonEmptyString("resource_package_uri", description.getResourcePackageUri(), 1, out);
@@ -337,9 +313,9 @@ public class ADLSerializer {
 	protected void printDescriptionItem(ResourceDescriptionItem item,
 			int indent, Writer out) throws IOException {
 		indent(indent, out);
-		out.write("[\"");
-		out.write(item.getLanguage().getCodeString());
-		out.write("\"] = <");
+		out.write("[");
+		out.write(quoteString(item.getLanguage().getCodeString()));
+		out.write("] = <");
 		newline(out);
 
 		indent(indent + 1, out);
@@ -374,9 +350,9 @@ public class ADLSerializer {
 		}
 		indent(indent, out);
 		out.write(label);
-		out.write(" = <\"");
-		out.write(value);
-		out.write("\">");
+		out.write(" = <");
+		out.write(quoteString(value));
+		out.write(">");
 		newline(out);
 	}
 
@@ -390,9 +366,7 @@ public class ADLSerializer {
 		out.write(label);
 		out.write(" = <");
 		for (int i = 0, j = list.size(); i < j; i++) {
-			out.write("\"");
-			out.write(list.get(i));
-			out.write("\"");
+			out.write(quoteString(list.get(i)));
 			if (i != j - 1) {
 				out.write(",");
 			}
@@ -414,7 +388,7 @@ public class ADLSerializer {
 
 		for (String key : map.keySet()) {
 			indent(2, out);
-			out.write("[\"" + key + "\"] = <\"" + map.get(key) + "\">");
+			out.write("[" + quoteString(key) + "] = <" + quoteString(map.get(key)) + ">");
 			newline(out);
 		}
 
@@ -804,14 +778,14 @@ public class ADLSerializer {
 			int index = 1;
 			for (CDvQuantityItem item : list) {
 				indent(indent + 2, out);
-				out.write("[\"");
-				out.write(Integer.toString(index));
-				out.write("\"] = <");
+				out.write("[");
+				out.write(quoteString(Integer.toString(index)));
+				out.write("] = <");
 				newline(out);
 				indent(indent + 3, out);
-				out.write("units = <\"");
-				out.write(item.getUnits());
-				out.write("\">");
+				out.write("units = <");
+				out.write(quoteString(item.getUnits()));
+				out.write(">");
 				newline(out);
 				Interval<Double> value = item.getMagnitude();
 				if (value != null) {
@@ -879,9 +853,9 @@ public class ADLSerializer {
 	}
 	
 	protected void printUnits(String units, Writer out) throws IOException {
-		out.write("units = <\"");
-		out.write(units);
-		out.write("\">");		
+		out.write("units = <");
+		out.write(quoteString(units));
+		out.write(">");
 	}
 
 	protected void printOntology(ArchetypeOntology ontology, Writer out)
@@ -894,9 +868,8 @@ public class ADLSerializer {
 			indent(1, out);
 			out.write("terminologies_available = <");
 			for (String terminology : ontology.getTerminologies()) {
-				out.write("\"");
-				out.write(terminology);
-				out.write("\", ");
+				out.write(quoteString(terminology));
+				out.write(", ");
 			}
 			out.write("...>");
 			newline(out);
@@ -932,9 +905,9 @@ public class ADLSerializer {
 			for (int i = 0; i < ontology.getTermBindingList().size(); i++) {
 				OntologyBinding bind = ontology.getTermBindingList().get(i);
 				indent(2, out);
-				out.write("[\"");
-				out.write(bind.getTerminology());
-				out.write("\"] = <");
+				out.write("[");
+				out.write(quoteString(bind.getTerminology()));
+				out.write("] = <");
 				newline(out);
 				indent(3, out);
 				out.write("items = <");
@@ -946,9 +919,9 @@ public class ADLSerializer {
 							.getTermBindingList().get(i).getBindingList()
 							.get(j);
 					indent(4, out);
-					out.write("[\"");
-					out.write(item.getCode());
-					out.write("\"] = <");
+					out.write("[");
+					out.write(quoteString(item.getCode()));
+					out.write("] = <");
 					out.write(item.getTerms().get(0));
 
 					if (item.getTerms().size() > 1) {
@@ -980,9 +953,9 @@ public class ADLSerializer {
 				OntologyBinding bind = ontology.getConstraintBindingList().get(
 						i);
 				indent(2, out);
-				out.write("[\"");
-				out.write(bind.getTerminology());
-				out.write("\"] = <");
+				out.write("[");
+				out.write(quoteString(bind.getTerminology()));
+				out.write("] = <");
 				newline(out);
 				indent(3, out);
 				out.write("items = <");
@@ -994,9 +967,9 @@ public class ADLSerializer {
 							.getConstraintBindingList().get(i).getBindingList()
 							.get(j);
 					indent(4, out);
-					out.write("[\"");
-					out.write(item.getCode());
-					out.write("\"] = <");
+					out.write("[");
+					out.write(quoteString(item.getCode()));
+					out.write("] = <");
 					out.write(item.getQuery().getUrl());
 					out.write(">");
 					newline(out);
@@ -1013,29 +986,33 @@ public class ADLSerializer {
 		}
 	}
 
-	private void printDefinitionList(Writer out, 
+    private String quoteString(String value) {
+        return "\"" + value.replaceAll("[\"]", "\\\\$0") + "\"";
+    }
+
+	private void printDefinitionList(Writer out,
 			List<OntologyDefinitions> termDefinitionsList) throws IOException {
 		for (OntologyDefinitions defs : termDefinitionsList) {
 			indent(2, out);
-			out.write("[\"");
-			out.write(defs.getLanguage());
-			out.write("\"] = <");
+			out.write("[");
+			out.write(quoteString(defs.getLanguage()));
+			out.write("] = <");
 			newline(out);
 			indent(3, out);
 			out.write("items = <");
 			newline(out);
 			for (ArchetypeTerm term : defs.getDefinitions()) {
 				indent(4, out);
-				out.write("[\"");
-				out.write(term.getCode());
-				out.write("\"] = <");
+				out.write("[");
+				out.write(quoteString(term.getCode()));
+				out.write("] = <");
 				newline(out);
 				for (Map.Entry<String, String> entry : term.getItems().entrySet()) {
 					indent(5, out);
 					out.write(entry.getKey());
-					out.write(" = <\"");
-					out.write(entry.getValue());
-					out.write("\">");
+					out.write(" = <");
+					out.write(quoteString(entry.getValue()));
+					out.write(">");
 					newline(out);
 				}
 				newline(out);
@@ -1184,13 +1161,11 @@ public class ADLSerializer {
 		} else if(cstring.getList() != null){
 			printList(cstring.getList(), out, true);
 		} else if(cstring.defaultValue() != null) {
-			out.write("\"");
-			out.write(cstring.defaultValue());
-			out.write("\"");
+			out.write(quoteString(cstring.defaultValue()));
 		}
 		if(cstring.hasAssumedValue()) {
 			out.write("; ");
-			out.write("\"" + cstring.assumedValue() + "\"");
+			out.write(quoteString(ObjectUtils.toString(cstring.assumedValue(), "")));
 		}
 	}
 
@@ -1204,13 +1179,12 @@ public class ADLSerializer {
 			if (i != 0) {
 				out.write(",");
 			}
+			String item = list.get(i).toString();
 			if (string) {
-				out.write("\"");
-			}
-			out.write(list.get(i).toString());
-			if (string) {
-				out.write("\"");
-			}
+				out.write(quoteString(item));
+			} else {
+			    out.write(item);
+            }
 		}
 	}
 
