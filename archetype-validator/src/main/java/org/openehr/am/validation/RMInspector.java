@@ -5,6 +5,7 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -192,8 +193,8 @@ public class RMInspector {
 				Organisation.class, Person.class, Contact.class,
 				PartyRelationship.class, Role.class, Capability.class };
 
-		typeMap = new HashMap<String, Class>();
-		upperCaseMap = new HashMap<String, Class>();
+		typeMap = new LinkedHashMap<String, Class>();
+		upperCaseMap = new LinkedHashMap<String, Class>();
 		for (Class klass : classes) {
 			String name = klass.getSimpleName();
 			if (klass.getSimpleName().equalsIgnoreCase("Double")) {
@@ -318,6 +319,7 @@ public class RMInspector {
 	 *
 	 * @param rmClassName
 	 * @return
+	 * @throws RMObjectBuildingException
 	 */
 	public Map<String, Class> retrieveRMAttributes(String rmClassName) {
 		Class rmClass = retrieveRMType(rmClassName);
@@ -328,11 +330,10 @@ public class RMInspector {
 
 		Map<String, Class> map = attributeType(rmClass);
 		Map<String, Class> ret = new HashMap<String, Class>();
-		for(Map.Entry<String, Class> entry : map.entrySet()) {
-			String name = entry.getKey();
-			ret.put(toUnderscoreSeparated(name), entry.getValue());
+		for(String name : map.keySet()) {
+			ret.put(toUnderscoreSeparated(name), map.get(name));
 
-			log.debug("rmattribute: " +name +": "+ entry.getValue());
+			log.debug("rmattribute: " +name +": "+ map.get(name));
 		}
 		return ret;
 	}
@@ -343,6 +344,7 @@ public class RMInspector {
 	 *
 	 * @param rmClassName
 	 * @return
+	 * @throws RMObjectBuildingException
 	 */
 	public Set<String> retrieveRMAttributeNames(String rmClassName) {
 		Class rmClass = retrieveRMType(rmClassName);
@@ -410,8 +412,8 @@ public class RMInspector {
 
 			// replace underscore separated names with camel case
 			Map<String, Object> filteredMap = new HashMap<String, Object>();
-			for (Map.Entry<String, Object> entry : valueMap.entrySet()) {
-				filteredMap.put(toCamelCase(entry.getKey()), entry.getValue());
+			for (String name : valueMap.keySet()) {
+				filteredMap.put(toCamelCase(name), valueMap.get(name));
 			}
 
 			Constructor constructor = fullConstructor(rmClass);
@@ -484,6 +486,28 @@ public class RMInspector {
 
 				return className;
 			}
+		}
+		return null;
+	}
+
+	// todo: isn't there any support from java api on this?
+	private Object defaultValue(Class type) {
+		if (type == boolean.class) {
+			return Boolean.FALSE;
+		} else if (type == double.class) {
+			return new Double(0);
+		} else if (type == float.class) {
+			return new Float(0);
+		} else if (type == int.class) {
+			return new Integer(0);
+		} else if (type == short.class) {
+			return new Short((short) 0);
+		} else if (type == long.class) {
+			return new Long(0);
+		} else if (type == char.class) {
+			return new Character((char) 0);
+		} else if (type == byte.class) {
+			return new Byte((byte) 0);
 		}
 		return null;
 	}
