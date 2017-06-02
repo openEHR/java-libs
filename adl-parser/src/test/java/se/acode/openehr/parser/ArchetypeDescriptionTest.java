@@ -56,11 +56,11 @@ public class ArchetypeDescriptionTest extends ParserTestBase {
 
 		// TODO: parent_resource
 
-		List<ResourceDescriptionItem> details = description.getDetails();
+		Map<String, ResourceDescriptionItem> details = description.getDetails();
 		assertNotNull("details null", details);
 		assertEquals("details size wrong", 1, details.size());
 
-		ResourceDescriptionItem item = details.get(0);
+		ResourceDescriptionItem item = details.get("en");
 		assertNotNull("descriptionItem null", item);
 		CodePhrase language = new CodePhrase("ISO_639-1", "en");
 		assertEquals("language wrong", language, item.getLanguage());
@@ -90,12 +90,12 @@ public class ArchetypeDescriptionTest extends ParserTestBase {
 		keywords.add("condition");
 		assertEquals("keywords wrong", keywords, item.getKeywords());
 
-		map  = details.get(0).getOriginalResourceUri();
+		map  = details.get("en").getOriginalResourceUri();
 		assertEquals("http://guidelines.are.us/wherever/fr", 
 				map.get("ligne guide"));
 		assertEquals("http://some%20medline%20ref", map.get("medline"));
 		
-		map = details.get(0).getOtherDetails();
+		map = details.get("en").getOtherDetails();
 		assertEquals("item details 1", map.get("item other 1"));
 		assertEquals("item details 2", map.get("item other 2"));
 	}

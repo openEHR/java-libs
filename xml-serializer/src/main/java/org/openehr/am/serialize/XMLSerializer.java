@@ -219,7 +219,7 @@ public class XMLSerializer {
         }
         printStringMap("other_details", description.getOtherDetails(), des);
 
-        for (ResourceDescriptionItem item : description.getDetails()) {
+        for (ResourceDescriptionItem item : description.getDetails().values()) {
             Element details = new Element("details", defaultNamespace);
             des.getChildren().add(details);
             printDescriptionItem(item, details);

@@ -68,8 +68,8 @@ public class DescriptionTest extends SerializerTestBase {
 		Map<String, String> authorMap = new HashMap<String, String>();
 		authorMap.put("name", author);
 
-		List<ResourceDescriptionItem> items =
-			new ArrayList<ResourceDescriptionItem>();
+		Map<String, ResourceDescriptionItem> items =
+			new HashMap<>();
 		String[][] others = { { "revision", "1.1" }, { "adl_version", "1.4" },
 				{ "rights", "all rights reserved" } };
 		Map<String, String> otherDetails = new HashMap<String, String>();
@@ -79,7 +79,7 @@ public class DescriptionTest extends SerializerTestBase {
 		TerminologyService service = SimpleTerminologyService.getInstance();
 		ResourceDescriptionItem item = new ResourceDescriptionItem(ENGLISH,
 				"purpose of this archetype", service);
-		items.add(item);
+		items.put(ENGLISH.getCodeString(),item);
 		ResourceDescription description = new ResourceDescription(authorMap,
 				null, status, items, null, null, null);
 

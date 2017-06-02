@@ -24,6 +24,8 @@ package org.openehr.rm.common.resource;
 import junit.framework.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.identification.TestTerminologyID;
 import org.openehr.rm.support.terminology.TestTerminologyService;
@@ -90,7 +92,7 @@ public class ResourceDescriptionTest extends ResourceTestBase {
     }
     
     private void failConstructor(HashMap<String, String> orgAuthor, List<String> 
-                otherContr, String lifeCycleState, List<ResourceDescriptionItem> details,
+                otherContr, String lifeCycleState, Map<String, ResourceDescriptionItem> details,
                 String resourcePackageUri, HashMap<String, String> otherDetails, 
                 AuthoredResource parentResource, String reason) {
         try {

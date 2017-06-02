@@ -164,7 +164,7 @@ public class ArchetypeValidator {
         }
 
         // check purpose in each available language
-        for (ResourceDescriptionItem detail : archetype.getDescription().getDetails()) {
+        for (ResourceDescriptionItem detail : archetype.getDescription().getDetails().values()) {
             if (StringUtils.isBlank(detail.getPurpose()) ||	StringUtils.containsIgnoreCase(detail.getPurpose(),"unknown")) {
                 ValidationError error = new ValidationError(ErrorType.VDSCR, "PURPOSE", 
                         detail.getLanguage().getCodeString());

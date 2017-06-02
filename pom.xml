@@ -1,12 +1,8 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <groupId>se.cambio.cds</groupId>
-        <artifactId>mig-project</artifactId>
-        <version>1.0.43</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
+    <groupId>openehr</groupId>
     <artifactId>ref_impl_java</artifactId>
     <packaging>pom</packaging>
     <version>0-SNAPSHOT</version>
@@ -14,9 +10,14 @@
     <organization>
         <name>The openEHR Foundation</name>
     </organization>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
     <scm>
-        <developerConnection>scm:git:ssh://git@css-cds-3:7999/cds/ref_impl_java.git</developerConnection>
-        <tag>HEAD</tag>
+        <connection>scm:git:git://github.com/openEHR/java-libs.git</connection>
+        <developerConnection>scm:git:ssh://github.com:openEHR/java-libs.git</developerConnection>
+        <url>http://github.com/openEHR/java-libs/tree/master</url>
     </scm>
     <build>
         <plugins>
@@ -26,12 +27,14 @@
                 <version>2.1</version>
             </plugin>
             <plugin>
-                <artifactId>maven-scm-plugin</artifactId>
-                <version>1.8.1</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
                 <configuration>
-                    <tag>${project.artifactId}-${project.version}</tag>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
-            </plugin>
+            </plugin>        
         </plugins>
     </build>
     <modules>

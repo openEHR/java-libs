@@ -13,6 +13,6 @@ public class MissingPurposeTest extends ParserTestBase {
 		assertNotNull(archetype);
 		
 		assertNotNull("purpose null", 
-				archetype.getDescription().getDetails().get(0).getPurpose());
+				archetype.getDescription().getDetails().get("en").getPurpose());
 	}
 }
