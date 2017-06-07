@@ -33,7 +33,7 @@ public interface MeasurementService extends Serializable{
      * @return true if units valid
      * @throws IllegalArgumentException if units null
      */
-    public boolean isValidUnitsString(String units);
+    boolean isValidUnitsString(String units);
 
     /**
      * Return True if two units strings correspond to the same
@@ -44,7 +44,7 @@ public interface MeasurementService extends Serializable{
      * @return true if two units equal
      * @throws IllegalArgumentException if units1 or units2 null
      */
-    public boolean unitsEquivalent(String units1, String units2);
+    boolean unitsEquivalent(String units1, String units2);
     
     /**
      * Return True if two units strings are comparable.
@@ -54,7 +54,7 @@ public interface MeasurementService extends Serializable{
      * @return true if two units comparable
      * @throws IllegalArgumentException if units1 or units2 null
      */
-    public boolean unitsComparable(String units1, String units2);
+    boolean unitsComparable(String units1, String units2);
     
     /**
      * Comparison between two measures.
@@ -66,7 +66,7 @@ public interface MeasurementService extends Serializable{
      *         quantity.
      * @throws IllegalArgumentException if units1, units2 null or not comparable
      */
-    public int compare(String units1, Double value1, String units2, Double value2);
+    int compare(String units1, Double value1, String units2, Double value2);
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****

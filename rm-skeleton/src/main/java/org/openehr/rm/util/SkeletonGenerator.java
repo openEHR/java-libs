@@ -571,14 +571,7 @@ public class SkeletonGenerator {
 			log.debug("multiple attribute..");
 			
 			CMultipleAttribute cma = (CMultipleAttribute) cattribute;
-			Collection container;
-			if(cma.getCardinality().isList()) {
-				container = new ArrayList<Object>();
-				
-			} else {
-				// default container type
-				container = new ArrayList<Object>();
-			}
+			Collection container = new ArrayList<Object>();
 			for(CObject cobj : children) {
 				
 				log.debug("looping children, required: " + cobj.isRequired());
@@ -701,11 +694,11 @@ public class SkeletonGenerator {
 		
 		} else if(cp instanceof CInteger) {
 			
-			return new Integer(0);
+			return Integer.valueOf(0);
 		
 		} else if(cp instanceof CReal) {
 		
-			return new Double(0);
+			return Double.valueOf(0);
 		
 		} else if(cp instanceof CDuration) {
 			

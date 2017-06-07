@@ -57,12 +57,13 @@ public class SimpleTerminologyAccess implements TerminologyAccess {
 			group.add(code);
 		}
 		groups.put(groupId, group);
-		for(String lang : names.keySet()) {
+		for(Map.Entry<String, String> entry : names.entrySet()) {
+			String lang = entry.getKey();
 			Map<String, String> nameToId = groupLangNameToId.get(lang);
 			if(nameToId == null) {
 				nameToId = new HashMap<String, String>();
 			}
-			String name = names.get(lang);
+			String name = entry.getValue();
 			
 			nameToId.put(name, groupId);
 			groupLangNameToId.put(lang, nameToId);

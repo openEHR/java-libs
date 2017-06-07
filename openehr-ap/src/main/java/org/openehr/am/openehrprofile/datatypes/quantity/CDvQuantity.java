@@ -56,8 +56,9 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 		if (list != null && list.isEmpty()) {
 			throw new IllegalArgumentException("empty list");
 		}
-		this.list = list == null ? list 
-				: new ArrayList<CDvQuantityItem>(list);
+		if(list != null) {
+			this.list = new ArrayList<CDvQuantityItem>(list);
+		}
 		this.property = property;
 	}
 	

@@ -45,7 +45,7 @@ public class ExpressionLeaf extends ExpressionItem {
 	 * @return
 	 */
 	public static final ExpressionLeaf intConstant(int i) {
-		return new ExpressionLeaf(ExpressionItem.INTEGER, new Integer(i),
+		return new ExpressionLeaf(ExpressionItem.INTEGER, Integer.valueOf(i),
 				ExpressionLeaf.ReferenceType.CONSTANT);
 	}
 	
@@ -56,7 +56,7 @@ public class ExpressionLeaf extends ExpressionItem {
 	 * @return
 	 */
 	public static final ExpressionLeaf realConstant(double d) {
-		return new ExpressionLeaf(ExpressionItem.REAL, new Double(d),
+		return new ExpressionLeaf(ExpressionItem.REAL, Double.valueOf(d),
 				ExpressionLeaf.ReferenceType.CONSTANT);
 	}
 	
