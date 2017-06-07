@@ -29,7 +29,7 @@ import javax.measure.unit.Unit;
  * @version 1.0
  *
  */
-public final class  SimpleMeasurementService implements MeasurementService {
+public class  SimpleMeasurementService implements MeasurementService {
 
     /**
      * 

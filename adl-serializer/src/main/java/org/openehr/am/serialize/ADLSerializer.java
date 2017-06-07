@@ -45,11 +45,11 @@ import java.util.Set;
 
 /**
  * ADL serializer for the openEHR Java kernel
- *
+ * 
  * @author Rong Chen
  * @author Mattias Forss, Johan Hjalmarsson
  * @author Sebastian Garde
- *
+ * 
  * @version 1.0
  */
 public class ADLSerializer {
@@ -65,7 +65,7 @@ public class ADLSerializer {
 
 	/**
 	 * Output given archetype as string in ADL format
-	 *
+	 * 
 	 * @param archetype
 	 * @return a string in ADL format
 	 * @throws IOException
@@ -76,9 +76,9 @@ public class ADLSerializer {
 		return writer.toString();
 	}
 
-	/**
+		/**
 	 * Output  archetype DEFINITION as string in ADL format
-	 *
+	 * 
 	 * @param archetype
 	 * @return a string in ADL format
 	 * @throws IOException
@@ -87,13 +87,13 @@ public class ADLSerializer {
 		StringWriter writer = new StringWriter();
 
 		printDefinition(archetype.getDefinition(), writer);
-
+				
 		return writer.toString();
 	}
-
+	
 	/**
 	 * Output given archetype to outputStream
-	 *
+	 * 
 	 * @param archetype
 	 * @param out
 	 * @throws IOException
@@ -107,40 +107,40 @@ public class ADLSerializer {
 
 	/**
 	 * Output given archetype to writer
-	 *
+	 * 
 	 * @param archetype
 	 * @param out
 	 * @throws IOException
 	 */
 	public void output(Archetype archetype, Writer out) throws IOException {
-		printHeader(archetype.getAdlVersion(), archetype.getArchetypeId(),
+		printHeader(archetype.getAdlVersion(), archetype.getArchetypeId(), 
 				archetype.getParentArchetypeId(), archetype.getUid(), archetype.getConcept(), out);
 		newline(out);
-
+		
 		printLanguage(archetype, out);
 		newline(out);
-
+		
 		if(archetype.getDescription() != null) {
 			printDescription(archetype.getDescription(), out);
-			newline(out);
+			newline(out);	
 		}
-
+		
 		printDefinition(archetype.getDefinition(), out);
 		newline(out);
-
+		
 		printOntology(archetype.getOntology(), out);
 		out.flush();
 		out.close();
 	}
-
+	
 	protected void printHeader(String adlVersion,
-							   ArchetypeID id, ArchetypeID parentId, ObjectID uid,
-							   String conceptCode, Writer out) throws IOException {
+			ArchetypeID id, ArchetypeID parentId, ObjectID uid,
+			String conceptCode, Writer out) throws IOException {
 
 		out.write("archetype");
-		if(StringUtils.isNotEmpty(adlVersion) || (uid != null && StringUtils.isNotEmpty(uid.toString()))) {
-			out.write(" (");
-		}
+        if(StringUtils.isNotEmpty(adlVersion) || (uid != null && StringUtils.isNotEmpty(uid.toString()))) {
+            out.write(" (");  
+        }
 
 		if(StringUtils.isNotEmpty(adlVersion)) {
 			out.write("adl_version=");
@@ -151,11 +151,11 @@ public class ADLSerializer {
 				out.write("; ");
 			}
 			out.write("uid=");
-			out.write(uid.toString());
-		}
-		if(StringUtils.isNotEmpty(adlVersion) || (uid!=null &&StringUtils.isNotEmpty(uid.toString()))) {
-			out.write(")");
-		}
+            out.write(uid.toString());
+        }
+	    if(StringUtils.isNotEmpty(adlVersion) || (uid!=null &&StringUtils.isNotEmpty(uid.toString()))) {
+	        out.write(")");  
+	    }
 		newline(out);
 		indent(1, out);
 		out.write(id.toString());
@@ -176,9 +176,9 @@ public class ADLSerializer {
 		out.write("[" + conceptCode + "]");
 		newline(out);
 	}
-
+	
 	protected void printLanguage(AuthoredResource authored,
-								 Writer out) throws IOException {
+			Writer out) throws IOException {
 
 		out.write("language");
 		newline(out);
@@ -195,17 +195,17 @@ public class ADLSerializer {
 			indent(1, out);
 			out.write("translations = <");
 			newline(out);
-			Map<String, TranslationDetails> translations =
-					authored.getTranslations();
+			Map<String, TranslationDetails> translations = 
+				authored.getTranslations();
 			for(String lang : translations.keySet()) {
 				TranslationDetails td = translations.get(lang);
-
+				
 				indent(2, out);
 				out.write("[");
 				out.write(quoteString(lang));
 				out.write("] = <");
 				newline(out);
-
+				
 				indent(3, out);
 				out.write("language = <");
 				out.write("[");
@@ -215,15 +215,15 @@ public class ADLSerializer {
 				out.write("]");
 				out.write(">");
 				newline(out);
-
+				
 				indent(3, out);
 				out.write("author = <");
-				newline(out);
-				printMap(td.getAuthor(), out, 4);
+				newline(out);				
+				printMap(td.getAuthor(), out, 4);				
 				indent(3, out);
 				out.write(">");
 				newline(out);
-
+				
 				if(td.getAccreditation() != null) {
 					indent(3, out);
 					out.write("accreditation = <");
@@ -231,19 +231,19 @@ public class ADLSerializer {
 					out.write(">");
 					newline(out);
 				}
-
+				
 				if(td.getOtherDetails() != null) {
 					indent(3, out);
 					out.write("other_details = <");
-					newline(out);
-					printMap(td.getOtherDetails(), out, 4);
+					newline(out);				
+					printMap(td.getOtherDetails(), out, 4);				
 					indent(3, out);
 					out.write(">");
 					newline(out);
 				}
-
+				
 				indent(2, out);
-				out.write(">");
+				out.write(">");				
 				newline(out);
 			}
 			indent(1, out);
@@ -251,18 +251,18 @@ public class ADLSerializer {
 			newline(out);
 		}
 	}
-
-	protected void printMap(Map<String,String> map, Writer out, int indent)
+	
+	protected void printMap(Map<String,String> map, Writer out, int indent) 
 			throws IOException {
 		if(map == null || map.size() == 0) {
 			return;
 		}
-		for(Map.Entry<String, String> entry: map.entrySet()) {
+		for(String key : map.keySet()) {
 			indent(indent, out);
 			out.write("[");
-			out.write(quoteString(entry.getKey()));
+			out.write(quoteString(key));
 			out.write("] = <");
-			out.write(quoteString(entry.getValue()));
+			out.write(quoteString(map.get(key)));
 			out.write(">");
 			newline(out);
 		}
@@ -282,9 +282,9 @@ public class ADLSerializer {
 		out.write("original_author = <");
 		newline(out);
 		Map<String, String> map = description.getOriginalAuthor();
-		for (Map.Entry<String, String> entry: map.entrySet()) {
+		for (String key : map.keySet()) {
 			indent(2, out);
-			out.write("[" + quoteString(entry.getKey()) + "] = <" + quoteString(entry.getValue()) + ">");
+			out.write("[" + quoteString(key) + "] = <" + quoteString(map.get(key)) + ">");
 			newline(out);
 		}
 		indent(1, out);
@@ -298,7 +298,7 @@ public class ADLSerializer {
 		newline(out);
 
 		printNonEmptyString("resource_package_uri", description.getResourcePackageUri(), 1, out);
-
+		
 		indent(1, out);
 		out.write("details = <");
 		newline(out);
@@ -311,7 +311,7 @@ public class ADLSerializer {
 	}
 
 	protected void printDescriptionItem(ResourceDescriptionItem item,
-										int indent, Writer out) throws IOException {
+			int indent, Writer out) throws IOException {
 		indent(indent, out);
 		out.write("[");
 		out.write(quoteString(item.getLanguage().getCodeString()));
@@ -326,7 +326,7 @@ public class ADLSerializer {
 		out.write(item.getLanguage().getCodeString());
 		out.write("]>");
 		newline(out);
-
+		
 		printNonEmptyString("purpose", item.getPurpose(), indent + 1, out);
 		printNonEmptyStringList("keywords", item.getKeywords(), indent + 1,
 				out);
@@ -343,7 +343,7 @@ public class ADLSerializer {
 	}
 
 	private void printNonEmptyString(String label, String value, int indent,
-									 Writer out) throws IOException {
+			Writer out) throws IOException {
 
 		if (StringUtils.isEmpty(value)) {
 			return;
@@ -357,7 +357,7 @@ public class ADLSerializer {
 	}
 
 	private void printNonEmptyStringList(String label, List<String> list,
-										 int indent, Writer out) throws IOException {
+			int indent, Writer out) throws IOException {
 
 		if (list == null || list.isEmpty()) {
 			return;
@@ -376,7 +376,7 @@ public class ADLSerializer {
 	}
 
 	private void printNonEmptyStringMap(String label, Map<String, String> map,
-										int indent, Writer out) throws IOException {
+			int indent, Writer out) throws IOException {
 		if (map == null || map.isEmpty()) {
 			return;
 		}
@@ -386,9 +386,9 @@ public class ADLSerializer {
 		out.write(" = <");
 		newline(out);
 
-		for (Map.Entry<String, String> entry: map.entrySet()) {
+		for (String key : map.keySet()) {
 			indent(2, out);
-			out.write("[" + quoteString(entry.getKey()) + "] = <" + quoteString(entry.getValue()) + ">");
+			out.write("[" + quoteString(key) + "] = <" + quoteString(map.get(key)) + ">");
 			newline(out);
 		}
 
@@ -407,16 +407,16 @@ public class ADLSerializer {
 	}
 
 	protected void printCComplexObject(CComplexObject ccobj, int indent,
-									   Writer out) throws IOException {
-
+			Writer out) throws IOException {
+		
 		// TODO skip c_obj with [0,0] occurrences
 		Interval<Integer> occurrences = ccobj.getOccurrences();
-		if(occurrences != null
+		if(occurrences != null 
 				&& (Integer.valueOf(0).equals(occurrences.getLower()))
 				&& (Integer.valueOf(0).equals(occurrences.getUpper()))) {
-			return;
+			return;		
 		}
-
+						
 
 		// print rmTypeName and nodeId
 		indent(indent, out);
@@ -450,29 +450,30 @@ public class ADLSerializer {
 		if(occurrences == null || defaultOccurrences.equals(occurrences)) {
 			return;
 		}
-
-		out.write(" occurrences matches {");
-		if (occurrences.getLower() == null) {
-			out.write("*");
-		} else {
-			out.write(Integer.toString(occurrences.getLower()));
+		if (occurrences != null) {
+			out.write(" occurrences matches {");
+			if (occurrences.getLower() == null) {
+				out.write("*");
+			} else {
+				out.write(Integer.toString(occurrences.getLower()));
+			}
+			out.write("..");
+			if (occurrences.getUpper() == null) {
+				out.write("*");
+			} else {
+				out.write(Integer.toString(occurrences.getUpper()));
+			}
+			out.write("}");
 		}
-		out.write("..");
-		if (occurrences.getUpper() == null) {
-			out.write("*");
-		} else {
-			out.write(Integer.toString(occurrences.getUpper()));
-		}
-		out.write("}");
 	}
 
 	protected void printArchetypeInternalRef(ArchetypeInternalRef ref,
-											 int indent, Writer out) throws IOException {
+			int indent, Writer out) throws IOException {
 		indent(indent, out);
 		out.write("use_node ");
 		out.write(ref.getRmTypeName());
 		printOccurrences(ref.getOccurrences(), out);
-		out.write(" ");
+		out.write(" ");		
 		out.write(ref.getTargetPath());
 		newline(out);
 	}
@@ -501,33 +502,33 @@ public class ADLSerializer {
 			}
 			newline(out);
 			indent(indent, out);
-			out.write("}");
+			out.write("}");			
 		}
 		newline(out);
 	}
-
+	
 	private void printAssertions(Set<Assertion> assertions, String purpose,
-								 int indent, Writer out)	throws IOException {
+			int indent, Writer out)	throws IOException {
 
 		if(assertions == null) {
 			return;
 		}
-
+		
 		newline(out);
 		indent(indent + 1, out);
 		out.write(purpose);
-
+		
 		for (Assertion assertion : assertions) {
-
+			
 			if(assertion.getStringExpression() == null) {
 				continue;
 			}
-
+			
 			newline(out);
 			indent(indent + 2, out);
-
-			// FIXME: The string expression is null when an archetype is parsed, but after the archetype is recreated in the archetype
-			// editor, the string expression exists. Please provide a valid string expression from the parser since it's _much_ easier to
+			
+			// FIXME: The string expression is null when an archetype is parsed, but after the archetype is recreated in the archetype 
+			// editor, the string expression exists. Please provide a valid string expression from the parser since it's _much_ easier to 
 			// maintain this line of code instead of adding hundreds of lines just to output some expressions, operators etc.
 			// Opening an archetype directly in the ADL format view will show the output of the parsed archetype in this way:
 			//
@@ -550,7 +551,7 @@ public class ADLSerializer {
 			CMultipleAttribute cma = (CMultipleAttribute) cattribute;
 			if(cma.getCardinality() != null) {
 				out.write(" ");
-				printCardinality(cma.getCardinality(), out);
+			    printCardinality(cma.getCardinality(), out);
 			}
 		}
 		List<CObject> children = cattribute.getChildren();
@@ -602,7 +603,7 @@ public class ADLSerializer {
 			printConstraintRef((ConstraintRef) cobj, indent, out);
 		}
 	}
-
+	
 	protected void printConstraintRef(ConstraintRef ref, int indent, Writer out) throws IOException {
 		indent(indent, out);
 		out.write("[");
@@ -648,9 +649,9 @@ public class ADLSerializer {
 			printCDvOrdinal((CDvOrdinal) cdomain, indent, out);
 		} else if (cdomain instanceof CDvQuantity) {
 			printCDvQuantity((CDvQuantity) cdomain, indent, out);
-		}
-		else if (cdomain instanceof CCodePhrase) {
-			printCCodePhrase((CCodePhrase) cdomain, indent, out);
+		}  
+		 else if (cdomain instanceof CCodePhrase) {
+		    printCCodePhrase((CCodePhrase) cdomain, indent, out);
 		}
 		// unknow CDomainType
 	}
@@ -659,7 +660,7 @@ public class ADLSerializer {
 			throws IOException {
 
 		indent(indent, out);
-
+		
 		if(ccoded.isAnyAllowed()) {
 			out.write("C_CODE_PHRASE <");
 			newline(out);
@@ -702,7 +703,7 @@ public class ADLSerializer {
 				}
 				out.write("]");
 				newline(out);
-			}
+			} 
 		} else {
 			out.write("]");
 			newline(out);
@@ -723,9 +724,9 @@ public class ADLSerializer {
 			newline(out);
 		}
 		else {
-			for (Iterator<Ordinal> it = cordinal.getList().iterator();
-				 it.hasNext();) {
-				Ordinal ordinal = it.next();
+			for (Iterator<Ordinal> it = cordinal.getList().iterator(); 
+			it.hasNext();) {
+				Ordinal ordinal = it.next();			
 				indent(indent, out);
 				printOrdinal(ordinal, out);
 				if (it.hasNext()) {
@@ -733,17 +734,17 @@ public class ADLSerializer {
 				} else if(cordinal.hasAssumedValue()) {
 					out.write(";");
 				}
-				newline(out);
+				newline(out);			
 			}
 			if(cordinal.hasAssumedValue()) {
 				printOrdinal(cordinal.getAssumedValue(), out);
 				newline(out);
 
 			}
-		}
+		}	
 	}
 
-	protected void printOrdinal(Ordinal ordinal, Writer out)
+	protected void printOrdinal(Ordinal ordinal, Writer out) 
 			throws IOException {
 		CodePhrase symbol = ordinal.getSymbol();
 		out.write(Integer.toString(ordinal.getValue()));
@@ -751,11 +752,11 @@ public class ADLSerializer {
 		out.write(symbol.getTerminologyId().getValue());
 		out.write("::");
 		out.write(symbol.getCodeString());
-		out.write("]");
+		out.write("]");		
 	}
 
 	protected void printCDvQuantity(CDvQuantity cquantity, int indent,
-									Writer out) throws IOException {
+			Writer out) throws IOException {
 		indent(indent, out);
 		out.write("C_DV_QUANTITY <");
 		newline(out);
@@ -770,7 +771,7 @@ public class ADLSerializer {
 		}
 		List<CDvQuantityItem> list = cquantity.getList();
 		if (list != null) {
-			newline(out);
+			newline(out);			
 			indent(indent + 1, out);
 			out.write("list = <");
 			newline(out);
@@ -794,7 +795,7 @@ public class ADLSerializer {
 					out.write(">");
 					newline(out);
 				}
-
+				
 				Interval<Integer> precision = item.getPrecision();
 				if (precision != null) {
 					indent(indent + 3, out);
@@ -812,10 +813,10 @@ public class ADLSerializer {
 			out.write(">");
 			newline(out);
 		}
-
-
+		
+		
 		if(cquantity.getAssumedValue() != null) {
-			newline(out);
+			newline(out);			
 			indent(indent + 1, out);
 			out.write("assumed_value = <");
 			newline(out);
@@ -823,20 +824,20 @@ public class ADLSerializer {
 			indent(indent + 1, out);
 			out.write(">");
 			newline(out);
-		}
-
+		}		
+		
 		indent(indent, out);
 		out.write(">");
 		newline(out);
 	}
-
-	protected void printDvQuantity(DvQuantity quantity, int indent, Writer out)
+	
+	protected void printDvQuantity(DvQuantity quantity, int indent, Writer out) 
 			throws IOException {
-
+		
 		indent(indent + 1, out);
 		printUnits(quantity.getUnits(), out);
 		newline(out);
-
+		
 		if(quantity.getMagnitude() != null) {
 			indent(indent + 1, out);
 			out.write("magnitude = <");
@@ -850,7 +851,7 @@ public class ADLSerializer {
 		out.write(">");
 		newline(out);
 	}
-
+	
 	protected void printUnits(String units, Writer out) throws IOException {
 		out.write("units = <");
 		out.write(quoteString(units));
@@ -925,8 +926,8 @@ public class ADLSerializer {
 
 					if (item.getTerms().size() > 1) {
 						for (int k = 1; k < item.getTerms().size(); k++) {
-							out.write("," + item.getTerms().get(k));
-						}
+                            out.write("," + item.getTerms().get(k));
+                        }
 					}
 
 					out.write(">");
@@ -985,12 +986,12 @@ public class ADLSerializer {
 		}
 	}
 
-	private String quoteString(String value) {
-		return "\"" + value.replaceAll("[\"]", "\\\\$0") + "\"";
-	}
+    private String quoteString(String value) {
+        return "\"" + value.replaceAll("[\"]", "\\\\$0") + "\"";
+    }
 
 	private void printDefinitionList(Writer out,
-									 List<OntologyDefinitions> termDefinitionsList) throws IOException {
+			List<OntologyDefinitions> termDefinitionsList) throws IOException {
 		for (OntologyDefinitions defs : termDefinitionsList) {
 			indent(2, out);
 			out.write("[");
@@ -1068,7 +1069,7 @@ public class ADLSerializer {
 			} else {
 				out.write("false");
 			}
-		}
+ 		}
 	}
 
 	protected void printCDate(CDate cdate, Writer out) throws IOException {
@@ -1182,8 +1183,8 @@ public class ADLSerializer {
 			if (string) {
 				out.write(quoteString(item));
 			} else {
-				out.write(item);
-			}
+			    out.write(item);
+            }
 		}
 	}
 
@@ -1192,7 +1193,7 @@ public class ADLSerializer {
 		out.write("|");
 		if (interval.getLower() != null && interval.getUpper() != null) {
 			if(interval.getLower().equals(interval.getUpper())
-					&& interval.isLowerIncluded()
+					&& interval.isLowerIncluded() 
 					&& interval.isUpperIncluded()) {
 				out.write(interval.getLower().toString());
 			} else {
@@ -1237,27 +1238,27 @@ public class ADLSerializer {
 }
 /*
  * ***** BEGIN LICENSE BLOCK ***** Version: MPL 1.1/GPL 2.0/LGPL 2.1
- *
+ * 
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the 'License'); you may not use this file except in compliance with the
  * License. You may obtain a copy of the License at http://www.mozilla.org/MPL/
- *
+ * 
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
- *
+ * 
  * The Original Code is ADLSerializer.java
- *
+ * 
  * The Initial Developer of the Original Code is Rong Chen. Portions created by
  * the Initial Developer are Copyright (C) 2004-2007 the Initial Developer. All
  * Rights Reserved.
- *
- * Contributor(s): Mattias Forss, Johan Hjalmarsson, Erik Sundvall,
+ * 
+ * Contributor(s): Mattias Forss, Johan Hjalmarsson, Erik Sundvall, 
  *                 Sebastian Garde
- *
+ * 
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
  * the specific language governing rights and limitations under the License.
- *
+ * 
  * ***** END LICENSE BLOCK *****
  */

@@ -61,16 +61,6 @@ public class ArchetypeTermValidityTest extends ArchetypeValidationTestBase {
 		}
 	}
 	
-	public void testCheckDoubleLanguage_Description() throws Exception {
-		archetype = loadArchetype("adl-test-ENTRY.term_definition.v5");
-		validator.checkDescription(archetype, errors);
-		
-		assertEquals("expected validation error in term def checking", 1, errors.size());
-		for(ValidationError error : errors) {
-			assertEquals("validation error type wrong", ErrorType.VDL, error.getType());
-		}
-	}
-	
 	public void testCheckDoubleLanguage_Ontology() throws Exception {
 		archetype = loadArchetype("adl-test-ENTRY.term_definition.v6");
 		validator.checkOntologyTranslation(archetype, errors);
