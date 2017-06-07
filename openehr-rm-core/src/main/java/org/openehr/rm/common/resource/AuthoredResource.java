@@ -198,11 +198,9 @@ public abstract class AuthoredResource extends RMObject {
 			//if (!description.equals(this.description)) {
 			//if(this.description != description) {
 			if (description.getParentResource() != this) {
-				for (ResourceDescriptionItem rdi : description.getDetails()) {
-					if (!translations.containsKey(rdi.getLanguage()
-							.getCodeString())
-							&& !originalLanguage.getCodeString().equals(
-									rdi.getLanguage().getCodeString())) {
+				for (String languageCode : description.getDetails().keySet()) {
+					if (!translations.containsKey(languageCode)
+							&& !originalLanguage.getCodeString().equals(languageCode)) {
 						throw new IllegalArgumentException(
 								"the language of description details not in translations");
 					}

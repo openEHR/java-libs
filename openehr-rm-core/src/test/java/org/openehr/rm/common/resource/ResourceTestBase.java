@@ -24,6 +24,8 @@ package org.openehr.rm.common.resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import junit.framework.TestCase;
 import org.openehr.rm.common.generic.RevisionHistory;
 import org.openehr.rm.datatypes.text.CodePhrase;
@@ -38,13 +40,14 @@ public class ResourceTestBase extends TestCase {
         super(name);
     }
 
-    protected List<ResourceDescriptionItem> details(String[] languages, String[] purposes) {
-        List<ResourceDescriptionItem> rdiList = new ArrayList<ResourceDescriptionItem>();
+    protected Map<String, ResourceDescriptionItem> details(String[] languages, String[] purposes) {
+        Map<String, ResourceDescriptionItem> rdiList = new HashMap();
         for(int i = 0; i < languages.length; i++) {
-            CodePhrase orgLang = new CodePhrase(TestTerminologyID.LANGUAGE, languages[i]);
+            String languageCode = languages[i];
+            CodePhrase orgLang = new CodePhrase(TestTerminologyID.LANGUAGE, languageCode);
             ResourceDescriptionItem rdi = new ResourceDescriptionItem(orgLang, purposes[i], 
                 TestTerminologyService.getInstance());
-            rdiList.add(rdi);
+            rdiList.put(languageCode, rdi);
         }
         return rdiList;
     }

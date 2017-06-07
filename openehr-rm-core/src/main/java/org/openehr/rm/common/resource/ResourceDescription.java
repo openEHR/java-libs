@@ -41,7 +41,7 @@ public class ResourceDescription implements Serializable{
 			@Attribute(name = "originalAuthor", required = true) Map<String, String> originalAuthor,
 			@Attribute(name = "otherContributors") List<String> otherContributors,
 			@Attribute(name = "lifecycleState", required = true) String lifecycleState,
-			@Attribute(name = "details", required = true) List<ResourceDescriptionItem> details,
+			@Attribute(name = "details", required = true) Map<String, ResourceDescriptionItem> details,
 			@Attribute(name = "resourcePackageUri") String resourcePackageUri,
 			@Attribute(name = "otherDetails") Map<String, String> otherDetails,
 			@Attribute(name = "parentResource") AuthoredResource parentResource ){
@@ -70,7 +70,7 @@ public class ResourceDescription implements Serializable{
 	 * 
 	 * @return details
 	 */
-	public List<ResourceDescriptionItem> getDetails() {
+	public Map<String, ResourceDescriptionItem> getDetails() {
 		return details;
 	}
 
@@ -136,7 +136,7 @@ public class ResourceDescription implements Serializable{
 	public ResourceDescription() {
 	}
 	
-	void setDetails(List<ResourceDescriptionItem> details) {
+	void setDetails(Map<String, ResourceDescriptionItem> details) {
 		this.details = details;
 	}
 
@@ -173,10 +173,10 @@ public class ResourceDescription implements Serializable{
             }
 	}
         
-        void languageValidCheck(AuthoredResource parent, List<ResourceDescriptionItem> details) {
+        void languageValidCheck(AuthoredResource parent, Map<String, ResourceDescriptionItem> details) {
             Set<String> languages = parent.languagesAvailable();
-            for(ResourceDescriptionItem rdi : details) {
-                if(!languages.contains(rdi.getLanguage().getCodeString())) {
+            for(String code : details.keySet()) {
+                if(!languages.contains(code)) {
                     throw new IllegalArgumentException("breach of language validity");
                 }
             }
@@ -188,7 +188,7 @@ public class ResourceDescription implements Serializable{
 	private Map<String, String> originalAuthor;
 	private List<String> otherContributors;
 	private String lifecycleState;
-	private List<ResourceDescriptionItem> details;
+	private Map<String, ResourceDescriptionItem> details;
 	private String resourcePackageUri;
 	private Map<String, String> otherDetails;
 	private AuthoredResource parentResource;

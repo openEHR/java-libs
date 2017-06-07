@@ -70,19 +70,11 @@ import org.openehr.rm.datatypes.uri.DvEHRURI;
 import org.openehr.rm.datatypes.uri.DvURI;
 import org.openehr.rm.demographic.*;
 import org.openehr.rm.support.identification.*;
+import org.openehr.rm.support.identification.UUID;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * Reference model class instances builder
@@ -206,8 +198,8 @@ public class RMObjectBuilder {
                 Organisation.class, Person.class, Contact.class,
                 PartyRelationship.class, Role.class, Capability.class};
 
-        typeMap = new LinkedHashMap<String, Class>();
-        upperCaseMap = new LinkedHashMap<String, Class>();
+        typeMap = new LinkedHashMap<>();
+        upperCaseMap = new LinkedHashMap<>();
         for (Class klass : classes) {
             String name = klass.getSimpleName();
             typeMap.put(name, klass);

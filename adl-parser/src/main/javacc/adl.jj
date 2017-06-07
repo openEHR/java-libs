@@ -858,7 +858,7 @@ ResourceDescription arch_description() throws Exception :
   String value = null;
   List otherContributors = null;
   String lifecycleState = null;
-  List details = new ArrayList();
+  Map details = new HashMap();
   ResourceDescriptionItem item = null;
   String resourcePackageURI = null;
   Map otherDetails = null;
@@ -879,7 +879,7 @@ ResourceDescription arch_description() throws Exception :
            LOOKAHEAD(2)       
            item = arch_description_item()
            {
-             details.add(item);
+             details.put(item.getLanguage().getCodeString(),item);
            }
          )+
      ">"

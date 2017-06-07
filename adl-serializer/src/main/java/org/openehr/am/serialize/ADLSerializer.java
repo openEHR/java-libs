@@ -302,7 +302,7 @@ public class ADLSerializer {
 		indent(1, out);
 		out.write("details = <");
 		newline(out);
-		for (ResourceDescriptionItem item : description.getDetails()) {
+		for (ResourceDescriptionItem item : description.getDetails().values()) {
 			printDescriptionItem(item, 2, out);
 		}
 		indent(1, out);
