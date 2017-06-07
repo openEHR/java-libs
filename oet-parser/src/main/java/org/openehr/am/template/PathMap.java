@@ -146,8 +146,9 @@ public class PathMap {
 		
 		int maxLen = 0;
 		String maxLenKey = null;
-		for(String key : keyPathMap.keySet()) {
-			String path = keyPathMap.get(key);
+		for(Map.Entry<String, String> entry: keyPathMap.entrySet()) {
+			String key = entry.getKey();
+			String path = entry.getValue();
 			if(key.length() > maxLen) {
 				maxLen = key.length();
 				maxLenKey = key;

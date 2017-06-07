@@ -198,9 +198,9 @@ public class TermMap {
 					
 					// TODO temp fix if no direct match
 					if(text == null) {
-						for(String p : paths.keySet()) {
-							if(path.endsWith(p)) {
-								text = paths.get(p);
+						for(Map.Entry<String, String> entry : paths.entrySet()) {
+							if(path.endsWith(entry.getKey())) {
+								text = entry.getValue();
 							}
 						}
 					}
@@ -277,21 +277,19 @@ public class TermMap {
 		Map<String, String> texts = null;
 		Map<String,Map<String,String>> terms = null;
 		
-		for(Iterator<String> it = termMap.keySet().iterator(); it.hasNext();) {
-			terminology = it.next();
-			terms = termMap.get(terminology);
+		for(Map.Entry<String, Map<String, Map<String, String>>> entry : termMap.entrySet()) {
+			terminology = entry.getKey();
+			terms = entry.getValue();
 			
-			for(Iterator<String> codes = terms.keySet().iterator(); 
-					codes.hasNext();) {
+			for(Map.Entry<String, Map<String, String>> entry2 : terms.entrySet()) {
 				
-				code = codes.next();
-				texts = terms.get(code);
+				code = entry2.getKey();
+				texts = entry2.getValue();
 				
-				for(Iterator <String> paths = texts.keySet().iterator(); 
-						paths.hasNext();) {
+				for(Map.Entry<String, String> entry3 : texts.entrySet()) {
 					
-					path = paths.next();
-					text = texts.get(path);
+					path = entry3.getKey();
+					text = entry3.getValue();
 					buf.append(terminology);
 					buf.append(DELIMITER);				
 					buf.append(code);
@@ -299,9 +297,7 @@ public class TermMap {
 					buf.append(text);
 					buf.append(DELIMITER);
 					buf.append(path);
-					if(codes.hasNext() || it.hasNext()) {
-						buf.append("\r\n");
-					}
+					buf.append("\r\n");
 				}
 			}
 		}

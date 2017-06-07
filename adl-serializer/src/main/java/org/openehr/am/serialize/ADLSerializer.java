@@ -450,21 +450,20 @@ public class ADLSerializer {
 		if(occurrences == null || defaultOccurrences.equals(occurrences)) {
 			return;
 		}
-		if (occurrences != null) {
-			out.write(" occurrences matches {");
-			if (occurrences.getLower() == null) {
-				out.write("*");
-			} else {
-				out.write(Integer.toString(occurrences.getLower()));
-			}
-			out.write("..");
-			if (occurrences.getUpper() == null) {
-				out.write("*");
-			} else {
-				out.write(Integer.toString(occurrences.getUpper()));
-			}
-			out.write("}");
+
+		out.write(" occurrences matches {");
+		if (occurrences.getLower() == null) {
+			out.write("*");
+		} else {
+			out.write(Integer.toString(occurrences.getLower()));
 		}
+		out.write("..");
+		if (occurrences.getUpper() == null) {
+			out.write("*");
+		} else {
+			out.write(Integer.toString(occurrences.getUpper()));
+		}
+		out.write("}");
 	}
 
 	protected void printArchetypeInternalRef(ArchetypeInternalRef ref,

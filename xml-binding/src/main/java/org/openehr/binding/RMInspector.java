@@ -6,7 +6,7 @@ import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.openehr.build.RMObjectBuildingException;
+
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.common.archetyped.Archetyped;
@@ -180,8 +180,8 @@ public class RMInspector {
 				Organisation.class, Person.class, Contact.class,
 				PartyRelationship.class, Role.class, Capability.class };
 
-		typeMap = new LinkedHashMap<String, Class>();
-		upperCaseMap = new LinkedHashMap<String, Class>();
+		typeMap = new HashMap<String, Class>();
+		upperCaseMap = new HashMap<String, Class>();
 		for (Class klass : classes) {
 			String name = klass.getSimpleName();
 			typeMap.put(name, klass);
@@ -300,7 +300,6 @@ public class RMInspector {
 	 * 
 	 * @param rmClassName
 	 * @return
-	 * @throws RMObjectBuildingException
 	 */
 	public Map<String, Class> retrieveRMAttributes(String rmClassName) {
 		Class rmClass = retrieveRMType(rmClassName);
@@ -311,9 +310,9 @@ public class RMInspector {
 		
 		Map<String, Class> map = attributeType(rmClass);
 		Map<String, Class> ret = new HashMap<String, Class>();
-		for(String name : map.keySet()) {
+		for(Map.Entry<String, Class> entry: map.entrySet()) {
+			String name = entry.getKey();
 			ret.put(toUnderscoreSeparated(name), map.get(name));
-			
 			log.debug("rmattribute: " +name +": "+ map.get(name));			
 		}
 		return ret;
@@ -325,7 +324,6 @@ public class RMInspector {
 	 * 
 	 * @param rmClassName
 	 * @return
-	 * @throws RMObjectBuildingException
 	 */
 	public Set<String> retrieveRMAttributeNames(String rmClassName) {
 		Class rmClass = retrieveRMType(rmClassName);
@@ -392,10 +390,9 @@ public class RMInspector {
 
 			// replace underscore separated names with camel case
 			Map<String, Object> filteredMap = new HashMap<String, Object>();
-			for (String name : valueMap.keySet()) {
-				filteredMap.put(toCamelCase(name), valueMap.get(name));
+			for(Map.Entry<String, Object> entry: valueMap.entrySet()) {
+				filteredMap.put(toCamelCase(entry.getKey()), valueMap.get(entry.getValue()));
 			}
-
 			Constructor constructor = fullConstructor(rmClass);
 			if (constructor == null) {
 				throw new RuntimeException("annotated constructor missing for "
@@ -466,28 +463,6 @@ public class RMInspector {
 				
 				return className;
 			}
-		}
-		return null;
-	}
-
-	// todo: isn't there any support from java api on this?
-	private Object defaultValue(Class type) {
-		if (type == boolean.class) {
-			return Boolean.FALSE;
-		} else if (type == double.class) {
-			return new Double(0);
-		} else if (type == float.class) {
-			return new Float(0);
-		} else if (type == int.class) {
-			return new Integer(0);
-		} else if (type == short.class) {
-			return new Short((short) 0);
-		} else if (type == long.class) {
-			return new Long(0);
-		} else if (type == char.class) {
-			return new Character((char) 0);
-		} else if (type == byte.class) {
-			return new Byte((byte) 0);
 		}
 		return null;
 	}
