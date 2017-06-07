@@ -1,0 +1,39 @@
+image: java:8
+
+stages:
+  - build
+  - release
+  - publish
+  
+maven-build-snapshot:
+    image: gitlab.cambiocds.com:4567/tools/docker-builder
+    stage: build
+    script:
+        - mvn clean package sonar:sonar -P sonar
+    except:
+        - /^release-.*$/
+        - tags
+
+maven-build-tag:
+    image: gitlab.cambiocds.com:4567/tools/docker-builder
+    stage: build
+    script:
+        - mvn clean deploy sonar:sonar -P sonar
+    only:
+        - tags
+
+release:
+    image: gitlab.cambiocds.com:4567/tools/docker-builder
+    stage: release
+    when: manual
+    script:
+        - git remote set-url origin $(echo $CI_REPOSITORY_URL | sed -e 's/[^@]\+@\([^\/]\+\)\//git@\1\:/')
+        - git checkout -b release-$CURRENT_VERSION
+        - git push -u origin release-$CURRENT_VERSION
+        - mvn versions:set -DnewVersion=$CURRENT_VERSION
+        - git commit -a -m "Changing to version "$CURRENT_VERSION
+        - git tag $CURRENT_VERSION
+        - git push origin $CURRENT_VERSION --tags
+        - git push origin --delete release-$CURRENT_VERSION
+    only:
+        - master
