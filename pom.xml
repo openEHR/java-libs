@@ -55,4 +55,18 @@
         <module>rm-skeleton</module>
         <module>archetype-validator</module>
     </modules>
+
+    <distributionManagement>
+        <repository>
+            <id>repo.cambio.se_releases</id>
+            <name>releases</name>
+            <url>https://nexus.cambiocds.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>repo.cambio.se_snapshots</id>
+            <name>snapshots</name>
+            <url>https://nexus.cambiocds.com/repository/maven-snapshots/</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
