@@ -2,8 +2,8 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-	<groupId>org.openehr</groupId>
-		<artifactId>ref_impl_java</artifactId>
+	<groupId>org.openehr.java-libs</groupId>
+		<artifactId>java-libs</artifactId>
 		<version>0-SNAPSHOT</version>
 	</parent>
 	<artifactId>rm-skeleton</artifactId>
@@ -12,52 +12,52 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.openehr</groupId>
+			<groupId>org.openehr.java-libs</groupId>
 			<artifactId>openehr-rm-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.openehr</groupId>
+			<groupId>org.openehr.java-libs</groupId>
 			<artifactId>openehr-rm-domain</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.openehr</groupId>
+			<groupId>org.openehr.java-libs</groupId>
 			<artifactId>openehr-aom</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.openehr</groupId>
+			<groupId>org.openehr.java-libs</groupId>
 			<artifactId>adl-parser</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-            <groupId>org.openehr</groupId>
+            <groupId>org.openehr.java-libs</groupId>
             <artifactId>dadl-parser</artifactId>
             <version>${project.version}</version>
         </dependency>
 		<dependency>
-			<groupId>org.openehr</groupId>
+			<groupId>org.openehr.java-libs</groupId>
 			<artifactId>oet-parser</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.openehr</groupId>
+			<groupId>org.openehr.java-libs</groupId>
 			<artifactId>measure-serv</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.openehr</groupId>
+			<groupId>org.openehr.java-libs</groupId>
 			<artifactId>mini-termserv</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-            <groupId>org.openehr</groupId>
+            <groupId>org.openehr.java-libs</groupId>
             <artifactId>dadl-binding</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.openehr</groupId>
+            <groupId>org.openehr.java-libs</groupId>
             <artifactId>xml-binding</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -74,7 +74,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.openehr</groupId>
+			<groupId>org.openehr.java-libs</groupId>
 			<artifactId>adl-serializer</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
