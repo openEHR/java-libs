@@ -1,5 +1,5 @@
 # java-libs
-Java openEHR Implementation project
+Java openEHR Implementation project (ADL 1.4)
 
 ## Getting Started
 
