@@ -34,7 +34,7 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
-            </plugin>        
+            </plugin>
         </plugins>
     </build>
     <modules>
@@ -55,18 +55,38 @@
         <module>rm-skeleton</module>
         <module>archetype-validator</module>
     </modules>
-
-    <distributionManagement>
-        <repository>
-            <id>repo.cambio.se_releases</id>
-            <name>releases</name>
-            <url>https://nexus.cambiocds.com/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>repo.cambio.se_snapshots</id>
-            <name>snapshots</name>
-            <url>https://nexus.cambiocds.com/repository/maven-snapshots/</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
+    <profiles>
+        <profile>
+            <id>cambio</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>repo.cambio.se_releases</id>
+                    <name>releases</name>
+                    <url>https://nexus.cambiocds.com/repository/maven-releases/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>repo.cambio.se_snapshots</id>
+                    <name>snapshots</name>
+                    <url>https://nexus.cambiocds.com/repository/maven-snapshots/</url>
+                    <uniqueVersion>false</uniqueVersion>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>ossrh</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 </project>
