@@ -7,6 +7,8 @@
     <packaging>pom</packaging>
     <version>0-SNAPSHOT</version>
     <name>The openEHR Reference Java Implementation</name>
+    <description>Standard Java libraries for Java implementations of openEHR</description>
+    <url>https://github.com/openEHR/java-libs</url>
     <organization>
         <name>The openEHR Foundation</name>
     </organization>
@@ -35,8 +37,51 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <failOnError>false</failOnError>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+    <licenses>
+        <license>
+            <name>MPL License</name>
+            <url>http://www.mozilla.org/MPL/</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Rong Chen</name>
+            <email>rong.chen@cambio.se</email>
+            <organization>Cambio Healthcare Systems</organization>
+            <organizationUrl>http://www.cambio.se</organizationUrl>
+        </developer>
+    </developers>
     <modules>
         <module>openehr-rm-core</module>
         <module>openehr-rm-domain</module>
@@ -87,6 +132,32 @@
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
             </distributionManagement>
+        </profile>
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
