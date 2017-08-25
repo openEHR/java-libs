@@ -18,7 +18,7 @@ For example, if you need to use the adl-parser, add into your _pom.xml_:
 <dependency>
     <groupId>org.openehr.java-libs</groupId>
     <artifactId>adl-parser</artifactId>
-    <version>1.0.70</version>
+    <version>1.0.71</version>
 </dependency>
 ```
 
