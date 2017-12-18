@@ -114,7 +114,7 @@ public class RMInspector {
 	// using FullConstructor annotation
 	private Map<String, Class> loadTypeMap() throws ClassNotFoundException {
 		Class[] classes = {
-				
+
 				// implied types
 				Integer.class,
 				String.class,
@@ -526,33 +526,33 @@ public class RMInspector {
 
 		if (cattr.getRmAttributeName().equals("items")) {
 			if (parentObj.getRmTypeName().equalsIgnoreCase("CLUSTER") ) { // Note: For SECTION items, the intention seems to be cardinality = 0
-				log.debug("--> >=1");				
-				return new Interval<Integer>(1,null);				
+				log.debug("--> >=1");
+				return new Interval<Integer>(1,null);
 			}
 		} else if (cattr.getRmAttributeName().equals("content")) {
 			if (parentObj.getRmTypeName().equalsIgnoreCase("COMPOSITION")) {
-				log.debug("--> >=1");				
-				return new Interval<Integer>(1,null);				
+				log.debug("--> >=1");
+				return new Interval<Integer>(1,null);
 			}
-	/*	}  else if (cattr.getRmAttributeName().equals("activities")) { // This seems to be incorrect 
+	/*	}  else if (cattr.getRmAttributeName().equals("activities")) { // This seems to be incorrect
 			if (parentObj.getRmTypeName().equalsIgnoreCase("INSTRUCTION")) {
-				log.debug("--> >=1");				
-				return new Interval<Integer>(1,null);				
+				log.debug("--> >=1");
+				return new Interval<Integer>(1,null);
 			}
-	*/	}  else if (cattr.getRmAttributeName().equals("events")) {
+	*//*	}   else if (cattr.getRmAttributeName().equals("events")) { // this seems to be too strict as well
 			if (parentObj.getRmTypeName().equalsIgnoreCase("HISTORY")) {
-				log.debug("--> >=1");				
-				return new Interval<Integer>(1,null);				
+				log.debug("--> >=1");
+				return new Interval<Integer>(1,null);
 			}
-		} else if (cattr.getRmAttributeName().equals("credentials")) {
+	*/	} else if (cattr.getRmAttributeName().equals("credentials")) {
 			if (parentObj.getRmTypeName().equalsIgnoreCase("CAPABILITY")) {
-				log.debug("--> ==1");				
-				return new Interval<Integer>(1,1);				
+				log.debug("--> ==1");
+				return new Interval<Integer>(1,1);
 			}
 		}
-		log.debug("--> >=0");				
+		log.debug("--> >=0");
 		return new Interval<Integer>(0,null); // not constrained
-		
+
 	}
 
 	/*
@@ -567,7 +567,7 @@ public class RMInspector {
 			"ObjectVersionID"
 	};
 
-	
+
 	/* logger */
 	private static final Logger log = Logger.getLogger(RMInspector.class);
 
