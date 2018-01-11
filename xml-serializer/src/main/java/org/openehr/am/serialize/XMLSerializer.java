@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -166,7 +165,7 @@ public class XMLSerializer {
         printString("value", archetype.getArchetypeId().toString(), archetypeId);
 
         printString("adl_version", archetype.getAdlVersion(), out);
-      
+
 
         printString("concept", archetype.getConcept(), out);
 
@@ -268,7 +267,7 @@ public class XMLSerializer {
                 out.getChildren().add(elm);
                 elm.setAttribute("id", entry.getKey());
                 if (entry.getValue() != null) {
-                    elm.setText(map.get(entry.getValue()));
+                    elm.setText(entry.getValue());
                 }
             }
         }
@@ -1101,14 +1100,14 @@ public class XMLSerializer {
             char c = str.charAt( i );
             if(! Character.isUpperCase(prevChar) &&
                     !(prevChar=='<') && // without this DV_INTERVAL<DV_QUANTITY>    -->    DV_INTERVAL<_DV_QUANTITY>
-                    !(prevChar=='_') && 
+                    !(prevChar=='_') &&
                     Character.isLetter(c) &&
                     Character.isUpperCase(c))
             {
                 result.append("_");
                 result.append( Character.toUpperCase( c ) );
             }
-            else { 
+            else {
                 result.append( Character.toUpperCase( c ) );
             }
             prevChar = c;
@@ -1131,7 +1130,7 @@ public class XMLSerializer {
 
     public static final Namespace xsdNamespace = Namespace.getNamespace("xsd", "http://www.w3.org/2001/XMLSchema");
 
-    /* fields */  
+    /* fields */
     private Charset encoding;
 
     private XMLOutputter outputter;
