@@ -17,8 +17,8 @@ package org.openehr.rm.datatypes.basic;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.openehr.rm.FullConstructor;
 import org.openehr.rm.Attribute;
+import org.openehr.rm.FullConstructor;
 
 /**
  * Type for representing identifiers of real-world entities. Typical
@@ -36,24 +36,16 @@ public class DvIdentifier extends DataValue {
      * @param issuer
      * @param id
      * @param type
-     * @throws IllegalArgumentException if issuer or id or type is null or empty
+     * @throws IllegalArgumentException if issuer is null or empty (others are optional as of RM1.0.3, SPECRM-23)
      */
     @FullConstructor
-            public DvIdentifier(@Attribute(name = "issuer", required=true) String issuer,
-                                @Attribute(name = "assigner", required=true) String assigner,
-                                @Attribute(name = "id", required=true) String id,
-                                @Attribute(name = "type", required=true) String type) {
-        if (StringUtils.isEmpty(issuer)) {
-            throw new IllegalArgumentException("empty or null issuer");
-        }
-        if (StringUtils.isEmpty(assigner)) {
-            throw new IllegalArgumentException("empty or null assigner");
-        }
+    public DvIdentifier(@Attribute(name = "issuer") String issuer,
+            @Attribute(name = "assigner") String assigner,
+            @Attribute(name = "id", required=true) String id,
+            @Attribute(name = "type") String type) {
+
         if (StringUtils.isEmpty(id)) {
             throw new IllegalArgumentException("empty or null id");
-        }
-        if (StringUtils.isEmpty(type)) {
-            throw new IllegalArgumentException("empty or null type");
         }
         this.issuer = issuer;
         this.assigner = assigner;
@@ -72,14 +64,14 @@ public class DvIdentifier extends DataValue {
 
     /**
      * Organisation that assigned the id to the item being identified
-     * 
+     *
      * @return assigner
      */
     public String getAssigner() {
-		return assigner;
-	}
+        return assigner;
+    }
 
-	/**
+    /**
      * The identifier value. Often structured, according to the definition of
      * the issuing authority s rules.
      *
@@ -105,9 +97,14 @@ public class DvIdentifier extends DataValue {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof DvIdentifier )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof DvIdentifier )) {
+            return false;
+        }
 
         final DvIdentifier dvid = (DvIdentifier) o;
 
@@ -124,6 +121,7 @@ public class DvIdentifier extends DataValue {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(3, 17)
                 .append(issuer)
@@ -142,9 +140,9 @@ public class DvIdentifier extends DataValue {
     }
 
     protected void setAssigner(String assigner) {
-    		this.assigner = assigner;
+        this.assigner = assigner;
     }
-    
+
     protected void setId(String id) {
         this.id = id;
     }
@@ -159,16 +157,16 @@ public class DvIdentifier extends DataValue {
     private String assigner;
     private String id;
     private String type;
-	@Override
-	public String getReferenceModelName() {
-		return "DV_IDENTIFIER";
-	}
+    @Override
+    public String getReferenceModelName() {
+        return "DV_IDENTIFIER";
+    }
 
-	@Override
-	public String serialise() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String serialise() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
 
 /*
