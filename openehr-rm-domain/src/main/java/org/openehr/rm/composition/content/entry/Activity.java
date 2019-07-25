@@ -20,10 +20,14 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
-import org.openehr.rm.common.archetyped.*;
-import org.openehr.rm.datatypes.text.DvText;
-import org.openehr.rm.datatypes.encapsulated.DvParsable;
+import org.openehr.rm.common.archetyped.Archetyped;
+import org.openehr.rm.common.archetyped.FeederAudit;
+import org.openehr.rm.common.archetyped.Link;
+import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
+import org.openehr.rm.datatypes.encapsulated.DvParsable;
+import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.UIDBasedID;
 
 /**
@@ -34,181 +38,178 @@ import org.openehr.rm.support.identification.UIDBasedID;
  */
 public class Activity extends Locatable {
 
-	/**
-	 * Creates an Activity
-	 * 
-	 * @param uit
-	 * @param archetypeNodeId
-	 * @param name
-	 * @param archetypeDetails
-	 * @param feederAudit
-	 * @param links
-	 * @param parent
-	 * @param description		required
-	 * @param timing
-	 * @param actionArchetypeId
-	 * 
-	 * @throws IllegalArgumentExeption if required parameters missing
-	 */
-	@FullConstructor
-	public Activity(
-			@Attribute(name = "uid") UIDBasedID uid, 
-			@Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId, 
-			@Attribute(name = "name", required = true) DvText name, 
-			@Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
-			@Attribute(name = "feederAudit") FeederAudit feederAudit, 
-			@Attribute(name = "links") Set<Link> links, 
-			@Attribute(name = "parent")	Pathable parent, 
-			@Attribute(name = "description", required = true) ItemStructure description, 
-			@Attribute(name = "timing", required = true) DvParsable timing,
-			@Attribute(name = "actionArchetypeId", required = true) String actionArchetypeId) {
-		
-		super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
-				parent);
-		if (description == null) {
-			throw new IllegalArgumentException("null description");
-		}
-		if (timing == null) {
-			throw new IllegalArgumentException("null timing");
-		}
-		if(StringUtils.isEmpty(actionArchetypeId)) {
-			throw new IllegalArgumentException("empty actionArchetypeId");
-		}
-		
-		this.description = description;
-		this.timing = timing;
-		this.actionArchetypeId = actionArchetypeId;
-	}
+    /**
+     * Creates an Activity
+     *
+     * @param uit
+     * @param archetypeNodeId
+     * @param name
+     * @param archetypeDetails
+     * @param feederAudit
+     * @param links
+     * @param parent
+     * @param description		required
+     * @param timing
+     * @param actionArchetypeId
+     *
+     * @throws IllegalArgumentExeption if required parameters missing
+     */
+    @FullConstructor
+    public Activity(
+            @Attribute(name = "uid") UIDBasedID uid,
+            @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
+            @Attribute(name = "name", required = true) DvText name,
+            @Attribute(name = "archetypeDetails") Archetyped archetypeDetails,
+            @Attribute(name = "feederAudit") FeederAudit feederAudit,
+            @Attribute(name = "links") Set<Link> links,
+            @Attribute(name = "parent")	Pathable parent,
+            @Attribute(name = "description", required = true) ItemStructure description,
+            @Attribute(name = "timing") DvParsable timing, /* SPECRM-71 Optional from RM 1.0.4 on */
+            @Attribute(name = "actionArchetypeId", required = true) String actionArchetypeId) {
 
-	public Activity(String archetypeNodeId, DvText name,
-			ItemStructure description, DvParsable timing, 
-			String actionArchetypeId) {
-		this(null, archetypeNodeId, name, null, null, null, null, description,
-				timing, actionArchetypeId);
-	}
+        super(uid, archetypeNodeId, name, archetypeDetails, feederAudit, links,
+                parent);
+        if (description == null) {
+            throw new IllegalArgumentException("null description");
+        }
+        if(StringUtils.isEmpty(actionArchetypeId)) {
+            throw new IllegalArgumentException("empty actionArchetypeId");
+        }
 
-	/**
-	 * Description of the activity, in the form of an archetyped structure.
-	 * 
-	 * @return description
-	 */
-	public ItemStructure getDescription() {
-		return description;
-	}
+        this.description = description;
+        this.timing = timing;
+        this.actionArchetypeId = actionArchetypeId;
+    }
 
-	/**
-	 * Timing of the activity, in the form of a parsable string, such as 
-	 * GTS or iCal string
-	 * 
-	 * @return timing
-	 */
-	public DvParsable getTiming() {
-		return timing;
-	}
-	
-	public String getActionArchetypeId() {
-		return actionArchetypeId;
-	}
+    public Activity(String archetypeNodeId, DvText name,
+            ItemStructure description, DvParsable timing,
+            String actionArchetypeId) {
+        this(null, archetypeNodeId, name, null, null, null, null, description,
+                timing, actionArchetypeId);
+    }
 
-	@Override
-	public String pathOfItem(Pathable item) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /**
+     * Description of the activity, in the form of an archetyped structure.
+     *
+     * @return description
+     */
+    public ItemStructure getDescription() {
+        return description;
+    }
 
-	@Override
-	public List<Object> itemsAtPath(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /**
+     * Timing of the activity, in the form of a parsable string, such as
+     * GTS or iCal string
+     *
+     * @return timing
+     */
+    public DvParsable getTiming() {
+        return timing;
+    }
 
-	@Override
-	public boolean pathExists(String arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public String getActionArchetypeId() {
+        return actionArchetypeId;
+    }
 
-	@Override
-	public boolean pathUnique(String arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public String pathOfItem(Pathable item) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	//POJO start
-	Activity() {
-	};
+    @Override
+    public List<Object> itemsAtPath(String arg0) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	void setDescription(ItemStructure description) {
-		this.description = description;
-	}
+    @Override
+    public boolean pathExists(String arg0) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	void setTiming(DvParsable timing) {
-		this.timing = timing;
-	}
-	public void setActionArchetypeId(String actionArchetypeId){
-	    this.actionArchetypeId = actionArchetypeId;
-	}
+    @Override
+    public boolean pathUnique(String arg0) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	// POJO end
+    //POJO start
+    Activity() {
+    };
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime
-				* result
-				+ ((actionArchetypeId == null) ? 0 : actionArchetypeId
-						.hashCode());
-		result = prime * result
-				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((timing == null) ? 0 : timing.hashCode());
-		return result;
-	}
+    void setDescription(ItemStructure description) {
+        this.description = description;
+    }
 
-	@Override
-	// Generated by Eclipse
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!super.equals(obj)) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		Activity other = (Activity) obj;
-		if (actionArchetypeId == null) {
-			if (other.actionArchetypeId != null) {
-				return false;
-			}
-		} else if (!actionArchetypeId.equals(other.actionArchetypeId)) {
-			return false;
-		}
-		if (description == null) {
-			if (other.description != null) {
-				return false;
-			}
-		} else if (!description.equals(other.description)) {
-			return false;
-		}
-		if (timing == null) {
-			if (other.timing != null) {
-				return false;
-			}
-		} else if (!timing.equals(other.timing)) {
-			return false;
-		}
-		return true;
-	}
+    void setTiming(DvParsable timing) {
+        this.timing = timing;
+    }
+    public void setActionArchetypeId(String actionArchetypeId){
+        this.actionArchetypeId = actionArchetypeId;
+    }
 
-	/* fields */
-	private ItemStructure description;
-	private DvParsable timing;
-	private String actionArchetypeId; 
+    // POJO end
 
-	/* static fields */
-	public static final String DESCRIPTION = "description";	
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime
+                * result
+                + ((actionArchetypeId == null) ? 0 : actionArchetypeId
+                        .hashCode());
+        result = prime * result
+                + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + ((timing == null) ? 0 : timing.hashCode());
+        return result;
+    }
+
+    @Override
+    // Generated by Eclipse
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Activity other = (Activity) obj;
+        if (actionArchetypeId == null) {
+            if (other.actionArchetypeId != null) {
+                return false;
+            }
+        } else if (!actionArchetypeId.equals(other.actionArchetypeId)) {
+            return false;
+        }
+        if (description == null) {
+            if (other.description != null) {
+                return false;
+            }
+        } else if (!description.equals(other.description)) {
+            return false;
+        }
+        if (timing == null) {
+            if (other.timing != null) {
+                return false;
+            }
+        } else if (!timing.equals(other.timing)) {
+            return false;
+        }
+        return true;
+    }
+
+    /* fields */
+    private ItemStructure description;
+    private DvParsable timing;
+    private String actionArchetypeId;
+
+    /* static fields */
+    public static final String DESCRIPTION = "description";
 }
 
 /*
