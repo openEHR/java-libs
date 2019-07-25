@@ -14,48 +14,49 @@
  */
 package org.openehr.build;
 
-import org.openehr.rm.RMObject;
-import org.openehr.rm.common.archetyped.Archetyped;
-import org.openehr.rm.common.generic.PartyProxy;
-import org.openehr.rm.composition.content.entry.Action;
-import org.openehr.rm.composition.content.entry.ISMTransition;
-import org.openehr.rm.support.identification.ArchetypeID;
-import org.openehr.rm.composition.Composition;
-import org.openehr.rm.composition.EventContext;
-import org.openehr.rm.composition.content.ContentItem;
-import org.openehr.rm.composition.content.entry.Evaluation;
-import org.openehr.rm.composition.content.entry.Instruction;
-import org.openehr.rm.composition.content.entry.Observation;
-import org.openehr.rm.composition.content.navigation.Section;
-import org.openehr.rm.datastructure.history.History;
-import org.openehr.rm.datastructure.itemstructure.ItemStructure;
-import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
-import org.openehr.rm.datatypes.text.CodePhrase;
-import org.openehr.rm.datatypes.text.DvCodedText;
-import org.openehr.rm.datatypes.text.DvText;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.openehr.rm.RMObject;
+import org.openehr.rm.common.archetyped.Archetyped;
+import org.openehr.rm.common.generic.PartyProxy;
+import org.openehr.rm.composition.Composition;
+import org.openehr.rm.composition.EventContext;
+import org.openehr.rm.composition.content.ContentItem;
+import org.openehr.rm.composition.content.entry.Action;
+import org.openehr.rm.composition.content.entry.Evaluation;
+import org.openehr.rm.composition.content.entry.ISMTransition;
+import org.openehr.rm.composition.content.entry.Instruction;
+import org.openehr.rm.composition.content.entry.Observation;
+import org.openehr.rm.composition.content.navigation.Section;
 import org.openehr.rm.datastructure.history.Event;
+import org.openehr.rm.datastructure.history.History;
 import org.openehr.rm.datastructure.history.PointEvent;
+import org.openehr.rm.datastructure.itemstructure.ItemStructure;
+import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
+import org.openehr.rm.datatypes.text.CodePhrase;
+import org.openehr.rm.datatypes.text.DvCodedText;
+import org.openehr.rm.datatypes.text.DvText;
+import org.openehr.rm.support.identification.ArchetypeID;
 
 /**
  * Test case for EHR objects building
  *
  * @author Rong Chen
- * @version 1.0 
+ * @version 1.0
  */
 
 public class EHRBuildTest extends BuildTestBase {
-	
-	private static CodePhrase EVENT = new CodePhrase("openehr", "433");
+
+    private static CodePhrase EVENT = new CodePhrase("openehr", "433");
 
     /**
      * The fixture set up called before every test method.
      */
+    @Override
     protected void setUp() throws Exception {
         Map<SystemValue,Object> values = new HashMap<SystemValue,Object>();
         values.put(SystemValue.LANGUAGE, lang);
@@ -64,19 +65,19 @@ public class EHRBuildTest extends BuildTestBase {
         values.put(SystemValue.SUBJECT, subject());
         values.put(SystemValue.PROVIDER, provider());
         values.put(SystemValue.COMPOSER, provider());
-        
+
         CodePhrase territory = new CodePhrase("ISO_3166-1", "SE");
         values.put(SystemValue.TERRITORY, territory);
         values.put(SystemValue.CONTEXT, context());
-        
-        DvCodedText category = new DvCodedText("event", lang, charset, EVENT, 
-        		ts);
+
+        DvCodedText category = new DvCodedText("event", lang, charset, EVENT,
+                ts);
         values.put(SystemValue.CATEGORY, category);
 
         builder = new RMObjectBuilder(values);
     }
 
-    
+
     public void testBuildObservation() throws Exception {
         Map<String, Object> values = new HashMap<String, Object>();
         DvText name = new DvText("test observation", lang, charset, ts);
@@ -114,7 +115,7 @@ public class EHRBuildTest extends BuildTestBase {
         DvText name = new DvText("test evlauation", lang, charset, ts);
         String node = "at0001";
         Archetyped archetypeDetails = new Archetyped(
-            new ArchetypeID("openehr-ehr_rm-evaluation.physical_examination.v3"), "v1.0");
+                new ArchetypeID("openehr-ehr_rm-evaluation.physical_examination.v3"), "v1.0");
         ItemStructure data = itemSingle();
         values.put("archetypeNodeId", node);
         values.put("archetypeDetails", archetypeDetails);
@@ -145,9 +146,9 @@ public class EHRBuildTest extends BuildTestBase {
         String node = "at0001";
         DvText name = new DvText("test instruction", lang, charset, ts);
         Archetyped archetypeDetails = new Archetyped(
-            new ArchetypeID("openehr-ehr_rm-evaluation.physical_examination.v3"), "v1.0");
+                new ArchetypeID("openehr-ehr_rm-evaluation.physical_examination.v3"), "v1.0");
         DvText narrative = new DvText("medication instruction", lang, charset, ts);
-        
+
         values.put("archetypeNodeId", node);
         values.put("archetypeDetails", archetypeDetails);
         values.put("name", name);
@@ -171,11 +172,11 @@ public class EHRBuildTest extends BuildTestBase {
         assertEquals("protocol", null, instruction.getProtocol());
         assertEquals("guidelineID", null, instruction.getGuidelineId());
         assertEquals("expiryTime", null, instruction.getExpiryTime());
-        
+
         // test with class name in upper case
         builder.construct("INSTRUCTION", values);
     }
-    
+
     public void testBuildAction() throws Exception {
         Map<String, Object> values = new HashMap<String, Object>();
         String node = "at0001";
@@ -184,8 +185,8 @@ public class EHRBuildTest extends BuildTestBase {
         ISMTransition ismTransition = ismTransition();
         DvDateTime time = new DvDateTime("2006-07-23T23:00:00");
         Archetyped archetypeDetails = new Archetyped(
-            new ArchetypeID("openehr-ehr_rm-evaluation.physical_examination.v3"), "v1.0");
-        
+                new ArchetypeID("openehr-ehr_rm-evaluation.physical_examination.v3"), "v1.0");
+
         values.put("archetypeNodeId", node);
         values.put("archetypeDetails", archetypeDetails);
         values.put("name", name);
@@ -213,7 +214,7 @@ public class EHRBuildTest extends BuildTestBase {
         assertEquals("description", description, action.getDescription());
         assertEquals("ismTransition", ismTransition, action.getIsmTransition());
         assertEquals("instructionDetails", null, action.getInstructionDetails());
-        
+
         // test with class name in upper case
         builder.construct("ACTION", values);
     }
@@ -245,10 +246,10 @@ public class EHRBuildTest extends BuildTestBase {
         PartyProxy composer = provider();
         Archetyped archetypeDetails = new Archetyped(new ArchetypeID(
                 "openehr-ehr_rm-Composition.physical_exam.v2"), "1.0");
-        DvCodedText category = new DvCodedText("event", lang, charset, EVENT, 
-        		ts);
+        DvCodedText category = new DvCodedText("event", lang, charset, EVENT,
+                ts);
         CodePhrase territory = new CodePhrase("ISO_3166-1", "SE");
-        
+
         values.put("archetypeNodeId", node);
         values.put("archetypeDetails", archetypeDetails);
         values.put("name", name);
@@ -273,10 +274,10 @@ public class EHRBuildTest extends BuildTestBase {
     }
 
     private EventContext context() throws Exception {
-    	CodePhrase home = new CodePhrase("openehr", "225");
+        CodePhrase home = new CodePhrase("openehr", "225");
         DvCodedText homeSetting = new DvCodedText("home setting", lang, charset,
                 home, ts);
-        return new EventContext(null, new DvDateTime("2006-02-01T12:00:09"), null, null, 
+        return new EventContext(null, new DvDateTime("2006-02-01T12:00:09"), null, null,
                 null, homeSetting, null, ts);
     }
 
@@ -290,29 +291,29 @@ public class EHRBuildTest extends BuildTestBase {
     private Observation observation() throws Exception {
         DvText name = new DvText("test observation", lang, charset, ts);
         Archetyped archetypeDetails = new Archetyped(
-            new ArchetypeID("openehr-ehr_rm-observation.physical_examination.v3"), "v1.0");
+                new ArchetypeID("openehr-ehr_rm-observation.physical_examination.v3"), "v1.0");
         return new Observation("at0001", name, archetypeDetails, lang,
                 charset, subject(), provider(), event(), ts);
     }
 
     private ISMTransition ismTransition() throws Exception {
-    	DvCodedText planned = new DvCodedText("planned e state", lang, charset, 
-    			new CodePhrase("openehr", "526"), ts);
-        return new ISMTransition(planned, null, null, ts);       
+        DvCodedText planned = new DvCodedText("planned e state", lang, charset,
+                new CodePhrase("openehr", "526"), ts);
+        return new ISMTransition(planned, null, null, null, ts);
     }
-    
-    private History<ItemStructure> event() throws Exception { 
+
+    private History<ItemStructure> event() throws Exception {
         List<Event<ItemStructure>> items = new ArrayList<Event<ItemStructure>>();
         items.add(pointEvent());
         return new History<ItemStructure>(null, "at0002", text("history"),
-                null, null, null, null, new DvDateTime("2006-07-12T09:22:00"), 
-                items, DvDuration.getInstance("PT1h"), 
+                null, null, null, null, new DvDateTime("2006-07-12T09:22:00"),
+                items, DvDuration.getInstance("PT1h"),
                 DvDuration.getInstance("PT3h"), null);
     }
 
     private Event<ItemStructure> pointEvent() throws Exception {
-        return new PointEvent<ItemStructure>(null, "at0003", text("point event"),  
-                null, null, null, null, new DvDateTime("2006-07-12T08:00:00"), 
+        return new PointEvent<ItemStructure>(null, "at0003", text("point event"),
+                null, null, null, null, new DvDateTime("2006-07-12T08:00:00"),
                 itemSingle(), null);
     }
 }

@@ -14,11 +14,15 @@
  */
 package org.openehr.rm.composition.content.entry;
 
+import java.util.List;
+
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
 import org.openehr.rm.RMObject;
 import org.openehr.rm.datatypes.text.DvCodedText;
-import org.openehr.rm.support.terminology.*;
+import org.openehr.rm.datatypes.text.DvText;
+import org.openehr.rm.support.terminology.OpenEHRTerminologyGroupIdentifiers;
+import org.openehr.rm.support.terminology.TerminologyService;
 
 /**
  * Model of a transition in the Instruction State machine, caused by a careflow step.
@@ -29,146 +33,161 @@ import org.openehr.rm.support.terminology.*;
  */
 public final class ISMTransition extends RMObject {
 
-	/**
-	 * @param uid
-	 * @param archetypeNodeId
-	 * @param name
-	 * @param archetypeDetails
-	 * @param feederAudit
-	 * @param links
-	 * @param parent
-	 */
-	@FullConstructor
-	public ISMTransition(
+    /**
+     * @param uid
+     * @param archetypeNodeId
+     * @param name
+     * @param archetypeDetails
+     * @param feederAudit
+     * @param links
+     * @param parent
+     */
+    @FullConstructor
+    public ISMTransition(
             @Attribute(name = "currentState", required = true) DvCodedText currentState,
             @Attribute(name = "transition") DvCodedText transition,
             @Attribute(name = "careflowStep") DvCodedText careflowStep,
+            @Attribute(name = "reason") List<DvText> reason, // SPECRM-37, RM 1.0.3
             @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService)  {
-		if (currentState == null) {
-			throw new IllegalArgumentException("null currentState");
-		}
-		if (terminologyService == null) {
-			throw new IllegalArgumentException("null terminologyService");
-		}
-		if (!terminologyService.terminology(TerminologyService.OPENEHR)
-                        .codesForGroupName(OpenEHRTerminologyGroupIdentifiers
-                        		.INSTRUCTION_STATES.getValue(), "en")
-                        .contains(currentState.getDefiningCode())) {
-			throw new IllegalArgumentException("unknown currentState:" + currentState);
-		}
-		if (transition != null && !terminologyService.terminology(TerminologyService.OPENEHR)
-                        .codesForGroupName(OpenEHRTerminologyGroupIdentifiers
-                        		.INSTRUCTION_TRANSITIONS.getValue(), "en")
-                        .contains(transition.getDefiningCode())) {
-			throw new IllegalArgumentException("unknown transition:" + transition);
-		}
-		this.currentState = currentState;
-		this.transition = transition;
-		this.careflowStep = careflowStep;		
-	}
+        if (currentState == null) {
+            throw new IllegalArgumentException("null currentState");
+        }
+        if (terminologyService == null) {
+            throw new IllegalArgumentException("null terminologyService");
+        }
+        if (!terminologyService.terminology(TerminologyService.OPENEHR)
+                .codesForGroupName(OpenEHRTerminologyGroupIdentifiers
+                        .INSTRUCTION_STATES.getValue(), "en")
+                .contains(currentState.getDefiningCode())) {
+            throw new IllegalArgumentException("unknown currentState:" + currentState);
+        }
+        if (transition != null && !terminologyService.terminology(TerminologyService.OPENEHR)
+                .codesForGroupName(OpenEHRTerminologyGroupIdentifiers
+                        .INSTRUCTION_TRANSITIONS.getValue(), "en")
+                .contains(transition.getDefiningCode())) {
+            throw new IllegalArgumentException("unknown transition:" + transition);
+        }
+        this.currentState = currentState;
+        this.transition = transition;
+        this.careflowStep = careflowStep;
+        this.reason = reason;
+    }
 
-	/**
-	 * The step in the careflow process which occurred as part of generating 
-	 * this action, e.g. "dispense", "start_administration". This attribute 
-	 * represents the clinical label for the activity, as opposed to 
-	 * currentState which represents the state machine computable form.
-	 * 
-	 * @return careflowStep
-	 */
-	public DvCodedText getCareflowStep() {
-		return careflowStep;
-	}
+    /**
+     * The step in the careflow process which occurred as part of generating
+     * this action, e.g. "dispense", "start_administration". This attribute
+     * represents the clinical label for the activity, as opposed to
+     * currentState which represents the state machine computable form.
+     *
+     * @return careflowStep
+     */
+    public DvCodedText getCareflowStep() {
+        return careflowStep;
+    }
 
-	/**
-	 * The ISM current state. Coded by openEHR terminology group "ISM states"
-	 * 
-	 * @return currentState
-	 */
-	public DvCodedText getCurrentState() {
-		return currentState;
-	}
+    /**
+     * The ISM current state. Coded by openEHR terminology group "ISM states"
+     *
+     * @return currentState
+     */
+    public DvCodedText getCurrentState() {
+        return currentState;
+    }
 
-	/**
-	 * The ISM transition which occurred to arrive in the currentState. Coded by 
-	 * openEHR terminology group "ISM transitions"
-	 * 
-	 * @return transition
-	 */
-	public DvCodedText getTransition() {
-		return transition;
-	}
+    /**
+     * The ISM transition which occurred to arrive in the currentState. Coded by
+     * openEHR terminology group "ISM transitions"
+     *
+     * @return transition
+     */
+    public DvCodedText getTransition() {
+        return transition;
+    }
 
-	//POJO start
-	ISMTransition() {
-	}
-	
-	void setCareflowStep(DvCodedText careflowStep) {
-		this.careflowStep = careflowStep;
-	}
+    //POJO start
+    ISMTransition() {
+    }
 
-	void setCurrentState(DvCodedText currentState) {
-		this.currentState = currentState;
-	}
+    void setCareflowStep(DvCodedText careflowStep) {
+        this.careflowStep = careflowStep;
+    }
 
-	void setTransition(DvCodedText transition) {
-		this.transition = transition;
-	}
-	//POJO end
+    void setCurrentState(DvCodedText currentState) {
+        this.currentState = currentState;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((careflowStep == null) ? 0 : careflowStep.hashCode());
-		result = prime * result
-				+ ((currentState == null) ? 0 : currentState.hashCode());
-		result = prime * result
-				+ ((transition == null) ? 0 : transition.hashCode());
-		return result;
-	}
+    void setTransition(DvCodedText transition) {
+        this.transition = transition;
+    }
 
-	@Override
-	// Generated by Eclipse
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		ISMTransition other = (ISMTransition) obj;
-		if (careflowStep == null) {
-			if (other.careflowStep != null) {
-				return false;
-			}
-		} else if (!careflowStep.equals(other.careflowStep)) {
-			return false;
-		}
-		if (currentState == null) {
-			if (other.currentState != null) {
-				return false;
-			}
-		} else if (!currentState.equals(other.currentState)) {
-			return false;
-		}
-		if (transition == null) {
-			if (other.transition != null) {
-				return false;
-			}
-		} else if (!transition.equals(other.transition)) {
-			return false;
-		}
-		return true;
-	}
+    List<DvText> getReason() {
+        return reason;
+    }
 
-	/* fields */
-	private DvCodedText currentState;
-	private DvCodedText transition;
-	private DvCodedText careflowStep;
+    void setReason(List<DvText> reason) {
+        this.reason = reason;
+    }
+    //POJO end
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((careflowStep == null) ? 0 : careflowStep.hashCode());
+        result = prime * result
+                + ((currentState == null) ? 0 : currentState.hashCode());
+        result = prime * result
+                + ((transition == null) ? 0 : transition.hashCode());
+        result = prime * result
+                + ((reason == null) ? 0 : reason.hashCode());
+        return result;
+    }
+
+    @Override
+    // Generated by Eclipse
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        ISMTransition other = (ISMTransition) obj;
+        if (careflowStep == null) {
+            if (other.careflowStep != null) {
+                return false;
+            }
+        } else if (!careflowStep.equals(other.careflowStep)) {
+            return false;
+        }
+        if (currentState == null) {
+            if (other.currentState != null) {
+                return false;
+            }
+        } else if (!currentState.equals(other.currentState)) {
+            return false;
+        }
+        if (transition == null) {
+            if (other.transition != null) {
+                return false;
+            }
+        } else if (!transition.equals(other.transition)) {
+            return false;
+        } else if (!reason.equals(other.reason)) {
+            return false;
+        }
+        return true;
+    }
+
+    /* fields */
+    private DvCodedText currentState;
+    private DvCodedText transition;
+    private DvCodedText careflowStep;
+    private List<DvText> reason;
 
 }
 

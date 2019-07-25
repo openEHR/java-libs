@@ -17,12 +17,10 @@
  * ActionTest
  *
  * @author Yin Su Lim
- * @version 1.0 
+ * @version 1.0
  */
 package org.openehr.rm.composition.content.entry;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import org.openehr.rm.common.archetyped.Archetyped;
 import org.openehr.rm.composition.CompositionTestBase;
 import org.openehr.rm.datastructure.itemstructure.ItemStructure;
@@ -31,135 +29,140 @@ import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.support.identification.ArchetypeID;
 import org.openehr.rm.support.terminology.TestCodeSetAccess;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 public class ActionTest extends CompositionTestBase {
-    
+
     public ActionTest(String testName) {
         super(testName);
     }
 
+    @Override
     protected void setUp() throws Exception {
         ItemStructure description = list("list description");
         ItemStructure protocol = list("list protocol");
         Archetyped arch = new Archetyped(
                 new ArchetypeID("openehr-ehr_rm-action.XYZ.v2"),
                 "1.1");
-        ISMTransition ismT = new ISMTransition(TestCodeSetAccess.ISM_ACTIVE, 
-        		null, null, ts);
+        ISMTransition ismT = new ISMTransition(TestCodeSetAccess.ISM_ACTIVE,
+                null, null, null, ts);
         action = new Action(null, "at0001", new DvText("action"),
-                arch, null, null, null, lang, encoding, subject(), provider(), 
-                null, null, protocol, null, new DvDateTime(), description, 
+                arch, null, null, null, lang, encoding, subject(), provider(),
+                null, null, protocol, null, new DvDateTime(), description,
                 ismT, null, ts);
     }
 
+    @Override
     protected void tearDown() throws Exception {
     }
 
     public static Test suite() {
         TestSuite suite = new TestSuite(ActionTest.class);
-        
+
         return suite;
     }
 
     public void testItemAtPathWhole() {
-    	path = "/";
-    	value = action.itemAtPath(path);
-    	assertEquals(action, value);
+        path = "/";
+        value = action.itemAtPath(path);
+        assertEquals(action, value);
     }
-    
+
     public void testItemAtPathSubject() {
-    	path = "/subject";
-    	value = action.itemAtPath(path);
-    	assertEquals(action.getSubject(), value);
+        path = "/subject";
+        value = action.itemAtPath(path);
+        assertEquals(action.getSubject(), value);
     }
-    
+
     public void testItemAtPathProvider() {
-    	path = "/provider";
-    	value = action.itemAtPath(path);
-    	assertEquals(action.getProvider(), value);
+        path = "/provider";
+        value = action.itemAtPath(path);
+        assertEquals(action.getProvider(), value);
     }
-    
+
     public void testItemAtPathProtocol() {
-    	path = "/protocol";
-    	value = action.itemAtPath(path);
-    	assertEquals(action.getProtocol(), value);
+        path = "/protocol";
+        value = action.itemAtPath(path);
+        assertEquals(action.getProtocol(), value);
     }
-    
+
     public void testItemAtPathDescription() {
-    	path = "/description";
-    	value = action.itemAtPath(path);
-    	assertEquals(action.getDescription(), value);
+        path = "/description";
+        value = action.itemAtPath(path);
+        assertEquals(action.getDescription(), value);
     }
-    
+
     public void testItemAtPathTime() {
-    	path = "/time";
-    	value = action.itemAtPath(path);
-    	assertEquals(action.getTime(), value);
+        path = "/time";
+        value = action.itemAtPath(path);
+        assertEquals(action.getTime(), value);
     }
-    
-	public void testEquals() throws Exception {
-		ItemStructure description = list("list description");
-		ItemStructure protocol = list("list protocol");
-		Archetyped arch = new Archetyped(new ArchetypeID(
-				"openehr-ehr_rm-action.XYZ.v2"), "1.1");
-		ISMTransition ismT = new ISMTransition(TestCodeSetAccess.ISM_ACTIVE,
-				null, null, ts);
-		DvDateTime time = new DvDateTime();
-		Action action = new Action(null, "at0001", new DvText("action"), arch,
-				null, null, null, lang, encoding, subject(), provider(), null,
-				null, protocol, null, time, description, ismT,
-				null, ts);
 
-		Action action2 = new Action(null, "at0001", new DvText("action"), arch,
-				null, null, null, lang, encoding, subject(), provider(), null,
-				null, protocol, null, time, description, ismT,
-				null, ts);
-		assertTrue(action.equals(action2));
-	}
+    public void testEquals() throws Exception {
+        ItemStructure description = list("list description");
+        ItemStructure protocol = list("list protocol");
+        Archetyped arch = new Archetyped(new ArchetypeID(
+                "openehr-ehr_rm-action.XYZ.v2"), "1.1");
+        ISMTransition ismT = new ISMTransition(TestCodeSetAccess.ISM_ACTIVE,
+                null, null, null, ts);
+        DvDateTime time = new DvDateTime();
+        Action action = new Action(null, "at0001", new DvText("action"), arch,
+                null, null, null, lang, encoding, subject(), provider(), null,
+                null, protocol, null, time, description, ismT,
+                null, ts);
 
-	public void testNotEquals() throws Exception {
-		ItemStructure description = list("list description");
-		ItemStructure protocol = list("list protocol");
-		Archetyped arch = new Archetyped(new ArchetypeID(
-				"openehr-ehr_rm-action.XYZ.v2"), "1.1");
-		ISMTransition ismT = new ISMTransition(TestCodeSetAccess.ISM_ACTIVE,
-				null, null, ts);
-		Action action = new Action(null, "at0001", new DvText("action"), arch,
-				null, null, null, lang, encoding, subject(), provider(), null,
-				null, protocol, null, new DvDateTime(), description, ismT,
-				null, ts);
+        Action action2 = new Action(null, "at0001", new DvText("action"), arch,
+                null, null, null, lang, encoding, subject(), provider(), null,
+                null, protocol, null, time, description, ismT,
+                null, ts);
+        assertTrue(action.equals(action2));
+    }
 
-		ItemStructure description2 = list("list description 2");
-		Action action2 = new Action(null, "at0001", new DvText("action"), arch,
-				null, null, null, lang, encoding, subject(), provider(), null,
-				null, protocol, null, new DvDateTime(), description2, ismT,
-				null, ts);
+    public void testNotEquals() throws Exception {
+        ItemStructure description = list("list description");
+        ItemStructure protocol = list("list protocol");
+        Archetyped arch = new Archetyped(new ArchetypeID(
+                "openehr-ehr_rm-action.XYZ.v2"), "1.1");
+        ISMTransition ismT = new ISMTransition(TestCodeSetAccess.ISM_ACTIVE,
+                null, null, null, ts);
+        Action action = new Action(null, "at0001", new DvText("action"), arch,
+                null, null, null, lang, encoding, subject(), provider(), null,
+                null, protocol, null, new DvDateTime(), description, ismT,
+                null, ts);
 
-		assertFalse(action.equals(action2));
-	}
+        ItemStructure description2 = list("list description 2");
+        Action action2 = new Action(null, "at0001", new DvText("action"), arch,
+                null, null, null, lang, encoding, subject(), provider(), null,
+                null, protocol, null, new DvDateTime(), description2, ismT,
+                null, ts);
 
-	public void testNotEqualsProtocol() throws Exception {
-		ItemStructure description = list("list description");
-		ItemStructure protocol = list("list protocol");
-		Archetyped arch = new Archetyped(new ArchetypeID(
-				"openehr-ehr_rm-action.XYZ.v2"), "1.1");
-		ISMTransition ismT = new ISMTransition(TestCodeSetAccess.ISM_ACTIVE,
-				null, null, ts);
-		Action action = new Action(null, "at0001", new DvText("action"), arch,
-				null, null, null, lang, encoding, subject(), provider(), null,
-				null, protocol, null, new DvDateTime(), description, ismT,
-				null, ts);
+        assertFalse(action.equals(action2));
+    }
 
-		ItemStructure protocol2 = list("list protocol 2");
-		Action action2 = new Action(null, "at0001", new DvText("action"), arch,
-				null, null, null, lang, encoding, subject(), provider(), null,
-				null, protocol2, null, new DvDateTime(), description, ismT,
-				null, ts);
+    public void testNotEqualsProtocol() throws Exception {
+        ItemStructure description = list("list description");
+        ItemStructure protocol = list("list protocol");
+        Archetyped arch = new Archetyped(new ArchetypeID(
+                "openehr-ehr_rm-action.XYZ.v2"), "1.1");
+        ISMTransition ismT = new ISMTransition(TestCodeSetAccess.ISM_ACTIVE,
+                null, null, null, ts);
+        Action action = new Action(null, "at0001", new DvText("action"), arch,
+                null, null, null, lang, encoding, subject(), provider(), null,
+                null, protocol, null, new DvDateTime(), description, ismT,
+                null, ts);
 
-		assertFalse(action.equals(action2));
-	}
-	
+        ItemStructure protocol2 = list("list protocol 2");
+        Action action2 = new Action(null, "at0001", new DvText("action"), arch,
+                null, null, null, lang, encoding, subject(), provider(), null,
+                null, protocol2, null, new DvDateTime(), description, ismT,
+                null, ts);
+
+        assertFalse(action.equals(action2));
+    }
+
     /* fields */
-    private static Action action;    
+    private static Action action;
 }
 
 /*
