@@ -45,21 +45,18 @@ public final class Participation extends RMObject {
      * @throws IllegalArgumentException if function null
      *                                  or mode invalid or performer null
      */
-	@FullConstructor
+    @FullConstructor
     public Participation(
-    		@Attribute(name = "performer", required = true)PartyProxy performer,
-    		@Attribute(name = "function", required = true)DvText function,
-    		@Attribute(name = "mode", required = true)DvCodedText mode, 
-    		@Attribute(name = "time")DvInterval<DvDateTime> time,
-    		@Attribute(name = "terminologyService", system = true)TerminologyService terminologyService) {
+            @Attribute(name = "performer", required = true) PartyProxy performer,
+            @Attribute(name = "function", required = true) DvText function,
+            @Attribute(name = "mode") DvCodedText mode, /* Optional as of RM 1.0.3 SPECRM-21*/
+            @Attribute(name = "time") DvInterval<DvDateTime> time,
+            @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
         if (performer == null) {
             throw new IllegalArgumentException("null performer");
         }
         if (function == null) {
             throw new IllegalArgumentException("null function");
-        }
-        if (mode == null) {
-            throw new IllegalArgumentException("null mode");
         }
         if (terminologyService == null) {
             throw new IllegalArgumentException("null terminologyService");
@@ -68,8 +65,8 @@ public final class Participation extends RMObject {
         if (( function instanceof DvCodedText )
                 && ( !terminologyService.terminology(
                         TerminologyService.OPENEHR)
-                .codesForGroupName("participation function", "en")
-                .contains(((DvCodedText) function).getDefiningCode()))) {
+                        .codesForGroupName("participation function", "en")
+                        .contains(((DvCodedText) function).getDefiningCode()))) {
             throw new IllegalArgumentException("unkown function: " + function);
         }
 
@@ -131,9 +128,14 @@ public final class Participation extends RMObject {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof Participation )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof Participation )) {
+            return false;
+        }
 
         final Participation p = (Participation) o;
 
@@ -150,6 +152,7 @@ public final class Participation extends RMObject {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(7, 19)
                 .append(performer)

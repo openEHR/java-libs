@@ -81,6 +81,7 @@ public class XMLSerializer {
     /**
      * Create an outputter which can use a JDOM formatter of choice, e.g.
      * Format.getPrettyFormat().setEncoding(encoding.name()).setTextMode(TextMode.PRESERVE)
+     * @param format the format
      */
     public XMLSerializer(Format format) {
         this.encoding = UTF8;
@@ -94,7 +95,6 @@ public class XMLSerializer {
      *
      * @param archetype
      * @return a string in XML format
-     * @throws IOException
      */
     public String output(Archetype archetype) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -118,9 +118,8 @@ public class XMLSerializer {
     /**
      * Output given archetype to Document
      *
-     * @param archetype
-     * @param out
-     * @throws IOException
+     * @param archetype the archetype
+     * @param out the out document
      */
     public void output(Archetype archetype, Document out) {
         Element rootElement = new Element("archetype", defaultNamespace);
@@ -136,7 +135,6 @@ public class XMLSerializer {
      *
      * @param archetype
      * @param out
-     * @throws IOException
      */
     public void output(Archetype archetype, Element out) {
         printHeader(archetype, out);

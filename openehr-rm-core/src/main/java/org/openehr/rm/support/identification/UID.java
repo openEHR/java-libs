@@ -17,11 +17,11 @@ package org.openehr.rm.support.identification;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Purpose Anstract parent of classes representing unique identifiers
+ * Purpose Abstract parent of classes representing unique identifiers
  * which identify information entities in a durable way. UIDs only
  * ever identify one IE in time or space and are never re-used.
  *
- * Instances of this class are immutalbe
+ * Instances of this class are immutable
  *
  * @author Rong Chen
  * @version 1.0
@@ -55,6 +55,7 @@ public abstract class UID {
      *
      * @return string presentation
      */
+    @Override
     public String toString() {
         return value;
     }
@@ -65,9 +66,14 @@ public abstract class UID {
      * @param o
      * @return true if equals
      */
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!( o instanceof UID )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!( o instanceof UID )) {
+            return false;
+        }
 
         final UID uid = (UID) o;
 
@@ -79,6 +85,7 @@ public abstract class UID {
      *
      * @return hash code
      */
+    @Override
     public int hashCode() {
         return value.hashCode();
     }
