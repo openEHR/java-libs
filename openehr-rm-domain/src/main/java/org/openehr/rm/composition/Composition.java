@@ -14,19 +14,24 @@
  */
 package org.openehr.rm.composition;
 
+import java.util.List;
+import java.util.Set;
+
 import org.openehr.rm.Attribute;
 import org.openehr.rm.FullConstructor;
-import org.openehr.rm.common.archetyped.*;
+import org.openehr.rm.common.archetyped.Archetyped;
+import org.openehr.rm.common.archetyped.FeederAudit;
+import org.openehr.rm.common.archetyped.Link;
+import org.openehr.rm.common.archetyped.Locatable;
+import org.openehr.rm.common.archetyped.Pathable;
 import org.openehr.rm.common.generic.PartyProxy;
-import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.composition.content.ContentItem;
 import org.openehr.rm.datatypes.text.CodePhrase;
-import org.openehr.rm.datatypes.text.DvText;
 import org.openehr.rm.datatypes.text.DvCodedText;
+import org.openehr.rm.datatypes.text.DvText;
+import org.openehr.rm.support.identification.UIDBasedID;
 import org.openehr.rm.support.terminology.OpenEHRCodeSetIdentifiers;
 import org.openehr.rm.support.terminology.TerminologyService;
-
-import java.util.*;
 
 /**
  * A composition is considered the unit of modification of the
@@ -57,20 +62,20 @@ public final class Composition extends Locatable {
      *                                  or links not null and empty
      */
     @FullConstructor
-            public Composition(@Attribute(name = "uid") UIDBasedID uid,
-                               @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
-                               @Attribute(name = "name", required = true) DvText name,
-                               @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
-                               @Attribute(name = "feederAudit") FeederAudit feederAudit,
-                               @Attribute(name = "links") Set<Link> links,
-                               @Attribute(name = "parent") Pathable parent,
-                               @Attribute(name = "content") List<ContentItem> content,
-                               @Attribute(name = "language", required = true) CodePhrase language,
-                               @Attribute(name = "context") EventContext context,
-                               @Attribute(name = "composer", required = true) PartyProxy composer,
-                               @Attribute(name = "category", required = true) DvCodedText category,
-                               @Attribute(name = "territory", required = true) CodePhrase territory,
-                               @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
+    public Composition(@Attribute(name = "uid") UIDBasedID uid,
+            @Attribute(name = "archetypeNodeId", required = true) String archetypeNodeId,
+            @Attribute(name = "name", required = true) DvText name,
+            @Attribute(name = "archetypeDetails", required = true) Archetyped archetypeDetails,
+            @Attribute(name = "feederAudit") FeederAudit feederAudit,
+            @Attribute(name = "links") Set<Link> links,
+            @Attribute(name = "parent") Pathable parent,
+            @Attribute(name = "content") List<ContentItem> content,
+            @Attribute(name = "language", required = true) CodePhrase language,
+            @Attribute(name = "context") EventContext context,
+            @Attribute(name = "composer", required = true) PartyProxy composer,
+            @Attribute(name = "category", required = true) DvCodedText category,
+            @Attribute(name = "territory", required = true) CodePhrase territory,
+            @Attribute(name = "terminologyService", system = true) TerminologyService terminologyService) {
 
         super(uid, archetypeNodeId, name, archetypeDetails, feederAudit,
                 links, parent);
@@ -88,9 +93,10 @@ public final class Composition extends Locatable {
         }
 
         // Is_persistent_validity: is_persistent implies context = Void
-        if (isPersistent(category) && context != null) {
-            throw new IllegalArgumentException("invalid persistent category");
-        }
+        // As per SPEC-RM-26 this is no longer required (1.0.4)
+        //if (isPersistent(category) && context != null) {
+        //    throw new IllegalArgumentException("invalid persistent category");
+        //}
         if (composer == null) {
             throw new IllegalArgumentException("null composer");
         }
@@ -111,7 +117,7 @@ public final class Composition extends Locatable {
         if (terminologyService == null) {
             throw new IllegalArgumentException("null terminologyService");
         }
-  
+
         if (!terminologyService.terminology(TerminologyService.OPENEHR)
                 .codesForGroupName("composition category", "en")
                 .contains(category.getDefiningCode())) {
@@ -119,12 +125,12 @@ public final class Composition extends Locatable {
                     "unknown category: " + category.getDefiningCode());
         }
         if (!terminologyService.codeSetForId(
-        		OpenEHRCodeSetIdentifiers.COUNTRIES).hasCode(territory)) {
+                OpenEHRCodeSetIdentifiers.COUNTRIES).hasCode(territory)) {
             throw new IllegalArgumentException(
                     "unknown territory: " + territory);
         }
         if (!terminologyService.codeSetForId(
-        		OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(language)) {
+                OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(language)) {
             throw new IllegalArgumentException("unknown language:" + language);
         }
 
@@ -175,20 +181,20 @@ public final class Composition extends Locatable {
         return category;
     }
 
-    
+
     /**
-     * The person primarily responsible for the content of the Composition 
+     * The person primarily responsible for the content of the Composition
      * (but not necessarily its committal). This is the identifier which should
      * appear on the screen. When it is the patient, the special "self" instance
      * of the PartyProxy will be used.
-     * 
+     *
      * @return composer
      */
     public PartyProxy getComposer() {
-		return composer;
-	}
+        return composer;
+    }
 
-	/**
+    /**
      * True if category is a "persistent" type, False otherwise. Useful for
      * finding Compositions in an EHR which are guaranteed to be of interest
      * to most users.
@@ -222,29 +228,29 @@ public final class Composition extends Locatable {
     }
 
     @Override
-	public String pathOfItem(Pathable arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public String pathOfItem(Pathable arg0) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public List<Object> itemsAtPath(String arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Object> itemsAtPath(String arg0) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public boolean pathExists(String arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean pathExists(String arg0) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public boolean pathUnique(String arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
+    @Override
+    public boolean pathUnique(String arg0) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
     // POJO start
     Composition() {
     }
@@ -252,7 +258,7 @@ public final class Composition extends Locatable {
     void setLanguage(CodePhrase language) {
         this.language = language;
     }
-    
+
     void setContent(List<ContentItem> content) {
         this.content = content;
     }
@@ -269,9 +275,9 @@ public final class Composition extends Locatable {
         this.territory = territory;
     }
 
-	void setComposer(PartyProxy composer) {
-		this.composer = composer;
-	} 
+    void setComposer(PartyProxy composer) {
+        this.composer = composer;
+    }
     // POJO end
 
     /* fields */
@@ -280,7 +286,7 @@ public final class Composition extends Locatable {
     private PartyProxy composer;
     private DvCodedText category;
     private CodePhrase territory;
-    private CodePhrase language;	
+    private CodePhrase language;
 }
 
 /*
