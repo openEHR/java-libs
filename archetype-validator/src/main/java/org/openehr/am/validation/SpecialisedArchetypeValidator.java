@@ -32,15 +32,15 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
 
 
     /**
-     * Validates the given specialised archetype including specialised validation to its stated parent archetype 
-     * 
+     * Validates the given specialised archetype including specialised validation to its stated parent archetype
+     *
      * @param archetype
      * @param parentArchetype
-     * @param reportConstraintsOnFunctionalPropertiesAsInfo if set to true, constraints on functional properties such as "is_integral" as part of DV_PROPORTION and "offset" in EVENT are reported as info only. If set to false (default), they are reported as errors.  
+     * @param reportConstraintsOnFunctionalPropertiesAsInfo if set to true, constraints on functional properties such as "is_integral" as part of DV_PROPORTION and "offset" in EVENT are reported as info only. If set to false (default), they are reported as errors.
      * @return list of validation errors or empty list if valid
      */
 
-    public List<ValidationError> validate(Archetype archetype, Archetype parentArchetype, boolean reportConstraintsOnCommonFunctionalPropertiesAsInfo) 
+    public List<ValidationError> validate(Archetype archetype, Archetype parentArchetype, boolean reportConstraintsOnCommonFunctionalPropertiesAsInfo)
             throws RMInspectionException {
         List<ValidationError> errors = new ArrayList<ValidationError>();
         // normal non-specialised validation first.
@@ -63,16 +63,16 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
         for (String atCode : fetchAllATCodes(archetype)) {
             // For all codes: An extra check that the code is no specialised more than the maximum specialisation depth
             if (StringUtils.countMatches(atCode, ".") > childSpecialisationDepth) {
-                errors.add (new ValidationError (ErrorType.VATCD, null, 
-                        atCode, StringUtils.countMatches(atCode, "."), childSpecialisationDepth)); 
+                errors.add (new ValidationError (ErrorType.VATCD, null,
+                        atCode, StringUtils.countMatches(atCode, "."), childSpecialisationDepth));
             }
         }
 
         for (String acCode : fetchAllACCodes(archetype)) {
             // For all codes: An extra check that the code is no specialised more than the maximum specialisation depth
             if (StringUtils.countMatches(acCode, ".") > childSpecialisationDepth) {
-                errors.add (new ValidationError (ErrorType.VATCD, null, 
-                        acCode, StringUtils.countMatches(acCode, "."), childSpecialisationDepth)); 
+                errors.add (new ValidationError (ErrorType.VATCD, null,
+                        acCode, StringUtils.countMatches(acCode, "."), childSpecialisationDepth));
             }
         }
     }
@@ -87,7 +87,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
 
         String parentPath = getExpectedPathInParentArchetype(ccobj.path(), childSpecialisationDepth-1);
         String parentPathOrig = parentPath;
-        boolean continueWithAttributes = true; 
+        boolean continueWithAttributes = true;
 
         if (parentPath != null) {
             CObject parentNode = (CObject)parentArchetype.node(parentPath);
@@ -98,7 +98,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
                 int goingUpTheSpecTree = childSpecialisationDepth -2;
                 boolean foundParentFurtherUp = false;
 
-                // if it wasn't found, we have to check further up in the hierarchy of node ids to see if it 
+                // if it wasn't found, we have to check further up in the hierarchy of node ids to see if it
                 // is totally missing or if there is an error of the level of specialisation of the node id (e.g. at0001.1 where it should be at0001.0.1
                 while (goingUpTheSpecTree >=0) {
                     parentPath = getExpectedPathInParentArchetype(ccobj.path(), goingUpTheSpecTree);
@@ -114,29 +114,29 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
                 if (foundParentFurtherUp)  {
                     errors.add(new ValidationError(ErrorType.VSONCI, null,
                             ccobj.getNodeId(), parentNode.getNodeId()));
-                } else if (parentPath != null && parentPath.length() > 0 && (parentPath.endsWith("]") || 
+                } else if (parentPath != null && parentPath.length() > 0 && (parentPath.endsWith("]") ||
                         parentPath.endsWith(ArchetypeConstraint.PATH_SEPARATOR) || Character.isDigit(parentPath.charAt(parentPath.length()-1)))){
-                    // we do not want anything in there that ends with an attribute - e.g. /data[at0001]/items[at0004]/items[at0002]/items[at0003]/value as this is just a constraint introduced, but no at code 
+                    // we do not want anything in there that ends with an attribute - e.g. /data[at0001]/items[at0004]/items[at0002]/items[at0003]/value as this is just a constraint introduced, but no at code
                     if (StringUtils.countMatches(ccobj.getNodeId(), ".") == childSpecialisationDepth) {
-                        errors.add (new ValidationError (ErrorType.VATDF, "SPECIALISED", 
+                        errors.add (new ValidationError (ErrorType.VATDF, "SPECIALISED",
                                 parentPath, ccobj.path()));
                     } else {
                         errors.add (new ValidationError (ErrorType.VATDF, "INTRODUCED",
                                 parentPath));
-                    }	
-                } else if (parentPath==null) {				    
+                    }
+                } else if (parentPath==null) {
                     errors.add (new ValidationError (ErrorType.VATDF, "INTRODUCED",
                             parentPathOrig));
                 }
 
                 continueWithAttributes= false;
-                // node must be in ontology of parent....		
+                // node must be in ontology of parent....
             } else {
                 if (parentNode instanceof ArchetypeInternalRef) {
                     // if the child is a redefine of a parent use_node, then have to do the comparison to the
                     // use_node target, unless they both are use_nodes, in which case leave them as is
                     // Note: ccobj cannot be an ArchetypeInternalRef anyway - Thomas' Eiffel code is slightly different, so he needs to check...
-                    parentNode = (CObject)parentArchetype.node(((ArchetypeInternalRef) parentNode).getTargetPath());					
+                    parentNode = (CObject)parentArchetype.node(((ArchetypeInternalRef) parentNode).getTargetPath());
                 }
 
                 if (ccobj.getNodeId() != null) {
@@ -166,16 +166,16 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
         // now check for all its attributes, which in turn check for all its cobjects again...
         if(ccobj.getAttributes() != null && continueWithAttributes) {
             for (CAttribute cattr : ccobj.getAttributes()) {
-                checkSpecialisedAttribute(cattr, archetype, parentArchetype, childSpecialisationDepth, errors);			
+                checkSpecialisedAttribute(cattr, archetype, parentArchetype, childSpecialisationDepth, errors);
             }
-        }		
+        }
     }
 
 
 
     /** Checks that the dynamic class of the node and its corresponding node in the parent are equal (e.g. both CCOmplexObjects)
      * VSONT
-     * 
+     *
      * @param parentNode
      * @param ccobj
      * @param errors
@@ -184,7 +184,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
     private boolean checkDynamicArchetypeType(CObject parentNode,
             CComplexObject ccobj, List<ValidationError> errors) {
         if (!ccobj.getClass().getSimpleName().equals(parentNode.getClass().getSimpleName())) {
-            errors.add(new ValidationError(ErrorType.VSONT, null, 
+            errors.add(new ValidationError(ErrorType.VSONT, null,
                     ccobj.getClass().getSimpleName(), ccobj.path(), parentNode.getClass().getSimpleName()));
             return false;
         }
@@ -211,7 +211,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
                 log.debug("PARENT NODE IN PARENT ARCHETYPE IS NULL");
             }
 
-            if (parentNodeInParentArchetype instanceof CComplexObject) {			   
+            if (parentNodeInParentArchetype instanceof CComplexObject) {
                 attrInParentArchetype = ((CComplexObject) parentNodeInParentArchetype).getAttribute(cattr.getRmAttributeName());
             } else {
                 // Can we really simply ignore this case where the parent node in the parent archetype is not a CComplexObject or do we need to introduce other handling here for _DV_QUANTITY and the like?
@@ -230,13 +230,13 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
         if (cattr.getChildren() != null) {
             for (CObject cobj : cattr.getChildren()) {
                 log.debug("-----");
-                log.debug(cobj.getRmTypeName() + " " +cobj.path());				
+                log.debug(cobj.getRmTypeName() + " " +cobj.path());
 
                 if (cobj instanceof CComplexObject) {
                     validateSpecialisedCComplexObject((CComplexObject)cobj, archetype, parentArchetype, childSpecialisationDepth, errors);
                 } else if (cobj instanceof ConstraintRef) {
                     checkSpecialisedConstraintRefConformance((ConstraintRef) cobj, archetype, parentArchetype, childSpecialisationDepth, errors);
-                }			
+                }
 
                 validateSpecialisedCObject(cobj, archetype, parentArchetype, childSpecialisationDepth, errors);
             }
@@ -270,7 +270,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
      *  VSCNR: placeholder constraint node conformance: a placeholder node can only
      *	be defined into a reference model type conformant with the type of the original constraint
      *	in the parent archetype.
-     * 
+     *
      * @param cobj
      * @param archetype
      * @param parentArchetype
@@ -278,7 +278,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
      */
     private void checkSpecialisedConstraintRefConformance(ConstraintRef cr,
             Archetype archetype, Archetype parentArchetype, int childSpecialisationDepth,
-            List<ValidationError> errors) {				
+            List<ValidationError> errors) {
         String pathInParent = getExpectedPathInParentArchetype(cr.path(), childSpecialisationDepth-1);
         if (pathInParent== null) {
             return;
@@ -290,7 +290,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
             return;
         }
 
-        /*	Not sure what needs to be checked for a VSCNR error, this is not it.		
+        /*	Not sure what needs to be checked for a VSCNR error, this is not it.
 		Class parentRMType =
 			rmInspector.retrieveRMType(nodeInParent.getRmTypeName());
 		Class childRMType = rmInspector.retrieveRMType(cr.getRmTypeName());
@@ -303,9 +303,9 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
     }
 
 
-    /** Checks that the existence of the parent archetype's corresponding attribute is conformant 
+    /** Checks that the existence of the parent archetype's corresponding attribute is conformant
      * with the child archetype's attribute in the sense of VSANCE error validation
-     * 
+     *
      * @param cattr
      * @param attrInParentArchetype
      * @param errors
@@ -314,13 +314,13 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
             CAttribute cattr, CAttribute attrInParentArchetype,
             List<ValidationError> errors) {
 
-        if ((cattr.getExistence() == Existence.OPTIONAL && 
-                (attrInParentArchetype.getExistence() == Existence.REQUIRED || 
+        if ((cattr.getExistence() == Existence.OPTIONAL &&
+                (attrInParentArchetype.getExistence() == Existence.REQUIRED ||
                 attrInParentArchetype.getExistence() == Existence.NOT_ALLOWED))
                 ||
-                (cattr.getExistence() == Existence.REQUIRED &&  
-                attrInParentArchetype.getExistence() == Existence.NOT_ALLOWED)					 
-                || (cattr.getExistence() == Existence.NOT_ALLOWED &&  
+                (cattr.getExistence() == Existence.REQUIRED &&
+                attrInParentArchetype.getExistence() == Existence.NOT_ALLOWED)
+                || (cattr.getExistence() == Existence.NOT_ALLOWED &&
                 attrInParentArchetype.getExistence() != Existence.NOT_ALLOWED)
                 ) {
             errors.add(new ValidationError(ErrorType.VSANCE, null,
@@ -328,9 +328,9 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
         }
     }
 
-    /** Checks that the multiplicity of the parent archetype's corresponding attribute is conformant 
+    /** Checks that the multiplicity of the parent archetype's corresponding attribute is conformant
      * with the child archetype's attribute in the sense of VSAM error validation
-     * 
+     *
      * @param cattr
      * @param attrInParentArchetype
      * @param errors
@@ -340,21 +340,21 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
             List<ValidationError> errors) {
 
         if (cattr instanceof CMultipleAttribute && !(attrInParentArchetype instanceof CMultipleAttribute)) {
-            errors.add(new ValidationError(ErrorType.VSAM, "MULTIPLE", 
+            errors.add(new ValidationError(ErrorType.VSAM, "MULTIPLE",
                     cattr.path(), attrInParentArchetype.path()));
-        }	
+        }
         // if it is the other way round, this is okay, as the cardinality is contained.
         if (!(cattr instanceof CMultipleAttribute) && (attrInParentArchetype instanceof CMultipleAttribute)) {
             errors.add(new ValidationError(ErrorType.VSAM, "SINGLE",
                     cattr.path(), attrInParentArchetype.path()));
-        }	
+        }
 
     }
 
 
-    /** Checks that the cardinality of the parent archetype's corresponding attribute is conformant 
+    /** Checks that the cardinality of the parent archetype's corresponding attribute is conformant
      * with the child archetype's attribute in the sense of VSANCC error validation
-     * 
+     *
      * @param cattr
      * @param attrInParentArchetype
      * @param errors
@@ -366,7 +366,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
         // if not both are CMultipleAttributes, there is nothing to check here (this would be a VSAM error)
         if (!(cattr instanceof CMultipleAttribute) || !(attrInParentArchetype instanceof CMultipleAttribute)) {
             return;
-        } 
+        }
 
         CMultipleAttribute cmattr = (CMultipleAttribute) cattr;
         CMultipleAttribute cmParentAttr = (CMultipleAttribute) attrInParentArchetype;
@@ -375,8 +375,8 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
 
         Cardinality cardParentAttr = cmParentAttr.getCardinality();
 
-        if (! cardParentAttr.getInterval().isUpperUnbounded() 
-                && ( cardAttr.getInterval().isUpperUnbounded() 
+        if (! cardParentAttr.getInterval().isUpperUnbounded()
+                && ( cardAttr.getInterval().isUpperUnbounded()
                         || cardParentAttr.getInterval().getUpper().compareTo(
                                 cardAttr.getInterval().getUpper()) <0)) {
             errors.add(new ValidationError(ErrorType.VSANCC, null,
@@ -385,8 +385,8 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
                 cardAttr.getInterval().getLower()) >0) {
             log.debug("Cardinality error");
             errors.add(new ValidationError(ErrorType.VSANCC, null,
-                    getIntervalFormalString(cardAttr.getInterval()), cattr.path(), getIntervalFormalString(cardParentAttr.getInterval()), attrInParentArchetype.path()));	
-        }				
+                    getIntervalFormalString(cardAttr.getInterval()), cattr.path(), getIntervalFormalString(cardParentAttr.getInterval()), attrInParentArchetype.path()));
+        }
     }
 
 
@@ -394,7 +394,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
      * @return true if all is ok, false if not (as this is a fatal error for any further validation)
      */
     private boolean checkSpecialisedNodeIdConformance(CObject parentNode,
-            CComplexObject ccobj, int childSpecialisationDepth, List<ValidationError> errors) { 
+            CComplexObject ccobj, int childSpecialisationDepth, List<ValidationError> errors) {
         //TODO THis is not used anywhere!!
         if (ccobj.getNodeId().equals(parentNode.getNodeId())) {
             return true; // identical, which is ok (non-specialised)
@@ -404,7 +404,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
             return true; // correct number of specialisations.
         }
 
-        errors.add(new ValidationError(ErrorType.VSONCI, null, 
+        errors.add(new ValidationError(ErrorType.VSONCI, null,
                 ccobj.getNodeId(), parentNode.getNodeId()));
         return false;
 
@@ -413,7 +413,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
 
     /** Checks that the node is specialised if required in the sense of VSONIR.
      * I.e. it needs to be redefined if any aspect of the immediate object constraint is redefined.
-     * 
+     *
      * @param parentNode
      * @param ccobj
      * @param errors
@@ -436,7 +436,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
 
             if (!archetype.getOntology().termDefinition(langPrim, ccobj.getNodeId()).equals(
                     parentArchetype.getOntology().termDefinition(langPrim, ccobj.getNodeId()))) {
-                if (archetype.getOntology().termDefinition(langPrim, ccobj.getNodeId()) !=null) {				    
+                if (archetype.getOntology().termDefinition(langPrim, ccobj.getNodeId()) !=null) {
                     log.debug("child desc: "+archetype.getOntology().termDefinition(langPrim, ccobj.getNodeId()).getText());
                     log.debug("child desc: "+archetype.getOntology().termDefinition(langPrim, ccobj.getNodeId()).getDescription());
                 }
@@ -450,7 +450,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
                             ccobj.path(), ccobj.getRmTypeName(), parentNode.getRmTypeName(), ccobj.getNodeId(), langPrim));
 
                 }
-            }	
+            }
             else {
                 // if the main text and description is ok, we still should check that this is true for all translations as well
                 if (archetype.getTranslations() != null && archetype.getTranslations().entrySet()!= null) {
@@ -459,19 +459,19 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
                                 parentArchetype.getOntology().termDefinition(trans.getValue().getLanguage().getCodeString(), ccobj.getNodeId()))) {
                             // if the node doesn't exist in the parent at all, this is a VATDF error, checked elsewhere.
                             if (parentArchetype.getOntology().termDefinition(trans.getValue().getLanguage().getCodeString(), ccobj.getNodeId()) != null) {
-                                errors.add(new ValidationError(ErrorType.VSONIR, "TEXTDESCRIPTION", 
+                                errors.add(new ValidationError(ErrorType.VSONIR, "TEXTDESCRIPTION",
                                         ccobj.path(), ccobj.getRmTypeName(), parentNode.getRmTypeName(), ccobj.getNodeId(), trans.getValue().getLanguage().getCodeString()));
                             }
                         }
                     }
                 }
-            }						
-        }				
+            }
+        }
     }
 
 
     /** Checks that the occurrences of the corresponding node in the parent conforms to the specialised node's occurrences
-     * 
+     *
      * @param parentNode
      * @param ccobj
      * @param errors
@@ -479,18 +479,18 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
     private void checkSpecialisedOccurrencesCompatiblity(CObject parentNode,
             CObject ccobj, List<ValidationError> errors) {
 
-        if (! parentNode.getOccurrences().isUpperUnbounded() 
-                && ( ccobj.getOccurrences().isUpperUnbounded() 
+        if (! parentNode.getOccurrences().isUpperUnbounded()
+                && ( ccobj.getOccurrences().isUpperUnbounded()
                         || parentNode.getOccurrences().getUpper().compareTo(
                                 ccobj.getOccurrences().getUpper()) <0)) {
 
-            errors.add(new ValidationError (ErrorType.VSONCO, null, 
-                    getIntervalFormalString(ccobj.getOccurrences()), ccobj.path(), getIntervalFormalString(parentNode.getOccurrences()), parentNode.path()));		
-        }				
+            errors.add(new ValidationError (ErrorType.VSONCO, null,
+                    getIntervalFormalString(ccobj.getOccurrences()), ccobj.path(), getIntervalFormalString(parentNode.getOccurrences()), parentNode.path()));
+        }
     }
 
-    /** Checks that the RM type of the parent's corresponding node conforms to the child'S node RM type. 
-     * 
+    /** Checks that the RM type of the parent's corresponding node conforms to the child'S node RM type.
+     *
      * @param parentNode
      * @param ccobj
      * @param errors
@@ -515,7 +515,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
                 rmInspector.retrieveRMType(rmParent);
 
         if (parentRMType == null || rmChild == null) {
-            errors.add (new ValidationError(ErrorType.VSONCT, "UNKNOWN", 
+            errors.add (new ValidationError(ErrorType.VSONCT, "UNKNOWN",
                     rmChild, ccobj.path(), rmParent));
             // or simply return ??  // there is a problem with the rmtypes (probably one that is unknown), this is a different validation, so ignore here.
         } else if (! parentRMType.isAssignableFrom(childRMType)) {
@@ -525,8 +525,8 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
     }
 
     /** Checks that the RM type(s) of the parent's corresponding node conforms to the child's node RM type(s).
-     * Note that because of choice type (multiple constraints to choose from), we need to test this for all children of an attribute at ones.  
-     * 
+     * Note that because of choice type (multiple constraints to choose from), we need to test this for all children of an attribute at ones.
+     *
      * @param parentNode
      * @param ccobj
      * @param errors
@@ -543,7 +543,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
         if (parentPath == null) {
             return; // nothing to test
         }
-        CObject parentNode =(CObject) parentArchetype.node(parentPath);		
+        CObject parentNode =(CObject) parentArchetype.node(parentPath);
         if (parentNode == null || !(parentNode instanceof CComplexObject)) {
             return;
         }
@@ -555,15 +555,15 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
 
         HashMap<CObject, Class> parentObjectsToRMTypesWithoutGenerics = new HashMap<CObject, Class>();
         for (CObject childInParent : parentAttr.getChildren()) {
-            // for all children - not only CComplexObjects - because of e.g. C_DV_QUANTITY constraints 
+            // for all children - not only CComplexObjects - because of e.g. C_DV_QUANTITY constraints
             String childInParentRMTypeWithoutGenerics = removeGenericTypes(childInParent.getRmTypeName());
             Class parentRMType = rmInspector.retrieveRMType(childInParentRMTypeWithoutGenerics);
             if (parentRMType == null) {
                 errors.add (new ValidationError(ErrorType.VSONCT, "UNKNOWNFORPARENT",
                         childInParent.getRmTypeName(), childInParent.path()));
-            } else { 
+            } else {
                 parentObjectsToRMTypesWithoutGenerics.put(childInParent, parentRMType);
-            }		
+            }
         }
 
         if (parentObjectsToRMTypesWithoutGenerics.size() == 0) {
@@ -589,21 +589,21 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
                     if (genericTypeInParentArchetype != null) {
                         String genericTypeInChildArchetype = getGenericType(child.getRmTypeName());
                         if (genericTypeInChildArchetype != null) {
-                            // if the parent generic type is set, but genericTypeInChildArchetype is not defined, this is not an assignable combination 
+                            // if the parent generic type is set, but genericTypeInChildArchetype is not defined, this is not an assignable combination
                             Class childGenericRMType =
                                     rmInspector.retrieveRMType(genericTypeInChildArchetype);
                             Class parentGenericRMType =
                                     rmInspector.retrieveRMType(genericTypeInParentArchetype);
                             if (childGenericRMType != null && parentGenericRMType!=null && parentGenericRMType.isAssignableFrom(childGenericRMType)) {
                                 assignable = true;
-                                break;								 
-                            }							
-                        }							 
+                                break;
+                            }
+                        }
                     } else {
                         assignable = true;
                         break;
-                    }	 
-                }	
+                    }
+                }
             }
 
             if (!assignable) {
@@ -618,11 +618,11 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
                     errors.add (new ValidationError(ErrorType.VSONCT, "NORMAL",
                             childRMType.getSimpleName(), child.path(), parentRefTypes));
                 } else {
-                    // more than one RM type possible 
-                    errors.add (new ValidationError(ErrorType.VSONCT, 
+                    // more than one RM type possible
+                    errors.add (new ValidationError(ErrorType.VSONCT, "MORETHANONE",
                             childRMType.getSimpleName(), child.path(), parentRefTypes));
                 }
-            }			
+            }
         }
     }
 
@@ -631,7 +631,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
             List<ValidationError> errors) {
 
         String lang = parentArchetype.getOriginalLanguage().getCodeString();
-        List<OntologyDefinitions> defList = 
+        List<OntologyDefinitions> defList =
                 parentArchetype.getOntology().getTermDefinitionsList();
         OntologyDefinitions priDefs = null;
         ValidationError error = null;
@@ -664,7 +664,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
 
 
     /** Calculates the expected path in a parent archetype derived from the given path.
-     * 
+     *
      * @param path
      * @return
      */
@@ -694,7 +694,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
                 log.debug("Path ends with at0: "+ pathPart +" "+expectedPath);
                 return null;
             }
-            expectedPath += pathPart + pathEnd+sep; 
+            expectedPath += pathPart + pathEnd+sep;
         }
         if (expectedPath.length() >1 && expectedPath.endsWith(sep)) {
             expectedPath = expectedPath.substring(0,expectedPath.length()-1); // get rid of tailing separator
@@ -706,7 +706,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
     }
 
     /** Tests whether two objects are directly equals, including their attributes, but without taking into account any direct or indirect children.
-     * 
+     *
      * @param c1
      * @param c2
      * @return
@@ -758,7 +758,7 @@ public class SpecialisedArchetypeValidator extends ArchetypeValidator {
                         }
                     }
                 }
-            }					
+            }
         }
 
         return true; // no differences found

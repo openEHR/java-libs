@@ -7,18 +7,14 @@ import java.util.ResourceBundle;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 /**
- * Archetype validation error with error type, short text 
+ * Archetype validation error with error type, short text
  * and a longer more specific explanation of the error
- * 
+ *
  * @author rong.chen
  * @author sebastian.garde
  */
 public class ValidationError {
 
-
-   // public ValidationError(ErrorType type) {
-   //     this(type, null);
-   // }
 
     public ValidationError(ErrorType type, String subType, Object... params) {
         this.type = type;
@@ -32,15 +28,15 @@ public class ValidationError {
 
 
     /** Gets the error text in the default locale
-     * 
+     *
      * @return
      */
     public String getText() {
         return getText(Locale.getDefault());
-    }   
+    }
 
     /** Gets the description in an explicitly specified locale
-     * 
+     *
      * @param locale
      * @return
      */
@@ -49,7 +45,15 @@ public class ValidationError {
             locale = Locale.getDefault();
         }
 
-        String errorText = ResourceBundle.getBundle("validations", locale, UTF8Control.getInstance()).getString(getTextKey());
+        String textKey = getTextKey();
+        ResourceBundle rb = ResourceBundle.getBundle("validations", locale, UTF8Control.getInstance());
+
+        // If the resource bundle doen't know the textkey, we try without the subtype
+        if (!rb.containsKey(textKey)) {
+            textKey = getTextKey(true);
+        }
+        // If for some reason the bundle doesn't contain the textKey, we don't fail completely but return the textkey at least.
+        String errorText = rb.containsKey(textKey) ? rb.getString(textKey) : textKey;
         if (params != null) {
             errorText= MessageFormat.format(errorText, params);
         }
@@ -57,24 +61,27 @@ public class ValidationError {
     }
 
     protected String getTextKey() {
-        if (subType ==null) {
+        return getTextKey(false);
+    }
+
+    protected String getTextKey(boolean ignoreSubtype) {
+        if (ignoreSubtype || subType == null) {
             return this.type.toString()+"_TEXT";
         } else {
-            return this.type.toString()+"_"+subType+"_TEXT";
+            return this.type.toString() + "_" + subType + "_TEXT";
         }
-        
-    }   
-    
+    }
+
     /** Gets the description in the default locale
-     * 
+     *
      * @return
      */
     public String getDescription() {
         return getDescription(Locale.getDefault());
-    }	
+    }
 
     /** Gets the description in an explicitly specified locale
-     * 
+     *
      * @param locale
      * @return
      */
@@ -85,7 +92,7 @@ public class ValidationError {
 
 
         return ResourceBundle.getBundle("validations", locale, UTF8Control.getInstance()).getString(this.type.toString());
-    }   
+    }
 
 
     /**
@@ -103,7 +110,7 @@ public class ValidationError {
     public String toString(Locale locale) {
         return type + ", " + getText(locale) + ", "+ getDescription(locale);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) { return false; }
@@ -113,11 +120,11 @@ public class ValidationError {
         }
         ValidationError ve = (ValidationError) obj;
         return new EqualsBuilder()
-        .append(type, ve.type)
-        .append(subType, ve.subType)
-        .append(params, ve.params)
-     //   .append(getDescription(), ve.getDescription())
-        .isEquals();
+                .append(type, ve.type)
+                .append(subType, ve.subType)
+                .append(params, ve.params)
+                //   .append(getDescription(), ve.getDescription())
+                .isEquals();
     }
 
     @Override
@@ -126,7 +133,7 @@ public class ValidationError {
                 append(type).
                 append(subType).
                 append(params).
-       //         append(getDescription()).
+                //         append(getDescription()).
                 toHashCode();
     }
 
