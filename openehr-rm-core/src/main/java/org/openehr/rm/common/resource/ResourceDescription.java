@@ -210,8 +210,6 @@ public class ResourceDescription implements Serializable{
 						.hashCode());
 		result = prime * result
 				+ ((otherDetails == null) ? 0 : otherDetails.hashCode());
-		result = prime * result
-				+ ((parentResource == null) ? 0 : parentResource.hashCode());
 		result = prime
 				* result
 				+ ((resourcePackageUri == null) ? 0 : resourcePackageUri
