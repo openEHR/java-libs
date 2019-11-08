@@ -34,6 +34,7 @@
 	</group>
 	<group name="composition category">
 		<concept id="431" rubric="persistent"/>
+		<concept id="435" rubric="episodic"/>
 		<concept id="433" rubric="event"/>
 	</group>
 	<group name="MultiMedia">
@@ -233,6 +234,7 @@
 		<concept id="166" rubric="cancel"/>
 		<concept id="542" rubric="postponed step"/>
 		<concept id="539" rubric="schedule"/>
+		<concept id="534" rubric="scheduled step"/>	
 		<concept id="540" rubric="start"/>
 		<concept id="541" rubric="do"/>
 		<concept id="543" rubric="active step"/>
@@ -266,15 +268,15 @@
 		<concept id="29" rubric="daughter"/>
 		<concept id="264" rubric="guardian"/>
 		<concept id="39" rubric="maternal aunt"/>
-		<concept id="8" rubric="maternal"/>
-		<concept id="7" rubric="maternal "/>
+		<concept id="8" rubric="maternal grandfather"/>
+		<concept id="7" rubric="maternal grandmother"/>
 		<concept id="38" rubric="maternal uncle"/>
 		<concept id="189" rubric="neonate"/>
 		<concept id="254" rubric="parent"/>
 		<concept id="22" rubric="partner/spouse"/>
 		<concept id="41" rubric="paternal aunt"/>
-		<concept id="36" rubric="paternal grandfa-"/>
-		<concept id="37" rubric="paternal grand-"/>
+		<concept id="36" rubric="paternal grandfather"/>
+		<concept id="37" rubric="paternal grandmother"/>
 		<concept id="40" rubric="paternal uncle"/>
 		<concept id="27" rubric="sibling"/>
 		<concept id="24" rubric="sister"/>
@@ -305,14 +307,14 @@
 	<group name="setting">
 		<concept id="225" rubric="home"/>
 		<concept id="227" rubric="emergency care"/>
-		<concept id="228" rubric="primary medical "/>
-		<concept id="229" rubric="primary nursing "/>
-		<concept id="230" rubric="primary allied "/>
+		<concept id="228" rubric="primary medical care"/>
+		<concept id="229" rubric="primary nursing care"/>
+		<concept id="230" rubric="primary allied health care"/>
 		<concept id="231" rubric="midwifery care"/>
-		<concept id="232" rubric="secondary medical "/>
-		<concept id="233" rubric="secondary nursing "/>
-		<concept id="234" rubric="secondary allied "/>
-		<concept id="235" rubric="complementary "/>
+		<concept id="232" rubric="secondary medical care"/>
+		<concept id="233" rubric="secondary nursing care"/>
+		<concept id="234" rubric="secondary allied health care"/>
+		<concept id="235" rubric="complementary health care"/>
 		<concept id="236" rubric="dental care"/>
 		<concept id="237" rubric="nursing home care"/>
 		<concept id="238" rubric="other care"/>

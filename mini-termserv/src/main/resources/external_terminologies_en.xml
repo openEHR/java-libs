@@ -333,14 +333,13 @@
 		<code value="it-ch" Description="Italian (Switzerland)"/>
 		<code value="ja" Description="Japanese"/>
 		<code value="kk" Description="Kasakh"/>
-		<code value="km" Description="Khmer"/>
+		<code value="km" Description="Central Khmer"/>
 		<code value="ko" Description="Korean"/>
 		<code value="ko" Description="Korean (Johab)"/>
 		<code value="lv" Description="Latvian"/>
 		<code value="lt" Description="Lithuanian"/>
 		<code value="mk" Description="FYRO Macedonian ms Malaysian"/>
 		<code value="mt" Description="Maltese"/>
-		<code value="no" Description="Norwegian"/>
 		<code value="nb" Description="Norwegian Bokmal"/>
 		<code value="nn" Description="Norwegian Nynorsk"/>
 		<code value="pl" Description="Polish"/>
@@ -398,16 +397,69 @@
 		<code value="zu" Description="Zulu"/>
 	</codeset>
 	<codeset issuer="IANA" openehr_id="media types" external_id="IANA_media-types">
-		<code value="text/plain"/>
-		<code value="text/html"/>
-		<code value="text/richtext"/>
-		<code value="text/rtf"/>
-		<code value="text/sgml"/>
-		<code value="text/rfc822-headers"/>
-		<code value="text/xml"/>
-		<code value="audio/basic"/>
-		<code value="audio/mpeg"/>
-		<code value="application/pdf"/>
-		<code value="application/msword"/>
+	    <code value="audio/DVI4" />
+	    <code value="audio/G722" />
+	    <code value="audio/G723" />
+	    <code value="audio/G726-16" />
+	    <code value="audio/G726-24" />
+	    <code value="audio/G726-32" />
+	    <code value="audio/G726-40" />
+	    <code value="audio/G728" />
+	    <code value="audio/L8" />
+	    <code value="audio/L16" />
+	    <code value="audio/LPC" />
+	    <code value="audio/G729" />
+	    <code value="audio/G729D" />
+	    <code value="audio/G729E" />
+	    <code value="video/BT656" />
+	    <code value="video/CelB" />
+	    <code value="video/JPEG" />
+	    <code value="video/H261" />
+	    <code value="video/H263" />
+	    <code value="video/H263-1998" />
+	    <code value="video/H263-2000" />
+	    <code value="video/MPV" />
+	    <code value="audio/basic"/>
+	    <code value="audio/mpeg" />
+	    <code value="audio/mpeg4-generic" />
+	    <code value="audio/L20" />
+	    <code value="audio/L24" />
+	    <code value="audio/telephone-event" />
+	    <code value="video/quicktime" />
+	    <code value="text/calendar" />
+	    <code value="text/directory" />
+	    <code value="text/html" />
+	    <code value="text/plain" />
+	    <code value="text/richtext"/>
+	    <code value="text/rtf" />
+	    <code value="text/rfc822-headers"/>
+	    <code value="text/sgml" />
+	    <code value="text/tab-separated-values" />
+	    <code value="text/uri-list" />
+	    <code value="text/xml" />
+	    <code value="text/xml-external-parsed-entity" />
+	    <code value="image/cgm" />
+	    <code value="image/gif" />
+	    <code value="image/png" />
+	    <code value="image/tiff" />
+	    <code value="image/jpeg" />
+	    <code value="application/msword" />
+	    <code value="application/pdf" />
+	    <code value="application/rtf" />
+	    <code value="application/dicom" />
+	    <code value="application/vnd.oasis.opendocument.text" />
+	    <code value="application/vnd.ms-word.document.macroEnabled.12" />
+	    <code value="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+	    <code value="application/vnd.ms-word.template.macroEnabled.12" />
+	    <code value="application/vnd.openxmlformats-officedocument.wordprocessingml.template" />
+	    <code value="application/vnd.ms-powerpoint.slideshow.macroEnabled.12" />
+	    <code value="application/vnd.openxmlformats-officedocument.presentationml.slideshow" />
+	    <code value="application/vnd.ms-powerpoint.presentation.macroEnabled.12" />
+	    <code value="application/vnd.openxmlformats-officedocument.presentationml.presentation" />
+	    <code value="application/vnd.ms-excel.sheet.binary.macroEnabled.12" />
+	    <code value="application/vnd.ms-excel.sheet.macroEnabled.12" />
+	    <code value="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+	    <code value="application/vnd.ms-xpsdocument" />
+	    <code value="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
 	</codeset>
 </terminology>
