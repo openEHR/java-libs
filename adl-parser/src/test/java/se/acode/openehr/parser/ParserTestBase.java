@@ -23,25 +23,25 @@ public class ParserTestBase extends TestCase {
     public ParserTestBase(String test) {
         super(test);
     }
-    
-    public ParserTestBase(){    	
+
+    public ParserTestBase(){
     }
-    
+
     protected InputStream loadFromClasspath(String adl) throws Exception {
-    	return this.getClass().getClassLoader().getResourceAsStream(adl);
+        return this.getClass().getClassLoader().getResourceAsStream(adl);
     }
 
     // assert CComplexObject object has expected values
     void assertCComplexObject(CComplexObject obj, String rmTypeName,
-                              String nodeID, Interval occurrences,
-                              int attributes) throws Exception {
+            String nodeID, Interval occurrences,
+            int attributes) throws Exception {
         assertCObject(obj, rmTypeName, nodeID, occurrences);
         assertEquals("attributes.size", attributes, obj.getAttributes().size());
     }
 
     // assert CObject has expected valuess
     void assertCObject(CObject obj, String rmTypeName, String nodeID,
-                       Interval occurrences) throws Exception {
+            Interval occurrences) throws Exception {
         assertEquals("rmTypeName", rmTypeName, obj.getRmTypeName());
         assertEquals("nodeID", nodeID, obj.getNodeId());
         assertEquals("occurrences", occurrences, obj.getOccurrences());
@@ -49,9 +49,9 @@ public class ParserTestBase extends TestCase {
 
     // assert CAttribute has expected values
     void assertCAttribute(CAttribute attr, String rmAttributeName,
-                          CAttribute.Existence existence,
-                          Cardinality cardinality, int children)
-            throws Exception {
+            CAttribute.Existence existence,
+            Cardinality cardinality, int children)
+                    throws Exception {
         assertEquals("rmAttributeName", rmAttributeName,
                 attr.getRmAttributeName());
         assertEquals("existence", existence, attr.getExistence());
@@ -64,32 +64,32 @@ public class ParserTestBase extends TestCase {
 
     // assert CAttribute has expected values
     void assertCAttribute(CAttribute attr, String rmAttributeName,
-                          int children) throws Exception {
-        assertCAttribute(attr, rmAttributeName, CAttribute.Existence.REQUIRED,
+            int children) throws Exception {
+        assertCAttribute(attr, rmAttributeName, CAttribute.Existence.OPTIONAL, /*NB: We changed this to common practice (initially 1.4 logic specified this to be REQUIRED by default.)*/
                 null, children);
     }
 
     // assertion on primitive types
     void assertCBoolean(Object obj, boolean trueValid, boolean falseValid,
-    		boolean assumed, boolean hasAssumed)
-            throws Exception {
+            boolean assumed, boolean hasAssumed)
+                    throws Exception {
         CBoolean b = (CBoolean) fetchFirst(obj);
         assertEquals("trueValid", trueValid, b.isTrueValid());
         assertEquals("falseValid", falseValid, b.isFalseValid());
         assertEquals("assumed value", assumed, b.assumedValue().booleanValue());
-        assertEquals("has assumed value", hasAssumed, b.hasAssumedValue());        
+        assertEquals("has assumed value", hasAssumed, b.hasAssumedValue());
     }
 
-    void assertCInteger(Object obj, Interval interval, int[] values, 
-    		Integer assumed) throws Exception {
+    void assertCInteger(Object obj, Interval interval, int[] values,
+            Integer assumed) throws Exception {
         CInteger c = (CInteger) fetchFirst(obj);
         assertEquals("interval", interval, c.getInterval());
         assertEquals("list", intSet(values), c.getList());
         assertEquals("unexpected assumed value", assumed, c.assumedValue());
     }
 
-    void assertCReal(Object obj, Interval interval, double[] values, 
-    		Double assumed) throws Exception {
+    void assertCReal(Object obj, Interval interval, double[] values,
+            Double assumed) throws Exception {
         CReal c = (CReal) fetchFirst(obj);
         assertEquals("interval", interval, c.getInterval());
         assertEquals("list", doubleSet(values), c.getList());
@@ -97,84 +97,84 @@ public class ParserTestBase extends TestCase {
     }
 
     void assertCDate(Object obj, String pattern, Interval interval,
-                     String[] values, String assumed)
-            throws Exception {
+            String[] values, String assumed)
+                    throws Exception {
         CDate c = (CDate) fetchFirst(obj);
         assertEquals("pattern", pattern, c.getPattern());
         assertEquals("interval", interval, c.getInterval());
         assertEquals("list", dateSet(values), c.getList());
-        assertEquals("assumed value", 
-        		assumed == null? null :new DvDate(assumed), c.assumedValue());
+        assertEquals("assumed value",
+                assumed == null? null :new DvDate(assumed), c.assumedValue());
     }
 
     void assertCDateTime(Object obj, String pattern, Interval interval,
-                         String[] values, String assumed)
-    	throws Exception {
+            String[] values, String assumed)
+                    throws Exception {
         CDateTime c = (CDateTime) fetchFirst(obj);
         assertEquals("pattern", pattern, c.getPattern());
         assertEquals("interval", interval, c.getInterval());
         assertEquals("list", dateTimeSet(values), c.getList());
-        assertEquals("assumed value", 
-        		assumed == null? null :new DvDateTime(assumed), c.assumedValue());
+        assertEquals("assumed value",
+                assumed == null? null :new DvDateTime(assumed), c.assumedValue());
     }
-    
+
     // without assumed value
     void assertCDateTime(Object obj, String pattern, Interval interval,
             String[] values) throws Exception {
-    	assertCDateTime(obj, pattern, interval, values, null);
+        assertCDateTime(obj, pattern, interval, values, null);
     }
 
 
     void assertCTime(Object obj, String pattern, Interval interval,
-                     String[] values, String assumed) 
-    		throws Exception {
+            String[] values, String assumed)
+                    throws Exception {
         CTime c = (CTime) fetchFirst(obj);
         assertEquals("pattern", pattern, c.getPattern());
         assertEquals("interval", interval, c.getInterval());
         assertEquals("list", timeSet(values), c.getList());
-        assertEquals("assumed value", 
-        		assumed == null? null :new DvTime(assumed), c.assumedValue());
+        assertEquals("assumed value",
+                assumed == null? null :new DvTime(assumed), c.assumedValue());
     }
-    
+
     // without assumed value
     void assertCTime(Object obj, String pattern, Interval interval,
             String[] values) throws Exception {
-    	assertCTime(obj, pattern, interval, values, null);
-    }   
-    
+        assertCTime(obj, pattern, interval, values, null);
+    }
+
     // full assertion with CDuration
-    void assertCDuration(Object obj, String value, Interval interval, 
-    		String assumed, String pattern) throws Exception {    
+    void assertCDuration(Object obj, String value, Interval interval,
+            String assumed, String pattern) throws Exception {
         CDuration c = (CDuration) ((CPrimitiveObject) obj).getItem();
         assertEquals("list", value == null ? null : DvDuration.getInstance(value),
                 c.getValue());
         assertEquals("interval", interval, c.getInterval());
-        assertEquals("assumed value", 
-        		assumed == null? null 
-        				: DvDuration.getInstance(assumed), c.assumedValue());
+        assertEquals("assumed value",
+                assumed == null? null
+                        : DvDuration.getInstance(assumed), c.assumedValue());
         assertEquals("pattern wrong", pattern, c.getPattern());
     }
-    
+
     // without pattern
-    void assertCDuration(Object obj, String value, Interval interval, 
-    		String assumed) throws Exception {
-    	assertCDuration(obj, value, interval, assumed, null);
+    void assertCDuration(Object obj, String value, Interval interval,
+            String assumed) throws Exception {
+        assertCDuration(obj, value, interval, assumed, null);
     }
-    
+
     // without assumed value, pattern
     void assertCDuration(Object obj, String value, Interval interval)
-    		throws Exception {
-    	assertCDuration(obj, value, interval, null);
+            throws Exception {
+        assertCDuration(obj, value, interval, null);
     }
-    
+
     // fetch the first CPrimitive from the CAttribute
     CPrimitive fetchFirst(Object obj) {
         return ( (CPrimitiveObject) ( (CAttribute) obj ).getChildren()
                 .get(0) ).getItem();
     }
 
-    void assertCString(Object obj, String pattern, String[] values, 
-    		String assumedValue) {
+    void assertCString(Object obj, String pattern, String[] values,
+            String assumedValue) {
         CString c = (CString) ( (CPrimitiveObject) ( (CAttribute) obj ).getChildren()
                 .get(0) ).getItem();
         if (pattern == null) {
@@ -185,7 +185,7 @@ public class ParserTestBase extends TestCase {
         assertEquals("list", values == null
                 ? null : Arrays.asList(values), c.getList());
         assertEquals("unexpected CString assumed value", assumedValue,
-        		c.assumedValue());
+                c.assumedValue());
     }
 
     void assertDateEquals(List set, String[] dates, String pattern)

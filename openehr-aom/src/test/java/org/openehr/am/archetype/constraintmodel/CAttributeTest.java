@@ -16,97 +16,103 @@
  * CAttributeTest
  *
  * @author Rong Chen
- * @version 1.0 
+ * @version 1.0
  */
 package org.openehr.am.archetype.constraintmodel;
+
+import org.openehr.am.archetype.constraintmodel.CAttribute.Existence;
 
 import junit.framework.TestCase;
 
 public class CAttributeTest extends TestCase {
 
-	public CAttributeTest(String test) {
-		super(test);
-	}
+    public CAttributeTest(String test) {
+        super(test);
+    }
 
-	/**
-	 * The fixture set up called before every test method.
-	 */
-	protected void setUp() throws Exception {
-	}
-		
-	/**
-	 * The fixture clean up called after every test method.
-	 */
-	protected void tearDown() throws Exception {
-	}
+    /**
+     * The fixture set up called before every test method.
+     */
+    @Override
+    protected void setUp() throws Exception {
+    }
 
-	public void testParentNodePath() throws Exception {
-		CAttribute cattr = new TestCAttribute(
-				"/[at0001]/content[at0003]/items", "items");
+    /**
+     * The fixture clean up called after every test method.
+     */
+    @Override
+    protected void tearDown() throws Exception {
+    }
 
-		assertEquals("/[at0001]/content[at0003]", cattr.parentNodePath());
-	}
+    public void testParentNodePath() throws Exception {
+        CAttribute cattr = new TestCAttribute(
+                "/[at0001]/content[at0003]/items", "items");
 
-	public void testChildNodePathBase() throws Exception {
-		CAttribute cattr = new TestCAttribute(
-				"/[at0001]/content[at0003]/items", "items");
-		assertEquals("/[at0001]/content[at0003]/items", 
-				cattr.childNodePathBase());
-	}
+        assertEquals("/[at0001]/content[at0003]", cattr.parentNodePath());
+        assertEquals(Existence.OPTIONAL, cattr.getExistence().OPTIONAL);
+    }
 
-	
-	public void testEqualityOfTwoIdenticalAttributes() throws Exception {
-		CAttribute cattr1 = new TestCAttribute(
-				"/[at0001]/content[at0003]/items", "items");
-		CAttribute cattr2 = new TestCAttribute(
-				"/[at0001]/content[at0003]/items", "items");
+    public void testChildNodePathBase() throws Exception {
+        CAttribute cattr = new TestCAttribute(
+                "/[at0001]/content[at0003]/items", "items");
+        assertEquals("/[at0001]/content[at0003]/items",
+                cattr.childNodePathBase());
+    }
 
-		assertEquals(cattr1, cattr2);
-		assertEquals(cattr1.hashCode(), cattr2.hashCode());
-	
-	}
-	
-	private static final class TestCAttribute extends CAttribute {
 
-		public CAttribute copy() {
-			return null;
-		}
-		
-		public TestCAttribute(String path, String rmAttributeName) {
-			super(path, rmAttributeName, Existence.OPTIONAL, null);
-		}
+    public void testEqualityOfTwoIdenticalAttributes() throws Exception {
+        CAttribute cattr1 = new TestCAttribute(
+                "/[at0001]/content[at0003]/items", "items");
+        CAttribute cattr2 = new TestCAttribute(
+                "/[at0001]/content[at0003]/items", "items");
 
-		/**
-		 * True if this node is a valid archetype node.
-		 *
-		 * @return ture if valid
-		 */
-		public boolean isValid() {
-			return false;
-		}
+        assertEquals(cattr1, cattr2);
+        assertEquals(cattr1.hashCode(), cattr2.hashCode());
 
-		/**
-		 * True if the relative path exists at this node.
-		 *
-		 * @param path
-		 * @return ture if has
-		 * @throws IllegalArgumentException if path null
-		 */
-		public boolean hasPath(String path) {
-			return false;
-		}		
+    }
 
-		/**
-		 * True if constraints represented by other are narrower than this node.
-		 *
-		 * @param constraint
-		 * @return true if subset
-		 * @throws IllegalArgumentException if constraint null
-		 */
-		public boolean isSubsetOf(ArchetypeConstraint constraint) {
-			return false;
-		}
-	}
+    private static final class TestCAttribute extends CAttribute {
+
+        public CAttribute copy() {
+            return null;
+        }
+
+        public TestCAttribute(String path, String rmAttributeName) {
+            super(path, rmAttributeName, Existence.OPTIONAL, null);
+        }
+
+        /**
+         * True if this node is a valid archetype node.
+         *
+         * @return ture if valid
+         */
+        public boolean isValid() {
+            return false;
+        }
+
+        /**
+         * True if the relative path exists at this node.
+         *
+         * @param path
+         * @return ture if has
+         * @throws IllegalArgumentException if path null
+         */
+        @Override
+        public boolean hasPath(String path) {
+            return false;
+        }
+
+        /**
+         * True if constraints represented by other are narrower than this node.
+         *
+         * @param constraint
+         * @return true if subset
+         * @throws IllegalArgumentException if constraint null
+         */
+        public boolean isSubsetOf(ArchetypeConstraint constraint) {
+            return false;
+        }
+    }
 
 }
 /*
