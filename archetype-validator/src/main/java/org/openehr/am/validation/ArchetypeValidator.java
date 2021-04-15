@@ -50,7 +50,9 @@ import org.openehr.am.archetype.ontology.OntologyDefinitions;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvScale;
 import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
+import org.openehr.am.openehrprofile.datatypes.quantity.Scale;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
 import org.openehr.rm.datatypes.quantity.DvOrdered;
@@ -1459,6 +1461,17 @@ public class ArchetypeValidator {
                     CodePhrase code = ord.getSymbol();
                     if ("local".equalsIgnoreCase(
                             code.getTerminologyId().name())) {
+                        codes.add(code.getCodeString());
+                    }
+                }
+            }
+        } else if (cobj instanceof CDvScale) {
+            CDvScale cord = (CDvScale) cobj;
+            List<Scale> list = cord.getList();
+            if (list != null) {
+                for (Scale ord : list) {
+                    CodePhrase code = ord.getSymbol();
+                    if ("local".equalsIgnoreCase(code.getTerminologyId().name())) {
                         codes.add(code.getCodeString());
                     }
                 }
