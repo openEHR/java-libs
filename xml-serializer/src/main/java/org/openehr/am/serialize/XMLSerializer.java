@@ -51,7 +51,9 @@ import org.openehr.am.archetype.ontology.TermBindingItem;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvOrdinal;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantity;
 import org.openehr.am.openehrprofile.datatypes.quantity.CDvQuantityItem;
+import org.openehr.am.openehrprofile.datatypes.quantity.CDvScale;
 import org.openehr.am.openehrprofile.datatypes.quantity.Ordinal;
+import org.openehr.am.openehrprofile.datatypes.quantity.Scale;
 import org.openehr.am.openehrprofile.datatypes.text.CCodePhrase;
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
@@ -597,6 +599,8 @@ public class XMLSerializer {
             printCCodePhrase((CCodePhrase) cdomain, out);
         } else if (cdomain instanceof CDvOrdinal) {
             printCDvOrdinal((CDvOrdinal) cdomain, out);
+        } else if (cdomain instanceof CDvScale) {
+            printCDvScale((CDvScale) cdomain, out);
         } else if (cdomain instanceof CDvQuantity) {
             printCDvQuantity((CDvQuantity) cdomain, out);
         } else {
@@ -638,7 +642,6 @@ public class XMLSerializer {
     }
 
     protected void printCDvOrdinal(CDvOrdinal cordinal, Element out) {
-
         Element children = new Element("children", defaultNamespace);
         out.getChildren().add(children);
         children.setAttribute("type", "C_DV_ORDINAL", xsiNamespace);
@@ -677,8 +680,46 @@ public class XMLSerializer {
         printCodePhrase(ordinal.getSymbol(), definingCode);
     }
 
-    protected void printCDvQuantity(CDvQuantity cquantity, Element out) {
+    protected void printCDvScale(CDvScale cscale, Element out) {
+        Element children = new Element("children", defaultNamespace);
+        out.getChildren().add(children);
+        children.setAttribute("type", "C_DV_SCALE", xsiNamespace);
 
+        printCObjectElements(cscale, children);
+        if (cscale.hasAssumedValue()) {
+            Scale assumedValue = cscale.getAssumedValue();
+            Element assumedValueEl = new Element("assumed_value", defaultNamespace);
+            children.getChildren().add(assumedValueEl);
+            printString("value", assumedValue.getDisplay(), assumedValueEl);
+            printSymbolOfScale(assumedValue, assumedValueEl);
+
+        }
+        if (cscale.getList() != null) {
+            final List<Scale> scales = cscale.getList();
+
+            Scale scale;
+            for (Iterator<Scale> it = scales.iterator(); it.hasNext();) {
+                scale = it.next();
+                Element list = new Element("list", defaultNamespace);
+                children.getChildren().add(list);
+                printString("value", scale.getDisplay(), list); // we need to use display here, so that we can preserve the the difference between 2 and 2.0
+                printSymbolOfScale(scale, list);
+            }
+        }
+    }
+
+    private void printSymbolOfScale(Scale scale, Element list) {
+        Element symbol = new Element("symbol", defaultNamespace);
+        list.getChildren().add(symbol);
+
+        printString("value", null, symbol); // this is the mandatory(!) value of a DV_CODED_TEXT symbol.
+        Element definingCode = new Element("defining_code", defaultNamespace);
+        symbol.getChildren().add(definingCode);
+
+        printCodePhrase(scale.getSymbol(), definingCode);
+    }
+
+    protected void printCDvQuantity(CDvQuantity cquantity, Element out) {
         Element children = new Element("children", defaultNamespace);
         out.getChildren().add(children);
         children.setAttribute("type", "C_DV_QUANTITY", xsiNamespace);

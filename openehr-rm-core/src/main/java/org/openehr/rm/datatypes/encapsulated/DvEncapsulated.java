@@ -38,18 +38,18 @@ public abstract class DvEncapsulated extends DataValue {
      * @throws IllegalArgumentException if any argument is invalid
      */
     protected DvEncapsulated(CodePhrase charset, CodePhrase language,
-                             TerminologyService terminologyService) {
-        
-    	if ((charset != null || language != null) && terminologyService == null) {
+            TerminologyService terminologyService) {
+
+        if ((charset != null || language != null) && terminologyService == null) {
             throw new IllegalArgumentException("null terminologyService");
         }
         if (language != null && ( ! terminologyService.codeSetForId(
-        		OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(language))) {
+                OpenEHRCodeSetIdentifiers.LANGUAGES).hasCode(language))) {
             throw new IllegalArgumentException("unknown language: " + language);
-            
+
         }
         if (charset != null && ( ! terminologyService.codeSetForId(
-        		OpenEHRCodeSetIdentifiers.CHARACTER_SETS).hasCode(charset))) {
+                OpenEHRCodeSetIdentifiers.CHARACTER_SETS).hasCode(charset))) {
             throw new IllegalArgumentException(
                     "unknown character set: " + charset);
         }
@@ -98,7 +98,7 @@ public abstract class DvEncapsulated extends DataValue {
 
     /* fields */
     private CodePhrase charset;
-    private CodePhrase language;    
+    private CodePhrase language;
 }
 
 /*

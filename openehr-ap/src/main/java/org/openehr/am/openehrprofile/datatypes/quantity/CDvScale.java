@@ -1,0 +1,157 @@
+/*
+ * component:   "openEHR Reference Implementation"
+ * description: "Class CDvOrdinal"
+ * keywords:    "openehr archetype profile"
+ *
+ * author:      "Rong Chen <rong@acode.se>"
+ * support:     "Acode HB <support@acode.se>"
+ * copyright:   "Copyright (c) 2006 Acode HB, Sweden"
+ * license:     "See notice at bottom of class"
+ *
+ * file:        "$URL$"
+ * revision:    "$LastChangedRevision$"
+ * last_change: "$LastChangedDate$"
+ */
+
+package org.openehr.am.openehrprofile.datatypes.quantity;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.openehr.am.archetype.constraintmodel.ArchetypeConstraint;
+import org.openehr.am.archetype.constraintmodel.CAttribute;
+import org.openehr.am.archetype.constraintmodel.CComplexObject;
+import org.openehr.am.archetype.constraintmodel.CDomainType;
+import org.openehr.rm.support.basic.Interval;
+
+/** Class specifying constraints on instances of DV_SCALE. Custom
+ * constraint type for instances of DV_SCALE.
+ * @author Sebastian Garde
+ * @version 1.0 */
+public class CDvScale extends CDomainType<Scale> {
+
+    /** Creates a CDvOrdinal
+     * @param path
+     * @param occurrences
+     * @param nodeID
+     * @param list */
+    public CDvScale(String path, Interval<Integer> occurrences, String nodeID, CAttribute parent, List<Scale> list, Scale defaultValue, Scale assumedValue) {
+        super(list == null, path, "DV_SCALE", occurrences, nodeID, defaultValue, assumedValue, parent);
+        if (list != null && list.isEmpty()) {
+            throw new IllegalArgumentException("list is empty");
+        }
+        this.list = list == null ? null : new ArrayList<Scale>(list);
+    }
+
+    @Override
+    public CDvScale copy() {
+        return new CDvScale(path(), getOccurrences(), getNodeId(), getParent(), list, getDefaultValue(), getAssumedValue());
+    }
+
+    /** Convenience constructor
+     * @param path
+     * @param occurrences
+     * @param list */
+    public CDvScale(String path, Interval<Integer> occurrences, List<Scale> list) {
+        this(path, occurrences, null, null, list, null, null);
+    }
+
+    @Override
+    public boolean isValid() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean hasPath(String path) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isSubsetOf(ArchetypeConstraint constraint) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    /** List of allowed DV_ORDINAL values.
+     * @return unmodifiable set of Ordinal */
+    public List<Scale> getList() {
+        if (list == null) {
+            return null;
+        }
+        return Collections.unmodifiableList(list);
+    }
+
+    /** Returns true if fields are the same */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof CDvScale)) {
+            return false;
+        }
+
+        final CDvScale scale = (CDvScale) o;
+
+        return new EqualsBuilder()
+                .appendSuper(super.equals(o)).append(list, scale.list)
+                .isEquals();
+    }
+
+    /** Returns the hashcode of this object
+     * @return hashcode */
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(3, 19)
+                .appendSuper(super.hashCode())
+                .append(list)
+                .toHashCode();
+    }
+
+    @Override
+    public boolean validValue(Scale arg0) {
+        // TODO Auto-generated method stub
+        return true;
+    }
+
+    @Override
+    public CComplexObject standardEquivalent() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private List<Scale> list;
+}
+
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the 'License'); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is CDvScale.java
+ *
+ * The Initial Developer of the Original Code is Sebastian Garde.
+ * Portions created by the Initial Developer are Copyright (C) 2020
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s): Rong Chen
+ *
+ * Software distributed under the License is distributed on an 'AS IS' basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * ***** END LICENSE BLOCK ***** */

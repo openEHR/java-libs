@@ -1,0 +1,97 @@
+archetype
+	adl-test-ENTRY.c_dv_scale.test
+
+concept
+	[at0000]
+
+language
+	original_language = <[ISO_639-1::en]>
+	
+definition
+	ENTRY[at0000] matches {	
+        types matches {
+            LIST[at0001] matches {
+                items cardinality matches {0..*} matches {
+                    ELEMENT[at10001] matches {	-- scale
+                        value matches {
+                            0.0|[local::at0003.0], 	-- capsule
+                            1.0|[local::at0003.1], 	-- powder
+                            2.5|[local::at0003.2],  	-- tablet
+                            3.8|[local::at0003.3],  	-- solution
+                            4.4|[local::at0003.4]  	-- suspension
+                        }
+                    }   
+                    ELEMENT[at10002] matches {	-- scale with assumed value
+                        value matches {
+                            0|[local::at0003.0], 	-- capsule
+                            1|[local::at0003.1], 	-- powder
+                            2|[local::at0003.2],  	-- tablet
+                            3|[local::at0003.3],  	-- solution
+                            4.1|[local::at0003.4];  	-- suspension
+                            2     -- assumed value
+                        }
+                    }
+                    ELEMENT[at10003] matches {	-- scale, any allowed
+                        value matches {		-- any allowed
+                            DV_SCALE matches { * }
+                        }
+                    }
+                    ELEMENT[at10004] matches {	-- scale with two duplicated values
+                        value matches {
+                            0|[local::at0003.0], 	-- capsule
+                            1.5|[local::at0003.1], 	-- powder
+                            1.5|[local::at0003.2],  	-- tablet
+                            3.5|[local::at0003.3],  	-- solution
+                            4|[local::at0003.4]  	-- suspension
+                        }
+                    }
+					ELEMENT[at10005] occurrences matches {0..1} matches {	-- MyScale NORMAL
+						value matches {
+							DV_SCALE matches {
+								value matches {0}
+								symbol matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {
+											[local::at0003.0]
+										} -- 0scale
+									}
+								}
+							}
+							DV_SCALE matches {
+								value matches {1.5}
+								symbol matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {
+											[local::at0003.2]
+										} -- 1.5scale
+									}
+								}
+							}
+						}
+					}
+                }
+            }
+        }
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions = < 
+		["en"] = <
+			items = <
+				["at0000"] = <
+					text = <"domain types test">
+					description = <"domain types test">
+				>
+				["at0001"] = <
+					text = <"items">
+					description = <"items">
+				>
+				["at10001"] = <
+					text = <"c_dv_scale">
+					description = <"c_dv_scale node">
+				>
+			>
+		>
+	>

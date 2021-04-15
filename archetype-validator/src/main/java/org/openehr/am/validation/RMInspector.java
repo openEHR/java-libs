@@ -59,6 +59,7 @@ import org.openehr.rm.datatypes.quantity.DvInterval;
 import org.openehr.rm.datatypes.quantity.DvOrdinal;
 import org.openehr.rm.datatypes.quantity.DvProportion;
 import org.openehr.rm.datatypes.quantity.DvQuantity;
+import org.openehr.rm.datatypes.quantity.DvScale;
 import org.openehr.rm.datatypes.quantity.datetime.DvDate;
 import org.openehr.rm.datatypes.quantity.datetime.DvDateTime;
 import org.openehr.rm.datatypes.quantity.datetime.DvDuration;
@@ -97,490 +98,491 @@ import org.openehr.rm.support.identification.UUID;
 import org.openehr.rm.support.identification.VersionTreeID;
 
 public class RMInspector {
-	/**
-	 * Create a RMInspector
-	 */
-	public RMInspector() {
+    /**
+     * Create a RMInspector
+     */
+    public RMInspector() {
 
-		try {
-			loadTypeMap();
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("failed to load class, " + e
-					+ " when starting RMInspector..");
-		}
-	}
+        try {
+            loadTypeMap();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("failed to load class, " + e
+                    + " when starting RMInspector..");
+        }
+    }
 
-	// load all reference types that are possible to instantiate
-	// using FullConstructor annotation
-	private Map<String, Class> loadTypeMap() throws ClassNotFoundException {
-		Class[] classes = {
+    // load all reference types that are possible to instantiate
+    // using FullConstructor annotation
+    private Map<String, Class> loadTypeMap() throws ClassNotFoundException {
+        Class[] classes = {
 
-				// implied types
-				Integer.class,
-				String.class,
-				Boolean.class,
-				Double.class, // Also the corresponding class for the Real assumed type.
+                // implied types
+                Integer.class,
+                String.class,
+                Boolean.class,
+                Double.class, // Also the corresponding class for the Real assumed type.
 
-				// common classes
-				PartySelf.class,
-				Archetyped.class,
-				Attestation.class,
-				AuditDetails.class,
-				Participation.class,
-				PartyProxy.class,
-				PartyIdentified.class,
-				PartyRelated.class,
-				PartySelf.class,
-				OriginalVersion.class,
-				Contribution.class,
+                // common classes
+                PartySelf.class,
+                Archetyped.class,
+                Attestation.class,
+                AuditDetails.class,
+                Participation.class,
+                PartyProxy.class,
+                PartyIdentified.class,
+                PartyRelated.class,
+                PartySelf.class,
+                OriginalVersion.class,
+                Contribution.class,
 
-				// support classes
-				TerminologyID.class,
-				ArchetypeID.class,
-				HierObjectID.class,
-				AccessGroupRef.class,
-				GenericID.class,
-				InternetID.class,
-				ISO_OID.class,
-				LocatableRef.class,
-				ObjectVersionID.class,
-				ObjectRef.class,
-				PartyRef.class,
-				TemplateID.class,
-				TerminologyID.class,
-				UUID.class,
-				VersionTreeID.class,
+                // support classes
+                TerminologyID.class,
+                ArchetypeID.class,
+                HierObjectID.class,
+                AccessGroupRef.class,
+                GenericID.class,
+                InternetID.class,
+                ISO_OID.class,
+                LocatableRef.class,
+                ObjectVersionID.class,
+                ObjectRef.class,
+                PartyRef.class,
+                TemplateID.class,
+                TerminologyID.class,
+                UUID.class,
+                VersionTreeID.class,
 
-				// datatypes classes
-				DvBoolean.class,
-				DvURI.class,
-				DvEHRURI.class,
-				DvState.class,
-				DvIdentifier.class,
-				DvText.class,
-				DvCodedText.class,
-				DvParagraph.class,
-				CodePhrase.class,
-				DvCount.class,
-				DvOrdinal.class,
-				DvQuantity.class,
-				DvInterval.class,
-				DvProportion.class,
-				DvDate.class,
-				DvDateTime.class,
-				DvTime.class,
-				DvDuration.class,
-				DvParsable.class,
-				DvMultimedia.class,
+                // datatypes classes
+                DvBoolean.class,
+                DvURI.class,
+                DvEHRURI.class,
+                DvState.class,
+                DvIdentifier.class,
+                DvText.class,
+                DvCodedText.class,
+                DvParagraph.class,
+                CodePhrase.class,
+                DvCount.class,
+                DvOrdinal.class,
+                DvScale.class,
+                DvQuantity.class,
+                DvInterval.class,
+                DvProportion.class,
+                DvDate.class,
+                DvDateTime.class,
+                DvTime.class,
+                DvDuration.class,
+                DvParsable.class,
+                DvMultimedia.class,
 
-				// datastructure classes
-				Element.class, Cluster.class, ItemSingle.class, ItemList.class,
-				ItemTable.class,
-				ItemTree.class,
-				History.class,
-				Event.class,
-				IntervalEvent.class,
-				PointEvent.class,
+                // datastructure classes
+                Element.class, Cluster.class, ItemSingle.class, ItemList.class,
+                ItemTable.class,
+                ItemTree.class,
+                History.class,
+                Event.class,
+                IntervalEvent.class,
+                PointEvent.class,
 
-				// ehr classes
-				Action.class, Activity.class, Evaluation.class,
-				Instruction.class, InstructionDetails.class, Observation.class, AdminEntry.class,
-				Section.class, Composition.class,
-				EventContext.class, ISMTransition.class, GenericEntry.class,
+                // ehr classes
+                Action.class, Activity.class, Evaluation.class,
+                Instruction.class, InstructionDetails.class, Observation.class, AdminEntry.class,
+                Section.class, Composition.class,
+                EventContext.class, ISMTransition.class, GenericEntry.class,
 
-				// demographic classes
-				Address.class, PartyIdentity.class, Agent.class, Group.class,
-				Organisation.class, Person.class, Contact.class,
-				PartyRelationship.class, Role.class, Capability.class };
+                // demographic classes
+                Address.class, PartyIdentity.class, Agent.class, Group.class,
+                Organisation.class, Person.class, Contact.class,
+                PartyRelationship.class, Role.class, Capability.class };
 
-		typeMap = new LinkedHashMap<String, Class>();
-		upperCaseMap = new LinkedHashMap<String, Class>();
-		for (Class klass : classes) {
-			String name = klass.getSimpleName();
-			if (klass.getSimpleName().equalsIgnoreCase("Double")) {
+        typeMap = new LinkedHashMap<String, Class>();
+        upperCaseMap = new LinkedHashMap<String, Class>();
+        for (Class klass : classes) {
+            String name = klass.getSimpleName();
+            if (klass.getSimpleName().equalsIgnoreCase("Double")) {
                 name = "Real"; // For the assumed type Double the corresponding rm type name is Real, not Double
             }
-			typeMap.put(name, klass);
-			upperCaseMap.put(name.toUpperCase(), klass);
-		}
-		return typeMap;
-	}
+            typeMap.put(name, klass);
+            upperCaseMap.put(name.toUpperCase(), klass);
+        }
+        return typeMap;
+    }
 
-	/*
-	 * Return a map with name as the key and index of position as the value for
-	 * required parameters of the full constructor in the RMObject
-	 *
-	 * @param rmClass
-	 * @return empty map if not found rm class
-	 */
-	private Map<String, Class> attributeType(Class rmClass) {
+    /*
+     * Return a map with name as the key and index of position as the value for
+     * required parameters of the full constructor in the RMObject
+     *
+     * @param rmClass
+     * @return empty map if not found rm class
+     */
+    private Map<String, Class> attributeType(Class rmClass) {
 
-		Map<String, Class> map = new HashMap<String, Class>();
-		Constructor constructor = fullConstructor(rmClass);
-		if (constructor == null) {
-			return map;
-		}
-		Annotation[][] annotations = constructor.getParameterAnnotations();
-		Class[] types = constructor.getParameterTypes();
+        Map<String, Class> map = new HashMap<String, Class>();
+        Constructor constructor = fullConstructor(rmClass);
+        if (constructor == null) {
+            return map;
+        }
+        Annotation[][] annotations = constructor.getParameterAnnotations();
+        Class[] types = constructor.getParameterTypes();
 
-		if (annotations.length != types.length) {
-			throw new IllegalArgumentException("less annotations");
-		}
-		for (int i = 0; i < types.length; i++) {
-			if (annotations[i].length == 0) {
-				throw new IllegalArgumentException(
-						"missing annotations of attribute " + i);
-			}
-			Attribute attribute = (Attribute) annotations[i][0];
-			map.put(attribute.name(), types[i]);
-		}
-		return map;
-	}
+        if (annotations.length != types.length) {
+            throw new IllegalArgumentException("less annotations");
+        }
+        for (int i = 0; i < types.length; i++) {
+            if (annotations[i].length == 0) {
+                throw new IllegalArgumentException(
+                        "missing annotations of attribute " + i);
+            }
+            Attribute attribute = (Attribute) annotations[i][0];
+            map.put(attribute.name(), types[i]);
+        }
+        return map;
+    }
 
-	/**
-	 * Return a map with name as the key and index of position as the value for
-	 * all parameters of the full constructor in the RMObject
-	 *
-	 * @param rmClass
-	 * @return
-	 */
-	private Map<String, Integer> attributeIndex(Class rmClass) {
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		Constructor constructor = fullConstructor(rmClass);
-		Annotation[][] annotations = constructor.getParameterAnnotations();
+    /**
+     * Return a map with name as the key and index of position as the value for
+     * all parameters of the full constructor in the RMObject
+     *
+     * @param rmClass
+     * @return
+     */
+    private Map<String, Integer> attributeIndex(Class rmClass) {
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        Constructor constructor = fullConstructor(rmClass);
+        Annotation[][] annotations = constructor.getParameterAnnotations();
 
-		for (int i = 0; i < annotations.length; i++) {
-			if (annotations[i].length == 0) {
-				throw new IllegalArgumentException(
-						"missing annotation at position " + i);
-			}
-			Attribute attribute = (Attribute) annotations[i][0];
-			map.put(attribute.name(), i);
-		}
-		return map;
-	}
+        for (int i = 0; i < annotations.length; i++) {
+            if (annotations[i].length == 0) {
+                throw new IllegalArgumentException(
+                        "missing annotation at position " + i);
+            }
+            Attribute attribute = (Attribute) annotations[i][0];
+            map.put(attribute.name(), i);
+        }
+        return map;
+    }
 
-	/**
-	 * Return a map with name as the key and index of position as the value for
-	 * all parameters of the full constructor in the RMObject
-	 *
-	 * @param rmClass
-	 * @return
-	 */
-	private Map<String, Attribute> attributeMap(Class rmClass) {
-		Map<String, Attribute> map = new HashMap<String, Attribute>();
-		Constructor constructor = fullConstructor(rmClass);
-		Annotation[][] annotations = constructor.getParameterAnnotations();
+    /**
+     * Return a map with name as the key and index of position as the value for
+     * all parameters of the full constructor in the RMObject
+     *
+     * @param rmClass
+     * @return
+     */
+    private Map<String, Attribute> attributeMap(Class rmClass) {
+        Map<String, Attribute> map = new HashMap<String, Attribute>();
+        Constructor constructor = fullConstructor(rmClass);
+        Annotation[][] annotations = constructor.getParameterAnnotations();
 
-		for (int i = 0; i < annotations.length; i++) {
-			if (annotations[i].length == 0) {
-				throw new IllegalArgumentException(
-						"missing annotation at position " + i);
-			}
-			Attribute attribute = (Attribute) annotations[i][0];
-			map.put(attribute.name(), attribute);
-		}
-		return map;
-	}
+        for (int i = 0; i < annotations.length; i++) {
+            if (annotations[i].length == 0) {
+                throw new IllegalArgumentException(
+                        "missing annotation at position " + i);
+            }
+            Attribute attribute = (Attribute) annotations[i][0];
+            map.put(attribute.name(), attribute);
+        }
+        return map;
+    }
 
-	private static Constructor fullConstructor(Class klass) {
-		if(klass == null) {
-			return null;
-		}
-		Constructor[] array = klass.getConstructors();
-		for (Constructor constructor : array) {
-			if (constructor.isAnnotationPresent(FullConstructor.class)) {
-				return constructor;
-			}
-		}
-		return null;
-	}
+    private static Constructor fullConstructor(Class klass) {
+        if(klass == null) {
+            return null;
+        }
+        Constructor[] array = klass.getConstructors();
+        for (Constructor constructor : array) {
+            if (constructor.isAnnotationPresent(FullConstructor.class)) {
+                return constructor;
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * Retrieves RM type using given name try both the CamelCase and
-	 * Underscore-separated ways
-	 *
-	 * @param rmClassName
-	 * @return null if not found
-	 */
-	public Class retrieveRMType(String rmClassName) {
-	    log.debug("Getting rmClass for "+rmClassName);
-		Class rmClass = typeMap.get(rmClassName);
-		if (rmClass == null) {
-			rmClass = upperCaseMap.get(rmClassName.replace("_", ""));
-		}
+    /**
+     * Retrieves RM type using given name try both the CamelCase and
+     * Underscore-separated ways
+     *
+     * @param rmClassName
+     * @return null if not found
+     */
+    public Class retrieveRMType(String rmClassName) {
+        log.debug("Getting rmClass for "+rmClassName);
+        Class rmClass = typeMap.get(rmClassName);
+        if (rmClass == null) {
+            rmClass = upperCaseMap.get(rmClassName.replace("_", ""));
+        }
 
-		log.debug("Retrieved rmClass is: "+ rmClass);
-		return rmClass;
-	}
+        log.debug("Retrieved rmClass is: "+ rmClass);
+        return rmClass;
+    }
 
-	/**
-	 * Retrieves Map of attribute classes indexed by names of given class
-	 *
-	 * @param rmClassName
-	 * @return
-	 * @throws RMObjectBuildingException
-	 */
-	public Map<String, Class> retrieveRMAttributes(String rmClassName) {
-		Class rmClass = retrieveRMType(rmClassName);
+    /**
+     * Retrieves Map of attribute classes indexed by names of given class
+     *
+     * @param rmClassName
+     * @return
+     * @throws RMObjectBuildingException
+     */
+    public Map<String, Class> retrieveRMAttributes(String rmClassName) {
+        Class rmClass = retrieveRMType(rmClassName);
 
-		log.debug("----- rmClassName: "+ rmClassName);
-		log.debug("rmClass: "+ rmClass.getSimpleName());
+        log.debug("----- rmClassName: "+ rmClassName);
+        log.debug("rmClass: "+ rmClass.getSimpleName());
 
 
-		Map<String, Class> map = attributeType(rmClass);
-		Map<String, Class> ret = new HashMap<String, Class>();
-		for(String name : map.keySet()) {
-			ret.put(toUnderscoreSeparated(name), map.get(name));
+        Map<String, Class> map = attributeType(rmClass);
+        Map<String, Class> ret = new HashMap<String, Class>();
+        for(String name : map.keySet()) {
+            ret.put(toUnderscoreSeparated(name), map.get(name));
 
-			log.debug("rmattribute: " +name +": "+ map.get(name));
-		}
-		return ret;
-	}
+            log.debug("rmattribute: " +name +": "+ map.get(name));
+        }
+        return ret;
+    }
 
-	/**
-	 * Retrieves list of attribute names of given class; each name is converted
-	 * from camel case to underscore delimited form
-	 *
-	 * @param rmClassName
-	 * @return
-	 * @throws RMObjectBuildingException
-	 */
-	public Set<String> retrieveRMAttributeNames(String rmClassName) {
-		Class rmClass = retrieveRMType(rmClassName);
+    /**
+     * Retrieves list of attribute names of given class; each name is converted
+     * from camel case to underscore delimited form
+     *
+     * @param rmClassName
+     * @return
+     * @throws RMObjectBuildingException
+     */
+    public Set<String> retrieveRMAttributeNames(String rmClassName) {
+        Class rmClass = retrieveRMType(rmClassName);
 
-		// WHAT TO DO HERE IF not found (e.g. CODED_TEXT would not be found...)
-		log.debug("----- rmClassName: "+ rmClassName);
-		log.debug("rmClass: "+ rmClass.getSimpleName());
+        // WHAT TO DO HERE IF not found (e.g. CODED_TEXT would not be found...)
+        log.debug("----- rmClassName: "+ rmClassName);
+        log.debug("rmClass: "+ rmClass.getSimpleName());
 
-		Map<String, Class> map = attributeType(rmClass);
-		Set<String> names = new LinkedHashSet<String>();
-		for(String name : map.keySet()) {
-			names.add(toUnderscoreSeparated(name));
+        Map<String, Class> map = attributeType(rmClass);
+        Set<String> names = new LinkedHashSet<String>();
+        for(String name : map.keySet()) {
+            names.add(toUnderscoreSeparated(name));
 
-			log.debug("name: " +name);
-		}
-		return names;
-	}
+            log.debug("name: " +name);
+        }
+        return names;
+    }
 
-	public String toCamelCase(String underscoreSeparated) {
-		StringTokenizer tokens = new StringTokenizer(underscoreSeparated, "_");
-		StringBuffer buf = new StringBuffer();
-		while (tokens.hasMoreTokens()) {
-			String word = tokens.nextToken();
-			if (buf.length() == 0) {
-				buf.append(word);
-			} else {
-				buf.append(word.substring(0, 1).toUpperCase());
-				buf.append(word.substring(1));
-			}
-		}
-		return buf.toString();
-	}
+    public String toCamelCase(String underscoreSeparated) {
+        StringTokenizer tokens = new StringTokenizer(underscoreSeparated, "_");
+        StringBuffer buf = new StringBuffer();
+        while (tokens.hasMoreTokens()) {
+            String word = tokens.nextToken();
+            if (buf.length() == 0) {
+                buf.append(word);
+            } else {
+                buf.append(word.substring(0, 1).toUpperCase());
+                buf.append(word.substring(1));
+            }
+        }
+        return buf.toString();
+    }
 
-	public String toUnderscoreSeparated(String camelCase) {
-		String[] array = StringUtils.splitByCharacterTypeCamelCase(camelCase);
-		StringBuffer buf = new StringBuffer();
-		for (int i = 0; i < array.length; i++) {
-			String s = array[i];
-			buf.append(s.substring(0, 1).toLowerCase());
-			buf.append(s.substring(1));
-			if (i != array.length - 1) {
-				buf.append("_");
-			}
-		}
-		return buf.toString();
-	}
+    public String toUnderscoreSeparated(String camelCase) {
+        String[] array = StringUtils.splitByCharacterTypeCamelCase(camelCase);
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < array.length; i++) {
+            String s = array[i];
+            buf.append(s.substring(0, 1).toLowerCase());
+            buf.append(s.substring(1));
+            if (i != array.length - 1) {
+                buf.append("_");
+            }
+        }
+        return buf.toString();
+    }
 
-	/**
-	 * Finds the matching RM class that can be used to create RM object for
-	 * given value map
-	 *
-	 * @param valueMap
-	 * @return null if no match RM class is found
-	 */
-	public String findMatchingRMClass(Map<String, Object> valueMap) {
-		List simpleTypes = Arrays.asList(SKIPPED_TYPES_IN_MATCHING);
+    /**
+     * Finds the matching RM class that can be used to create RM object for
+     * given value map
+     *
+     * @param valueMap
+     * @return null if no match RM class is found
+     */
+    public String findMatchingRMClass(Map<String, Object> valueMap) {
+        List simpleTypes = Arrays.asList(SKIPPED_TYPES_IN_MATCHING);
 
-		for (Class rmClass : typeMap.values()) {
+        for (Class rmClass : typeMap.values()) {
 
-			log.debug("matching rmClass: " + rmClass.getName());
+            log.debug("matching rmClass: " + rmClass.getName());
 
-			if (simpleTypes.contains(rmClass.getSimpleName())) {
-				continue; // skip simple value types
-			}
+            if (simpleTypes.contains(rmClass.getSimpleName())) {
+                continue; // skip simple value types
+            }
 
-			// replace underscore separated names with camel case
-			Map<String, Object> filteredMap = new HashMap<String, Object>();
-			for (String name : valueMap.keySet()) {
-				filteredMap.put(toCamelCase(name), valueMap.get(name));
-			}
+            // replace underscore separated names with camel case
+            Map<String, Object> filteredMap = new HashMap<String, Object>();
+            for (String name : valueMap.keySet()) {
+                filteredMap.put(toCamelCase(name), valueMap.get(name));
+            }
 
-			Constructor constructor = fullConstructor(rmClass);
-			if (constructor == null) {
-				throw new RuntimeException("annotated constructor missing for "
-						+ rmClass);
-			}
-			Annotation[][] annotations = constructor.getParameterAnnotations();
-			if (annotations == null || annotations.length == 0) {
-				throw new RuntimeException("attribute annotations missing for "
-						+ rmClass);
-			}
-			Class[] types = constructor.getParameterTypes();
-			boolean matched = true;
-			Set<String> attributes = new HashSet<String>();
+            Constructor constructor = fullConstructor(rmClass);
+            if (constructor == null) {
+                throw new RuntimeException("annotated constructor missing for "
+                        + rmClass);
+            }
+            Annotation[][] annotations = constructor.getParameterAnnotations();
+            if (annotations == null || annotations.length == 0) {
+                throw new RuntimeException("attribute annotations missing for "
+                        + rmClass);
+            }
+            Class[] types = constructor.getParameterTypes();
+            boolean matched = true;
+            Set<String> attributes = new HashSet<String>();
 
-			for (int i = 0; i < types.length; i++) {
-				if (annotations[i].length == 0) {
-					throw new RuntimeException(
-							"attribute annotation missing for" + rmClass);
-				}
-				Attribute attribute = (Attribute) annotations[i][0];
-				attributes.add(attribute.name());
+            for (int i = 0; i < types.length; i++) {
+                if (annotations[i].length == 0) {
+                    throw new RuntimeException(
+                            "attribute annotation missing for" + rmClass);
+                }
+                Attribute attribute = (Attribute) annotations[i][0];
+                attributes.add(attribute.name());
 
-				log.debug("checking attribute: " + attribute.name());
+                log.debug("checking attribute: " + attribute.name());
 
-				String attrName = attribute.name();
-				Object attrValue = filteredMap.get(attrName);
+                String attrName = attribute.name();
+                Object attrValue = filteredMap.get(attrName);
 
-				if (attribute.required() && attrValue == null) {
+                if (attribute.required() && attrValue == null) {
 
-					log.debug("missing required attribute..");
+                    log.debug("missing required attribute..");
 
-					matched = false;
-					break;
+                    matched = false;
+                    break;
 
-				} else if (attrValue != null) {
-					if (((attrValue instanceof Boolean) && types[i] != boolean.class)
-							|| ((attrValue instanceof Integer) && types[i] != Integer.class)
-							|| ((attrValue instanceof Double) && types[i] != double.class)) {
+                } else if (attrValue != null) {
+                    if (((attrValue instanceof Boolean) && types[i] != boolean.class)
+                            || ((attrValue instanceof Integer) && types[i] != Integer.class)
+                            || ((attrValue instanceof Double) && types[i] != double.class)) {
 
-						log.debug("wrong primitive value type for attribute..");
-						matched = false;
-						break;
+                        log.debug("wrong primitive value type for attribute..");
+                        matched = false;
+                        break;
 
-					} else if (!types[i].isPrimitive()
-							&& !types[i].isInstance(attrValue)) {
-						log.debug("wrong value type for attribute..");
-						matched = false;
-						break;
+                    } else if (!types[i].isPrimitive()
+                            && !types[i].isInstance(attrValue)) {
+                        log.debug("wrong value type for attribute..");
+                        matched = false;
+                        break;
 
-					}
-				}
-			}
+                    }
+                }
+            }
 
-			for (String attr : filteredMap.keySet()) {
-				if (!attributes.contains(attr)) {
+            for (String attr : filteredMap.keySet()) {
+                if (!attributes.contains(attr)) {
 
-					log.debug("unknown attribute: " + attr);
+                    log.debug("unknown attribute: " + attr);
 
-					matched = false;
-				}
-			}
+                    matched = false;
+                }
+            }
 
-			// matching found
-			if (matched) {
-				String className = rmClass.getSimpleName();
+            // matching found
+            if (matched) {
+                String className = rmClass.getSimpleName();
 
-				log.debug(">>> MATCHING FOUND: " + className);
+                log.debug(">>> MATCHING FOUND: " + className);
 
-				return className;
-			}
-		}
-		return null;
-	}
+                return className;
+            }
+        }
+        return null;
+    }
 
-	// todo: isn't there any support from java api on this?
-	private Object defaultValue(Class type) {
-		if (type == boolean.class) {
-			return Boolean.FALSE;
-		} else if (type == double.class) {
-			return new Double(0);
-		} else if (type == float.class) {
-			return new Float(0);
-		} else if (type == int.class) {
-			return new Integer(0);
-		} else if (type == short.class) {
-			return new Short((short) 0);
-		} else if (type == long.class) {
-			return new Long(0);
-		} else if (type == char.class) {
-			return new Character((char) 0);
-		} else if (type == byte.class) {
-			return new Byte((byte) 0);
-		}
-		return null;
-	}
+    // todo: isn't there any support from java api on this?
+    private Object defaultValue(Class type) {
+        if (type == boolean.class) {
+            return Boolean.FALSE;
+        } else if (type == double.class) {
+            return new Double(0);
+        } else if (type == float.class) {
+            return new Float(0);
+        } else if (type == int.class) {
+            return new Integer(0);
+        } else if (type == short.class) {
+            return new Short((short) 0);
+        } else if (type == long.class) {
+            return new Long(0);
+        } else if (type == char.class) {
+            return new Character((char) 0);
+        } else if (type == byte.class) {
+            return new Byte((byte) 0);
+        }
+        return null;
+    }
 
-	/** gets the default cardinality interval as specified by the reference model.
-	 *  In most cases this is 0..*, only in very few cases this has been constrained to 1..*
-	 *  RECONSIDER: This could be done using annotations as well, however for the couple of constraints from the RM,
-	 *  the approach taken here seems to be simple and sufficient.
-	 *
-	 * @param cattr
-	 * @param parentObj
-	 * @return
-	 */
-	Interval<Integer> defaultCardinalityInterval(CMultipleAttribute cattr, CObject parentObj) {
-		log.debug("Checking: "+ cattr.getRmAttributeName() +"; "+ parentObj.getRmTypeName() +" at "+cattr.path() +" parent path: "+parentObj.path());
+    /** gets the default cardinality interval as specified by the reference model.
+     *  In most cases this is 0..*, only in very few cases this has been constrained to 1..*
+     *  RECONSIDER: This could be done using annotations as well, however for the couple of constraints from the RM,
+     *  the approach taken here seems to be simple and sufficient.
+     *
+     * @param cattr
+     * @param parentObj
+     * @return
+     */
+    Interval<Integer> defaultCardinalityInterval(CMultipleAttribute cattr, CObject parentObj) {
+        log.debug("Checking: "+ cattr.getRmAttributeName() +"; "+ parentObj.getRmTypeName() +" at "+cattr.path() +" parent path: "+parentObj.path());
 
-		if (cattr.getRmAttributeName().equals("items")) {
-			if (parentObj.getRmTypeName().equalsIgnoreCase("CLUSTER") ) { // Note: For SECTION items, the intention seems to be cardinality = 0
-				log.debug("--> >=1");
-				return new Interval<Integer>(1,null);
-			}
-		} else if (cattr.getRmAttributeName().equals("content")) {
-			if (parentObj.getRmTypeName().equalsIgnoreCase("COMPOSITION")) {
-				log.debug("--> >=1");
-				return new Interval<Integer>(1,null);
-			}
-	/*	}  else if (cattr.getRmAttributeName().equals("activities")) { // This seems to be incorrect
+        if (cattr.getRmAttributeName().equals("items")) {
+            if (parentObj.getRmTypeName().equalsIgnoreCase("CLUSTER") ) { // Note: For SECTION items, the intention seems to be cardinality = 0
+                log.debug("--> >=1");
+                return new Interval<Integer>(1,null);
+            }
+        } else if (cattr.getRmAttributeName().equals("content")) {
+            if (parentObj.getRmTypeName().equalsIgnoreCase("COMPOSITION")) {
+                log.debug("--> >=1");
+                return new Interval<Integer>(1,null);
+            }
+            /*	}  else if (cattr.getRmAttributeName().equals("activities")) { // This seems to be incorrect
 			if (parentObj.getRmTypeName().equalsIgnoreCase("INSTRUCTION")) {
 				log.debug("--> >=1");
 				return new Interval<Integer>(1,null);
 			}
-	*//*	}   else if (cattr.getRmAttributeName().equals("events")) { // this seems to be too strict as well
+             *//*	}   else if (cattr.getRmAttributeName().equals("events")) { // this seems to be too strict as well
 			if (parentObj.getRmTypeName().equalsIgnoreCase("HISTORY")) {
 				log.debug("--> >=1");
 				return new Interval<Integer>(1,null);
 			}
-	*/	} else if (cattr.getRmAttributeName().equals("credentials")) {
-			if (parentObj.getRmTypeName().equalsIgnoreCase("CAPABILITY")) {
-				log.debug("--> ==1");
-				return new Interval<Integer>(1,1);
-			}
-		}
-		log.debug("--> >=0");
-		return new Interval<Integer>(0,null); // not constrained
+              */	} else if (cattr.getRmAttributeName().equals("credentials")) {
+                  if (parentObj.getRmTypeName().equalsIgnoreCase("CAPABILITY")) {
+                      log.debug("--> ==1");
+                      return new Interval<Integer>(1,1);
+                  }
+              }
+        log.debug("--> >=0");
+        return new Interval<Integer>(0,null); // not constrained
 
-	}
+    }
 
-	/*
-	 * Skipped types during matching: 1. Simple value types in DADL 2. Cluster
-	 * due to clash with ItemList
-	 */
-	private static final String[] SKIPPED_TYPES_IN_MATCHING = { "DvDateTime",
-			"DvDate", "DvTime", "DvDuration", "Cluster",
-			// due to clash with DvText
-			"TerminologyID", "ArchetypeID", "TemplateID", "ISO_OID",
-			"HierObjectID", "DvBoolean", "InternetID", "UUID",
-			"ObjectVersionID"
-	};
+    /*
+     * Skipped types during matching: 1. Simple value types in DADL 2. Cluster
+     * due to clash with ItemList
+     */
+    private static final String[] SKIPPED_TYPES_IN_MATCHING = { "DvDateTime",
+            "DvDate", "DvTime", "DvDuration", "Cluster",
+            // due to clash with DvText
+            "TerminologyID", "ArchetypeID", "TemplateID", "ISO_OID",
+            "HierObjectID", "DvBoolean", "InternetID", "UUID",
+            "ObjectVersionID"
+    };
 
 
-	/* logger */
-	private static final Logger log = Logger.getLogger(RMInspector.class);
+    /* logger */
+    private static final Logger log = Logger.getLogger(RMInspector.class);
 
-	// loaded rm type map
-	private Map<String, Class> typeMap;
-	private Map<String, Class> upperCaseMap;
-	private static final Set<String> stringParsingTypes;
+    // loaded rm type map
+    private Map<String, Class> typeMap;
+    private Map<String, Class> upperCaseMap;
+    private static final Set<String> stringParsingTypes;
 
-	static {
-		// so far only types from quantity.datetime
-		stringParsingTypes = new HashSet<String>();
-		String[] types = { "DvDate", "DvDateTime", "DvTime", "DvDuration",
-				"DvPartialDate", "DvPartialTime" };
-		stringParsingTypes.addAll(Arrays.asList(types));
-	}
+    static {
+        // so far only types from quantity.datetime
+        stringParsingTypes = new HashSet<String>();
+        String[] types = { "DvDate", "DvDateTime", "DvTime", "DvDuration",
+                "DvPartialDate", "DvPartialTime" };
+        stringParsingTypes.addAll(Arrays.asList(types));
+    }
 }
