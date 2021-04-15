@@ -26,6 +26,7 @@
 	
 	<description>Java implementation of openEHR RM XML Data Binding Component</description>
 	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -42,6 +43,10 @@
     			<inherited>true</inherited>
     			<configuration>
        				<schemaDirectory>src/main/xsd</schemaDirectory>
+					 
+                    <source>1.8</source>
+                    <target>1.8</target>
+                
     			</configuration>
   			</plugin>
 		</plugins>
@@ -61,7 +66,7 @@
 		<dependency>
 			<groupId>org.apache.xmlbeans</groupId>
 			<artifactId>xmlbeans</artifactId>
-			<version>2.3.0</version>
+			<version>3.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openehr.java-libs</groupId>

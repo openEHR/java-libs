@@ -17,7 +17,7 @@
  * AuthoredResourceTest
  *
  * @author Yin Su Lim
- * @version 1.0 
+ * @version 1.0
  */
 
 package org.openehr.rm.common.resource;
@@ -32,26 +32,28 @@ import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.rm.support.terminology.TestTerminologyService;
 
 public class AuthoredResourceTest extends ResourceTestBase {
-    
+
     public AuthoredResourceTest(String testName) {
         super(testName);
     }
 
+    @Override
     protected void setUp() throws Exception {
     }
 
+    @Override
     protected void tearDown() throws Exception {
     }
 
     public static Test suite() {
         TestSuite suite = new TestSuite(AuthoredResourceTest.class);
-        
+
         return suite;
     }
 
     public void test() {
         CodePhrase orgLang = new CodePhrase(TestTerminologyID.LANGUAGE, "en");
-        
+
         String[] fr = {"fr"};
         String[] languages = {"en", "fr"};
         String[] purposes = {"purpose", "but"};
@@ -65,24 +67,28 @@ public class AuthoredResourceTest extends ResourceTestBase {
         lAvailable.add("en");
         lAvailable.add("fr");
         assertEquals(lAvailable, ar.languagesAvailable());
-        
+
+        // This may look like a stupid test, but since a ResourceDescription is explicitly referencing its own parentResource, we
+        // must ensure that this comparison does not run into problems:
+        rd.setParentResource(ar);
+        assertEquals(ar, ar);
     }
 
 
-    
+
     public void testFails() {
-        
+
         CodePhrase orgLang = new CodePhrase(TestTerminologyID.LANGUAGE, "en");
         String[] languages = {"en", "fr"};
         String[] fr = {"fr"};
-        
+
         failConstructor(null, null, null, null, false, TestTerminologyService.getInstance(),
                 "original language missing");
         failConstructor(orgLang, null, null, null, true, TestTerminologyService.getInstance(),
                 "revision history missing");
         failConstructor(orgLang, translations(languages), null, null, true, TestTerminologyService.getInstance(),
                 "translations contain org language");
-        
+
         String[] languages2 = {"en", "fr", "us"};
         String[] purposes = {"purpose", "but", "purpose"};
         ResourceDescription rd = new ResourceDescription(hashMap("Sam Heard", "Dr. Sam Heard"),
@@ -90,14 +96,14 @@ public class AuthoredResourceTest extends ResourceTestBase {
         failConstructor(orgLang, translations(fr), rd, null, false, TestTerminologyService.getInstance(),
                 "description contains more languages than translations");
     }
-    
-    private void failConstructor(CodePhrase orgLang, HashMap<String, 
-                TranslationDetails> translations, ResourceDescription rd,
-                RevisionHistory revisionHistory, boolean isControlled, 
-                TerminologyService terminologyService, String reason) {
+
+    private void failConstructor(CodePhrase orgLang, HashMap<String,
+            TranslationDetails> translations, ResourceDescription rd,
+            RevisionHistory revisionHistory, boolean isControlled,
+            TerminologyService terminologyService, String reason) {
         try {
             AuthoredResource ar = new AuthoredResourceImpl(orgLang, translations, rd, revisionHistory,
-                isControlled, terminologyService);
+                    isControlled, terminologyService);
             fail(reason);
         } catch (IllegalArgumentException iae) {
             //System.out.println(iae.getMessage());
