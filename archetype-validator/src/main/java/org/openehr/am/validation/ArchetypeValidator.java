@@ -711,7 +711,6 @@ public class ArchetypeValidator {
             //WCACA the same...can we do this ... is this not simply ok??? as default is set
         }
 
-
         if (!rmCardinality.isUpperUnbounded()) {
             if (actualCardinality.isUpperUnbounded() ||
                     (rmCardinality.getUpper().compareTo(actualCardinality.getUpper()) < 0)) {
@@ -724,8 +723,6 @@ public class ArchetypeValidator {
                 //WCACA
             }
         }
-
-
     }
 
 
@@ -737,8 +734,7 @@ public class ArchetypeValidator {
      * @param archetype
      * @param errors
      */
-    private void checkArchetypeSlot(ArchetypeSlot slot, Class rmAttrType, Archetype archetype,
-            List<ValidationError> errors) {
+    private void checkArchetypeSlot(ArchetypeSlot slot, Class rmAttrType, Archetype archetype, List<ValidationError> errors) {
         if (slot.getIncludes() != null) {
             for (Assertion include : slot.getIncludes()) {
                 checkAssertionHasValidArchetypeIds(include, slot, errors);
@@ -748,6 +744,11 @@ public class ArchetypeValidator {
             for (Assertion exclude : slot.getExcludes()) {
                 checkAssertionHasValidArchetypeIds(exclude, slot, errors);
             }
+        }
+        //any_allowed xor (includes /= Void or excludes /= Void)
+        if (!slot.isAnyAllowed() && slot.getExcludes() == null && slot.getIncludes() == null) {
+            ValidationError error = new ValidationError(ErrorType.VDFAI, "SLOTVALIDITY", slot.path());
+            errors.add(error);
         }
     }
 
