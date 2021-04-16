@@ -15,12 +15,24 @@ public class ArchetypeSlotCheckTest extends ArchetypeValidationTestBase {
         assertSecondErrorType(ErrorType.VDFAI);
     }
 
-    public void testCheckWithInvalidSlotNoneAllowed() throws Exception {
+    public void testCheckWithValidSlotAllAllowed() throws Exception {
         checkSlot("openEHR-EHR-OBSERVATION.slot.v3.adl");
-       // SG: This slot is not giving an error anymore * is the same as unconstrained ?!
-	   // assertEquals("wrong number of validation errors: " + errors, 1, errors.size());
-       // assertFirstErrorType(ErrorType.VDFAI);
+        // SG: This slot is not giving an error  * is the same as unconstrained
+        assertEquals("wrong number of validation errors: " + errors, 0, errors.size());
+
     }
+
+    public void testCheckWithValidInclude() throws Exception {
+        checkSlot("openEHR-EHR-OBSERVATION.slot.v4.adl");
+        assertEquals("wrong number of validation errors: " + errors, 0, errors.size());
+    }
+
+    public void testCheckWithInvalidInclude() throws Exception {
+        checkSlot("openEHR-EHR-OBSERVATION.slot.v5.adl");
+        assertEquals("wrong number of validation errors: " + errors, 1, errors.size());
+        assertFirstErrorType(ErrorType.VDFAI);
+    }
+
 
     private void checkSlot(String name) throws Exception {
         archetype = loadArchetype(name);

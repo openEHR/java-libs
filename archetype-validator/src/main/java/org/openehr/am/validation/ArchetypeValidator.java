@@ -804,15 +804,32 @@ public class ArchetypeValidator {
      * @param oneId
      */
     private void checkOneArchetypeId(ArchetypeSlot slot, List<ValidationError> errors, String oneId) {
-        // check for the right number of dots in the id
+        // check for the right number of dots in the id - note that since this is a regex, we would need to look for \. but this has been replace before already
         boolean containsCorrectNumberOfDots = (StringUtils.countMatches(oneId, ".") == 2);
+
+        boolean containsAnyString = StringUtils.contains(oneId, ".*") || StringUtils.contains(oneId, ".+");
+        if (containsAnyString && !containsCorrectNumberOfDots) {
+            return; // if there are parts in the regex that can be anything our validation here is not sophisticated enough
+        }
+
+        if (!containsCorrectNumberOfDots) {
+            ValidationError error = new ValidationError(ErrorType.VDFAI, "NUMBEROFDOTS", oneId, slot.path());
+            errors.add(error);
+            return; // Without the correct number of dots, there is too much guessing afterwards
+        }
+
+        // Guaranteed to have the three parts now, e.g. openEHR-EHR-Cluster + my_concept + v1
+        String[] idParts = StringUtils.split(oneId, ".");
+        // String rmPart = idParts[0];
+        // String conceptPart = idParts[1];
+        String versionPart = idParts[2];
 
         // check that the id ends with .v[0..9]+
         boolean endsWithDotVNumber = true; // assume it is ok, until proven false
-        if (oneId.lastIndexOf(".v") == -1) {
+        if (!versionPart.startsWith("v") && !versionPart.startsWith("*") && !versionPart.startsWith("+")) { // a dot unescaped would be any character - we may have to accept this even if it is odd
             endsWithDotVNumber = false;
-        } else {
-            String tail = oneId.substring(oneId.lastIndexOf(".v") + 2);
+        } else if (versionPart.startsWith("v")) { // we can only (easily) continue with this part of the validation then
+            String tail = versionPart.substring(1);
             log.debug("tail: " + tail);
 
             // In addition to specifying a concrete version number, it is also possible in a slot regex to match any number.
@@ -827,6 +844,8 @@ public class ArchetypeValidator {
                             && !tail.equals("[1-9]")
                             && !tail.equals("(0|[1-9][0-9]*)")
                             && !tail.equals("[1-9][0-9]*")
+                            && !tail.equals(".+") // This is far too lose, but if VDFAI only postulates that the regex can(!) be an archetype id, we need to allow this
+                            && !tail.equals(".*") // This is far too lose, but if VDFAI only postulates that the regex can(!) be an archetype id, we need to allow this
                             )) {
 
                 boolean matchedANumber = false;
@@ -840,28 +859,21 @@ public class ArchetypeValidator {
             }
         }
 
-        // check that the first part of the id (the qualified RM Entity) contains the right number of hyphens
-        boolean containsCorrectNumberOfHyphensInQualifiedRMEntity = true; // assume it is ok, until proven wrong
-        String qualifiedRMEntity = oneId.substring(0, oneId.indexOf("."));
-        if (StringUtils.countMatches(qualifiedRMEntity, "-") != 2) {
-            containsCorrectNumberOfHyphensInQualifiedRMEntity = false;
-        }
-
-        // add all the errors
-        if (!containsCorrectNumberOfDots) {
-            ValidationError error = new ValidationError(ErrorType.VDFAI, "NUMBEROFDOTS", oneId, slot.path());
-            errors.add(error);
-
-        }
         if (!endsWithDotVNumber) {
             ValidationError error = new ValidationError(ErrorType.VDFAI, "DOTVNUMBER", oneId, slot.path());
             errors.add(error);
-
         }
+
+        // check that the first part of the id (the qualified RM Entity) contains the right number of hyphens
+        boolean containsCorrectNumberOfHyphensInQualifiedRMEntity = true; // assume it is ok, until proven wrong
+        String qualifiedRMEntity = idParts[0]; // oneId.substring(0, oneId.indexOf("\\."));
+        if (StringUtils.countMatches(qualifiedRMEntity, "-") != 2 && !StringUtils.contains(qualifiedRMEntity, ".")) { // the . could be .* or .+ or just . unescaped = any char -> in that case we cannot guarantee it is not meant to be a dash
+            containsCorrectNumberOfHyphensInQualifiedRMEntity = false;
+        }
+
         if (!containsCorrectNumberOfHyphensInQualifiedRMEntity) {
             ValidationError error = new ValidationError(ErrorType.VDFAI, "NUMBEROFHYPHENS", oneId, slot.path());
             errors.add(error);
-
         }
 
     }

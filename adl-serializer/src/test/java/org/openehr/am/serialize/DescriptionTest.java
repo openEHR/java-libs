@@ -21,79 +21,77 @@ import java.util.Map;
 
 import org.openehr.rm.common.resource.ResourceDescription;
 import org.openehr.rm.common.resource.ResourceDescriptionItem;
-import org.openehr.rm.datatypes.text.CodePhrase;
 import org.openehr.rm.support.terminology.TerminologyService;
 import org.openehr.terminology.SimpleTerminologyService;
 
 public class DescriptionTest extends SerializerTestBase {
 
-	public DescriptionTest(String test) {
-		super(test);
-	}
+    public DescriptionTest(String test) {
+        super(test);
+    }
 
-	public void testPrintDescriptionItem() throws Exception {
-		String purpose = "purpose";
-		String use = "use";
-		String misuse = "misuse";
-		String copyright = "copyright";
-		List<String> keywords = new ArrayList<String>();
-		keywords.add("apple");
-		keywords.add("pear");
-		Map<String, String> urls = new HashMap<String, String>();
-		urls.put("key", "value");
-		Map<String, String> others = new HashMap<String, String>();
-		TerminologyService service = SimpleTerminologyService.getInstance();
-		
-		ResourceDescriptionItem item = new ResourceDescriptionItem(ENGLISH,
-				purpose, keywords, use, misuse, copyright, urls, others, 
-				service);		
-		
-		clean();
-		outputter.printDescriptionItem(item, 0, out);
+    public void testPrintDescriptionItem() throws Exception {
+        String purpose = "purpose";
+        String use = "use";
+        String misuse = "misuse";
+        String copyright = "copyright";
+        List<String> keywords = new ArrayList<String>();
+        keywords.add("apple");
+        keywords.add("pear");
+        Map<String, String> urls = new HashMap<String, String>();
+        urls.put("key", "value");
+        Map<String, String> others = new HashMap<String, String>();
+        TerminologyService service = SimpleTerminologyService.getInstance();
 
-		verify("[\"en\"] = <\r\n" + "    language = <[ISO_639-1::en]>\r\n"
-				+ "    purpose = <\"purpose\">\r\n"
-				+ "    keywords = <\"apple\",\"pear\">\r\n"
-				+ "    copyright = <\"copyright\">\r\n"
-				+ "    use = <\"use\">\r\n" + "    misuse = <\"misuse\">\r\n"
-				+ "    original_resource_uri = <\r\n"
-				+ "        [\"key\"] = <\"value\">\r\n"
-				+ "    >\r\n"
-				+ ">\r\n");
-	}
+        ResourceDescriptionItem item = new ResourceDescriptionItem(ENGLISH,
+                purpose, keywords, use, misuse, copyright, urls, others,
+                service);
 
-	public void testPrintDescription() throws Exception {
-		String author = "Jerry Mouse";
-		String status = "draft";
-		Map<String, String> authorMap = new HashMap<String, String>();
-		authorMap.put("name", author);
+        clean();
+        outputter.printDescriptionItem(item, 0, out);
 
-		Map<String, ResourceDescriptionItem> items =
-			new HashMap<>();
-		String[][] others = { { "revision", "1.1" }, { "adl_version", "1.4" },
-				{ "rights", "all rights reserved" } };
-		Map<String, String> otherDetails = new HashMap<String, String>();
-		for (String[] pair : others) {
-			otherDetails.put(pair[0], pair[1]);
-		}
-		TerminologyService service = SimpleTerminologyService.getInstance();
-		ResourceDescriptionItem item = new ResourceDescriptionItem(ENGLISH,
-				"purpose of this archetype", service);
-		items.put(ENGLISH.getCodeString(),item);
-		ResourceDescription description = new ResourceDescription(authorMap,
-				null, status, items, null, null, null);
+        verify("[\"en\"] = <\r\n" + "    language = <[ISO_639-1::en]>\r\n"
+                + "    purpose = <\"purpose\">\r\n"
+                + "    keywords = <\"apple\",\"pear\">\r\n"
+                + "    copyright = <\"copyright\">\r\n"
+                + "    use = <\"use\">\r\n" + "    misuse = <\"misuse\">\r\n"
+                + "    original_resource_uri = <\r\n"
+                + "        [\"key\"] = <\"value\">\r\n"
+                + "    >\r\n"
+                + ">\r\n");
+    }
 
-		clean();
-		outputter.printDescription(description, out);
+    public void testPrintDescription() throws Exception {
+        String author = "Jerry Mouse";
+        String status = "draft";
+        Map<String, String> authorMap = new HashMap<String, String>();
+        authorMap.put("name", author);
 
-		verify("description\r\n" + "    original_author = <\r\n"
-				+ "        [\"name\"] = <\"" + author + "\">\r\n" + "    >\r\n"
-				+ "    lifecycle_state = <\"" + status + "\">\r\n"
-				+ "    details = <\r\n" + "        [\"en\"] = <\r\n"
-				+ "            language = <[ISO_639-1::en]>\r\n"
-				+ "            purpose = <\"purpose of this archetype\">\r\n"
-				+ "        >\r\n" + "    >\r\n");
-	}		
+        Map<String, ResourceDescriptionItem> items = new HashMap<String, ResourceDescriptionItem>();
+        String[][] others = { { "revision", "1.1" }, { "adl_version", "1.4" },
+                { "rights", "all rights reserved" } };
+        Map<String, String> otherDetails = new HashMap<String, String>();
+        for (String[] pair : others) {
+            otherDetails.put(pair[0], pair[1]);
+        }
+        TerminologyService service = SimpleTerminologyService.getInstance();
+        ResourceDescriptionItem item = new ResourceDescriptionItem(ENGLISH,
+                "purpose of this archetype", service);
+        items.put(ENGLISH.getCodeString(),item);
+        ResourceDescription description = new ResourceDescription(authorMap,
+                null, status, items, null, null, null);
+
+        clean();
+        outputter.printDescription(description, out);
+
+        verify("description\r\n" + "    original_author = <\r\n"
+                + "        [\"name\"] = <\"" + author + "\">\r\n" + "    >\r\n"
+                + "    lifecycle_state = <\"" + status + "\">\r\n"
+                + "    details = <\r\n" + "        [\"en\"] = <\r\n"
+                + "            language = <[ISO_639-1::en]>\r\n"
+                + "            purpose = <\"purpose of this archetype\">\r\n"
+                + "        >\r\n" + "    >\r\n");
+    }
 }
 /*
  *  ***** BEGIN LICENSE BLOCK *****
@@ -115,7 +113,7 @@ public class DescriptionTest extends SerializerTestBase {
  *  Portions created by the Initial Developer are Copyright (C) 2004-2006
  *  the Initial Developer. All Rights Reserved.
  *
- *  Contributor(s): 
+ *  Contributor(s):
  *
  * Software distributed under the License is distributed on an 'AS IS' basis,
  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License

@@ -1,5 +1,5 @@
 archetype (adl_version=1.4)
-	openEHR-EHR-OBSERVATION.slot.v3
+	openEHR-EHR-OBSERVATION.slot.v5
 
 concept
 	[at0000]	-- unknown
@@ -16,8 +16,8 @@ definition
 							ITEM_TREE[at0003] matches {	-- Tree
 								items cardinality matches {0..*; unordered} matches {
 									allow_archetype CLUSTER[at0004] occurrences matches {0..*} matches {	
-										-- empty and * seems to be the same...therefore this a correct Slot based on Validity: any_allowed xor (includes /= Void or excludes /= Void)
-									
+										include
+											archetype_id/value matches {/openEHR-EHR-CLUSTER\.media_capture*/}   -- invalid - a version cannot be specified  
 									}
 								}
 							}
@@ -49,9 +49,9 @@ ontology
 					description = <"@ internal @">
 				>
 				["at0004"] = <
-					text = <"correct Slot ">
+					text = <"incorrect Slot ">
 					description = <"*">
-				>
+				>				
 			>
 		>
 	>
