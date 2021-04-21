@@ -1,0 +1,129 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-CLUSTER.duration_interval_test.v0
+
+concept
+	[at0000]	-- Duration interval test
+language
+	original_language = <[ISO_639-1::de]>
+description
+	original_author = <
+		["name"] = <"s">
+	>
+	details = <
+		["de"] = <
+			language = <[ISO_639-1::de]>
+			purpose = <"test duration constraints">
+			use = <"">
+			misuse = <"">
+			copyright = <"">
+		>
+	>
+	lifecycle_state = <"in_development">
+	other_contributors = <>
+	other_details = <
+		["MD5-CAM-1.0.1"] = <"56BA0D180BE093539E02771672EF6BA2">
+	>
+
+definition
+	CLUSTER[at0000] matches {	-- Duration interval test
+		items cardinality matches {1..*; unordered} matches {
+			ELEMENT[at0001] occurrences matches {0..1} matches {	-- D1
+				value matches {
+					DV_DURATION matches {
+						value matches {PD/|>P10D..<P1000D|}
+					}
+				}
+			}
+			ELEMENT[at0009] occurrences matches {0..1} matches {	-- D1a
+				value matches {
+					DV_DURATION matches {
+						value matches {|>PT0M..<PT10M|}
+					}
+				}
+			}
+			ELEMENT[at0003] occurrences matches {0..1} matches {	-- D2
+				value matches {
+					DV_DURATION matches {
+						value matches {|>PT0M|}
+					}
+				}
+			}
+			ELEMENT[at0004] occurrences matches {0..1} matches {	-- D3
+				value matches {
+					DV_DURATION matches {
+						value matches {PD/|<P110D|}
+					}
+				}
+			}
+			ELEMENT[at0005] occurrences matches {0..1} matches {	-- D4
+				value matches {
+					DV_DURATION matches {
+						value matches {|PT0M..PT111M|}
+					}
+				}
+			}
+			ELEMENT[at0006] occurrences matches {0..1} matches {	-- D unconstrained
+				value matches {
+					DV_DURATION matches {*}
+				}
+			}
+			ELEMENT[at0007] occurrences matches {0..1} matches {	-- D5
+				value matches {
+					DV_DURATION matches {
+						value matches {PD/|>=P10D|}
+					}
+				}
+			}
+			ELEMENT[at0008] occurrences matches {0..1} matches {	-- D6
+				value matches {
+					DV_DURATION matches {
+						value matches {|<=PT110M|}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	term_definitions = <
+		["de"] = <
+			items = <
+				["at0000"] = <
+					text = <"Duration interval test">
+					description = <"unknown">
+				>
+				["at0001"] = <
+					text = <"D1">
+					description = <"*">
+				>
+				["at0003"] = <
+					text = <"D2">
+					description = <"*">
+				>
+				["at0004"] = <
+					text = <"D3">
+					description = <"*">
+				>
+				["at0005"] = <
+					text = <"D4">
+					description = <"*">
+				>
+				["at0006"] = <
+					text = <"D unconstrained">
+					description = <"*">
+				>
+				["at0007"] = <
+					text = <"D5">
+					description = <"*">
+				>
+				["at0008"] = <
+					text = <"D6">
+					description = <"*">
+				>
+				["at0009"] = <
+					text = <"D1a">
+					description = <"*">
+				>
+			>
+		>
+	>

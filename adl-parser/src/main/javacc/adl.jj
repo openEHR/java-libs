@@ -2208,14 +2208,34 @@ Interval duration_interval_value() :
 {
   <SYM_INTERVAL_DELIM>
   (
+  
+   LOOKAHEAD( 3 )
+    {
+      boolean lowerInclusive = true;
+	  boolean upperInclusive = true;
+	  boolean upperSpecified = false;
+	}
+    [
+      <SYM_GT> { lowerInclusive = false; }
+	]
     lower = duration_value()
     { upper = lower; }
     [
-      <SYM_ELLIPSIS> upper = duration_value()
+      <SYM_ELLIPSIS>
+      [
+        <SYM_LT> { upperInclusive = false; }
+      ]
+      upper = duration_value()      
+      { upperSpecified = true; }
     ]
     {
-      i = new Interval(lower, upper, true, true);
-    }
+      if(!lowerInclusive && !upperSpecified) {
+      	// specical case for |>100| - important to avoid >100..100
+      	i = new Interval(lower, null, false, false);
+      } else {
+      	i = new Interval(lower, upper, lowerInclusive, upperInclusive);
+      }
+    }   
   |
     <SYM_LT> upper = duration_value()
     {
