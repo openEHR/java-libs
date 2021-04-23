@@ -25,8 +25,10 @@ import org.openehr.rm.support.basic.Interval;
  * @author Rong Chen
  * @version 1.0
  */
-public final class CDuration extends CPrimitive {
-
+public final class CDuration extends CPrimitive implements HasInterval<DvDuration> {
+	/** */
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Constructs a DurationConstraint with an assumed value
 	 * 
