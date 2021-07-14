@@ -141,6 +141,36 @@ public class CDvQuantity extends CDomainType<DvQuantity> {
 	}
 	
 	/**
+	 * Keeps the items that have the given units
+	 * 
+	 * @param item not null
+	 * @return whether any of the units were found in the list
+	 */
+	public boolean keepItemByUnitsList(String[] unitsList) {
+		if (list == null)
+			return false;
+
+		if (unitsList == null) {
+			list.clear();
+			return false;
+		}
+
+		boolean found = false;
+		List<String> keep = Arrays.asList(unitsList);
+
+		for (Iterator<CDvQuantityItem> it = list.iterator(); it.hasNext();) {
+			CDvQuantityItem item = it.next();
+
+			if (!keep.contains(item.getUnits()))
+				it.remove();
+			else
+				found = true;
+		}
+
+		return found;
+	}
+	
+	/**
 	 * Removes the items that have the given units
 	 * 
 	 * @param item not null
