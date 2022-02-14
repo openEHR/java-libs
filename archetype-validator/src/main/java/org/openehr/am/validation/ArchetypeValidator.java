@@ -769,22 +769,49 @@ public class ArchetypeValidator {
                     CString elRCStr = (CString) elR.getItem();
                     if (elRCStr.getPattern() != null) {
                         String pattern = elRCStr.getPattern();
+
+                        try {
+                            Pattern.compile(pattern);
+                        } catch (PatternSyntaxException exception) {
+                            ValidationError error = new ValidationError(ErrorType.VDFAI, "INVALIDPATTERN", pattern, slot.path());
+                            errors.add(error);
+                            return;
+                            // System.err.println(exception.getDescription());
+                        }
+
                         if (!pattern.equals(".*")) {
                             // make readability modifications for the pattern
                             while (pattern.indexOf("(-[a-zA-Z0-9_]+)*\\") > 0) {
-                                int i = pattern.indexOf("(-[a-zA-Z0-9_]+)*\\");
                                 pattern = pattern.replace("(-[a-zA-Z0-9_]+)*\\", "");
                                 // ignore any specialised syntax for now
                                 //pattern = pattern.substring(0,i+3) + " and specialisations"+ pattern.substring(i+3);
                             }
+
                             // delete the regex \
                             while (pattern.indexOf("\\.") > 0) {
                                 pattern = pattern.replace("\\.", ".");
                             }
+
+                            String prevPipeStart = "";
                             while (pattern.indexOf("|") > 0) {
-                                String oneId = pattern.substring(0, pattern.indexOf("|"));
+                                // We check if the number of opening and closing brackets match up to the point of the pipe symbol.
+                                // If not, this is an indication that the pipe represents a choice in the middle of an archetype id,
+                                // and is not separating two archetype ids from each other:
+                                String subStringUpToPipe = pattern.substring(0, pattern.indexOf("|"));
+                                int openingBrackets = StringUtils.countMatches(subStringUpToPipe, "(");
+                                int closingBrackets = StringUtils.countMatches(subStringUpToPipe, ")");
+
+                                String oneId = prevPipeStart + subStringUpToPipe;
                                 pattern = pattern.substring(pattern.indexOf("|") + 1);
+
+                                if (openingBrackets != closingBrackets) {
+                                    prevPipeStart += subStringUpToPipe + "|"; // can be more than once!
+                                    continue; // we are in the middle of an archetype id and need to continue looking for the end
+                                } else {
+                                    prevPipeStart = ""; // reset
                                 checkOneArchetypeId(slot, errors, oneId);
+                            }
+
                             }
                             // the rest of the pattern is the last archetype id, so test this one too.
                             checkOneArchetypeId(slot, errors, pattern);
@@ -793,7 +820,6 @@ public class ArchetypeValidator {
                 }
             }
         }
-
     }
 
     /**
@@ -843,6 +869,7 @@ public class ArchetypeValidator {
                             && !tail.equals("[0-9]")
                             && !tail.equals("[1-9]")
                             && !tail.equals("(0|[1-9][0-9]*)")
+                            && !tail.equals("([0-9]|[1-9][0-9]+)")
                             && !tail.equals("[1-9][0-9]*")
                             && !tail.equals(".+") // This is far too lose, but if VDFAI only postulates that the regex can(!) be an archetype id, we need to allow this
                             && !tail.equals(".*") // This is far too lose, but if VDFAI only postulates that the regex can(!) be an archetype id, we need to allow this
@@ -865,17 +892,13 @@ public class ArchetypeValidator {
         }
 
         // check that the first part of the id (the qualified RM Entity) contains the right number of hyphens
-        boolean containsCorrectNumberOfHyphensInQualifiedRMEntity = true; // assume it is ok, until proven wrong
         String qualifiedRMEntity = idParts[0]; // oneId.substring(0, oneId.indexOf("\\."));
-        if (StringUtils.countMatches(qualifiedRMEntity, "-") != 2 && !StringUtils.contains(qualifiedRMEntity, ".")) { // the . could be .* or .+ or just . unescaped = any char -> in that case we cannot guarantee it is not meant to be a dash
-            containsCorrectNumberOfHyphensInQualifiedRMEntity = false;
-        }
-
-        if (!containsCorrectNumberOfHyphensInQualifiedRMEntity) {
+        if (StringUtils.countMatches(qualifiedRMEntity, "-") != 2
+                && StringUtils.countMatches(qualifiedRMEntity, "|") == 0 // If there are pipes there is choice in this part of the pattern. This is unusal and beyond the competency of this validator.
+                && !StringUtils.contains(qualifiedRMEntity, ".")) { // the . could be .* or .+ or just . unescaped = any char -> in that case we cannot guarantee it is not meant to be a dash
             ValidationError error = new ValidationError(ErrorType.VDFAI, "NUMBEROFHYPHENS", oneId, slot.path());
             errors.add(error);
         }
-
     }
 
 

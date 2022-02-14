@@ -33,7 +33,17 @@ public class ArchetypeSlotCheckTest extends ArchetypeValidationTestBase {
         assertFirstErrorType(ErrorType.VDFAI);
     }
 
-
+    public void testCheckWithValidPipeInclude() throws Exception {
+        checkSlot("openEHR-EHR-OBSERVATION.slot.v6.adl");
+        assertEquals("wrong number of validation errors: " + errors, 0, errors.size());
+    }
+	
+	  public void testCheckWithUnparsableRegexInclude() throws Exception {
+        checkSlot("openEHR-EHR-OBSERVATION.slot.v7.adl");
+        assertEquals("wrong number of validation errors: " + errors, 1, errors.size());
+        assertFirstErrorType(ErrorType.VDFAI);
+    }
+	
     private void checkSlot(String name) throws Exception {
         archetype = loadArchetype(name);
         validator.checkObjectConstraints(archetype, errors);
