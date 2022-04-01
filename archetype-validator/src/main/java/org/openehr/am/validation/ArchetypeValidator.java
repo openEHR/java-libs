@@ -24,6 +24,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -1142,17 +1143,14 @@ public class ArchetypeValidator {
         }
     }
 
-    /**
-     * Checks if languages listed in translation section are provided in
-     * term_definition and constraint_definition sections
+    /** Checks if languages listed in translation section are provided in
+     * term_definition and constraint_definition sections.
+     * Also checks if the respective language is present in the description details.
      * <p>
      * TODO: how about missing individual term_def/constraint_def translations?
-     *
      * @param archetype
-     * @return errors
-     */
-    public void checkOntologyTranslation(Archetype archetype,
-            List<ValidationError> errors) {
+     * @return errors */
+    public void checkOntologyTranslation(Archetype archetype, List<ValidationError> errors) {
         Set<String> languages = archetype.languagesAvailable();
         String primaryLang = archetype.getOriginalLanguage().getCodeString();
 
@@ -1164,21 +1162,28 @@ public class ArchetypeValidator {
 
         Set<String> termDefLangs = retrieveLanguageSet(termDefList);
         Set<String> constraintDefLangs = retrieveLanguageSet(constraintDefList);
-        ValidationError error;
+
+        ValidationError error = null;
         for (String lang : languages) {
+            // Checks if for all available languages, there are also equivalents in the description/details - if there are description/details at all.
+            // This is important to prevent inconsistencies and is also relevant for the primary language.
+            if (archetype.getDescription() != null && archetype.getDescription().getDetails() != null && !archetype.getDescription().getDetails().containsKey(lang)) {
+                error = new ValidationError(ErrorType.VOTM, "DESCRIPTIONDETAILS", lang);
+                errors.add(error);
+            }
+
             if (primaryLang.equals(lang)) {
                 continue;
             }
+
             if (!termDefLangs.contains(lang)) {
-                error = new ValidationError(ErrorType.VOTM, "TERM",
-                        lang);
+                error = new ValidationError(ErrorType.VOTM, "TERM", lang);
                 errors.add(error);
             }
 
             if (!constraintDefList.isEmpty()
                     && !constraintDefLangs.contains(lang)) {
-                error = new ValidationError(ErrorType.VOTM, "CONSTRAINT",
-                        lang);
+                error = new ValidationError(ErrorType.VOTM, "CONSTRAINT", lang);
                 errors.add(error);
             }
         }
