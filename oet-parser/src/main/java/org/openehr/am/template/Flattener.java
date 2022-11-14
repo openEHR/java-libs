@@ -1240,110 +1240,102 @@ public class Flattener {
 		}
 	}
 	
-	protected void applyQuantityConstraint(CComplexObject ccobj, 
-			QuantityConstraint qc) throws FlatteningException {
-		
+	protected void applyQuantityConstraint(CComplexObject ccobj, QuantityConstraint qc) throws FlatteningException {
 		log.debug("applying quantity constraint on path: " + ccobj.path());
-		
+
 		String[] includedUnits = qc.getIncludedUnitsArray();
 		String[] excludedUnits = qc.getExcludedUnitsArray();
-		QuantityUnitConstraint[] magnitudeUnits = qc.getUnitMagnitudeArray() ;
-		CDvQuantityItem item = null;
-		CAttribute valueAttr = ccobj.getAttribute(VALUE);		
+		QuantityUnitConstraint[] magnitudeUnits = qc.getUnitMagnitudeArray();
+		CAttribute valueAttr = ccobj.getAttribute(VALUE);
 		String valuePath = ccobj.path() + "/" + VALUE;
-		
-		if(magnitudeUnits != null && magnitudeUnits.length == 1) {
-			
+
+		if (magnitudeUnits != null && magnitudeUnits.length == 1) {
 			log.debug("setting unit_magnitude quantity constraint");
-			
+
 			QuantityUnitConstraint quc = magnitudeUnits[0];
-			Interval<Double> magnitude = new Interval<Double>(
-					quc.getMinMagnitude(), quc.getMaxMagnitude(), 
+			Interval<Double> magnitude = new Interval<Double>(quc.getMinMagnitude(), quc.getMaxMagnitude(),
 					quc.getIncludesMinimum(), quc.getIncludesMaximum());
-			
-			item = new CDvQuantityItem(magnitude, quc.getUnit());
-			if(valueAttr != null) {
-				valueAttr.removeAllChildren();
-				CDvQuantity cdq = CDvQuantity.singleRequired(valuePath, item);
-				valueAttr.addChild(cdq);	
+
+			if (valueAttr == null) {
+				valueAttr = new CSingleAttribute(valuePath, VALUE, Existence.REQUIRED);
+				ccobj.addAttribute(valueAttr);
 			}
-			
-		} else if(includedUnits != null && includedUnits.length == 1) {
-			// <constraint xsi:type="quantityConstraint">
-	        //     <includedUnits>mmol/L</includedUnits>
-	        // </constraint>
-			
-			log.debug("setting included_units quantity constraint");
-			
-			item = new CDvQuantityItem(includedUnits[0]);
-				
-		} else if(excludedUnits != null && excludedUnits.length > 0) {
-			
-			log.debug("setting excluded_units quantity constraint");
-			
-			// <constraint xsi:type="quantityConstraint">
-	        //     <excludedUnits>in</excludedUnits>
-	        // </constraint>
-			
-			if(valueAttr == null) {
-				throw new FlatteningException(
-						"Missing value attribute for quantityConstraint.excludedUnits");
-			}
-			if(valueAttr.getChildren() == null || valueAttr.getChildren().isEmpty()) {
-				throw new FlatteningException(
-						"Missing child obj for quantityConstraint.excludedUnits");
-			}
-			if(valueAttr.getChildren().size() > 1) {
-				throw new FlatteningException(
-						"More than one child obj for quantityConstraint.excludedUnits");
-			}
-			CObject child = valueAttr.getChildren().get(0);
-			if( ! (child instanceof CDvQuantity)) {
-				throw new FlatteningException(
-						"Non-CDvQuantity child obj for quantityConstraint.excludedUnits");				
-			}
-			CDvQuantity cdq = (CDvQuantity) child;
-			if(cdq.getList() == null || cdq.getList().isEmpty()) {
-				throw new FlatteningException(
-						"Empty CDvQuantity.list for quantityConstraint.excludedUnits");				
-			}
-			
-			cdq.removeItemByUnitsList(excludedUnits);
-			return;
-			
+
+			createSingleQuantity(valuePath, valueAttr, quc.getUnit(), magnitude);
+
 		} else {
+			boolean including = (includedUnits != null && includedUnits.length == 1);
+			boolean excluding = (excludedUnits != null && excludedUnits.length > 0);
+
 			// TODO > 1 in the array etc
-			throw new FlatteningException(
-					"Unsupported quantityConstraint in Template: " + qc);
+			if (!(including || excluding))
+				throw new FlatteningException("Unsupported quantityConstraint in Template: " + qc);
+
+			if (including)
+				log.debug("setting included_units quantity constraint");
+			else
+				log.debug("setting excluded_units quantity constraint");
+
+			if (valueAttr == null) {
+				if (excluding) {
+					throw new FlatteningException("Missing value attribute for quantityConstraint.excludedUnits");
+
+				} else {
+					valueAttr = new CSingleAttribute(valuePath, VALUE, Existence.REQUIRED);
+					ccobj.addAttribute(valueAttr);
+
+					createSingleQuantity(valuePath, valueAttr, includedUnits[0], null);
+				}
+
+			} else {
+				if (valueAttr.getChildren() == null || valueAttr.getChildren().isEmpty()) {
+					throw new FlatteningException("Missing child obj for quantityConstraint.[included/excluded]Units");
+				}
+				if (valueAttr.getChildren().size() > 1) {
+					throw new FlatteningException(
+							"More than one child obj for quantityConstraint.[included/excluded]Units");
+				}
+				CObject child = valueAttr.getChildren().get(0);
+				if (!(child instanceof CDvQuantity)) {
+					throw new FlatteningException(
+							"Non-CDvQuantity child obj for quantityConstraint.[included/excluded]Units");
+				}
+				CDvQuantity cdq = (CDvQuantity) child;
+//				if (cdq.getList() == null || cdq.getList().isEmpty()) {
+//					throw new FlatteningException(
+//							"Empty CDvQuantity.list for quantityConstraint.[included/excluded]Units");
+//				}
+
+				if (including) {
+					// if possible, just keep original quantity item
+					if (!cdq.keepItemByUnitsList(includedUnits))
+						// if no original quantity item, let's add it
+						cdq.addItem(new CDvQuantityItem(includedUnits[0]));
+
+				} else if (excluding) {
+					cdq.removeItemByUnitsList(excludedUnits);
+				}
+			}
 		}
-		
-		
-		if(valueAttr == null) {
-		
-			valueAttr = new CSingleAttribute(valuePath, VALUE, Existence.REQUIRED); 
-			CDvQuantity cdq = CDvQuantity.singleRequired(valuePath, item);
-			valueAttr.addChild(cdq);		
-			ccobj.addAttribute(valueAttr);
-		
-		} else {
-			
-			// deal with empty c_dv_quantity to add new items			
-			if(valueAttr.getChildren() == null || valueAttr.getChildren().isEmpty()) {
-				throw new FlatteningException(
-						"Missing child obj for quantityConstraint.excludedUnits");
-			}
-			if(valueAttr.getChildren().size() > 1) {
-				throw new FlatteningException(
-						"More than one child obj for quantityConstraint.excludedUnits");
-			}
-			CObject child = valueAttr.getChildren().get(0);
-			if( ! (child instanceof CDvQuantity)) {
-				throw new FlatteningException(
-						"Non-CDvQuantity child obj for quantityConstraint.excludedUnits");				
-			}
-			CDvQuantity cdq = (CDvQuantity) child;
-			cdq.addItem(item);
-		}
+	}
+
+	private void createSingleQuantity(String valuePath, CAttribute valueAttr, String unit, Interval<Double> magnitude) {
+		// try and copy precision from original item ..
+		CDvQuantityItem orItem = valueAttr.getChildren().stream().filter(c -> c instanceof CDvQuantity)
+				.flatMap(c -> ((CDvQuantity) c).getList().stream()).filter(q -> q.getUnits().equals(unit)).findAny()
+				.orElse(null);
+
+		CDvQuantityItem item = null;
+		if (orItem == null)
+			item = new CDvQuantityItem(magnitude, null, unit);
+		else
+			item = new CDvQuantityItem((magnitude == null ? orItem.getMagnitude() : magnitude), orItem.getPrecision(),
+					unit);
+
+		valueAttr.removeAllChildren();
+
+		CDvQuantity cdq = CDvQuantity.singleRequired(valuePath, item);
+		valueAttr.addChild(cdq);
 	}
 	
 	protected void applyTextConstraint(CComplexObject ccobj, 
