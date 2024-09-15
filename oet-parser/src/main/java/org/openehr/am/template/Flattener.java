@@ -1265,7 +1265,8 @@ public class Flattener {
 			if(valueAttr != null) {
 				valueAttr.removeAllChildren();
 				CDvQuantity cdq = CDvQuantity.singleRequired(valuePath, item);
-				valueAttr.addChild(cdq);	
+				valueAttr.addChild(cdq);
+				return;
 			}
 			
 		} else if(includedUnits != null && includedUnits.length == 1) {
